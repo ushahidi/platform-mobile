@@ -9,6 +9,7 @@ git clone git@github.com:ushahidi/platform-mobile
 cd platform-mobile
 npm install -g ionic cordova
 npm install
+ionic platform add android
 ionic serve
 ```
 
