@@ -1,0 +1,58 @@
+{
+  "name": "cordova-plugin-email",
+  "version": "1.2.2",
+  "description": "Cordova Email Plugin",
+  "scripts": {
+    "clean": "rm -rf tmp && mkdir -p tmp",
+    "setupAndroidSDK": "cd tmp && git clone https://github.com/simpligility/maven-android-sdk-deployer.git && cd maven-android-sdk-deployer/ && mvn install -P 6.0 && ls ~/.m2/repository/android/android/",
+    "prepare": "npm run clean && npm run setupAndroidSDK && npm run setupDemoApp",
+    "build": "cd tmp/test-app && cordova platform add ${PLATFORM} && cordova plugin add ../.. && cordova build ${PLATFORM}",
+    "setupDemoApp": "cd tmp && git clone https://github.com/apache/cordova-app-hello-world.git && mkdir test-app && cp -rp cordova-app-hello-world/template_src/* test-app && cd test-app && cordova plugin add cordova-plugin-device && cordova plugin add cordova-plugin-compat",
+    "test": "cd tmp/test-app && node ../../etc/prepare_test_app.js config.xml && cordova platform add ${PLATFORM} && cordova plugin add http://git-wip-us.apache.org/repos/asf/cordova-plugin-test-framework.git && cordova plugin add ../../tests && cordova build ${PLATFORM}",
+    "posttest": "jsdoc -c jsdoc.json && jsdoc2md www/email_composer.js | sed s/emailComposerPlugin/cordova.plugins.email/g | sed s/EmailComposerPlugin/cordova.plugins.email/g > PLUGIN_USAGE.MD && cd tmp/test-app && cordova plugin rm cordova-plugin-email-tests",
+    "e2e": "cd tmp/cordova-demo-app/ && cordova build ${PLATFORM} && cd ../..",
+    "abc": "karma start karma.conf.js",
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0",
+    "changelog:add": "git add CHANGELOG.md && git commit -m 'updated CHANGELOG.md'",
+    "release:pre": "npm run clean",
+    "release:post": "npm run changelog && npm run changelog:add",
+    "release:major": "npm version major && npm run release:pre && git push origin && git push origin --tags && npm run release:post && npm publish",
+    "release:minor": "npm version minor && npm run release:pre && git push origin && git push origin --tags && npm run release:post && npm publish",
+    "release:patch": "npm version patch && npm run release:pre && git push origin && git push origin --tags && npm run release:post && npm publish"
+  },
+  "devDependencies": {
+    "conventional-changelog-cli": "1.2.0",
+    "ink-docstrap": "1.3.0",
+    "jsdoc": "3.4.0",
+    "jsdoc-to-markdown": "1.3.3",
+    "karma": "0.12.16",
+    "karma-cordova-launcher": "0.0.9",
+    "xml2js": "0.4.17"
+  },
+  "cordova": {
+    "id": "cordova-plugin-email",
+    "platforms": [
+      "android",
+      "amazon-fireos",
+      "ios",
+      "windows",
+      "wp8"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hypery2k/cordova-email-plugin.git"
+  },
+  "keywords": [
+    "cordova",
+    "email",
+    "ecosystem:cordova",
+    "cordova-android",
+    "cordova-amazon-fireos",
+    "cordova-ios",
+    "cordova-wp8",
+    "cordova-windows"
+  ],
+  "author": "Martin Reinhardt",
+  "license": "MIT"
+}

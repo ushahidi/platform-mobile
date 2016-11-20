@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        id="cordova-plugin-networkactivityindicator"
+        version="0.1.1">
+
+  <name>NetworkActivityIndicator</name>
+
+  <description>This plugin allows you to show and hide the statusbar's network activity indicator on iOS.</description>
+
+  <keywords>Cordova,PhoneGap,plugin,network,activity,indicator,iOS</keywords>
+
+  <repo>https://github.com/ohh2ahh/NetworkActivityIndicator.git</repo>
+  <issue>https://github.com/ohh2ahh/NetworkActivityIndicator/issues</issue>
+
+  <license>MIT</license>
+
+  <engines>
+    <engine name="cordova" version=">=3.0.0" />
+  </engines>
+
+  <js-module src="www/NetworkActivityIndicator.js" name="NetworkActivityIndicator">
+    <clobbers target="NetworkActivityIndicator" />
+  </js-module>
+
+  <!-- iOS -->
+  <platform name="ios">
+    <config-file target="config.xml" parent="/*">
+      <feature name="NetworkActivityIndicator">
+        <param name="ios-package" value="NetworkActivityIndicator" />
+      </feature>
+    </config-file>
+
+    <header-file src="src/ios/NetworkActivityIndicator.h" />
+    <source-file src="src/ios/NetworkActivityIndicator.m" />
+  </platform>
+
+</plugin>
