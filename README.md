@@ -82,7 +82,7 @@ android avd
 ---
 
 ## iOS
-#### Commands to build and run the iOS app
+#### Commands to [build](http://ionicframework.com/docs/v2/cli/build/) and [run](http://ionicframework.com/docs/v2/cli/run/) the iOS app
 
 ```
 ionic build ios
@@ -98,7 +98,7 @@ ionic run ios --emulator --livereload --consolelogs --serverlogs --address local
 ---
 
 ## Android
-#### Commands to build and run the Android app
+#### Commands to [build](http://ionicframework.com/docs/v2/cli/build/) and [run](http://ionicframework.com/docs/v2/cli/run/) the Android app
 
 ```
 ionic build android
