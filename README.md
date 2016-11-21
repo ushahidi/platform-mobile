@@ -66,10 +66,6 @@ https://developer.apple.com/xcode/
 #### Ensure that [Android](https://developer.android.com/index.html) is installed
 
 ```
-https://developer.android.com/index.html
-```
-
-```
 android list sdk --all --extended
 android update sdk -u -a -t android-24
 android update sdk -u -a -t extra-android-m2repository
@@ -101,7 +97,7 @@ ionic run ios --emulator --livereload --consolelogs --serverlogs --address local
 
 ---
 
-## iOS
+## Android
 #### Commands to build and run the Android app
 
 ```
