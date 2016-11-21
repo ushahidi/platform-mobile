@@ -1,10 +1,10 @@
 # Ushahidi
-## Mobile
+## Mobile Apps
 
 ---
 
 ## GitHub
-### Clone the [Ushahidi](https://github.com/ushahidi/platform-mobile) repo
+#### Clone the [Ushahidi](https://github.com/ushahidi/platform-mobile) repo
 
 ```
 git clone git@github.com:ushahidi/platform-mobile.git Ushahidi_Mobile
@@ -12,14 +12,15 @@ cd Ushahidi_Mobile
 ```
 
 ---
+
 ## Homebrew
-### Ensure that [Homebrew](http://brew.sh) is installed
+#### Ensure that [Homebrew](http://brew.sh) is installed
 
 ```
 /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 ```
 
-Add Homebrew location `export PATH="/usr/local/bin:$PATH"` to your `$PATH`.
+Add Homebrew location `export PATH="/usr/local/bin:$PATH"` to your environment `$PATH`.
 
 ```
 brew update
@@ -29,7 +30,7 @@ brew doctor
 ---
 
 ## NPM
-### Ensure that [NPM](https://www.npmjs.com) is installed
+#### Ensure that [NPM](https://www.npmjs.com) is installed
 
 ```
 brew install node
@@ -38,7 +39,7 @@ brew install node
 ---
 
 ## Ionic
-### Install the latest [Cordova](https://cordova.apache.org), [Ionic2](http://ionicframework.com/docs/v2/) and necessary dependencies
+#### Install the latest [Cordova](https://cordova.apache.org), [Ionic2](http://ionicframework.com/docs/v2/) and necessary dependencies
 
 ```
 npm install -g cordova@latest
@@ -52,9 +53,8 @@ npm install
 
 ---
 
-
 ## XCode
-### Ensure that [XCode](https://developer.apple.com/xcode/) is installed
+#### Ensure that [XCode](https://developer.apple.com/xcode/) is installed
 
 ```
 https://developer.apple.com/xcode/
@@ -63,7 +63,7 @@ https://developer.apple.com/xcode/
 ---
 
 ## Android
-### Ensure that [Android](https://developer.android.com/index.html) is installed
+#### Ensure that [Android](https://developer.android.com/index.html) is installed
 
 ```
 https://developer.android.com/index.html
@@ -86,7 +86,7 @@ android avd
 ---
 
 ## iOS
-### Commands to build and run the iOS app
+#### Commands to build and run the iOS app
 
 ```
 ionic build ios
@@ -102,7 +102,7 @@ ionic run ios --emulator --livereload --consolelogs --serverlogs --address local
 ---
 
 ## iOS
-### Commands to build and run the Android app
+#### Commands to build and run the Android app
 
 ```
 ionic build android
