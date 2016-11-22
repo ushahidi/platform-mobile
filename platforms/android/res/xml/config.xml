@@ -94,4 +94,10 @@
     <preference name="android-targetSdkVersion" value="24" />
     <preference name="android-minSdkVersion" value="19" />
     <preference name="LoadUrlTimeoutValue" value="50000" />
+    <feature name="SecureStorage">
+        <param name="android-package" value="com.crypho.plugins.SecureStorage" />
+    </feature>
+    <feature name="NativeStorage">
+        <param name="android-package" value="NativeStorage" />
+    </feature>
 </widget>

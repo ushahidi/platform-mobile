@@ -1,0 +1,47 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.ushahidi.mobile" version="0.1.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <feature name="Device">
+        <param name="browser-package" value="Device" />
+    </feature>
+    <feature name="NativeStorage">
+        <param name="browser-package" value="NativeStorage" />
+    </feature>
+    <feature name="SecureStorage">
+        <param name="browser-package" value="SecureStorage" />
+    </feature>
+    <name>Ushahidi</name>
+    <description>Ushahidi Mobile</description>
+    <author email="support@ushahidi.com" href="https://www.ushahidi.com/">Ushahidi Team</author>
+    <content src="index.html" />
+    <access origin="*" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    <allow-intent href="tel:*" />
+    <allow-intent href="sms:*" />
+    <allow-intent href="mailto:*" />
+    <allow-intent href="geo:*" />
+    <allow-navigation href="*" />
+    <allow-navigation href="http://*/*" />
+    <allow-navigation href="http://localhost:8000" />
+    <allow-navigation href="http://192.168.0.16:8000" />
+    <allow-navigation href="http://192.168.57.1:8000" />
+    <icon src="resources/android/icon/drawable-xhdpi-icon.png" />
+    <preference name="orientation" value="portrait" />
+    <preference name="webviewbounce" value="false" />
+    <preference name="UIWebViewBounce" value="false" />
+    <preference name="DisallowOverscroll" value="true" />
+    <preference name="BackupWebStorage" value="none" />
+    <preference name="AutoHideSplashScreen" value="true" />
+    <preference name="SplashScreen" value="screen" />
+    <preference name="SplashScreenDelay" value="1000" />
+    <preference name="SplashShowOnlyFirstTime" value="false" />
+    <preference name="FadeSplashScreenDuration" value="1000" />
+    <preference name="StatusBarStyle" value="default" />
+    <preference name="StatusBarOverlaysWebView" value="true" />
+    <preference name="StatusBarBackgroundColor" value="#3f4751" />
+    <preference name="ShowSplashScreenSpinner" value="true" />
+    <preference name="android-build-tool" value="gradle" />
+    <preference name="android-targetSdkVersion" value="24" />
+    <preference name="android-minSdkVersion" value="19" />
+    <preference name="LoadUrlTimeoutValue" value="50000" />
+</widget>

@@ -13,6 +13,7 @@ export class MyApp {
 
   constructor(platform: Platform) {
     platform.ready().then(() => {
+      console.log("Platform Ready");
       StatusBar.styleDefault();
       Splashscreen.hide();
     });

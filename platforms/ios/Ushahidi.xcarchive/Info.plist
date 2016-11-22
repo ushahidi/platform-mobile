@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>ApplicationProperties</key>
+	<dict>
+		<key>ApplicationPath</key>
+		<string>Applications/Ushahidi.app</string>
+		<key>CFBundleIdentifier</key>
+		<string>com.ushahidi.mobile</string>
+		<key>CFBundleShortVersionString</key>
+		<string>0.1.0</string>
+		<key>CFBundleVersion</key>
+		<string>0.1.0</string>
+		<key>SigningIdentity</key>
+		<string>iPhone Developer: Dale Zak (89V8WPXURA)</string>
+	</dict>
+	<key>ArchiveVersion</key>
+	<integer>2</integer>
+	<key>CreationDate</key>
+	<date>2016-11-22T20:38:00Z</date>
+	<key>Name</key>
+	<string>Ushahidi</string>
+	<key>SchemeName</key>
+	<string>Ushahidi</string>
+</dict>
+</plist>

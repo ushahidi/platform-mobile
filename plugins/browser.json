@@ -1,0 +1,71 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {}
+    },
+    "installed_plugins": {
+        "cordova-fabric-plugin": {
+            "FABRIC_API_KEY": "ce67fdba44588767037fbff566b67932e811c332",
+            "FABRIC_API_SECRET": "7b24e06a9561fa04b86ae87ef1a0942faaba38b606ac787935af6583d22c3392",
+            "PACKAGE_NAME": "com.ushahidi.mobile"
+        },
+        "cordova-plugin-app-version": {
+            "PACKAGE_NAME": "com.ushahidi.mobile"
+        },
+        "cordova-plugin-console": {
+            "PACKAGE_NAME": "com.ushahidi.mobile"
+        },
+        "cordova-plugin-device": {
+            "PACKAGE_NAME": "com.ushahidi.mobile"
+        },
+        "cordova-plugin-email": {
+            "PACKAGE_NAME": "com.ushahidi.mobile"
+        },
+        "cordova-plugin-google-analytics": {
+            "PACKAGE_NAME": "com.ushahidi.mobile"
+        },
+        "cordova-plugin-ios-longpress-fix": {
+            "PACKAGE_NAME": "com.ushahidi.mobile"
+        },
+        "cordova-plugin-nativestorage": {
+            "PACKAGE_NAME": "com.ushahidi.mobile"
+        },
+        "cordova-plugin-networkactivityindicator": {
+            "PACKAGE_NAME": "com.ushahidi.mobile"
+        },
+        "cordova-plugin-secure-storage": {
+            "PACKAGE_NAME": "com.ushahidi.mobile"
+        },
+        "cordova-plugin-spinner-dialog": {
+            "PACKAGE_NAME": "com.ushahidi.mobile"
+        },
+        "cordova-plugin-splashscreen": {
+            "PACKAGE_NAME": "com.ushahidi.mobile"
+        },
+        "cordova-plugin-statusbar": {
+            "PACKAGE_NAME": "com.ushahidi.mobile"
+        },
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "com.ushahidi.mobile"
+        },
+        "cordova-plugin-x-socialsharing": {
+            "PACKAGE_NAME": "com.ushahidi.mobile"
+        },
+        "cordova-sqlite-storage": {
+            "PACKAGE_NAME": "com.ushahidi.mobile"
+        },
+        "ionic-plugin-deeplinks": {
+            "URL_SCHEME": "ushahidi",
+            "DEEPLINK_SCHEME": "https",
+            "DEEPLINK_HOST": "ushahidi.com",
+            "PACKAGE_NAME": "com.ushahidi.mobile"
+        },
+        "ionic-plugin-keyboard": {
+            "PACKAGE_NAME": "com.ushahidi.mobile"
+        }
+    },
+    "dependent_plugins": {}
+}

@@ -13,6 +13,8 @@ npm install xcode
 npm install ios-sim
 npm install ios-deploy
 npm install android-simulator
+npm install -g npm-check-updates
+npm-check-updates -u
 npm install
 ```
 
