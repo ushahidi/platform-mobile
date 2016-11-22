@@ -43,8 +43,9 @@ brew install node
 
 ```
 npm install -g cordova@latest
-npm install cordova-common
+npm install -g cordova-common
 ```
+
 ```
 cordova -v
 ```
@@ -56,10 +57,13 @@ cordova -v
 
 ```
 npm install -g ionic@latest
-npm install ios-sim
-npm install ios-deploy
-npm install android-simulator
+npm install -g cordova-ios
+npm install -g ios-sim
+npm install -g ios-deploy
+npm install -g cordova-android
+npm install -g android-simulator
 ```
+
 ```
 ionic -v
 ```
@@ -90,10 +94,6 @@ android update sdk -u -a -t extra-intel-Hardware_Accelerated_Execution_Manager
 ```
 android sdk
 android avd
-```
-
-```
-cordova requirements android
 ```
 
 ---
@@ -129,4 +129,8 @@ ionic build android --release
 ```
 ionic run android --consolelogs --serverlogs
 ionic run android --livereload --consolelogs --serverlogs
+```
+
+```
+cordova requirements android
 ```
