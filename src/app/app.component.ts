@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Platform } from 'ionic-angular';
-import { StatusBar, Splashscreen } from 'ionic-native';
+import { StatusBar, Splashscreen, AppVersion } from 'ionic-native';
 
 import { HomePage } from '../pages/home/home';
 
@@ -14,6 +14,18 @@ export class MyApp {
   constructor(platform: Platform) {
     platform.ready().then(() => {
       console.log("Platform Ready");
+      // AppVersion.getAppName().then(appName => {
+      //   console.log(`App Name ${appName}`);
+      // });
+      // AppVersion.getPackageName().then(packageName => {
+      //   console.log(`Package Name ${packageName}`);
+      // });
+      // AppVersion.getVersionCode().then(versionCode => {
+      //   console.log(`Version Code ${versionCode}`);
+      // });
+      // AppVersion.getVersionNumber().then(versionNumber => {
+      //   console.log(`Version Number ${versionNumber}`);
+      // });
       StatusBar.styleDefault();
       Splashscreen.hide();
     });

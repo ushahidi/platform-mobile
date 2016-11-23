@@ -38,8 +38,14 @@
         <param name="ios-package" value="LongPressFix" />
         <param name="onload" value="true" />
     </feature>
+    <feature name="NativeStorage">
+        <param name="ios-package" value="NativeStorage" />
+    </feature>
     <feature name="NetworkActivityIndicator">
         <param name="ios-package" value="NetworkActivityIndicator" />
+    </feature>
+    <feature name="SecureStorage">
+        <param name="ios-package" value="SecureStorage" />
     </feature>
     <feature name="SpinnerDialog">
         <param name="ios-package" value="CDVSpinnerDialog" />
@@ -65,16 +71,10 @@
     <feature name="Keyboard">
         <param name="ios-package" onload="true" value="IonicKeyboard" />
     </feature>
-    <feature name="SecureStorage">
-        <param name="ios-package" value="SecureStorage" />
-    </feature>
-    <feature name="NativeStorage">
-        <param name="ios-package" value="NativeStorage" />
-    </feature>
     <name>Ushahidi</name>
     <description>Ushahidi Mobile</description>
     <author email="support@ushahidi.com" href="https://www.ushahidi.com/">Ushahidi Team</author>
-    <content original-src="index.html" src="http://localhost:8000" />
+    <content original-src="index.html" src="http://192.168.0.16:8000" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />

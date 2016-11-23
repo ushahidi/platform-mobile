@@ -13,6 +13,15 @@ cd Ushahidi_Mobile
 
 ---
 
+## XCode
+#### Ensure the latest [XCode](https://developer.apple.com/xcode/) is installed
+
+```
+https://developer.apple.com/xcode/
+```
+
+---
+
 ## Homebrew
 #### Ensure that [Homebrew](http://brew.sh) is installed
 
@@ -20,7 +29,7 @@ cd Ushahidi_Mobile
 /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 ```
 
-Add Homebrew location `export PATH="/usr/local/bin:$PATH"` to your environment `$PATH`.
+Add the Homebrew location `export PATH="/usr/local/bin:$PATH"` to your environment `$PATH`.
 
 ```
 brew update
@@ -34,6 +43,13 @@ brew doctor
 
 ```
 brew install node
+npm install -g npm
+```
+
+Double check the version of NPM
+
+```
+npm --version
 ```
 
 ---
@@ -45,6 +61,8 @@ brew install node
 npm install -g cordova@latest
 npm install -g cordova-common
 ```
+
+Double check the version of Cordova
 
 ```
 cordova -v
@@ -64,17 +82,10 @@ npm install -g cordova-android
 npm install -g android-simulator
 ```
 
+Double check the version of Ionic
+
 ```
 ionic -v
-```
-
----
-
-## XCode
-#### Ensure that [XCode](https://developer.apple.com/xcode/) is installed
-
-```
-https://developer.apple.com/xcode/
 ```
 
 ---
@@ -108,9 +119,10 @@ ionic build ios --release
 
 ```
 ionic run ios
-ionic run ios --device --livereload --consolelogs --serverlogs
-ionic run ios --emulator --livereload --consolelogs --serverlogs --address localhost --port 8000
+ionic run ios --livereload --consolelogs --serverlogs
 ```
+
+Double check whether the Cordova requirements for iOS are installed
 
 ```
 cordova requirements ios
@@ -130,6 +142,8 @@ ionic build android --release
 ionic run android --consolelogs --serverlogs
 ionic run android --livereload --consolelogs --serverlogs
 ```
+
+Double check whether the Cordova requirements for Android are installed
 
 ```
 cordova requirements android

@@ -36,8 +36,11 @@ ionic platform add ios
 ```
 
 ```
-ionic build ios
+ionic build ios --verbose
 ionic build ios --release
+```
+
+```
 ionic run ios
 ionic run ios --device --livereload --consolelogs --serverlogs
 ionic run ios --emulator --livereload --consolelogs --serverlogs --address localhost --port 8000
@@ -64,7 +67,11 @@ ionic platform add android
 ```
 
 ```
-ionic build android
+ionic build android --verbose
+ionic build android --release
+```
+
+```
 ionic run android --consolelogs --serverlogs
 ionic run android --livereload --consolelogs --serverlogs
 ```
