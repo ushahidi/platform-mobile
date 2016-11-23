@@ -27,6 +27,11 @@ export class HomePage {
 
   ionViewDidEnter() {
     console.log("Home ionViewDidEnter");
-    this.api.postLogin("dalezak@gmail.com", "P4NpCNUqLTCnvJAQBBMX");
+    // this.api.postLogin("dalezak@gmail.com", "P4NpCNUqLTCnvJAQBBMX").then(accessToken => {
+    //   console.log(`Home Token ${accessToken}`);
+    //   this.api.createPost("New Post From App", (new Date()).toLocaleString()).then(post => {
+    //     console.log(`Home Post ${JSON.stringify(post)}`);
+    //   });
+    // });
   }
 }

@@ -80,6 +80,7 @@ npm install -g ios-sim
 npm install -g ios-deploy
 npm install -g cordova-android
 npm install -g android-simulator
+npm install -g cordova-browser
 ```
 
 Double check the version of Ionic
@@ -147,4 +148,19 @@ Double check whether the Cordova requirements for Android are installed
 
 ```
 cordova requirements android
+```
+
+## Desktop
+### Commands to run the app in the Browser
+
+```
+ionic build browser --desktop --testing
+```
+
+```
+ionic run browser
+```
+
+```
+cordova requirements browser
 ```
