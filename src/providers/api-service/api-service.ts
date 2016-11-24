@@ -84,6 +84,27 @@ export class ApiService {
     });
   };
 
+  searchDeployments(search:string, cache:boolean=true) {
+    return new Promise(resolve => {
+      let url = `http://api.ushahididev.com/deployments?q=${search}`;
+      let headers = this.getHeaders();
+      console.log(`Downloading ${url}`);
+      this.http.get(url, {headers: headers})
+        //.map(res => res.json())
+        .subscribe(
+          (json) => {
+            console.log(`Downloaded ${url} ${JSON.stringify(json)}`);
+            let deployments = json;
+            resolve(deployments);
+          },
+          (err) => {
+            console.error(`Failed ${url} ${JSON.stringify(err)}`);
+            resolve(null);
+          }
+        );
+    });
+  }
+
   getPosts(search:string=null, form:string=null, user:string=null, cache:boolean=true) {
     return new Promise(resolve => {
       let api = "/api/v3/posts";

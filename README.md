@@ -87,6 +87,7 @@ Double check the version of Ionic
 
 ```
 ionic -v
+npm list --depth=0
 ```
 
 ---

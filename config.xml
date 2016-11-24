@@ -16,6 +16,7 @@
   <allow-navigation href="http://localhost:8000"/>
   <allow-navigation href="http://192.168.0.16:8000"/>
   <allow-navigation href="http://192.168.57.1:8000"/>
+  <allow-navigation href="http://192.168.0.21:8000"/>
   <platform name="android">
     <allow-intent href="market:*"/>
     <splash density="port-ldpi" src="resources/android/splash/drawable-port-ldpi-screen.png"/>
@@ -71,8 +72,8 @@
   <preference name="SplashScreenDelay" value="1000"/>
   <preference name="SplashShowOnlyFirstTime" value="false"/>
   <preference name="FadeSplashScreenDuration" value="1000"/>
-  <preference name="StatusBarStyle" value="default"/>
-  <preference name="StatusBarOverlaysWebView" value="true"/>
+  <preference name="StatusBarStyle" value="lightcontent"/>
+  <preference name="StatusBarOverlaysWebView" value="false"/>
   <preference name="StatusBarBackgroundColor" value="#3f4751"/>
   <preference name="ShowSplashScreenSpinner" value="true"/>
   <preference name="android-build-tool" value="gradle"/>

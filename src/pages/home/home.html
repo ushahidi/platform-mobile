@@ -6,6 +6,9 @@
   <p text-center>Enter the name or URL of the deployment you want to add.</p>
   <ion-item margin-top class="input">
     <ion-icon name="search" item-left color="grey"></ion-icon>
-    <ion-input type="text" placeholder="Deployment name or URL"></ion-input>
+    <ion-input #input type="text" placeholder="Deployment name or URL"
+              (focus)="inputFocussed($event)" (blur)="inputBlurred($event)"></ion-input>
   </ion-item>
+  <button #button ion-button block margin-top color="primary"
+          [disabled]="input.value.length == 0" (click)="searchDeployments($event)">Search</button>
 </ion-content>

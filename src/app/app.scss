@@ -20,5 +20,9 @@ ion-item {
   }
   ion-input {
     font-size: 15px;
+    border: none; 
+    input {
+      border: none;
+    }
   }
 }

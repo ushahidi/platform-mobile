@@ -1,0 +1,27 @@
+<ion-header>
+  <ion-navbar color="dark">
+    <ion-title>Deployments</ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content class="page-deployments">
+  <div padding>
+    <ion-item margin-top class="input">
+      <ion-icon name="search" item-left color="grey"></ion-icon>
+      <ion-input #input type="text" placeholder="Deployment name or URL" [value]="search"
+                (focus)="inputFocussed($event)" (blur)="inputBlurred($event)"></ion-input>
+    </ion-item>
+  </div>
+  <div text-center margin-top-lg margin-bottom-lg *ngIf="deployments == null">
+    <ion-spinner></ion-spinner>
+  </div>
+  <div *ngIf="deployments && deployments.length > 0">
+    <ion-card *ngFor="let deployment of deployments; let i = index">
+      <ion-card-header>
+        {{deployment.deployment_name}}
+      </ion-card-header>
+      <ion-card-content>
+        {{deployment.subdomain}}
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>
