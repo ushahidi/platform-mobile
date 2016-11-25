@@ -1,15 +1,15 @@
 import { Component, ViewChild } from '@angular/core';
 import { Platform, NavController, TextInput, Button, LoadingController } from 'ionic-angular';
 
-import { DeploymentsPage } from '../deployments/deployments';
+import { DeploymentListPage } from '../deployment-list/deployment-list';
 
 import { ApiService } from '../../providers/api-service/api-service';
 
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html',
-  providers: [ApiService],
-  entryComponents:[ DeploymentsPage ]
+  providers: [ ApiService ],
+  entryComponents:[ DeploymentListPage ]
 })
 export class HomePage {
 
@@ -34,12 +34,6 @@ export class HomePage {
 
   ionViewDidEnter() {
     console.log("Home ionViewDidEnter");
-    // this.api.postLogin("dalezak@gmail.com", "P4NpCNUqLTCnvJAQBBMX").then(token => {
-    //   console.log(`Home Token ${token}`);
-    //   this.api.getPosts().then(posts => {
-    //     console.log(`Home Posts ${posts}`);
-    //   });
-    // });
   }
 
   inputFocussed(event) {
@@ -62,7 +56,7 @@ export class HomePage {
         console.log(`Home Deployments ${deployments}`);
         loading.dismiss();
         this.navController.push(
-          DeploymentsPage,
+          DeploymentListPage,
           { search: search,
             deployments: deployments });
       });

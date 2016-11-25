@@ -15,12 +15,12 @@
     <ion-spinner></ion-spinner>
   </div>
   <div *ngIf="deployments && deployments.length > 0">
-    <ion-card *ngFor="let deployment of deployments; let i = index">
+    <ion-card tappable (click)="showDeployment($event, deployment)" *ngFor="let deployment of deployments; let i = index">
       <ion-card-header>
         {{deployment.deployment_name}}
       </ion-card-header>
       <ion-card-content>
-        {{deployment.subdomain}}
+        {{deployment.url}}
       </ion-card-content>
     </ion-card>
   </div>

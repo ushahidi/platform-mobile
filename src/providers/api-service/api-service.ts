@@ -11,7 +11,6 @@ import 'rxjs/add/operator/catch';
 @Injectable()
 export class ApiService {
   secureStorage: SecureStorage;
-  domain: any = String;
   clientId: any = String;
   clientSecret: any = String;
   accessToken: any = String;
@@ -19,7 +18,6 @@ export class ApiService {
 
   constructor(public http: Http, public platform:Platform) {
     console.log('ApiService');
-    this.domain = "https://dale.api.ushahidi.io";
     this.clientId = "ushahidiui";
     this.clientSecret = "35e7f0bca957836d05ca0492211b0ac707671261";
     this.platform.ready().then(() => {
@@ -52,50 +50,13 @@ export class ApiService {
     return headers;
   }
 
-  postLogin(username:string, password:string, scope:string="api posts forms tags sets media") {
-    if (this.accessToken) {
-      console.log(`Cached ${this.accessToken}`);
-      return Promise.resolve(this.accessToken);
-    }
-    return new Promise(resolve => {
-      let api = "/oauth/token";
-      let params = {
-        grant_type: "password",
-        scope: scope,
-        client_id: this.clientId,
-        client_secret: this.clientSecret,
-        username: username,
-        password: password};
-      let url = this.domain + api;
-      let body = JSON.stringify(params);
-      let headers = this.getHeaders();
-      let options = new RequestOptions({ headers: headers });
-      console.log(`Posting ${url} ${body}`);
-      this.http.post(url, body, options)
-        .map(res => res.json())
-        .subscribe(
-          (json) => {
-            console.log(`Posted ${url} ${JSON.stringify(json)}`);
-            this.accessToken = json.access_token;
-            this.refreshToken = json.refresh_token;
-            console.log(`access_token ${json.access_token} refresh_token ${json.refresh_token}`);
-            resolve(this.accessToken);
-          },
-          (err) => {
-            console.error(`Failed ${url} ${JSON.stringify(err)}`);
-            resolve(null);
-          }
-        );
-    });
-  };
-
   searchDeployments(search:string, cache:boolean=true) {
     return new Promise(resolve => {
       let params = new URLSearchParams();
       if (search != null) {
         params.set("q", search);
       }
-      let url = "http://api.ushahididev.com/deployments";
+      let url = "https://api.ushahididev.com/deployments";
       let headers = this.getHeaders();
       //let options = new RequestOptions({ headers: headers, search: params });
       let options = new RequestOptions({
@@ -122,7 +83,44 @@ export class ApiService {
     });
   }
 
-  getPosts(search:string=null, form:string=null, user:string=null, cache:boolean=true) {
+  postLogin(host:string, username:string, password:string, scope:string="api posts forms tags sets media") {
+    if (this.accessToken) {
+      console.log(`Cached ${this.accessToken}`);
+      return Promise.resolve(this.accessToken);
+    }
+    return new Promise(resolve => {
+      let api = "/oauth/token";
+      let params = {
+        grant_type: "password",
+        scope: scope,
+        client_id: this.clientId,
+        client_secret: this.clientSecret,
+        username: username,
+        password: password};
+      let url = host + api;
+      let body = JSON.stringify(params);
+      let headers = this.getHeaders();
+      let options = new RequestOptions({ headers: headers });
+      console.log(`Posting ${url} ${body}`);
+      this.http.post(url, body, options)
+        .map(res => res.json())
+        .subscribe(
+          (json) => {
+            console.log(`Posted ${url} ${JSON.stringify(json)}`);
+            this.accessToken = json.access_token;
+            this.refreshToken = json.refresh_token;
+            console.log(`access_token ${json.access_token} refresh_token ${json.refresh_token}`);
+            resolve(this.accessToken);
+          },
+          (err) => {
+            console.error(`Failed ${url} ${JSON.stringify(err)}`);
+            resolve(null);
+          }
+        );
+    });
+  };
+
+  getPosts(host:string, search:string=null, form:string=null, user:string=null, cache:boolean=true) {
     return new Promise(resolve => {
       let api = "/api/v3/posts";
       let params = new URLSearchParams();
@@ -135,7 +133,7 @@ export class ApiService {
       if (user != null) {
         params.set("user", user);
       }
-      let url = this.domain + api;
+      let url = host + api;
       let headers = this.getHeaders(this.accessToken);
       let options = new RequestOptions({ headers: headers, search: params });
       console.log(`Downloading ${url}`);
@@ -155,11 +153,11 @@ export class ApiService {
     });
   }
 
-  getPost(id:number, cache:boolean=true) {
+  getPost(host:string, id:number, cache:boolean=true) {
     return new Promise(resolve => {
       let api = `/api/v3/posts/#{id}`;
       let params = new URLSearchParams();
-      let url = this.domain + api;
+      let url = host + api;
       let headers = this.getHeaders(this.accessToken);
       let options = new RequestOptions({ headers: headers, search: params });
       console.log(`Downloading ${url}`);
@@ -179,7 +177,7 @@ export class ApiService {
     });
   }
 
-  createPost(title:string, message:string=null) {
+  createPost(host:string, title:string, message:string=null) {
     return new Promise(resolve => {
       let api = "/api/v3/posts/";
       let params = {};
@@ -189,7 +187,7 @@ export class ApiService {
       if (message != null) {
         params["message"] = message;
       }
-      let url = this.domain + api;
+      let url = host + api;
       let body = JSON.stringify(params);
       let headers = this.getHeaders(this.accessToken);
       let options = new RequestOptions({ headers: headers });
@@ -210,7 +208,7 @@ export class ApiService {
     });
   }
 
-  updatePost(id:number, title:string, message:string=null) {
+  updatePost(host:string, id:number, title:string, message:string=null) {
     return new Promise(resolve => {
       let api = `/api/v3/posts/#{id}`;
       let params = {};
@@ -220,7 +218,7 @@ export class ApiService {
       if (message != null) {
         params["message"] = message;
       }
-      let url = this.domain + api;
+      let url = host + api;
       let body = JSON.stringify(params);
       let headers = this.getHeaders(this.accessToken);
       let options = new RequestOptions({ headers: headers });

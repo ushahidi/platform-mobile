@@ -1,0 +1,27 @@
+<ion-header>
+  <ion-navbar color="dark">
+    <ion-title>Login</ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content class="page-login" padding>
+  <div margin-top margin-bottom *ngIf="deployment">
+    <ion-item class="input">
+      <ion-icon name="link" item-left color="grey"></ion-icon>
+      <ion-input #url type="text" disabled="true" [value]="deployment.url"></ion-input>
+    </ion-item>
+  </div>
+  <div margin-top margin-bottom>
+    <ion-item class="input">
+      <ion-icon name="mail" item-left color="grey"></ion-icon>
+      <ion-input #username type="email" clearInput="true" placeholder="Email"></ion-input>
+    </ion-item>
+  </div>
+  <div margin-top margin-bottom>
+    <ion-item margin-top margin-bottom class="input">
+      <ion-icon name="key" item-left color="grey"></ion-icon>
+      <ion-input #password type="password" clearInput="true" placeholder="Password"></ion-input>
+    </ion-item>
+  </div>
+  <button #button ion-button block margin-top color="primary" (click)="doLogin($event)"
+          [disabled]="username.value.length == 0 || password.value.length == 0">Login</button>
+</ion-content>
