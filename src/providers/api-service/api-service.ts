@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Platform } from 'ionic-angular';
 import { NativeStorage, SecureStorage } from 'ionic-native';
-import { Http, Headers, URLSearchParams, RequestOptions } from '@angular/http';
+import { Http, Headers, URLSearchParams, Request, RequestOptions, RequestMethod } from '@angular/http';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/retry';
 import 'rxjs/add/operator/delay';
 import 'rxjs/add/operator/timeout';
+import 'rxjs/add/operator/catch';
 
 @Injectable()
 export class ApiService {
@@ -41,7 +42,11 @@ export class ApiService {
     let headers = new Headers();
     headers.set('Accept', 'application/json');
     headers.set('Content-Type', 'application/json');
+    // headers.set('Access-Control-Allow-Origin', '*');
+    // headers.set('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Range, Content-Disposition, Content-Type, Authorization');
+    // headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, OPTIONS');
     if (accessToken != null) {
+      // headers.set('Access-Control-Allow-Credentials', "true");
       headers.set("Authorization", `Bearer ${accessToken}`)
     }
     return headers;
@@ -86,22 +91,34 @@ export class ApiService {
 
   searchDeployments(search:string, cache:boolean=true) {
     return new Promise(resolve => {
-      let url = `http://api.ushahididev.com/deployments?q=${search}`;
+      let params = new URLSearchParams();
+      if (search != null) {
+        params.set("q", search);
+      }
+      let url = "http://api.ushahididev.com/deployments";
       let headers = this.getHeaders();
+      //let options = new RequestOptions({ headers: headers, search: params });
+      let options = new RequestOptions({
+        method: RequestMethod.Get,
+        url: url,
+        headers: headers,
+        search: params
+      });
       console.log(`Downloading ${url}`);
-      this.http.get(url, {headers: headers})
-        //.map(res => res.json())
+      this.http.request(new Request(options))
+        .map(res => res.json())
         .subscribe(
           (json) => {
-            console.log(`Downloaded ${url} ${JSON.stringify(json)}`);
+            console.log(`Downloaded ${url}`);
+            console.log(`JSON #{json}`);
+            // console.log(JSON.stringify(json));
             let deployments = json;
             resolve(deployments);
           },
           (err) => {
             console.error(`Failed ${url} ${JSON.stringify(err)}`);
             resolve(null);
-          }
-        );
+          });
     });
   }
 
@@ -120,8 +137,9 @@ export class ApiService {
       }
       let url = this.domain + api;
       let headers = this.getHeaders(this.accessToken);
+      let options = new RequestOptions({ headers: headers, search: params });
       console.log(`Downloading ${url}`);
-      this.http.get(url, {headers: headers, search: params})
+      this.http.get(url, options)
         .map(res => res.json())
         .subscribe(
           (json) => {
@@ -143,8 +161,9 @@ export class ApiService {
       let params = new URLSearchParams();
       let url = this.domain + api;
       let headers = this.getHeaders(this.accessToken);
+      let options = new RequestOptions({ headers: headers, search: params });
       console.log(`Downloading ${url}`);
-      this.http.get(url, {headers: headers, search: params})
+      this.http.get(url, options)
         .map(res => res.json())
         .subscribe(
           (json) => {

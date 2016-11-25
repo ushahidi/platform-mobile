@@ -34,6 +34,12 @@ export class HomePage {
 
   ionViewDidEnter() {
     console.log("Home ionViewDidEnter");
+    // this.api.postLogin("dalezak@gmail.com", "P4NpCNUqLTCnvJAQBBMX").then(token => {
+    //   console.log(`Home Token ${token}`);
+    //   this.api.getPosts().then(posts => {
+    //     console.log(`Home Posts ${posts}`);
+    //   });
+    // });
   }
 
   inputFocussed(event) {
@@ -53,7 +59,7 @@ export class HomePage {
       });
       loading.present();
       this.api.searchDeployments(search).then(deployments => {
-        console.log(JSON.stringify(deployments));
+        console.log(`Home Deployments ${deployments}`);
         loading.dismiss();
         this.navController.push(
           DeploymentsPage,
