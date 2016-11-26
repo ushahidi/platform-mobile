@@ -1,22 +1,37 @@
-import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { Platform, NavParams, NavController, TextInput, Button, LoadingController, ToastController, AlertController } from 'ionic-angular';
 
-/*
-  Generated class for the DeploymentDetails page.
+import { ApiService } from '../../providers/api-service/api-service';
 
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
-*/
 @Component({
   selector: 'page-deployment-details',
-  templateUrl: 'deployment-details.html'
+  templateUrl: 'deployment-details.html',
+  providers: [ ApiService ]
 })
 export class DeploymentDetailsPage {
 
-  constructor(public navCtrl: NavController) {}
+  deployment: any;
 
-  ionViewDidLoad() {
-    console.log('Hello DeploymentDetailsPage Page');
-  }
+  constructor(
+    public platform:Platform,
+    public api:ApiService,
+    public navParams: NavParams,
+    public navController:NavController,
+    public toastController: ToastController,
+    public alertController: AlertController,
+    public loadingController:LoadingController) {}
+
+    ionViewDidLoad() {
+      console.log('Deployment Details ionViewDidLoad');
+    }
+
+    ionViewWillEnter() {
+      console.log("Deployment Details ionViewWillEnter");
+      this.deployment = this.navParams.get("deployment");
+    }
+
+    ionViewDidEnter() {
+      console.log("Deployment Details ionViewDidEnter");
+    }
 
 }

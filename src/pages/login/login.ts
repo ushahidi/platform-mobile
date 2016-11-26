@@ -8,7 +8,8 @@ import { ApiService } from '../../providers/api-service/api-service';
 @Component({
   selector: 'page-login',
   templateUrl: 'login.html',
-  entryComponents:[ LoginPage ]
+  providers: [ ApiService ],
+  entryComponents:[ DeploymentDetailsPage ]
 })
 export class LoginPage {
 
@@ -58,12 +59,16 @@ export class LoginPage {
         this.api.postLogin(host, username, password).then(token => {
           console.log(`Login Token ${token}`);
           loading.dismiss();
-          if (token) {
+          if (token && token.length > 0) {
             let toast = this.toastController.create({
               message: 'Login Successful',
               duration: 3000
             });
             toast.present();
+            this.navController.setRoot(DeploymentDetailsPage,
+             {  deployment: this.deployment },
+             { animate:true,
+               direction: 'forward' });
           }
           else {
             let alert = this.alertController.create({
