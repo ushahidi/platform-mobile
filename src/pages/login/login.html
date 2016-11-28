@@ -1,6 +1,16 @@
 <ion-header>
   <ion-navbar color="dark">
+    <ion-buttons start>
+      <button #cancel ion-button (click)="doCancel($event)">
+        Cancel
+      </button>
+    </ion-buttons>
     <ion-title>Login</ion-title>
+    <!-- <ion-buttons end>
+      <button #login ion-button (click)="doLogin($event)" [disabled]="username.value.length == 0 || password.value.length == 0">
+        Login
+      </button>
+    </ion-buttons> -->
   </ion-navbar>
 </ion-header>
 <ion-content class="page-login" padding>
@@ -22,6 +32,6 @@
       <ion-input #password type="password" clearInput="true" placeholder="Password"></ion-input>
     </ion-item>
   </div>
-  <button #button ion-button block margin-top color="primary" (click)="doLogin($event)"
+  <button #login ion-button block margin-top color="primary" (click)="doLogin($event)"
           [disabled]="username.value.length == 0 || password.value.length == 0">Login</button>
 </ion-content>

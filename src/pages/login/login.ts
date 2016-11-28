@@ -1,19 +1,20 @@
 import { Component, ViewChild } from '@angular/core';
-import { Platform, NavParams, NavController, TextInput, Button, LoadingController, ToastController, AlertController } from 'ionic-angular';
-
-import { DeploymentDetailsPage } from '../deployment-details/deployment-details';
+import { Platform, NavParams, NavController, TextInput, Button, LoadingController,
+  ToastController, AlertController, ViewController } from 'ionic-angular';
 
 import { ApiService } from '../../providers/api-service/api-service';
 
 @Component({
   selector: 'page-login',
   templateUrl: 'login.html',
-  providers: [ ApiService ],
-  entryComponents:[ DeploymentDetailsPage ]
+  providers: [ ApiService ]
 })
 export class LoginPage {
 
   deployment: any;
+
+  @ViewChild('cancel') cancel: Button;
+  @ViewChild('login') login: Button;
 
   @ViewChild('username') username: TextInput;
   @ViewChild('password') password: TextInput;
@@ -25,6 +26,7 @@ export class LoginPage {
     public navController:NavController,
     public toastController: ToastController,
     public alertController: AlertController,
+    public viewController: ViewController,
     public loadingController:LoadingController) {
 
     }
@@ -36,6 +38,7 @@ export class LoginPage {
     ionViewWillEnter() {
       console.log("Login ionViewWillEnter");
       this.deployment = this.navParams.get("deployment");
+      this.deployment.url = `https://${this.deployment.subdomain}.${this.deployment.domain}`;
       if (this.deployment.subdomain == 'dale') {
         this.username.value = "dalezak@gmail.com";
         this.password.value = "P4NpCNUqLTCnvJAQBBMX";
@@ -44,6 +47,11 @@ export class LoginPage {
 
     ionViewDidEnter() {
       console.log("Login ionViewDidEnter");
+    }
+
+    doCancel(event) {
+      console.log("Login doCancel");
+      this.viewController.dismiss();
     }
 
     doLogin(event) {
@@ -65,10 +73,7 @@ export class LoginPage {
               duration: 3000
             });
             toast.present();
-            this.navController.setRoot(DeploymentDetailsPage,
-             {  deployment: this.deployment },
-             { animate:true,
-               direction: 'forward' });
+            this.viewController.dismiss({token: token.toString()});
           }
           else {
             let alert = this.alertController.create({

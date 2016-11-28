@@ -52,8 +52,9 @@ export class HomePage {
         content: "Searching..."
       });
       loading.present();
-      this.api.searchDeployments(search).then(deployments => {
-        console.log(`Home Deployments ${deployments}`);
+      this.api.searchDeployments(search).then(results => {
+        let deployments = <any[]>results;
+        console.log(`Home searchDeployments ${deployments.length}`);
         loading.dismiss();
         this.navController.push(
           DeploymentListPage,

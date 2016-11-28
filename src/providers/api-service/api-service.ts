@@ -40,11 +40,7 @@ export class ApiService {
     let headers = new Headers();
     headers.set('Accept', 'application/json');
     headers.set('Content-Type', 'application/json');
-    // headers.set('Access-Control-Allow-Origin', '*');
-    // headers.set('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Range, Content-Disposition, Content-Type, Authorization');
-    // headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, OPTIONS');
     if (accessToken != null) {
-      // headers.set('Access-Control-Allow-Credentials', "true");
       headers.set("Authorization", `Bearer ${accessToken}`)
     }
     return headers;
@@ -56,23 +52,15 @@ export class ApiService {
       if (search != null) {
         params.set("q", search);
       }
-      let url = "https://api.ushahididev.com/deployments";
+      let url = "https://api.ushahidi.io/deployments";
       let headers = this.getHeaders();
-      //let options = new RequestOptions({ headers: headers, search: params });
-      let options = new RequestOptions({
-        method: RequestMethod.Get,
-        url: url,
-        headers: headers,
-        search: params
-      });
-      console.log(`Downloading ${url}`);
-      this.http.request(new Request(options))
+      let options = new RequestOptions({ headers: headers, search: params });
+      console.log(`Downloading ${url} ${params.toString()}`);
+      this.http.get(url, options)
         .map(res => res.json())
         .subscribe(
           (json) => {
-            console.log(`Downloaded ${url}`);
-            console.log(`JSON #{json}`);
-            // console.log(JSON.stringify(json));
+            console.log(`Downloaded ${url} ${JSON.stringify(json)}`);
             let deployments = json;
             resolve(deployments);
           },
@@ -120,7 +108,7 @@ export class ApiService {
     });
   };
 
-  getPosts(host:string, search:string=null, form:string=null, user:string=null, cache:boolean=true) {
+  getPosts(host:string, token:string, search:string=null, form:string=null, user:string=null, cache:boolean=true) {
     return new Promise(resolve => {
       let api = "/api/v3/posts";
       let params = new URLSearchParams();
@@ -134,9 +122,9 @@ export class ApiService {
         params.set("user", user);
       }
       let url = host + api;
-      let headers = this.getHeaders(this.accessToken);
+      let headers = this.getHeaders(token);
       let options = new RequestOptions({ headers: headers, search: params });
-      console.log(`Downloading ${url}`);
+      console.log(`Downloading ${url} ${params.toString()}`);
       this.http.get(url, options)
         .map(res => res.json())
         .subscribe(
@@ -153,12 +141,12 @@ export class ApiService {
     });
   }
 
-  getPost(host:string, id:number, cache:boolean=true) {
+  getPost(host:string, token:string, id:number, cache:boolean=true) {
     return new Promise(resolve => {
       let api = `/api/v3/posts/#{id}`;
       let params = new URLSearchParams();
       let url = host + api;
-      let headers = this.getHeaders(this.accessToken);
+      let headers = this.getHeaders(token);
       let options = new RequestOptions({ headers: headers, search: params });
       console.log(`Downloading ${url}`);
       this.http.get(url, options)
@@ -177,7 +165,7 @@ export class ApiService {
     });
   }
 
-  createPost(host:string, title:string, message:string=null) {
+  createPost(host:string, token:string, title:string, message:string=null) {
     return new Promise(resolve => {
       let api = "/api/v3/posts/";
       let params = {};
@@ -189,7 +177,7 @@ export class ApiService {
       }
       let url = host + api;
       let body = JSON.stringify(params);
-      let headers = this.getHeaders(this.accessToken);
+      let headers = this.getHeaders(token);
       let options = new RequestOptions({ headers: headers });
       console.log(`Posting ${url} ${body}`);
       this.http.post(url, body, options)
@@ -208,7 +196,7 @@ export class ApiService {
     });
   }
 
-  updatePost(host:string, id:number, title:string, message:string=null) {
+  updatePost(host:string, token:string, id:number, title:string, message:string=null) {
     return new Promise(resolve => {
       let api = `/api/v3/posts/#{id}`;
       let params = {};
@@ -220,7 +208,7 @@ export class ApiService {
       }
       let url = host + api;
       let body = JSON.stringify(params);
-      let headers = this.getHeaders(this.accessToken);
+      let headers = this.getHeaders(token);
       let options = new RequestOptions({ headers: headers });
       console.log(`Updating ${url} ${body}`);
       this.http.put(url, body, options)

@@ -1,18 +1,24 @@
-<!--
-  Generated template for the ResponseList page.
-
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
-
-  <ion-navbar>
-    <ion-title>ResponseList</ion-title>
+  <ion-navbar color="dark">
+    <ion-title>Responses</ion-title>
   </ion-navbar>
-
 </ion-header>
-
-
-<ion-content padding>
-
+<ion-content class="page-response-list">
+  <ion-refresher (ionRefresh)="loadUpdates($event)">
+      <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+  <div text-center margin-top-lg margin-bottom-lg *ngIf="responses == null">
+    <ion-spinner></ion-spinner>
+  </div>
+  <div *ngIf="responses && responses.length > 0">
+    <ion-card tappable *ngFor="let response of responses; let i = index">
+      <ion-card-header>
+        {{response.title}}
+      </ion-card-header>
+      <ion-card-content>
+        <p>{{response.content}}</p>
+        <p>{{response.post_date}}</p>
+      </ion-card-content>
+    </ion-card>
+  </div>
 </ion-content>

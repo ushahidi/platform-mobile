@@ -8,6 +8,9 @@
     <ion-title *ngIf="deployment">{{deployment.deployment_name}}</ion-title>
   </ion-navbar>
 </ion-header>
-<ion-content padding>
-
+<ion-content class="page-deployment-details" padding>
+  <button #button ion-button block margin-top color="secondary"
+          (click)="loginDeployment($event)" *ngIf="token == null">Login</button>
+  <button #button ion-button block margin-top color="secondary"
+          (click)="showResponses($event)" *ngIf="token && token.length > 0">Responses</button>
 </ion-content>

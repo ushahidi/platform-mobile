@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 
-import { LoginPage } from '../login/login';
+import { DeploymentDetailsPage } from '../deployment-details/deployment-details';
 
 import { ApiService } from '../../providers/api-service/api-service';
 
@@ -9,7 +9,7 @@ import { ApiService } from '../../providers/api-service/api-service';
   selector: 'page-deployment-list',
   templateUrl: 'deployment-list.html',
   providers: [ ApiService ],
-  entryComponents:[ LoginPage ]
+  entryComponents:[ DeploymentDetailsPage ]
 })
 export class DeploymentListPage {
 
@@ -24,42 +24,23 @@ export class DeploymentListPage {
     }
 
   ionViewDidLoad() {
-    console.log('Deployments ionViewDidLoad');
+    console.log('Deployment List ionViewDidLoad');
   }
 
   ionViewWillEnter() {
-    console.log("Deployments ionViewWillEnter");
+    console.log("Deployment List ionViewWillEnter");
     this.search = this.navParams.get("search");
     this.deployments = this.navParams.get("deployments");
   }
 
   ionViewDidEnter() {
-    console.log("Deployments ionViewDidEnter");
-    this.deployments = [
-      { tier: 'free',
-        status: 'deployed',
-        domain: 'api.ushahidi.io',
-        subdomain: 'dale',
-        deployment_name: "Dale",
-        url: "https://dale.api.ushahidi.io"},
-      { tier: 'free',
-        status: 'deployed',
-        domain: 'api.ushahididev.com',
-        subdomain: 'ansibletest',
-        deployment_name: "Robbie",
-        url: "https://ansibletest.api.ushahididev.com"},
-      { tier: 'free',
-        status: 'deployed',
-        domain: 'api.ushahididev.com',
-        subdomain: 'angie',
-        deployment_name: "Angie QA",
-        url: "https://angie.api.ushahididev.com"}];
+    console.log("Deployment List ionViewDidEnter");
   }
 
   showDeployment($event, deployment) {
-    console.log(`Home showDeployment ${deployment}`);
+    console.log(`Deployment List showDeployment ${deployment}`);
     this.navController.push(
-      LoginPage,
+      DeploymentDetailsPage,
       { deployment: deployment });
   }
 
