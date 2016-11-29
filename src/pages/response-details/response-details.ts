@@ -1,22 +1,63 @@
-import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { Platform, NavParams, NavController, TextInput, Button, LoadingController,
+  ToastController, AlertController, ViewController, ModalController } from 'ionic-angular';
 
-/*
-  Generated class for the ResponseDetails page.
+import { ResponseEditPage } from '../response-edit/response-edit';
 
-  See http://ionicframework.com/docs/v2/components/#navigation for more info on
-  Ionic pages and navigation.
-*/
+import { ApiService } from '../../providers/api-service/api-service';
+
 @Component({
   selector: 'page-response-details',
-  templateUrl: 'response-details.html'
+  templateUrl: 'response-details.html',
+  providers: [ ApiService ],
+  entryComponents:[ ResponseEditPage ]
 })
 export class ResponseDetailsPage {
 
-  constructor(public navCtrl: NavController) {}
+  token: string = null;
+  deployment: any;
+  response: any;
+
+  constructor(
+    public platform:Platform,
+    public api:ApiService,
+    public navParams: NavParams,
+    public navController:NavController,
+    public toastController: ToastController,
+    public alertController: AlertController,
+    public viewController: ViewController,
+    public modalController: ModalController,
+    public loadingController:LoadingController) {
+
+  }
 
   ionViewDidLoad() {
-    console.log('Hello ResponseDetailsPage Page');
+    console.log('Response Details ionViewDidLoad');
+  }
+
+  ionViewWillEnter() {
+    console.log("Response Details ionViewWillEnter");
+    this.token = this.navParams.get("token");
+    this.deployment = this.navParams.get("deployment");
+    this.deployment.url = `https://${this.deployment.subdomain}.${this.deployment.domain}`;
+    this.response = this.navParams.get("response");
+  }
+
+  ionViewDidEnter() {
+    console.log("Response Details ionViewDidEnter");
+  }
+
+  editResponse(event) {
+    console.log("Response Details editResponse");
+    let modal = this.modalController.create(
+      ResponseEditPage,
+      { token: this.token,
+        deployment: this.deployment,
+        response: this.response });
+    modal.present();
+    modal.onDidDismiss(data => {
+
+    });
   }
 
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Platform } from 'ionic-angular';
 import { NativeStorage, SecureStorage } from 'ionic-native';
-import { Http, Headers, URLSearchParams, Request, RequestOptions, RequestMethod } from '@angular/http';
+import { Http, Headers, URLSearchParams, RequestOptions } from '@angular/http';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/retry';
 import 'rxjs/add/operator/delay';
@@ -71,7 +71,7 @@ export class ApiService {
     });
   }
 
-  postLogin(host:string, username:string, password:string, scope:string="api posts forms tags sets media") {
+  postLogin(host:string, username:string, password:string, scope:string="api posts forms tags sets media config") {
     if (this.accessToken) {
       console.log(`Cached ${this.accessToken}`);
       return Promise.resolve(this.accessToken);
@@ -106,7 +106,37 @@ export class ApiService {
           }
         );
     });
-  };
+  }
+
+  getConfigSite(host:string, token:string) {
+    return new Promise(resolve => {
+      let api = "/api/v3/config/";
+      let params = new URLSearchParams();
+      let url = host + api;
+      let headers = this.getHeaders(token);
+      let options = new RequestOptions({ headers: headers, search: params });
+      console.log(`Downloading ${url} ${params.toString()}`);
+      this.http.get(url, options)
+        .map(res => res.json())
+        .subscribe(
+          (json) => {
+            console.log(`Downloaded ${url} ${JSON.stringify(json)}`);
+            let results = json.results;
+            for (let i = 0; i < results.length; i++) {
+              let item = results[i];
+              if (item.id == 'site') {
+                console.log(`Site ${item}`);
+                resolve(item);
+              }
+            }
+          },
+          (err) => {
+            console.error(`Failed ${url} ${JSON.stringify(err)}`);
+            resolve(null);
+          }
+        );
+    });
+  }
 
   getPosts(host:string, token:string, search:string=null, form:string=null, user:string=null, cache:boolean=true) {
     return new Promise(resolve => {
@@ -196,9 +226,9 @@ export class ApiService {
     });
   }
 
-  updatePost(host:string, token:string, id:number, title:string, message:string=null) {
+  updatePost(host:string, token:string, id:string, title:string=null, message:string=null) {
     return new Promise(resolve => {
-      let api = `/api/v3/posts/#{id}`;
+      let api = `/api/v3/posts/${id}`;
       let params = {};
       if (title != null) {
         params["title"] = title;

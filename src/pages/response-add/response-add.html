@@ -1,0 +1,24 @@
+<ion-header>
+  <ion-navbar color="dark">
+    <ion-buttons start>
+      <button #cancel ion-button (click)="doCancel($event)">Cancel</button>
+    </ion-buttons>
+    <ion-title>Add Response</ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content class="page-response-add" padding>
+  <div margin-top margin-bottom>
+    <ion-item class="input">
+      <ion-label floating>Title</ion-label>
+      <ion-input #title type="text"></ion-input>
+    </ion-item>
+  </div>
+  <div margin-top margin-bottom>
+    <ion-item class="input">
+      <ion-label floating>Description</ion-label>
+      <ion-input #content type="text"></ion-input>
+    </ion-item>
+  </div>
+  <button #login ion-button block margin-top color="primary" (click)="postResponse($event)"
+          [disabled]="title.value.length == 0">Post Response</button>
+</ion-content>

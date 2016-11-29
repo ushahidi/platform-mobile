@@ -1,19 +1,12 @@
 <ion-header>
   <ion-navbar color="dark">
     <ion-buttons start>
-      <button #cancel ion-button (click)="doCancel($event)">
-        Cancel
-      </button>
+      <button #cancel ion-button (click)="doCancel($event)" *ngIf="modal">Cancel</button>
     </ion-buttons>
     <ion-title>Login</ion-title>
-    <!-- <ion-buttons end>
-      <button #login ion-button (click)="doLogin($event)" [disabled]="username.value.length == 0 || password.value.length == 0">
-        Login
-      </button>
-    </ion-buttons> -->
   </ion-navbar>
 </ion-header>
-<ion-content class="page-login" padding>
+<ion-content class="page-deployment-login" padding>
   <div margin-top margin-bottom *ngIf="deployment">
     <ion-item class="input">
       <ion-icon name="link" item-left color="grey"></ion-icon>

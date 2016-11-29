@@ -2,8 +2,8 @@ import { Component, ViewChild } from '@angular/core';
 import { Platform, NavParams, NavController, TextInput, Button,
   LoadingController, ToastController, AlertController, ModalController } from 'ionic-angular';
 
-import { LoginPage } from '../login/login';
 import { ResponseListPage } from '../response-list/response-list';
+import { ResponseAddPage } from '../response-add/response-add';
 
 import { ApiService } from '../../providers/api-service/api-service';
 
@@ -11,12 +11,13 @@ import { ApiService } from '../../providers/api-service/api-service';
   selector: 'page-deployment-details',
   templateUrl: 'deployment-details.html',
   providers: [ ApiService ],
-  entryComponents:[ LoginPage, ResponseListPage ]
+  entryComponents:[ ResponseListPage, ResponseAddPage ]
 })
 export class DeploymentDetailsPage {
 
-  token: String = null;
+  token: string = null;
   deployment: any;
+  site: any;
 
   constructor(
     public platform:Platform,
@@ -34,8 +35,12 @@ export class DeploymentDetailsPage {
 
     ionViewWillEnter() {
       console.log("Deployment Details ionViewWillEnter");
+      this.token = this.navParams.get('token');
       this.deployment = this.navParams.get("deployment");
       this.deployment.url = `https://${this.deployment.subdomain}.${this.deployment.domain}`;
+      if (this.token) {
+        this.loadDeployment();
+      }
     }
 
     ionViewDidEnter() {
@@ -50,19 +55,22 @@ export class DeploymentDetailsPage {
           deployment: this.deployment });
     }
 
-    showCollections(event) {
-        console.log("Deployment Details showCollections");
+    loadDeployment() {
+      this.api.getConfigSite(this.deployment.url, this.token).then(results => {
+        console.log(`Site ${results}`);
+        this.site = results;
+      });
     }
 
-    loginDeployment(event) {
-      console.log("Deployment Details loginDeployment");
+    addResponse(event) {
+      console.log("Deployment Details addResponse");
       let modal = this.modalController.create(
-        LoginPage,
-        { deployment: this.deployment });
+        ResponseAddPage,
+        { token: this.token,
+          deployment: this.deployment });
       modal.present();
       modal.onDidDismiss(data => {
-        console.log(`Deployment Details Data ${JSON.stringify(data)}`);
-        this.token = data['token'];
+
       });
     }
 }

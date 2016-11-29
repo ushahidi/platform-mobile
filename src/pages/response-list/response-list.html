@@ -1,17 +1,27 @@
 <ion-header>
   <ion-navbar color="dark">
     <ion-title>Responses</ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="addResponse($event)">
+        <ion-icon name="add-circle"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 <ion-content class="page-response-list">
+  <ion-fab bottom right>
+    <button ion-fab mini color="primary" (click)="addResponse($event)">
+      <ion-icon name="add"></ion-icon>
+    </button>
+  </ion-fab>
   <ion-refresher (ionRefresh)="loadUpdates($event)">
-      <ion-refresher-content></ion-refresher-content>
-    </ion-refresher>
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
   <div text-center margin-top-lg margin-bottom-lg *ngIf="responses == null">
     <ion-spinner></ion-spinner>
   </div>
   <div *ngIf="responses && responses.length > 0">
-    <ion-card tappable *ngFor="let response of responses; let i = index">
+    <ion-card tappable *ngFor="let response of responses; let i = index" (click)="showResponse($event, response)">
       <ion-card-header>
         {{response.title}}
       </ion-card-header>

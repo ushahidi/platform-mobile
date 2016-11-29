@@ -2,15 +2,19 @@ import { Component, ViewChild } from '@angular/core';
 import { Platform, NavParams, NavController, TextInput, Button, LoadingController,
   ToastController, AlertController, ViewController } from 'ionic-angular';
 
+import { DeploymentDetailsPage } from '../deployment-details/deployment-details';
+
 import { ApiService } from '../../providers/api-service/api-service';
 
 @Component({
-  selector: 'page-login',
-  templateUrl: 'login.html',
-  providers: [ ApiService ]
+  selector: 'page-deployment-login',
+  templateUrl: 'deployment-login.html',
+  providers: [ ApiService ],
+  entryComponents:[ DeploymentDetailsPage ]
 })
-export class LoginPage {
+export class DeploymentLoginPage {
 
+  modal: any;
   deployment: any;
 
   @ViewChild('cancel') cancel: Button;
@@ -32,11 +36,12 @@ export class LoginPage {
     }
 
     ionViewDidLoad() {
-      console.log('Login ionViewDidLoad');
+      console.log('Deployment Login ionViewDidLoad');
     }
 
     ionViewWillEnter() {
-      console.log("Login ionViewWillEnter");
+      console.log("Deployment Login ionViewWillEnter");
+      this.modal = this.navParams.get("modal");
       this.deployment = this.navParams.get("deployment");
       this.deployment.url = `https://${this.deployment.subdomain}.${this.deployment.domain}`;
       if (this.deployment.subdomain == 'dale') {
@@ -46,16 +51,16 @@ export class LoginPage {
     }
 
     ionViewDidEnter() {
-      console.log("Login ionViewDidEnter");
+      console.log("Deployment Login ionViewDidEnter");
     }
 
     doCancel(event) {
-      console.log("Login doCancel");
+      console.log("Deployment Login doCancel");
       this.viewController.dismiss();
     }
 
     doLogin(event) {
-      console.log("Login doLogin");
+      console.log("Deployment Login doLogin");
       let host = this.deployment.url;
       let username = this.username.value.toString();
       let password = this.password.value.toString();
@@ -73,7 +78,7 @@ export class LoginPage {
               duration: 3000
             });
             toast.present();
-            this.viewController.dismiss({token: token.toString()});
+            this.showDeployment(token);
           }
           else {
             let alert = this.alertController.create({
@@ -84,6 +89,21 @@ export class LoginPage {
             alert.present();
           }
         });
+      }
+    }
+
+    showDeployment(token:string) {
+      if (this.modal) {
+        this.viewController.dismiss(
+          { token: token }
+        );
+      }
+      else {
+        this.navController.setRoot(DeploymentDetailsPage,
+         { token: token,
+           deployment: this.deployment },
+         { animate:true,
+           direction: 'forward' });
       }
     }
 

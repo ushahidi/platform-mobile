@@ -6,11 +6,25 @@
       </button>
     </ion-buttons>
     <ion-title *ngIf="deployment">{{deployment.deployment_name}}</ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="addResponse($event)" *ngIf="token">
+        <ion-icon name="add-circle"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 <ion-content class="page-deployment-details" padding>
-  <button #button ion-button block margin-top color="secondary"
-          (click)="loginDeployment($event)" *ngIf="token == null">Login</button>
+  <ion-fab bottom right *ngIf="token">
+    <button ion-fab mini color="primary" (click)="addResponse($event)">
+      <ion-icon name="add"></ion-icon>
+    </button>
+  </ion-fab>
+  <div *ngIf="site">
+    <h1>{{site.name}}</h1>
+    <h4>{{site.description}}</h4>
+    <p>{{site.client_url}}</p>
+    <img [src]="site.image_header" *ngIf="site.image_header">
+  </div>
   <button #button ion-button block margin-top color="secondary"
           (click)="showResponses($event)" *ngIf="token && token.length > 0">Responses</button>
 </ion-content>

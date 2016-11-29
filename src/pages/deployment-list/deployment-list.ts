@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 
-import { DeploymentDetailsPage } from '../deployment-details/deployment-details';
+import { DeploymentLoginPage } from '../deployment-login/deployment-login';
 
 import { ApiService } from '../../providers/api-service/api-service';
 
@@ -9,11 +9,11 @@ import { ApiService } from '../../providers/api-service/api-service';
   selector: 'page-deployment-list',
   templateUrl: 'deployment-list.html',
   providers: [ ApiService ],
-  entryComponents:[ DeploymentDetailsPage ]
+  entryComponents:[ DeploymentLoginPage ]
 })
 export class DeploymentListPage {
 
-  search: any = String;
+  search: string = null;
   deployments: any = [];
 
   constructor(
@@ -21,7 +21,7 @@ export class DeploymentListPage {
     public navParams: NavParams,
     public api:ApiService) {
 
-    }
+  }
 
   ionViewDidLoad() {
     console.log('Deployment List ionViewDidLoad');
@@ -40,7 +40,7 @@ export class DeploymentListPage {
   showDeployment($event, deployment) {
     console.log(`Deployment List showDeployment ${deployment}`);
     this.navController.push(
-      DeploymentDetailsPage,
+      DeploymentLoginPage,
       { deployment: deployment });
   }
 
