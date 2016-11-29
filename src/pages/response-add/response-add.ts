@@ -4,6 +4,19 @@ import { Platform, NavParams, NavController, TextInput, Button,
 
 import { ApiService } from '../../providers/api-service/api-service';
 
+import { CheckboxComponent } from '../../components/checkbox/checkbox';
+import { CheckboxesComponent } from '../../components/checkboxes/checkboxes';
+import { DateComponent } from '../../components/date/date';
+import { DateTimeComponent } from '../../components/datetime/datetime';
+import { ImageComponent } from '../../components/image/image';
+import { LocationComponent } from '../../components/location/location';
+import { NumberComponent } from '../../components/number/number';
+import { RadioComponent } from '../../components/radio/radio';
+import { SelectComponent } from '../../components/select/select';
+import { TextComponent } from '../../components/text/text';
+import { TextAreaComponent } from '../../components/textarea/textarea';
+import { VideoComponent } from '../../components/video/video';
+
 @Component({
   selector: 'page-response-add',
   templateUrl: 'response-add.html',
@@ -13,9 +26,9 @@ export class ResponseAddPage {
 
   token: string = null;
   deployment: any;
+  form: any;
 
-  @ViewChild('title') title: TextInput;
-  @ViewChild('content') content: TextInput;
+  @ViewChild('submit') submit: Button;
 
   constructor(
     public platform:Platform,
@@ -38,6 +51,7 @@ export class ResponseAddPage {
     this.token = this.navParams.get("token");
     this.deployment = this.navParams.get("deployment");
     this.deployment.url = `https://${this.deployment.subdomain}.${this.deployment.domain}`;
+    this.form = this.navParams.get("form");
   }
 
   ionViewDidEnter() {
@@ -53,8 +67,8 @@ export class ResponseAddPage {
     console.log("Response Add postResponse");
     let host = this.deployment.url;
     let token = this.token;
-    let title = this.title.value.toString();
-    let content = this.content.value.toString();
+    let title = "";
+    let content = "";
     let loading = this.loadingController.create({
       content: "Posting..."
     });
@@ -74,19 +88,25 @@ export class ResponseAddPage {
   postResponseFailed() {
     let alert = this.alertController.create({
       title: 'Post Failed',
-      subTitle: 'There was a problem posting the response.',
+      subTitle: 'There was a problem posting your response.',
       buttons: ['OK']
     });
     alert.present();
   }
 
   postResponseSucceeded() {
-    let toast = this.toastController.create({
-      message: 'Post Successful',
-      duration: 3000
+    let alert = this.alertController.create({
+      title: 'Post Successful',
+      subTitle: 'Your response has been posted!',
+      buttons: [{
+        text: 'Ok',
+        role: 'cancel',
+        handler: () => {
+          this.viewController.dismiss();
+        }
+      }]
     });
-    toast.present();
-    this.viewController.dismiss();
+    alert.present();
   }
 
 }

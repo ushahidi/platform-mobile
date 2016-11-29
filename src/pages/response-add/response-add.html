@@ -3,22 +3,25 @@
     <ion-buttons start>
       <button #cancel ion-button (click)="doCancel($event)">Cancel</button>
     </ion-buttons>
-    <ion-title>Add Response</ion-title>
+    <ion-title *ngIf="form">{{form.name}}</ion-title>
   </ion-navbar>
 </ion-header>
 <ion-content class="page-response-add" padding>
-  <div margin-top margin-bottom>
-    <ion-item class="input">
-      <ion-label floating>Title</ion-label>
-      <ion-input #title type="text"></ion-input>
-    </ion-item>
+  <div *ngIf="form">
+    <div margin-top margin-bottom *ngFor="let attribute of form.attributes">
+      <field-checkbox [label]="attribute.label" *ngIf="attribute.input == 'checkbox'"></field-checkbox>
+      <field-checkboxes [label]="attribute.label" *ngIf="attribute.input == 'checkboxes'"></field-checkboxes>
+      <field-date [label]="attribute.label" *ngIf="attribute.input == 'date'"></field-date>
+      <field-datetime [label]="attribute.label" *ngIf="attribute.input == 'datetime'"></field-datetime>
+      <field-image [label]="attribute.label" *ngIf="attribute.input == 'upload'"></field-image>
+      <field-location [label]="attribute.label" *ngIf="attribute.input == 'location'"></field-location>
+      <field-number [label]="attribute.label" *ngIf="attribute.input == 'number'"></field-number>
+      <field-radio [label]="attribute.label" *ngIf="attribute.input == 'radio'"></field-radio>
+      <field-select [label]="attribute.label" *ngIf="attribute.input == 'select'"></field-select>
+      <field-text [label]="attribute.label" *ngIf="attribute.input == 'varchar'"></field-text>
+      <field-textarea [label]="attribute.label" *ngIf="attribute.input == 'text'"></field-textarea>
+      <field-video [label]="attribute.label" *ngIf="attribute.input == 'video'"></field-video>
+    </div>
   </div>
-  <div margin-top margin-bottom>
-    <ion-item class="input">
-      <ion-label floating>Description</ion-label>
-      <ion-input #content type="text"></ion-input>
-    </ion-item>
-  </div>
-  <button #login ion-button block margin-top color="primary" (click)="postResponse($event)"
-          [disabled]="title.value.length == 0">Post Response</button>
+  <button #submit ion-button block margin-top color="primary" (click)="postResponse($event)">Post Response</button>
 </ion-content>

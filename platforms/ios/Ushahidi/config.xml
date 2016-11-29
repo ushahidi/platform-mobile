@@ -89,6 +89,7 @@
     <allow-navigation href="http://192.168.57.1:8000" />
     <allow-navigation href="http://192.168.0.21:8000" />
     <allow-navigation href="http://localhost:3000" />
+    <allow-navigation href="http://localhost:3001" />
     <icon src="resources/android/icon/drawable-xhdpi-icon.png" />
     <allow-intent href="itms:*" />
     <allow-intent href="itms-apps:*" />

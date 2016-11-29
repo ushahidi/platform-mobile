@@ -82,12 +82,18 @@ export class ResponseEditPage {
   }
 
   updateResponseSucceeded() {
-    let toast = this.toastController.create({
-      message: 'Update Successful',
-      duration: 3000
+    let alert = this.alertController.create({
+      title: 'Update Successful',
+      subTitle: 'Your response has been updated!',
+      buttons: [{
+        text: 'Ok',
+        role: 'cancel',
+        handler: () => {
+          this.viewController.dismiss();
+        }
+      }]
     });
-    toast.present();
-    this.viewController.dismiss();
+    alert.present();
   }
 
 }

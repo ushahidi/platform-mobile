@@ -18,6 +18,7 @@
   <allow-navigation href="http://192.168.57.1:8000"/>
   <allow-navigation href="http://192.168.0.21:8000"/>
   <allow-navigation href="http://localhost:3000"/>
+  <allow-navigation href="http://localhost:3001"/>
   <platform name="android">
     <allow-intent href="market:*"/>
     <splash density="port-ldpi" src="resources/android/splash/drawable-port-ldpi-screen.png"/>

@@ -2,11 +2,13 @@ import { Injectable } from '@angular/core';
 import { Platform } from 'ionic-angular';
 import { NativeStorage, SecureStorage } from 'ionic-native';
 import { Http, Headers, URLSearchParams, RequestOptions } from '@angular/http';
+import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/retry';
 import 'rxjs/add/operator/delay';
 import 'rxjs/add/operator/timeout';
 import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/mergeMap';
 
 @Injectable()
 export class ApiService {
@@ -255,6 +257,86 @@ export class ApiService {
           }
         );
     });
+  }
+
+  getForms(host:string, token:string, cache:boolean=true) {
+    return new Promise(resolve => {
+      let api = `/api/v3/forms`;
+      let params = new URLSearchParams();
+      let url = host + api;
+      let headers = this.getHeaders(token);
+      let options = new RequestOptions({ headers: headers, search: params });
+      console.log(`Downloading ${url}`);
+      this.http.get(url, options)
+        .map(res => res.json())
+        .subscribe(
+          (json) => {
+            console.log(`Downloaded ${url} ${JSON.stringify(json)}`);
+            let forms = json.results;
+            resolve(forms);
+          },
+          (err) => {
+            console.error(`Failed ${url} ${JSON.stringify(err)}`);
+            resolve(null);
+          }
+        );
+    });
+  }
+
+  getAttributes(host:string, token:string, cache:boolean=true) {
+    return new Promise(resolve => {
+      let api = `/api/v3/forms/attributes`;
+      let params = new URLSearchParams();
+      let url = host + api;
+      let headers = this.getHeaders(token);
+      let options = new RequestOptions({ headers: headers, search: params });
+      console.log(`Downloading ${url}`);
+      this.http.get(url, options)
+        .map(res => res.json())
+        .subscribe(
+          (json) => {
+            console.log(`Downloaded ${url} ${JSON.stringify(json)}`);
+            let attributes = json.results;
+            resolve(attributes);
+          },
+          (err) => {
+            console.error(`Failed ${url} ${JSON.stringify(err)}`);
+            resolve(null);
+          }
+        );
+    });
+  }
+
+  getFormsWithAttributes(host:string, token:string, cache:boolean=true) {
+    return Promise.all([
+      this.getForms(host, token, cache),
+      this.getAttributes(host, token, cache)]).
+      then(results => {
+        console.log(`Results ${JSON.stringify(results)}`);
+        let forms = <any[]>results[0];
+        console.log(`Forms ${JSON.stringify(forms)}`);
+        let attributes = <any[]>results[1];
+        console.log(`Attributes ${JSON.stringify(attributes)}`);
+        for (var i = 0; i <= forms.length; i++){
+          let form = forms[i];
+          if (form) {
+            form.attributes = [];
+            for (var j = 0; j <= attributes.length; j++){
+              let attribute = attributes[j];
+              if (attribute) {
+                console.log(`Attribute ${JSON.stringify(attribute)}`);
+                if (form.id == attribute.form_stage_id) {
+                  form.attributes.push(attribute);
+                }
+              }
+            }
+            form.attributes = form.attributes.sort(function(a, b){
+              return a.cardinality - b.cardinality;
+            });
+          }
+        }
+        return forms;
+      });
   }
 
 }
