@@ -1,4 +1,7 @@
-<ion-item class="input">
-  <ion-label floating>{{label}} <small>(radio)</small></ion-label>
-  <ion-input type="text"></ion-input>
-</ion-item>
+<ion-label>{{attribute.label}}</ion-label>
+<div radio-group>
+  <ion-item *ngFor="let option of attribute.options">
+    <ion-label>{{option}}</ion-label>
+    <ion-radio value="{{option}}"></ion-radio>
+  </ion-item>
+</div>

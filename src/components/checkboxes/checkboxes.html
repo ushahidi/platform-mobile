@@ -1,4 +1,5 @@
-<ion-item class="input">
-  <ion-label floating>{{label}} <small>(checkboxes)</small></ion-label>
-  <ion-input type="text"></ion-input>
+<ion-label>{{attribute.label}}</ion-label>
+<ion-item *ngFor="let option of attribute.options">
+  <ion-label>{{option}}</ion-label>
+  <ion-checkbox></ion-checkbox>
 </ion-item>

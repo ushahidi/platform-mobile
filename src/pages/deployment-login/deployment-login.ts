@@ -75,7 +75,7 @@ export class DeploymentLoginPage {
           if (token && token.length > 0) {
             let toast = this.toastController.create({
               message: 'Login Successful',
-              duration: 3000
+              duration: 1500
             });
             toast.present();
             this.showDeployment(token);

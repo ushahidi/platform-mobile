@@ -3,13 +3,11 @@ import { Component, Input } from '@angular/core';
 @Component({
   selector: 'field-text',
   templateUrl: 'text.html',
-  inputs: ['label', 'type', 'value']
+  inputs: ['attribute']
 })
 export class TextComponent {
 
-  label: string;
-  type: string;
-  value: string;
+  attribute: string;
 
   constructor() {
   }

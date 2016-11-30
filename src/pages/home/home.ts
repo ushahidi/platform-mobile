@@ -36,14 +36,6 @@ export class HomePage {
     console.log("Home ionViewDidEnter");
   }
 
-  inputFocussed(event) {
-    console.log("Home inputFocussed");
-  }
-
-  inputBlurred(event) {
-    console.log("Home inputBlurred");
-  }
-
   searchDeployments(event) {
     console.log(`Home searchDeployments ${this.input.value}`);
     let search = this.input.value.toString();

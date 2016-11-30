@@ -3,15 +3,16 @@ import { Component, Input } from '@angular/core';
 @Component({
   selector: 'field-location',
   templateUrl: 'location.html',
-  inputs: ['label', 'type', 'value']
+  inputs: ['attribute']
 })
 export class LocationComponent {
 
-  label: string;
-  type: string;
-  value: string;
+  attribute: string;
 
   constructor() {
   }
 
+  detectLocation() {
+
+  }
 }

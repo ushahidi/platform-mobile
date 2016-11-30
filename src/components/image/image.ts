@@ -4,13 +4,11 @@ import { Camera } from 'ionic-native';
 @Component({
   selector: 'field-image',
   templateUrl: 'image.html',
-  inputs: ['label', 'type', 'value']
+  inputs: ['attribute']
 })
 export class ImageComponent {
 
-  label: string;
-  type: string;
-  value: string;
+  attribute: string;
   base64Image: string;
 
   constructor() {

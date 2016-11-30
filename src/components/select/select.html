@@ -1,4 +1,6 @@
-<ion-item class="input">
-  <ion-label floating>{{label}} <small>(select)</small></ion-label>
-  <ion-input type="text"></ion-input>
+<ion-label>{{attribute.label}}</ion-label>
+<ion-item>
+  <ion-select>
+    <ion-option value="{{option}}" *ngFor="let option of attribute.options">{{option}}</ion-option>
+  </ion-select>
 </ion-item>

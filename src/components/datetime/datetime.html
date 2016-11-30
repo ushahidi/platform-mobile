@@ -1,4 +1,7 @@
-<ion-item class="input">
-  <ion-label floating>{{label}} <small>(datetime)</small></ion-label>
-  <ion-input type="text"></ion-input>
+<ion-label>{{attribute.label}}</ion-label>
+<ion-item>
+  <ion-datetime displayFormat="h:mm A" pickerFormat="h mm A"></ion-datetime>
+</ion-item>
+<ion-item>
+  <ion-datetime displayFormat="MMMM D, YYYY" pickerFormat="MMMM D YYYY"></ion-datetime>
 </ion-item>

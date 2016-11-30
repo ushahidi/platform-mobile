@@ -6,22 +6,26 @@
     <ion-title *ngIf="form">{{form.name}}</ion-title>
   </ion-navbar>
 </ion-header>
-<ion-content class="page-response-add" padding>
+<ion-content class="page-response-add">
   <div *ngIf="form">
-    <div margin-top margin-bottom *ngFor="let attribute of form.attributes">
-      <field-checkbox [label]="attribute.label" *ngIf="attribute.input == 'checkbox'"></field-checkbox>
-      <field-checkboxes [label]="attribute.label" *ngIf="attribute.input == 'checkboxes'"></field-checkboxes>
-      <field-date [label]="attribute.label" *ngIf="attribute.input == 'date'"></field-date>
-      <field-datetime [label]="attribute.label" *ngIf="attribute.input == 'datetime'"></field-datetime>
-      <field-image [label]="attribute.label" *ngIf="attribute.input == 'upload'"></field-image>
-      <field-location [label]="attribute.label" *ngIf="attribute.input == 'location'"></field-location>
-      <field-number [label]="attribute.label" *ngIf="attribute.input == 'number'"></field-number>
-      <field-radio [label]="attribute.label" *ngIf="attribute.input == 'radio'"></field-radio>
-      <field-select [label]="attribute.label" *ngIf="attribute.input == 'select'"></field-select>
-      <field-text [label]="attribute.label" *ngIf="attribute.input == 'varchar'"></field-text>
-      <field-textarea [label]="attribute.label" *ngIf="attribute.input == 'text'"></field-textarea>
-      <field-video [label]="attribute.label" *ngIf="attribute.input == 'video'"></field-video>
-    </div>
+    <ion-list>
+      <ion-item *ngFor="let attribute of form.attributes">
+        <field-checkbox [attribute]="attribute" *ngIf="attribute.input == 'checkbox'"></field-checkbox>
+        <field-checkboxes [attribute]="attribute" *ngIf="attribute.input == 'checkboxes'"></field-checkboxes>
+        <field-date [attribute]="attribute" *ngIf="attribute.input == 'date'"></field-date>
+        <field-datetime [attribute]="attribute" *ngIf="attribute.input == 'datetime'"></field-datetime>
+        <field-image [attribute]="attribute" *ngIf="attribute.input == 'upload'"></field-image>
+        <field-location [attribute]="attribute" *ngIf="attribute.input == 'location'"></field-location>
+        <field-number [attribute]="attribute" *ngIf="attribute.input == 'number'"></field-number>
+        <field-radio [attribute]="attribute" *ngIf="attribute.input == 'radio'"></field-radio>
+        <field-select [attribute]="attribute" *ngIf="attribute.input == 'select'"></field-select>
+        <field-text [attribute]="attribute" *ngIf="attribute.input == 'varchar'"></field-text>
+        <field-textarea [attribute]="attribute" *ngIf="attribute.input == 'text'"></field-textarea>
+        <field-video [attribute]="attribute" *ngIf="attribute.input == 'video'"></field-video>
+      </ion-item>
+    </ion-list>
   </div>
-  <button #submit ion-button block margin-top color="primary" (click)="postResponse($event)">Post Response</button>
+  <div padding>
+    <button #submit ion-button block margin-top color="primary" (click)="postResponse($event)">Post Response</button>
+  </div>  
 </ion-content>
