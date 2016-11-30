@@ -7,7 +7,7 @@ import { Component, Input } from '@angular/core';
 })
 export class CheckboxComponent {
 
-  attribute: any;
+  attribute: any = {};
 
   constructor() {
   }

@@ -8,7 +8,7 @@ import { Camera } from 'ionic-native';
 })
 export class ImageComponent {
 
-  attribute: string;
+  attribute: any = {};
   base64Image: string;
 
   constructor() {

@@ -7,7 +7,7 @@ import { Component, Input } from '@angular/core';
 })
 export class NumberComponent {
 
-  attribute: string;
+  attribute: any = {};
 
   constructor() {
   }

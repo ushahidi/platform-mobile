@@ -7,7 +7,7 @@ import { Component, Input } from '@angular/core';
 })
 export class LocationComponent {
 
-  attribute: string;
+  attribute: any = {};
 
   constructor() {
   }

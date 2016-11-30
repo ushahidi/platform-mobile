@@ -7,7 +7,7 @@ import { Component, Input } from '@angular/core';
 })
 export class DateTimeComponent {
 
-  attribute: string;
+  attribute: any = {};
 
   constructor() {
   }
