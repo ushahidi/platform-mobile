@@ -17,6 +17,7 @@ export class ResponseDetailsPage {
   token: string = null;
   deployment: any;
   response: any;
+  form: any;
 
   constructor(
     public platform:Platform,
@@ -41,6 +42,7 @@ export class ResponseDetailsPage {
     this.deployment = this.navParams.get("deployment");
     this.deployment.url = `https://${this.deployment.subdomain}.${this.deployment.domain}`;
     this.response = this.navParams.get("response");
+    this.form = this.navParams.get("form");
   }
 
   ionViewDidEnter() {
@@ -53,6 +55,7 @@ export class ResponseDetailsPage {
       ResponseEditPage,
       { token: this.token,
         deployment: this.deployment,
+        form: this.form,
         response: this.response });
     modal.present();
     modal.onDidDismiss(data => {

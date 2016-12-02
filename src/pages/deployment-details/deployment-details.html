@@ -18,20 +18,22 @@
     <div class="header">
       <h4 text-center padding-top padding-bottom *ngIf="site.name">{{site.name}}</h4>
     </div>
-    <img padding [src]="site.image_header" *ngIf="site.image_header">
+    <div class="image">
+      <img padding [src]="site.image_header" *ngIf="site.image_header">
+    </div>  
     <p padding-left padding-right *ngIf="site.description">{{site.description}}</p>
-    <div padding>
+    <div padding-left padding-right margin-bottom>
       <button ion-button block margin-top text-uppercase color="primary"
             (click)="addResponse($event)">Submit A Survey Response</button>
     </div>
     <ion-list>
-      <ion-item (click)="showResponses($event)">
+      <ion-item detail-push (click)="showResponses($event)">
         Responses
       </ion-item>
-      <ion-item (click)="showCollections($event)">
+      <ion-item detail-push (click)="showCollections($event)">
         Collections
       </ion-item>
-      <ion-item (click)="showSettings($event)">
+      <ion-item detail-push (click)="showSettings($event)">
         Settings
       </ion-item>
     </ion-list>

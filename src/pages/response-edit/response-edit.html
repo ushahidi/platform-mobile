@@ -3,24 +3,29 @@
     <ion-buttons start>
       <button #cancel ion-button (click)="doCancel($event)">Cancel</button>
     </ion-buttons>
-    <ion-title>Edit Response</ion-title>
+    <ion-title *ngIf="form">{{form.name}}</ion-title>
   </ion-navbar>
 </ion-header>
-<ion-content class="page-response-edit" padding>
-  <div *ngIf="response">
-    <div margin-top margin-bottom>
-      <ion-item class="input">
-        <ion-label floating>Title</ion-label>
-        <ion-input #title type="text" [value]="response.title"></ion-input>
+<ion-content class="page-response-edit">
+  <div *ngIf="form">
+    <ion-list>
+      <ion-item *ngFor="let attribute of form.attributes">
+        <field-checkbox [attribute]="attribute" *ngIf="attribute.input == 'checkbox'"></field-checkbox>
+        <field-checkboxes [attribute]="attribute" *ngIf="attribute.input == 'checkboxes'"></field-checkboxes>
+        <field-date [attribute]="attribute" *ngIf="attribute.input == 'date'"></field-date>
+        <field-datetime [attribute]="attribute" *ngIf="attribute.input == 'datetime'"></field-datetime>
+        <field-image [attribute]="attribute" *ngIf="attribute.input == 'upload'"></field-image>
+        <field-location [attribute]="attribute" *ngIf="attribute.input == 'location'"></field-location>
+        <field-number [attribute]="attribute" *ngIf="attribute.input == 'number'"></field-number>
+        <field-radio [attribute]="attribute" *ngIf="attribute.input == 'radio'"></field-radio>
+        <field-select [attribute]="attribute" *ngIf="attribute.input == 'select'"></field-select>
+        <field-text [attribute]="attribute" *ngIf="attribute.input == 'varchar'"></field-text>
+        <field-textarea [attribute]="attribute" *ngIf="attribute.input == 'text'"></field-textarea>
+        <field-video [attribute]="attribute" *ngIf="attribute.input == 'video'"></field-video>
       </ion-item>
+    </ion-list>
+    <div padding-left padding-right padding-bottom>
+      <button #submit ion-button block text-uppercase color="primary" (click)="updateResponse($event)">Update Response</button>
     </div>
-    <div margin-top margin-bottom>
-      <ion-item class="input">
-        <ion-label floating>Description</ion-label>
-        <ion-input #content type="text" [value]="response.content"></ion-input>
-      </ion-item>
-    </div>
-    <button #login ion-button block margin-top color="primary" (click)="updateResponse($event)"
-            [disabled]="title.value.length == 0">Update Response</button>
   </div>
 </ion-content>

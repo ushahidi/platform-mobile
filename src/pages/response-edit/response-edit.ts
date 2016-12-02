@@ -14,6 +14,7 @@ export class ResponseEditPage {
   token: string = null;
   deployment: any;
   response: any;
+  form: any;
 
   @ViewChild('title') title: TextInput;
   @ViewChild('content') content: TextInput;
@@ -38,6 +39,7 @@ export class ResponseEditPage {
     this.deployment = this.navParams.get("deployment");
     this.deployment.url = `https://${this.deployment.subdomain}.${this.deployment.domain}`;
     this.response = this.navParams.get("response");
+    this.form = this.navParams.get("form");
   }
 
   ionViewDidEnter() {

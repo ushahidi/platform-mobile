@@ -19,13 +19,14 @@
         <field-number [attribute]="attribute" *ngIf="attribute.input == 'number'"></field-number>
         <field-radio [attribute]="attribute" *ngIf="attribute.input == 'radio'"></field-radio>
         <field-select [attribute]="attribute" *ngIf="attribute.input == 'select'"></field-select>
+        <field-text [attribute]="attribute" *ngIf="attribute.input == 'text'"></field-text>
         <field-text [attribute]="attribute" *ngIf="attribute.input == 'varchar'"></field-text>
-        <field-textarea [attribute]="attribute" *ngIf="attribute.input == 'text'"></field-textarea>
+        <field-textarea [attribute]="attribute" *ngIf="attribute.input == 'textarea'"></field-textarea>
         <field-video [attribute]="attribute" *ngIf="attribute.input == 'video'"></field-video>
       </ion-item>
     </ion-list>
+    <div padding-left padding-right padding-bottom>
+      <button #submit ion-button block text-uppercase color="primary" (click)="postResponse($event)">Post Response</button>
+    </div>
   </div>
-  <div padding>
-    <button #submit ion-button block margin-top color="primary" (click)="postResponse($event)">Post Response</button>
-  </div>  
 </ion-content>
