@@ -93,7 +93,7 @@ npm install -g cordova-browser
 Check the version of Ionic
 
 ```
-ionic -v
+ionic info
 ```
 
 List the root level NPM packages
