@@ -55,7 +55,26 @@ export class DeploymentDetailsPage {
       this.navController.push(
         ResponseListPage,
         { token: this.token,
+          forms: this.forms,
           deployment: this.deployment });
+    }
+
+    showCollections(event) {
+      console.log("Deployment Details showCollections");
+      let toast = this.toastController.create({
+        message: 'Collections Not Implemented',
+        duration: 1500
+      });
+      toast.present();
+    }
+
+    showSettings(event) {
+      console.log("Deployment Details showSettings");
+      let toast = this.toastController.create({
+        message: 'Settings Not Implemented',
+        duration: 1500
+      });
+      toast.present();
     }
 
     loadDeployment() {
@@ -109,5 +128,14 @@ export class DeploymentDetailsPage {
       modal.onDidDismiss(data => {
 
       });
+    }
+
+    shareDeployment(event) {
+      console.log("Deployment Details shareDeployment");
+      let toast = this.toastController.create({
+        message: 'Sharing Not Implemented',
+        duration: 1500
+      });
+      toast.present();
     }
 }

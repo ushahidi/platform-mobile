@@ -55,10 +55,8 @@ export class DeploymentAddPage {
 
   addDeployment(event, deployment) {
     console.log(`Deployment Add addDeployment`);
-    this.navController.setRoot(DeploymentLoginPage,
-     { deployment: deployment },
-     { animate: true,
-       direction: 'forward' });
+    let data = { 'deployment' : deployment };
+    this.viewController.dismiss(data);
   }
 
 }

@@ -98,4 +98,8 @@ export class DeploymentLoginPage {
          direction: 'forward' });
     }
 
+    showMenu(event) {
+      console.log("Deployment Login showMenu");
+    }
+
 }

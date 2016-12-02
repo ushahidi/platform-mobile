@@ -6,6 +6,11 @@
       </button>
     </ion-buttons>
     <ion-title></ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only (click)="shareDeployment($event)">
+        <ion-icon ios="ios-share-outline" md="md-share"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 <ion-content class="page-deployment-details">
@@ -15,12 +20,20 @@
     </div>
     <img padding [src]="site.image_header" *ngIf="site.image_header">
     <p padding-left padding-right *ngIf="site.description">{{site.description}}</p>
-  </div>
-  <div padding>
-    <button ion-button block margin-top text-uppercase color="primary"
-          (click)="addResponse($event)">Submit A Survey Response</button>
-
-    <button ion-button block outline margin-top text-uppercase color="secondary"
-          (click)="showResponses($event)">Responses</button>
+    <div padding>
+      <button ion-button block margin-top text-uppercase color="primary"
+            (click)="addResponse($event)">Submit A Survey Response</button>
+    </div>
+    <ion-list>
+      <ion-item (click)="showResponses($event)">
+        Responses
+      </ion-item>
+      <ion-item (click)="showCollections($event)">
+        Collections
+      </ion-item>
+      <ion-item (click)="showSettings($event)">
+        Settings
+      </ion-item>
+    </ion-list>
   </div>
 </ion-content>

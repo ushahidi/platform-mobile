@@ -3,11 +3,13 @@ import { Nav, Platform } from 'ionic-angular';
 import { StatusBar, Splashscreen, AppVersion } from 'ionic-native';
 
 import { HomePage } from '../pages/home/home';
+
+import { DeploymentLoginPage } from '../pages/deployment-login/deployment-login';
 import { DeploymentDetailsPage } from '../pages/deployment-details/deployment-details';
 
 @Component({
   templateUrl: 'app.html',
-  entryComponents:[ HomePage, DeploymentDetailsPage ]
+  entryComponents:[ HomePage, DeploymentLoginPage, DeploymentDetailsPage ]
 })
 export class MyApp {
 
@@ -35,12 +37,16 @@ export class MyApp {
       StatusBar.styleDefault();
       Splashscreen.hide();
     });
+    this.deployments.push({
+      "domain":"api.ushahidi.io",
+      "subdomain":"dale",
+      "deployment_name":"Dale's Deployment"});
   }
 
   showDeployment(event, deployment) {
     console.log("App showDeployment");
     this.nav.setRoot(
-      DeploymentDetailsPage,
+      DeploymentLoginPage,
       { deployment: deployment });
   }
 }

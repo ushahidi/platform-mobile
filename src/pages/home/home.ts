@@ -2,6 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { Platform, NavController, TextInput, Button, LoadingController, ModalController } from 'ionic-angular';
 
 import { DeploymentAddPage } from '../deployment-add/deployment-add';
+import { DeploymentLoginPage } from '../deployment-login/deployment-login';
 
 import { ApiService } from '../../providers/api-service/api-service';
 
@@ -9,7 +10,7 @@ import { ApiService } from '../../providers/api-service/api-service';
   selector: 'page-home',
   templateUrl: 'home.html',
   providers: [ ApiService ],
-  entryComponents:[ DeploymentAddPage ]
+  entryComponents:[ DeploymentAddPage, DeploymentLoginPage ]
 })
 export class HomePage {
 
@@ -40,8 +41,17 @@ export class HomePage {
       { });
     modal.present();
     modal.onDidDismiss(data => {
-
+      if (data) {
+        console.log(data);
+        this.navController.setRoot(DeploymentLoginPage,
+         { deployment: data['deployment'] },
+         { animate: true,
+           direction: 'forward' });
+      }
     });
   }
 
+  showMenu(event) {
+    console.log("Home showMenu");
+  }
 }

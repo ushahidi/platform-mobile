@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { Platform, NavParams, NavController, TextInput, Button,
-  LoadingController, ToastController, AlertController, ModalController } from 'ionic-angular';
+  LoadingController, ToastController, AlertController, ModalController, ActionSheetController } from 'ionic-angular';
 
 import { ResponseAddPage } from '../response-add/response-add';
 import { ResponseDetailsPage } from '../response-details/response-details';
@@ -17,6 +17,7 @@ export class ResponseListPage {
   token: string = null;
   deployment: any;
   responses: any;
+  forms: any;
 
   constructor(
     public platform:Platform,
@@ -26,7 +27,8 @@ export class ResponseListPage {
     public toastController: ToastController,
     public alertController: AlertController,
     public modalController: ModalController,
-    public loadingController:LoadingController) {
+    public loadingController:LoadingController,
+    public actionController: ActionSheetController) {
 
   }
 
@@ -39,6 +41,7 @@ export class ResponseListPage {
     this.token = this.navParams.get("token");
     this.deployment = this.navParams.get("deployment");
     this.deployment.url = `https://${this.deployment.subdomain}.${this.deployment.domain}`;
+    this.forms = this.navParams.get("forms");
     this.loadUpdates(null);
   }
 
@@ -68,10 +71,36 @@ export class ResponseListPage {
   }
 
   addResponse(event) {
-    console.log("Deployment List addResponse");
+    console.log("Deployment Details addResponse");
+    let buttons = [];
+    if (this.forms) {
+      for (var i = 0; i <= this.forms.length; i++){
+        let form = this.forms[i];
+        if (form) {
+          buttons.push({
+            text: form.name,
+            handler: () => {
+              console.log(`Form ${form.name} Selected`);
+              this.showResponseAdd(form);
+          }});
+        }
+      }
+    }
+    buttons.push({
+      text: 'Cancel',
+      role: 'cancel'});
+    let actionSheet = this.actionController.create({
+      title: 'Submit A Survey Response',
+      buttons: buttons
+    });
+    actionSheet.present();
+  }
+
+  showResponseAdd(form) {
     let modal = this.modalController.create(
       ResponseAddPage,
       { token: this.token,
+        form: form,
         deployment: this.deployment });
     modal.present();
     modal.onDidDismiss(data => {
@@ -81,10 +110,20 @@ export class ResponseListPage {
 
   searchResponses(event) {
     console.log("Deployment List searchResponses");
+    let toast = this.toastController.create({
+      message: 'Search Not Implemented',
+      duration: 1500
+    });
+    toast.present();
   }
 
   shareResponses(event) {
     console.log("Deployment List shareResponses");
+    let toast = this.toastController.create({
+      message: 'Sharing Not Implemented',
+      duration: 1500
+    });
+    toast.present();
   }
 
 }
