@@ -37,6 +37,13 @@ Update the Homebrew recipes
 brew update
 ```
 
+If you have permission issues with `/usr/local/`, try running
+
+```
+sudo chown -R `whoami` /usr/local/
+brew update
+```
+
 Check health of Homebrew recipes
 
 ```
@@ -66,6 +73,17 @@ npm --version
 
 ```
 npm install -g cordova@latest
+```
+
+If you run into permission problems, try using `sudo`
+
+```
+sudo npm install -g cordova@latest
+```
+
+Install some Cordova utilities
+
+```
 npm install -g cordova-common
 ```
 
@@ -82,6 +100,17 @@ cordova -v
 
 ```
 npm install -g ionic@latest
+```
+
+If you run into permission problems, try using `sudo`
+
+```
+sudo npm install -g cordova@latest
+```
+
+Install some Ionic utilities
+
+```
 npm install -g cordova-ios
 npm install -g ios-sim
 npm install -g ios-deploy
