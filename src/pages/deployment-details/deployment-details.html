@@ -20,9 +20,9 @@
     </div>
     <div class="image">
       <img padding [src]="site.image_header" *ngIf="site.image_header">
-    </div>  
+    </div>
     <p padding-left padding-right *ngIf="site.description">{{site.description}}</p>
-    <div padding-left padding-right margin-bottom>
+    <div padding-top padding-left padding-right padding-bottom margin-bottom>
       <button ion-button block margin-top text-uppercase color="primary"
             (click)="addResponse($event)">Submit A Survey Response</button>
     </div>

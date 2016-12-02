@@ -90,7 +90,7 @@ export class ResponseListPage {
       text: 'Cancel',
       role: 'cancel'});
     let actionSheet = this.actionController.create({
-      title: 'Submit A Survey Response',
+      title: 'Submit a survey response',
       buttons: buttons
     });
     actionSheet.present();

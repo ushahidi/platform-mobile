@@ -11,9 +11,6 @@
   <div class="loading" text-center *ngIf="deployments.length == 0 && loading == true">
     <ion-spinner></ion-spinner>
   </div>
-  <div class="no-results" *ngIf="deployments.length == 0 && loading == false">
-    <p>No search results...</p>
-  </div>
   <ion-list>
     <ion-item (click)="addDeployment($event, deployment)" *ngFor="let deployment of deployments">
       <h2>{{deployment.deployment_name}}</h2>

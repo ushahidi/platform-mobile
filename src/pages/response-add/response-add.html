@@ -8,7 +8,7 @@
 </ion-header>
 <ion-content class="page-response-add">
   <div *ngIf="form">
-    <ion-list>
+    <ion-list no-lines>
       <ion-item *ngFor="let attribute of form.attributes">
         <field-checkbox [attribute]="attribute" *ngIf="attribute.input == 'checkbox'"></field-checkbox>
         <field-checkboxes [attribute]="attribute" *ngIf="attribute.input == 'checkboxes'"></field-checkboxes>
