@@ -1,13 +1,9 @@
 <ion-header>
 </ion-header>
 <ion-content class="page-home" padding>
-  <img text-center src="/assets/ushahidi-logo-gold.png" />
-  <h5 text-center>Let's add your first deployment</h5>
-  <p text-center>Enter the name or URL of the deployment you want to add.</p>
-  <ion-item margin-top class="input">
-    <ion-icon name="search" item-left color="grey"></ion-icon>
-    <ion-input #input type="text" placeholder="Deployment name or URL"></ion-input>
-  </ion-item>
-  <button #button ion-button block margin-top color="primary"
-          [disabled]="input.value.length == 0" (click)="searchDeployments($event)">Search</button>
+  <h4 text-center>
+    Let's add your<br>
+    first deployment.
+  </h4>
+  <button ion-fab (click)="addDeployment($event)"><ion-icon name="add"></ion-icon></button>
 </ion-content>

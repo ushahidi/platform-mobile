@@ -6,7 +6,10 @@
   </ion-header>
   <ion-content>
     <ion-list>
-
+      <ion-item menuClose (click)="showDeployment($event, deployment)" *ngFor="let deployment of deployments">
+        <h2>{{deployment.deployment_name}}</h2>
+        <p>{{deployment.subdomain}}.{{deployment.domain}}</p>
+      </ion-item>
     </ion-list>
   </ion-content>
 </ion-menu>

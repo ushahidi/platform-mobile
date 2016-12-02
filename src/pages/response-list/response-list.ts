@@ -79,4 +79,12 @@ export class ResponseListPage {
     });
   }
 
+  searchResponses(event) {
+    console.log("Deployment List searchResponses");
+  }
+
+  shareResponses(event) {
+    console.log("Deployment List shareResponses");
+  }
+
 }

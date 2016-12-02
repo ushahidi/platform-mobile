@@ -14,7 +14,6 @@ import { ApiService } from '../../providers/api-service/api-service';
 })
 export class DeploymentLoginPage {
 
-  modal: any;
   deployment: any;
 
   @ViewChild('cancel') cancel: Button;
@@ -41,7 +40,6 @@ export class DeploymentLoginPage {
 
     ionViewWillEnter() {
       console.log("Deployment Login ionViewWillEnter");
-      this.modal = this.navParams.get("modal");
       this.deployment = this.navParams.get("deployment");
       this.deployment.url = `https://${this.deployment.subdomain}.${this.deployment.domain}`;
       if (this.deployment.subdomain == 'dale') {
@@ -93,18 +91,11 @@ export class DeploymentLoginPage {
     }
 
     showDeployment(token:string) {
-      if (this.modal) {
-        this.viewController.dismiss(
-          { token: token }
-        );
-      }
-      else {
-        this.navController.setRoot(DeploymentDetailsPage,
-         { token: token,
-           deployment: this.deployment },
-         { animate:true,
-           direction: 'forward' });
-      }
+      this.navController.setRoot(DeploymentDetailsPage,
+       { token: token,
+         deployment: this.deployment },
+       { animate:true,
+         direction: 'forward' });
     }
 
 }

@@ -1,18 +1,25 @@
-import { Component } from '@angular/core';
-import { Platform } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { Nav, Platform } from 'ionic-angular';
 import { StatusBar, Splashscreen, AppVersion } from 'ionic-native';
 
 import { HomePage } from '../pages/home/home';
+import { DeploymentDetailsPage } from '../pages/deployment-details/deployment-details';
 
 @Component({
-  templateUrl: 'app.html'
+  templateUrl: 'app.html',
+  entryComponents:[ HomePage, DeploymentDetailsPage ]
 })
 export class MyApp {
-  rootPage = HomePage;
 
-  constructor(platform: Platform) {
+  @ViewChild(Nav) nav: Nav;
+
+  rootPage = HomePage;
+  deployments: any = [];
+
+  constructor(
+    public platform: Platform) {
     platform.ready().then(() => {
-      console.log("Platform Ready");
+      console.log("App Platform Ready");
       // AppVersion.getAppName().then(appName => {
       //   console.log(`App Name ${appName}`);
       // });
@@ -28,5 +35,12 @@ export class MyApp {
       StatusBar.styleDefault();
       Splashscreen.hide();
     });
+  }
+
+  showDeployment(event, deployment) {
+    console.log("App showDeployment");
+    this.nav.setRoot(
+      DeploymentDetailsPage,
+      { deployment: deployment });
   }
 }

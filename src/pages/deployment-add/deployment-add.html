@@ -1,0 +1,20 @@
+<ion-header>
+  <ion-navbar color="dark">
+    <ion-buttons start>
+      <button #cancel ion-button (click)="doCancel($event)"><ion-icon name="md-close"></ion-icon></button>
+    </ion-buttons>
+    <ion-title>Add Deployment</ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content class="page-deployment-add">
+  <ion-searchbar #search color="light" placeholder="Find deployment by name" (ionInput)="searchDeployments($event)"></ion-searchbar>
+  <div class="loading" text-center *ngIf="deployments.length == 0 && loading == true">
+    <ion-spinner></ion-spinner>
+  </div>
+  <ion-list>
+    <ion-item (click)="addDeployment($event, deployment)" *ngFor="let deployment of deployments">
+      <h2>{{deployment.deployment_name}}</h2>
+      <p>{{deployment.subdomain}}.{{deployment.domain}}</p>
+    </ion-item>
+  </ion-list>
+</ion-content>

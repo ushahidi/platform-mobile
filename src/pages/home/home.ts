@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
-import { Platform, NavController, TextInput, Button, LoadingController } from 'ionic-angular';
+import { Platform, NavController, TextInput, Button, LoadingController, ModalController } from 'ionic-angular';
 
-import { DeploymentListPage } from '../deployment-list/deployment-list';
+import { DeploymentAddPage } from '../deployment-add/deployment-add';
 
 import { ApiService } from '../../providers/api-service/api-service';
 
@@ -9,17 +9,15 @@ import { ApiService } from '../../providers/api-service/api-service';
   selector: 'page-home',
   templateUrl: 'home.html',
   providers: [ ApiService ],
-  entryComponents:[ DeploymentListPage ]
+  entryComponents:[ DeploymentAddPage ]
 })
 export class HomePage {
-
-  @ViewChild('input') input: TextInput;
-  @ViewChild('button') button: Button;
 
   constructor(
     public platform:Platform,
     public api:ApiService,
     public navController:NavController,
+    public modalController: ModalController,
     public loadingController:LoadingController) {
   }
 
@@ -29,31 +27,21 @@ export class HomePage {
 
   ionViewWillEnter() {
     console.log("Home ionViewWillEnter");
-    this.input.value = "";
   }
 
   ionViewDidEnter() {
     console.log("Home ionViewDidEnter");
   }
 
-  searchDeployments(event) {
-    console.log(`Home searchDeployments ${this.input.value}`);
-    let search = this.input.value.toString();
-    if (search && search.length > 0) {
-      let loading = this.loadingController.create({
-        content: "Searching..."
-      });
-      loading.present();
-      this.api.searchDeployments(search).then(results => {
-        let deployments = <any[]>results;
-        console.log(`Home searchDeployments ${deployments.length}`);
-        loading.dismiss();
-        this.navController.push(
-          DeploymentListPage,
-          { search: search,
-            deployments: deployments });
-      });
-    }
+  addDeployment(event) {
+    console.log("Home addDeployment");
+    let modal = this.modalController.create(
+      DeploymentAddPage,
+      { });
+    modal.present();
+    modal.onDidDismiss(data => {
+
+    });
   }
 
 }

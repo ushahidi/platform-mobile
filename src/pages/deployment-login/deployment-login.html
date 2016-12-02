@@ -1,30 +1,28 @@
 <ion-header>
   <ion-navbar color="dark">
     <ion-buttons start>
-      <button #cancel ion-button (click)="doCancel($event)" *ngIf="modal">Cancel</button>
+      <button ion-button icon-only menuToggle>
+        <ion-icon name="menu"></ion-icon>
+      </button>
     </ion-buttons>
-    <ion-title>Login</ion-title>
+    <ion-title></ion-title>
   </ion-navbar>
 </ion-header>
-<ion-content class="page-deployment-login" padding>
-  <div margin-top margin-bottom *ngIf="deployment">
-    <ion-item class="input">
-      <ion-icon name="link" item-left color="grey"></ion-icon>
-      <ion-input #url type="text" disabled="true" [value]="deployment.url"></ion-input>
-    </ion-item>
+<ion-content class="page-deployment-login">
+  <div class="header">
+    <h4 *ngIf="deployment" text-center padding-top padding-bottom>{{deployment.deployment_name}}</h4>
   </div>
-  <div margin-top margin-bottom>
-    <ion-item class="input">
-      <ion-icon name="mail" item-left color="grey"></ion-icon>
-      <ion-input #username type="email" clearInput="true" placeholder="Email"></ion-input>
-    </ion-item>
+  <p padding-left padding-right>Log in to see and contribute to this deployment's survey responses.</p>
+  <ion-item>
+    <ion-label floating>Email</ion-label>
+    <ion-input #username type="email" clearInput="true"></ion-input>
+  </ion-item>
+  <ion-item margin-top margin-bottom>
+    <ion-label floating>Password</ion-label>
+    <ion-input #password type="password" clearInput="true"></ion-input>
+  </ion-item>
+  <div text-right padding>
+    <button #login ion-button text-uppercase color="primary" (click)="doLogin($event)"
+          [disabled]="username.value.length == 0 || password.value.length == 0">Log in</button>
   </div>
-  <div margin-top margin-bottom>
-    <ion-item margin-top margin-bottom class="input">
-      <ion-icon name="key" item-left color="grey"></ion-icon>
-      <ion-input #password type="password" clearInput="true" placeholder="Password"></ion-input>
-    </ion-item>
-  </div>
-  <button #login ion-button block margin-top color="primary" (click)="doLogin($event)"
-          [disabled]="username.value.length == 0 || password.value.length == 0">Login</button>
 </ion-content>

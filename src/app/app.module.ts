@@ -1,11 +1,11 @@
-import { NgModule } from '@angular/core';
-import { IonicApp, IonicModule } from 'ionic-angular';
+import { NgModule, ErrorHandler } from '@angular/core';
+import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 
+import { DeploymentAddPage } from '../pages/deployment-add/deployment-add';
 import { DeploymentLoginPage } from '../pages/deployment-login/deployment-login';
-import { DeploymentListPage } from '../pages/deployment-list/deployment-list';
 import { DeploymentDetailsPage } from '../pages/deployment-details/deployment-details';
 
 import { ResponseMapPage } from '../pages/response-map/response-map';
@@ -33,8 +33,8 @@ import { ApiService } from '../providers/api-service/api-service';
   declarations: [
     MyApp,
     HomePage,
+    DeploymentAddPage,
     DeploymentLoginPage,
-    DeploymentListPage,
     DeploymentDetailsPage,
     ResponseMapPage,
     ResponseListPage,
@@ -61,8 +61,8 @@ import { ApiService } from '../providers/api-service/api-service';
   entryComponents: [
     MyApp,
     HomePage,
+    DeploymentAddPage,
     DeploymentLoginPage,
-    DeploymentListPage,
     DeploymentDetailsPage,
     ResponseMapPage,
     ResponseListPage,
@@ -70,6 +70,6 @@ import { ApiService } from '../providers/api-service/api-service';
     ResponseAddPage,
     ResponseEditPage
   ],
-  providers: [ ApiService ]
+  providers: [ ApiService, {provide: ErrorHandler, useClass: IonicErrorHandler} ]
 })
 export class AppModule {}
