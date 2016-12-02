@@ -31,8 +31,15 @@ https://developer.apple.com/xcode/
 
 Add the Homebrew location `export PATH="/usr/local/bin:$PATH"` to your environment `$PATH`.
 
+Update the Homebrew recipes
+
 ```
 brew update
+```
+
+Check health of Homebrew recipes
+
+```
 brew doctor
 ```
 
@@ -46,7 +53,7 @@ brew install node
 npm install -g npm
 ```
 
-Double check the version of NPM
+Check the version of NPM
 
 ```
 npm --version
@@ -62,7 +69,7 @@ npm install -g cordova@latest
 npm install -g cordova-common
 ```
 
-Double check the version of Cordova
+Check the version of Cordova
 
 ```
 cordova -v
@@ -83,10 +90,15 @@ npm install -g android-simulator
 npm install -g cordova-browser
 ```
 
-Double check the version of Ionic
+Check the version of Ionic
 
 ```
 ionic -v
+```
+
+List the root level NPM packages
+
+```
 npm list --depth=0
 ```
 
@@ -94,6 +106,10 @@ npm list --depth=0
 
 ## Android
 #### Ensure that [Android](https://developer.android.com/index.html) is installed
+
+```
+https://developer.android.com
+```
 
 ```
 android list sdk --all --extended
@@ -104,8 +120,13 @@ android update sdk -u -a -t extra-google-analytics_sdk_v2
 android update sdk -u -a -t extra-intel-Hardware_Accelerated_Execution_Manager
 ```
 
+Run Android SDK Manager
 ```
 android sdk
+```
+
+Run Android Virtual Device Manager
+```
 android avd
 ```
 
@@ -124,7 +145,7 @@ ionic run ios
 ionic run ios --livereload --consolelogs --serverlogs
 ```
 
-Double check whether the Cordova requirements for iOS are installed
+Check whether the Cordova requirements for iOS are installed
 
 ```
 cordova requirements ios
@@ -145,7 +166,7 @@ ionic run android --consolelogs --serverlogs
 ionic run android --livereload --consolelogs --serverlogs
 ```
 
-Double check whether the Cordova requirements for Android are installed
+Check whether the Cordova requirements for Android are installed
 
 ```
 cordova requirements android
@@ -161,6 +182,8 @@ ionic build browser --desktop --testing
 ```
 ionic run browser
 ```
+
+Check whether the Cordova requirements for Browser are installed
 
 ```
 cordova requirements browser
