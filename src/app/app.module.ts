@@ -1,6 +1,8 @@
 import { NgModule, ErrorHandler } from '@angular/core';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 
+import { Gravatar } from 'ng2-gravatar-directive';
+
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 
@@ -26,11 +28,20 @@ import { SelectComponent } from '../components/select/select';
 import { TextComponent } from '../components/text/text';
 import { TextAreaComponent } from '../components/textarea/textarea';
 import { VideoComponent } from '../components/video/video';
+import { CardComponent } from '../components/card/card';
+
+import { NiceDate } from '../pipes/nice-date';
+import { NiceDecimal } from '../pipes/nice-decimal';
+import { NiceHtml } from '../pipes/nice-html';
+import { NiceNumber } from '../pipes/nice-number';
+import { NiceTime } from '../pipes/nice-time';
+import { NiceTitle } from '../pipes/nice-title';
 
 import { ApiService } from '../providers/api-service/api-service';
 
 @NgModule({
   declarations: [
+    Gravatar,
     MyApp,
     HomePage,
     DeploymentAddPage,
@@ -52,7 +63,14 @@ import { ApiService } from '../providers/api-service/api-service';
     SelectComponent,
     TextComponent,
     TextAreaComponent,
-    VideoComponent
+    VideoComponent,
+    CardComponent,
+    NiceDate,
+    NiceDecimal,
+    NiceHtml,
+    NiceNumber,
+    NiceTime,
+    NiceTitle
   ],
   imports: [
     IonicModule.forRoot(MyApp)

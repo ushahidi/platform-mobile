@@ -1,0 +1,44 @@
+.card {
+  border-left: thick solid #cccccc;
+  ion-avatar {
+    max-width: 25px;
+    margin-right: 0;
+    padding-right: 0;
+    padding-top: 5px;
+    img {
+      max-width: 25px;
+      margin-right: 0;
+      padding-right: 0;
+    }
+  }
+  ion-card-content {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    h2 {
+      margin-bottom: 10px;
+    }
+    p {
+
+    }
+  }
+  ion-item {
+    p {
+      margin-left: 0;
+      padding-left: 0;
+    }
+  }
+  button {
+    margin-right: 0;
+    padding-right: 0;
+    ion-icon {
+      font-size: 2em;
+      margin-right: 0;
+      padding-right: 0;
+    }
+  }
+  .more {
+    margin-top: 5px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+}

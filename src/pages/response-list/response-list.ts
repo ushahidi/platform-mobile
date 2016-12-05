@@ -5,11 +5,14 @@ import { Platform, NavParams, NavController, TextInput, Button,
 import { ResponseAddPage } from '../response-add/response-add';
 import { ResponseDetailsPage } from '../response-details/response-details';
 
+import { CardComponent } from '../../components/card/card';
+
 import { ApiService } from '../../providers/api-service/api-service';
 
 @Component({
   selector: 'page-response-list',
   templateUrl: 'response-list.html',
+  providers: [ ApiService ],
   entryComponents:[ ResponseAddPage, ResponseDetailsPage ]
 })
 export class ResponseListPage {

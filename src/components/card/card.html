@@ -1,0 +1,22 @@
+<ion-card class="card" [style.border-left-color]="response.color" tappable (click)="cardSelected($event)">
+  <ion-item>
+    <button item-right tappable (click)="menuSelected($event)">
+      <ion-icon ios="ios-more" md="ios-more"></ion-icon>
+    </button>
+    <ion-icon ios="md-globe" md="md-globe" color="grey" item-left></ion-icon>
+    <ion-avatar item-left>
+      <img gravatar email="dalezak@gmail.com" [size]="32">
+    </ion-avatar>
+    <p text-muted>Dale Zak • {{response.created | niceTime}}</p>
+  </ion-item>
+  <ion-card-content>
+    <h2 *ngIf="response.title">{{response.title}}</h2>
+    <p *ngIf="response.content">{{response.content}}</p>
+  </ion-card-content>
+  <ion-card-content>
+    <img src="http://lorempixel.com/400/200/sports/{{index+1}}">
+  </ion-card-content>
+  <ion-card-content>
+    <p class="more">2 more fields...</p>
+  </ion-card-content>
+</ion-card>

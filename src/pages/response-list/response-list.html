@@ -24,14 +24,6 @@
     <ion-spinner></ion-spinner>
   </div>
   <div *ngIf="responses && responses.length > 0">
-    <ion-card tappable *ngFor="let response of responses; let i = index" (click)="showResponse($event, response)">
-      <ion-card-header>
-        {{response.title}}
-      </ion-card-header>
-      <ion-card-content>
-        <p>{{response.content}}</p>
-        <p>{{response.post_date}}</p>
-      </ion-card-content>
-    </ion-card>
+    <response-card [response]="response" [index]="i" *ngFor="let response of responses; let i = index"></response-card>
   </div>
 </ion-content>
