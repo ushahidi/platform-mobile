@@ -1,7 +1,8 @@
 import { NgModule, ErrorHandler } from '@angular/core';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 
-import { Gravatar } from 'ng2-gravatar-directive';
+// import { Gravatar } from 'ng2-gravatar-directive';
+import { LazyLoadImageModule } from 'ng2-lazyload-image';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
@@ -41,7 +42,6 @@ import { ApiService } from '../providers/api-service/api-service';
 
 @NgModule({
   declarations: [
-    Gravatar,
     MyApp,
     HomePage,
     DeploymentAddPage,
@@ -70,10 +70,12 @@ import { ApiService } from '../providers/api-service/api-service';
     NiceHtml,
     NiceNumber,
     NiceTime,
-    NiceTitle
+    NiceTitle,
+    // Gravatar
   ],
   imports: [
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp),
+    LazyLoadImageModule
   ],
   bootstrap: [ IonicApp ],
   entryComponents: [

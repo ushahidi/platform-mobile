@@ -1,7 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { ToastController } from 'ionic-angular';
 
-import { Gravatar } from 'ng2-gravatar-directive';
+// import { Gravatar } from 'ng2-gravatar-directive';
 
 import { NiceTime } from '../../pipes/nice-time';
 
@@ -15,7 +14,7 @@ export class CardComponent {
   index: number = 0;
   response: any = {};
 
-  constructor(public toastController: ToastController) {
+  constructor() {
     console.log('Card Component');
   }
 

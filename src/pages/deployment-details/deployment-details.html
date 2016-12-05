@@ -19,7 +19,7 @@
       <h4 text-center padding-top padding-bottom *ngIf="site.name">{{site.name}}</h4>
     </div>
     <div class="image">
-      <img padding [src]="site.image_header" *ngIf="site.image_header">
+      <img padding [lazyLoad]="site.image_header" *ngIf="site.image_header">
     </div>
     <p padding-left padding-right *ngIf="site.description">{{site.description}}</p>
     <div padding-top padding-left padding-right padding-bottom margin-bottom>

@@ -5,9 +5,9 @@
     </button>
     <ion-icon ios="md-globe" md="md-globe" color="grey" item-left></ion-icon>
     <ion-avatar item-left>
-      <img gravatar email="dalezak@gmail.com" [size]="32">
+      <img src="https://randomuser.me/api/portraits/men/{{index+1}}.jpg">
     </ion-avatar>
-    <p text-muted>Dale Zak • {{response.created | niceTime}}</p>
+    <p text-muted>Dale Zak {{response.created}}</p>
   </ion-item>
   <ion-card-content>
     <h2 *ngIf="response.title">{{response.title}}</h2>
