@@ -13,11 +13,43 @@ cd Ushahidi_Mobile
 
 ---
 
+## Git
+### Commands for [Git](https://git-scm.com) version control
+
+Check local changes
+
+```
+git status
+```
+
+Revert local changes
+
+```
+git reset --hard
+```
+
+Commit local changes
+
+```
+git add .
+git add -u
+git commit -m "message about the changes"
+git push
+```
+
+---
+
 ## XCode
 #### Ensure the latest [XCode](https://developer.apple.com/xcode/) is installed
 
 ```
 https://developer.apple.com/xcode/
+```
+
+Once XCode is installed, install the command line tools
+
+```
+sudo xcode-select --switch /Library/Developer/CommandLineTools/
 ```
 
 ---
@@ -30,6 +62,10 @@ https://developer.apple.com/xcode/
 ```
 
 Add the Homebrew location `export PATH="/usr/local/bin:$PATH"` to your environment `$PATH`.
+
+```
+open -e ~/.bash_profile
+```
 
 Update the Homebrew recipes
 
@@ -58,6 +94,12 @@ brew doctor
 ```
 brew install node
 npm install -g npm
+```
+
+Check the location of NPM
+
+```
+which npm
 ```
 
 Check the version of NPM
@@ -91,6 +133,12 @@ Check the version of Cordova
 
 ```
 cordova -v
+```
+
+Clean up the Cordova build files
+
+```
+cordova clean
 ```
 
 ---
@@ -139,6 +187,8 @@ npm list --depth=0
 ```
 https://developer.android.com
 ```
+
+Once Android is installed, update the necessary SDKs
 
 ```
 android list sdk --all --extended
@@ -200,6 +250,8 @@ Check whether the Cordova requirements for Android are installed
 ```
 cordova requirements android
 ```
+
+---
 
 ## Desktop
 ### Commands to run the app in the Browser

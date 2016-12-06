@@ -1,0 +1,7 @@
+{
+  "name": "ushahidi",
+  "dependencies": {},
+  "globalDependencies": {
+    "moment": "registry:dt/moment#2.11.1+20161010105546"
+  }
+}
