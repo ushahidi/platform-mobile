@@ -9,7 +9,7 @@
     <ion-avatar item-left>
       <img src="https://randomuser.me/api/portraits/men/{{index+1}}.jpg">
     </ion-avatar>
-    <p text-muted>Dale Zak {{response.created}}</p>
+    <p text-muted>Dale Zak {{response.created | timeAgo}}</p>
   </ion-item>
   <ion-card-content>
     <h2 *ngIf="response.title">{{response.title}}</h2>

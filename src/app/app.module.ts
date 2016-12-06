@@ -31,12 +31,9 @@ import { TextAreaComponent } from '../components/textarea/textarea';
 import { VideoComponent } from '../components/video/video';
 import { CardComponent } from '../components/card/card';
 
-import { NiceDate } from '../pipes/nice-date';
-import { NiceDecimal } from '../pipes/nice-decimal';
-import { NiceHtml } from '../pipes/nice-html';
-import { NiceNumber } from '../pipes/nice-number';
-import { NiceTime } from '../pipes/nice-time';
-import { NiceTitle } from '../pipes/nice-title';
+import { TimeAgoPipe } from '../pipes/time-ago';
+import { TitleizePipe } from '../pipes/titleize';
+import { CapitalizePipe } from '../pipes/capitalize';
 
 import { ApiService } from '../providers/api-service/api-service';
 
@@ -65,12 +62,9 @@ import { ApiService } from '../providers/api-service/api-service';
     TextAreaComponent,
     VideoComponent,
     CardComponent,
-    NiceDate,
-    NiceDecimal,
-    NiceHtml,
-    NiceNumber,
-    NiceTime,
-    NiceTitle,
+    TimeAgoPipe,
+    TitleizePipe,
+    CapitalizePipe
     // Gravatar
   ],
   imports: [

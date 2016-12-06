@@ -2,7 +2,8 @@ import { Component, Input } from '@angular/core';
 
 // import { Gravatar } from 'ng2-gravatar-directive';
 
-import { NiceTime } from '../../pipes/nice-time';
+import { TimeAgoPipe } from '../../pipes/time-ago';
+import { TitleizePipe } from '../../pipes/titleize';
 
 @Component({
   selector: 'response-card',

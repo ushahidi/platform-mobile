@@ -1,17 +1,18 @@
-import { Injectable, Pipe } from '@angular/core';
+import { Injectable, Pipe, PipeTransform } from '@angular/core';
 import * as moment from 'moment';
 
 @Pipe({
-  name: 'niceDate'
+  name: 'timeAgo'
 })
 @Injectable()
-export class NiceDate {
-  transform(value: string, args: any[]) {
+export class TimeAgoPipe implements PipeTransform {
+
+  transform(value: string, args: any[]=null): any {
     var date = new Date(value);
     moment.locale('en', {
         relativeTime : {
             future: "in %s",
-            past:   "%s ago",
+            past: "%s ago",
             s:  "seconds",
             m:  "1 minute",
             mm: "%d minutes",
@@ -27,4 +28,5 @@ export class NiceDate {
     });
     return moment(date).fromNow();
   }
+  
 }
