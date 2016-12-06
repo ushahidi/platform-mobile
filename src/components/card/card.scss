@@ -9,6 +9,11 @@
       max-width: 25px;
       margin-right: 0;
       padding-right: 0;
+      transition: opacity 1s;
+      opacity: 0;
+      &.ng2-lazyloaded {
+        opacity: 1;
+      }
     }
   }
   ion-card-content {
@@ -19,6 +24,13 @@
     }
     p {
 
+    }
+    img {
+      transition: opacity 1s;
+      opacity: 0;
+      &.ng2-lazyloaded {
+        opacity: 1;
+      }
     }
   }
   ion-item {

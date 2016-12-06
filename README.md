@@ -250,22 +250,3 @@ Check whether the Cordova requirements for Android are installed
 ```
 cordova requirements android
 ```
-
----
-
-## Desktop
-### Commands to run the app in the Browser
-
-```
-ionic build browser --desktop --testing
-```
-
-```
-ionic run browser
-```
-
-Check whether the Cordova requirements for Browser are installed
-
-```
-cordova requirements browser
-```

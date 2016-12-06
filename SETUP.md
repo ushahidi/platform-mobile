@@ -122,6 +122,8 @@ ionic plugin add cordova-plugin-statusbar
 ionic plugin add cordova-plugin-whitelist
 ionic plugin add cordova-plugin-x-socialsharing
 ionic plugin add cordova-sqlite-storage
+ionic plugin add cordova-plugin-nativestorage
+ionic plugin add cordova-plugin-secure-storage
 ionic plugin add cordova-fabric-plugin --variable FABRIC_API_KEY=ce67fdba44588767037fbff566b67932e811c332 --variable FABRIC_API_SECRET=7b24e06a9561fa04b86ae87ef1a0942faaba38b606ac787935af6583d22c3392
 ionic plugin add ionic-plugin-deeplinks --variable URL_SCHEME=ushahidi --variable DEEPLINK_SCHEME=https --variable DEEPLINK_HOST=ushahidi.com
 ```

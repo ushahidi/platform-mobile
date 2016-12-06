@@ -15,11 +15,11 @@
 </ion-header>
 <ion-content class="page-deployment-details">
   <div *ngIf="site">
-    <div class="header">
-      <h4 text-center padding-top padding-bottom *ngIf="site.name">{{site.name}}</h4>
+    <div class="header" *ngIf="site.name">
+      <h4 text-center padding-top padding-bottom>{{site.name}}</h4>
     </div>
-    <div class="image">
-      <img padding [lazyLoad]="site.image_header" *ngIf="site.image_header">
+    <div class="image" *ngIf="site.image_header">
+      <img padding [src]="placeholder" [lazyLoad]="site.image_header" [offset]="offset">
     </div>
     <p padding-left padding-right *ngIf="site.description">{{site.description}}</p>
     <div padding-top padding-left padding-right padding-bottom margin-bottom>

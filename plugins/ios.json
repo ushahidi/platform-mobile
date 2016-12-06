@@ -30,13 +30,7 @@
         "cordova-plugin-ios-longpress-fix": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
-        "cordova-plugin-nativestorage": {
-            "PACKAGE_NAME": "com.ushahidi.mobile"
-        },
         "cordova-plugin-networkactivityindicator": {
-            "PACKAGE_NAME": "com.ushahidi.mobile"
-        },
-        "cordova-plugin-secure-storage": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
         "cordova-plugin-spinner-dialog": {
@@ -54,7 +48,10 @@
         "cordova-plugin-x-socialsharing": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
-        "cordova-sqlite-storage": {
+        "cordova-plugin-secure-storage": {
+            "PACKAGE_NAME": "com.ushahidi.mobile"
+        },
+        "cordova-plugin-nativestorage": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
         "ionic-plugin-deeplinks": {

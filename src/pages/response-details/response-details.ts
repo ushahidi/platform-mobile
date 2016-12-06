@@ -18,7 +18,7 @@ export class ResponseDetailsPage {
   deployment: any;
   response: any;
   form: any;
-
+  
   constructor(
     public platform:Platform,
     public api:ApiService,

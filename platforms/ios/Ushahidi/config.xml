@@ -38,14 +38,8 @@
         <param name="ios-package" value="LongPressFix" />
         <param name="onload" value="true" />
     </feature>
-    <feature name="NativeStorage">
-        <param name="ios-package" value="NativeStorage" />
-    </feature>
     <feature name="NetworkActivityIndicator">
         <param name="ios-package" value="NetworkActivityIndicator" />
-    </feature>
-    <feature name="SecureStorage">
-        <param name="ios-package" value="SecureStorage" />
     </feature>
     <feature name="SpinnerDialog">
         <param name="ios-package" value="CDVSpinnerDialog" />
@@ -62,8 +56,11 @@
         <param name="ios-package" value="SocialSharing" />
         <param name="onload" value="true" />
     </feature>
-    <feature name="SQLitePlugin">
-        <param name="ios-package" value="SQLitePlugin" />
+    <feature name="SecureStorage">
+        <param name="ios-package" value="SecureStorage" />
+    </feature>
+    <feature name="NativeStorage">
+        <param name="ios-package" value="NativeStorage" />
     </feature>
     <feature name="IonicDeeplinkPlugin">
         <param name="ios-package" onload="true" value="IonicDeeplinkPlugin" />

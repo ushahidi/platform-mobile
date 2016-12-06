@@ -19,6 +19,8 @@ export class DeploymentDetailsPage {
   deployment: any;
   site: any;
   forms: any;
+  offset: number = 1000;
+  placeholder: string = "assets/images/placeholder-photo.jpg";
 
   constructor(
     public platform:Platform,

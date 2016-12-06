@@ -54,9 +54,6 @@
         "cordova-plugin-x-socialsharing": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
-        "cordova-sqlite-storage": {
-            "PACKAGE_NAME": "com.ushahidi.mobile"
-        },
         "ionic-plugin-deeplinks": {
             "URL_SCHEME": "ushahidi",
             "DEEPLINK_SCHEME": "https",

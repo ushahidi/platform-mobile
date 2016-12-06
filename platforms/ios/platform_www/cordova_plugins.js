@@ -75,44 +75,12 @@ module.exports = [
         ]
     },
     {
-        "id": "cordova-plugin-nativestorage.mainHandle",
-        "file": "plugins/cordova-plugin-nativestorage/www/mainHandle.js",
-        "pluginId": "cordova-plugin-nativestorage",
-        "clobbers": [
-            "NativeStorage"
-        ]
-    },
-    {
-        "id": "cordova-plugin-nativestorage.LocalStorageHandle",
-        "file": "plugins/cordova-plugin-nativestorage/www/LocalStorageHandle.js",
-        "pluginId": "cordova-plugin-nativestorage"
-    },
-    {
-        "id": "cordova-plugin-nativestorage.NativeStorageError",
-        "file": "plugins/cordova-plugin-nativestorage/www/NativeStorageError.js",
-        "pluginId": "cordova-plugin-nativestorage"
-    },
-    {
         "id": "cordova-plugin-networkactivityindicator.NetworkActivityIndicator",
         "file": "plugins/cordova-plugin-networkactivityindicator/www/NetworkActivityIndicator.js",
         "pluginId": "cordova-plugin-networkactivityindicator",
         "clobbers": [
             "NetworkActivityIndicator"
         ]
-    },
-    {
-        "id": "cordova-plugin-secure-storage.SecureStorage",
-        "file": "plugins/cordova-plugin-secure-storage/www/securestorage.js",
-        "pluginId": "cordova-plugin-secure-storage",
-        "clobbers": [
-            "SecureStorage"
-        ]
-    },
-    {
-        "id": "cordova-plugin-secure-storage.sjcl_ss",
-        "file": "plugins/cordova-plugin-secure-storage/www/sjcl_ss.js",
-        "pluginId": "cordova-plugin-secure-storage",
-        "runs": true
     },
     {
         "id": "cordova-plugin-spinner-dialog.SpinnerDialog",
@@ -147,12 +115,36 @@ module.exports = [
         ]
     },
     {
-        "id": "cordova-sqlite-storage.SQLitePlugin",
-        "file": "plugins/cordova-sqlite-storage/www/SQLitePlugin.js",
-        "pluginId": "cordova-sqlite-storage",
+        "id": "cordova-plugin-secure-storage.SecureStorage",
+        "file": "plugins/cordova-plugin-secure-storage/www/securestorage.js",
+        "pluginId": "cordova-plugin-secure-storage",
         "clobbers": [
-            "SQLitePlugin"
+            "SecureStorage"
         ]
+    },
+    {
+        "id": "cordova-plugin-secure-storage.sjcl_ss",
+        "file": "plugins/cordova-plugin-secure-storage/www/sjcl_ss.js",
+        "pluginId": "cordova-plugin-secure-storage",
+        "runs": true
+    },
+    {
+        "id": "cordova-plugin-nativestorage.mainHandle",
+        "file": "plugins/cordova-plugin-nativestorage/www/mainHandle.js",
+        "pluginId": "cordova-plugin-nativestorage",
+        "clobbers": [
+            "NativeStorage"
+        ]
+    },
+    {
+        "id": "cordova-plugin-nativestorage.LocalStorageHandle",
+        "file": "plugins/cordova-plugin-nativestorage/www/LocalStorageHandle.js",
+        "pluginId": "cordova-plugin-nativestorage"
+    },
+    {
+        "id": "cordova-plugin-nativestorage.NativeStorageError",
+        "file": "plugins/cordova-plugin-nativestorage/www/NativeStorageError.js",
+        "pluginId": "cordova-plugin-nativestorage"
     },
     {
         "id": "ionic-plugin-deeplinks.deeplink",
@@ -181,17 +173,16 @@ module.exports.metadata =
     "cordova-plugin-console": "1.0.4",
     "cordova-plugin-device": "1.1.3",
     "cordova-plugin-email": "1.2.2",
-    "cordova-plugin-google-analytics": "1.7.1",
+    "cordova-plugin-google-analytics": "1.7.2",
     "cordova-plugin-ios-longpress-fix": "1.1.0",
-    "cordova-plugin-nativestorage": "2.0.2",
     "cordova-plugin-networkactivityindicator": "0.1.1",
-    "cordova-plugin-secure-storage": "2.6.3",
     "cordova-plugin-spinner-dialog": "1.3.1",
     "cordova-plugin-splashscreen": "4.0.0",
     "cordova-plugin-statusbar": "2.2.0",
     "cordova-plugin-whitelist": "1.3.0",
     "cordova-plugin-x-socialsharing": "5.1.3",
-    "cordova-sqlite-storage": "1.4.8",
+    "cordova-plugin-secure-storage": "2.6.3",
+    "cordova-plugin-nativestorage": "2.0.2",
     "ionic-plugin-deeplinks": "1.0.8",
     "ionic-plugin-keyboard": "2.2.1"
 };

@@ -1,7 +1,6 @@
 import { NgModule, ErrorHandler } from '@angular/core';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 
-// import { Gravatar } from 'ng2-gravatar-directive';
 import { LazyLoadImageModule } from 'ng2-lazyload-image';
 
 import { MyApp } from './app.component';
@@ -65,7 +64,6 @@ import { ApiService } from '../providers/api-service/api-service';
     TimeAgoPipe,
     TitleizePipe,
     CapitalizePipe
-    // Gravatar
   ],
   imports: [
     IonicModule.forRoot(MyApp),

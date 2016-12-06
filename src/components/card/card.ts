@@ -1,6 +1,4 @@
-import { Component, Input } from '@angular/core';
-
-// import { Gravatar } from 'ng2-gravatar-directive';
+import { Component, Input, Directive } from '@angular/core';
 
 import { TimeAgoPipe } from '../../pipes/time-ago';
 import { TitleizePipe } from '../../pipes/titleize';
@@ -14,6 +12,11 @@ export class CardComponent {
 
   index: number = 0;
   response: any = {};
+  offset: number = 1000;
+  placeholderUser: string = "assets/images/placeholder-user.jpg";
+  placeholderPhoto: string = "assets/images/placeholder-photo.jpg";
+  imageUser: string = "https://www.gravatar.com/avatar/74a8d7dadabcd2ac5c45f68e5a53cedf.jpg?s=32";
+  imagePhoto: string = "http://lorempixel.com/400/200/sports/1";
 
   constructor() {
     console.log('Card Component');
