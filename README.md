@@ -228,7 +228,7 @@ cordova requirements android
 ---
 
 ## Git
-### Commands for [Git](https://git-scm.com) version control
+#### Commands for [Git](https://git-scm.com) version control
 
 Check local changes
 
