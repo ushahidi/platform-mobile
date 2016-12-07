@@ -100,4 +100,7 @@
     <preference name="android-targetSdkVersion" value="24" />
     <preference name="android-minSdkVersion" value="19" />
     <preference name="LoadUrlTimeoutValue" value="50000" />
+    <feature name="SQLitePlugin">
+        <param name="android-package" value="io.sqlc.SQLitePlugin" />
+    </feature>
 </widget>

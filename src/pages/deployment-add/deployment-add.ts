@@ -1,6 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { Platform, NavParams, NavController, TextInput, Button,
         LoadingController, ToastController, AlertController, ViewController } from 'ionic-angular';
+import { StatusBar } from 'ionic-native';
 
 import { DeploymentLoginPage } from '../deployment-login/deployment-login';
 
@@ -31,6 +32,15 @@ export class DeploymentAddPage {
 
   ionViewDidLoad() {
     console.log('Deployment Add ionViewDidLoad');
+  }
+
+  ionViewWillEnter() {
+    console.log("Deployment Add ionViewWillEnter");
+    this.platform.ready().then(() => {
+      StatusBar.styleLightContent();
+      StatusBar.overlaysWebView(false);
+      StatusBar.backgroundColorByHexString('#3f4751');
+    });
   }
 
   doCancel(event) {

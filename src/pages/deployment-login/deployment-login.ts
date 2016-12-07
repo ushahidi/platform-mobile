@@ -1,6 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { Platform, NavParams, NavController, TextInput, Button, LoadingController,
   ToastController, AlertController, ViewController } from 'ionic-angular';
+import { StatusBar } from 'ionic-native';
 
 import { DeploymentDetailsPage } from '../deployment-details/deployment-details';
 
@@ -40,16 +41,26 @@ export class DeploymentLoginPage {
 
     ionViewWillEnter() {
       console.log("Deployment Login ionViewWillEnter");
+      this.platform.ready().then(() => {
+        StatusBar.styleLightContent();
+        StatusBar.overlaysWebView(false);
+        StatusBar.backgroundColorByHexString('#3f4751');
+      });
       this.deployment = this.navParams.get("deployment");
       this.deployment.url = `https://${this.deployment.subdomain}.${this.deployment.domain}`;
-      if (this.deployment.subdomain == 'dale') {
-        this.username.value = "dalezak@gmail.com";
-        this.password.value = "P4NpCNUqLTCnvJAQBBMX";
-      }
+      this.addTestData();
     }
 
     ionViewDidEnter() {
       console.log("Deployment Login ionViewDidEnter");
+    }
+
+    addTestData() {
+      console.log("Deployment Login addTestData");
+      if (this.deployment.subdomain == 'dale') {
+        this.username.value = "dalezak@gmail.com";
+        this.password.value = "P4NpCNUqLTCnvJAQBBMX";
+      }
     }
 
     doCancel(event) {

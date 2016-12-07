@@ -79,6 +79,10 @@
                         {
                             "xml": "<feature name=\"Keyboard\"><param name=\"ios-package\" onload=\"true\" value=\"IonicKeyboard\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"SQLitePlugin\"><param name=\"ios-package\" value=\"SQLitePlugin\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -162,6 +166,9 @@
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
         "ionic-plugin-keyboard": {
+            "PACKAGE_NAME": "com.ushahidi.mobile"
+        },
+        "cordova-sqlite-storage": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         }
     },
@@ -330,6 +337,14 @@
                 "cordova.plugins.Keyboard"
             ],
             "runs": true
+        },
+        {
+            "id": "cordova-sqlite-storage.SQLitePlugin",
+            "file": "plugins/cordova-sqlite-storage/www/SQLitePlugin.js",
+            "pluginId": "cordova-sqlite-storage",
+            "clobbers": [
+                "SQLitePlugin"
+            ]
         }
     ],
     "plugin_metadata": {
@@ -349,6 +364,7 @@
         "cordova-plugin-secure-storage": "2.6.3",
         "cordova-plugin-nativestorage": "2.0.2",
         "ionic-plugin-deeplinks": "1.0.8",
-        "ionic-plugin-keyboard": "2.2.1"
+        "ionic-plugin-keyboard": "2.2.1",
+        "cordova-sqlite-storage": "2.0.0"
     }
 }

@@ -49,7 +49,7 @@ https://developer.apple.com/xcode/
 Once XCode is installed, install the command line tools
 
 ```
-sudo xcode-select --switch /Library/Developer/CommandLineTools/
+sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
 ```
 
 ---

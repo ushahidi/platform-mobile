@@ -27,7 +27,7 @@
     "zone.js": "0.6.26"
   },
   "devDependencies": {
-    "@ionic/app-scripts": "0.0.45",
+    "@ionic/app-scripts": "0.0.42",
     "typescript": "2.0.6"
   },
   "cordovaPlugins": [
@@ -47,6 +47,7 @@
     "cordova-plugin-x-socialsharing",
     "cordova-plugin-nativestorage",
     "cordova-plugin-secure-storage",
+    "cordova-sqlite-storage",
     "ionic-plugin-keyboard"
   ],
   "cordovaPlatforms": [

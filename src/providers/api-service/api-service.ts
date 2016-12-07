@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Platform } from 'ionic-angular';
-import { NativeStorage, SecureStorage } from 'ionic-native';
+import { NativeStorage, SecureStorage, SQLite } from 'ionic-native';
 import { Http, Headers, URLSearchParams, RequestOptions } from '@angular/http';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
@@ -17,6 +17,7 @@ export class ApiService {
   clientSecret: any = String;
   accessToken: any = String;
   refreshToken: any = String;
+  database : SQLite;
 
   constructor(public http: Http, public platform:Platform) {
     console.log('ApiService');
@@ -24,18 +25,25 @@ export class ApiService {
     this.clientSecret = "35e7f0bca957836d05ca0492211b0ac707671261";
     this.platform.ready().then(() => {
       console.log('ApiService Platform Ready');
-      // NativeStorage.setItem("test", "test").then(
-      //   () => console.log('NativeStorage Stored!'),
-      //   error => console.error('NativeStorage Error', error)
-      // );
-      // this.secureStorage = new SecureStorage();
-      // this.secureStorage.create('ushahidi').then(
-      //    () => console.log('SecureStorage Ready'),
-      //    err => console.error(`SecureStorage ${err}`)
-      // );
+      this.openDatabase();
     });
     this.accessToken = null;
     this.refreshToken = null;
+  }
+
+  openDatabase() {
+    console.log("API openDatabase");
+    this.database = new SQLite();
+    this.database.openDatabase({
+      name: 'ushahidi.db',
+      location: 'default'
+    }).then(
+      () => {
+        console.log('API openDatabase Opened');
+      },
+      (err) => {
+        console.error('API openDatabase Failed', err);
+      });
   }
 
   getHeaders(accessToken:string=null) {

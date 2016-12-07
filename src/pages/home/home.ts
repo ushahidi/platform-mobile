@@ -1,5 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
-import { Platform, NavController, TextInput, Button, LoadingController, ModalController } from 'ionic-angular';
+import { Platform, NavController, TextInput, LoadingController, ModalController } from 'ionic-angular';
+import { StatusBar } from 'ionic-native';
 
 import { DeploymentAddPage } from '../deployment-add/deployment-add';
 import { DeploymentLoginPage } from '../deployment-login/deployment-login';
@@ -28,6 +29,11 @@ export class HomePage {
 
   ionViewWillEnter() {
     console.log("Home ionViewWillEnter");
+    this.platform.ready().then(() => {
+      StatusBar.styleDefault();
+      StatusBar.overlaysWebView(false);
+      StatusBar.backgroundColorByHexString('#f9f9f8');
+    });
   }
 
   ionViewDidEnter() {
@@ -41,6 +47,9 @@ export class HomePage {
       { });
     modal.present();
     modal.onDidDismiss(data => {
+      StatusBar.styleDefault();
+      StatusBar.overlaysWebView(false);
+      StatusBar.backgroundColorByHexString('#f9f9f8');
       if (data) {
         console.log(data);
         this.navController.setRoot(DeploymentLoginPage,
