@@ -7,7 +7,7 @@ import { ResponseDetailsPage } from '../response-details/response-details';
 
 import { CardComponent } from '../../components/card/card';
 
-import { ApiService } from '../../providers/api-service/api-service';
+import { ApiService } from '../../providers/api-service';
 
 @Component({
   selector: 'page-response-list',

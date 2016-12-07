@@ -4,7 +4,7 @@ import { Platform, NavParams, NavController, Button, LoadingController,
 
 import { ResponseEditPage } from '../response-edit/response-edit';
 
-import { ApiService } from '../../providers/api-service/api-service';
+import { ApiService } from '../../providers/api-service';
 
 @Component({
   selector: 'page-response-details',

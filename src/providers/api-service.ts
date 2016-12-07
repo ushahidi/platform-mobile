@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Platform } from 'ionic-angular';
-import { NativeStorage, SecureStorage, SQLite } from 'ionic-native';
 import { Http, Headers, URLSearchParams, RequestOptions } from '@angular/http';
-import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/retry';
 import 'rxjs/add/operator/delay';
@@ -12,38 +10,17 @@ import 'rxjs/add/operator/mergeMap';
 
 @Injectable()
 export class ApiService {
-  secureStorage: SecureStorage;
   clientId: any = String;
   clientSecret: any = String;
   accessToken: any = String;
   refreshToken: any = String;
-  database : SQLite;
 
   constructor(public http: Http, public platform:Platform) {
     console.log('ApiService');
     this.clientId = "ushahidiui";
     this.clientSecret = "35e7f0bca957836d05ca0492211b0ac707671261";
-    this.platform.ready().then(() => {
-      console.log('ApiService Platform Ready');
-      this.openDatabase();
-    });
     this.accessToken = null;
     this.refreshToken = null;
-  }
-
-  openDatabase() {
-    console.log("API openDatabase");
-    this.database = new SQLite();
-    this.database.openDatabase({
-      name: 'ushahidi.db',
-      location: 'default'
-    }).then(
-      () => {
-        console.log('API openDatabase Opened');
-      },
-      (err) => {
-        console.error('API openDatabase Failed', err);
-      });
   }
 
   getHeaders(accessToken:string=null) {

@@ -4,7 +4,7 @@ import { Platform, NavParams, NavController, LoadingController, ToastController,
 import { ResponseListPage } from '../response-list/response-list';
 import { ResponseAddPage } from '../response-add/response-add';
 
-import { ApiService } from '../../providers/api-service/api-service';
+import { ApiService } from '../../providers/api-service';
 
 @Component({
   selector: 'page-deployment-details',

@@ -5,7 +5,7 @@ import { StatusBar } from 'ionic-native';
 
 import { DeploymentDetailsPage } from '../deployment-details/deployment-details';
 
-import { ApiService } from '../../providers/api-service/api-service';
+import { ApiService } from '../../providers/api-service';
 
 @Component({
   selector: 'page-deployment-login',

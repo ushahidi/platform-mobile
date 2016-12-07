@@ -2,7 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { Platform, NavParams, NavController, TextInput, Button,
         LoadingController, ToastController, AlertController, ViewController } from 'ionic-angular';
 
-import { ApiService } from '../../providers/api-service/api-service';
+import { ApiService } from '../../providers/api-service';
 
 @Component({
   selector: 'page-response-edit',

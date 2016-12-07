@@ -2,7 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { Platform, NavParams, NavController, Button,
         LoadingController, ToastController, AlertController, ViewController } from 'ionic-angular';
 
-import { ApiService } from '../../providers/api-service/api-service';
+import { ApiService } from '../../providers/api-service';
 
 import { CheckboxComponent } from '../../components/checkbox/checkbox';
 import { CheckboxesComponent } from '../../components/checkboxes/checkboxes';

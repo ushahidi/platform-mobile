@@ -34,7 +34,8 @@ import { TimeAgoPipe } from '../pipes/time-ago';
 import { TitleizePipe } from '../pipes/titleize';
 import { CapitalizePipe } from '../pipes/capitalize';
 
-import { ApiService } from '../providers/api-service/api-service';
+import { ApiService } from '../providers/api-service';
+import { DatabaseService } from '../providers/database-service';
 
 @NgModule({
   declarations: [
@@ -82,6 +83,6 @@ import { ApiService } from '../providers/api-service/api-service';
     ResponseAddPage,
     ResponseEditPage
   ],
-  providers: [ ApiService, {provide: ErrorHandler, useClass: IonicErrorHandler} ]
+  providers: [ ApiService, DatabaseService, {provide: ErrorHandler, useClass: IonicErrorHandler} ]
 })
 export class AppModule {}
