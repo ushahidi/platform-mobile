@@ -1,7 +1,4 @@
-import { Component, Input, Directive } from '@angular/core';
-
-import { TimeAgoPipe } from '../../pipes/time-ago';
-import { TitleizePipe } from '../../pipes/titleize';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'response-card',

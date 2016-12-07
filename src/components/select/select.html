@@ -1,6 +1,6 @@
 <ion-label>{{attribute.label}}</ion-label>
 <ion-item>
-  <ion-select>
+  <ion-select #select>
     <ion-option value="{{option}}" *ngFor="let option of attribute.options">{{option}}</ion-option>
   </ion-select>
 </ion-item>

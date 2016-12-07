@@ -1,4 +1,5 @@
-import { Component, Input } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
+import { RadioGroup } from 'ionic-angular';
 
 @Component({
   selector: 'field-radio',
@@ -8,6 +9,8 @@ import { Component, Input } from '@angular/core';
 export class RadioComponent {
 
   attribute: any = {};
+
+  @ViewChild('radio') radio: RadioGroup;
 
   constructor() {
   }

@@ -1,4 +1,5 @@
-import { Component, Input } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
+import { Button } from 'ionic-angular';
 
 @Component({
   selector: 'field-location',
@@ -8,6 +9,8 @@ import { Component, Input } from '@angular/core';
 export class LocationComponent {
 
   attribute: any = {};
+
+  @ViewChild('button') button: Button;
 
   constructor() {
   }

@@ -1,4 +1,5 @@
-import { Component, Input } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
+import { Checkbox } from 'ionic-angular';
 
 @Component({
   selector: 'field-checkboxes',
@@ -8,6 +9,8 @@ import { Component, Input } from '@angular/core';
 export class CheckboxesComponent {
 
   attribute: any = {};
+
+  @ViewChild('checkbox') checkbox: Checkbox;
 
   constructor() {
   }

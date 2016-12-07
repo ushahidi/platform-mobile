@@ -1,4 +1,5 @@
-import { Component, Input } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
+import { DateTime } from 'ionic-angular';
 
 @Component({
   selector: 'field-datetime',
@@ -8,6 +9,9 @@ import { Component, Input } from '@angular/core';
 export class DateTimeComponent {
 
   attribute: any = {};
+
+  @ViewChild('date') date: DateTime;
+  @ViewChild('time') time: DateTime;
 
   constructor() {
   }

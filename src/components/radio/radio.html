@@ -1,5 +1,5 @@
 <ion-label>{{attribute.label}}</ion-label>
-<div radio-group>
+<div radio-group #radio>
   <ion-item *ngFor="let option of attribute.options">
     <ion-label>{{option}}</ion-label>
     <ion-radio value="{{option}}"></ion-radio>

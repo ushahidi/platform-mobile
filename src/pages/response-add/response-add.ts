@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Platform, NavParams, NavController, TextInput, Button,
+import { Platform, NavParams, NavController, Button,
         LoadingController, ToastController, AlertController, ViewController } from 'ionic-angular';
 
 import { ApiService } from '../../providers/api-service/api-service';

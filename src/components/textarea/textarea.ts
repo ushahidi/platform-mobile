@@ -1,4 +1,5 @@
-import { Component, Input } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
+import { TextArea } from 'ionic-angular';
 
 @Component({
   selector: 'field-textarea',
@@ -8,6 +9,8 @@ import { Component, Input } from '@angular/core';
 export class TextAreaComponent {
 
   attribute: any = {};
+
+  @ViewChild('textarea') textarea: TextArea;
 
   constructor() {
   }

@@ -1,5 +1,5 @@
-import { Component, ViewChild } from '@angular/core';
-import { Platform, NavController, TextInput, LoadingController, ModalController } from 'ionic-angular';
+import { Component } from '@angular/core';
+import { Platform, NavController, LoadingController, ModalController } from 'ionic-angular';
 import { StatusBar } from 'ionic-native';
 
 import { DeploymentAddPage } from '../deployment-add/deployment-add';

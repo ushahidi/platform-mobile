@@ -1,6 +1,5 @@
-import { Component, ViewChild } from '@angular/core';
-import { Platform, NavParams, NavController, TextInput, Button,
-        LoadingController, ToastController, AlertController, ViewController } from 'ionic-angular';
+import { Component } from '@angular/core';
+import { Platform, NavParams, NavController, LoadingController, ToastController, AlertController, ViewController } from 'ionic-angular';
 import { StatusBar } from 'ionic-native';
 
 import { DeploymentLoginPage } from '../deployment-login/deployment-login';

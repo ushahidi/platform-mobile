@@ -13,32 +13,6 @@ cd Ushahidi_Mobile
 
 ---
 
-## Git
-### Commands for [Git](https://git-scm.com) version control
-
-Check local changes
-
-```
-git status
-```
-
-Revert local changes
-
-```
-git reset --hard
-```
-
-Commit local changes
-
-```
-git add .
-git add -u
-git commit -m "message about the changes"
-git push
-```
-
----
-
 ## XCode
 #### Ensure the latest [XCode](https://developer.apple.com/xcode/) is installed
 
@@ -249,4 +223,30 @@ Check whether the Cordova requirements for Android are installed
 
 ```
 cordova requirements android
+```
+
+---
+
+## Git
+### Commands for [Git](https://git-scm.com) version control
+
+Check local changes
+
+```
+git status
+```
+
+Revert local changes
+
+```
+git reset --hard
+```
+
+Commit local changes
+
+```
+git add .
+git add -u
+git commit -m "message about the changes"
+git push
 ```

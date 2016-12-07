@@ -1,6 +1,5 @@
-import { Component, ViewChild } from '@angular/core';
-import { Platform, NavParams, NavController, TextInput, Button,
-  LoadingController, ToastController, AlertController, ModalController, ActionSheetController } from 'ionic-angular';
+import { Component } from '@angular/core';
+import { Platform, NavParams, NavController, LoadingController, ToastController, AlertController, ModalController, ActionSheetController } from 'ionic-angular';
 
 import { ResponseListPage } from '../response-list/response-list';
 import { ResponseAddPage } from '../response-add/response-add';

@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Platform, NavParams, NavController, TextInput, Button, LoadingController,
+import { Platform, NavParams, NavController, Button, LoadingController,
   ToastController, AlertController, ViewController, ModalController } from 'ionic-angular';
 
 import { ResponseEditPage } from '../response-edit/response-edit';
@@ -18,7 +18,9 @@ export class ResponseDetailsPage {
   deployment: any;
   response: any;
   form: any;
-  
+
+  @ViewChild('submit') submit: Button;
+
   constructor(
     public platform:Platform,
     public api:ApiService,

@@ -1,4 +1,5 @@
-import { Component, Input } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
+import { Button } from 'ionic-angular';
 import { Camera } from 'ionic-native';
 
 @Component({
@@ -10,6 +11,8 @@ export class ImageComponent {
 
   attribute: any = {};
   base64Image: string;
+
+  @ViewChild('button') button: Button;
 
   constructor() {
   }
