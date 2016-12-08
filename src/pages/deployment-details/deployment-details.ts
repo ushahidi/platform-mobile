@@ -89,7 +89,7 @@ export class DeploymentDetailsPage {
     loadForms() {
       this.api.getFormsWithAttributes(this.deployment.url, this.token).then(results => {
         let forms = <any[]>results;
-        console.log(`Deployment Details Forms ${forms}`);
+        console.log(`Deployment Details Forms ${JSON.stringify(forms)}`);
         this.forms = forms;
       });
     }

@@ -85,7 +85,7 @@ npm --version
 ---
 
 ## Cordova
-### Install the latest [Cordova](https://www.npmjs.com/package/cordova)
+#### Install the latest [Cordova](https://www.npmjs.com/package/cordova)
 
 ```
 npm install -g cordova@latest
@@ -158,11 +158,13 @@ npm list --depth=0
 ## Android
 #### Ensure that [Android](https://developer.android.com/index.html) is installed
 
+Download and install [Android Studio](https://developer.android.com/studio/index.html)
+
 ```
-https://developer.android.com
+https://developer.android.com/studio/index.html
 ```
 
-Once Android is installed, update the necessary SDKs
+Once Android Studio is installed, update the necessary SDKs
 
 ```
 android list sdk --all --extended
