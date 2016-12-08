@@ -6,11 +6,12 @@ import { StatusBar } from 'ionic-native';
 import { DeploymentDetailsPage } from '../deployment-details/deployment-details';
 
 import { ApiService } from '../../providers/api-service';
+import { DatabaseService } from '../../providers/database-service';
 
 @Component({
   selector: 'page-deployment-login',
   templateUrl: 'deployment-login.html',
-  providers: [ ApiService ],
+  providers: [ ApiService, DatabaseService ],
   entryComponents:[ DeploymentDetailsPage ]
 })
 export class DeploymentLoginPage {
@@ -26,6 +27,7 @@ export class DeploymentLoginPage {
   constructor(
     public platform:Platform,
     public api:ApiService,
+    public database:DatabaseService,
     public navParams: NavParams,
     public navController:NavController,
     public toastController: ToastController,
@@ -43,24 +45,22 @@ export class DeploymentLoginPage {
       console.log("Deployment Login ionViewWillEnter");
       this.platform.ready().then(() => {
         StatusBar.styleLightContent();
-        StatusBar.overlaysWebView(false);
         StatusBar.backgroundColorByHexString('#3f4751');
       });
       this.deployment = this.navParams.get("deployment");
-      this.deployment.url = `https://${this.deployment.subdomain}.${this.deployment.domain}`;
-      this.addTestData();
+      if (this.deployment.username) {
+        this.username.value = this.deployment.username;
+      }
+      if (this.deployment.password) {
+        this.password.value = this.deployment.password;
+      }
+      else if (this.deployment.subdomain = 'dale') {
+        this.password.value = "P4NpCNUqLTCnvJAQBBMX";
+      }
     }
 
     ionViewDidEnter() {
       console.log("Deployment Login ionViewDidEnter");
-    }
-
-    addTestData() {
-      console.log("Deployment Login addTestData");
-      if (this.deployment.subdomain == 'dale') {
-        this.username.value = "dalezak@gmail.com";
-        this.password.value = "P4NpCNUqLTCnvJAQBBMX";
-      }
     }
 
     doCancel(event) {
@@ -79,17 +79,24 @@ export class DeploymentLoginPage {
         });
         loading.present();
         this.api.postLogin(host, username, password).then(token => {
-          console.log(`Login Token ${token}`);
-          loading.dismiss();
+          console.log(`Deployment Login ${token}`);
           if (token && token.length > 0) {
-            let toast = this.toastController.create({
-              message: 'Login Successful',
-              duration: 1500
+            let changes = {
+              token: token,
+              username: username,
+              password: password };
+            this.database.updateDeployment(this.deployment.id, changes).then(results => {
+              loading.dismiss();
+              let toast = this.toastController.create({
+                message: 'Login Successful',
+                duration: 1500
+              });
+              toast.present();
+              this.showDeployment(token);
             });
-            toast.present();
-            this.showDeployment(token);
           }
           else {
+            loading.dismiss();
             let alert = this.alertController.create({
               title: 'Invalid Credentials',
               subTitle: 'Please verify your email and password, then try again.',

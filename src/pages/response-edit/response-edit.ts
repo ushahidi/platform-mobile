@@ -37,7 +37,6 @@ export class ResponseEditPage {
     console.log("Response Edit ionViewWillEnter");
     this.token = this.navParams.get("token");
     this.deployment = this.navParams.get("deployment");
-    this.deployment.url = `https://${this.deployment.subdomain}.${this.deployment.domain}`;
     this.response = this.navParams.get("response");
     this.form = this.navParams.get("form");
   }

@@ -1,3 +1,11 @@
 button {
   text-transform: uppercase;
 }
+ion-menu {
+  ion-toolbar {
+    ion-title {
+      width: 100%;
+      text-align: left;
+    }
+  }
+}

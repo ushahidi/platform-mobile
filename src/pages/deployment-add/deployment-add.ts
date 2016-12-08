@@ -39,7 +39,6 @@ export class DeploymentAddPage {
     console.log("Deployment Add ionViewWillEnter");
     this.platform.ready().then(() => {
       StatusBar.styleLightContent();
-      StatusBar.overlaysWebView(false);
       StatusBar.backgroundColorByHexString('#3f4751');
     });
   }
@@ -69,10 +68,10 @@ export class DeploymentAddPage {
     let loading = this.loadingController.create({
       content: "Adding..."
     });
-    //loading.present();
+    loading.present();
     this.database.addDeployment(deployment).then(results => {
       console.log(`Deployment Add addDeployment ${results}`);
-      //loading.present();
+      loading.dismiss();
       let data = { 'deployment' : deployment };
       this.viewController.dismiss(data);
     });

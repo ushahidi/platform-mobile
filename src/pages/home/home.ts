@@ -31,7 +31,6 @@ export class HomePage {
     console.log("Home ionViewWillEnter");
     this.platform.ready().then(() => {
       StatusBar.styleDefault();
-      StatusBar.overlaysWebView(false);
       StatusBar.backgroundColorByHexString('#f9f9f8');
     });
   }
@@ -48,7 +47,6 @@ export class HomePage {
     modal.present();
     modal.onDidDismiss(data => {
       StatusBar.styleDefault();
-      StatusBar.overlaysWebView(false);
       StatusBar.backgroundColorByHexString('#f9f9f8');
       if (data) {
         console.log(data);

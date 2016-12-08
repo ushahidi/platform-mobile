@@ -43,7 +43,6 @@ export class ResponseListPage {
     console.log("Response List ionViewWillEnter");
     this.token = this.navParams.get("token");
     this.deployment = this.navParams.get("deployment");
-    this.deployment.url = `https://${this.deployment.subdomain}.${this.deployment.domain}`;
     this.forms = this.navParams.get("forms");
     this.loadUpdates(null);
   }

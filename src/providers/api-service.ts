@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Platform } from 'ionic-angular';
-import { SecureStorage } from 'ionic-native';
 import { Http, Headers, URLSearchParams, RequestOptions } from '@angular/http';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/retry';
@@ -22,18 +21,10 @@ export class ApiService {
     public platform:Platform,
     public http: Http,
     public database: DatabaseService) {
-    console.log('API Service Provider');
     this.clientId = "ushahidiui";
     this.clientSecret = "35e7f0bca957836d05ca0492211b0ac707671261";
     this.accessToken = null;
     this.refreshToken = null;
-    platform.ready().then(() => {
-      // let secureStorage: SecureStorage = new SecureStorage();
-      // secureStorage.create('ushahidi').then(
-      //    () => console.log('SecureStorage Created'),
-      //    err => console.error(`SecureStorage Failed ${err}`)
-      // );
-    });
   }
 
   getHeaders(accessToken:string=null) {
@@ -55,17 +46,17 @@ export class ApiService {
       let url = "https://api.ushahidi.io/deployments";
       let headers = this.getHeaders();
       let options = new RequestOptions({ headers: headers, search: params });
-      console.log(`Downloading ${url} ${params.toString()}`);
+      console.log(`API Downloading ${url} ${params.toString()}`);
       this.http.get(url, options)
         .map(res => res.json())
         .subscribe(
           (json) => {
-            console.log(`Downloaded ${url} ${JSON.stringify(json)}`);
+            console.log(`API Downloaded ${url} ${JSON.stringify(json)}`);
             let deployments = json;
             resolve(deployments);
           },
           (err) => {
-            console.error(`Failed ${url} ${JSON.stringify(err)}`);
+            console.error(`API Failed ${url} ${JSON.stringify(err)}`);
             resolve(null);
           });
     });
@@ -73,7 +64,7 @@ export class ApiService {
 
   postLogin(host:string, username:string, password:string, scope:string="api posts forms tags sets media config") {
     if (this.accessToken) {
-      console.log(`Cached ${this.accessToken}`);
+      console.log(`API Cached ${this.accessToken}`);
       return Promise.resolve(this.accessToken);
     }
     return new Promise(resolve => {
@@ -89,19 +80,19 @@ export class ApiService {
       let body = JSON.stringify(params);
       let headers = this.getHeaders();
       let options = new RequestOptions({ headers: headers });
-      console.log(`Posting ${url} ${body}`);
+      console.log(`API Posting ${url} ${body}`);
       this.http.post(url, body, options)
         .map(res => res.json())
         .subscribe(
           (json) => {
-            console.log(`Posted ${url} ${JSON.stringify(json)}`);
+            console.log(`API Posted ${url} ${JSON.stringify(json)}`);
             this.accessToken = json.access_token;
             this.refreshToken = json.refresh_token;
             console.log(`access_token ${json.access_token} refresh_token ${json.refresh_token}`);
             resolve(this.accessToken);
           },
           (err) => {
-            console.error(`Failed ${url} ${JSON.stringify(err)}`);
+            console.error(`API Failed ${url} ${JSON.stringify(err)}`);
             resolve(null);
           }
         );
@@ -115,23 +106,23 @@ export class ApiService {
       let url = host + api;
       let headers = this.getHeaders(token);
       let options = new RequestOptions({ headers: headers, search: params });
-      console.log(`Downloading ${url} ${params.toString()}`);
+      console.log(`API Downloading ${url} ${params.toString()}`);
       this.http.get(url, options)
         .map(res => res.json())
         .subscribe(
           (json) => {
-            console.log(`Downloaded ${url} ${JSON.stringify(json)}`);
+            console.log(`API Downloaded ${url} ${JSON.stringify(json)}`);
             let results = json.results;
             for (let i = 0; i < results.length; i++) {
               let item = results[i];
               if (item.id == 'site') {
-                console.log(`Site ${item}`);
+                console.log(`API Downloaded Site ${item}`);
                 resolve(item);
               }
             }
           },
           (err) => {
-            console.error(`Failed ${url} ${JSON.stringify(err)}`);
+            console.error(`API Failed ${url} ${JSON.stringify(err)}`);
             resolve(null);
           }
         );
@@ -154,17 +145,17 @@ export class ApiService {
       let url = host + api;
       let headers = this.getHeaders(token);
       let options = new RequestOptions({ headers: headers, search: params });
-      console.log(`Downloading ${url} ${params.toString()}`);
+      console.log(`API Downloading ${url} ${params.toString()}`);
       this.http.get(url, options)
         .map(res => res.json())
         .subscribe(
           (json) => {
-            console.log(`Downloaded ${url} ${JSON.stringify(json)}`);
+            console.log(`API Downloaded ${url} ${JSON.stringify(json)}`);
             let posts = json;
             resolve(posts);
           },
           (err) => {
-            console.error(`Failed ${url} ${JSON.stringify(err)}`);
+            console.error(`API Failed ${url} ${JSON.stringify(err)}`);
             resolve(null);
           }
         );
@@ -178,17 +169,17 @@ export class ApiService {
       let url = host + api;
       let headers = this.getHeaders(token);
       let options = new RequestOptions({ headers: headers, search: params });
-      console.log(`Downloading ${url}`);
+      console.log(`API Downloading ${url}`);
       this.http.get(url, options)
         .map(res => res.json())
         .subscribe(
           (json) => {
-            console.log(`Downloaded ${url} ${JSON.stringify(json)}`);
+            console.log(`API Downloaded ${url} ${JSON.stringify(json)}`);
             let post = json;
             resolve(post);
           },
           (err) => {
-            console.error(`Failed ${url} ${JSON.stringify(err)}`);
+            console.error(`API Failed ${url} ${JSON.stringify(err)}`);
             resolve(null);
           }
         );
@@ -209,17 +200,17 @@ export class ApiService {
       let body = JSON.stringify(params);
       let headers = this.getHeaders(token);
       let options = new RequestOptions({ headers: headers });
-      console.log(`Posting ${url} ${body}`);
+      console.log(`API Posting ${url} ${body}`);
       this.http.post(url, body, options)
         .map(res => res.json())
         .subscribe(
           (json) => {
-            console.log(`Posted ${url} ${JSON.stringify(json)}`);
+            console.log(`API Posted ${url} ${JSON.stringify(json)}`);
             let post = json;
             resolve(post);
           },
           (err) => {
-            console.error(`Failed ${url} ${JSON.stringify(err)}`);
+            console.error(`API Failed ${url} ${JSON.stringify(err)}`);
             resolve(null);
           }
         );
@@ -240,17 +231,17 @@ export class ApiService {
       let body = JSON.stringify(params);
       let headers = this.getHeaders(token);
       let options = new RequestOptions({ headers: headers });
-      console.log(`Updating ${url} ${body}`);
+      console.log(`API Updating ${url} ${body}`);
       this.http.put(url, body, options)
         .map(res => res.json())
         .subscribe(
           (json) => {
-            console.log(`Updated ${url} ${JSON.stringify(json)}`);
+            console.log(`API Updated ${url} ${JSON.stringify(json)}`);
             let post = json;
             resolve(post);
           },
           (err) => {
-            console.error(`Failed ${url} ${JSON.stringify(err)}`);
+            console.error(`API Failed ${url} ${JSON.stringify(err)}`);
             resolve(null);
           }
         );
@@ -264,17 +255,17 @@ export class ApiService {
       let url = host + api;
       let headers = this.getHeaders(token);
       let options = new RequestOptions({ headers: headers, search: params });
-      console.log(`Downloading ${url}`);
+      console.log(`API Downloading ${url}`);
       this.http.get(url, options)
         .map(res => res.json())
         .subscribe(
           (json) => {
-            console.log(`Downloaded ${url} ${JSON.stringify(json)}`);
+            console.log(`API Downloaded ${url} ${JSON.stringify(json)}`);
             let forms = json.results;
             resolve(forms);
           },
           (err) => {
-            console.error(`Failed ${url} ${JSON.stringify(err)}`);
+            console.error(`API Failed ${url} ${JSON.stringify(err)}`);
             resolve(null);
           }
         );
@@ -288,17 +279,17 @@ export class ApiService {
       let url = host + api;
       let headers = this.getHeaders(token);
       let options = new RequestOptions({ headers: headers, search: params });
-      console.log(`Downloading ${url}`);
+      console.log(`API Downloading ${url}`);
       this.http.get(url, options)
         .map(res => res.json())
         .subscribe(
           (json) => {
-            console.log(`Downloaded ${url} ${JSON.stringify(json)}`);
+            console.log(`API Downloaded ${url} ${JSON.stringify(json)}`);
             let attributes = json.results;
             resolve(attributes);
           },
           (err) => {
-            console.error(`Failed ${url} ${JSON.stringify(err)}`);
+            console.error(`API Failed ${url} ${JSON.stringify(err)}`);
             resolve(null);
           }
         );
@@ -310,11 +301,11 @@ export class ApiService {
       this.getForms(host, token, cache),
       this.getAttributes(host, token, cache)]).
       then(results => {
-        console.log(`Results ${JSON.stringify(results)}`);
+        console.log(`API Results ${JSON.stringify(results)}`);
         let forms = <any[]>results[0];
-        console.log(`Forms ${JSON.stringify(forms)}`);
+        console.log(`API Forms ${JSON.stringify(forms)}`);
         let attributes = <any[]>results[1];
-        console.log(`Attributes ${JSON.stringify(attributes)}`);
+        console.log(`API Attributes ${JSON.stringify(attributes)}`);
         for (var i = 0; i <= forms.length; i++){
           let form = forms[i];
           if (form) {
@@ -322,7 +313,7 @@ export class ApiService {
             for (var j = 0; j <= attributes.length; j++){
               let attribute = attributes[j];
               if (attribute) {
-                console.log(`Attribute ${JSON.stringify(attribute)}`);
+                console.log(`API Attribute ${JSON.stringify(attribute)}`);
                 if (form.id == attribute.form_stage_id) {
                   form.attributes.push(attribute);
                 }

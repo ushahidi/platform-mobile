@@ -50,7 +50,6 @@ export class ResponseAddPage {
     console.log("Response Add ionViewWillEnter");
     this.token = this.navParams.get("token");
     this.deployment = this.navParams.get("deployment");
-    this.deployment.url = `https://${this.deployment.subdomain}.${this.deployment.domain}`;
     this.form = this.navParams.get("form");
   }
 

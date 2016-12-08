@@ -5,11 +5,12 @@ import { ResponseListPage } from '../response-list/response-list';
 import { ResponseAddPage } from '../response-add/response-add';
 
 import { ApiService } from '../../providers/api-service';
+import { DatabaseService } from '../../providers/database-service';
 
 @Component({
   selector: 'page-deployment-details',
   templateUrl: 'deployment-details.html',
-  providers: [ ApiService ],
+  providers: [ ApiService, DatabaseService ],
   entryComponents:[ ResponseListPage, ResponseAddPage ]
 })
 export class DeploymentDetailsPage {
@@ -24,6 +25,7 @@ export class DeploymentDetailsPage {
   constructor(
     public platform:Platform,
     public api:ApiService,
+    public database:DatabaseService,
     public navParams: NavParams,
     public navController:NavController,
     public toastController: ToastController,
@@ -40,7 +42,6 @@ export class DeploymentDetailsPage {
       console.log("Deployment Details ionViewWillEnter");
       this.token = this.navParams.get('token');
       this.deployment = this.navParams.get("deployment");
-      this.deployment.url = `https://${this.deployment.subdomain}.${this.deployment.domain}`;
       if (this.token) {
         this.loadDeployment();
         this.loadForms();
@@ -80,7 +81,7 @@ export class DeploymentDetailsPage {
 
     loadDeployment() {
       this.api.getConfigSite(this.deployment.url, this.token).then(results => {
-        console.log(`Site ${results}`);
+        console.log(`Deployment Details Site ${JSON.stringify(results)}`);
         this.site = results;
       });
     }
@@ -88,7 +89,7 @@ export class DeploymentDetailsPage {
     loadForms() {
       this.api.getFormsWithAttributes(this.deployment.url, this.token).then(results => {
         let forms = <any[]>results;
-        console.log(`Forms ${forms}`);
+        console.log(`Deployment Details Forms ${forms}`);
         this.forms = forms;
       });
     }
@@ -103,7 +104,7 @@ export class DeploymentDetailsPage {
             buttons.push({
               text: form.name,
               handler: () => {
-                console.log(`Form ${form.name} Selected`);
+                console.log(`Deployment Details Form ${form.name} Selected`);
                 this.showResponseAdd(form);
             }});
           }

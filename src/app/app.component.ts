@@ -4,6 +4,8 @@ import { StatusBar, Splashscreen } from 'ionic-native';
 
 import { HomePage } from '../pages/home/home';
 
+import { DatabaseService } from '../providers/database-service';
+
 import { DeploymentLoginPage } from '../pages/deployment-login/deployment-login';
 import { DeploymentDetailsPage } from '../pages/deployment-details/deployment-details';
 
@@ -18,26 +20,34 @@ export class MyApp {
 
   @ViewChild(Nav) nav: Nav;
 
-  rootPage = HomePage;
+  rootPage: any = null;
   deployments: any = [];
 
   constructor(
-    public platform: Platform) {
+    public platform: Platform,
+    public database:DatabaseService) {
     platform.ready().then(() => {
       console.log(`App Platform Ready ${this.platform.platforms()}`);
-      Splashscreen.hide();
       StatusBar.styleDefault();
-      StatusBar.overlaysWebView(false);
+      database.createTables().then(results => {
+        console.log("App Database Ready");
+        database.getDeployments().then(results => {
+          console.log(`App Deployments ${JSON.stringify(results)}`);
+          this.deployments = <any[]>results;
+          if (this.deployments && this.deployments.length > 0) {
+            let deployment = this.deployments[0];
+            console.log(`App Deployment ${JSON.stringify(deployment)}`);
+            this.nav.setRoot(
+              DeploymentLoginPage,
+              { deployment: deployment });  
+          }
+          else {
+            this.rootPage = HomePage;
+          }
+          Splashscreen.hide();
+        });
+      });
     });
-    this.addTestData();
-  }
-
-  addTestData() {
-    console.log("App addTestData");
-    this.deployments.push({
-      "domain":"api.ushahidi.io",
-      "subdomain":"dale",
-      "deployment_name":"Dale's Deployment"});
   }
 
   showDeployment(event, deployment) {
