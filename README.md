@@ -156,7 +156,7 @@ npm list --depth=0
 ---
 
 ## Android
-#### Ensure that [Android](https://developer.android.com/index.html) is installed
+#### Ensure the latest [Android](https://developer.android.com/index.html) is installed
 
 Download and install the latest [Android Studio](https://developer.android.com/studio/index.html)
 
@@ -164,13 +164,19 @@ Download and install the latest [Android Studio](https://developer.android.com/s
 https://developer.android.com/studio/index.html
 ```
 
-Open your `~/.bash_profile` to include the [Android SDK](https://developer.android.com/studio/command-line/index.html)
+Find the location where [Android Studio](https://developer.android.com/studio/index.html) installed the [Android SDK](https://developer.android.com/studio/command-line/index.html)
+
+```
+Android Studio > Preferences > Appearance & Behaviour > System Settings > Android SDK > Android SDK Location
+```
+
+Open your `~/.bash_profile` to include the location of the [Android SDK](https://developer.android.com/studio/command-line/index.html)
 
 ```
 open -e ~/.bash_profile
 ```
 
-Add the lines to the bottom of your `~/.bash_profile`
+Add the lines to the bottom of your `~/.bash_profile`, pointing to your `Android SDK Location`
 
 ```
 export PATH=/Library/Android/tools:/Library/Android/platform-tools:$PATH
