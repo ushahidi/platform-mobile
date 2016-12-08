@@ -5,6 +5,7 @@ import { StatusBar } from 'ionic-native';
 import { DeploymentLoginPage } from '../deployment-login/deployment-login';
 
 import { ApiService } from '../../providers/api-service';
+import { DatabaseService } from '../../providers/database-service';
 
 @Component({
   selector: 'page-deployment-add',
@@ -20,6 +21,7 @@ export class DeploymentAddPage {
   constructor(
     public platform:Platform,
     public api:ApiService,
+    public database:DatabaseService,
     public navParams: NavParams,
     public navController:NavController,
     public toastController: ToastController,
@@ -64,8 +66,16 @@ export class DeploymentAddPage {
 
   addDeployment(event, deployment) {
     console.log(`Deployment Add addDeployment`);
-    let data = { 'deployment' : deployment };
-    this.viewController.dismiss(data);
+    let loading = this.loadingController.create({
+      content: "Adding..."
+    });
+    //loading.present();
+    this.database.addDeployment(deployment).then(results => {
+      console.log(`Deployment Add addDeployment ${results}`);
+      //loading.present();
+      let data = { 'deployment' : deployment };
+      this.viewController.dismiss(data);
+    });
   }
 
 }

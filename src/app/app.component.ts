@@ -24,7 +24,7 @@ export class MyApp {
   constructor(
     public platform: Platform) {
     platform.ready().then(() => {
-      console.log("App Platform Ready");
+      console.log(`App Platform Ready ${this.platform.platforms()}`);
       Splashscreen.hide();
       StatusBar.styleDefault();
       StatusBar.overlaysWebView(false);

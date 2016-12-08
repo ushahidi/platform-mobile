@@ -147,6 +147,14 @@ module.exports = [
         "pluginId": "cordova-plugin-nativestorage"
     },
     {
+        "id": "cordova-sqlite-storage.SQLitePlugin",
+        "file": "plugins/cordova-sqlite-storage/www/SQLitePlugin.js",
+        "pluginId": "cordova-sqlite-storage",
+        "clobbers": [
+            "SQLitePlugin"
+        ]
+    },
+    {
         "id": "ionic-plugin-deeplinks.deeplink",
         "file": "plugins/ionic-plugin-deeplinks/www/deeplink.js",
         "pluginId": "ionic-plugin-deeplinks",
@@ -173,7 +181,7 @@ module.exports.metadata =
     "cordova-plugin-console": "1.0.4",
     "cordova-plugin-device": "1.1.3",
     "cordova-plugin-email": "1.2.2",
-    "cordova-plugin-google-analytics": "1.7.2",
+    "cordova-plugin-google-analytics": "1.7.4",
     "cordova-plugin-ios-longpress-fix": "1.1.0",
     "cordova-plugin-networkactivityindicator": "0.1.1",
     "cordova-plugin-spinner-dialog": "1.3.1",
@@ -183,6 +191,7 @@ module.exports.metadata =
     "cordova-plugin-x-socialsharing": "5.1.3",
     "cordova-plugin-secure-storage": "2.6.3",
     "cordova-plugin-nativestorage": "2.0.2",
+    "cordova-sqlite-storage": "1.5.1",
     "ionic-plugin-deeplinks": "1.0.8",
     "ionic-plugin-keyboard": "2.2.1"
 };

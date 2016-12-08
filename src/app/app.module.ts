@@ -1,6 +1,8 @@
 import { NgModule, ErrorHandler } from '@angular/core';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 
+import { Storage } from '@ionic/storage';
+
 import { LazyLoadImageModule } from 'ng2-lazyload-image';
 
 import { MyApp } from './app.component';
@@ -83,6 +85,6 @@ import { DatabaseService } from '../providers/database-service';
     ResponseAddPage,
     ResponseEditPage
   ],
-  providers: [ ApiService, DatabaseService, {provide: ErrorHandler, useClass: IonicErrorHandler} ]
+  providers: [ Storage, ApiService, DatabaseService, {provide: ErrorHandler, useClass: IonicErrorHandler} ]
 })
 export class AppModule {}

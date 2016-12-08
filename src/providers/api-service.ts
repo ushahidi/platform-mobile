@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Platform } from 'ionic-angular';
+import { SecureStorage } from 'ionic-native';
 import { Http, Headers, URLSearchParams, RequestOptions } from '@angular/http';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/retry';
@@ -8,6 +9,8 @@ import 'rxjs/add/operator/timeout';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/mergeMap';
 
+import { DatabaseService } from './database-service';
+
 @Injectable()
 export class ApiService {
   clientId: any = String;
@@ -15,12 +18,22 @@ export class ApiService {
   accessToken: any = String;
   refreshToken: any = String;
 
-  constructor(public http: Http, public platform:Platform) {
-    console.log('ApiService');
+  constructor(
+    public platform:Platform,
+    public http: Http,
+    public database: DatabaseService) {
+    console.log('API Service Provider');
     this.clientId = "ushahidiui";
     this.clientSecret = "35e7f0bca957836d05ca0492211b0ac707671261";
     this.accessToken = null;
     this.refreshToken = null;
+    platform.ready().then(() => {
+      // let secureStorage: SecureStorage = new SecureStorage();
+      // secureStorage.create('ushahidi').then(
+      //    () => console.log('SecureStorage Created'),
+      //    err => console.error(`SecureStorage Failed ${err}`)
+      // );
+    });
   }
 
   getHeaders(accessToken:string=null) {

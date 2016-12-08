@@ -86,7 +86,7 @@
 		</data>
 		<key>CDVLaunchScreen.storyboardc/01J-lp-oVM-view-Ze5-6b-2t3.nib</key>
 		<data>
-		eSpZcBrYZIUXPhqnnE4JjuMgCic=
+		9TcEr6cbv8m0W3cYUW1lG6j2R+A=
 		</data>
 		<key>CDVLaunchScreen.storyboardc/Info.plist</key>
 		<data>
@@ -94,7 +94,7 @@
 		</data>
 		<key>CDVLaunchScreen.storyboardc/UIViewController-01J-lp-oVM.nib</key>
 		<data>
-		dqT6r8GmSGqpITKmK153c4asyow=
+		fP7XYKEUUic1/Q2ElpHk8v5YLAI=
 		</data>
 		<key>Info.plist</key>
 		<data>
@@ -158,7 +158,7 @@
 		</data>
 		<key>MainViewController.nib</key>
 		<data>
-		/xp2Eham5N5XhwboqRiHg6lgxxs=
+		JHlEZvZR2+LstzXUu2/9qXaZB6U=
 		</data>
 		<key>PkgInfo</key>
 		<data>
@@ -179,7 +179,7 @@
 		</data>
 		<key>config.xml</key>
 		<data>
-		JNNytR7PZPTOGOz2wc8cZ0FoRxs=
+		C7hfnbvhp7JmI3JYhWjzi9x9LJI=
 		</data>
 		<key>embedded.mobileprovision</key>
 		<data>
@@ -275,15 +275,15 @@
 		</data>
 		<key>www/build/main.css</key>
 		<data>
-		00wkTSoQ1scZPOnIn706B69h/cU=
+		rsblfTkfNw6n0jowfNfFEqeh3HA=
 		</data>
 		<key>www/build/main.js</key>
 		<data>
-		MAM5FFF4AnGC4UZhc/N9id+UWB8=
+		UvHymG3Z6hlUCpftJSCSUHejAKI=
 		</data>
 		<key>www/build/main.js.map</key>
 		<data>
-		CfjOtygAVXXFDGvXMXJSyX/ECfU=
+		8mHKvD6oQHfKGtCFN/065+zzKrY=
 		</data>
 		<key>www/build/polyfills.js</key>
 		<data>
@@ -303,7 +303,7 @@
 		</data>
 		<key>www/cordova_plugins.js</key>
 		<data>
-		xhtb443VL1aCASvZNNTF9ujZvAg=
+		5QAJmCrbC+KPDv4pOneYLsBD7cs=
 		</data>
 		<key>www/index.html</key>
 		<data>
@@ -347,7 +347,7 @@
 		</data>
 		<key>www/plugins/cordova-plugin-google-analytics/www/analytics.js</key>
 		<data>
-		aoXi3IDf9q7YG7xF9vIvVAxLv14=
+		unkMHyTGgseiPJ0+bUJ7IIT8aAQ=
 		</data>
 		<key>www/plugins/cordova-plugin-nativestorage/www/LocalStorageHandle.js</key>
 		<data>
@@ -388,6 +388,10 @@
 		<key>www/plugins/cordova-plugin-x-socialsharing/www/SocialSharing.js</key>
 		<data>
 		p2ovf3IcCK49/GvqK+j7UmFu1zI=
+		</data>
+		<key>www/plugins/cordova-sqlite-storage/www/SQLitePlugin.js</key>
+		<data>
+		LWy22lOFz6EJ/XBwsXol+JgjQYs=
 		</data>
 		<key>www/plugins/ionic-plugin-deeplinks/www/deeplink.js</key>
 		<data>
@@ -628,11 +632,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			eSpZcBrYZIUXPhqnnE4JjuMgCic=
+			9TcEr6cbv8m0W3cYUW1lG6j2R+A=
 			</data>
 			<key>hash2</key>
 			<data>
-			JJbGXiV2g1XpMcKIJ0h68bUS4AJvGdyL2f0tUv5oaWg=
+			ECdE/LV/z13uPp5xWv8C3bzSy51izNIHxqQLreQZjC4=
 			</data>
 		</dict>
 		<key>CDVLaunchScreen.storyboardc/Info.plist</key>
@@ -650,11 +654,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			dqT6r8GmSGqpITKmK153c4asyow=
+			fP7XYKEUUic1/Q2ElpHk8v5YLAI=
 			</data>
 			<key>hash2</key>
 			<data>
-			GRBQ7zjzGInV6TqvhY6XPhRdhHi58PIgjz7Qd0B0KCQ=
+			nRrpWYARjsT7FJ7CQhV64jhsvTlXNbJoC3lIQiMoHJY=
 			</data>
 		</dict>
 		<key>LaunchImage-568h@2x.png</key>
@@ -815,11 +819,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			/xp2Eham5N5XhwboqRiHg6lgxxs=
+			JHlEZvZR2+LstzXUu2/9qXaZB6U=
 			</data>
 			<key>hash2</key>
 			<data>
-			+LPJ8FOfBI2IIehvfy9HZrENnO7xekRx7bbgZ3K0OvQ=
+			tNdGZ8IP1eGldLbrwj3Th9Gk0ysVzvtfXIKWvsv4eJs=
 			</data>
 		</dict>
 		<key>SAMKeychain.bundle/en.lproj/SAMKeychain.strings</key>
@@ -850,11 +854,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			JNNytR7PZPTOGOz2wc8cZ0FoRxs=
+			C7hfnbvhp7JmI3JYhWjzi9x9LJI=
 			</data>
 			<key>hash2</key>
 			<data>
-			RD/DEMmRukTWtgMxmh9VJIbWWwlYDn98Of2iEV0MnOA=
+			1N40XyKWFaekd6UcvGPXXE4i0d4Ix/0fWgu7YWqgfyg=
 			</data>
 		</dict>
 		<key>embedded.mobileprovision</key>
@@ -1114,33 +1118,33 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			00wkTSoQ1scZPOnIn706B69h/cU=
+			rsblfTkfNw6n0jowfNfFEqeh3HA=
 			</data>
 			<key>hash2</key>
 			<data>
-			0FFYa+hY1xUAD9/Y7nkUAI7JcqVuMsAPnNye6o4b2Vc=
+			CgKkhW67fR0QNjWjgGXg9k+w9WBGyCDMUm/cRWUTbow=
 			</data>
 		</dict>
 		<key>www/build/main.js</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			MAM5FFF4AnGC4UZhc/N9id+UWB8=
+			UvHymG3Z6hlUCpftJSCSUHejAKI=
 			</data>
 			<key>hash2</key>
 			<data>
-			FTKtVBbLvCb3n2kPyYIpb3GCLoCscriZmVCfn5J/aqs=
+			rDfPvo5H+gd2h4blIjWZWoCGOqDV2SOj4jCBeyZsZ6Q=
 			</data>
 		</dict>
 		<key>www/build/main.js.map</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			CfjOtygAVXXFDGvXMXJSyX/ECfU=
+			8mHKvD6oQHfKGtCFN/065+zzKrY=
 			</data>
 			<key>hash2</key>
 			<data>
-			uAf+05BpDodw5kDbZSauYg2akhhq/tA66JqPeJMEghI=
+			xaEslw8QHz4YCLszhY8iES7KetM6VZsb+fALeXhg5Mo=
 			</data>
 		</dict>
 		<key>www/build/polyfills.js</key>
@@ -1191,11 +1195,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			xhtb443VL1aCASvZNNTF9ujZvAg=
+			5QAJmCrbC+KPDv4pOneYLsBD7cs=
 			</data>
 			<key>hash2</key>
 			<data>
-			Wy0h5JB+Bet89ghJngMXAEUGxUXWusFLsP5/mSa6w7E=
+			ACLMejt8ndcH5joxdzA18quJ4f58GAz5EhPyMQo5h/Y=
 			</data>
 		</dict>
 		<key>www/index.html</key>
@@ -1312,11 +1316,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			aoXi3IDf9q7YG7xF9vIvVAxLv14=
+			unkMHyTGgseiPJ0+bUJ7IIT8aAQ=
 			</data>
 			<key>hash2</key>
 			<data>
-			MdHrdsDUP+o1cNTO7KZKog2u6LPcX9LzINgDu6Doin4=
+			Y5RaRYeffh1MX8LOyCDEQTjHQ6hcuwYo/8LEl5rZVpw=
 			</data>
 		</dict>
 		<key>www/plugins/cordova-plugin-nativestorage/www/LocalStorageHandle.js</key>
@@ -1427,6 +1431,17 @@
 			<key>hash2</key>
 			<data>
 			vaAJBb/wNtJKRgYT7sxU/Sv+fqB5bfWIw3SyBSUukCI=
+			</data>
+		</dict>
+		<key>www/plugins/cordova-sqlite-storage/www/SQLitePlugin.js</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			LWy22lOFz6EJ/XBwsXol+JgjQYs=
+			</data>
+			<key>hash2</key>
+			<data>
+			oPvOMc690MiIaFhHM8eX7ztxKCpuD/IK6I2vptGQcl4=
 			</data>
 		</dict>
 		<key>www/plugins/ionic-plugin-deeplinks/www/deeplink.js</key>
