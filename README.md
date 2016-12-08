@@ -158,13 +158,34 @@ npm list --depth=0
 ## Android
 #### Ensure that [Android](https://developer.android.com/index.html) is installed
 
-Download and install [Android Studio](https://developer.android.com/studio/index.html)
+Download and install the latest [Android Studio](https://developer.android.com/studio/index.html)
 
 ```
 https://developer.android.com/studio/index.html
 ```
 
-Once Android Studio is installed, update the necessary SDKs
+Open your `~/.bash_profile` to include the [Android SDK](https://developer.android.com/studio/command-line/index.html)
+
+```
+open -e ~/.bash_profile
+```
+
+Add the lines to the bottom of your `~/.bash_profile`
+
+```
+export PATH=/Library/Android/tools:/Library/Android/platform-tools:$PATH
+export ANDROID_HOME=/Library/Android
+export ANDROID_SDK=/Library/Android
+export ANDROID_SDK_ROOT=/Library/Android
+```
+
+Test running the [Android Command Line Tools](https://developer.android.com/studio/command-line/index.html)
+
+```
+android --help
+```
+
+Update the necessary SDKs
 
 ```
 android list sdk --all --extended
