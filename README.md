@@ -155,6 +155,23 @@ npm list --depth=0
 
 ---
 
+## Java
+#### Ensure that [Java JDK](https://www.java.com/en) is installed on your machine
+
+Download and install the latest Java JDK
+
+```
+https://support.apple.com/kb/dl1572?locale=en_US
+```
+
+Check your version of Java
+
+```
+java -version
+```
+
+---
+
 ## Android
 #### Ensure the latest [Android](https://developer.android.com/index.html) is installed
 
@@ -164,7 +181,7 @@ Download and install the latest [Android Studio](https://developer.android.com/s
 https://developer.android.com/studio/index.html
 ```
 
-Find the location where [Android Studio](https://developer.android.com/studio/index.html) installed the [Android SDK](https://developer.android.com/studio/command-line/index.html)
+Once installed, find the location where the [Android SDK](https://developer.android.com/studio/command-line/index.html) is installed
 
 ```
 Android Studio > Preferences > Appearance & Behaviour > System Settings > Android SDK > Android SDK Location
@@ -176,7 +193,7 @@ Open your `~/.bash_profile` to include the location of the [Android SDK](https:/
 open -e ~/.bash_profile
 ```
 
-Add the lines to the bottom of your `~/.bash_profile`, pointing to your `Android SDK Location`
+Add the lines to the bottom of your `~/.bash_profile`, pointing to your `Android SDK Location` (mine was `/Library/Android`)
 
 ```
 export PATH=/Library/Android/tools:/Library/Android/platform-tools:$PATH
@@ -217,20 +234,22 @@ android avd
 ## iOS
 #### Commands to [build](http://ionicframework.com/docs/v2/cli/build/) and [run](http://ionicframework.com/docs/v2/cli/run/) the iOS app
 
-```
-ionic build ios --verbose
-ionic build ios --release
-```
-
-```
-ionic run ios
-ionic run ios --livereload --consolelogs --serverlogs
-```
-
 Check whether the Cordova requirements for iOS are installed
 
 ```
 cordova requirements ios
+```
+
+Build the project for iOS
+
+```
+ionic build ios
+```
+
+Run the app in the iOS Simulator or on an attached iOS device
+
+```
+ionic run ios --livereload --consolelogs --serverlogs
 ```
 
 ---
@@ -238,20 +257,22 @@ cordova requirements ios
 ## Android
 #### Commands to [build](http://ionicframework.com/docs/v2/cli/build/) and [run](http://ionicframework.com/docs/v2/cli/run/) the Android app
 
-```
-ionic build android --verbose
-ionic build android --release
-```
-
-```
-ionic run android --consolelogs --serverlogs
-ionic run android --livereload --consolelogs --serverlogs
-```
-
 Check whether the Cordova requirements for Android are installed
 
 ```
 cordova requirements android
+```
+
+Build the project for Android
+
+```
+ionic build android
+```
+
+Run the app in the Android Emulator or on an attached Android device
+
+```
+ionic run android --livereload --consolelogs --serverlogs
 ```
 
 ---
