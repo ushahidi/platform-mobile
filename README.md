@@ -246,7 +246,7 @@ Build the project for iOS
 ionic build ios
 ```
 
-Run the app in the iOS Simulator or on an attached iOS device
+Run the app in the iOS Simulator or attached iOS device
 
 ```
 ionic run ios --livereload --consolelogs --serverlogs
@@ -269,7 +269,7 @@ Build the project for Android
 ionic build android
 ```
 
-Run the app in the Android Emulator or on an attached Android device
+Run the app in the Android Emulator or attached Android device
 
 ```
 ionic run android --livereload --consolelogs --serverlogs
