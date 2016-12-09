@@ -117,12 +117,6 @@ If you run into permission problems, try using `sudo`
 sudo npm install -g cordova@latest
 ```
 
-Install some Cordova utilities
-
-```
-npm install -g cordova-common
-```
-
 Check the version of Cordova
 
 ```
@@ -155,12 +149,14 @@ sudo npm install -g ionic@latest
 Install some Ionic utilities
 
 ```
+npm install -g xcode
+npm install -g cordova-common
 npm install -g cordova-ios
+npm install -g cordova-android
+npm install -g cordova-browser
 npm install -g ios-sim
 npm install -g ios-deploy
-npm install -g cordova-android
 npm install -g android-simulator
-npm install -g cordova-browser
 ```
 
 Check the version of Ionic
@@ -274,6 +270,12 @@ Run the app in the iOS Simulator or attached iOS device
 ionic run ios --livereload --consolelogs --serverlogs
 ```
 
+More information on Cordova's [iOS Platform Guide](https://cordova.apache.org/docs/en/latest/guide/platforms/ios/)
+
+```
+https://cordova.apache.org/docs/en/latest/guide/platforms/ios/
+```
+
 ---
 
 ## Android
@@ -295,6 +297,12 @@ Run the app in the Android Emulator or attached Android device
 
 ```
 ionic run android --livereload --consolelogs --serverlogs
+```
+
+More information on Cordova's [Android Platform Guide](https://cordova.apache.org/docs/en/latest/guide/platforms/android/)
+
+```
+https://cordova.apache.org/docs/en/latest/guide/platforms/android/
 ```
 
 ---
