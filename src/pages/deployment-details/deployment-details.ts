@@ -52,6 +52,17 @@ export class DeploymentDetailsPage {
       console.log(`Deployment Details ionViewDidEnter`);
     }
 
+    loadUpdates(event) {
+      console.log("Response Details loadUpdates");
+      this.loadDeployment().then(results => {
+        console.log("Response Details loadDeployment DONE");
+        this.loadForms().then(results => {
+          console.log("Response Details loadForms DONE");
+          event.complete();
+        });
+      });
+    }
+
     showResponses(event) {
       console.log("Deployment Details showResponses");
       this.navController.push(
@@ -80,14 +91,14 @@ export class DeploymentDetailsPage {
     }
 
     loadDeployment() {
-      this.api.getConfigSite(this.deployment.url, this.token).then(results => {
+      return this.api.getConfigSite(this.deployment.url, this.token).then(results => {
         console.log(`Deployment Details Site ${JSON.stringify(results)}`);
         this.site = results;
       });
     }
 
     loadForms() {
-      this.api.getFormsWithAttributes(this.deployment.url, this.token).then(results => {
+      return this.api.getFormsWithAttributes(this.deployment.url, this.token).then(results => {
         let forms = <any[]>results;
         console.log(`Deployment Details Forms ${JSON.stringify(forms)}`);
         this.forms = forms;

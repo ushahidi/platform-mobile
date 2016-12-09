@@ -16,6 +16,8 @@ cd Ushahidi_Mobile
 ## XCode
 #### Ensure the latest [XCode](https://developer.apple.com/xcode/) is installed
 
+Download and install XCode
+
 ```
 https://developer.apple.com/xcode/
 ```
@@ -24,12 +26,21 @@ Once XCode is installed, install the command line tools
 
 ```
 sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
+sudo xcode-select --install
+```
+
+Check your version of GCC
+
+```
+gcc --version
 ```
 
 ---
 
 ## Homebrew
 #### Ensure that [Homebrew](http://brew.sh) is installed
+
+Install Homebrew, if its not already installed
 
 ```
 /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
@@ -63,17 +74,24 @@ brew doctor
 ---
 
 ## NPM
-#### Ensure that [NPM](https://www.npmjs.com) is installed
+#### Ensure that [Node.js](https://nodejs.org) and [NPM](https://www.npmjs.com) is installed
+
+Install Node via Homebrew
 
 ```
 brew install node
+```
+
+Check the version of Node
+
+```
+node --version
+```
+
+Install NPM
+
+```
 npm install -g npm
-```
-
-Check the location of NPM
-
-```
-which npm
 ```
 
 Check the version of NPM
@@ -86,6 +104,8 @@ npm --version
 
 ## Cordova
 #### Install the latest [Cordova](https://www.npmjs.com/package/cordova)
+
+Install the latest Cordova
 
 ```
 npm install -g cordova@latest
@@ -119,6 +139,8 @@ cordova clean
 
 ## Ionic
 #### Install the latest [Ionic2](http://ionicframework.com/docs/v2/) and necessary dependencies
+
+Install the latest Ionic2
 
 ```
 npm install -g ionic@latest

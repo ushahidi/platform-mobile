@@ -14,6 +14,9 @@
   </ion-navbar>
 </ion-header>
 <ion-content class="page-deployment-details">
+  <ion-refresher (ionRefresh)="loadUpdates($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
   <div *ngIf="site">
     <div class="header" *ngIf="site.name">
       <h4 text-center padding-top padding-bottom>{{site.name}}</h4>
