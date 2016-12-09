@@ -88,7 +88,7 @@ Check the version of Node
 node --version
 ```
 
-Install NPM
+Install some NPM utilities
 
 ```
 npm install -g npm
