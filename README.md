@@ -138,9 +138,9 @@ cordova clean
 ---
 
 ## Ionic
-#### Install the latest [Ionic2](http://ionicframework.com/docs/v2/) and necessary dependencies
+#### Install the latest [Ionic](http://ionicframework.com/docs/v2/) and necessary dependencies
 
-Install the latest Ionic2
+Install the latest Ionic
 
 ```
 npm install -g ionic@latest
@@ -149,7 +149,7 @@ npm install -g ionic@latest
 If you run into permission problems, try using `sudo`
 
 ```
-sudo npm install -g cordova@latest
+sudo npm install -g ionic@latest
 ```
 
 Install some Ionic utilities
