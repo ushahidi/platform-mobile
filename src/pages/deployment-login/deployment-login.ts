@@ -78,11 +78,12 @@ export class DeploymentLoginPage {
           content: "Logging in..."
         });
         loading.present();
-        this.api.postLogin(host, username, password).then(token => {
-          console.log(`Deployment Login ${token}`);
-          if (token && token.length > 0) {
+        this.api.authLogin(host, username, password).then(tokens => {
+          console.log(`Deployment Login ${JSON.stringify(tokens)}`);
+          if (tokens) {
             let changes = {
-              token: token,
+              access_token: tokens['access_token'],
+              refresh_token: tokens['refresh_token'],
               username: username,
               password: password };
             this.database.updateDeployment(this.deployment.id, changes).then(results => {
@@ -92,7 +93,7 @@ export class DeploymentLoginPage {
                 duration: 1500
               });
               toast.present();
-              this.showDeployment(token);
+              this.showDeployment(tokens['access_token']);
             });
           }
           else {

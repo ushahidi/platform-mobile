@@ -4,6 +4,7 @@ import { StatusBar, Splashscreen } from 'ionic-native';
 
 import { HomePage } from '../pages/home/home';
 
+import { ApiService } from '../providers/api-service';
 import { DatabaseService } from '../providers/database-service';
 
 import { DeploymentLoginPage } from '../pages/deployment-login/deployment-login';
@@ -25,21 +26,20 @@ export class MyApp {
 
   constructor(
     public platform: Platform,
+    public api:ApiService,
     public database:DatabaseService) {
     platform.ready().then(() => {
       console.log(`App Platform Ready ${this.platform.platforms()}`);
       StatusBar.styleDefault();
-      database.createTables().then(results => {
+      this.database.createTables().then(results => {
         console.log("App Database Ready");
-        database.getDeployments().then(results => {
+        this.database.getDeployments().then(results => {
           console.log(`App Deployments ${JSON.stringify(results)}`);
           this.deployments = <any[]>results;
           if (this.deployments && this.deployments.length > 0) {
             let deployment = this.deployments[0];
             console.log(`App Deployment ${JSON.stringify(deployment)}`);
-            this.nav.setRoot(
-              DeploymentLoginPage,
-              { deployment: deployment });  
+            this.showDeployment(deployment);
           }
           else {
             this.rootPage = HomePage;
@@ -50,10 +50,30 @@ export class MyApp {
     });
   }
 
-  showDeployment(event, deployment) {
-    console.log("App showDeployment");
-    this.nav.setRoot(
-      DeploymentLoginPage,
-      { deployment: deployment });
+  showDeployment(deployment) {
+    console.log(`App showDeployment ${deployment.name}`);
+    if (deployment.refresh_token) {
+      console.log(`App showDeployment Refresh Token ${deployment.refresh_token}`);
+      this.api.authRefresh(deployment.url, deployment.refresh_token).then(tokens => {
+        console.log(`App showDeployment Tokens ${JSON.stringify(tokens)}`);
+        if (tokens && tokens['access_token']) {
+          this.nav.setRoot(
+            DeploymentDetailsPage,
+            { token: tokens['access_token'],
+              deployment: deployment });
+        }
+        else {
+          this.nav.setRoot(
+            DeploymentLoginPage,
+            { deployment: deployment });
+        }
+      });
+    }
+    else {
+      console.log(`App showDeployment Refresh Token NONE`);
+      this.nav.setRoot(
+        DeploymentLoginPage,
+        { deployment: deployment });
+    }
   }
 }

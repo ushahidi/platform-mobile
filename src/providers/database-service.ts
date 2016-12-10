@@ -25,8 +25,20 @@ export class DatabaseService {
       'image': 'TEXT',
       'username': 'TEXT',
       'password': 'TEXT',
-      'token': 'TEXT',
-      'refresh': 'TEXT'}
+      'access_token': 'TEXT',
+      'refresh_token': 'TEXT'}
+    this.tables['posts'] = {
+      'id': 'INTEGER PRIMARY KEY AUTOINCREMENT',
+      'deployment': 'INTEGER',
+      'title': 'TEXT',
+      'content': 'TEXT',
+      'slug': 'TEXT',
+      'type': 'TEXT',
+      'color': 'TEXT',
+      'message': 'TEXT',
+      'created': 'TEXT',
+      'updated': 'TEXT',
+      'image': 'TEXT'}
   }
 
   openDatabase() {
@@ -81,50 +93,52 @@ export class DatabaseService {
     });
   }
 
-  addDeployment(json:{}) {
-    console.log(`Database addDeployment ${JSON.stringify(json)}`);
-    if (json['name'] == null) {
-      json['name'] = json['deployment_name'];
-    }
-    if (json['url'] == null) {
-      json['url'] = `https://${json['subdomain']}.${json['domain']}`;
-    }
-    return this.executeInsert("deployments", json);
+  addDeployment(data:{}) {
+    console.log(`Database addDeployment ${JSON.stringify(data)}`);
+    data['name'] = data['deployment_name'];
+    data['url'] = `https://${data['subdomain']}.${data['domain']}`;
+    return this.executeInsert("deployments", data);
   }
 
   getDeployments() {
     return this.executeSelect("deployments");
   }
 
-  updateDeployment(id:string, json:{}) {
-    return this.executeUpdate("deployments", id, json);
+  getDeployment(id:number) {
+    return this.executeSelect("deployments", {"id": id});
   }
 
-  executeUpdate(table:string, id:string, json:{}) {
-    return new Promise(resolve => {
-      this.openDatabase().then((database:SQLite) => {
-        let statement = this.updateStatement(table, id, json);
-        let parameters = this.updateParameters(table, id, json);
-        console.log(`Database Updating ${statement} ${parameters}`);
-        database.executeSql(statement, parameters)
-          .then(
-            () => {
-              console.log(`Database Updated ${statement} ${parameters}`);
-              resolve(true);
-            })
-          .catch(
-            () => {
-              console.error(`Database Failed ${statement} ${parameters}`);
-              resolve(false);
-            });
-      });
-    });
+  updateDeployment(id:string, data:{}) {
+    return this.executeUpdate("deployments", id, data);
   }
 
-  executeSelect(table:string) {
+  getPosts(deployment:number) {
+    return this.executeSelect("posts", {"deployment": deployment});
+  }
+
+  getPost(deployment:number, post:number) {
+    return this.executeSelect("posts", {"deployment": deployment, "id": post});
+  }
+
+  addPost(deployment:number, data:{}) {
+    console.log(`Database addPost Deployment ${deployment} ${JSON.stringify(data)}`);
+    data['deployment'] = deployment;
+    return Promise.all([
+      this.executeUpdate("posts", data['id'], data),
+      this.executeInsert("posts", data)]);
+  }
+
+  executeSelect(table:string, where:{}=null) {
     return new Promise(resolve => {
       this.openDatabase().then((database:SQLite) => {
         let sql = `SELECT * FROM ${table}`;
+        if (where != null) {
+          let clause = [];
+          for (let column in where) {
+            clause.push(`${column} = ${where[column]}`);
+          }
+          sql = `SELECT * FROM ${table} WHERE ${clause.join(', ')}`;
+        }
         database.executeSql(sql, []).then(data => {
           if (data.rows.length > 0) {
             let results = [];
@@ -151,17 +165,39 @@ export class DatabaseService {
     });
   }
 
-  executeInsert(table:string, json:{}) {
+  executeInsert(table:string, data:{}) {
     return new Promise(resolve => {
       this.openDatabase().then((database:SQLite) => {
         let columns = this.tables[table];
-        let statement = this.insertStatement(table, columns, json);
-        let parameters = this.insertParameters(table, columns, json);
+        let statement = this.insertStatement(table, columns, data);
+        let parameters = this.insertParameters(table, columns, data);
         console.log(`Database Inserting ${statement} ${parameters}`);
         database.executeSql(statement, parameters)
           .then(
             () => {
               console.log(`Database Inserted ${statement} ${parameters}`);
+              resolve(true);
+            })
+          .catch(
+            () => {
+              console.error(`Database Failed ${statement} ${parameters}`);
+              resolve(false);
+            });
+      });
+    });
+  }
+
+  executeUpdate(table:string, id:string, data:{}) {
+    return new Promise(resolve => {
+      this.openDatabase().then((database:SQLite) => {
+        let columns = this.tables[table];
+        let statement = this.updateStatement(table, columns, id, data);
+        let parameters = this.updateParameters(table, columns, id, data);
+        console.log(`Database Updating ${statement} ${parameters}`);
+        database.executeSql(statement, parameters)
+          .then(
+            () => {
+              console.log(`Database Updated ${statement} ${parameters}`);
               resolve(true);
             })
           .catch(
@@ -182,10 +218,10 @@ export class DatabaseService {
         params.push("?");
       }
     }
-    return `INSERT INTO ${table} (${names.join(", ")}) VALUES (${params.join(", ")})`;
+    return `INSERT OR IGNORE INTO ${table} (${names.join(", ")}) VALUES (${params.join(", ")})`;
   }
 
-  insertParameters(table, columns, values) : any {
+  insertParameters(table:string, columns:{}, values:{}) : any {
     let params = [];
     for (var column in columns) {
       if (values[column]) {
@@ -195,19 +231,21 @@ export class DatabaseService {
     return params;
   }
 
-  updateStatement(table:string, id:string, values:{}) : string {
+  updateStatement(table:string, columns:{}, id:string, values:{}) : string {
     let params = [];
-    for (var value in values) {
-      params.push(`${value} = ?`);
+    for (var column in columns) {
+      if (values[column]) {
+        params.push(`${column} = ?`);
+      }
     }
-    return `UPDATE ${table} SET ${params.join(", ")} WHERE id = ${id}`;
+    return `UPDATE OR IGNORE ${table} SET ${params.join(", ")} WHERE id = ${id}`;
   }
 
-  updateParameters(table:string, id:string, values:{}) : any {
+  updateParameters(table:string, columns:{}, id:string, values:{}) : any {
     let params = [];
-    for (var value in values) {
-      if (values[value]) {
-        params.push(values[value]);
+    for (var column in columns) {
+      if (values[column]) {
+        params.push(values[column]);
       }
     }
     return params;

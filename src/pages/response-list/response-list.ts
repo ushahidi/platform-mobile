@@ -8,11 +8,12 @@ import { ResponseDetailsPage } from '../response-details/response-details';
 import { CardComponent } from '../../components/card/card';
 
 import { ApiService } from '../../providers/api-service';
+import { DatabaseService } from '../../providers/database-service';
 
 @Component({
   selector: 'page-response-list',
   templateUrl: 'response-list.html',
-  providers: [ ApiService ],
+  providers: [ ApiService, DatabaseService ],
   entryComponents:[ ResponseAddPage, ResponseDetailsPage ]
 })
 export class ResponseListPage {
@@ -25,6 +26,7 @@ export class ResponseListPage {
   constructor(
     public platform:Platform,
     public api:ApiService,
+    public database:DatabaseService,
     public navParams: NavParams,
     public navController:NavController,
     public toastController: ToastController,
@@ -44,23 +46,41 @@ export class ResponseListPage {
     this.token = this.navParams.get("token");
     this.deployment = this.navParams.get("deployment");
     this.forms = this.navParams.get("forms");
-    this.loadUpdates(null);
+    this.loadPosts(true);
   }
 
   ionViewDidEnter() {
     console.log("Response List ionViewDidEnter");
   }
 
-  loadUpdates(event) {
-    console.log("Response List loadUpdates");
-    this.api.getPosts(this.deployment.url, this.token).then(results => {
-      let responses = <any[]>results['results'];
-      console.log(`Response List Responses ${responses.length}`)
-      this.responses = responses;
-      if (event) {
-        event.complete();
-      }
-    });
+  loadPosts(cache:boolean=true, event:any=null) {
+    console.log(`Response List loadPosts Cache ${cache}`);
+    if (cache) {
+      this.database.getPosts(this.deployment.id).then(results => {
+        let responses = <any[]>results;
+        if (responses && responses.length > 0) {
+          console.log(`Response List loadPosts Database ${responses.length}`);
+          this.responses = responses;
+        }
+        else {
+          this.loadPosts(false, event);
+        }
+      });
+    }
+    else {
+      this.api.getPosts(this.deployment.url, this.token).then(results => {
+        let responses = <any[]>results['results'];
+        console.log(`Response List loadPosts API ${responses.length}`)
+        this.responses = responses;
+        for (let index in responses) {
+          let response = responses[index];
+          this.database.addPost(this.deployment.id, response);
+        }
+        if (event) {
+          event.complete();
+        }
+      });
+    }
   }
 
   showResponse(event, response) {
@@ -82,7 +102,7 @@ export class ResponseListPage {
           buttons.push({
             text: form.name,
             handler: () => {
-              console.log(`Form ${form.name} Selected`);
+              console.log(`Deployment Details Form ${form.name} Selected`);
               this.showResponseAdd(form);
           }});
         }

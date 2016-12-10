@@ -17,7 +17,7 @@
       <ion-icon ios="md-add" md="md-add"></ion-icon>
     </button>
   </ion-fab>
-  <ion-refresher (ionRefresh)="loadUpdates($event)">
+  <ion-refresher (ionRefresh)="loadPosts(false, $event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   <div text-center margin-top-lg margin-bottom-lg *ngIf="responses == null">

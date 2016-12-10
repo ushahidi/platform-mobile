@@ -14,8 +14,6 @@ import { DatabaseService } from './database-service';
 export class ApiService {
   clientId: any = String;
   clientSecret: any = String;
-  accessToken: any = String;
-  refreshToken: any = String;
 
   constructor(
     public platform:Platform,
@@ -23,8 +21,6 @@ export class ApiService {
     public database: DatabaseService) {
     this.clientId = "ushahidiui";
     this.clientSecret = "35e7f0bca957836d05ca0492211b0ac707671261";
-    this.accessToken = null;
-    this.refreshToken = null;
   }
 
   getHeaders(accessToken:string=null) {
@@ -37,7 +33,7 @@ export class ApiService {
     return headers;
   }
 
-  searchDeployments(search:string, cache:boolean=true) {
+  searchDeployments(search:string) {
     return new Promise(resolve => {
       let params = new URLSearchParams();
       if (search != null) {
@@ -62,11 +58,7 @@ export class ApiService {
     });
   }
 
-  postLogin(host:string, username:string, password:string, scope:string="api posts forms tags sets media config") {
-    if (this.accessToken) {
-      console.log(`API Cached ${this.accessToken}`);
-      return Promise.resolve(this.accessToken);
-    }
+  authLogin(host:string, username:string, password:string, scope:string="api posts forms tags sets media config") {
     return new Promise(resolve => {
       let api = "/oauth/token";
       let params = {
@@ -86,10 +78,44 @@ export class ApiService {
         .subscribe(
           (json) => {
             console.log(`API Posted ${url} ${JSON.stringify(json)}`);
-            this.accessToken = json.access_token;
-            this.refreshToken = json.refresh_token;
+            let tokens = {
+              access_token: json.access_token,
+              refresh_token: json.refresh_token }
             console.log(`access_token ${json.access_token} refresh_token ${json.refresh_token}`);
-            resolve(this.accessToken);
+            resolve(tokens);
+          },
+          (err) => {
+            console.error(`API Failed ${url} ${JSON.stringify(err)}`);
+            resolve(null);
+          }
+        );
+    });
+  }
+
+  authRefresh(host:string, refreshToken:string, scope:string="api posts forms tags sets media config") {
+    return new Promise(resolve => {
+      let api = "/oauth/token";
+      let params = {
+        grant_type: "client_credentials",
+        scope: scope,
+        client_id: this.clientId,
+        client_secret: this.clientSecret,
+        refresh_token: refreshToken};
+      let url = host + api;
+      let body = JSON.stringify(params);
+      let headers = this.getHeaders();
+      let options = new RequestOptions({ headers: headers });
+      console.log(`API Posting ${url} ${body}`);
+      this.http.post(url, body, options)
+        .map(res => res.json())
+        .subscribe(
+          (json) => {
+            console.log(`API Posted ${url} ${JSON.stringify(json)}`);
+            let tokens = {
+              access_token: json.access_token,
+              refresh_token: refreshToken }
+            console.log(`access_token ${json.access_token} refresh_token ${refreshToken}`);
+            resolve(tokens);
           },
           (err) => {
             console.error(`API Failed ${url} ${JSON.stringify(err)}`);
