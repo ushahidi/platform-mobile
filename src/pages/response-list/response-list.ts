@@ -154,6 +154,9 @@ export class ResponseListPage {
   showList(event) {
     console.log("Deployment List showList");
     this.view = 'list';
+    if (this.map) {
+      this.map.setVisible(false);
+    }
   }
 
   showMap(event, attempts:number=0) {
@@ -161,9 +164,11 @@ export class ResponseListPage {
     this.view = 'map';
     let element: HTMLElement = document.getElementById('map');
     if (element) {
+      if (this.map) {
+        this.map.remove();
+      }
       this.map = new GoogleMap(element,
-        { 'backgroundColor': 'white' });
-      this.map.setBackgroundColor("white");
+        { 'backgroundColor': '#e7e9ec' });
       this.map.one(GoogleMapsEvent.MAP_READY).then(() => {
         console.log('Deployment List Map Ready');
         let points = [];

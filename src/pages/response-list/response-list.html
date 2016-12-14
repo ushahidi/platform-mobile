@@ -5,27 +5,33 @@
       <button ion-button (click)="searchResponses($event)">
         <ion-icon name="search"></ion-icon>
       </button>
-      <button ion-button (click)="shareResponses($event)">
-        <ion-icon ios="ios-share-outline" md="md-share"></ion-icon>
+      <button ion-button (click)="showMap($event)" *ngIf="view == 'list'">
+        <ion-icon ios="ios-map-outline" md="md-map"></ion-icon>
       </button>
+      <button ion-button (click)="showList($event)" *ngIf="view == 'map'">
+        <ion-icon ios="ios-list-box-outline" md="md-list-box"></ion-icon>
+      </button>
+      <!-- <button ion-button (click)="shareResponses($event)">
+        <ion-icon ios="ios-share-outline" md="md-share"></ion-icon>
+      </button> -->
     </ion-buttons>
   </ion-navbar>
 </ion-header>
 <ion-content class="page-response-list">
-  <div class="map-container" *ngIf="view == 'map'">
-    <div #map id="map"></div>
-  </div>
   <ion-fab bottom right>
     <button ion-fab mini color="primary" (click)="addResponse($event)">
       <ion-icon ios="md-add" md="md-add"></ion-icon>
     </button>
   </ion-fab>
-  <div padding>
+  <div class="map-container" *ngIf="view == 'map'">
+    <div #map id="map"></div>
+  </div>
+  <!-- <div padding>
     <ion-segment [(ngModel)]="view" color="dark">
       <ion-segment-button value="list" (ionSelect)="showList($event)">List</ion-segment-button>
       <ion-segment-button value="map" (ionSelect)="showMap($event)">Map</ion-segment-button>
     </ion-segment>
-  </div>
+  </div> -->
   <div *ngIf="view == 'list'">
     <ion-refresher (ionRefresh)="loadPosts(false, $event)">
       <ion-refresher-content></ion-refresher-content>
