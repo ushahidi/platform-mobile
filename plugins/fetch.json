@@ -149,5 +149,25 @@
         },
         "is_top_level": true,
         "variables": {}
+    },
+    "cordova-plugin-googlemaps": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-googlemaps@~1.4.0"
+        },
+        "is_top_level": true,
+        "variables": {
+            "API_KEY_FOR_ANDROID": "AIzaSyDAQq5_U1fm1p_lZY2nm6oH0Lc3bG9MOaI",
+            "API_KEY_FOR_IOS": "AIzaSyClDqDvu3mRUDwJ7EX438kIRhB0xfRelPM"
+        }
+    },
+    "com.googlemaps.ios": {
+        "source": {
+            "type": "git",
+            "url": "https://github.com/mapsplugin/cordova-plugin-googlemaps-sdk",
+            "subdir": "."
+        },
+        "is_top_level": false,
+        "variables": {}
     }
 }

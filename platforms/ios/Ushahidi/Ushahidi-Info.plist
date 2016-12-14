@@ -32,6 +32,16 @@
           <string>ushahidi</string>
         </array>
       </dict>
+      <dict>
+        <key>CFBundleTypeRole</key>
+        <string>Editor</string>
+        <key>CFBundleURLName</key>
+        <string>com.ushahidi.mobile</string>
+        <key>CFBundleURLSchemes</key>
+        <array>
+          <string>com.ushahidi.mobile</string>
+        </array>
+      </dict>
     </array>
     <key>CFBundleVersion</key>
     <string>0.1.0</string>
@@ -43,6 +53,8 @@
     <key>LSApplicationQueriesSchemes</key>
     <array>
       <string>mailto</string>
+      <string>googlechromes</string>
+      <string>comgooglemaps</string>
     </array>
     <key>LSRequiresIPhoneOS</key>
     <true/>
@@ -99,5 +111,11 @@
       <string>UIInterfaceOrientationPortrait</string>
       <string>UIInterfaceOrientationPortraitUpsideDown</string>
     </array>
+    <key>Google Maps API Key</key>
+    <string>AIzaSyClDqDvu3mRUDwJ7EX438kIRhB0xfRelPM</string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>$NSLocationWhenInUseUsageDescription</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>$NSLocationAlwaysUsageDescription</string>
   </dict>
 </plist>

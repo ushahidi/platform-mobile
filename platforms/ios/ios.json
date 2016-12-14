@@ -83,6 +83,50 @@
                         {
                             "xml": "<feature name=\"Keyboard\"><param name=\"ios-package\" onload=\"true\" value=\"IonicKeyboard\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"GoogleMaps\"><param name=\"ios-package\" value=\"GoogleMaps\" /><param name=\"onload\" value=\"true\" /><param name=\"onreset\" value=\"true\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"External\"><param name=\"ios-package\" value=\"External\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Geocoder\"><param name=\"ios-package\" value=\"Geocoder\" /></feature>",
+                            "count": 2
+                        },
+                        {
+                            "xml": "<feature name=\"Map\"><param name=\"ios-package\" value=\"Map\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Circle\"><param name=\"ios-package\" value=\"Circle\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"GroundOverlay\"><param name=\"ios-package\" value=\"GroundOverlay\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"KmlOverlay\"><param name=\"ios-package\" value=\"KmlOverlay\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Marker\"><param name=\"ios-package\" value=\"Marker\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Polygon\"><param name=\"ios-package\" value=\"Polygon\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Polyline\"><param name=\"ios-package\" value=\"Polyline\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"TileOverlay\"><param name=\"ios-package\" value=\"TileOverlay\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -99,11 +143,37 @@
                         {
                             "xml": "<array><string>mailto</string></array>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<array><string>googlechromes</string><string>comgooglemaps</string></array>",
+                            "count": 1
                         }
                     ],
                     "CFBundleURLTypes": [
                         {
                             "xml": "<array><dict><key>CFBundleURLSchemes</key><array><string>ushahidi</string></array></dict></array>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<array><dict><key>CFBundleTypeRole</key><string>Editor</string><key>CFBundleURLName</key><string>com.ushahidi.mobile</string><key>CFBundleURLSchemes</key><array><string>com.ushahidi.mobile</string></array></dict></array>",
+                            "count": 1
+                        }
+                    ],
+                    "Google Maps API Key": [
+                        {
+                            "xml": "<string>AIzaSyClDqDvu3mRUDwJ7EX438kIRhB0xfRelPM</string>",
+                            "count": 1
+                        }
+                    ],
+                    "NSLocationWhenInUseUsageDescription": [
+                        {
+                            "xml": "<string>$NSLocationWhenInUseUsageDescription</string>",
+                            "count": 1
+                        }
+                    ],
+                    "NSLocationAlwaysUsageDescription": [
+                        {
+                            "xml": "<string>$NSLocationAlwaysUsageDescription</string>",
                             "count": 1
                         }
                     ]
@@ -169,6 +239,15 @@
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
         "ionic-plugin-keyboard": {
+            "PACKAGE_NAME": "com.ushahidi.mobile"
+        },
+        "com.googlemaps.ios": {
+            "PACKAGE_NAME": "com.ushahidi.mobile"
+        },
+        "cordova-plugin-googlemaps": {
+            "API_KEY_FOR_IOS": "AIzaSyClDqDvu3mRUDwJ7EX438kIRhB0xfRelPM",
+            "NSLOCATIONWHENINUSEUSAGEDESCRIPTION": "Show your location on the map",
+            "NSLOCATIONALWAYSUSAGEDESCRIPTION": "Trace your location on the map",
             "PACKAGE_NAME": "com.ushahidi.mobile"
         }
     },
@@ -345,6 +424,14 @@
                 "cordova.plugins.Keyboard"
             ],
             "runs": true
+        },
+        {
+            "id": "cordova-plugin-googlemaps.cordova-plugin-googlemaps",
+            "file": "plugins/cordova-plugin-googlemaps/www/googlemaps-cdv-plugin.js",
+            "pluginId": "cordova-plugin-googlemaps",
+            "clobbers": [
+                "cordova-plugin-googlemaps"
+            ]
         }
     ],
     "plugin_metadata": {
@@ -365,6 +452,8 @@
         "cordova-plugin-nativestorage": "2.0.2",
         "cordova-sqlite-storage": "1.5.1",
         "ionic-plugin-deeplinks": "1.0.8",
-        "ionic-plugin-keyboard": "2.2.1"
+        "ionic-plugin-keyboard": "2.2.1",
+        "com.googlemaps.ios": "2.1.1",
+        "cordova-plugin-googlemaps": "1.4.0"
     }
 }

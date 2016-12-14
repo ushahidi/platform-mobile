@@ -71,10 +71,45 @@
     <feature name="Keyboard">
         <param name="ios-package" onload="true" value="IonicKeyboard" />
     </feature>
+    <feature name="GoogleMaps">
+        <param name="ios-package" value="GoogleMaps" />
+        <param name="onload" value="true" />
+        <param name="onreset" value="true" />
+    </feature>
+    <feature name="External">
+        <param name="ios-package" value="External" />
+    </feature>
+    <feature name="Geocoder">
+        <param name="ios-package" value="Geocoder" />
+    </feature>
+    <feature name="Map">
+        <param name="ios-package" value="Map" />
+    </feature>
+    <feature name="Circle">
+        <param name="ios-package" value="Circle" />
+    </feature>
+    <feature name="GroundOverlay">
+        <param name="ios-package" value="GroundOverlay" />
+    </feature>
+    <feature name="KmlOverlay">
+        <param name="ios-package" value="KmlOverlay" />
+    </feature>
+    <feature name="Marker">
+        <param name="ios-package" value="Marker" />
+    </feature>
+    <feature name="Polygon">
+        <param name="ios-package" value="Polygon" />
+    </feature>
+    <feature name="Polyline">
+        <param name="ios-package" value="Polyline" />
+    </feature>
+    <feature name="TileOverlay">
+        <param name="ios-package" value="TileOverlay" />
+    </feature>
     <name>Ushahidi</name>
     <description>Ushahidi Mobile</description>
     <author email="support@ushahidi.com" href="https://www.ushahidi.com/">Ushahidi Team</author>
-    <content src="index.html" />
+    <content original-src="index.html" src="http://localhost:3000" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />

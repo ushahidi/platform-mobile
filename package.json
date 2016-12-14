@@ -38,6 +38,7 @@
     "cordova-plugin-device",
     "cordova-plugin-email",
     "cordova-plugin-google-analytics",
+    "cordova-plugin-googlemaps",
     "cordova-plugin-inappbrowser",
     "cordova-plugin-ios-longpress-fix",
     "cordova-plugin-networkactivityindicator",

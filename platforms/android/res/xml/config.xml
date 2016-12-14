@@ -104,4 +104,15 @@
     <preference name="android-targetSdkVersion" value="24" />
     <preference name="android-minSdkVersion" value="19" />
     <preference name="LoadUrlTimeoutValue" value="50000" />
+    <feature name="GoogleMaps">
+        <param name="android-package" value="plugin.google.maps.GoogleMaps" />
+        <param name="onload" value="true" />
+        <param name="onreset" value="true" />
+    </feature>
+    <feature name="External">
+        <param name="android-package" value="plugin.google.maps.External" />
+    </feature>
+    <feature name="Geocoder">
+        <param name="android-package" value="plugin.google.maps.MyGeocoder" />
+    </feature>
 </widget>

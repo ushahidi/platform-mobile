@@ -126,4 +126,5 @@ ionic plugin add cordova-plugin-nativestorage
 ionic plugin add cordova-plugin-secure-storage
 ionic plugin add cordova-fabric-plugin --variable FABRIC_API_KEY=ce67fdba44588767037fbff566b67932e811c332 --variable FABRIC_API_SECRET=7b24e06a9561fa04b86ae87ef1a0942faaba38b606ac787935af6583d22c3392
 ionic plugin add ionic-plugin-deeplinks --variable URL_SCHEME=ushahidi --variable DEEPLINK_SCHEME=https --variable DEEPLINK_HOST=ushahidi.com
+ionic plugin add cordova-plugin-googlemaps --variable API_KEY_FOR_ANDROID="AIzaSyDAQq5_U1fm1p_lZY2nm6oH0Lc3bG9MOaI" --variable API_KEY_FOR_IOS="AIzaSyClDqDvu3mRUDwJ7EX438kIRhB0xfRelPM"
 ```

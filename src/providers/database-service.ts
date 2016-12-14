@@ -38,7 +38,9 @@ export class DatabaseService {
       'message': 'TEXT',
       'created': 'TEXT',
       'updated': 'TEXT',
-      'image': 'TEXT'}
+      'image': 'TEXT',
+      'latitude': 'DOUBLE',
+      'longitude': 'DOUBLE'}
   }
 
   openDatabase() {
@@ -123,6 +125,11 @@ export class DatabaseService {
   addPost(deployment:number, data:{}) {
     console.log(`Database addPost Deployment ${deployment} ${JSON.stringify(data)}`);
     data['deployment'] = deployment;
+    if (data['values']['location_default']) {
+      let location = data['values']['location_default'][0];
+      data['latitude'] = location['lat'];
+      data['longitude'] = location['lon'];
+    }
     return Promise.all([
       this.executeUpdate("posts", data['id'], data),
       this.executeInsert("posts", data)]);
@@ -225,7 +232,13 @@ export class DatabaseService {
     let params = [];
     for (var column in columns) {
       if (values[column]) {
-        params.push(values[column]);
+        let type = columns[column];
+        if (type == 'TEXT') {
+          params.push(values[column].toString());
+        }
+        else {
+          params.push(values[column]);
+        }
       }
     }
     return params;
@@ -245,7 +258,13 @@ export class DatabaseService {
     let params = [];
     for (var column in columns) {
       if (values[column]) {
-        params.push(values[column]);
+        let type = columns[column];
+        if (type == 'TEXT') {
+          params.push(values[column].toString());
+        }
+        else {
+          params.push(values[column]);
+        }
       }
     }
     return params;

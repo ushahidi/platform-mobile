@@ -50,6 +50,15 @@ export class ResponseDetailsPage {
     console.log("Response Details ionViewDidEnter");
   }
 
+  shareResponse(event) {
+    console.log("Response Details shareResponse");
+    let toast = this.toastController.create({
+      message: 'Sharing Not Implemented',
+      duration: 1500
+    });
+    toast.present();
+  }
+
   editResponse(event) {
     console.log("Response Details editResponse");
     let modal = this.modalController.create(

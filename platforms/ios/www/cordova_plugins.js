@@ -171,6 +171,14 @@ module.exports = [
             "cordova.plugins.Keyboard"
         ],
         "runs": true
+    },
+    {
+        "id": "cordova-plugin-googlemaps.cordova-plugin-googlemaps",
+        "file": "plugins/cordova-plugin-googlemaps/www/googlemaps-cdv-plugin.js",
+        "pluginId": "cordova-plugin-googlemaps",
+        "clobbers": [
+            "cordova-plugin-googlemaps"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -193,7 +201,9 @@ module.exports.metadata =
     "cordova-plugin-nativestorage": "2.0.2",
     "cordova-sqlite-storage": "1.5.1",
     "ionic-plugin-deeplinks": "1.0.8",
-    "ionic-plugin-keyboard": "2.2.1"
+    "ionic-plugin-keyboard": "2.2.1",
+    "com.googlemaps.ios": "2.1.1",
+    "cordova-plugin-googlemaps": "1.4.0"
 };
 // BOTTOM OF METADATA
 });

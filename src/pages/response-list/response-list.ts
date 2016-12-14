@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Platform, NavParams, NavController,
   LoadingController, ToastController, AlertController, ModalController, ActionSheetController } from 'ionic-angular';
+import { GoogleMap, GoogleMapsEvent, GoogleMapsLatLng, GoogleMapsLatLngBounds, CameraPosition, GoogleMapsMarkerOptions, GoogleMapsMarker } from 'ionic-native';
 
 import { ResponseAddPage } from '../response-add/response-add';
 import { ResponseDetailsPage } from '../response-details/response-details';
@@ -22,6 +23,8 @@ export class ResponseListPage {
   deployment: any;
   responses: any;
   forms: any;
+  map: GoogleMap;
+  view: string = 'list';
 
   constructor(
     public platform:Platform,
@@ -146,6 +149,62 @@ export class ResponseListPage {
       duration: 1500
     });
     toast.present();
+  }
+
+  showList(event) {
+    console.log("Deployment List showList");
+    this.view = 'list';
+  }
+
+  showMap(event, attempts:number=0) {
+    console.log(`Deployment List showMap ${attempts}`);
+    this.view = 'map';
+    let element: HTMLElement = document.getElementById('map');
+    if (element) {
+      this.map = new GoogleMap(element,
+        { 'backgroundColor': 'white' });
+      this.map.setBackgroundColor("white");
+      this.map.one(GoogleMapsEvent.MAP_READY).then(() => {
+        console.log('Deployment List Map Ready');
+        let points = [];
+        for (var i = 0; i <= this.responses.length; i++){
+          let response = this.responses[i];
+          if (response && response.latitude && response.longitude) {
+            console.log(`Deployment List Latitude ${response.latitude} Longitude ${response.longitude}`);
+            let latitude = Number(response.latitude);
+            let longitude = Number(response.longitude);
+            let coordinate: GoogleMapsLatLng = new GoogleMapsLatLng(latitude, longitude);
+            console.log(`Deployment List Coordinate ${coordinate}`);
+            let options: GoogleMapsMarkerOptions = {
+              position: coordinate,
+              title: response.title
+            };
+            points.push(coordinate);
+            console.log(`Deployment List Marker ${response.title}`);
+            this.map.addMarker(options)
+              .then((marker: GoogleMapsMarker) => {
+                marker.showInfoWindow();
+              });
+          }
+        }
+        if (points.length > 0) {
+          console.log(`Deployment List Points ${points.length}`);
+          var bounds: GoogleMapsLatLngBounds = new GoogleMapsLatLngBounds(points);
+          console.log(`Deployment List Center ${bounds.getCenter()}`);
+          let position: CameraPosition = {
+             target: bounds.getCenter(),
+             zoom: 15,
+             tilt: 0
+           };
+           this.map.moveCamera(position);
+        }
+      });
+    }
+    else {
+      setTimeout((attempts) => {
+        this.showMap(event, attempts+1);
+      }, 1000, attempts);
+    }
   }
 
 }
