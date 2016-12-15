@@ -31,9 +31,9 @@
       <ion-spinner></ion-spinner>
     </div>
     <div padding-left padding-right *ngIf="responses && responses.length == 0">
-      <h6 color="dark" text-center class="no-responses">
+      <h6 text-center class="no-responses">
         This deployment doesn't have any<br>
-        survey responses yet.
+        survey responses, yet.
       </h6>
       <button ion-button block margin-top text-uppercase color="primary"
             (click)="addResponse($event)">Submit A Survey Response</button>
