@@ -11,14 +11,14 @@
       <button ion-button (click)="showList($event)" *ngIf="view == 'map'">
         <ion-icon ios="ios-list-box-outline" md="md-list-box"></ion-icon>
       </button>
-      <!-- <button ion-button (click)="shareResponses($event)">
+      <button ion-button (click)="shareResponses($event)">
         <ion-icon ios="ios-share-outline" md="md-share"></ion-icon>
-      </button> -->
+      </button>
     </ion-buttons>
   </ion-navbar>
 </ion-header>
 <ion-content class="page-response-list">
-  <ion-fab bottom right>
+  <ion-fab bottom right *ngIf="responses && responses.length > 0">
     <button ion-fab mini color="primary" (click)="addResponse($event)">
       <ion-icon ios="md-add" md="md-add"></ion-icon>
     </button>
@@ -26,12 +26,6 @@
   <div class="map-container" *ngIf="view == 'map'">
     <div #map id="map"></div>
   </div>
-  <!-- <div padding>
-    <ion-segment [(ngModel)]="view" color="dark">
-      <ion-segment-button value="list" (ionSelect)="showList($event)">List</ion-segment-button>
-      <ion-segment-button value="map" (ionSelect)="showMap($event)">Map</ion-segment-button>
-    </ion-segment>
-  </div> -->
   <div *ngIf="view == 'list'">
     <ion-refresher (ionRefresh)="loadPosts(false, $event)">
       <ion-refresher-content></ion-refresher-content>
@@ -39,9 +33,19 @@
     <div text-center margin-top-lg margin-bottom-lg *ngIf="responses == null">
       <ion-spinner></ion-spinner>
     </div>
-    <div *ngIf="responses">
-      <response-card tappable [response]="response" [index]="i" (click)="showResponse($event, response)"
-                    *ngFor="let response of responses; let i = index"></response-card>
+    <div padding-left padding-right *ngIf="responses && responses.length == 0">
+      <h6 color="dark" text-center class="no-responses">
+        This deployment doesn't have any<br>
+        survey responses yet.
+      </h6>
+      <button ion-button block margin-top text-uppercase color="primary"
+            (click)="addResponse($event)">Submit A Survey Response</button>
+    </div>
+    <div *ngIf="responses && responses.length > 0">
+      <response-card [response]="response" [index]="i"
+                  (cardSelected)="showResponse($event, response)"
+                  (menuSelected)="showOptions($event, response)"
+                  *ngFor="let response of responses; let i = index"></response-card>
     </div>
   </div>
 </ion-content>

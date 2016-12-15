@@ -1,11 +1,35 @@
-button {
-  text-transform: uppercase;
-}
 ion-menu {
-  ion-toolbar {
-    ion-title {
-      width: 100%;
-      text-align: left;
+  background-color: #fafafa;
+  ion-header {
+    ion-toolbar {
+      ion-title {
+        width: 100%;
+      }
+      button {
+        font-weight: bold;
+      }
     }
+  }
+  ion-item {
+    h2 {
+      font-weight: 600;
+    }
+    p {
+      font-weight: 400;
+    }
+    &.selected {
+      background-color: #eeeeee;
+      h2 {
+        color: #5b95bf;
+      }
+    }
+  }
+}
+img {
+  &.img-rounded {
+    border-radius: 50%;
+  }
+  &.img-100 {
+    max-width: 100px;
   }
 }

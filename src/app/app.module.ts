@@ -12,7 +12,6 @@ import { DeploymentAddPage } from '../pages/deployment-add/deployment-add';
 import { DeploymentLoginPage } from '../pages/deployment-login/deployment-login';
 import { DeploymentDetailsPage } from '../pages/deployment-details/deployment-details';
 
-import { ResponseMapPage } from '../pages/response-map/response-map';
 import { ResponseListPage } from '../pages/response-list/response-list';
 import { ResponseDetailsPage } from '../pages/response-details/response-details';
 import { ResponseAddPage } from '../pages/response-add/response-add';
@@ -46,7 +45,6 @@ import { DatabaseService } from '../providers/database-service';
     DeploymentAddPage,
     DeploymentLoginPage,
     DeploymentDetailsPage,
-    ResponseMapPage,
     ResponseListPage,
     ResponseDetailsPage,
     ResponseAddPage,
@@ -79,7 +77,6 @@ import { DatabaseService } from '../providers/database-service';
     DeploymentAddPage,
     DeploymentLoginPage,
     DeploymentDetailsPage,
-    ResponseMapPage,
     ResponseListPage,
     ResponseDetailsPage,
     ResponseAddPage,

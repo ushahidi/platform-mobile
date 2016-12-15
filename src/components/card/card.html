@@ -1,24 +1,32 @@
-<ion-card class="card" [style.border-left-color]="response.color" tappable (click)="cardSelected($event)">
-  <ion-item>
-    <button item-right tappable (click)="menuSelected($event)">
-      <ion-icon ios="ios-more" md="ios-more"></ion-icon>
-    </button>
-    <ion-icon ios="ios-globe-outline" md="md-globe" color="grey" item-left *ngIf="response.status=='published'"></ion-icon>
-    <ion-icon ios="ios-lock-outline" md="md-lock" color="grey" item-left *ngIf="response.status=='draft'"></ion-icon>
-    <ion-icon ios="ios-trash-oultine" md="md-trash" color="grey" item-left *ngIf="response.status=='archived'"></ion-icon>
-    <ion-avatar item-left>
-      <img [src]="placeholderUser" [lazyLoad]="imageUser" [offset]="offset">
-    </ion-avatar>
-    <p text-muted>Dale Zak {{response.created | timeAgo}}</p>
-  </ion-item>
+<ion-card class="card" [style.border-left-color]="response.color">
   <ion-card-content>
+    <ion-grid>
+      <ion-row>
+        <ion-col width-10 tappable (click)="onCardSelected($event)">
+          <ion-icon ios="ios-globe-outline" md="md-globe" color="grey" *ngIf="response.status=='published'"></ion-icon>
+          <ion-icon ios="ios-lock-outline" md="md-lock" color="grey" *ngIf="response.status=='draft'"></ion-icon>
+          <ion-icon ios="ios-trash-oultine" md="md-trash" color="grey" *ngIf="response.status=='archived'"></ion-icon>
+        </ion-col>
+        <ion-col width-10 tappable (click)="onCardSelected($event)">
+          <img class="profile" [src]="placeholderUser" [lazyLoad]="imageUser" [offset]="offset">
+        </ion-col>
+        <ion-col width-70 tappable (click)="onCardSelected($event)">
+          <p text-muted>Dale Zak {{response.created | timeAgo}}</p>
+        </ion-col>
+        <ion-col width-10 text-right>
+          <button tappable (click)="onMenuSelected($event)">
+            <ion-icon ios="ios-more" md="ios-more"></ion-icon>
+          </button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
     <h2 *ngIf="response.title">{{response.title}}</h2>
     <p *ngIf="response.content">{{response.content}}</p>
   </ion-card-content>
-  <ion-card-content>
+  <ion-card-content tappable (click)="onCardSelected($event)">
     <img [src]="placeholderPhoto" [lazyLoad]="imagePhoto" [offset]="offset">
   </ion-card-content>
-  <ion-card-content>
+  <ion-card-content tappable (click)="onCardSelected($event)">
     <p class="more">2 more fields...</p>
   </ion-card-content>
 </ion-card>

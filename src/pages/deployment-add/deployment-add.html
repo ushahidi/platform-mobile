@@ -1,7 +1,9 @@
 <ion-header>
   <ion-navbar color="dark">
     <ion-buttons start>
-      <button #cancel ion-button (click)="doCancel($event)"><ion-icon name="md-close"></ion-icon></button>
+      <button #cancel ion-button (click)="doCancel($event)">
+        <ion-icon ios="md-close" md="md-close"></ion-icon>
+      </button>
     </ion-buttons>
     <ion-title>Add Deployment</ion-title>
   </ion-navbar>

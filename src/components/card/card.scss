@@ -1,20 +1,33 @@
 .card {
   border-left: thick solid #cccccc;
-  ion-avatar {
-    max-width: 25px;
-    margin-right: 0;
-    padding-right: 0;
-    padding-top: 5px;
-    img {
-      max-width: 25px;
-      margin-right: 0;
-      padding-right: 0;
-      transition: opacity 1s;
-      opacity: 0;
-      &.ng2-lazyloaded {
-        opacity: 1;
+  ion-grid {
+    padding:0;
+    margin-top: 10px;
+    ion-row {
+      padding:0;
+      margin:0;
+      ion-col {
+        padding:0;
+        margin:0;
+        p {
+          font-size: 13px;
+        }
       }
     }
+  }
+  img {
+    transition: opacity 1s;
+    opacity: 0;
+    &.ng2-lazyloaded {
+      opacity: 1;
+    }
+    &.profile {
+      border-radius: 50%;
+      width: 20px;
+    }
+  }
+  span {
+    color: #ccc;
   }
   ion-card-content {
     padding-top: 5px;

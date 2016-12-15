@@ -151,6 +151,48 @@ export class ResponseListPage {
     toast.present();
   }
 
+  showOptions(event, response) {
+    console.log("Deployment List showOptions");
+    let actionSheet = this.actionController.create({
+    //  title: 'Response options',
+     buttons: [
+       {
+         text: 'Edit',
+         handler: () => {
+           console.log('Deployment List Edit');
+         }
+       },
+       {
+         text: 'Add to Collection',
+         handler: () => {
+           console.log('Deployment List Add');
+         }
+       },
+       {
+         text: 'Share',
+         handler: () => {
+           console.log('Deployment List Share');
+         }
+       },
+       {
+         text: 'Delete',
+         role: 'destructive',
+         handler: () => {
+           console.log('Deployment List Delete');
+         }
+       },
+       {
+         text: 'Cancel',
+         role: 'cancel',
+         handler: () => {
+           console.log('Deployment List Cancel');
+         }
+       }
+     ]
+   });
+   actionSheet.present();
+  }
+
   showList(event) {
     console.log("Deployment List showList");
     this.view = 'list';

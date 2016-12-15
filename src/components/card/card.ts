@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'response-card',
@@ -6,6 +6,9 @@ import { Component, Input } from '@angular/core';
   inputs: ['response', 'index']
 })
 export class CardComponent {
+
+  @Output() cardSelected = new EventEmitter();
+  @Output() menuSelected = new EventEmitter();
 
   index: number = 0;
   response: any = {};
@@ -22,11 +25,13 @@ export class CardComponent {
   ngOnInit() {
   }
 
-  cardSelected(event) {
+  onCardSelected(event) {
     console.log('Card cardSelected');
+    this.cardSelected.emit();
   }
 
-  menuSelected(event) {
+  onMenuSelected(event) {
     console.log('Card menuSelected');
+    this.menuSelected.emit();
   }
 }

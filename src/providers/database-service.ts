@@ -34,6 +34,7 @@ export class DatabaseService {
       'content': 'TEXT',
       'slug': 'TEXT',
       'type': 'TEXT',
+      'status': 'TEXT',
       'color': 'TEXT',
       'message': 'TEXT',
       'created': 'TEXT',

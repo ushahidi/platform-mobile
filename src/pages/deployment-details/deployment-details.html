@@ -6,11 +6,11 @@
       </button>
     </ion-buttons>
     <ion-title></ion-title>
-    <ion-buttons end>
+    <!-- <ion-buttons end>
       <button ion-button icon-only (click)="shareDeployment($event)">
         <ion-icon ios="ios-share-outline" md="md-share"></ion-icon>
       </button>
-    </ion-buttons>
+    </ion-buttons> -->
   </ion-navbar>
 </ion-header>
 <ion-content class="page-deployment-details">
@@ -26,7 +26,7 @@
     </div>
     <p padding-left padding-right *ngIf="site.description">{{site.description}}</p>
     <div padding-top padding-left padding-right padding-bottom margin-bottom>
-      <button ion-button block margin-top text-uppercase color="primary"
+      <button ion-button block text-uppercase color="primary"
             (click)="addResponse($event)">Submit A Survey Response</button>
     </div>
     <ion-list>

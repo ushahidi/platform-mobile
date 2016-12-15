@@ -12,15 +12,18 @@
   <div class="header">
     <h4 *ngIf="deployment" text-center padding-top padding-bottom>{{deployment.name}}</h4>
   </div>
-  <p padding-left padding-right>Log in to see and contribute to this deployment's survey responses.</p>
-  <ion-item>
-    <ion-label floating>Email</ion-label>
-    <ion-input #username type="email" clearInput="true"></ion-input>
-  </ion-item>
-  <ion-item margin-top margin-bottom>
-    <ion-label floating>Password</ion-label>
-    <ion-input #password type="password" clearInput="true"></ion-input>
-  </ion-item>
+  <div margin-bottom>
+    <ion-item margin-bottom>
+      <ion-label floating>Email</ion-label>
+      <ion-input #username type="email" clearInput="true"></ion-input>
+    </ion-item>
+  </div>
+  <div margin-top margin-bottom>
+    <ion-item>
+      <ion-label floating>Password</ion-label>
+      <ion-input #password type="password" clearInput="true"></ion-input>
+    </ion-item>
+  </div>
   <div text-right padding>
     <button #login ion-button text-uppercase color="primary" (click)="doLogin($event)"
           [disabled]="username.value.length == 0 || password.value.length == 0">Log in</button>
