@@ -120,6 +120,10 @@ export class DatabaseService {
     return this.executeUpdate("deployments", id, data);
   }
 
+  removeDeployment(id:string) {
+    return this.executeDelete("deployments", id);
+  }
+
   getDeployments() {
     return this.executeSelect("deployments");
   }
@@ -241,6 +245,32 @@ export class DatabaseService {
         reject(JSON.stringify(error));
       });
     });
+  }
+
+  executeDelete(table:string, id:string) {
+    return new Promise((resolve, reject) => {
+      this.openDatabase().then((database:SQLite) => {
+        let statement = this.deleteStatement(table, id);
+        console.log(`Database Deleting ${statement}`);
+        database.executeSql(statement, []).then(
+          (results) => {
+            console.log(`Database Deleted ${statement} ${JSON.stringify(results)}`);
+            resolve(results['insertId']);
+          },
+          (error) => {
+            console.error(`Database Delete Failed ${statement} ${JSON.stringify(error)}`);
+            reject(JSON.stringify(error));
+          });
+      },
+      (error) => {
+        console.error(`Database Delete Failed ${error}`);
+        reject(JSON.stringify(error));
+      });
+    });
+  }
+
+  deleteStatement(table, id) : string {
+    return `DELETE FROM ${table} WHERE id = ${id}`;
   }
 
   insertStatement(table, columns, values) : string {

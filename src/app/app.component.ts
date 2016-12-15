@@ -1,5 +1,5 @@
 import { Component, ViewChild, NgZone } from '@angular/core';
-import { Nav, Platform, ModalController } from 'ionic-angular';
+import { Nav, Platform, ModalController, LoadingController, ToastController, AlertController, MenuController } from 'ionic-angular';
 import { StatusBar, Splashscreen } from 'ionic-native';
 
 import { HomePage } from '../pages/home/home';
@@ -33,7 +33,11 @@ export class MyApp {
     public platform: Platform,
     public api:ApiService,
     public database:DatabaseService,
-    public modalController: ModalController) {
+    public modalController:ModalController,
+    public toastController:ToastController,
+    public loadingController:LoadingController,
+    public alertController: AlertController,
+    public menuController: MenuController) {
     this.zone = zone;
     platform.ready().then(() => {
       console.log(`App Platform Ready ${this.platform.platforms()}`);
@@ -73,7 +77,7 @@ export class MyApp {
     });
   }
 
-  loadDeployments(event) {
+  loadDeployments(event=null) {
     console.log("App loadDeployments");
     this.database.getDeployments().then(results => {
       console.log(`App Deployments ${JSON.stringify(results)}`);
@@ -131,5 +135,39 @@ export class MyApp {
         DeploymentLoginPage,
         { deployment: deployment });
     }
+  }
+
+  removeDeployment(event, deployment) {
+    console.log(`App removeDeployment ${deployment.name}`);
+    let loading = this.loadingController.create({
+      content: "Removing..."
+    });
+    loading.present();
+    this.database.removeDeployment(deployment.id).then(
+      (results) => {
+        this.database.getDeployments().then(results => {
+          loading.dismiss();
+          this.zone.run(() => {
+            this.deployments = <any[]>results;
+            if (this.deployments.length == 0) {
+              this.nav.setRoot(HomePage);
+              this.menuController.close();
+            }
+            else if (this.deployment.id == deployment.id){
+              this.deployment = this.deployments[0];
+              this.showDeployment(this.deployment);
+            }
+          });
+        });
+      },
+      (error) => {
+        loading.dismiss();
+        let alert = this.alertController.create({
+          title: 'Problem Removing Deployment',
+          subTitle: error,
+          buttons: ['OK']
+        });
+        alert.present();
+      });
   }
 }

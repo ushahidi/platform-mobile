@@ -7,7 +7,7 @@
         </button>
       </ion-buttons>
       <ion-buttons end>
-        <button ion-button icon-only (click)="addDeployment($event)">
+        <button ion-button icon-only menuClose (click)="addDeployment($event)">
           <ion-icon ios="md-add" md="md-add"></ion-icon>
         </button>
       </ion-buttons>
@@ -18,12 +18,26 @@
       <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
     <ion-list *ngIf="deployments && deployments.length > 0">
-      <ion-item menuClose [class.selected]="deployment != null && deployment.url === _deployment.url"
-                (click)="showDeployment(_deployment)" *ngFor="let _deployment of deployments">
-        <div class="name">{{_deployment.name}}</div>
-        <div class="domain">{{_deployment.subdomain}}.{{_deployment.domain}}</div>
+      <ion-item-sliding *ngFor="let _deployment of deployments">
+        <ion-item menuClose [class.selected]="deployment != null && deployment.url === _deployment.url"
+                  (click)="showDeployment(_deployment)">
+          <div class="name">{{_deployment.name}}</div>
+          <div class="domain">{{_deployment.subdomain}}.{{_deployment.domain}}</div>
+        </ion-item>
+        <ion-item-options side="right">
+          <button ion-button color="danger" (click)="removeDeployment($event, deployment)">
+            <ion-icon name="trash"></ion-icon>
+            Delete
+          </button>
+        </ion-item-options>
+      </ion-item-sliding>
+      <ion-item tappable menuClose (click)="addDeployment($event)">
+        <div class="name">
+          <ion-icon ios="md-add" md="md-add"></ion-icon> Add Deployment
+        </div>
       </ion-item>
     </ion-list>
+
   </ion-content>
 </ion-menu>
 <ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>
