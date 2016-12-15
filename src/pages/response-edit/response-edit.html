@@ -1,9 +1,16 @@
 <ion-header>
   <ion-navbar color="dark">
     <ion-buttons start>
-      <button #cancel ion-button (click)="doCancel($event)">Cancel</button>
+      <button #cancel ion-button icon-only (click)="doCancel($event)">
+        <ion-icon ios="md-close" md="md-close"></ion-icon>
+      </button>
     </ion-buttons>
     <ion-title *ngIf="form">{{form.name}}</ion-title>
+    <ion-buttons end>
+      <button #submit ion-button icon-only (click)="updateResponse($event)">
+        <ion-icon ios="ios-send" md="md-send"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 <ion-content class="page-response-edit">
@@ -24,8 +31,5 @@
         <field-video [attribute]="attribute" *ngIf="attribute.input == 'video'"></field-video>
       </ion-item>
     </ion-list>
-    <div padding-left padding-right padding-bottom>
-      <button #submit ion-button block text-uppercase color="primary" (click)="updateResponse($event)">Update Response</button>
-    </div>
   </div>
 </ion-content>
