@@ -1,6 +1,6 @@
 .page-response-list {
   background-color: #e7e9ec;
-  .map-container {
+  .map {
     z-index: -100;
     position: absolute;
     top: 0;
@@ -21,7 +21,13 @@
       background-color: white;
     }
   }
+  ion-refresher {
+
+  }
   .no-responses {
+    margin-top: 100px;
+  }
+  .loading {
     margin-top: 100px;
   }
 }

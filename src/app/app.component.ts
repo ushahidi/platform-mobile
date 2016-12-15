@@ -40,25 +40,41 @@ export class MyApp {
       StatusBar.styleDefault();
       this.database.createTables().then(results => {
         console.log("App Database Ready");
-        this.database.getDeployments().then(results => {
-          console.log(`App Deployments ${JSON.stringify(results)}`);
-          this.deployments = <any[]>results;
-          if (this.deployments && this.deployments.length > 0) {
-            let deployment = this.deployments[0];
-            console.log(`App Deployment ${JSON.stringify(deployment)}`);
-            this.showDeployment(deployment);
-          }
-          else {
+        if (results) {
+          this.database.getDeployments().then(results => {
+            console.log(`App Deployments ${JSON.stringify(results)}`);
+            this.deployments = <any[]>results;
+            if (this.deployments && this.deployments.length > 0) {
+              let deployment = this.deployments[0];
+              console.log(`App Deployment ${JSON.stringify(deployment)}`);
+              this.showDeployment(deployment);
+            }
+            else {
+              this.rootPage = HomePage;
+            }
+            Splashscreen.hide();
+          },
+          (error) => {
+            console.error(`App Deployments Error ${error}`);
             this.rootPage = HomePage;
-          }
+            Splashscreen.hide();
+          });
+        }
+        else {
+          this.rootPage = HomePage;
           Splashscreen.hide();
-        });
+        }
+      },
+      (error) => {
+        console.error(`App Database Error ${error}`);
+        this.rootPage = HomePage;
+        Splashscreen.hide();
       });
     });
   }
 
-  menuOpen(event) {
-    console.log("App menuOpen");
+  loadDeployments(event) {
+    console.log("App loadDeployments");
     this.database.getDeployments().then(results => {
       console.log(`App Deployments ${JSON.stringify(results)}`);
       this.zone.run(() => {
@@ -66,12 +82,11 @@ export class MyApp {
         if (this.deployment == null) {
           this.deployment = this.deployments[0];
         }
+        if (event) {
+          event.complete();
+        }
       });
     });
-  }
-
-  menuClose(event) {
-    console.log("App menuClose");
   }
 
   addDeployment(event) {

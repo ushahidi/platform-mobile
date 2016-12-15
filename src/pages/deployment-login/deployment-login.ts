@@ -81,25 +81,46 @@ export class DeploymentLoginPage {
           content: "Logging in..."
         });
         loading.present();
-        this.api.authLogin(host, username, password).then(tokens => {
-          console.log(`Deployment Login ${JSON.stringify(tokens)}`);
-          if (tokens) {
-            let changes = {
-              access_token: tokens['access_token'],
-              refresh_token: tokens['refresh_token'],
-              username: username,
-              password: password };
-            this.database.updateDeployment(this.deployment.id, changes).then(results => {
+        this.api.authLogin(host, username, password).then(
+          (tokens) => {
+            console.log(`Deployment Login ${JSON.stringify(tokens)}`);
+            if (tokens) {
+              let changes = {
+                access_token: tokens['access_token'],
+                refresh_token: tokens['refresh_token'],
+                username: username,
+                password: password };
+              this.database.updateDeployment(this.deployment.id, changes).then(
+                (results) => {
+                  loading.dismiss();
+                  let toast = this.toastController.create({
+                    message: 'Login Successful',
+                    duration: 1500
+                  });
+                  toast.present();
+                  this.showDeployment(tokens['access_token']);
+                },
+                (error) => {
+                  loading.dismiss();
+                  let alert = this.alertController.create({
+                    title: 'Problem Updating Deployment',
+                    subTitle: JSON.stringify(error),
+                    buttons: ['OK']
+                  });
+                  alert.present();
+                });
+            }
+            else {
               loading.dismiss();
-              let toast = this.toastController.create({
-                message: 'Login Successful',
-                duration: 1500
+              let alert = this.alertController.create({
+                title: 'Invalid Credentials',
+                subTitle: 'Please verify your email and password, then try again.',
+                buttons: ['OK']
               });
-              toast.present();
-              this.showDeployment(tokens['access_token']);
-            });
-          }
-          else {
+              alert.present();
+            }
+          },
+          (error) => {
             loading.dismiss();
             let alert = this.alertController.create({
               title: 'Invalid Credentials',
@@ -107,8 +128,7 @@ export class DeploymentLoginPage {
               buttons: ['OK']
             });
             alert.present();
-          }
-        });
+          });
       }
     }
 

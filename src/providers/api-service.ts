@@ -12,6 +12,7 @@ import { DatabaseService } from './database-service';
 
 @Injectable()
 export class ApiService {
+
   clientId: any = String;
   clientSecret: any = String;
 
@@ -34,7 +35,7 @@ export class ApiService {
   }
 
   searchDeployments(search:string) {
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       let params = new URLSearchParams();
       if (search != null) {
         params.set("q", search);
@@ -42,24 +43,24 @@ export class ApiService {
       let url = "https://api.ushahidi.io/deployments";
       let headers = this.getHeaders();
       let options = new RequestOptions({ headers: headers, search: params });
-      console.log(`API Downloading ${url} ${params.toString()}`);
+      console.log(`API GET ${url} ${params.toString()}`);
       this.http.get(url, options)
         .map(res => res.json())
         .subscribe(
           (json) => {
-            console.log(`API Downloaded ${url} ${JSON.stringify(json)}`);
+            console.log(`API GET ${url} ${JSON.stringify(json)}`);
             let deployments = json;
             resolve(deployments);
           },
-          (err) => {
-            console.error(`API Failed ${url} ${JSON.stringify(err)}`);
-            resolve(null);
+          (error) => {
+            console.error(`API GET ${url} ${JSON.stringify(error)}`);
+            reject(JSON.stringify(error));
           });
     });
   }
 
   authLogin(host:string, username:string, password:string, scope:string="api posts forms tags sets media config") {
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       let api = "/oauth/token";
       let params = {
         grant_type: "password",
@@ -72,28 +73,28 @@ export class ApiService {
       let body = JSON.stringify(params);
       let headers = this.getHeaders();
       let options = new RequestOptions({ headers: headers });
-      console.log(`API Posting ${url} ${body}`);
+      console.log(`API POST ${url} ${body}`);
       this.http.post(url, body, options)
         .map(res => res.json())
         .subscribe(
           (json) => {
-            console.log(`API Posted ${url} ${JSON.stringify(json)}`);
+            console.log(`API POST ${url} ${JSON.stringify(json)}`);
             let tokens = {
               access_token: json.access_token,
               refresh_token: json.refresh_token }
             console.log(`access_token ${json.access_token} refresh_token ${json.refresh_token}`);
             resolve(tokens);
           },
-          (err) => {
-            console.error(`API Failed ${url} ${JSON.stringify(err)}`);
-            resolve(null);
+          (error) => {
+            console.error(`API POST ${url} ${JSON.stringify(error)}`);
+            reject(JSON.stringify(error));
           }
         );
     });
   }
 
   authRefresh(host:string, refreshToken:string, scope:string="api posts forms tags sets media config") {
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       let api = "/oauth/token";
       let params = {
         grant_type: "client_credentials",
@@ -105,58 +106,58 @@ export class ApiService {
       let body = JSON.stringify(params);
       let headers = this.getHeaders();
       let options = new RequestOptions({ headers: headers });
-      console.log(`API Posting ${url} ${body}`);
+      console.log(`API POST ${url} ${body}`);
       this.http.post(url, body, options)
         .map(res => res.json())
         .subscribe(
           (json) => {
-            console.log(`API Posted ${url} ${JSON.stringify(json)}`);
+            console.log(`API POST ${url} ${JSON.stringify(json)}`);
             let tokens = {
               access_token: json.access_token,
               refresh_token: refreshToken }
             console.log(`access_token ${json.access_token} refresh_token ${refreshToken}`);
             resolve(tokens);
           },
-          (err) => {
-            console.error(`API Failed ${url} ${JSON.stringify(err)}`);
-            resolve(null);
+          (error) => {
+            console.error(`API POST ${url} ${JSON.stringify(error)}`);
+            reject(JSON.stringify(error));
           }
         );
     });
   }
 
   getConfigSite(host:string, token:string) {
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       let api = "/api/v3/config/";
       let params = new URLSearchParams();
       let url = host + api;
       let headers = this.getHeaders(token);
       let options = new RequestOptions({ headers: headers, search: params });
-      console.log(`API Downloading ${url} ${params.toString()}`);
+      console.log(`API GET ${url} ${params.toString()}`);
       this.http.get(url, options)
         .map(res => res.json())
         .subscribe(
           (json) => {
-            console.log(`API Downloaded ${url} ${JSON.stringify(json)}`);
+            console.log(`API GET ${url} ${JSON.stringify(json)}`);
             let results = json.results;
             for (let i = 0; i < results.length; i++) {
               let item = results[i];
               if (item.id == 'site') {
-                console.log(`API Downloaded Site ${item}`);
+                console.log(`API GET Site ${item}`);
                 resolve(item);
               }
             }
           },
-          (err) => {
-            console.error(`API Failed ${url} ${JSON.stringify(err)}`);
-            resolve(null);
+          (error) => {
+            console.error(`API GET ${url} ${JSON.stringify(error)}`);
+            reject(JSON.stringify(error));
           }
         );
     });
   }
 
   getPosts(host:string, token:string, search:string=null, form:string=null, user:string=null, cache:boolean=true) {
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       let api = "/api/v3/posts";
       let params = new URLSearchParams();
       if (search != null) {
@@ -171,49 +172,49 @@ export class ApiService {
       let url = host + api;
       let headers = this.getHeaders(token);
       let options = new RequestOptions({ headers: headers, search: params });
-      console.log(`API Downloading ${url} ${params.toString()}`);
+      console.log(`API GET ${url} ${params.toString()}`);
       this.http.get(url, options)
         .map(res => res.json())
         .subscribe(
           (json) => {
-            console.log(`API Downloaded ${url} ${JSON.stringify(json)}`);
+            console.log(`API GET ${url} ${JSON.stringify(json)}`);
             let posts = json;
             resolve(posts);
           },
-          (err) => {
-            console.error(`API Failed ${url} ${JSON.stringify(err)}`);
-            resolve(null);
+          (error) => {
+            console.error(`API GET ${url} ${JSON.stringify(error)}`);
+            reject(JSON.stringify(error));
           }
         );
     });
   }
 
   getPost(host:string, token:string, id:number, cache:boolean=true) {
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       let api = `/api/v3/posts/#{id}`;
       let params = new URLSearchParams();
       let url = host + api;
       let headers = this.getHeaders(token);
       let options = new RequestOptions({ headers: headers, search: params });
-      console.log(`API Downloading ${url}`);
+      console.log(`API GET ${url}`);
       this.http.get(url, options)
         .map(res => res.json())
         .subscribe(
           (json) => {
-            console.log(`API Downloaded ${url} ${JSON.stringify(json)}`);
+            console.log(`API GET ${url} ${JSON.stringify(json)}`);
             let post = json;
             resolve(post);
           },
-          (err) => {
-            console.error(`API Failed ${url} ${JSON.stringify(err)}`);
-            resolve(null);
+          (error) => {
+            console.error(`API GET ${url} ${JSON.stringify(error)}`);
+            reject(JSON.stringify(error));
           }
         );
     });
   }
 
   createPost(host:string, token:string, title:string, message:string=null) {
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       let api = "/api/v3/posts/";
       let params = {};
       if (title != null) {
@@ -226,25 +227,25 @@ export class ApiService {
       let body = JSON.stringify(params);
       let headers = this.getHeaders(token);
       let options = new RequestOptions({ headers: headers });
-      console.log(`API Posting ${url} ${body}`);
+      console.log(`API POST ${url} ${body}`);
       this.http.post(url, body, options)
         .map(res => res.json())
         .subscribe(
           (json) => {
-            console.log(`API Posted ${url} ${JSON.stringify(json)}`);
+            console.log(`API POST ${url} ${JSON.stringify(json)}`);
             let post = json;
             resolve(post);
           },
-          (err) => {
-            console.error(`API Failed ${url} ${JSON.stringify(err)}`);
-            resolve(null);
+          (error) => {
+            console.error(`API POST ${url} ${JSON.stringify(error)}`);
+            reject(JSON.stringify(error));
           }
         );
     });
   }
 
   updatePost(host:string, token:string, id:string, title:string=null, message:string=null) {
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       let api = `/api/v3/posts/${id}`;
       let params = {};
       if (title != null) {
@@ -257,66 +258,66 @@ export class ApiService {
       let body = JSON.stringify(params);
       let headers = this.getHeaders(token);
       let options = new RequestOptions({ headers: headers });
-      console.log(`API Updating ${url} ${body}`);
+      console.log(`API PUT ${url} ${body}`);
       this.http.put(url, body, options)
         .map(res => res.json())
         .subscribe(
           (json) => {
-            console.log(`API Updated ${url} ${JSON.stringify(json)}`);
+            console.log(`API PUT ${url} ${JSON.stringify(json)}`);
             let post = json;
             resolve(post);
           },
-          (err) => {
-            console.error(`API Failed ${url} ${JSON.stringify(err)}`);
-            resolve(null);
+          (error) => {
+            console.error(`API PUT ${url} ${JSON.stringify(error)}`);
+            reject(JSON.stringify(error));
           }
         );
     });
   }
 
   getForms(host:string, token:string, cache:boolean=true) {
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       let api = `/api/v3/forms`;
       let params = new URLSearchParams();
       let url = host + api;
       let headers = this.getHeaders(token);
       let options = new RequestOptions({ headers: headers, search: params });
-      console.log(`API Downloading ${url}`);
+      console.log(`API GET ${url}`);
       this.http.get(url, options)
         .map(res => res.json())
         .subscribe(
           (json) => {
-            console.log(`API Downloaded ${url} ${JSON.stringify(json)}`);
+            console.log(`API GET ${url} ${JSON.stringify(json)}`);
             let forms = json.results;
             resolve(forms);
           },
-          (err) => {
-            console.error(`API Failed ${url} ${JSON.stringify(err)}`);
-            resolve(null);
+          (error) => {
+            console.error(`API GET ${url} ${JSON.stringify(error)}`);
+            reject(JSON.stringify(error));
           }
         );
     });
   }
 
   getAttributes(host:string, token:string, cache:boolean=true) {
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       let api = `/api/v3/forms/attributes`;
       let params = new URLSearchParams();
       let url = host + api;
       let headers = this.getHeaders(token);
       let options = new RequestOptions({ headers: headers, search: params });
-      console.log(`API Downloading ${url}`);
+      console.log(`API GET ${url}`);
       this.http.get(url, options)
         .map(res => res.json())
         .subscribe(
           (json) => {
-            console.log(`API Downloaded ${url} ${JSON.stringify(json)}`);
+            console.log(`API GET ${url} ${JSON.stringify(json)}`);
             let attributes = json.results;
             resolve(attributes);
           },
-          (err) => {
-            console.error(`API Failed ${url} ${JSON.stringify(err)}`);
-            resolve(null);
+          (error) => {
+            console.error(`API Failed ${url} ${JSON.stringify(error)}`);
+            reject(JSON.stringify(error));
           }
         );
     });

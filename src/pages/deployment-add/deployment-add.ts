@@ -53,10 +53,19 @@ export class DeploymentAddPage {
     let search = event.target.value;
     if (search && search.length > 0) {
       this.loading = true;
-      this.api.searchDeployments(search).then(results => {
-        this.deployments = <any[]>results;
-        this.loading = false;
-      });
+      this.api.searchDeployments(search).then(
+        (results) => {
+          this.deployments = <any[]>results;
+          this.loading = false;
+        },
+        (error) => {
+          this.loading = false;
+          let toast = this.toastController.create({
+            message: error,
+            duration: 1500
+          });
+          toast.present();
+        });
     }
     else {
       this.deployments = [];
@@ -69,12 +78,34 @@ export class DeploymentAddPage {
       content: "Adding..."
     });
     loading.present();
-    this.database.addDeployment(deployment).then(results => {
-      console.log(`Deployment Add addDeployment ${results}`);
-      loading.dismiss();
-      let data = { 'deployment' : deployment };
-      this.viewController.dismiss(data);
-    });
+    this.database.addDeployment(deployment).then(
+      (results) => {
+        console.log(`Deployment Add addDeployment ID ${results}`);
+        loading.dismiss();
+        if (results) {
+          deployment['id'] = results;
+          let data = { 'deployment' : deployment };
+          this.viewController.dismiss(data);
+        }
+        else {
+          let alert = this.alertController.create({
+            title: 'Problem Adding Deployment',
+            subTitle: 'There was a problem adding your deployment.',
+            buttons: ['OK']
+          });
+          alert.present();
+        }
+      },
+      (error) => {
+        console.error(`Deployment Add addDeployment ${error}`);
+        loading.dismiss();
+        let alert = this.alertController.create({
+          title: 'Problem Adding Deployment',
+          subTitle: error,
+          buttons: ['OK']
+        });
+        alert.present();
+      });
   }
 
 }

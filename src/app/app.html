@@ -1,4 +1,4 @@
-<ion-menu [content]="content" swipeEnabled="false" (ionOpen)="menuOpen($event)" (ionClose)="menuClose($event)">
+<ion-menu [content]="content" swipeEnabled="false" (ionOpen)="loadDeployments()">
   <ion-header>
     <ion-toolbar color="dark">
       <ion-buttons start>
@@ -14,6 +14,9 @@
     </ion-toolbar>
   </ion-header>
   <ion-content>
+    <ion-refresher (ionRefresh)="loadDeployments($event)">
+      <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
     <ion-list *ngIf="deployments && deployments.length > 0">
       <ion-item menuClose [class.selected]="deployment != null && deployment.url === _deployment.url"
                 (click)="showDeployment(_deployment)" *ngFor="let _deployment of deployments">

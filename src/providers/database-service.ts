@@ -44,14 +44,18 @@ export class DatabaseService {
       'longitude': 'DOUBLE'}
   }
 
+  testDatabase() {
+    return this.platform.platforms().indexOf('cordova') >= 0;
+  }
+
   openDatabase() {
     console.log("Database openDatabase");
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       if (this.database) {
         console.log(`Database Cached ${JSON.stringify(this.database)}`);
         resolve(this.database);
       }
-      else {
+      else if (this.testDatabase()) {
         let database = new SQLite();
         database.openDatabase({
           name: this.name,
@@ -62,17 +66,21 @@ export class DatabaseService {
             this.database = database;
             resolve(database);
           },
-          (err) => {
-            console.error(`Database Failed ${JSON.stringify(err)}`);
-            resolve(null);
+          (error) => {
+            console.error(`Database Open Failed ${JSON.stringify(error)}`);
+            reject(JSON.stringify(error));
           });
+      }
+      else {
+        console.error(`Database Open Failed Cordova Not Available`);
+        reject(`Error Opening Database`);
       }
     });
   }
 
   createTables() {
     console.log(`Database createTables`);
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       this.openDatabase().then((database:SQLite) => {
         let sql = [];
         for (var table in this.tables) {
@@ -83,15 +91,20 @@ export class DatabaseService {
           }
           sql.push(`CREATE TABLE IF NOT EXISTS ${table} (${columns.join(", ")})`);
         }
-        database.sqlBatch(sql).
-          then(() => {
+        console.log(`Database Creating ${sql}`);
+        database.sqlBatch(sql).then(
+          () => {
             console.log(`Database Created ${sql}`);
             resolve(true);
-          }).
-          catch(() => {
-            console.error(`Database Failed ${sql}`);
-            resolve(null);
+          },
+          (error) => {
+            console.error(`Database Create Failed ${sql} ${JSON.stringify(error)}`);
+            reject(JSON.stringify(error));
           });
+      },
+      (error) => {
+        console.error(`Database Create Failed ${error}`);
+        reject(`Error Creating Database Tables`);
       });
     });
   }
@@ -103,16 +116,16 @@ export class DatabaseService {
     return this.executeInsert("deployments", data);
   }
 
+  updateDeployment(id:string, data:{}) {
+    return this.executeUpdate("deployments", id, data);
+  }
+
   getDeployments() {
     return this.executeSelect("deployments");
   }
 
   getDeployment(id:number) {
     return this.executeSelect("deployments", {"id": id});
-  }
-
-  updateDeployment(id:string, data:{}) {
-    return this.executeUpdate("deployments", id, data);
   }
 
   getPosts(deployment:number) {
@@ -137,7 +150,7 @@ export class DatabaseService {
   }
 
   executeSelect(table:string, where:{}=null) {
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       this.openDatabase().then((database:SQLite) => {
         let sql = `SELECT * FROM ${table}`;
         if (where != null) {
@@ -147,72 +160,85 @@ export class DatabaseService {
           }
           sql = `SELECT * FROM ${table} WHERE ${clause.join(', ')}`;
         }
-        database.executeSql(sql, []).then(data => {
-          if (data.rows.length > 0) {
-            let results = [];
-            let columns = this.tables[table];
-            for (let i = 0; i < data.rows.length; i++) {
-              let row = data.rows.item(i);
-              let result = {};
-              for (var column in columns) {
-                if (row[column]) {
-                  result[column] = row[column];
+        database.executeSql(sql, []).then(
+          (data) => {
+            if (data.rows.length > 0) {
+              let results = [];
+              let columns = this.tables[table];
+              for (let i = 0; i < data.rows.length; i++) {
+                let row = data.rows.item(i);
+                let result = {};
+                for (var column in columns) {
+                  if (row[column]) {
+                    result[column] = row[column];
+                  }
                 }
+                results.push(result);
               }
-              results.push(result);
+              console.log(`Database Selected ${sql} ${JSON.stringify(results)}`);
+              resolve(results);
             }
-            console.log(`Database Selected ${sql} ${JSON.stringify(results)}`);
-            resolve(results);
-          }
-          else {
-            console.log(`Database Selected ${sql} []`);
-            resolve([]);
-          }
-        });
+            else {
+              console.log(`Database Selected ${sql} []`);
+              resolve([]);
+            }
+          },
+          (error) => {
+            console.error(`Database Select Failed ${JSON.stringify(error)}`);
+            reject(JSON.stringify(error));
+          });
+      },
+      (error) => {
+        console.error(`Database Select Failed ${error}`);
+        reject(error);
       });
     });
   }
 
   executeInsert(table:string, data:{}) {
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       this.openDatabase().then((database:SQLite) => {
         let columns = this.tables[table];
         let statement = this.insertStatement(table, columns, data);
         let parameters = this.insertParameters(table, columns, data);
         console.log(`Database Inserting ${statement} ${parameters}`);
-        database.executeSql(statement, parameters)
-          .then(
-            () => {
-              console.log(`Database Inserted ${statement} ${parameters}`);
-              resolve(true);
-            })
-          .catch(
-            () => {
-              console.error(`Database Failed ${statement} ${parameters}`);
-              resolve(false);
-            });
+        database.executeSql(statement, parameters).then(
+          (results) => {
+            console.log(`Database Inserted ${statement} ${parameters} ${JSON.stringify(results)}`);
+            resolve(results['insertId']);
+          },
+          (error) => {
+            console.error(`Database Insert Failed ${statement} ${parameters} ${JSON.stringify(error)}`);
+            reject(JSON.stringify(error));
+          });
+      },
+      (error) => {
+        console.error(`Database Insert Failed ${error}`);
+        reject(JSON.stringify(error));
       });
     });
   }
 
   executeUpdate(table:string, id:string, data:{}) {
-    return new Promise(resolve => {
+    return new Promise((resolve, reject) => {
       this.openDatabase().then((database:SQLite) => {
         let columns = this.tables[table];
         let statement = this.updateStatement(table, columns, id, data);
         let parameters = this.updateParameters(table, columns, id, data);
         console.log(`Database Updating ${statement} ${parameters}`);
-        database.executeSql(statement, parameters)
-          .then(
-            () => {
-              console.log(`Database Updated ${statement} ${parameters}`);
-              resolve(true);
-            })
-          .catch(
-            () => {
-              console.error(`Database Failed ${statement} ${parameters}`);
-              resolve(false);
-            });
+        database.executeSql(statement, parameters).then(
+          (results) => {
+            console.log(`Database Updated ${statement} ${parameters} ${JSON.stringify(results)}`);
+            resolve(true);
+          },
+          (error) => {
+            console.error(`Database Update Failed ${statement} ${parameters} ${JSON.stringify(error)}`);
+            reject(JSON.stringify(error));
+          });
+      },
+      (error) => {
+        console.error(`Database Update Failed ${error}`);
+        reject(JSON.stringify(error));
       });
     });
   }

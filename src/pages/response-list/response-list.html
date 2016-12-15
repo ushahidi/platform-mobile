@@ -23,14 +23,11 @@
       <ion-icon ios="md-add" md="md-add"></ion-icon>
     </button>
   </ion-fab>
-  <div class="map-container" *ngIf="view == 'map'">
-    <div #map id="map"></div>
-  </div>
-  <div *ngIf="view == 'list'">
+  <div class="list" *ngIf="view == 'list'">
     <ion-refresher (ionRefresh)="loadPosts(false, $event)">
       <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
-    <div text-center margin-top-lg margin-bottom-lg *ngIf="responses == null">
+    <div class="loading" text-center margin-top-lg margin-bottom-lg *ngIf="responses == null">
       <ion-spinner></ion-spinner>
     </div>
     <div padding-left padding-right *ngIf="responses && responses.length == 0">
@@ -47,5 +44,8 @@
                   (menuSelected)="showOptions($event, response)"
                   *ngFor="let response of responses; let i = index"></response-card>
     </div>
+  </div>
+  <div class="map" *ngIf="view == 'map'">
+    <div #map id="map"></div>
   </div>
 </ion-content>
