@@ -11,6 +11,7 @@ import { ApiService } from '../../providers/api-service';
 })
 export class ResponseEditPage {
 
+  color: string = "#cccccc";
   token: string = null;
   deployment: any;
   response: any;
@@ -39,6 +40,7 @@ export class ResponseEditPage {
     this.deployment = this.navParams.get("deployment");
     this.response = this.navParams.get("response");
     this.form = this.navParams.get("form");
+    this.color = this.form.color;
   }
 
   ionViewDidEnter() {

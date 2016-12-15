@@ -24,6 +24,7 @@ import { VideoComponent } from '../../components/video/video';
 })
 export class ResponseAddPage {
 
+  color: string = "#cccccc";
   token: string = null;
   deployment: any;
   form: any;
@@ -51,6 +52,7 @@ export class ResponseAddPage {
     this.token = this.navParams.get("token");
     this.deployment = this.navParams.get("deployment");
     this.form = this.navParams.get("form");
+    this.color = this.form.color;
   }
 
   ionViewDidEnter() {
