@@ -13,6 +13,7 @@
     text-align: center;
     img {
       max-width: 50%;
+      border-radius: 50%;
       transition: opacity 1s;
       opacity: 0;
       &.ng2-lazyloaded {

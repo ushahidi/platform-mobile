@@ -51,6 +51,9 @@ export class DeploymentLoginPage {
       if (this.deployment.username) {
         this.username.value = this.deployment.username;
       }
+      else if (this.deployment.subdomain = 'dale') {
+        this.username.value = "dalezak@gmail.com";
+      }
       if (this.deployment.password) {
         this.password.value = this.deployment.password;
       }
