@@ -78,34 +78,48 @@ export class DeploymentAddPage {
       content: "Adding..."
     });
     loading.present();
-    this.database.addDeployment(deployment).then(
-      (results) => {
-        console.log(`Deployment Add addDeployment ID ${results}`);
-        loading.dismiss();
-        if (results) {
-          deployment['id'] = results;
-          let data = { 'deployment' : deployment };
-          this.viewController.dismiss(data);
-        }
-        else {
-          let alert = this.alertController.create({
-            title: 'Problem Adding Deployment',
-            subTitle: 'There was a problem adding your deployment.',
-            buttons: ['OK']
-          });
-          alert.present();
-        }
-      },
-      (error) => {
-        console.error(`Deployment Add addDeployment ${error}`);
+    this.database.getDeploymentBySubdomain(deployment.subdomain).then(existing => {
+      let deployments = <any[]>existing;
+      if (deployments && deployments.length > 0) {
         loading.dismiss();
         let alert = this.alertController.create({
-          title: 'Problem Adding Deployment',
-          subTitle: error,
+          title: 'Deployment Already Added',
+          subTitle: 'Looks like that deployment has already been added.',
           buttons: ['OK']
         });
         alert.present();
-      });
+      }
+      else {
+        this.database.addDeployment(deployment).then(
+          (results) => {
+            console.log(`Deployment Add addDeployment ID ${results}`);
+            loading.dismiss();
+            if (results) {
+              deployment['id'] = results;
+              let data = { 'deployment' : deployment };
+              this.viewController.dismiss(data);
+            }
+            else {
+              let alert = this.alertController.create({
+                title: 'Problem Adding Deployment',
+                subTitle: 'There was a problem adding your deployment.',
+                buttons: ['OK']
+              });
+              alert.present();
+            }
+          },
+          (error) => {
+            console.error(`Deployment Add addDeployment ${error}`);
+            loading.dismiss();
+            let alert = this.alertController.create({
+              title: 'Problem Adding Deployment',
+              subTitle: error,
+              buttons: ['OK']
+            });
+            alert.present();
+          });
+      }
+    });
   }
 
 }

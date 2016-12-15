@@ -124,6 +124,9 @@ export class DatabaseService {
     return this.executeDelete("deployments", id);
   }
 
+  getDeploymentBySubdomain(subdomain:string) {
+    return this.executeSelect("deployments", {"subdomain": subdomain});
+  }
   getDeployments() {
     return this.executeSelect("deployments");
   }
@@ -160,7 +163,7 @@ export class DatabaseService {
         if (where != null) {
           let clause = [];
           for (let column in where) {
-            clause.push(`${column} = ${where[column]}`);
+            clause.push(`${column} = '${where[column]}'`);
           }
           sql = `SELECT * FROM ${table} WHERE ${clause.join(', ')}`;
         }

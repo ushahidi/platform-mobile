@@ -51,13 +51,13 @@ export class DeploymentLoginPage {
       if (this.deployment.username) {
         this.username.value = this.deployment.username;
       }
-      else if (this.deployment.subdomain = 'dale') {
+      else if (this.deployment.subdomain == 'dale') {
         this.username.value = "dalezak@gmail.com";
       }
       if (this.deployment.password) {
         this.password.value = this.deployment.password;
       }
-      else if (this.deployment.subdomain = 'dale') {
+      else if (this.deployment.subdomain == 'dale') {
         this.password.value = "P4NpCNUqLTCnvJAQBBMX";
       }
     }
