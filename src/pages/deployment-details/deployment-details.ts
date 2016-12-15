@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Platform, NavParams, NavController, LoadingController, ToastController, AlertController, ModalController, ActionSheetController } from 'ionic-angular';
+import { StatusBar } from 'ionic-native';
 
 import { ResponseListPage } from '../response-list/response-list';
 import { ResponseAddPage } from '../response-add/response-add';
@@ -40,6 +41,10 @@ export class DeploymentDetailsPage {
 
     ionViewWillEnter() {
       console.log("Deployment Details ionViewWillEnter");
+      this.platform.ready().then(() => {
+        StatusBar.styleLightContent();
+        StatusBar.backgroundColorByHexString('#3f4751');
+      });
       this.token = this.navParams.get('token');
       this.deployment = this.navParams.get("deployment");
       if (this.token) {

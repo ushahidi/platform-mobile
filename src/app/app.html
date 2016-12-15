@@ -17,8 +17,8 @@
     <ion-list *ngIf="deployments">
       <ion-item [class.selected]="deployment.url == _deployment.url" menuClose
                 (click)="showDeployment(_deployment)" *ngFor="let _deployment of deployments">
-        <h2>{{_deployment.name}}</h2>
-        <p>{{_deployment.subdomain}}.{{_deployment.domain}}</p>
+        <div class="name">{{_deployment.name}}</div>
+        <div class="domain">{{_deployment.subdomain}}.{{_deployment.domain}}</div>
       </ion-item>
     </ion-list>
   </ion-content>

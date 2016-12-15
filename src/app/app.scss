@@ -6,21 +6,28 @@ ion-menu {
         width: 100%;
       }
       button {
-        font-weight: bold;
+        font-weight: 600;
       }
     }
   }
-  ion-item {
-    h2 {
-      font-weight: 600;
-    }
-    p {
-      font-weight: 400;
-    }
-    &.selected {
-      background-color: #eeeeee;
-      h2 {
-        color: #5b95bf;
+  ion-list {
+    ion-item {
+      .name {
+        font-weight: 600;
+        font-size: 16px;
+        color: #3c3c3c;
+        padding-bottom: 4px;
+      }
+      .domain {
+        font-weight: 400;
+        font-size: 14px;
+        color: #767676;
+      }
+      &.selected {
+        background-color: #eeeeee;
+        .name {
+          color: #2f77b0;
+        }
       }
     }
   }
