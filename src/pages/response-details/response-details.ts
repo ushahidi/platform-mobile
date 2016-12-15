@@ -14,6 +14,7 @@ import { ApiService } from '../../providers/api-service';
 })
 export class ResponseDetailsPage {
 
+  color: string = "#cccccc";
   token: string = null;
   deployment: any;
   response: any;
@@ -44,6 +45,7 @@ export class ResponseDetailsPage {
     this.deployment = this.navParams.get("deployment");
     this.response = this.navParams.get("response");
     this.form = this.navParams.get("form");
+    this.color = this.form.color;
   }
 
   ionViewDidEnter() {
