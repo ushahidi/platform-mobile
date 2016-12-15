@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, NgZone } from '@angular/core';
 import { Nav, Platform, ModalController } from 'ionic-angular';
 import { StatusBar, Splashscreen } from 'ionic-native';
 
@@ -23,15 +23,18 @@ export class MyApp {
 
   @ViewChild(Nav) nav: Nav;
 
+  zone: any;
   rootPage: any = null;
   deployment : any = null;
-  deployments: any = [];
+  deployments: any = null;
 
   constructor(
+    zone: NgZone,
     public platform: Platform,
     public api:ApiService,
     public database:DatabaseService,
     public modalController: ModalController) {
+    this.zone = zone;
     platform.ready().then(() => {
       console.log(`App Platform Ready ${this.platform.platforms()}`);
       StatusBar.styleDefault();
@@ -58,7 +61,12 @@ export class MyApp {
     console.log("App menuOpen");
     this.database.getDeployments().then(results => {
       console.log(`App Deployments ${JSON.stringify(results)}`);
-      this.deployments = <any[]>results;
+      this.zone.run(() => {
+        this.deployments = <any[]>results;
+        if (this.deployment == null) {
+          this.deployment = this.deployments[0];
+        }
+      });
     });
   }
 
