@@ -63,19 +63,21 @@ export class ResponseAddPage {
   }
 
   changeLocation(event) {
-    console.log("Response Add changeLocation");
+    console.log(`Response Add changeLocation ${JSON.stringify(event)}`);
     let modal = this.modalController.create(
       ResponseMapPage,
       { latitude: event['latitude'],
-        longitude: event['longitude'] });
+        longitude: event['longitude'] },
+      { showBackdrop: false,
+        enableBackdropDismiss: false });
     modal.onDidDismiss(data => {
-      console.log(`Modal ${JSON.stringify(data)}`);
+      console.log(`Response Add Modal ${JSON.stringify(data)}`);
     });
     modal.present();
   }
 
-  doCancel(event) {
-    console.log("Response Add doCancel");
+  onCancel(event) {
+    console.log("Response Add onCancel");
     this.viewController.dismiss();
   }
 

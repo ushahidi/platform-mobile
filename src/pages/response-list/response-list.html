@@ -18,12 +18,12 @@
   </ion-navbar>
 </ion-header>
 <ion-content class="page-response-list">
-  <ion-fab bottom right *ngIf="responses && responses.length > 0">
-    <button ion-fab mini color="primary" (click)="addResponse($event)">
-      <ion-icon ios="md-add" md="md-add"></ion-icon>
-    </button>
-  </ion-fab>
   <div class="list" *ngIf="view == 'list'">
+    <ion-fab bottom right *ngIf="responses && responses.length > 0">
+      <button ion-fab mini color="primary" (click)="addResponse($event)">
+        <ion-icon ios="md-add" md="md-add"></ion-icon>
+      </button>
+    </ion-fab>
     <ion-refresher (ionRefresh)="loadPosts(false, $event)">
       <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
@@ -47,5 +47,10 @@
   </div>
   <div class="map" *ngIf="view == 'map'">
     <div #map id="map"></div>
+    <ion-fab bottom right *ngIf="responses && responses.length > 0">
+      <button ion-fab mini color="primary" (click)="addResponse($event)">
+        <ion-icon ios="md-add" md="md-add"></ion-icon>
+      </button>
+    </ion-fab>
   </div>
 </ion-content>

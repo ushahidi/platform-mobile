@@ -8,8 +8,8 @@ import { GoogleMap, GoogleMapsEvent, GoogleMapsLatLng, GoogleMapsLatLngBounds, C
 })
 export class ResponseMapPage {
 
-  latitude: Number;
-  longitude: Number;
+  latitude: number;
+  longitude: number;
   map: GoogleMap = null;
 
   constructor(
@@ -52,13 +52,26 @@ export class ResponseMapPage {
     console.log(`Response Map showMap ${attempts}`);
     let element: HTMLElement = document.getElementById('map');
     if (element) {
-      if (this.map) {
-        this.map.remove();
-      }
       this.map = new GoogleMap(element,
         { 'backgroundColor': '#e7e9ec' });
       this.map.one(GoogleMapsEvent.MAP_READY).then(() => {
         console.log('Deployment List Map Ready');
+        if (this.latitude && this.longitude) {
+          let location = new GoogleMapsLatLng(this.latitude, this.longitude);
+          let position: CameraPosition = {
+            target: location,
+            zoom: 16
+          };
+          this.map.moveCamera(position);
+          let markerOptions: GoogleMapsMarkerOptions = {
+            position: location,
+            title: 'My Location'
+          };
+          this.map.addMarker(markerOptions).then(
+            (marker) => {
+              marker.showInfoWindow();
+            });
+        }
       });
     }
     else {

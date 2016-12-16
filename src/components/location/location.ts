@@ -34,7 +34,7 @@ export class LocationComponent {
         this.longitude = position.coords.longitude;
         this.mapImage = `https://maps.googleapis.com/maps/api/staticmap`
           + `?center=${this.latitude},${this.longitude}`
-          + `&zoom=16&size=600x400&maptype=roadmap&markers=color:red%7Clabel:S%7C`
+          + `&zoom=15&size=300x200&maptype=roadmap&markers=color:red%7C`
           + `${this.latitude},${this.longitude}&key=${this.key}`;
       },
       (error) => {

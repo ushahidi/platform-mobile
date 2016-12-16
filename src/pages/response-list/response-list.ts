@@ -49,7 +49,7 @@ export class ResponseListPage {
     this.token = this.navParams.get("token");
     this.deployment = this.navParams.get("deployment");
     this.forms = this.navParams.get("forms");
-    this.responses = [];
+    this.loadPosts();
   }
 
   ionViewDidEnter() {
