@@ -1,0 +1,18 @@
+<ion-header>
+  <ion-navbar color="dark">
+    <ion-buttons start>
+      <button #cancel ion-button icon-only (click)="onCancel($event)">
+        <ion-icon ios="md-close" md="md-close"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title>Location</ion-title>
+    <ion-buttons end>
+      <button #cancel ion-button icon-only (click)="onDone($event)">
+        <ion-icon ios="md-checkmark" md="md-checkmark"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+<ion-content class="page-response-map">
+  <div #map id="map"></div>
+</ion-content>

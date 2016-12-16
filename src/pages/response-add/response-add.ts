@@ -1,8 +1,10 @@
 import { Component, ViewChild } from '@angular/core';
 import { Platform, NavParams, NavController, Button,
-        LoadingController, ToastController, AlertController, ViewController } from 'ionic-angular';
+        LoadingController, ToastController, AlertController, ViewController, ModalController } from 'ionic-angular';
 
 import { ApiService } from '../../providers/api-service';
+
+import { ResponseMapPage } from '../response-map/response-map';
 
 import { CheckboxComponent } from '../../components/checkbox/checkbox';
 import { CheckboxesComponent } from '../../components/checkboxes/checkboxes';
@@ -39,6 +41,7 @@ export class ResponseAddPage {
     public toastController: ToastController,
     public alertController: AlertController,
     public viewController: ViewController,
+    public modalController: ModalController,
     public loadingController:LoadingController) {
 
   }
@@ -57,6 +60,18 @@ export class ResponseAddPage {
 
   ionViewDidEnter() {
     console.log("Response Add ionViewDidEnter");
+  }
+
+  changeLocation(event) {
+    console.log("Response Add changeLocation");
+    let modal = this.modalController.create(
+      ResponseMapPage,
+      { latitude: event['latitude'],
+        longitude: event['longitude'] });
+    modal.onDidDismiss(data => {
+      console.log(`Modal ${JSON.stringify(data)}`);
+    });
+    modal.present();
   }
 
   doCancel(event) {

@@ -22,7 +22,7 @@
         <field-date [attribute]="attribute" *ngIf="attribute.input == 'date'"></field-date>
         <field-datetime [attribute]="attribute" *ngIf="attribute.input == 'datetime'"></field-datetime>
         <field-image [attribute]="attribute" *ngIf="attribute.input == 'upload'"></field-image>
-        <field-location [attribute]="attribute" *ngIf="attribute.input == 'location'"></field-location>
+        <field-location [attribute]="attribute" *ngIf="attribute.input == 'location'" (changeLocation)="changeLocation($event)"></field-location>
         <field-number [attribute]="attribute" *ngIf="attribute.input == 'number'"></field-number>
         <field-radio [attribute]="attribute" *ngIf="attribute.input == 'radio'"></field-radio>
         <field-select [attribute]="attribute" *ngIf="attribute.input == 'select'"></field-select>

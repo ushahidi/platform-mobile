@@ -16,6 +16,7 @@ import { ResponseListPage } from '../pages/response-list/response-list';
 import { ResponseDetailsPage } from '../pages/response-details/response-details';
 import { ResponseAddPage } from '../pages/response-add/response-add';
 import { ResponseEditPage } from '../pages/response-edit/response-edit';
+import { ResponseMapPage } from '../pages/response-map/response-map';
 
 import { CheckboxComponent } from '../components/checkbox/checkbox';
 import { CheckboxesComponent } from '../components/checkboxes/checkboxes';
@@ -49,6 +50,7 @@ import { DatabaseService } from '../providers/database-service';
     ResponseDetailsPage,
     ResponseAddPage,
     ResponseEditPage,
+    ResponseMapPage,
     CheckboxComponent,
     CheckboxesComponent,
     DateComponent,
@@ -80,7 +82,8 @@ import { DatabaseService } from '../providers/database-service';
     ResponseListPage,
     ResponseDetailsPage,
     ResponseAddPage,
-    ResponseEditPage
+    ResponseEditPage,
+    ResponseMapPage
   ],
   providers: [ Storage, ApiService, DatabaseService, {provide: ErrorHandler, useClass: IonicErrorHandler} ]
 })

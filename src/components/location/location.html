@@ -1,4 +1,13 @@
 <ion-item>
   <ion-icon ios="ios-pin" md="md-pin" color="grey" item-left></ion-icon>
-  <ion-input #location type="text" [placeholder]="attribute.label" disabled="true"></ion-input>
+  <ion-label>{{attribute.label}}</ion-label>
+</ion-item>
+<ion-item>
+  <ion-icon ios="ios-pin" md="md-pin" color="white" item-left></ion-icon>
+  <ion-card class="card-button" *ngIf="mapImage != null" (click)="mapClicked($event)">
+    <img full [src]="mapImage" />
+  </ion-card>
+  <ion-card class="card-button" *ngIf="mapImage == null" (click)="mapClicked($event)">
+    <img full [src]="mapPlaceholder" />
+  </ion-card>
 </ion-item>
