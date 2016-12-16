@@ -99,16 +99,14 @@ export class ResponseListPage {
     console.log("Deployment Details addResponse");
     let buttons = [];
     if (this.forms) {
-      for (var i = 0; i <= this.forms.length; i++){
+      for (var i = 0; i < this.forms.length; i++){
         let form = this.forms[i];
-        if (form) {
-          buttons.push({
-            text: form.name,
-            handler: () => {
-              console.log(`Deployment Details Form ${form.name} Selected`);
-              this.showResponseAdd(form);
-          }});
-        }
+        buttons.push({
+          text: form.name,
+          handler: () => {
+            console.log(`Deployment Details Form ${form.name} Selected`);
+            this.showResponseAdd(form);
+        }});
       }
     }
     buttons.push({
@@ -154,8 +152,7 @@ export class ResponseListPage {
   showOptions(event, response) {
     console.log("Deployment List showOptions");
     let actionSheet = this.actionController.create({
-    //  title: 'Response options',
-     buttons: [
+    buttons: [
        {
          text: 'Edit',
          handler: () => {

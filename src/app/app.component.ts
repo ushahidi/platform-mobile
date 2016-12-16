@@ -143,7 +143,12 @@ export class MyApp {
       content: "Removing..."
     });
     loading.present();
-    this.database.removeDeployment(deployment.id).then(
+    let promises = [
+      this.database.removeAttributes(deployment.id),
+      this.database.removeForms(deployment.id),
+      this.database.removePosts(deployment.id),
+      this.database.removeDeployment(deployment.id)];
+    Promise.all(promises).then(
       (results) => {
         this.database.getDeployments().then(results => {
           loading.dismiss();

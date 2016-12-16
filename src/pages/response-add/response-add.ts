@@ -3,6 +3,7 @@ import { Platform, NavParams, NavController, Button,
         LoadingController, ToastController, AlertController, ViewController, ModalController } from 'ionic-angular';
 
 import { ApiService } from '../../providers/api-service';
+import { DatabaseService } from '../../providers/database-service';
 
 import { ResponseMapPage } from '../response-map/response-map';
 
@@ -22,7 +23,8 @@ import { VideoComponent } from '../../components/video/video';
 @Component({
   selector: 'page-response-add',
   templateUrl: 'response-add.html',
-  providers: [ ApiService ]
+  providers: [ ApiService, DatabaseService ],
+  entryComponents:[ ResponseMapPage ]
 })
 export class ResponseAddPage {
 
@@ -30,12 +32,15 @@ export class ResponseAddPage {
   token: string = null;
   deployment: any;
   form: any;
+  attributes: any;
+  response:any = null;
 
   @ViewChild('submit') submit: Button;
 
   constructor(
     public platform:Platform,
     public api:ApiService,
+    public database:DatabaseService,
     public navParams: NavParams,
     public navController:NavController,
     public toastController: ToastController,
@@ -55,6 +60,7 @@ export class ResponseAddPage {
     this.token = this.navParams.get("token");
     this.deployment = this.navParams.get("deployment");
     this.form = this.navParams.get("form");
+    this.attributes = this.navParams.get("attributes");
     this.color = this.form.color;
   }
 

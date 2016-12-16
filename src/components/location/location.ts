@@ -1,5 +1,4 @@
-import { Component, ViewChild, Output, EventEmitter } from '@angular/core';
-import { Button, TextInput } from 'ionic-angular';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { Geolocation } from 'ionic-native';
 
 @Component({

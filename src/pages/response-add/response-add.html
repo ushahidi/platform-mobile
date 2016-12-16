@@ -14,9 +14,9 @@
   </ion-navbar>
 </ion-header>
 <ion-content [style.border-left-color]="color" class="page-response-add">
-  <div *ngIf="form">
+  <div *ngIf="attributes">
     <ion-list>
-      <div padding-top *ngFor="let attribute of form.attributes">
+      <div padding-top *ngFor="let attribute of attributes">
         <field-checkbox [attribute]="attribute" *ngIf="attribute.input == 'checkbox'"></field-checkbox>
         <field-checkboxes [attribute]="attribute" *ngIf="attribute.input == 'checkboxes'"></field-checkboxes>
         <field-date [attribute]="attribute" *ngIf="attribute.input == 'date'"></field-date>

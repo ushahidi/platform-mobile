@@ -1,34 +1,42 @@
 import { Component, ViewChild } from '@angular/core';
 import { Platform, NavParams, NavController, TextInput, Button,
-        LoadingController, ToastController, AlertController, ViewController } from 'ionic-angular';
+        LoadingController, ToastController, AlertController, ViewController, ModalController } from 'ionic-angular';
 
 import { ApiService } from '../../providers/api-service';
+import { DatabaseService } from '../../providers/database-service';
+
+import { ResponseMapPage } from '../response-map/response-map';
 
 @Component({
   selector: 'page-response-edit',
   templateUrl: 'response-edit.html',
-  providers: [ ApiService ]
+  providers: [ ApiService, DatabaseService ],
+  entryComponents:[ ResponseMapPage ]
 })
 export class ResponseEditPage {
 
   color: string = "#cccccc";
   token: string = null;
   deployment: any;
-  response: any;
   form: any;
+  attributes: any;
+  response:any = null;
 
-  @ViewChild('title') title: TextInput;
-  @ViewChild('content') content: TextInput;
+  @ViewChild('submit') submit: Button;
 
   constructor(
     public platform:Platform,
     public api:ApiService,
+    public database:DatabaseService,
     public navParams: NavParams,
     public navController:NavController,
     public toastController: ToastController,
     public alertController: AlertController,
     public viewController: ViewController,
-    public loadingController:LoadingController) {}
+    public modalController: ModalController,
+    public loadingController:LoadingController) {
+
+  }
 
   ionViewDidLoad() {
     console.log('Response Edit ionViewDidLoad');
@@ -40,6 +48,7 @@ export class ResponseEditPage {
     this.deployment = this.navParams.get("deployment");
     this.response = this.navParams.get("response");
     this.form = this.navParams.get("form");
+    this.attributes = this.navParams.get("attributes");
     this.color = this.form.color;
   }
 
@@ -47,9 +56,23 @@ export class ResponseEditPage {
     console.log("Response Edit ionViewDidEnter");
   }
 
-  doCancel(event) {
-    console.log("Response Edit doCancel");
+  onCancel(event) {
+    console.log("Response Edit onCancel");
     this.viewController.dismiss();
+  }
+
+  changeLocation(event) {
+    console.log(`Response Add changeLocation ${JSON.stringify(event)}`);
+    let modal = this.modalController.create(
+      ResponseMapPage,
+      { latitude: event['latitude'],
+        longitude: event['longitude'] },
+      { showBackdrop: false,
+        enableBackdropDismiss: false });
+    modal.onDidDismiss(data => {
+      console.log(`Response Add Modal ${JSON.stringify(data)}`);
+    });
+    modal.present();
   }
 
   updateResponse(event) {
@@ -57,8 +80,8 @@ export class ResponseEditPage {
     let host = this.deployment.url;
     let token = this.token;
     let id = this.response.id;
-    let title = this.title.value.toString();
-    let content = this.content.value.toString();
+    let title = "";
+    let content = "";
     let loading = this.loadingController.create({
       content: "Updating..."
     });

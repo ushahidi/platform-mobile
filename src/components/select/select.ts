@@ -9,10 +9,25 @@ import { Select } from 'ionic-angular';
 export class SelectComponent {
 
   attribute: any = {};
+  options: any = [];
 
   @ViewChild('select') select: Select;
 
   constructor() {
+  }
+
+  ngOnInit() {
+    if (this.attribute.options) {
+      if (Array.isArray(this.attribute.options)) {
+        this.options = this.attribute.options;
+      }
+      else {
+        this.options = this.attribute.options.split(',');
+      }
+    }
+    else {
+      this.options = [];
+    }
   }
 
 }

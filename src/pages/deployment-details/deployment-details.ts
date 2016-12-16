@@ -18,8 +18,8 @@ export class DeploymentDetailsPage {
 
   token: string = null;
   deployment: any;
-  site: any;
   forms: any;
+  attributes: any;
   offset: number = 1000;
   placeholder: string = "assets/images/placeholder-photo.jpg";
 
@@ -47,25 +47,101 @@ export class DeploymentDetailsPage {
       });
       this.token = this.navParams.get('token');
       this.deployment = this.navParams.get("deployment");
-      if (this.token) {
-        this.loadDeployment();
-        this.loadForms();
-      }
+      this.loadUpdates(null, true);
     }
 
     ionViewDidEnter() {
       console.log(`Deployment Details ionViewDidEnter`);
     }
 
-    loadUpdates(event) {
+    loadUpdates(event:any=null, cache:boolean=false) {
       console.log("Response Details loadUpdates");
-      this.loadDeployment().then(results => {
-        console.log("Response Details loadDeployment DONE");
-        this.loadForms().then(results => {
-          console.log("Response Details loadForms DONE");
+      let promises = [
+        this.loadDeployment(cache),
+        this.loadForms(cache),
+        this.loadAttributes(cache)];
+      Promise.all(promises).then(done => {
+        if (event) {
           event.complete();
-        });
+        }
       });
+    }
+
+    loadDeployment(cache:boolean=true) {
+      console.log(`Deployment Details loadDeployment ${cache?'CACHED':'REFRESH'}`);
+      if (cache && this.deployment.image != null && this.deployment.description != null) {
+        return this.database.getDeployment(this.deployment.id).then(results => {
+          console.log(`Deployment Details Deployment ${JSON.stringify(results)}`);
+          this.deployment = results[0];
+        });
+      }
+      else {
+        return this.api.getDeployment(this.deployment.url, this.token).then(results => {
+          console.log(`Deployment Details Site ${JSON.stringify(results)}`);
+          this.deployment.image = results['image_header'];
+          this.deployment.description = results['description'];
+          let changes = {
+            image: results['image_header'],
+            description: results['description'] };
+          this.database.updateDeployment(this.deployment.id, changes).then(
+            (results) => {
+              console.log(`Deployment Details Update Deployment ${results}`);
+            },
+            (error) => {
+              console.error(`Deployment Details Update Deployment ${error}`);
+            });
+        });
+      }
+    }
+
+    loadForms(cache:boolean=true) {
+      console.log(`Deployment Details loadForms ${cache?'CACHED':'REFRESH'}`);
+      if (cache && this.forms) {
+        return this.database.getForms(this.deployment.id).then(results => {
+          console.log(`Deployment Details Forms ${JSON.stringify(results)}`);
+          this.forms = <any[]>results;
+        });
+      }
+      else {
+        return this.api.getForms(this.deployment.url, this.token).then(
+          (results) => {
+            let forms = <any[]>results;
+            console.log(`Deployment Details Forms ${JSON.stringify(forms)}`);
+            for (var i = 0; i < forms.length; i++){
+              let form = forms[i];
+              this.database.addForm(this.deployment.id, form);
+            }
+            this.forms = forms;
+          },
+          (error) => {
+            console.error(`Deployment Details Forms ${JSON.stringify(error)}`);
+          });
+      }
+    }
+
+    loadAttributes(cache:boolean=true) {
+      console.log(`Deployment Details loadAttributes ${cache?'CACHED':'REFRESH'}`);
+      if (cache && this.attributes) {
+        // return this.database.getAttributes(this.deployment.id).then(results => {
+        //   console.log(`Deployment Details Forms ${JSON.stringify(results)}`);
+        //   this.forms = <any[]>results;
+        // });
+      }
+      else {
+        return this.api.getAttributes(this.deployment.url, this.token).then(
+          (results) => {
+            let attributes = <any[]>results;
+            console.log(`Deployment Details Attributes ${JSON.stringify(attributes)}`);
+            for (var i = 0; i < attributes.length; i++){
+              let attribute = attributes[i];
+              this.database.addAttribute(this.deployment.id, attribute);
+            }
+            this.attributes = attributes;
+          },
+          (error) => {
+            console.error(`Deployment Details Attributes ${JSON.stringify(error)}`);
+          });
+      }
     }
 
     showResponses(event) {
@@ -95,40 +171,23 @@ export class DeploymentDetailsPage {
       toast.present();
     }
 
-    loadDeployment() {
-      return this.api.getConfigSite(this.deployment.url, this.token).then(results => {
-        console.log(`Deployment Details Site ${JSON.stringify(results)}`);
-        this.site = results;
-      });
-    }
-
-    loadForms() {
-      return this.api.getFormsWithAttributes(this.deployment.url, this.token).then(results => {
-        let forms = <any[]>results;
-        console.log(`Deployment Details Forms ${JSON.stringify(forms)}`);
-        this.forms = forms;
-      });
-    }
-
     addResponse(event) {
       console.log("Deployment Details addResponse");
       let buttons = [];
       if (this.forms) {
-        for (var i = 0; i <= this.forms.length; i++){
+        for (var i = 0; i < this.forms.length; i++){
           let form = this.forms[i];
-          if (form) {
-            buttons.push({
-              text: form.name,
-              handler: () => {
-                console.log(`Deployment Details Form ${form.name} Selected`);
-                this.showResponseAdd(form);
-            }});
-          }
+          buttons.push({
+            text: form.name,
+            handler: () => {
+              console.log(`Deployment Details Form ${form.name} Selected`);
+              this.showResponseAdd(form);
+          }});
         }
       }
       buttons.push({
         text: 'Cancel',
-        role: 'cancel'});
+        role: 'cancel' });
       let actionSheet = this.actionController.create({
         title: 'Submit a survey response',
         buttons: buttons
@@ -137,14 +196,20 @@ export class DeploymentDetailsPage {
     }
 
     showResponseAdd(form) {
-      let modal = this.modalController.create(
-        ResponseAddPage,
-        { token: this.token,
-          form: form,
-          deployment: this.deployment });
-      modal.present();
-      modal.onDidDismiss(data => {
-
+      console.log(`Response Details showResponseAdd Form ${JSON.stringify(form)}`);
+      this.database.getAttributes(this.deployment.id, form.id).then(results => {
+        console.log(`Response Details showResponseAdd Attributes ${JSON.stringify(results)}`);
+        let attributes = <any[]>results;
+        let modal = this.modalController.create(
+          ResponseAddPage,
+          { token: this.token,
+            form: form,
+            attributes: attributes,
+            deployment: this.deployment });
+        modal.present();
+        modal.onDidDismiss(data => {
+          console.log(`Response Details Modal ${JSON.stringify(data)}`);
+        });
       });
     }
 

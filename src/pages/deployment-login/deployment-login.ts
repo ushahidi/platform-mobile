@@ -18,8 +18,8 @@ export class DeploymentLoginPage {
 
   deployment: any;
 
-  @ViewChild('cancel') cancel: Button;
   @ViewChild('login') login: Button;
+  @ViewChild('cancel') cancel: Button;
 
   @ViewChild('username') username: TextInput;
   @ViewChild('password') password: TextInput;
@@ -52,12 +52,14 @@ export class DeploymentLoginPage {
         this.username.value = this.deployment.username;
       }
       else if (this.deployment.subdomain == 'dale') {
+        //TODO remove this later, hardcoded to speed up development
         this.username.value = "dalezak@gmail.com";
       }
       if (this.deployment.password) {
         this.password.value = this.deployment.password;
       }
       else if (this.deployment.subdomain == 'dale') {
+        //TODO remove this later, hardcoded to speed up development
         this.password.value = "P4NpCNUqLTCnvJAQBBMX";
       }
     }
@@ -66,13 +68,13 @@ export class DeploymentLoginPage {
       console.log("Deployment Login ionViewDidEnter");
     }
 
-    doCancel(event) {
-      console.log("Deployment Login doCancel");
+    onCancel(event) {
+      console.log("Deployment Login onCancel");
       this.viewController.dismiss();
     }
 
-    doLogin(event) {
-      console.log("Deployment Login doLogin");
+    onLogin(event) {
+      console.log("Deployment Login onLogin");
       let host = this.deployment.url;
       let username = this.username.value.toString();
       let password = this.password.value.toString();

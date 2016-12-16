@@ -43,8 +43,8 @@ export class DeploymentAddPage {
     });
   }
 
-  doCancel(event) {
-    console.log("Deployment Add doCancel");
+  onCancel(event) {
+    console.log("Deployment Add onCancel");
     this.viewController.dismiss();
   }
 
@@ -78,8 +78,8 @@ export class DeploymentAddPage {
       content: "Adding..."
     });
     loading.present();
-    this.database.getDeploymentBySubdomain(deployment.subdomain).then(existing => {
-      let deployments = <any[]>existing;
+    this.database.getDeploymentBySubdomain(deployment.subdomain).then(results => {
+      let deployments = <any[]>results;
       if (deployments && deployments.length > 0) {
         loading.dismiss();
         let alert = this.alertController.create({

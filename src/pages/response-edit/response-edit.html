@@ -1,7 +1,7 @@
 <ion-header>
   <ion-navbar color="dark">
     <ion-buttons start>
-      <button #cancel ion-button icon-only (click)="doCancel($event)">
+      <button #cancel ion-button icon-only (click)="onCancel($event)">
         <ion-icon ios="md-close" md="md-close"></ion-icon>
       </button>
     </ion-buttons>
@@ -14,22 +14,22 @@
   </ion-navbar>
 </ion-header>
 <ion-content [style.border-left-color]="color" class="page-response-edit">
-  <div *ngIf="form">
+  <div *ngIf="attributes">
     <ion-list>
-      <ion-item *ngFor="let attribute of form.attributes">
+      <div padding-top *ngFor="let attribute of attributes">
         <field-checkbox [attribute]="attribute" *ngIf="attribute.input == 'checkbox'"></field-checkbox>
         <field-checkboxes [attribute]="attribute" *ngIf="attribute.input == 'checkboxes'"></field-checkboxes>
         <field-date [attribute]="attribute" *ngIf="attribute.input == 'date'"></field-date>
         <field-datetime [attribute]="attribute" *ngIf="attribute.input == 'datetime'"></field-datetime>
         <field-image [attribute]="attribute" *ngIf="attribute.input == 'upload'"></field-image>
-        <field-location [attribute]="attribute" *ngIf="attribute.input == 'location'"></field-location>
+        <field-location [attribute]="attribute" *ngIf="attribute.input == 'location'" (changeLocation)="changeLocation($event)"></field-location>
         <field-number [attribute]="attribute" *ngIf="attribute.input == 'number'"></field-number>
         <field-radio [attribute]="attribute" *ngIf="attribute.input == 'radio'"></field-radio>
         <field-select [attribute]="attribute" *ngIf="attribute.input == 'select'"></field-select>
         <field-text [attribute]="attribute" *ngIf="attribute.input == 'varchar'"></field-text>
         <field-textarea [attribute]="attribute" *ngIf="attribute.input == 'text'"></field-textarea>
         <field-video [attribute]="attribute" *ngIf="attribute.input == 'video'"></field-video>
-      </ion-item>
+      </div>
     </ion-list>
   </div>
 </ion-content>

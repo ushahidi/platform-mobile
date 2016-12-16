@@ -9,10 +9,25 @@ import { RadioGroup } from 'ionic-angular';
 export class RadioComponent {
 
   attribute: any = {};
+  options: any = [];
 
   @ViewChild('radio') radio: RadioGroup;
 
   constructor() {
+  }
+
+  ngOnInit() {
+    if (this.attribute.options) {
+      if (Array.isArray(this.attribute.options)) {
+        this.options = this.attribute.options;
+      }
+      else {
+        this.options = this.attribute.options.split(',');
+      }
+    }
+    else {
+      this.options = [];
+    }
   }
 
 }

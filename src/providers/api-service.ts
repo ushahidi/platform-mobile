@@ -8,8 +8,6 @@ import 'rxjs/add/operator/timeout';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/mergeMap';
 
-import { DatabaseService } from './database-service';
-
 @Injectable()
 export class ApiService {
 
@@ -18,8 +16,7 @@ export class ApiService {
 
   constructor(
     public platform:Platform,
-    public http: Http,
-    public database: DatabaseService) {
+    public http: Http) {
     this.clientId = "ushahidiui";
     this.clientSecret = "35e7f0bca957836d05ca0492211b0ac707671261";
   }
@@ -126,7 +123,7 @@ export class ApiService {
     });
   }
 
-  getConfigSite(host:string, token:string) {
+  getDeployment(host:string, token:string) {
     return new Promise((resolve, reject) => {
       let api = "/api/v3/config/";
       let params = new URLSearchParams();
@@ -143,7 +140,7 @@ export class ApiService {
             for (let i = 0; i < results.length; i++) {
               let item = results[i];
               if (item.id == 'site') {
-                console.log(`API GET Site ${item}`);
+                console.log(`API GET Site ${JSON.stringify(item)}`);
                 resolve(item);
               }
             }
@@ -333,23 +330,19 @@ export class ApiService {
         console.log(`API Forms ${JSON.stringify(forms)}`);
         let attributes = <any[]>results[1];
         console.log(`API Attributes ${JSON.stringify(attributes)}`);
-        for (var i = 0; i <= forms.length; i++){
+        for (var i = 0; i < forms.length; i++){
           let form = forms[i];
-          if (form) {
-            form.attributes = [];
-            for (var j = 0; j <= attributes.length; j++){
-              let attribute = attributes[j];
-              if (attribute) {
-                console.log(`API Attribute ${JSON.stringify(attribute)}`);
-                if (form.id == attribute.form_stage_id) {
-                  form.attributes.push(attribute);
-                }
-              }
+          form.attributes = [];
+          for (var j = 0; j < attributes.length; j++){
+            let attribute = attributes[j];
+            console.log(`API Attribute ${JSON.stringify(attribute)}`);
+            if (form.id == attribute.form_stage_id) {
+              form.attributes.push(attribute);
             }
-            form.attributes = form.attributes.sort(function(a, b){
-              return a.cardinality - b.cardinality;
-            });
           }
+          form.attributes = form.attributes.sort(function(a, b){
+            return a.cardinality - b.cardinality;
+          });
         }
         return forms;
       });

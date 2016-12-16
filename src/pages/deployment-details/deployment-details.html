@@ -17,14 +17,14 @@
   <ion-refresher (ionRefresh)="loadUpdates($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  <div *ngIf="site">
-    <div class="header" *ngIf="site.name">
-      <h4 text-center padding-top padding-bottom>{{site.name}}</h4>
+  <div *ngIf="deployment">
+    <div class="header" *ngIf="deployment.name">
+      <h4 text-center padding-top padding-bottom>{{deployment.name}}</h4>
     </div>
-    <div class="image" *ngIf="site.image_header">
-      <img padding [src]="placeholder" [lazyLoad]="site.image_header" [offset]="offset">
+    <div class="image" *ngIf="deployment.image">
+      <img padding [src]="placeholder" [lazyLoad]="deployment.image" [offset]="offset">
     </div>
-    <p padding-left padding-right *ngIf="site.description">{{site.description}}</p>
+    <p padding-left padding-right *ngIf="deployment.description">{{deployment.description}}</p>
     <div padding-top padding-left padding-right padding-bottom margin-bottom>
       <button ion-button block text-uppercase color="primary"
             (click)="addResponse($event)">Submit A Survey Response</button>

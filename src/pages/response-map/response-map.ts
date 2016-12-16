@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Platform, NavParams, NavController, LoadingController, ToastController, AlertController, ViewController, ModalController } from 'ionic-angular';
-import { GoogleMap, GoogleMapsEvent, GoogleMapsLatLng, GoogleMapsLatLngBounds, CameraPosition, GoogleMapsMarkerOptions, GoogleMapsMarker } from 'ionic-native';
+import { GoogleMap, GoogleMapsEvent, GoogleMapsLatLng, CameraPosition, GoogleMapsMarkerOptions, GoogleMapsMarker } from 'ionic-native';
 
 @Component({
   selector: 'page-response-map',
