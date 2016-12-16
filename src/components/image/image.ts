@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Button } from 'ionic-angular';
+import { Button, ActionSheetController, AlertController } from 'ionic-angular';
 import { Camera } from 'ionic-native';
 
 @Component({
@@ -10,22 +10,84 @@ import { Camera } from 'ionic-native';
 export class ImageComponent {
 
   attribute: any = {};
-  base64Image: string;
+  imageData: string = null;
+  imagePlaceholder: string;
 
   @ViewChild('button') button: Button;
 
-  constructor() {
+  constructor(
+    public alertController:AlertController,
+    public actionController:ActionSheetController) {
+    this.imagePlaceholder = "/assets/images/placeholder-photo.jpg";
   }
 
-  takePicture() {
-    Camera.getPicture({
-      destinationType: Camera.DestinationType.DATA_URL,
-      targetWidth: 1000,
-      targetHeight: 1000
-    }).then((imageData) => {
-        this.base64Image = "data:image/jpeg;base64," + imageData;
-    }, (err) => {
-        console.log(err);
+  showOptions() {
+    let actionSheet = this.actionController.create({
+      buttons: [
+        {
+          text: 'Take Photo',
+          handler: () => {
+            this.takePhoto();
+          }
+        },
+        {
+          text: 'Photo Library',
+          handler: () => {
+            this.choosePhoto();
+          }
+        },
+        {
+          text: 'Cancel',
+          role: 'cancel'
+        }
+      ]
     });
+    actionSheet.present();
+  }
+
+  choosePhoto() {
+    let options = {
+      targetWidth: 800,
+      targetHeight: 600,
+      encodingType: Camera.EncodingType.JPEG,
+      sourceType: Camera.PictureSourceType.CAMERA,
+      destinationType: Camera.DestinationType.DATA_URL
+    };
+    Camera.getPicture(options).then (
+      (data) => {
+        this.imageData = "data:image/jpeg;base64," + data;
+      },
+      (error) => {
+        console.error(`Camera Choose Photo ${JSON.stringify(error)}`);
+        let alert = this.alertController.create({
+          title: 'Problem Choosing Photo',
+          subTitle: "There was a problem trying to choose photo from the library.",
+          buttons: ['OK']
+        });
+        alert.present();
+      });
+  }
+
+  takePhoto() {
+    let options = {
+      targetWidth: 800,
+      targetHeight: 600,
+      encodingType: Camera.EncodingType.JPEG,
+      sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
+      destinationType: Camera.DestinationType.DATA_URL,
+    };
+    Camera.getPicture(options).then(
+      (data) => {
+        this.imageData = "data:image/jpeg;base64," + data;
+      },
+      (error) => {
+        console.error(`Camera Take Photo ${JSON.stringify(error)}`);
+        let alert = this.alertController.create({
+          title: 'Problem Taking Photo',
+          subTitle: "There was a problem trying to take a photo.",
+          buttons: ['OK']
+        });
+        alert.present();
+      });
   }
 }

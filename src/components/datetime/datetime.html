@@ -1,7 +1,5 @@
-<ion-label>{{attribute.label}}</ion-label>
 <ion-item>
+  <ion-icon ios="ios-time" md="md-time" color="grey" item-left></ion-icon>
+  <ion-input #input type="text" [placeholder]="attribute.label"></ion-input>
   <ion-datetime #date displayFormat="h:mm A" pickerFormat="h mm A"></ion-datetime>
-</ion-item>
-<ion-item>
-  <ion-datetime #time displayFormat="MMMM D, YYYY" pickerFormat="MMMM D YYYY"></ion-datetime>
 </ion-item>

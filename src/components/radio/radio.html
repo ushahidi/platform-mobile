@@ -1,7 +1,11 @@
-<ion-label>{{attribute.label}}</ion-label>
-<div radio-group #radio>
+<ion-item>
+  <ion-icon ios="ios-checkmark-circle" md="md-checkmark-circle" color="grey" item-left></ion-icon>
+  <ion-label>{{attribute.label}}</ion-label>
+</ion-item>
+<ion-list class="radio-group" radio-group #radio>
   <ion-item *ngFor="let option of attribute.options">
+    <ion-icon ios="ios-checkmark-circle" md="md-checkmark-circle" color="white" item-left></ion-icon>
     <ion-label>{{option}}</ion-label>
     <ion-radio value="{{option}}"></ion-radio>
   </ion-item>
-</div>
+</ion-list>

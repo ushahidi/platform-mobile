@@ -1,2 +1,4 @@
-<ion-label>{{attribute.label}}</ion-label>
-<button #button ion-button block text-uppercase color="secondary" (click)="detectLocation()">Detect Location</button>
+<ion-item>
+  <ion-icon ios="ios-pin" md="md-pin" color="grey" item-left></ion-icon>
+  <ion-input #location type="text" [placeholder]="attribute.label" disabled="true"></ion-input>
+</ion-item>

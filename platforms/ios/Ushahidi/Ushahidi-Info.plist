@@ -114,8 +114,14 @@
     <key>Google Maps API Key</key>
     <string>AIzaSyClDqDvu3mRUDwJ7EX438kIRhB0xfRelPM</string>
     <key>NSLocationWhenInUseUsageDescription</key>
-    <string>$NSLocationWhenInUseUsageDescription</string>
+    <string>Detect user's location for survey response</string>
     <key>NSLocationAlwaysUsageDescription</key>
     <string>$NSLocationAlwaysUsageDescription</string>
+    <key>NSCameraUsageDescription</key>
+    <string/>
+    <key>NSMicrophoneUsageDescription</key>
+    <string/>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string/>
   </dict>
 </plist>

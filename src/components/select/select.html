@@ -1,5 +1,6 @@
-<ion-label>{{attribute.label}}</ion-label>
 <ion-item>
+  <ion-icon ios="ios-list-box" md="md-list-box" color="grey" item-left></ion-icon>
+  <ion-label>{{attribute.label}}</ion-label>
   <ion-select #select>
     <ion-option value="{{option}}" *ngFor="let option of attribute.options">{{option}}</ion-option>
   </ion-select>

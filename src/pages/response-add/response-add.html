@@ -16,7 +16,7 @@
 <ion-content [style.border-left-color]="color" class="page-response-add">
   <div *ngIf="form">
     <ion-list>
-      <ion-item *ngFor="let attribute of form.attributes">
+      <div padding-top *ngFor="let attribute of form.attributes">
         <field-checkbox [attribute]="attribute" *ngIf="attribute.input == 'checkbox'"></field-checkbox>
         <field-checkboxes [attribute]="attribute" *ngIf="attribute.input == 'checkboxes'"></field-checkboxes>
         <field-date [attribute]="attribute" *ngIf="attribute.input == 'date'"></field-date>
@@ -30,7 +30,7 @@
         <field-text [attribute]="attribute" *ngIf="attribute.input == 'varchar'"></field-text>
         <field-textarea [attribute]="attribute" *ngIf="attribute.input == 'textarea'"></field-textarea>
         <field-video [attribute]="attribute" *ngIf="attribute.input == 'video'"></field-video>
-      </ion-item>
+      </div>
     </ion-list>
   </div>
 </ion-content>

@@ -9,7 +9,7 @@
     "libsqlite3.dylib": 1,
     "Social.framework": 1,
     "Accelerate.framework": 1,
-    "CoreLocation.framework": 1,
+    "CoreLocation.framework": 2,
     "CoreText.framework": 1,
     "GLKit.framework": 1,
     "ImageIO.framework": 1,

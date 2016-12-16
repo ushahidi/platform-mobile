@@ -15,4 +15,6 @@ export class DateComponent {
   constructor() {
   }
 
+  ngOnInit() {
+  }
 }

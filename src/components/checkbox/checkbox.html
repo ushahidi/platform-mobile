@@ -1,5 +1,9 @@
-<ion-label>{{attribute.label}}</ion-label>
+<ion-item>
+  <ion-icon ios="ios-checkbox" md="md-checkbox" color="grey" item-left></ion-icon>
+  <ion-label>{{attribute.label}}</ion-label>
+</ion-item>
 <ion-item *ngFor="let option of attribute.options">
+  <ion-icon ios="ios-checkbox" md="md-checkbox" color="white" item-left></ion-icon>
   <ion-label>{{option}}</ion-label>
   <ion-checkbox #checkbox></ion-checkbox>
 </ion-item>

@@ -50,6 +50,7 @@
     "cordova-plugin-nativestorage",
     "cordova-plugin-secure-storage",
     "cordova-sqlite-storage",
+    "cordova-plugin-geolocation",
     "ionic-plugin-keyboard"
   ],
   "cordovaPlatforms": [

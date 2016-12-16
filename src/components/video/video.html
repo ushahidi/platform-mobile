@@ -1,2 +1,13 @@
-<ion-label>{{attribute.label}}</ion-label>
-<button #button ion-button block text-uppercase color="secondary" (click)="captureVideo()">Capture Video</button>
+<ion-item>
+  <ion-icon ios="ios-videocam" md="md-videocam" color="grey" item-left></ion-icon>
+  <ion-label>{{attribute.label}}</ion-label>
+</ion-item>
+<ion-item>
+  <ion-icon ios="ios-videocam" md="md-videocam" color="white" item-left></ion-icon>
+  <ion-card class="card-button" *ngIf="videoData != null" (click)="captureVideo()">
+    <img full [src]="videoThumbail" />
+  </ion-card>
+  <ion-card class="card-button" *ngIf="videoData == null" (click)="captureVideo()">
+    <img full [src]="videoPlaceholder" />
+  </ion-card>
+</ion-item>

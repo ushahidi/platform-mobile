@@ -24,10 +24,20 @@
         "cordova-plugin-email": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
+        "cordova-plugin-geolocation": {
+            "PACKAGE_NAME": "com.ushahidi.mobile"
+        },
         "cordova-plugin-google-analytics": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
+        "cordova-plugin-googlemaps": {
+            "API_KEY_FOR_ANDROID": "AIzaSyDAQq5_U1fm1p_lZY2nm6oH0Lc3bG9MOaI",
+            "PACKAGE_NAME": "com.ushahidi.mobile"
+        },
         "cordova-plugin-ios-longpress-fix": {
+            "PACKAGE_NAME": "com.ushahidi.mobile"
+        },
+        "cordova-plugin-media-capture": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
         "cordova-plugin-nativestorage": {
@@ -66,11 +76,17 @@
         },
         "ionic-plugin-keyboard": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
-        },
-        "cordova-plugin-googlemaps": {
-            "API_KEY_FOR_ANDROID": "AIzaSyDAQq5_U1fm1p_lZY2nm6oH0Lc3bG9MOaI",
-            "PACKAGE_NAME": "com.ushahidi.mobile"
         }
     },
-    "dependent_plugins": {}
+    "dependent_plugins": {
+        "com.googlemaps.ios": {
+            "PACKAGE_NAME": "com.ushahidi.mobile"
+        },
+        "cordova-plugin-compat": {
+            "PACKAGE_NAME": "com.ushahidi.mobile"
+        },
+        "cordova-plugin-file": {
+            "PACKAGE_NAME": "com.ushahidi.mobile"
+        }
+    }
 }

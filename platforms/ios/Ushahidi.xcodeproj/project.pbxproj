@@ -85,6 +85,12 @@
 		F60AE99C06AF467C82FC1A3E /* LongPressFix.m in Sources */ = {isa = PBXBuildFile; fileRef = 8B4B3E9C6773432BB491F432 /* LongPressFix.m */; };
 		F6FA337D567B498E83C8C3E2 /* Geocoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 208A830D30B3455CB79A9071 /* Geocoder.m */; };
 		F7D629E07AC54780923D4030 /* AppVersion.m in Sources */ = {isa = PBXBuildFile; fileRef = A96B4D9E19F846D39DF2CBF5 /* AppVersion.m */; };
+		BF81B31B17E245B6B916F98F /* CDVLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = BB1858B133864051A137B5F8 /* CDVLocation.m */; };
+		A667FBE51B18432784B7E9E9 /* CDVFile.m in Sources */ = {isa = PBXBuildFile; fileRef = C13A6EE006444C0CA920857A /* CDVFile.m */; };
+		0492C09F0949408FB8A6770E /* CDVLocalFilesystem.m in Sources */ = {isa = PBXBuildFile; fileRef = 96133E7A59034828BF044B8C /* CDVLocalFilesystem.m */; };
+		C287AA3E661D45389B00FC80 /* CDVAssetLibraryFilesystem.m in Sources */ = {isa = PBXBuildFile; fileRef = E8CB87FE0EFC42CFA8B3B97F /* CDVAssetLibraryFilesystem.m */; };
+		B9BB57F0F1F549B6BE739F64 /* CDVCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A6AEC5E6224460CBC1F89F5 /* CDVCapture.m */; };
+		104C4343F52244B6BEBE78C7 /* CDVCapture.bundle in Resources */ = {isa = PBXBuildFile; fileRef = AE0438B4756A453DB9839808 /* CDVCapture.bundle */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -251,6 +257,17 @@
 		F840E1F0165FE0F500CFE078 /* config.xml */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = config.xml; path = Ushahidi/config.xml; sourceTree = "<group>"; };
 		FE4E7BFCE3CA4049BD353589 /* Polygon.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = Polygon.h; path = "cordova-plugin-googlemaps/Polygon.h"; sourceTree = "<group>"; };
 		FF0A95205EC0434596EE6927 /* SAMKeychain.m */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.objc; name = SAMKeychain.m; path = "cordova-plugin-secure-storage/SAMKeychain.m"; sourceTree = "<group>"; };
+		BB1858B133864051A137B5F8 /* CDVLocation.m */ = {isa = PBXFileReference; name = "CDVLocation.m"; path = "cordova-plugin-geolocation/CDVLocation.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
+		CD94A62BEF8740FBA1CC4237 /* CDVLocation.h */ = {isa = PBXFileReference; name = "CDVLocation.h"; path = "cordova-plugin-geolocation/CDVLocation.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
+		C13A6EE006444C0CA920857A /* CDVFile.m */ = {isa = PBXFileReference; name = "CDVFile.m"; path = "cordova-plugin-file/CDVFile.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
+		96133E7A59034828BF044B8C /* CDVLocalFilesystem.m */ = {isa = PBXFileReference; name = "CDVLocalFilesystem.m"; path = "cordova-plugin-file/CDVLocalFilesystem.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
+		E8CB87FE0EFC42CFA8B3B97F /* CDVAssetLibraryFilesystem.m */ = {isa = PBXFileReference; name = "CDVAssetLibraryFilesystem.m"; path = "cordova-plugin-file/CDVAssetLibraryFilesystem.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
+		DA817A3C2DA0422AB6F327E3 /* CDVFile.h */ = {isa = PBXFileReference; name = "CDVFile.h"; path = "cordova-plugin-file/CDVFile.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
+		DE327A4C7F3E4DA6B5C9BBE5 /* CDVLocalFilesystem.h */ = {isa = PBXFileReference; name = "CDVLocalFilesystem.h"; path = "cordova-plugin-file/CDVLocalFilesystem.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
+		9675A2097A894AB1A67D299B /* CDVAssetLibraryFilesystem.h */ = {isa = PBXFileReference; name = "CDVAssetLibraryFilesystem.h"; path = "cordova-plugin-file/CDVAssetLibraryFilesystem.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
+		9A6AEC5E6224460CBC1F89F5 /* CDVCapture.m */ = {isa = PBXFileReference; name = "CDVCapture.m"; path = "cordova-plugin-media-capture/CDVCapture.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
+		2C646185DD92479BA712CA6A /* CDVCapture.h */ = {isa = PBXFileReference; name = "CDVCapture.h"; path = "cordova-plugin-media-capture/CDVCapture.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
+		AE0438B4756A453DB9839808 /* CDVCapture.bundle */ = {isa = PBXFileReference; name = "CDVCapture.bundle"; path = "CDVCapture.bundle"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.plug-in; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -349,6 +366,7 @@
 				6AFF5BF81D6E424B00AB3073 /* CDVLaunchScreen.storyboard */,
 				8A9EA634A21C4F598A1D8E52 /* SAMKeychain.bundle */,
 				0B6F6393FF574BDBB282633D /* GoogleMaps.bundle */,
+				AE0438B4756A453DB9839808 /* CDVCapture.bundle */,
 			);
 			name = Resources;
 			path = Ushahidi/Resources;
@@ -506,6 +524,16 @@
 				0F5DA1A355124692910BDDF3 /* MyReachability.h */,
 				CB016CF4BFD6473EBCEB3EEF /* MyPluginLayerDebugView.h */,
 				9A2D6A263AFA4447B632926F /* MyPluginScrollView.h */,
+				BB1858B133864051A137B5F8 /* CDVLocation.m */,
+				CD94A62BEF8740FBA1CC4237 /* CDVLocation.h */,
+				C13A6EE006444C0CA920857A /* CDVFile.m */,
+				96133E7A59034828BF044B8C /* CDVLocalFilesystem.m */,
+				E8CB87FE0EFC42CFA8B3B97F /* CDVAssetLibraryFilesystem.m */,
+				DA817A3C2DA0422AB6F327E3 /* CDVFile.h */,
+				DE327A4C7F3E4DA6B5C9BBE5 /* CDVLocalFilesystem.h */,
+				9675A2097A894AB1A67D299B /* CDVAssetLibraryFilesystem.h */,
+				9A6AEC5E6224460CBC1F89F5 /* CDVCapture.m */,
+				2C646185DD92479BA712CA6A /* CDVCapture.h */,
 			);
 			name = Plugins;
 			path = Ushahidi/Plugins;
@@ -597,6 +625,7 @@
 				6AFF5BF91D6E424B00AB3073 /* CDVLaunchScreen.storyboard in Resources */,
 				72A1C9F5735847F6A7DDAC7D /* SAMKeychain.bundle in Resources */,
 				24A253B2221B423D978731BB /* GoogleMaps.bundle in Resources */,
+				104C4343F52244B6BEBE78C7 /* CDVCapture.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -672,6 +701,11 @@
 				9195831796D54DF3A1910D1A /* MyReachability.m in Sources */,
 				62E4C6BB0F52439FA13A9279 /* MyPluginLayerDebugView.m in Sources */,
 				769942F1D1204FFCB0A0A760 /* MyPluginScrollView.m in Sources */,
+				BF81B31B17E245B6B916F98F /* CDVLocation.m in Sources */,
+				A667FBE51B18432784B7E9E9 /* CDVFile.m in Sources */,
+				0492C09F0949408FB8A6770E /* CDVLocalFilesystem.m in Sources */,
+				C287AA3E661D45389B00FC80 /* CDVAssetLibraryFilesystem.m in Sources */,
+				B9BB57F0F1F549B6BE739F64 /* CDVCapture.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
