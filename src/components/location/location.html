@@ -2,7 +2,7 @@
   <ion-icon ios="ios-pin" md="md-pin" color="grey" item-left></ion-icon>
   <ion-label>{{attribute.label}}</ion-label>
 </ion-item>
-<ion-item>
+<ion-item [formGroup]="formGroup" *ngIf="formGroup">
   <ion-icon ios="ios-pin" md="md-pin" color="white" item-left></ion-icon>
   <ion-card class="card-button" *ngIf="mapImage != null" (click)="mapClicked($event)">
     <img full [src]="mapImage" />

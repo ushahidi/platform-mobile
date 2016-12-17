@@ -4,7 +4,7 @@ import { Select } from 'ionic-angular';
 @Component({
   selector: 'field-select',
   templateUrl: 'select.html',
-  inputs: ['attribute']
+  inputs: ['attribute', 'formGroup']
 })
 export class SelectComponent {
 

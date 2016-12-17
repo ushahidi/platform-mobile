@@ -56,9 +56,9 @@ export class ResponseListPage {
     console.log("Response List ionViewDidEnter");
   }
 
-  loadPosts(cache:boolean=true, event:any=null) {
+  loadPosts(event:any=null, cache:boolean=true) {
     console.log(`Response List loadPosts Cache ${cache}`);
-    if (cache) {
+    if (cache && this.responses) {
       this.database.getPosts(this.deployment.id).then(results => {
         let responses = <any[]>results;
         if (responses && responses.length > 0) {
@@ -66,7 +66,10 @@ export class ResponseListPage {
           this.responses = responses;
         }
         else {
-          this.loadPosts(false, event);
+          this.loadPosts(event, false);
+        }
+        if (event) {
+          event.complete();
         }
       });
     }
@@ -127,7 +130,7 @@ export class ResponseListPage {
         deployment: this.deployment });
     modal.present();
     modal.onDidDismiss(data => {
-
+      console.log(`Deployment List Modal ${JSON.stringify(data)}`);
     });
   }
 
@@ -153,7 +156,7 @@ export class ResponseListPage {
     console.log("Deployment List showOptions");
     let actionSheet = this.actionController.create({
     buttons: [
-       {
+      {
          text: 'Edit',
          handler: () => {
            console.log('Deployment List Edit');

@@ -4,7 +4,7 @@ import { Checkbox } from 'ionic-angular';
 @Component({
   selector: 'field-checkboxes',
   templateUrl: 'checkboxes.html',
-    inputs: ['attribute']
+    inputs: ['attribute', 'formGroup']
 })
 export class CheckboxesComponent {
 

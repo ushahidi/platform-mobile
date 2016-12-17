@@ -1,4 +1,4 @@
-<ion-item>
+<ion-item [formGroup]="formGroup" *ngIf="formGroup">
   <ion-icon ios="ios-paper" md="md-paper" color="grey" item-left></ion-icon>
-  <ion-textarea #textarea type="text" [placeholder]="attribute.label"></ion-textarea>
+  <ion-textarea #textarea type="text" [placeholder]="attribute.label" [formControlName]="attribute.key"></ion-textarea>
 </ion-item>

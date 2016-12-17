@@ -4,7 +4,7 @@ import { TextArea } from 'ionic-angular';
 @Component({
   selector: 'field-textarea',
   templateUrl: 'textarea.html',
-  inputs: ['attribute']
+  inputs: ['attribute', 'formGroup']
 })
 export class TextAreaComponent {
 

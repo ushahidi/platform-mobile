@@ -4,7 +4,7 @@ import { Geolocation } from 'ionic-native';
 @Component({
   selector: 'field-location',
   templateUrl: 'location.html',
-  inputs: ['attribute']
+  inputs: ['attribute', 'formGroup']
 })
 export class LocationComponent {
 

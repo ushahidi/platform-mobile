@@ -1,4 +1,4 @@
-<ion-item>
+<ion-item [formGroup]="formGroup" *ngIf="formGroup">
   <ion-icon ios="ios-calculator" md="md-calculator" color="grey" item-left></ion-icon>
-  <ion-input #input type="number" [placeholder]="attribute.label"></ion-input>
+  <ion-input #input type="number" [placeholder]="attribute.label" [formControlName]="attribute.key"></ion-input>
 </ion-item>

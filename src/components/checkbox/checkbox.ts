@@ -4,7 +4,7 @@ import { Checkbox } from 'ionic-angular';
 @Component({
   selector: 'field-checkbox',
   templateUrl: 'checkbox.html',
-  inputs: ['attribute']
+  inputs: ['attribute', 'formGroup']
 })
 export class CheckboxComponent {
 
@@ -22,7 +22,7 @@ export class CheckboxComponent {
         this.options = this.attribute.options;
       }
       else {
-        this.options = this.attribute.options.split(',');  
+        this.options = this.attribute.options.split(',');
       }
     }
     else {

@@ -1,6 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { Platform, NavParams, NavController, Button,
         LoadingController, ToastController, AlertController, ViewController, ModalController } from 'ionic-angular';
+import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 
 import { ApiService } from '../../providers/api-service';
 import { DatabaseService } from '../../providers/database-service';
@@ -33,9 +34,7 @@ export class ResponseAddPage {
   deployment: any;
   form: any;
   attributes: any;
-  response:any = null;
-
-  @ViewChild('submit') submit: Button;
+  formGroup:any = null;
 
   constructor(
     public platform:Platform,
@@ -43,16 +42,26 @@ export class ResponseAddPage {
     public database:DatabaseService,
     public navParams: NavParams,
     public navController:NavController,
-    public toastController: ToastController,
-    public alertController: AlertController,
-    public viewController: ViewController,
-    public modalController: ModalController,
-    public loadingController:LoadingController) {
+    public toastController:ToastController,
+    public alertController:AlertController,
+    public viewController:ViewController,
+    public modalController:ModalController,
+    public loadingController:LoadingController,
+    public formBuilder: FormBuilder) {
 
   }
 
   ionViewDidLoad() {
     console.log('Response Add ionViewDidLoad');
+    this.form = this.navParams.get("form");
+    this.attributes = this.navParams.get("attributes");
+    let controls = {};
+    for (let item in this.attributes) {
+      let attribute = this.attributes[item];
+      controls[attribute.key] = new FormControl('');
+    }
+    console.log(`Response Add Controls ${JSON.stringify(controls)}`);
+    this.formGroup = this.formBuilder.group(controls);
   }
 
   ionViewWillEnter() {
@@ -62,6 +71,7 @@ export class ResponseAddPage {
     this.form = this.navParams.get("form");
     this.attributes = this.navParams.get("attributes");
     this.color = this.form.color;
+
   }
 
   ionViewDidEnter() {
@@ -87,26 +97,27 @@ export class ResponseAddPage {
     this.viewController.dismiss();
   }
 
-  postResponse(event) {
+  postResponse(event:any=null) {
     console.log("Response Add postResponse");
-    let host = this.deployment.url;
-    let token = this.token;
-    let title = "";
-    let content = "";
-    let loading = this.loadingController.create({
-      content: "Posting..."
-    });
-    loading.present();
-    this.api.createPost(host, token, title, content).then(resp => {
-      console.log(`Response Add ${resp}`);
-      loading.dismiss();
-      if (resp) {
-        this.postResponseSucceeded();
-      }
-      else {
-        this.postResponseFailed();
-      }
-    });
+    console.log(`Form ${JSON.stringify(this.formGroup.value)}`);
+    // let host = this.deployment.url;
+    // let token = this.token;
+    // let title = "";
+    // let content = "";
+    // let loading = this.loadingController.create({
+    //   content: "Posting..."
+    // });
+    // loading.present();
+    // this.api.createPost(host, token, title, content).then(resp => {
+    //   console.log(`Response Add ${resp}`);
+    //   loading.dismiss();
+    //   if (resp) {
+    //     this.postResponseSucceeded();
+    //   }
+    //   else {
+    //     this.postResponseFailed();
+    //   }
+    // });
   }
 
   postResponseFailed() {

@@ -4,7 +4,7 @@ import { RadioGroup } from 'ionic-angular';
 @Component({
   selector: 'field-radio',
   templateUrl: 'radio.html',
-  inputs: ['attribute']
+  inputs: ['attribute', 'formGroup']
 })
 export class RadioComponent {
 

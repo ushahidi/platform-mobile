@@ -4,7 +4,7 @@ import { DateTime } from 'ionic-angular';
 @Component({
   selector: 'field-datetime',
   templateUrl: 'datetime.html',
-  inputs: ['attribute']
+  inputs: ['attribute', 'formGroup']
 })
 export class DateTimeComponent {
 

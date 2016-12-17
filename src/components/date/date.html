@@ -1,5 +1,5 @@
-<ion-item>
+<ion-item [formGroup]="formGroup" *ngIf="formGroup">
   <ion-icon ios="ios-calendar" md="md-calendar" color="grey" item-left></ion-icon>
   <ion-input #input type="text" [placeholder]="attribute.label"></ion-input>
-  <ion-datetime #datetime displayFormat="MMMM D, YYYY" pickerFormat="D MMMM YYYY"></ion-datetime>
+  <ion-datetime #datetime displayFormat="MMMM D, YYYY" pickerFormat="D MMMM YYYY" [formControlName]="attribute.key"></ion-datetime>
 </ion-item>

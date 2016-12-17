@@ -5,7 +5,7 @@ import { Camera } from 'ionic-native';
 @Component({
   selector: 'field-image',
   templateUrl: 'image.html',
-  inputs: ['attribute']
+  inputs: ['attribute', 'formGroup']
 })
 export class ImageComponent {
 

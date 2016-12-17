@@ -4,7 +4,7 @@ import { TextInput } from 'ionic-angular';
 @Component({
   selector: 'field-number',
   templateUrl: 'number.html',
-  inputs: ['attribute']
+  inputs: ['attribute', 'formGroup']
 })
 export class NumberComponent {
 
