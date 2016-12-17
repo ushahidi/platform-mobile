@@ -100,30 +100,35 @@ export class ResponseAddPage {
   postResponse(event:any=null) {
     console.log("Response Add postResponse");
     console.log(`Form ${JSON.stringify(this.formGroup.value)}`);
-    // let host = this.deployment.url;
-    // let token = this.token;
-    // let title = "";
-    // let content = "";
-    // let loading = this.loadingController.create({
-    //   content: "Posting..."
-    // });
-    // loading.present();
-    // this.api.createPost(host, token, title, content).then(resp => {
-    //   console.log(`Response Add ${resp}`);
-    //   loading.dismiss();
-    //   if (resp) {
-    //     this.postResponseSucceeded();
-    //   }
-    //   else {
-    //     this.postResponseFailed();
-    //   }
-    // });
+    let host = this.deployment.url;
+    let token = this.token;
+    let data = this.formGroup.value;
+    let loading = this.loadingController.create({
+      content: "Posting..."
+    });
+    loading.present();
+    this.api.createPost(host, token, this.form.id, data).then(
+      (resp) => {
+        console.log(`Response Add ${resp}`);
+        loading.dismiss();
+        if (resp) {
+          this.postResponseSucceeded();
+        }
+        else {
+          this.postResponseFailed();
+        }
+      },
+      (error) => {
+        console.error(`Response Add ${error}`);
+        loading.dismiss();
+        this.postResponseFailed(error);
+      });
   }
 
-  postResponseFailed() {
+  postResponseFailed(message:string='There was a problem posting your response.') {
     let alert = this.alertController.create({
       title: 'Post Failed',
-      subTitle: 'There was a problem posting your response.',
+      subTitle: message,
       buttons: ['OK']
     });
     alert.present();

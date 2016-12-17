@@ -13,12 +13,19 @@ export class ApiService {
 
   clientId: any = String;
   clientSecret: any = String;
+  source: string = null;
 
   constructor(
     public platform:Platform,
     public http: Http) {
     this.clientId = "ushahidiui";
     this.clientSecret = "35e7f0bca957836d05ca0492211b0ac707671261";
+    if (this.platform.is('ios')) {
+      this.source = "iOS";
+    }
+    else if (this.platform.is('android')) {
+      this.source = "Android";
+    }
   }
 
   getHeaders(accessToken:string=null) {
@@ -210,18 +217,14 @@ export class ApiService {
     });
   }
 
-  createPost(host:string, token:string, title:string, message:string=null) {
+  createPost(host:string, token:string, form:number, values:any) {
     return new Promise((resolve, reject) => {
       let api = "/api/v3/posts/";
-      let params = {};
-      if (title != null) {
-        params["title"] = title;
-      }
-      if (message != null) {
-        params["message"] = message;
-      }
       let url = host + api;
-      let body = JSON.stringify(params);
+      let body = JSON.stringify({
+        source: this.source,
+        form: form,
+        values: values });
       let headers = this.getHeaders(token);
       let options = new RequestOptions({ headers: headers });
       console.log(`API POST ${url} ${body}`);
@@ -233,9 +236,15 @@ export class ApiService {
             let post = json;
             resolve(post);
           },
-          (error) => {
-            console.error(`API POST ${url} ${JSON.stringify(error)}`);
-            reject(JSON.stringify(error));
+          (err) => {
+            let errors = err.json()['errors'];
+            console.error(`API POST ${url} ${JSON.stringify(errors)}`);
+            let message = [];
+            for (var i = 0; i < errors.length; i++) {
+              let error = errors[i];
+              message.push(error['message']);
+            }
+            reject(message.join(", "));
           }
         );
     });
