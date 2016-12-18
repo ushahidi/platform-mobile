@@ -1,6 +1,6 @@
 import { NgModule, ErrorHandler } from '@angular/core';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
-
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Storage } from '@ionic/storage';
 
 import { LazyLoadImageModule } from 'ng2-lazyload-image';
@@ -70,7 +70,9 @@ import { DatabaseService } from '../providers/database-service';
   ],
   imports: [
     IonicModule.forRoot(MyApp),
-    LazyLoadImageModule
+    LazyLoadImageModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   bootstrap: [ IonicApp ],
   entryComponents: [

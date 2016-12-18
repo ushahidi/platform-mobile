@@ -6,6 +6,6 @@
   <ion-item *ngFor="let option of options">
     <ion-icon ios="ios-checkbox" md="md-checkbox" color="white" item-left></ion-icon>
     <ion-label>{{option}}</ion-label>
-    <ion-checkbox #checkbox [formControlName]="attribute.key"></ion-checkbox>
+    <ion-checkbox #checkbox [formControlName]="attribute.key" checked="false"></ion-checkbox>
   </ion-item>
 </div>

@@ -217,13 +217,14 @@ export class ApiService {
     });
   }
 
-  createPost(host:string, token:string, form:number, values:any) {
+  createPost(host:string, token:string, form:number, title:string, values:any) {
     return new Promise((resolve, reject) => {
       let api = "/api/v3/posts/";
       let url = host + api;
       let body = JSON.stringify({
         source: this.source,
         form: form,
+        title: title,
         values: values });
       let headers = this.getHeaders(token);
       let options = new RequestOptions({ headers: headers });
@@ -237,6 +238,7 @@ export class ApiService {
             resolve(post);
           },
           (err) => {
+            console.error(`API POST ${url} ${JSON.stringify(err)}`);
             let errors = err.json()['errors'];
             console.error(`API POST ${url} ${JSON.stringify(errors)}`);
             let message = [];

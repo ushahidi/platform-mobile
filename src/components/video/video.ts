@@ -1,11 +1,11 @@
 import { Component, ViewChild } from '@angular/core';
-import { Button, ActionSheetController, AlertController } from 'ionic-angular';
+import { ActionSheetController, AlertController } from 'ionic-angular';
 import { MediaCapture } from 'ionic-native';
 
 @Component({
   selector: 'field-video',
   templateUrl: 'video.html',
-  inputs: ['attribute']
+  inputs: ['attribute', 'formGroup']
 })
 export class VideoComponent {
 
@@ -13,8 +13,6 @@ export class VideoComponent {
   videoData: any = null;
   videoThumbail: string;
   videoPlaceholder: string;
-
-  @ViewChild('button') button: Button;
 
   constructor(
     public alertController:AlertController,

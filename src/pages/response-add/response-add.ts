@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { Platform, NavParams, NavController, Button,
         LoadingController, ToastController, AlertController, ViewController, ModalController } from 'ionic-angular';
-import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormGroupName, FormControl, Validators } from '@angular/forms';
 
 import { ApiService } from '../../providers/api-service';
 import { DatabaseService } from '../../providers/database-service';
@@ -34,7 +34,7 @@ export class ResponseAddPage {
   deployment: any;
   form: any;
   attributes: any;
-  formGroup:any = null;
+  formGroup: FormGroup = null;
 
   constructor(
     public platform:Platform,
@@ -53,25 +53,29 @@ export class ResponseAddPage {
 
   ionViewDidLoad() {
     console.log('Response Add ionViewDidLoad');
-    this.form = this.navParams.get("form");
-    this.attributes = this.navParams.get("attributes");
-    let controls = {};
-    for (let item in this.attributes) {
-      let attribute = this.attributes[item];
-      controls[attribute.key] = new FormControl('');
-    }
-    console.log(`Response Add Controls ${JSON.stringify(controls)}`);
-    this.formGroup = this.formBuilder.group(controls);
-  }
-
-  ionViewWillEnter() {
-    console.log("Response Add ionViewWillEnter");
     this.token = this.navParams.get("token");
     this.deployment = this.navParams.get("deployment");
     this.form = this.navParams.get("form");
     this.attributes = this.navParams.get("attributes");
     this.color = this.form.color;
+    this.formGroup = new FormGroup({});
+    for (let item in this.attributes) {
+      let attribute = this.attributes[item];
+      console.log(`Response Add Attribute ${attribute.label} ${attribute.input} ${attribute.key}`)
+      if (attribute.input == 'location') {
+        // this.formGroup.addControl(attribute.key, new FormGroup({
+        //   lat: new FormControl(''),
+        //   lon: new FormControl('')}));
+        this.formGroup.addControl(attribute.key, new FormControl(''));
+      }
+      else {
+        this.formGroup.addControl(attribute.key, new FormControl(''));
+      }
+    }
+  }
 
+  ionViewWillEnter() {
+    console.log("Response Add ionViewWillEnter");
   }
 
   ionViewDidEnter() {
@@ -99,15 +103,95 @@ export class ResponseAddPage {
 
   postResponse(event:any=null) {
     console.log("Response Add postResponse");
-    console.log(`Form ${JSON.stringify(this.formGroup.value)}`);
+    console.log(`Response Add Form ${JSON.stringify(this.formGroup.value)}`);
     let host = this.deployment.url;
     let token = this.token;
-    let data = this.formGroup.value;
+    let title = "";
+    let values = this.formGroup.value;
+    for (let index in this.attributes) {
+      let attribute = this.attributes[index];
+      let key = attribute.key;
+      let value = values[key];
+      console.log(`${index} > ${key} = ${value}`);
+      if (attribute.type == 'title') {
+        title = value;
+      }
+      if (attribute.input == 'video') {
+        if (value && value.length > 0) {
+          values[key] = [value];
+        }
+        else {
+          values[key] = [];
+        }
+      }
+      else if (attribute.input == 'upload') {
+        if (value && value.length > 0) {
+          values[key] = [value];
+        }
+        else {
+          values[key] = [];
+        }
+      }
+      else if (attribute.input == 'location') {
+        if (value && value.length > 0) {
+          let location = value.split(",");
+          values[key] = [{
+            lat: location[0],
+            lon: location[1]}];
+        }
+        else {
+          values[key] = [];
+        }
+      }
+      else if (attribute.input == 'select') {
+        if (value && value.length > 0) {
+          values[key] = [value];
+        }
+        else {
+          values[key] = [];
+        }
+      }
+      else if (attribute.input == 'radio') {
+        if (value && value.length > 0) {
+          values[key] = [value];
+        }
+        else {
+          values[key] = [];
+        }
+      }
+      else if (attribute.input == 'number') {
+        if (value && value.length > 0) {
+            values[key] = [Number(value)];
+        }
+        else {
+          values[key] = [];
+        }
+      }
+      else if (attribute.input == 'date') {
+        if (value && value.length > 0) {
+          values[key] = [value];
+        }
+        else {
+          values[key] = [];
+        }
+      }
+      else if (attribute.input == 'datetime') {
+        if (value && value.length > 0) {
+          values[key] = [value];
+        }
+        else {
+          values[key] = [];
+        }
+      }
+      else {
+        values[key] = [value];
+      }
+    }
     let loading = this.loadingController.create({
       content: "Posting..."
     });
     loading.present();
-    this.api.createPost(host, token, this.form.id, data).then(
+    this.api.createPost(host, token, this.form.id, title, values).then(
       (resp) => {
         console.log(`Response Add ${resp}`);
         loading.dismiss();

@@ -14,7 +14,7 @@
   </ion-navbar>
 </ion-header>
 <ion-content [style.border-left-color]="color" class="page-response-add">
-  <div *ngIf="attributes">
+  <div *ngIf="attributes && formGroup">
     <form [formGroup]="formGroup" (ngSubmit)="postResponse()">
       <ion-list>
         <div padding-top *ngFor="let attribute of attributes">
