@@ -1,11 +1,10 @@
 <ion-item [formGroup]="formGroup" *ngIf="formGroup && attribute">
   <ion-icon ios="ios-pin" md="md-pin" color="grey" item-left></ion-icon>
   <ion-label>{{attribute.label}}</ion-label>
-  <!-- <div [formGroupName]="attribute.key">
-    <ion-input type="text" hidden [formControlName]="lat" [(ngModel)]="latitude"></ion-input>
-    <ion-input type="text" hidden [formControlName]="lon" [(ngModel)]="longitude"></ion-input>
-  </div> -->
-  <ion-input #location type="text" hidden [formControlName]="attribute.key"></ion-input>
+  <div [formGroupName]="attribute.key">
+    <ion-input type="text" hidden formControlName="lat" [(ngModel)]="latitude"></ion-input>
+    <ion-input type="text" hidden formControlName="lon" [(ngModel)]="longitude"></ion-input>
+  </div>
 </ion-item>
 <ion-item>
   <ion-icon ios="ios-pin" md="md-pin" color="white" item-left></ion-icon>

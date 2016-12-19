@@ -1,5 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { DateTime } from 'ionic-angular';
+import { FormGroup, FormGroupName, FormControl, FormControlName } from '@angular/forms';
 
 @Component({
   selector: 'field-date',
@@ -8,6 +9,7 @@ import { DateTime } from 'ionic-angular';
 })
 export class DateComponent {
 
+  formGroup: FormGroup;
   attribute: any = {};
 
   @ViewChild('datetime') datetime: DateTime;
@@ -16,5 +18,6 @@ export class DateComponent {
   }
 
   ngOnInit() {
+    console.log(`Date ${JSON.stringify(this.attribute)}`);
   }
 }

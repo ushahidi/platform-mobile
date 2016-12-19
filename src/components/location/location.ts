@@ -1,7 +1,7 @@
 import { Component, ViewChild, Output, EventEmitter } from '@angular/core';
 import { TextInput } from 'ionic-angular';
 import { Geolocation } from 'ionic-native';
-import { ReactiveFormsModule, FormGroup, FormControl, FormGroupName } from '@angular/forms';
+import { FormGroup, FormGroupName, FormControl, FormControlName } from '@angular/forms';
 
 @Component({
   selector: 'field-location',
@@ -10,20 +10,21 @@ import { ReactiveFormsModule, FormGroup, FormControl, FormGroupName } from '@ang
 })
 export class LocationComponent {
 
-  key: string = "AIzaSyBjDgMqF6GOdirXn3iFtI6Jlt8jEoWhSq4";
+  formGroup: FormGroup;
   attribute: any = {};
+  key: string = "AIzaSyBjDgMqF6GOdirXn3iFtI6Jlt8jEoWhSq4";
   mapPlaceholder: string = "/assets/images/placeholder-map.jpg";
   mapImage: string = null;
   latitude: number = null;
   longitude: number = null;
 
   @Output() changeLocation = new EventEmitter();
-  @ViewChild('location') location: TextInput;
 
   constructor() {
   }
 
   ngOnInit() {
+    console.log(`Location ${JSON.stringify(this.attribute)}`);
     this.detectLocation();
   }
 
@@ -38,7 +39,6 @@ export class LocationComponent {
           + `?center=${position.coords.latitude},${position.coords.longitude}`
           + `&zoom=15&size=300x200&maptype=roadmap&markers=color:red%7C`
           + `${position.coords.latitude},${position.coords.longitude}&key=${this.key}`;
-          this.location.value = `${position.coords.latitude},${position.coords.longitude}`;
       },
       (error) => {
         console.error(`Location ${JSON.stringify(error)}`);

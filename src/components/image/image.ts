@@ -1,6 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { Button, ActionSheetController, AlertController } from 'ionic-angular';
 import { Camera } from 'ionic-native';
+import { FormGroup, FormGroupName, FormControl, FormControlName } from '@angular/forms';
 
 @Component({
   selector: 'field-image',
@@ -9,16 +10,20 @@ import { Camera } from 'ionic-native';
 })
 export class ImageComponent {
 
+  formGroup: FormGroup;
   attribute: any = {};
   imageData: string = null;
-  imagePlaceholder: string;
+  imagePlaceholder: string = "/assets/images/placeholder-photo.jpg";
 
   @ViewChild('button') button: Button;
 
   constructor(
     public alertController:AlertController,
     public actionController:ActionSheetController) {
-    this.imagePlaceholder = "/assets/images/placeholder-photo.jpg";
+  }
+
+  ngOnInit() {
+    console.log(`Image ${JSON.stringify(this.attribute)}`);
   }
 
   showOptions() {

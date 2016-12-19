@@ -1,5 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { TextInput } from 'ionic-angular';
+import { FormGroup, FormGroupName, FormControl, FormControlName } from '@angular/forms';
 
 @Component({
   selector: 'field-number',
@@ -8,6 +9,7 @@ import { TextInput } from 'ionic-angular';
 })
 export class NumberComponent {
 
+  formGroup: FormGroup;
   attribute: any = {};
 
   @ViewChild('input') input: TextInput;
@@ -15,4 +17,7 @@ export class NumberComponent {
   constructor() {
   }
 
+  ngOnInit() {
+    console.log(`Number ${JSON.stringify(this.attribute)}`);
+  }
 }

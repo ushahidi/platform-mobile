@@ -1,5 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { Checkbox } from 'ionic-angular';
+import { FormGroup, FormGroupName, FormControl, FormControlName } from '@angular/forms';
 
 @Component({
   selector: 'field-checkboxes',
@@ -8,15 +9,15 @@ import { Checkbox } from 'ionic-angular';
 })
 export class CheckboxesComponent {
 
+  formGroup: FormGroup;
   attribute: any = {};
   options: any = [];
-
-  @ViewChild('checkbox') checkbox: Checkbox;
 
   constructor() {
   }
 
   ngOnInit() {
+    console.log(`Checkboxes ${JSON.stringify(this.attribute)}`);
     if (this.attribute.options) {
       if (Array.isArray(this.attribute.options)) {
         this.options = this.attribute.options;

@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { TextInput } from 'ionic-angular';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormGroupName, FormControl, FormControlName } from '@angular/forms';
 
 @Component({
   selector: 'field-text',
@@ -9,11 +9,16 @@ import { FormGroup, FormControl } from '@angular/forms';
 })
 export class TextComponent {
 
+  formGroup: FormGroup;
   attribute: any = {};
 
   @ViewChild('input') input: TextInput;
 
   constructor() {
+  }
+
+  ngOnInit() {
+    console.log(`Text ${JSON.stringify(this.attribute)}`);
   }
 
 }

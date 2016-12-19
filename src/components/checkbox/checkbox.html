@@ -3,9 +3,11 @@
   <ion-label>{{attribute.label}}</ion-label>
 </ion-item>
 <div [formGroup]="formGroup" *ngIf="formGroup">
-  <ion-item *ngFor="let option of options">
-    <ion-icon ios="ios-checkbox" md="md-checkbox" color="white" item-left></ion-icon>
-    <ion-label>{{option}}</ion-label>
-    <ion-checkbox #checkbox [formControlName]="attribute.key" checked="false"></ion-checkbox>
-  </ion-item>
+  <div [formGroupName]="attribute.key">
+    <ion-item *ngFor="let option of options">
+      <ion-icon ios="ios-checkbox" md="md-checkbox" color="white" item-left></ion-icon>
+      <ion-label>{{option}}</ion-label>
+      <ion-checkbox checked="false" formControlName="{{option}}"></ion-checkbox>
+    </ion-item>
+  </div>
 </div>

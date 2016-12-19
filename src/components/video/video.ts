@@ -1,6 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { ActionSheetController, AlertController } from 'ionic-angular';
 import { MediaCapture } from 'ionic-native';
+import { FormGroup, FormGroupName, FormControl, FormControlName } from '@angular/forms';
 
 @Component({
   selector: 'field-video',
@@ -9,15 +10,19 @@ import { MediaCapture } from 'ionic-native';
 })
 export class VideoComponent {
 
+  formGroup: FormGroup;
   attribute: any = {};
   videoData: any = null;
   videoThumbail: string;
-  videoPlaceholder: string;
+  videoPlaceholder: string = "/assets/images/placeholder-video.jpg";
 
   constructor(
     public alertController:AlertController,
     public actionController:ActionSheetController) {
-    this.videoPlaceholder = "/assets/images/placeholder-video.jpg";
+  }
+
+  ngOnInit() {
+    console.log(`Video ${JSON.stringify(this.attribute)}`);
   }
 
   captureVideo() {

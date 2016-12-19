@@ -1,5 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { RadioGroup } from 'ionic-angular';
+import { FormGroup, FormGroupName, FormControl, FormControlName } from '@angular/forms';
 
 @Component({
   selector: 'field-radio',
@@ -8,6 +9,7 @@ import { RadioGroup } from 'ionic-angular';
 })
 export class RadioComponent {
 
+  formGroup: FormGroup;
   attribute: any = {};
   options: any = [];
 
@@ -17,6 +19,7 @@ export class RadioComponent {
   }
 
   ngOnInit() {
+    console.log(`Radio ${JSON.stringify(this.attribute)}`);
     if (this.attribute.options) {
       if (Array.isArray(this.attribute.options)) {
         this.options = this.attribute.options;

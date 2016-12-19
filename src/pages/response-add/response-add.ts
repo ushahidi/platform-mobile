@@ -59,14 +59,21 @@ export class ResponseAddPage {
     this.attributes = this.navParams.get("attributes");
     this.color = this.form.color;
     this.formGroup = new FormGroup({});
-    for (let item in this.attributes) {
-      let attribute = this.attributes[item];
-      console.log(`Response Add Attribute ${attribute.label} ${attribute.input} ${attribute.key}`)
+    for (let index in this.attributes) {
+      let attribute = this.attributes[index];
       if (attribute.input == 'location') {
-        // this.formGroup.addControl(attribute.key, new FormGroup({
-        //   lat: new FormControl(''),
-        //   lon: new FormControl('')}));
-        this.formGroup.addControl(attribute.key, new FormControl(''));
+        let formGroup = new FormGroup({
+          lat: new FormControl(''),
+          lon: new FormControl('')});
+        this.formGroup.addControl(attribute.key, formGroup);
+      }
+      else if (attribute.input == 'checkbox' || attribute.input == 'checkboxes') {
+        let formGroup = new FormGroup({});
+        let options = attribute.options.split(',');
+        for (let index in options) {
+          formGroup.addControl(options[index], new FormControl(''));
+        }
+        this.formGroup.addControl(attribute.key, formGroup);
       }
       else {
         this.formGroup.addControl(attribute.key, new FormControl(''));
@@ -103,90 +110,10 @@ export class ResponseAddPage {
 
   postResponse(event:any=null) {
     console.log("Response Add postResponse");
-    console.log(`Response Add Form ${JSON.stringify(this.formGroup.value)}`);
     let host = this.deployment.url;
     let token = this.token;
-    let title = "";
-    let values = this.formGroup.value;
-    for (let index in this.attributes) {
-      let attribute = this.attributes[index];
-      let key = attribute.key;
-      let value = values[key];
-      console.log(`${index} > ${key} = ${value}`);
-      if (attribute.type == 'title') {
-        title = value;
-      }
-      if (attribute.input == 'video') {
-        if (value && value.length > 0) {
-          values[key] = [value];
-        }
-        else {
-          values[key] = [];
-        }
-      }
-      else if (attribute.input == 'upload') {
-        if (value && value.length > 0) {
-          values[key] = [value];
-        }
-        else {
-          values[key] = [];
-        }
-      }
-      else if (attribute.input == 'location') {
-        if (value && value.length > 0) {
-          let location = value.split(",");
-          values[key] = [{
-            lat: location[0],
-            lon: location[1]}];
-        }
-        else {
-          values[key] = [];
-        }
-      }
-      else if (attribute.input == 'select') {
-        if (value && value.length > 0) {
-          values[key] = [value];
-        }
-        else {
-          values[key] = [];
-        }
-      }
-      else if (attribute.input == 'radio') {
-        if (value && value.length > 0) {
-          values[key] = [value];
-        }
-        else {
-          values[key] = [];
-        }
-      }
-      else if (attribute.input == 'number') {
-        if (value && value.length > 0) {
-            values[key] = [Number(value)];
-        }
-        else {
-          values[key] = [];
-        }
-      }
-      else if (attribute.input == 'date') {
-        if (value && value.length > 0) {
-          values[key] = [value];
-        }
-        else {
-          values[key] = [];
-        }
-      }
-      else if (attribute.input == 'datetime') {
-        if (value && value.length > 0) {
-          values[key] = [value];
-        }
-        else {
-          values[key] = [];
-        }
-      }
-      else {
-        values[key] = [value];
-      }
-    }
+    let title = this.getTitle(this.formGroup.value);
+    let values = this.sanitizeValues(this.formGroup.value);
     let loading = this.loadingController.create({
       content: "Posting..."
     });
@@ -207,6 +134,109 @@ export class ResponseAddPage {
         loading.dismiss();
         this.postResponseFailed(error);
       });
+  }
+
+  getTitle(values:any=null) {
+    for (let index in this.attributes) {
+      let attribute = this.attributes[index];
+      if (attribute.type == 'title') {
+        return values[attribute.key];
+      }
+    }
+    return null;
+  }
+
+  sanitizeValues(values:any=null) {
+    console.log(`Response Add Values ${JSON.stringify(values)}`);
+    let sanitized = {};
+    for (let index in this.attributes) {
+      let attribute = this.attributes[index];
+      let key = attribute.key;
+      let value = values[key];
+      console.log(`Response Add Value ${attribute.label} ${attribute.input} ${key} ${value}`);
+      if (attribute.input == 'checkbox' || attribute.input == 'checkboxes') {
+        let checkboxes = {};
+        for (let key in value) {
+          if (value[key]) {
+            checkboxes[key] = 1;
+          }
+          else {
+            checkboxes[key] = 0;
+          }
+        }
+        sanitized[key] = [checkboxes];
+      }
+      else if (attribute.input == 'date') {
+        if (value && value.length > 0) {
+          sanitized[key] = [value];
+        }
+        else {
+          sanitized[key] = [];
+        }
+      }
+      else if (attribute.input == 'datetime') {
+        if (value && value.length > 0) {
+          sanitized[key] = [value];
+        }
+        else {
+          sanitized[key] = [];
+        }
+      }
+      else if (attribute.input == 'location') {
+        sanitized[key] = [value];
+      }
+      else if (attribute.input == 'number') {
+        if (value && value.length > 0) {
+          sanitized[key] = [Number(value)];
+        }
+        else {
+          sanitized[key] = [];
+        }
+      }
+      else if (attribute.input == 'radio') {
+        if (value && value.length > 0) {
+          sanitized[key] = [value];
+        }
+        else {
+          sanitized[key] = [];
+        }
+      }
+      else if (attribute.input == 'select') {
+        if (value && value.length > 0) {
+          sanitized[key] = [value];
+        }
+        else {
+          sanitized[key] = [];
+        }
+      }
+      else if (attribute.input == 'text') {
+        sanitized[key] = [value];
+      }
+      else if (attribute.input == 'textarea') {
+        sanitized[key] = [value];
+      }
+      else if (attribute.input == 'upload') {
+        if (value && value.length > 0) {
+          sanitized[key] = [value];
+        }
+        else {
+          sanitized[key] = [];
+        }
+      }
+      else if (attribute.input == 'varchar') {
+        sanitized[key] = [value];
+      }
+      else if (attribute.input == 'video') {
+        if (value && value.length > 0) {
+          sanitized[key] = [value];
+        }
+        else {
+          sanitized[key] = [];
+        }
+      }
+    }
+    console.log(`Response Add Sanitized ${JSON.stringify(sanitized)}`);
+    return sanitized;
   }
 
   postResponseFailed(message:string='There was a problem posting your response.') {
