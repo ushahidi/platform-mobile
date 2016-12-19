@@ -11,13 +11,19 @@ export class DateComponent {
 
   formGroup: FormGroup;
   attribute: any = {};
-
-  @ViewChild('datetime') datetime: DateTime;
+  datetime: string = null;
+  date: string = null;
+  time: string = null;
 
   constructor() {
   }
 
   ngOnInit() {
     console.log(`Date ${JSON.stringify(this.attribute)}`);
+  }
+
+  dateChanged(event) {
+    this.datetime = new Date(this.date).toISOString();
+    console.log(`Date dateChanged ${this.datetime}`);
   }
 }

@@ -113,14 +113,15 @@ export class ResponseAddPage {
     let host = this.deployment.url;
     let token = this.token;
     let title = this.getTitle(this.formGroup.value);
+    let description = this.getDescription(this.formGroup.value);
     let values = this.sanitizeValues(this.formGroup.value);
     let loading = this.loadingController.create({
       content: "Posting..."
     });
     loading.present();
-    this.api.createPost(host, token, this.form.id, title, values).then(
+    this.api.createPost(host, token, this.form.id, title, description, values).then(
       (resp) => {
-        console.log(`Response Add ${resp}`);
+        console.log(`Response Add ${JSON.stringify(resp)}`);
         loading.dismiss();
         if (resp) {
           this.postResponseSucceeded();
@@ -136,7 +137,7 @@ export class ResponseAddPage {
       });
   }
 
-  getTitle(values:any=null) {
+  getTitle(values:any) {
     for (let index in this.attributes) {
       let attribute = this.attributes[index];
       if (attribute.type == 'title') {
@@ -146,7 +147,17 @@ export class ResponseAddPage {
     return null;
   }
 
-  sanitizeValues(values:any=null) {
+  getDescription(values:any) {
+    for (let index in this.attributes) {
+      let attribute = this.attributes[index];
+      if (attribute.type == 'description') {
+        return values[attribute.key];
+      }
+    }
+    return null;
+  }
+
+  sanitizeValues(values:any) {
     console.log(`Response Add Values ${JSON.stringify(values)}`);
     let sanitized = {};
     for (let index in this.attributes) {
@@ -155,16 +166,13 @@ export class ResponseAddPage {
       let value = values[key];
       console.log(`Response Add Value ${attribute.label} ${attribute.input} ${key} ${value}`);
       if (attribute.input == 'checkbox' || attribute.input == 'checkboxes') {
-        let checkboxes = {};
+        let checks = [];
         for (let key in value) {
-          if (value[key]) {
-            checkboxes[key] = 1;
-          }
-          else {
-            checkboxes[key] = 0;
+          if (value[key] == true || value[key] == 1) {
+            checks.push(key);
           }
         }
-        sanitized[key] = [checkboxes];
+        sanitized[key] = checks;
       }
       else if (attribute.input == 'date') {
         if (value && value.length > 0) {
@@ -216,23 +224,13 @@ export class ResponseAddPage {
         sanitized[key] = [value];
       }
       else if (attribute.input == 'upload') {
-        if (value && value.length > 0) {
-          sanitized[key] = [value];
-        }
-        else {
-          sanitized[key] = [];
-        }
+        //TODO handle image upload
       }
       else if (attribute.input == 'varchar') {
         sanitized[key] = [value];
       }
       else if (attribute.input == 'video') {
-        if (value && value.length > 0) {
-          sanitized[key] = [value];
-        }
-        else {
-          sanitized[key] = [];
-        }
+        //TODO handle video upload
       }
     }
     console.log(`Response Add Sanitized ${JSON.stringify(sanitized)}`);

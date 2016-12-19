@@ -217,20 +217,28 @@ export class ApiService {
     });
   }
 
-  createPost(host:string, token:string, form:number, title:string, values:any) {
+  createPost(host:string, token:string, form:number, title:string, description:string, values:any) {
     return new Promise((resolve, reject) => {
       let api = "/api/v3/posts/";
       let url = host + api;
       let body = JSON.stringify({
         source: this.source,
-        form: form,
+        form: { id: form },
         title: title,
+        content: description,
         values: values });
       let headers = this.getHeaders(token);
       let options = new RequestOptions({ headers: headers });
       console.log(`API POST ${url} ${body}`);
       this.http.post(url, body, options)
-        .map(res => res.json())
+        .map(res => {
+          if (res.status == 204) {
+            return {}
+          }
+          else {
+            return res.json();
+          }
+        })
         .subscribe(
           (json) => {
             console.log(`API POST ${url} ${JSON.stringify(json)}`);
@@ -238,15 +246,21 @@ export class ApiService {
             resolve(post);
           },
           (err) => {
-            console.error(`API POST ${url} ${JSON.stringify(err)}`);
-            let errors = err.json()['errors'];
-            console.error(`API POST ${url} ${JSON.stringify(errors)}`);
-            let message = [];
-            for (var i = 0; i < errors.length; i++) {
-              let error = errors[i];
-              message.push(error['message']);
+            try {
+              console.error(`API POST ${url} ${JSON.stringify(err)}`);
+              let errors = err.json()['errors'];
+              console.error(`API POST ${url} ${JSON.stringify(errors)}`);
+              let message = [];
+              for (var i = 0; i < errors.length; i++) {
+                let error = errors[i];
+                message.push(error['message']);
+              }
+              reject(message.join(", "));
             }
-            reject(message.join(", "));
+            catch(error) {
+              console.error(`API POST ${url} ${error}`);
+              reject();
+            }
           }
         );
     });
