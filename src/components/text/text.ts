@@ -21,4 +21,9 @@ export class TextComponent {
     console.log(`Text ${JSON.stringify(this.attribute)}`);
   }
 
+  setFocus(event) {
+    console.log(`Text setFocus`);
+    this.input.setFocus();
+  }
+
 }

@@ -1,13 +1,13 @@
-<ion-item>
+<ion-item  no-lines>
   <ion-icon ios="ios-checkbox" md="md-checkbox" color="grey" item-left></ion-icon>
   <ion-label>{{attribute.label}}</ion-label>
 </ion-item>
 <div [formGroup]="formGroup" *ngIf="formGroup">
-  <div [formGroupName]="attribute.key">
-    <ion-item *ngFor="let option of options">
+  <div class="checkboxes" [formGroupName]="attribute.key">
+    <ion-item no-lines *ngFor="let option of options">
       <ion-icon ios="ios-checkbox" md="md-checkbox" color="white" item-left></ion-icon>
       <ion-label>{{option}}</ion-label>
-      <ion-checkbox checked="false" formControlName="{{option}}"></ion-checkbox>
+      <ion-checkbox [(ngModel)]="values[option]" formControlName="{{option}}"></ion-checkbox>
     </ion-item>
   </div>
 </div>

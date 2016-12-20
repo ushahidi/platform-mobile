@@ -13,6 +13,8 @@
 $text-color:        #000;
 $background-color:  #fff;
 $refresher-border-color: #3f4751;
+$text-input-highlight-color-valid: #fdc245;
+$text-input-highlight-color-invalid: #a51a1a;
 
 // Named Color Variables
 // --------------------------------------------------
@@ -30,7 +32,7 @@ $colors: (
   dark:       #3f4751,
   grey:       #999999,
   muted:      #aaaaaa,
-  white:      #ffffff 
+  white:      #ffffff
 );
 
 

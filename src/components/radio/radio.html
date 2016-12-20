@@ -1,9 +1,9 @@
-<ion-item>
+<ion-item no-lines>
   <ion-icon ios="ios-checkmark-circle" md="md-checkmark-circle" color="grey" item-left></ion-icon>
   <ion-label>{{attribute.label}}</ion-label>
 </ion-item>
-<div [formGroup]="formGroup" *ngIf="formGroup">
-  <ion-list class="radio-group" radio-group #radio [formControlName]="attribute.key">
+<div [formGroup]="formGroup">
+  <ion-list no-lines class="radio-group" radio-group #radio [formControlName]="attribute.key">
     <ion-item *ngFor="let option of options">
       <ion-icon ios="ios-checkmark-circle" md="md-checkmark-circle" color="white" item-left></ion-icon>
       <ion-label>{{option}}</ion-label>

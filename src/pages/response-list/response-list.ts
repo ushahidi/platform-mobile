@@ -91,11 +91,11 @@ export class ResponseListPage {
 
   showResponse(event, response) {
     console.log("Deployment List showResponse");
-    this.navController.push(
-      ResponseDetailsPage,
-      { token: this.token,
-        deployment: this.deployment,
-        response: response });
+    // this.navController.push(
+    //   ResponseDetailsPage,
+    //   { token: this.token,
+    //     deployment: this.deployment,
+    //     response: response });
   }
 
   addResponse(event) {

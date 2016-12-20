@@ -21,4 +21,9 @@ export class TextAreaComponent {
     console.log(`TextArea ${JSON.stringify(this.attribute)}`);
   }
 
+  setFocus(event) {
+    console.log(`TextArea setFocus`);
+    this.textarea.setFocus();
+  }
+
 }

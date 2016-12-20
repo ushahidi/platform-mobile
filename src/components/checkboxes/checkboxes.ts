@@ -12,6 +12,7 @@ export class CheckboxesComponent {
   formGroup: FormGroup;
   attribute: any = {};
   options: any = [];
+  values: any = {};
 
   constructor() {
   }
@@ -28,6 +29,10 @@ export class CheckboxesComponent {
     }
     else {
       this.options = [];
+    }
+    for (let index in this.options) {
+      let option = this.options[index];
+      this.values[option] = false;
     }
   }
 }

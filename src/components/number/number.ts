@@ -20,4 +20,10 @@ export class NumberComponent {
   ngOnInit() {
     console.log(`Number ${JSON.stringify(this.attribute)}`);
   }
+
+  setFocus(input) {
+    console.log(`Number setFocus`);
+    this.input.setFocus();
+  }
+
 }

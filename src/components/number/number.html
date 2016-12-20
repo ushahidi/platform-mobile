@@ -1,4 +1,8 @@
-<ion-item [formGroup]="formGroup" *ngIf="formGroup">
+<ion-item no-lines>
   <ion-icon ios="ios-calculator" md="md-calculator" color="grey" item-left></ion-icon>
-  <ion-input #input type="number" [placeholder]="attribute.label" [formControlName]="attribute.key"></ion-input>
+  <ion-label tappable (click)="setFocus($event)">{{attribute.label}}</ion-label>
+</ion-item>
+<ion-item no-lines [formGroup]="formGroup" *ngIf="formGroup">
+  <ion-icon ios="ios-calculator" md="md-calculator" color="white" item-left></ion-icon>
+  <ion-input #input type="number" [formControlName]="attribute.key"></ion-input>
 </ion-item>

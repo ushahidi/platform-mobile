@@ -40,3 +40,48 @@ img {
     max-width: 100px;
   }
 }
+ion-label {
+  color: #555;
+}
+ion-input, ion-textarea {
+  border-bottom: 1px solid #cccccc;
+}
+.input-has-focus {
+  ion-input, ion-textarea {
+    border-bottom: 1px solid #fdc245;
+  }
+}
+ion-datetime {
+  width: 100%;
+  border-bottom: 1px solid #cccccc;
+  &:focus {
+    border-bottom-color: #fdc245 !important;
+  }
+  &.date-placeholder {
+    .datetime-text:empty:not(:focus):before {
+      color: #aaaaaa;
+      content: "MMMM D, YYYY";
+    }
+  }
+  &.time-placeholder {
+    .datetime-text:empty:not(:focus):before {
+      color: #aaaaaa;
+      content: "H:MM A";
+    }
+  }
+}
+.radio-group {
+  ion-item {
+    .item-inner {
+      border-bottom: 1px solid #cccccc !important;
+    }
+  }
+  ion-label {
+    color: #222;
+  }
+}
+.checkboxes {
+  ion-label {
+    color: #222;
+  }
+}

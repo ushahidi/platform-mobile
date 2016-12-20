@@ -12,6 +12,7 @@ export class SelectComponent {
   formGroup: FormGroup;
   attribute: any = {};
   options: any = [];
+  selectOptions: {} = null;
 
   @ViewChild('select') select: Select;
 
@@ -20,6 +21,9 @@ export class SelectComponent {
 
   ngOnInit() {
     console.log(`Select ${JSON.stringify(this.attribute)}`);
+    this.selectOptions = {
+      title: this.attribute.label
+    };
     if (this.attribute.options) {
       if (Array.isArray(this.attribute.options)) {
         this.options = this.attribute.options;

@@ -1,9 +1,9 @@
-<ion-item [formGroup]="formGroup" *ngIf="formGroup">
+<ion-item no-lines [formGroup]="formGroup" *ngIf="formGroup">
   <ion-icon ios="ios-calendar" md="md-calendar" color="grey" item-left></ion-icon>
   <ion-label>{{attribute.label}}</ion-label>
   <ion-input type="text" hidden [formControlName]="attribute.key" [(ngModel)]="datetime"></ion-input>
 </ion-item>
-<ion-item>
+<ion-item no-lines>
   <ion-icon ios="ios-calendar" md="md-calendar" color="white" item-left></ion-icon>
-  <ion-datetime displayFormat="MMMM D, YYYY" pickerFormat="D MMMM YYYY" placeholder="MMMM D, YYYY" [(ngModel)]="date" (ionChange)="dateChanged($event)"></ion-datetime>
+  <ion-datetime class="date-placeholder" displayFormat="MMMM D, YYYY" pickerFormat="D MMMM YYYY" placeholder="MMMM D, YYYY" [(ngModel)]="date" (ionChange)="dateChanged($event)"></ion-datetime>
 </ion-item>
