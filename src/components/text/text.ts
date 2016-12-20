@@ -11,6 +11,8 @@ export class TextComponent {
 
   formGroup: FormGroup;
   attribute: any = {};
+  required: boolean = false;
+  value: string = "";
 
   @ViewChild('input') input: TextInput;
 
@@ -19,6 +21,7 @@ export class TextComponent {
 
   ngOnInit() {
     console.log(`Text ${JSON.stringify(this.attribute)}`);
+    this.required = this.attribute.required == "true";
   }
 
   setFocus(event) {

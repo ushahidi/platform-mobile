@@ -62,13 +62,21 @@ export class ResponseAddPage {
     for (let index in this.attributes) {
       let attribute = this.attributes[index];
       if (attribute.input == 'location') {
+        let validator: any = null;
+        if (attribute.required == "true") {
+          validator = Validators.required;
+        }
         let formGroup = new FormGroup({
           lat: new FormControl(''),
-          lon: new FormControl('')});
+          lon: new FormControl('')}, validator);
         this.formGroup.addControl(attribute.key, formGroup);
       }
       else if (attribute.input == 'checkbox' || attribute.input == 'checkboxes') {
-        let formGroup = new FormGroup({});
+        let validator : any = null;
+        if (attribute.required == "true") {
+          validator = Validators.required;
+        }
+        let formGroup = new FormGroup({}, validator);
         let options = attribute.options.split(',');
         for (let index in options) {
           formGroup.addControl(options[index], new FormControl(''));
@@ -76,7 +84,11 @@ export class ResponseAddPage {
         this.formGroup.addControl(attribute.key, formGroup);
       }
       else {
-        this.formGroup.addControl(attribute.key, new FormControl(''));
+        let validators = [];
+        if (attribute.required == "true") {
+          validators.push(Validators.required);
+        }
+        this.formGroup.addControl(attribute.key, new FormControl('', validators));
       }
     }
   }
@@ -110,31 +122,41 @@ export class ResponseAddPage {
 
   postResponse(event:any=null) {
     console.log("Response Add postResponse");
-    let host = this.deployment.url;
-    let token = this.token;
-    let title = this.getTitle(this.formGroup.value);
-    let description = this.getDescription(this.formGroup.value);
-    let values = this.sanitizeValues(this.formGroup.value);
-    let loading = this.loadingController.create({
-      content: "Posting..."
-    });
-    loading.present();
-    this.api.createPost(host, token, this.form.id, title, description, values).then(
-      (resp) => {
-        console.log(`Response Add ${JSON.stringify(resp)}`);
-        loading.dismiss();
-        if (resp) {
-          this.postResponseSucceeded();
-        }
-        else {
-          this.postResponseFailed();
-        }
-      },
-      (error) => {
-        console.error(`Response Add ${error}`);
-        loading.dismiss();
-        this.postResponseFailed(error);
+    if (this.formGroup.valid) {
+      let host = this.deployment.url;
+      let token = this.token;
+      let title = this.getTitle(this.formGroup.value);
+      let description = this.getDescription(this.formGroup.value);
+      let values = this.sanitizeValues(this.formGroup.value);
+      let loading = this.loadingController.create({
+        content: "Posting..."
       });
+      loading.present();
+      this.api.createPost(host, token, this.form.id, title, description, values).then(
+        (resp) => {
+          console.log(`Response Add ${JSON.stringify(resp)}`);
+          loading.dismiss();
+          if (resp) {
+            this.postResponseSucceeded();
+          }
+          else {
+            this.postResponseFailed();
+          }
+        },
+        (error) => {
+          console.error(`Response Add ${error}`);
+          loading.dismiss();
+          this.postResponseFailed(error);
+        });
+    }
+    else {
+      let alert = this.alertController.create({
+        title: 'Required Fields',
+        subTitle: 'Looks like some of the required fields are missing.',
+        buttons: ['OK']
+      });
+      alert.present();
+    }
   }
 
   getTitle(values:any) {
