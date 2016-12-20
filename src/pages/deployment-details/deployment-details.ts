@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { Platform, NavParams, NavController, LoadingController, ToastController, AlertController, ModalController, ActionSheetController } from 'ionic-angular';
 import { StatusBar } from 'ionic-native';
 
+import { DeploymentLoginPage } from '../deployment-login/deployment-login';
+
 import { ResponseListPage } from '../response-list/response-list';
 import { ResponseAddPage } from '../response-add/response-add';
 
@@ -221,4 +223,39 @@ export class DeploymentDetailsPage {
       });
       toast.present();
     }
+
+    onLogout(event) {
+      console.log("Deployment Details onLogout");
+      let loading = this.loadingController.create({
+        content: "Logging out..."
+      });
+      loading.present();
+      let changes = {
+        access_token: "",
+        refresh_token: "",
+        username: "",
+        password: "" };
+      this.database.updateDeployment(this.deployment.id, changes).then(
+        (results) => {
+          loading.dismiss();
+          let toast = this.toastController.create({
+            message: 'Logout Successful',
+            duration: 1500
+          });
+          toast.present();
+          this.navController.setRoot(DeploymentLoginPage,
+           { deployment: this.deployment },
+           { });
+        },
+        (error) => {
+          loading.dismiss();
+          let alert = this.alertController.create({
+            title: 'Problem Logging Out',
+            subTitle: JSON.stringify(error),
+            buttons: ['OK']
+          });
+          alert.present();
+        });
+    }
+
 }

@@ -435,7 +435,7 @@ export class DatabaseService {
   updateStatement(table:string, columns:{}, id:string, values:{}) : string {
     let params = [];
     for (var column in columns) {
-      if (values[column]) {
+      if (column in values) {
         params.push(`${column} = ?`);
       }
     }
@@ -445,14 +445,8 @@ export class DatabaseService {
   updateParameters(table:string, columns:{}, id:string, values:{}) : any {
     let params = [];
     for (var column in columns) {
-      if (values[column]) {
-        let type = columns[column];
-        if (type == 'TEXT') {
-          params.push(values[column].toString());
-        }
-        else {
-          params.push(values[column]);
-        }
+      if (column in values) {
+        params.push(values[column]);
       }
     }
     return params;
