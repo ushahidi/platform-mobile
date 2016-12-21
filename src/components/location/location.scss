@@ -1,3 +1,13 @@
-location {
-
+.field-location {
+  .field-label {
+    color: #555;
+    font-size: 14px;
+    margin-bottom: 0;
+  }
+  ion-card {
+    max-width: 90%;
+    img {
+      width: 100%;
+    }
+  }
 }

@@ -1,8 +1,10 @@
-<ion-item no-lines [class.invalid]="required && value.length == 0">
-  <ion-icon no-lines ios="ios-create" md="md-create" color="grey" item-left></ion-icon>
-  <ion-label tappable (click)="setFocus($event)">{{attribute.label}}</ion-label>
-</ion-item>
-<ion-item no-lines [formGroup]="formGroup">
-  <ion-icon ios="ios-create" md="md-create" color="white" item-left></ion-icon>
-  <ion-input #input type="text" [formControlName]="attribute.key" [(ngModel)]="value"></ion-input>
-</ion-item>
+<div class="field-text" [class.focused]="focused" [class.invalid]="required && value.length == 0 && focused == false">
+  <ion-item no-lines [formGroup]="formGroup">
+    <ion-label floating class="field-label">
+      {{attribute.label}}
+      <span color="danger" *ngIf="required">*</span>
+    </ion-label>
+    <ion-input #input type="text" [formControlName]="attribute.key" [(ngModel)]="value" (focus)="onFocus($event)" (blur)="onBlur($event)"></ion-input>
+  </ion-item>
+  <p padding-left color="red" *ngIf="required && value.length == 0 && focused == false">Text required</p>
+</div>

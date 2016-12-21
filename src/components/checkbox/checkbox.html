@@ -1,13 +1,17 @@
-<ion-item  no-lines>
-  <ion-icon ios="ios-checkbox" md="md-checkbox" color="grey" item-left></ion-icon>
-  <ion-label>{{attribute.label}}</ion-label>
-</ion-item>
-<div [formGroup]="formGroup" *ngIf="formGroup">
-  <div class="checkboxes" [formGroupName]="attribute.key">
-    <ion-item no-lines *ngFor="let option of options">
-      <ion-icon ios="ios-checkbox" md="md-checkbox" color="white" item-left></ion-icon>
-      <ion-label>{{option}}</ion-label>
-      <ion-checkbox [(ngModel)]="values[option]" formControlName="{{option}}"></ion-checkbox>
-    </ion-item>
+<div class="field-checkbox" [class.invalid]="required && hasValue() == false">
+  <ion-item no-lines>
+    <ion-label class="field-label">
+      {{attribute.label}}
+      <span color="danger" *ngIf="required">*</span>
+    </ion-label>
+  </ion-item>
+  <div [formGroup]="formGroup" *ngIf="formGroup">
+    <div [formGroupName]="attribute.key">
+      <ion-item *ngFor="let option of options">
+        <ion-label>{{option}}</ion-label>
+        <ion-checkbox color="blue" [(ngModel)]="values[option]" formControlName="{{option}}" (ionChange)="checkChanged($event)"></ion-checkbox>
+      </ion-item>
+    </div>
   </div>
+  <p padding-left color="red" *ngIf="required && hasValue() == false">Selection required</p>
 </div>

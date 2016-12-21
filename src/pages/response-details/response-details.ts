@@ -5,11 +5,12 @@ import { Platform, NavParams, NavController, Button, LoadingController,
 import { ResponseEditPage } from '../response-edit/response-edit';
 
 import { ApiService } from '../../providers/api-service';
+import { DatabaseService } from '../../providers/database-service';
 
 @Component({
   selector: 'page-response-details',
   templateUrl: 'response-details.html',
-  providers: [ ApiService ],
+  providers: [ ApiService, DatabaseService ],
   entryComponents:[ ResponseEditPage ]
 })
 export class ResponseDetailsPage {
@@ -19,12 +20,14 @@ export class ResponseDetailsPage {
   deployment: any;
   response: any;
   form: any;
+  values: any;
 
   @ViewChild('submit') submit: Button;
 
   constructor(
     public platform:Platform,
     public api:ApiService,
+    public database:DatabaseService,
     public navParams: NavParams,
     public navController:NavController,
     public toastController: ToastController,
@@ -71,7 +74,7 @@ export class ResponseDetailsPage {
         response: this.response });
     modal.present();
     modal.onDidDismiss(data => {
-
+      console.log("Response Details editResponse Done");
     });
   }
 

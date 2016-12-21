@@ -19,26 +19,6 @@ export class Deployments {
     'refresh_token': 'TEXT'};
 }
 
-export class Posts {
-  static Table : string = 'posts';
-  static Columns : any = {
-    'id': 'INTEGER PRIMARY KEY AUTOINCREMENT',
-    'deployment': 'INTEGER',
-    'title': 'TEXT',
-    'content': 'TEXT',
-    'slug': 'TEXT',
-    'type': 'TEXT',
-    'status': 'TEXT',
-    'color': 'TEXT',
-    'message': 'TEXT',
-    'created': 'TEXT',
-    'updated': 'TEXT',
-    'image': 'TEXT',
-    'pending': 'INTEGER',
-    'latitude': 'DOUBLE',
-    'longitude': 'DOUBLE'};
-}
-
 export class Forms {
   static Table : string = 'forms';
   static Columns : any = {
@@ -72,6 +52,40 @@ export class Attributes {
     'options': 'TEXT'};
 }
 
+export class Posts {
+  static Table : string = 'posts';
+  static Columns : any = {
+    'id': 'INTEGER PRIMARY KEY AUTOINCREMENT',
+    'deployment': 'INTEGER',
+    'title': 'TEXT',
+    'content': 'TEXT',
+    'slug': 'TEXT',
+    'type': 'TEXT',
+    'status': 'TEXT',
+    'color': 'TEXT',
+    'message': 'TEXT',
+    'created': 'TEXT',
+    'updated': 'TEXT',
+    'image': 'TEXT',
+    'pending': 'INTEGER',
+    'latitude': 'DOUBLE',
+    'longitude': 'DOUBLE'};
+}
+
+export class Values {
+  static Table : string = 'values_';
+  static Columns : any = {
+    'id': 'INTEGER PRIMARY KEY AUTOINCREMENT',
+    'deployment': 'INTEGER',
+    'form': 'INTEGER',
+    'post': 'INTEGER',
+    'key': 'TEXT',
+    'value': 'TEXT',
+    'label': 'TEXT',
+    'input': 'TEXT',
+    'type': 'TEXT'};
+}
+
 @Injectable()
 export class DatabaseService {
 
@@ -86,6 +100,7 @@ export class DatabaseService {
     this.database = null;
     this.tables[Deployments.Table] = Deployments.Columns;
     this.tables[Posts.Table] = Posts.Columns;
+    this.tables[Values.Table] = Values.Columns;
     this.tables[Forms.Table] = Forms.Columns;
     this.tables[Attributes.Table] = Attributes.Columns;
   }
@@ -162,33 +177,40 @@ export class DatabaseService {
   }
 
   updateDeployment(id:string, data:{}) {
+    console.log(`Database updateDeployment ${id} ${JSON.stringify(data)}`);
     return this.executeUpdate(Deployments.Table, id, data);
   }
 
   removeDeployment(id:string) {
+    console.log(`Database removeDeployment ${id}`);
     return this.executeDelete(Deployments.Table, {
       "id": id });
   }
 
   getDeploymentBySubdomain(subdomain:string) {
+    console.log(`Database getDeploymentBySubdomain ${subdomain}`);
     return this.executeSelect(Deployments.Table, {
       "subdomain": subdomain });
   }
   getDeployments() {
+    console.log(`Database getDeployments`);
     return this.executeSelect(Deployments.Table);
   }
 
   getDeployment(id:number) {
+    console.log(`Database getDeployment ${id}`);
     return this.executeSelect(Deployments.Table, {
       "id": id });
   }
 
   getPosts(deployment:number) {
+    console.log(`Database getPosts ${deployment}`);
     return this.executeSelect(Posts.Table, {
       "deployment": deployment });
   }
 
   getPost(deployment:number, post:number) {
+    console.log(`Database getPost ${deployment} ${post}`);
     return this.executeSelect(Posts.Table, {
       "deployment": deployment,
       "id": post });
@@ -208,16 +230,36 @@ export class DatabaseService {
   }
 
   removePosts(deployment:string) {
+    console.log(`Database removePosts ${deployment}`);
     return this.executeDelete(Posts.Table, {
       "deployment": deployment });
   }
 
+  addValue(deployment:number, form:number, post:number, data:{}) {
+    console.log(`Database addValue ${deployment} ${form} ${post} ${JSON.stringify(data)}`);
+    data['deployment'] = deployment;
+    data['form'] = form;
+    data['post'] = post;
+    return Promise.all([
+      this.executeUpdate(Values.Table, data['id'], data),
+      this.executeInsert(Values.Table, data)]);
+  }
+
+  getValues(deployment:number, post:number) {
+    console.log(`Database getValues ${deployment} ${post}`);
+    return this.executeSelect(Values.Table, {
+      "deployment": deployment,
+      "post": post });
+  }
+
   getForms(deployment:number) {
+    console.log(`Database getForms ${deployment}`);
     return this.executeSelect(Forms.Table, {
       "deployment": deployment });
   }
 
   getForm(deployment:number, form:number) {
+    console.log(`Database getForm ${deployment} ${form}`);
     return this.executeSelect(Forms.Table, {
       "deployment": deployment,
       "id": form });
@@ -232,6 +274,7 @@ export class DatabaseService {
   }
 
   removeForms(deployment:string) {
+    console.log(`Database removeForms ${deployment}`);
     return this.executeDelete(Forms.Table, {
       "deployment": deployment });
   }
@@ -246,6 +289,7 @@ export class DatabaseService {
   }
 
   getAttributes(deployment:number, form:number) {
+    console.log(`Database getAttributes ${deployment} ${form}`);
     return this.executeSelect(Attributes.Table,
       { "deployment": deployment,
         "form": form },
@@ -253,6 +297,7 @@ export class DatabaseService {
   }
 
   removeAttributes(deployment:string) {
+    console.log(`Database removeAttributes ${deployment}`);
     return this.executeDelete(Attributes.Table, {
       "deployment": deployment });
   }
@@ -351,6 +396,9 @@ export class DatabaseService {
   }
 
   executeUpdate(table:string, id:string, data:{}) {
+    if (id == null) {
+      return Promise.resolve(false);
+    }
     return new Promise((resolve, reject) => {
       this.openDatabase().then((database:SQLite) => {
         let columns = this.tables[table];

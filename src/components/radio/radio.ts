@@ -12,6 +12,7 @@ export class RadioComponent {
   formGroup: FormGroup;
   attribute: any = {};
   options: any = [];
+  required: boolean = false;
 
   @ViewChild('radio') radio: RadioGroup;
 
@@ -31,6 +32,7 @@ export class RadioComponent {
     else {
       this.options = [];
     }
+    this.required = this.attribute.required == "true";
   }
 
 }

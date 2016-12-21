@@ -13,8 +13,8 @@
 $text-color:        #000;
 $background-color:  #fff;
 $refresher-border-color: #3f4751;
-$text-input-highlight-color-valid: #fdc245;
-$text-input-highlight-color-invalid: #a51a1a;
+$text-input-highlight-color-valid: #2274b4;
+$text-input-highlight-color-invalid: #dd0000;
 
 // Named Color Variables
 // --------------------------------------------------
@@ -28,11 +28,15 @@ $colors: (
   primary:    #fdc245,
   secondary:  #8793a2,
   danger:     #a51a1a,
-  light:      #dde0e5,
+  light:      #f0f2f4,
   dark:       #3f4751,
-  grey:       #999999,
   muted:      #aaaaaa,
-  white:      #ffffff
+  label:      #999999,
+  grey:       #999999,
+  white:      #ffffff,
+  blue:       #2274b4,
+  yellow:     #fdc245,
+  red:        #dd0000,
 );
 
 

@@ -17,7 +17,7 @@
   <div *ngIf="attributes && formGroup">
     <form [formGroup]="formGroup" (ngSubmit)="postResponse()">
       <ion-list>
-        <div padding-top *ngFor="let attribute of attributes">
+        <div padding-bottom *ngFor="let attribute of attributes">
           <field-checkbox [attribute]="attribute" [formGroup]="formGroup" *ngIf="attribute.input == 'checkbox'"></field-checkbox>
           <field-checkboxes [attribute]="attribute" [formGroup]="formGroup" *ngIf="attribute.input == 'checkboxes'"></field-checkboxes>
           <field-date [attribute]="attribute" [formGroup]="formGroup" *ngIf="attribute.input == 'date'"></field-date>

@@ -1,7 +1,11 @@
-<ion-item no-lines [formGroup]="formGroup" *ngIf="formGroup">
-  <ion-icon ios="ios-list-box" md="md-list-box" color="grey" item-left></ion-icon>
-  <ion-label>{{attribute.label}}</ion-label>
-  <ion-select #select [selectOptions]="selectOptions" [formControlName]="attribute.key">
-    <ion-option value="{{option}}" *ngFor="let option of options">{{option}}</ion-option>
-  </ion-select>
-</ion-item>
+<div class="field-select">
+  <ion-item [formGroup]="formGroup" *ngIf="formGroup">
+    <ion-label class="field-label">
+      {{attribute.label}}
+      <span color="danger" *ngIf="required">*</span>
+    </ion-label>
+    <ion-select #select [selectOptions]="selectOptions" [formControlName]="attribute.key">
+      <ion-option value="{{option}}" *ngFor="let option of options">{{option}}</ion-option>
+    </ion-select>
+  </ion-item>
+</div>

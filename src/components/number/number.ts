@@ -11,6 +11,9 @@ export class NumberComponent {
 
   formGroup: FormGroup;
   attribute: any = {};
+  required: boolean = false;
+  focused: boolean = false;
+  value: string = "";
 
   @ViewChild('input') input: TextInput;
 
@@ -21,9 +24,14 @@ export class NumberComponent {
     console.log(`Number ${JSON.stringify(this.attribute)}`);
   }
 
-  setFocus(input) {
-    console.log(`Number setFocus`);
-    this.input.setFocus();
+  onFocus(event) {
+    console.log(`Number onFocus ${JSON.stringify(this.attribute)}`);
+    this.focused = true;
+  }
+
+  onBlur(event) {
+    console.log(`Number onBlur ${JSON.stringify(this.attribute)}`);
+    this.focused = false;
   }
 
 }

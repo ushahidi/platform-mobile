@@ -13,6 +13,7 @@ export class SelectComponent {
   attribute: any = {};
   options: any = [];
   selectOptions: {} = null;
+  required: boolean = false;
 
   @ViewChild('select') select: Select;
 

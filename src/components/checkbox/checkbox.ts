@@ -14,6 +14,7 @@ export class CheckboxComponent {
   attribute: any = {};
   options: any = [];
   values: any = {};
+  required: boolean = false;
 
   constructor() {
   }
@@ -35,6 +36,21 @@ export class CheckboxComponent {
       let option = this.options[index];
       this.values[option] = false;
     }
+    this.required = this.attribute.required == "true";
+  }
+
+  checkChanged(event) {
+    console.log(`Checkbox checkChanged`);
+  }
+
+  hasValue() {
+    for (let index in this.options) {
+      let option = this.options[index];
+      if (this.values[option]) {
+        return true;
+      }
+    }
+    return false;
   }
 
 }

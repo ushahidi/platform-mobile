@@ -1,8 +1,10 @@
-<ion-item no-lines>
-  <ion-icon no-lines ios="ios-paper" md="md-paper" color="grey" item-left></ion-icon>
-  <ion-label tappable (click)="setFocus($event)">{{attribute.label}}</ion-label>
-</ion-item>
-<ion-item no-lines [formGroup]="formGroup">
-  <ion-icon ios="ios-paper" md="md-paper" color="white" item-left></ion-icon>
-  <ion-textarea #textarea type="text" [formControlName]="attribute.key"></ion-textarea>
-</ion-item>
+<div class="field-textarea" [class.focused]="focused" [class.invalid]="required && value.length == 0 && focused == false">
+  <ion-item [formGroup]="formGroup">
+    <ion-label floating class="field-label">
+      {{attribute.label}}
+      <span color="danger" *ngIf="required">*</span>
+    </ion-label>
+    <ion-textarea #textarea type="text" [formControlName]="attribute.key" (focus)="onFocus($event)" (blur)="onBlur($event)"></ion-textarea>
+  </ion-item>
+  <p padding-left color="red" *ngIf="required && value.length == 0 && focused == false">Text required</p>
+</div>

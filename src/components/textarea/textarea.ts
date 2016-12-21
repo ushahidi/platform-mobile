@@ -11,6 +11,9 @@ export class TextAreaComponent {
 
   formGroup: FormGroup;
   attribute: any = {};
+  required: boolean = false;
+  focused: boolean = false;
+  value: string = "";
 
   @ViewChild('textarea') textarea: TextArea;
 
@@ -21,9 +24,13 @@ export class TextAreaComponent {
     console.log(`TextArea ${JSON.stringify(this.attribute)}`);
   }
 
-  setFocus(event) {
-    console.log(`TextArea setFocus`);
-    this.textarea.setFocus();
+  onFocus(event) {
+    console.log(`TextArea onFocus ${JSON.stringify(this.attribute)}`);
+    this.focused = true;
   }
 
+  onBlur(event) {
+    console.log(`TextArea onBlur ${JSON.stringify(this.attribute)}`);
+    this.focused = false;
+  }
 }

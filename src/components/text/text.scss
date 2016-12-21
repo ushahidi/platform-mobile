@@ -1,3 +1,21 @@
-text {
-
+.field-text {
+  .field-label {
+    color: #555;
+  }
+  ion-input {
+    border-bottom: 1px solid #cccccc;
+  }
+  &.invalid {
+    ion-input {
+      border-bottom: 1px solid #dd0000 !important;
+    }
+  }
+  &.focused {
+    .field-label {
+      color: #2274b4;
+    }
+    ion-input {
+      border-bottom: 1px solid #2274b4 !important;
+    }
+  }
 }

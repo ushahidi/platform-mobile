@@ -1,7 +1,17 @@
-radio {
-
-}
-.radio-group {
-  margin-top: 0;
-  margin-bottom: 0;
+.field-radio {
+  .field-label {
+    color: #555;
+    font-size: 14px;
+    margin-bottom: 0;
+  }
+  ion-list {
+    border: none;
+    margin-top: 0;
+    margin-bottom: 0;
+    ion-item {
+      .item-inner {
+        border-bottom: 1px solid #cccccc !important;
+      }
+    }
+  }
 }

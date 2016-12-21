@@ -17,6 +17,7 @@ export class LocationComponent {
   mapImage: string = null;
   latitude: number = null;
   longitude: number = null;
+  required: boolean = false;
 
   @Output() changeLocation = new EventEmitter();
 
@@ -25,6 +26,7 @@ export class LocationComponent {
 
   ngOnInit() {
     console.log(`Location ${JSON.stringify(this.attribute)}`);
+    this.required = this.attribute.required == "true";
     this.detectLocation();
   }
 
@@ -48,8 +50,8 @@ export class LocationComponent {
       });
   }
 
-  mapClicked(event) {
-    console.log(`Location inputClicked`);
+  changeLocatupdateLocationion(event) {
+    console.log(`Location updateLocation`);
     this.changeLocation.emit({
       latitude: this.latitude,
       longitude: this.longitude});

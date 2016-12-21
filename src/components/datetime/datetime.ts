@@ -16,12 +16,14 @@ export class DateTimeComponent {
   datetime: string = null;
   date: string = null;
   time: string = null;
+  required: boolean = false;
 
   constructor() {
   }
 
   ngOnInit() {
     console.log(`DateTime ${JSON.stringify(this.attribute)}`);
+    this.required = this.attribute.required == "true";
   }
 
   dateChanged(event) {

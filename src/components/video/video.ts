@@ -12,9 +12,10 @@ export class VideoComponent {
 
   formGroup: FormGroup;
   attribute: any = {};
-  videoData: any = null;
-  videoThumbail: string;
-  videoPlaceholder: string = "/assets/images/placeholder-video.jpg";
+  //videoData: string = "/assets/images/placeholder-video.jpg";
+  videoData: string = null;
+  videoThumbail: string = null;
+  required: boolean = false;
 
   constructor(
     public alertController:AlertController,
@@ -23,6 +24,7 @@ export class VideoComponent {
 
   ngOnInit() {
     console.log(`Video ${JSON.stringify(this.attribute)}`);
+    this.required = this.attribute.required == "true";
   }
 
   captureVideo() {
@@ -43,5 +45,9 @@ export class VideoComponent {
           alert.present();
         }
       );
+  }
+
+  deleteVideo() {
+    console.log(`Video deleteVideo`);
   }
 }

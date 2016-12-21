@@ -1,14 +1,22 @@
-<ion-item no-lines [formGroup]="formGroup">
-  <ion-icon ios="ios-image" md="md-image" color="grey" item-left></ion-icon>
-  <ion-label>{{attribute.label}}</ion-label>
-  <ion-input type="text" hidden [formControlName]="attribute.key"></ion-input>
-</ion-item>
-<ion-item no-lines>
-  <ion-icon ios="ios-image" md="md-image" color="white" item-left></ion-icon>
-  <ion-card class="card-button" *ngIf="imageData != null" (click)="showOptions()">
+<div class="field-image" [class.invalid]="required && imageData == null">
+  <ion-item no-lines [formGroup]="formGroup">
+    <ion-label class="field-label">
+      {{attribute.label}}
+      <span color="danger" *ngIf="required">*</span>
+    </ion-label>
+    <ion-input type="text" hidden [formControlName]="attribute.key"></ion-input>
+  </ion-item>
+  <ion-card margin-left margin-right *ngIf="imageData != null">
     <img full [src]="imageData" />
   </ion-card>
-  <ion-card class="card-button" *ngIf="imageData == null" (click)="showOptions()">
-    <img full [src]="imagePlaceholder" />
-  </ion-card>
-</ion-item>
+  <button ion-button margin-left icon-left text-uppercase small color="light" *ngIf="imageData == null" (click)="showOptions()">
+    <ion-icon name="camera"></ion-icon> Add Photo
+  </button>
+  <button ion-button margin-left icon-left text-uppercase small color="light" *ngIf="imageData != null" (click)="showOptions()">
+    <ion-icon name="camera"></ion-icon> Replace Photo
+  </button>
+  <button ion-button icon-only text-uppercase small color="red" *ngIf="imageData != null" (click)="deletePhoto()">
+    <ion-icon name="trash"></ion-icon>
+  </button>
+  <p padding-left color="red" *ngIf="required && imageData == null">Image required</p>
+</div>

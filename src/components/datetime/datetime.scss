@@ -1,3 +1,22 @@
-datetime {
-
+.field-datetime {
+  .field-label {
+    color: #555;
+    font-size: 14px;
+    margin-bottom: 0;
+  }
+  ion-datetime {
+    width: 100%;
+    &.date-placeholder {
+      .datetime-text:empty:not(:focus):before {
+        color: #aaaaaa;
+        content: "YYYY-MM-DD";
+      }
+    }
+    &.time-placeholder {
+      .datetime-text:empty:not(:focus):before {
+        color: #aaaaaa;
+        content: "H:MM A";
+      }
+    }
+  }
 }

@@ -62,6 +62,7 @@ export class ResponseListPage {
       this.database.getPosts(this.deployment.id).then(results => {
         let responses = <any[]>results;
         if (responses && responses.length > 0) {
+          let responses = <any[]>results;
           console.log(`Response List loadPosts Database ${responses.length}`);
           this.responses = responses;
         }
@@ -81,6 +82,19 @@ export class ResponseListPage {
         for (let index in responses) {
           let response = responses[index];
           this.database.addPost(this.deployment.id, response);
+          let form = response.form;
+          let values = response.values;
+          for (let key in values) {
+            let value = values[key][0];
+            let data = {
+              deployment: this.deployment.id,
+              form: form.id,
+              post: response.id,
+              key: key,
+              value: value.toString()};
+            console.log(`Response List Value ${JSON.stringify(data)}`);
+            this.database.addValue(this.deployment.id, form.id, response.id, data);
+          }
         }
         if (event) {
           event.complete();
@@ -91,11 +105,11 @@ export class ResponseListPage {
 
   showResponse(event, response) {
     console.log("Deployment List showResponse");
-    // this.navController.push(
-    //   ResponseDetailsPage,
-    //   { token: this.token,
-    //     deployment: this.deployment,
-    //     response: response });
+    this.navController.push(
+      ResponseDetailsPage,
+      { token: this.token,
+        deployment: this.deployment,
+        response: response });
   }
 
   addResponse(event) {

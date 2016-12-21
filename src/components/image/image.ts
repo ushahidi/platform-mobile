@@ -12,8 +12,10 @@ export class ImageComponent {
 
   formGroup: FormGroup;
   attribute: any = {};
+  //imageData: string = "/assets/images/placeholder-photo.jpg";
   imageData: string = null;
-  imagePlaceholder: string = "/assets/images/placeholder-photo.jpg";
+  imageThumbnail: string = null;
+  required: boolean = false;
 
   @ViewChild('button') button: Button;
 
@@ -24,6 +26,7 @@ export class ImageComponent {
 
   ngOnInit() {
     console.log(`Image ${JSON.stringify(this.attribute)}`);
+    this.required = this.attribute.required == "true";
   }
 
   showOptions() {
@@ -94,5 +97,9 @@ export class ImageComponent {
         });
         alert.present();
       });
+  }
+
+  deletePhoto() {
+    console.log(`Image deletePhoto`);
   }
 }
