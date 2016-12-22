@@ -11,7 +11,7 @@
           <img class="lazy profile" [src]="placeholderUser" [lazyLoad]="imageUser" [offset]="offset">
         </ion-col>
         <ion-col width-70 tappable (click)="onCardSelected($event)">
-          <p text-muted>Dale Zak {{response.created | timeAgo}}</p>
+          <p text-muted>{{name}} {{response.created | timeAgo}}</p>
         </ion-col>
         <ion-col width-10 text-right>
           <button tappable (click)="onMenuSelected($event)">

@@ -130,6 +130,30 @@ export class ApiService {
     });
   }
 
+  getUsers(host:string, token:string) {
+    return new Promise((resolve, reject) => {
+      let api = `/api/v3/users`;
+      let params = new URLSearchParams();
+      let url = host + api;
+      let headers = this.getHeaders(token);
+      let options = new RequestOptions({ headers: headers, search: params });
+      console.log(`API GET ${url} ${params.toString()}`);
+      this.http.get(url, options)
+        .map(res => res.json())
+        .subscribe(
+          (json) => {
+            console.log(`API GET ${url} ${JSON.stringify(json)}`);
+            let users = json.results;
+            resolve(users);
+          },
+          (error) => {
+            console.error(`API GET ${url} ${JSON.stringify(error)}`);
+            reject(this.getErrorMessage(error));
+          }
+        );
+    });
+  }
+
   getUser(host:string, token:string, user:any="me") {
     return new Promise((resolve, reject) => {
       let api = `/api/v3/users/${user}`;
@@ -205,7 +229,7 @@ export class ApiService {
         .subscribe(
           (json) => {
             console.log(`API GET ${url} ${JSON.stringify(json)}`);
-            let posts = json;
+            let posts = json.results;
             resolve(posts);
           },
           (error) => {

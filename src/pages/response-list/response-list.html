@@ -24,7 +24,7 @@
         <ion-icon ios="md-add" md="md-add"></ion-icon>
       </button>
     </ion-fab>
-    <ion-refresher (ionRefresh)="loadPosts($event, false)">
+    <ion-refresher (ionRefresh)="loadUpdates($event, false)">
       <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
     <div class="loading" text-center margin-top-lg margin-bottom-lg *ngIf="responses == null">
@@ -39,7 +39,7 @@
             (click)="addResponse($event)">Submit A Survey Response</button>
     </div>
     <div *ngIf="responses && responses.length > 0">
-      <response-card [response]="response" [index]="i"
+      <response-card [response]="response" [user]="users[response.user]" [index]="i"
                   (cardSelected)="showResponse($event, response)"
                   (menuSelected)="showOptions($event, response)"
                   *ngFor="let response of responses; let i = index"></response-card>

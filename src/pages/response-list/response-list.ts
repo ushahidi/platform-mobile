@@ -23,6 +23,7 @@ export class ResponseListPage {
   deployment: any;
   responses: any;
   forms: any;
+  users: any;
   map: GoogleMap;
   view: string = 'list';
 
@@ -49,17 +50,58 @@ export class ResponseListPage {
     this.token = this.navParams.get("token");
     this.deployment = this.navParams.get("deployment");
     this.forms = this.navParams.get("forms");
-    this.loadPosts();
+    this.loadUpdates(null, true);
   }
 
   ionViewDidEnter() {
     console.log("Response List ionViewDidEnter");
   }
 
-  loadPosts(event:any=null, cache:boolean=true) {
+  loadUpdates(event:any=null, cache:boolean=false) {
+    console.log("Response List loadUpdates");
+    let promises = [
+      this.loadUsers(cache),
+      this.loadPosts(cache)];
+    Promise.all(promises).then(done => {
+      if (event) {
+        event.complete();
+      }
+    });
+  }
+
+  loadUsers(cache:boolean=true) {
+    console.log(`Response List loadUsers Cache ${cache}`);
+    if (cache && this.users) {
+      return this.database.getUsers(this.deployment.id).then(results => {
+        let users = <any[]>results;
+        console.log(`Response List loadUsers Database ${users.length}`);
+        this.users = {};
+        for (let index in users) {
+          let user = users[index];
+          this.users[user.id] = user;
+        }
+      });
+    }
+    else {
+      return this.api.getUsers(this.deployment.url, this.token).then(results => {
+        let users = <any[]>results;
+        console.log(`Response List loadUsers API ${users.length}`);
+        this.users = {};
+        for (let index in users) {
+          let user = users[index];
+          this.users[user.id] = user;
+          this.database.addUser(this.deployment.id, user).then(results => {
+            console.log(`Response List loadUsers Add User ${results}`);
+          });
+        }
+      });
+    }
+  }
+
+  loadPosts(cache:boolean=true) {
     console.log(`Response List loadPosts Cache ${cache}`);
     if (cache && this.responses) {
-      this.database.getPosts(this.deployment.id).then(results => {
+      return this.database.getPosts(this.deployment.id).then(results => {
         let responses = <any[]>results;
         if (responses && responses.length > 0) {
           let responses = <any[]>results;
@@ -67,21 +109,20 @@ export class ResponseListPage {
           this.responses = responses;
         }
         else {
-          this.loadPosts(event, false);
-        }
-        if (event) {
-          event.complete();
+          this.loadPosts(false);
         }
       });
     }
     else {
-      this.api.getPosts(this.deployment.url, this.token).then(results => {
-        let responses = <any[]>results['results'];
-        console.log(`Response List loadPosts API ${responses.length}`)
+      return this.api.getPosts(this.deployment.url, this.token).then(results => {
+        let responses = <any[]>results;
+        console.log(`Response List loadPosts API ${responses.length}`);
         this.responses = responses;
         for (let index in responses) {
           let response = responses[index];
-          this.database.addPost(this.deployment.id, response);
+          this.database.addPost(this.deployment.id, response).then(results => {
+            console.log(`Response List loadPosts Add Post ${results}`);
+          })
           let form = response.form;
           let values = response.values;
           for (let key in values) {
@@ -96,20 +137,17 @@ export class ResponseListPage {
             this.database.addValue(this.deployment.id, form.id, response.id, data);
           }
         }
-        if (event) {
-          event.complete();
-        }
       });
     }
   }
 
   showResponse(event, response) {
     console.log("Deployment List showResponse");
-    this.navController.push(
-      ResponseDetailsPage,
-      { token: this.token,
-        deployment: this.deployment,
-        response: response });
+    // this.navController.push(
+    //   ResponseDetailsPage,
+    //   { token: this.token,
+    //     deployment: this.deployment,
+    //     response: response });
   }
 
   addResponse(event) {

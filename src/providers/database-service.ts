@@ -57,6 +57,8 @@ export class Posts {
   static Columns : any = {
     'id': 'INTEGER PRIMARY KEY AUTOINCREMENT',
     'deployment': 'INTEGER',
+    'form': 'INTEGER',
+    'user': 'INTEGER',
     'title': 'TEXT',
     'content': 'TEXT',
     'slug': 'TEXT',
@@ -230,6 +232,12 @@ export class DatabaseService {
   addPost(deployment:number, data:{}) {
     console.log(`Database addPost Deployment ${deployment} ${JSON.stringify(data)}`);
     data['deployment'] = deployment;
+    if (data['form'] && data['form']['id']) {
+      data['form'] = data['form']['id'];
+    }
+    if (data['user'] && data['user']['id']) {
+      data['user'] = data['user']['id'];
+    }
     if (data['values']['location_default']) {
       let location = data['values']['location_default'][0];
       data['latitude'] = location['lat'];
@@ -323,9 +331,15 @@ export class DatabaseService {
 
   getUser(deployment:number, user:number) {
     console.log(`Database getUser ${deployment} ${user}`);
-    return this.executeSelect(Forms.Table, {
+    return this.executeSelect(Users.Table, {
       "deployment": deployment,
       "id": user });
+  }
+
+  getUsers(deployment:number) {
+    console.log(`Database getUsers ${deployment}`);
+    return this.executeSelect(Users.Table, {
+      "deployment": deployment });
   }
 
   executeFirst(table:string, where:{}=null, order:{}=null) {
