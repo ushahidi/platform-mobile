@@ -139,10 +139,7 @@ export class MyApp {
 
   removeDeployment(event, deployment) {
     console.log(`App removeDeployment ${deployment.name}`);
-    let loading = this.loadingController.create({
-      content: "Removing..."
-    });
-    loading.present();
+    let loading = this.showLoading("Removing...");
     let promises = [
       this.database.removeAttributes(deployment.id),
       this.database.removeForms(deployment.id),
@@ -167,12 +164,34 @@ export class MyApp {
       },
       (error) => {
         loading.dismiss();
-        let alert = this.alertController.create({
-          title: 'Problem Removing Deployment',
-          subTitle: error,
-          buttons: ['OK']
-        });
-        alert.present();
+        this.showAlert('Problem Removing Deployment', error);
       });
+  }
+
+  showLoading(message) {
+    let loading = this.loadingController.create({
+      content: message
+    });
+    loading.present();
+    return loading;
+  }
+
+  showAlert(title, subTitle) {
+    let alert = this.alertController.create({
+      title: title,
+      subTitle: subTitle,
+      buttons: ['OK']
+    });
+    alert.present();
+    return alert;
+  }
+
+  showToast(message, duration:number=1500) {
+    let toast = this.toastController.create({
+      message: message,
+      duration: duration
+    });
+    toast.present();
+    return toast;
   }
 }

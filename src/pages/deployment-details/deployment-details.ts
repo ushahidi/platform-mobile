@@ -24,6 +24,7 @@ export class DeploymentDetailsPage {
   attributes: any;
   offset: number = 1000;
   placeholder: string = "assets/images/placeholder-photo.jpg";
+  user: {} = null;
 
   constructor(
     public platform:Platform,
@@ -59,6 +60,7 @@ export class DeploymentDetailsPage {
     loadUpdates(event:any=null, cache:boolean=false) {
       console.log("Response Details loadUpdates");
       let promises = [
+        this.loadUser(cache),
         this.loadDeployment(cache),
         this.loadForms(cache),
         this.loadAttributes(cache)];
@@ -67,6 +69,20 @@ export class DeploymentDetailsPage {
           event.complete();
         }
       });
+    }
+
+    loadUser(cache:boolean=true) {
+      return this.api.getUser(this.deployment.url, this.token).then(
+        (results) => {
+          console.log(`Deployment Details User ${JSON.stringify(results)}`);
+          this.user = results;
+          this.database.addUser(this.deployment, this.user).then(results => {
+            console.log(`Deployment Details Update User ${JSON.stringify(results)}`);
+          });
+        },
+        (error) => {
+          console.error(`Deployment Details User ${error}`);
+        });
     }
 
     loadDeployment(cache:boolean=true) {
@@ -157,20 +173,12 @@ export class DeploymentDetailsPage {
 
     showCollections(event) {
       console.log("Deployment Details showCollections");
-      let toast = this.toastController.create({
-        message: 'Collections Not Implemented',
-        duration: 1500
-      });
-      toast.present();
+      this.showToast('Collections Not Implemented');
     }
 
     showSettings(event) {
       console.log("Deployment Details showSettings");
-      let toast = this.toastController.create({
-        message: 'Settings Not Implemented',
-        duration: 1500
-      });
-      toast.present();
+      this.showToast('Settings Not Implemented');
     }
 
     addResponse(event) {
@@ -217,19 +225,12 @@ export class DeploymentDetailsPage {
 
     shareDeployment(event) {
       console.log("Deployment Details shareDeployment");
-      let toast = this.toastController.create({
-        message: 'Sharing Not Implemented',
-        duration: 1500
-      });
-      toast.present();
+      this.showToast('Sharing Not Implemented');
     }
 
     onLogout(event) {
       console.log("Deployment Details onLogout");
-      let loading = this.loadingController.create({
-        content: "Logging out..."
-      });
-      loading.present();
+      let loading = this.showLoading("Logging out...");
       let changes = {
         access_token: "",
         refresh_token: "",
@@ -238,24 +239,42 @@ export class DeploymentDetailsPage {
       this.database.updateDeployment(this.deployment.id, changes).then(
         (results) => {
           loading.dismiss();
-          let toast = this.toastController.create({
-            message: 'Logout Successful',
-            duration: 1500
-          });
-          toast.present();
+          this.showToast('Logout Successful');
           this.navController.setRoot(DeploymentLoginPage,
            { deployment: this.deployment },
            { });
         },
         (error) => {
           loading.dismiss();
-          let alert = this.alertController.create({
-            title: 'Problem Logging Out',
-            subTitle: JSON.stringify(error),
-            buttons: ['OK']
-          });
-          alert.present();
+          this.showAlert('Problem Logging Out', error);
         });
+    }
+
+    showLoading(message) {
+      let loading = this.loadingController.create({
+        content: message
+      });
+      loading.present();
+      return loading;
+    }
+
+    showAlert(title, subTitle) {
+      let alert = this.alertController.create({
+        title: title,
+        subTitle: subTitle,
+        buttons: ['OK']
+      });
+      alert.present();
+      return alert;
+    }
+
+    showToast(message, duration:number=1500) {
+      let toast = this.toastController.create({
+        message: message,
+        duration: duration
+      });
+      toast.present();
+      return toast;
     }
 
 }

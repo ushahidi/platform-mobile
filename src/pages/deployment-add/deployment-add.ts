@@ -74,20 +74,12 @@ export class DeploymentAddPage {
 
   addDeployment(event, deployment) {
     console.log(`Deployment Add addDeployment`);
-    let loading = this.loadingController.create({
-      content: "Adding..."
-    });
-    loading.present();
+    let loading = this.showLoading("Adding...");
     this.database.getDeploymentBySubdomain(deployment.subdomain).then(results => {
       let deployments = <any[]>results;
       if (deployments && deployments.length > 0) {
         loading.dismiss();
-        let alert = this.alertController.create({
-          title: 'Deployment Already Added',
-          subTitle: 'Looks like that deployment has already been added.',
-          buttons: ['OK']
-        });
-        alert.present();
+        this.showAlert('Deployment Already Added', 'Looks like that deployment has already been added.');
       }
       else {
         this.database.addDeployment(deployment).then(
@@ -100,26 +92,43 @@ export class DeploymentAddPage {
               this.viewController.dismiss(data);
             }
             else {
-              let alert = this.alertController.create({
-                title: 'Problem Adding Deployment',
-                subTitle: 'There was a problem adding your deployment.',
-                buttons: ['OK']
-              });
-              alert.present();
+              this.showAlert('Problem Adding Deployment', 'There was a problem adding your deployment.');
             }
           },
           (error) => {
             console.error(`Deployment Add addDeployment ${error}`);
             loading.dismiss();
-            let alert = this.alertController.create({
-              title: 'Problem Adding Deployment',
-              subTitle: error,
-              buttons: ['OK']
-            });
-            alert.present();
+            this.showAlert('Problem Adding Deployment', error);
           });
       }
     });
+  }
+
+  showLoading(message) {
+    let loading = this.loadingController.create({
+      content: message
+    });
+    loading.present();
+    return loading;
+  }
+
+  showAlert(title, subTitle) {
+    let alert = this.alertController.create({
+      title: title,
+      subTitle: subTitle,
+      buttons: ['OK']
+    });
+    alert.present();
+    return alert;
+  }
+
+  showToast(message, duration:number=1500) {
+    let toast = this.toastController.create({
+      message: message,
+      duration: duration
+    });
+    toast.present();
+    return toast;
   }
 
 }

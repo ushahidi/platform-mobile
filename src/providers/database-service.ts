@@ -86,6 +86,16 @@ export class Values {
     'type': 'TEXT'};
 }
 
+export class Users {
+  static Table : string = 'users';
+  static Columns : any = {
+    'id': 'INTEGER PRIMARY KEY AUTOINCREMENT',
+    'deployment': 'INTEGER',
+    'email': 'TEXT',
+    'realname': 'TEXT',
+    'gravatar': 'TEXT'};
+}
+
 @Injectable()
 export class DatabaseService {
 
@@ -98,6 +108,7 @@ export class DatabaseService {
     this.name = 'ushahidi.db';
     this.location = 'default';
     this.database = null;
+    this.tables[Users.Table] = Users.Columns;
     this.tables[Deployments.Table] = Deployments.Columns;
     this.tables[Posts.Table] = Posts.Columns;
     this.tables[Values.Table] = Values.Columns;
@@ -300,6 +311,21 @@ export class DatabaseService {
     console.log(`Database removeAttributes ${deployment}`);
     return this.executeDelete(Attributes.Table, {
       "deployment": deployment });
+  }
+
+  addUser(deployment:number, data:{}) {
+    console.log(`Database addUser Deployment ${deployment} ${JSON.stringify(data)}`);
+    data['deployment'] = deployment;
+    return Promise.all([
+      this.executeUpdate(Users.Table, data['id'], data),
+      this.executeInsert(Users.Table, data)]);
+  }
+
+  getUser(deployment:number, user:number) {
+    console.log(`Database getUser ${deployment} ${user}`);
+    return this.executeSelect(Forms.Table, {
+      "deployment": deployment,
+      "id": user });
   }
 
   executeFirst(table:string, where:{}=null, order:{}=null) {

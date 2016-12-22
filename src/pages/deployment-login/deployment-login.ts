@@ -79,10 +79,7 @@ export class DeploymentLoginPage {
       let username = this.username.value.toString();
       let password = this.password.value.toString();
       if (username.length > 0 && password.length > 0) {
-        let loading = this.loadingController.create({
-          content: "Logging in..."
-        });
-        loading.present();
+        let loading = this.showLoading("Logging in...");
         this.api.authLogin(host, username, password).then(
           (tokens) => {
             console.log(`Deployment Login ${JSON.stringify(tokens)}`);
@@ -95,41 +92,22 @@ export class DeploymentLoginPage {
               this.database.updateDeployment(this.deployment.id, changes).then(
                 (results) => {
                   loading.dismiss();
-                  let toast = this.toastController.create({
-                    message: 'Login Successful',
-                    duration: 1500
-                  });
-                  toast.present();
+                  this.showToast('Login Successful');
                   this.showDeployment(tokens['access_token']);
                 },
                 (error) => {
                   loading.dismiss();
-                  let alert = this.alertController.create({
-                    title: 'Problem Updating Deployment',
-                    subTitle: JSON.stringify(error),
-                    buttons: ['OK']
-                  });
-                  alert.present();
+                  this.showAlert('Problem Updating Deployment', error);
                 });
             }
             else {
               loading.dismiss();
-              let alert = this.alertController.create({
-                title: 'Invalid Credentials',
-                subTitle: 'Please verify your email and password, then try again.',
-                buttons: ['OK']
-              });
-              alert.present();
+              this.showAlert('Invalid Credentials', 'Please verify your email and password, then try again.');
             }
           },
           (error) => {
             loading.dismiss();
-            let alert = this.alertController.create({
-              title: 'Invalid Credentials',
-              subTitle: 'Please verify your email and password, then try again.',
-              buttons: ['OK']
-            });
-            alert.present();
+            this.showAlert('Invalid Credentials', 'Please verify your email and password, then try again.');
           });
       }
     }
@@ -140,6 +118,33 @@ export class DeploymentLoginPage {
          deployment: this.deployment },
        { animate:true,
          direction: 'forward' });
+    }
+
+    showLoading(message) {
+      let loading = this.loadingController.create({
+        content: message
+      });
+      loading.present();
+      return loading;
+    }
+
+    showAlert(title, subTitle) {
+      let alert = this.alertController.create({
+        title: title,
+        subTitle: subTitle,
+        buttons: ['OK']
+      });
+      alert.present();
+      return alert;
+    }
+
+    showToast(message, duration:number=1500) {
+      let toast = this.toastController.create({
+        message: message,
+        duration: duration
+      });
+      toast.present();
+      return toast;
     }
 
     showMenu(event) {

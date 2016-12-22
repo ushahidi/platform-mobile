@@ -128,34 +128,37 @@ export class ResponseAddPage {
       let title = this.getTitle(this.formGroup.value);
       let description = this.getDescription(this.formGroup.value);
       let values = this.sanitizeValues(this.formGroup.value);
-      let loading = this.loadingController.create({
-        content: "Posting..."
-      });
-      loading.present();
+      let loading = this.showLoading("Posting...");
       this.api.createPost(host, token, this.form.id, title, description, values).then(
         (resp) => {
           console.log(`Response Add ${JSON.stringify(resp)}`);
           loading.dismiss();
           if (resp) {
-            this.postResponseSucceeded();
+            let alert = this.alertController.create({
+              title: 'Post Successful',
+              subTitle: 'Your response has been posted!',
+              buttons: [{
+                text: 'Ok',
+                role: 'cancel',
+                handler: () => {
+                  this.viewController.dismiss();
+                }
+              }]
+            });
+            alert.present();
           }
           else {
-            this.postResponseFailed();
+            this.showAlert('Post Failed', 'There was a problem posting your response.');
           }
         },
         (error) => {
           console.error(`Response Add ${error}`);
           loading.dismiss();
-          this.postResponseFailed(error);
+          this.showAlert('Post Failed', error);
         });
     }
     else {
-      let alert = this.alertController.create({
-        title: 'Required Fields Missing',
-        subTitle: 'Looks like some of the required fields are missing, please ensure all required fields are entered and try again.',
-        buttons: ['OK']
-      });
-      alert.present();
+      this.showAlert('Required Fields Missing', 'Please ensure all required fields are entered and try again.');
     }
   }
 
@@ -259,28 +262,31 @@ export class ResponseAddPage {
     return sanitized;
   }
 
-  postResponseFailed(message:string='There was a problem posting your response.') {
+  showLoading(message) {
+    let loading = this.loadingController.create({
+      content: message
+    });
+    loading.present();
+    return loading;
+  }
+
+  showAlert(title, subTitle) {
     let alert = this.alertController.create({
-      title: 'Post Failed',
-      subTitle: message,
+      title: title,
+      subTitle: subTitle,
       buttons: ['OK']
     });
     alert.present();
+    return alert;
   }
 
-  postResponseSucceeded() {
-    let alert = this.alertController.create({
-      title: 'Post Successful',
-      subTitle: 'Your response has been posted!',
-      buttons: [{
-        text: 'Ok',
-        role: 'cancel',
-        handler: () => {
-          this.viewController.dismiss();
-        }
-      }]
+  showToast(message, duration:number=1500) {
+    let toast = this.toastController.create({
+      message: message,
+      duration: duration
     });
-    alert.present();
+    toast.present();
+    return toast;
   }
 
 }

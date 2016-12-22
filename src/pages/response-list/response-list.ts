@@ -150,20 +150,12 @@ export class ResponseListPage {
 
   searchResponses(event) {
     console.log("Deployment List searchResponses");
-    let toast = this.toastController.create({
-      message: 'Search Not Implemented',
-      duration: 1500
-    });
-    toast.present();
+    this.showToast('Search Not Implemented');
   }
 
   shareResponses(event) {
     console.log("Deployment List shareResponses");
-    let toast = this.toastController.create({
-      message: 'Sharing Not Implemented',
-      duration: 1500
-    });
-    toast.present();
+    this.showToast('Sharing Not Implemented');
   }
 
   showOptions(event, response) {
@@ -268,4 +260,30 @@ export class ResponseListPage {
     }
   }
 
+  showLoading(message) {
+    let loading = this.loadingController.create({
+      content: message
+    });
+    loading.present();
+    return loading;
+  }
+
+  showAlert(title, subTitle) {
+    let alert = this.alertController.create({
+      title: title,
+      subTitle: subTitle,
+      buttons: ['OK']
+    });
+    alert.present();
+    return alert;
+  }
+
+  showToast(message, duration:number=1500) {
+    let toast = this.toastController.create({
+      message: message,
+      duration: duration
+    });
+    toast.present();
+    return toast;
+  }
 }

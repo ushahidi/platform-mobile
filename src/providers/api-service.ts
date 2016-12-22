@@ -58,12 +58,12 @@ export class ApiService {
           },
           (error) => {
             console.error(`API GET ${url} ${JSON.stringify(error)}`);
-            reject(JSON.stringify(error));
+            reject(this.getErrorMessage(error));
           });
     });
   }
 
-  authLogin(host:string, username:string, password:string, scope:string="api posts forms tags sets media config") {
+  authLogin(host:string, username:string, password:string, scope:string="api posts forms tags sets users media config") {
     return new Promise((resolve, reject) => {
       let api = "/oauth/token";
       let params = {
@@ -91,13 +91,13 @@ export class ApiService {
           },
           (error) => {
             console.error(`API POST ${url} ${JSON.stringify(error)}`);
-            reject(JSON.stringify(error));
+            reject(this.getErrorMessage(error));
           }
         );
     });
   }
 
-  authRefresh(host:string, refreshToken:string, scope:string="api posts forms tags sets media config") {
+  authRefresh(host:string, refreshToken:string, scope:string="api posts forms tags sets users media config") {
     return new Promise((resolve, reject) => {
       let api = "/oauth/token";
       let params = {
@@ -124,7 +124,30 @@ export class ApiService {
           },
           (error) => {
             console.error(`API POST ${url} ${JSON.stringify(error)}`);
-            reject(JSON.stringify(error));
+            reject(this.getErrorMessage(error));
+          }
+        );
+    });
+  }
+
+  getUser(host:string, token:string, user:any="me") {
+    return new Promise((resolve, reject) => {
+      let api = `/api/v3/users/${user}`;
+      let params = new URLSearchParams();
+      let url = host + api;
+      let headers = this.getHeaders(token);
+      let options = new RequestOptions({ headers: headers, search: params });
+      console.log(`API GET ${url} ${params.toString()}`);
+      this.http.get(url, options)
+        .map(res => res.json())
+        .subscribe(
+          (json) => {
+            console.log(`API GET ${url} ${JSON.stringify(json)}`);
+            resolve(json);
+          },
+          (error) => {
+            console.error(`API GET ${url} ${JSON.stringify(error)}`);
+            reject(this.getErrorMessage(error));
           }
         );
     });
@@ -154,7 +177,7 @@ export class ApiService {
           },
           (error) => {
             console.error(`API GET ${url} ${JSON.stringify(error)}`);
-            reject(JSON.stringify(error));
+            reject(this.getErrorMessage(error));
           }
         );
     });
@@ -187,7 +210,7 @@ export class ApiService {
           },
           (error) => {
             console.error(`API GET ${url} ${JSON.stringify(error)}`);
-            reject(JSON.stringify(error));
+            reject(this.getErrorMessage(error));
           }
         );
     });
@@ -211,7 +234,7 @@ export class ApiService {
           },
           (error) => {
             console.error(`API GET ${url} ${JSON.stringify(error)}`);
-            reject(JSON.stringify(error));
+            reject(this.getErrorMessage(error));
           }
         );
     });
@@ -245,22 +268,9 @@ export class ApiService {
             let post = json;
             resolve(post);
           },
-          (err) => {
-            try {
-              console.error(`API POST ${url} ${JSON.stringify(err)}`);
-              let errors = err.json()['errors'];
-              console.error(`API POST ${url} ${JSON.stringify(errors)}`);
-              let message = [];
-              for (var i = 0; i < errors.length; i++) {
-                let error = errors[i];
-                message.push(error['message']);
-              }
-              reject(message.join(", "));
-            }
-            catch(error) {
-              console.error(`API POST ${url} ${error}`);
-              reject();
-            }
+          (error) => {
+            console.error(`API POST ${url} ${JSON.stringify(error)}`);
+            reject(this.getErrorMessage(error));
           }
         );
     });
@@ -291,7 +301,7 @@ export class ApiService {
           },
           (error) => {
             console.error(`API PUT ${url} ${JSON.stringify(error)}`);
-            reject(JSON.stringify(error));
+            reject(this.getErrorMessage(error));
           }
         );
     });
@@ -315,7 +325,7 @@ export class ApiService {
           },
           (error) => {
             console.error(`API GET ${url} ${JSON.stringify(error)}`);
-            reject(JSON.stringify(error));
+            reject(this.getErrorMessage(error));
           }
         );
     });
@@ -339,7 +349,7 @@ export class ApiService {
           },
           (error) => {
             console.error(`API Failed ${url} ${JSON.stringify(error)}`);
-            reject(JSON.stringify(error));
+            reject(this.getErrorMessage(error));
           }
         );
     });
@@ -371,6 +381,25 @@ export class ApiService {
         }
         return forms;
       });
+  }
+
+  getErrorMessage(err) {
+    try {
+      let json = err.json();
+      if (json['errors']) {
+        let errors = json['errors'];
+        let message = [];
+        for (var i = 0; i < errors.length; i++) {
+          let error = errors[i];
+          message.push(error['message']);
+        }
+        return message.join(", ");
+      }
+    }
+    catch (error) {
+      console.error(`API getErrorMessage ${JSON.stringify(error)}`);
+    }
+    return JSON.stringify(err);
   }
 
 }
