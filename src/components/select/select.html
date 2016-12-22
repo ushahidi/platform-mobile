@@ -1,11 +1,12 @@
-<div class="field-select">
-  <ion-item [formGroup]="formGroup" *ngIf="formGroup">
+<div class="field-select" [class.invalid]="required && value.length == 0">
+  <ion-item [formGroup]="formGroup">
     <ion-label class="field-label">
       {{attribute.label}}
       <span color="danger" *ngIf="required">*</span>
     </ion-label>
-    <ion-select #select [selectOptions]="selectOptions" [formControlName]="attribute.key">
+    <ion-select #select [(ngModel)]="value" [selectOptions]="selectOptions" [formControlName]="attribute.key" (ionChange)="selectChanged($event)">
       <ion-option value="{{option}}" *ngFor="let option of options">{{option}}</ion-option>
     </ion-select>
   </ion-item>
+  <p padding-left color="red" *ngIf="required && value.length == 0">Selection required</p>
 </div>

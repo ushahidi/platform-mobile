@@ -1,4 +1,4 @@
-<div class="field-radio">
+<div class="field-radio" [class.invalid]="required && value.length == 0">
   <ion-item no-lines>
     <ion-label class="field-label">
       {{attribute.label}}
@@ -9,8 +9,9 @@
     <ion-list no-lines radio-group #radio [formControlName]="attribute.key">
       <ion-item *ngFor="let option of options">
         <ion-label>{{option}}</ion-label>
-        <ion-radio color="blue" value="{{option}}"></ion-radio>
+        <ion-radio color="blue" value="{{option}}" (ionSelect)="radioChanged($event)"></ion-radio>
       </ion-item>
     </ion-list>
   </div>
+  <p padding-left color="red" *ngIf="required && value.length == 0">Selection required</p>
 </div>

@@ -1,6 +1,9 @@
 .field-number {
   .field-label {
-
+    color: #555;
+  }
+  ion-input {
+    border-bottom: 1px solid #cccccc;
   }
   &.invalid {
     ion-input {

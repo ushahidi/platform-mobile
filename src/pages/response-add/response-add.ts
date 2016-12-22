@@ -151,8 +151,8 @@ export class ResponseAddPage {
     }
     else {
       let alert = this.alertController.create({
-        title: 'Required Fields',
-        subTitle: 'Looks like some of the required fields are missing.',
+        title: 'Required Fields Missing',
+        subTitle: 'Looks like some of the required fields are missing, please ensure all required fields are entered and try again.',
         buttons: ['OK']
       });
       alert.present();

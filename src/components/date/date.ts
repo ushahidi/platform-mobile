@@ -25,7 +25,12 @@ export class DateComponent {
   }
 
   dateChanged(event) {
-    this.datetime = new Date(this.date).toISOString();
+    if (this.date) {
+      this.datetime = new Date(this.date).toISOString();
+    }
+    else {
+      this.datetime = null;
+    }
     console.log(`Date dateChanged ${this.datetime}`);
   }
 }

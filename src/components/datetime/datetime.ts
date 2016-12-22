@@ -31,6 +31,9 @@ export class DateTimeComponent {
       let datetime = moment(this.date + ' ' + this.time, "YYYY-MM-DD HH:mm");
       this.datetime = datetime.toDate().toISOString();
     }
+    else {
+      this.datetime = null;
+    }
     console.log(`DateTime dateChanged ${this.datetime}`);
   }
 

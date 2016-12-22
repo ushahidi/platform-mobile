@@ -1,5 +1,5 @@
 <div class="field-number" [class.focused]="focused" [class.invalid]="required && value.length == 0 && focused == false">
-  <ion-item [formGroup]="formGroup" *ngIf="formGroup">
+  <ion-item no-lines [formGroup]="formGroup">
     <ion-label floating class="field-label">
       {{attribute.label}}
       <span color="danger" *ngIf="required">*</span>

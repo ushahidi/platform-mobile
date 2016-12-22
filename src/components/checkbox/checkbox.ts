@@ -39,10 +39,6 @@ export class CheckboxComponent {
     this.required = this.attribute.required == "true";
   }
 
-  checkChanged(event) {
-    console.log(`Checkbox checkChanged`);
-  }
-
   hasValue() {
     for (let index in this.options) {
       let option = this.options[index];

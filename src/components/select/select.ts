@@ -14,6 +14,7 @@ export class SelectComponent {
   options: any = [];
   selectOptions: {} = null;
   required: boolean = false;
+  value: string = "";
 
   @ViewChild('select') select: Select;
 
@@ -36,6 +37,11 @@ export class SelectComponent {
     else {
       this.options = [];
     }
+    this.required = this.attribute.required == "true";
+  }
+
+  selectChanged(event) {
+    console.log(`Select selectChanged ${this.value}`);
   }
 
 }

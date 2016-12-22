@@ -9,7 +9,7 @@
     <div [formGroupName]="attribute.key">
       <ion-item *ngFor="let option of options">
         <ion-label>{{option}}</ion-label>
-        <ion-checkbox color="blue" [(ngModel)]="values[option]" formControlName="{{option}}" (ionChange)="checkChanged($event)"></ion-checkbox>
+        <ion-checkbox color="blue" [(ngModel)]="values[option]" formControlName="{{option}}"></ion-checkbox>
       </ion-item>
     </div>
   </div>
