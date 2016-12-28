@@ -206,8 +206,8 @@ export class ResponseListPage {
     }
   }
 
-  showResponse(event, response) {
-    console.log("Deployment List showResponse");
+  showResponse(response:any) {
+    console.log(`Deployment List showResponse ${response.id}`);
     // this.navController.push(
     //   ResponseDetailsPage,
     //   { token: this.token,
@@ -215,7 +215,7 @@ export class ResponseListPage {
     //     response: response });
   }
 
-  addResponse(event) {
+  addResponse(event:any) {
     console.log("Deployment Details addResponse");
     let buttons = [];
     if (this.forms) {
@@ -261,7 +261,7 @@ export class ResponseListPage {
     this.showToast('Sharing Not Implemented');
   }
 
-  showOptions(event, response) {
+  showOptions(response) {
     console.log("Deployment List showOptions");
     let actionSheet = this.actionController.create({
     buttons: [
@@ -322,37 +322,35 @@ export class ResponseListPage {
         { 'backgroundColor': '#e7e9ec' });
       this.map.one(GoogleMapsEvent.MAP_READY).then(() => {
         console.log('Deployment List Map Ready');
-        let points = [];
+        let bounds = [];
         for (var i = 0; i <= this.responses.length; i++){
           let response = this.responses[i];
           if (response && response.latitude && response.longitude) {
-            console.log(`Deployment List Latitude ${response.latitude} Longitude ${response.longitude}`);
             let latitude = Number(response.latitude);
             let longitude = Number(response.longitude);
             let coordinate: GoogleMapsLatLng = new GoogleMapsLatLng(latitude, longitude);
             console.log(`Deployment List Coordinate ${coordinate}`);
-            let options: GoogleMapsMarkerOptions = {
+            this.map.addMarker({
               position: coordinate,
-              title: response.title
-            };
-            points.push(coordinate);
-            console.log(`Deployment List Marker ${response.title}`);
-            this.map.addMarker(options)
-              .then((marker: GoogleMapsMarker) => {
+              title: response.title,
+              snippet: response.content,
+              infoClick: (marker) => {
+                console.log(`Deployment List Info Clicked ${response.id}`);
+                this.showResponse(response);
+              },
+              markerClick: (marker) => {
+                console.log(`Deployment List Marker Clicked ${response.id}`);
                 marker.showInfoWindow();
-              });
+              },
+            });
+            bounds.push(coordinate);
           }
         }
-        if (points.length > 0) {
-          console.log(`Deployment List Points ${points.length}`);
-          var bounds: GoogleMapsLatLngBounds = new GoogleMapsLatLngBounds(points);
-          console.log(`Deployment List Center ${bounds.getCenter()}`);
-          let position: CameraPosition = {
-             target: bounds.getCenter(),
-             zoom: 15,
-             tilt: 0
-           };
-           this.map.moveCamera(position);
+        if (bounds.length > 0) {
+          this.map.animateCamera({
+            target: bounds,
+            duration: 2000
+          });
         }
       });
     }

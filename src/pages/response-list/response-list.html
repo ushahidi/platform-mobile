@@ -41,8 +41,8 @@
     <div *ngIf="responses && users && media">
       <response-card [response]="response" [user]="users[response.user]"
                      [media]="media[response.media]" [index]="i"
-                     (cardSelected)="showResponse($event, response)"
-                     (menuSelected)="showOptions($event, response)"
+                     (cardSelected)="showResponse(response)"
+                     (menuSelected)="showOptions(response)"
                      *ngFor="let response of responses; let i = index"></response-card>
     </div>
   </div>
