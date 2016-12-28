@@ -18,15 +18,15 @@
   </ion-navbar>
 </ion-header>
 <ion-content class="page-response-list">
+  <ion-refresher *ngIf="view == 'list'" (ionRefresh)="loadUpdates($event, false)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
   <div class="list" *ngIf="view == 'list'">
     <ion-fab bottom right *ngIf="responses && responses.length > 0">
       <button ion-fab mini color="primary" (click)="addResponse($event)">
         <ion-icon ios="md-add" md="md-add"></ion-icon>
       </button>
     </ion-fab>
-    <ion-refresher (ionRefresh)="loadUpdates($event, false)">
-      <ion-refresher-content></ion-refresher-content>
-    </ion-refresher>
     <div class="loading" text-center margin-top-lg margin-bottom-lg *ngIf="responses == null">
       <ion-spinner></ion-spinner>
     </div>

@@ -16,6 +16,7 @@ export class CardComponent {
   media: any = {};
   name: string = null;
   offset: number = 1000;
+  values: number = 0;
   placeholderUser: string = "assets/images/placeholder-user.jpg";
   placeholderPhoto: string = "assets/images/placeholder-photo.jpg";
   imageUser: string = null;
@@ -27,7 +28,6 @@ export class CardComponent {
   ngOnInit() {
     if (this.user) {
       console.log(`Card User ${JSON.stringify(this.user)}`);
-      console.log(`Card User Gravatar ${this.user['gravatar']}`);
       if (this.user['gravatar']) {
         this.imageUser = `https://www.gravatar.com/avatar/${this.user['gravatar']}.jpg?s=32`;
       }
@@ -42,13 +42,6 @@ export class CardComponent {
       console.log(`Card User NULL`);
       this.name = "Anonymous";
     }
-    // if (this.media) {
-    //   console.log(`Card Media ${this.media['original_file_url']}`);
-    //   this.imagePhoto = this.media['original_file_url'];
-    // }
-    // else {
-    //   this.imagePhoto = null;
-    // }
   }
 
   onCardSelected(event) {

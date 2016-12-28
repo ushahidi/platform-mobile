@@ -26,6 +26,7 @@ export class ResponseListPage {
   forms: any;
   users: any;
   media: any;
+  values: any;
   map: GoogleMap;
   view: string = 'list';
 
@@ -128,13 +129,16 @@ export class ResponseListPage {
     else {
       return this.api.getPosts(this.deployment.url, this.token).then(results => {
         let responses = <any[]>results;
-        console.log(`Response List loadPosts API ${responses.length}`);
+        console.log(`Response List loadPosts API Response ${responses.length}`);
         this.responses = responses;
         for (let index in responses) {
           let response = responses[index];
           this.database.addPost(this.deployment.id, response).then(results => {
             console.log(`Response List loadPosts Add ${results}`);
-          })
+          });
+          if (response['values']) {
+            response['fields'] = Object.keys(response['values']).length;
+          }
           let form = response.form;
           let values = response.values;
           for (let key in values) {

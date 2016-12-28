@@ -70,6 +70,7 @@ export class Posts {
     'created': 'TEXT',
     'updated': 'TEXT',
     'image': 'TEXT',
+    'fields': 'TEXT',
     'pending': 'INTEGER',
     'latitude': 'DOUBLE',
     'longitude': 'DOUBLE'};
@@ -261,6 +262,9 @@ export class DatabaseService {
       let location = data['values']['location_default'][0];
       data['latitude'] = location['lat'];
       data['longitude'] = location['lon'];
+    }
+    if (data['values']) {
+      data['fields'] = Object.keys(data['values']).length;
     }
     return Promise.all([
       this.executeUpdate(Posts.Table, data['id'], data),

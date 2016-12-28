@@ -26,7 +26,7 @@
   <ion-card-content *ngIf="media" tappable (click)="onCardSelected($event)">
     <img class="lazy" [src]="media.original_file_url" [lazyLoad]="media.original_file_url">
   </ion-card-content>
-  <ion-card-content tappable (click)="onCardSelected($event)">
-    <p class="more">2 more fields...</p>
+  <ion-card-content *ngIf="response.fields" tappable (click)="onCardSelected($event)">
+    <p class="more">{{response.fields}} more fields...</p>
   </ion-card-content>
 </ion-card>

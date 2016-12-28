@@ -1,6 +1,9 @@
 .page-deployment-details {
   padding-top: 0;
   margin-top: 0;
+  &.has-refresher > .scroll-content {
+    border-top: 1px solid #3f4751;
+  }
   .header {
     background-color: #3f4751;
     h4 {
