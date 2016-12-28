@@ -11,15 +11,14 @@ import 'rxjs/add/operator/mergeMap';
 @Injectable()
 export class ApiService {
 
-  clientId: any = String;
-  clientSecret: any = String;
   source: string = null;
+  clientId: any = "ushahidiui";
+  clientSecret: any = "35e7f0bca957836d05ca0492211b0ac707671261";
+  scope: string = "api posts forms tags sets users media config";
 
   constructor(
     public platform:Platform,
     public http: Http) {
-    this.clientId = "ushahidiui";
-    this.clientSecret = "35e7f0bca957836d05ca0492211b0ac707671261";
     if (this.platform.is('ios')) {
       this.source = "iOS";
     }
@@ -63,12 +62,12 @@ export class ApiService {
     });
   }
 
-  authLogin(host:string, username:string, password:string, scope:string="api posts forms tags sets users media config") {
+  authLogin(host:string, username:string, password:string) {
     return new Promise((resolve, reject) => {
       let api = "/oauth/token";
       let params = {
         grant_type: "password",
-        scope: scope,
+        scope: this.scope,
         client_id: this.clientId,
         client_secret: this.clientSecret,
         username: username,
@@ -97,12 +96,12 @@ export class ApiService {
     });
   }
 
-  authRefresh(host:string, refreshToken:string, scope:string="api posts forms tags sets users media config") {
+  authRefresh(host:string, refreshToken:string) {
     return new Promise((resolve, reject) => {
       let api = "/oauth/token";
       let params = {
-        grant_type: "client_credentials",
-        scope: scope,
+        grant_type: "refresh_token",
+        scope: this.scope,
         client_id: this.clientId,
         client_secret: this.clientSecret,
         refresh_token: refreshToken};
@@ -207,7 +206,7 @@ export class ApiService {
     });
   }
 
-  getPosts(host:string, token:string, search:string=null, form:string=null, user:string=null, cache:boolean=true) {
+  getPosts(host:string, token:string, search:string=null, form:string=null, user:string=null) {
     return new Promise((resolve, reject) => {
       let api = "/api/v3/posts";
       let params = new URLSearchParams();
@@ -240,7 +239,7 @@ export class ApiService {
     });
   }
 
-  getPost(host:string, token:string, id:number, cache:boolean=true) {
+  getPost(host:string, token:string, id:number) {
     return new Promise((resolve, reject) => {
       let api = `/api/v3/posts/#{id}`;
       let params = new URLSearchParams();
@@ -331,7 +330,7 @@ export class ApiService {
     });
   }
 
-  getForms(host:string, token:string, cache:boolean=true) {
+  getForms(host:string, token:string) {
     return new Promise((resolve, reject) => {
       let api = `/api/v3/forms`;
       let params = new URLSearchParams();
@@ -355,7 +354,31 @@ export class ApiService {
     });
   }
 
-  getAttributes(host:string, token:string, cache:boolean=true) {
+  getMedia(host:string, token:string) {
+    return new Promise((resolve, reject) => {
+      let api = `/api/v3/media`;
+      let params = new URLSearchParams();
+      let url = host + api;
+      let headers = this.getHeaders(token);
+      let options = new RequestOptions({ headers: headers, search: params });
+      console.log(`API GET ${url}`);
+      this.http.get(url, options)
+        .map(res => res.json())
+        .subscribe(
+          (json) => {
+            console.log(`API GET ${url} ${JSON.stringify(json)}`);
+            let media = json.results;
+            resolve(media);
+          },
+          (error) => {
+            console.error(`API GET ${url} ${JSON.stringify(error)}`);
+            reject(this.getErrorMessage(error));
+          }
+        );
+    });
+  }
+
+  getAttributes(host:string, token:string) {
     return new Promise((resolve, reject) => {
       let api = `/api/v3/forms/attributes`;
       let params = new URLSearchParams();
@@ -379,10 +402,10 @@ export class ApiService {
     });
   }
 
-  getFormsWithAttributes(host:string, token:string, cache:boolean=true) {
+  getFormsWithAttributes(host:string, token:string) {
     return Promise.all([
-      this.getForms(host, token, cache),
-      this.getAttributes(host, token, cache)]).
+      this.getForms(host, token),
+      this.getAttributes(host, token)]).
       then(results => {
         console.log(`API Results ${JSON.stringify(results)}`);
         let forms = <any[]>results[0];

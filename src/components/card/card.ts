@@ -3,7 +3,7 @@ import { Component, Output, EventEmitter } from '@angular/core';
 @Component({
   selector: 'response-card',
   templateUrl: 'card.html',
-  inputs: ['response', 'user', 'index']
+  inputs: ['response', 'user', 'media', 'index']
 })
 export class CardComponent {
 
@@ -13,12 +13,13 @@ export class CardComponent {
   index: number = 0;
   response: any = {};
   user: any = {};
+  media: any = {};
   name: string = null;
   offset: number = 1000;
   placeholderUser: string = "assets/images/placeholder-user.jpg";
   placeholderPhoto: string = "assets/images/placeholder-photo.jpg";
   imageUser: string = null;
-  imagePhoto: string = "http://lorempixel.com/400/200/sports/1";
+  imagePhoto: string = null;
 
   constructor() {
   }
@@ -26,6 +27,7 @@ export class CardComponent {
   ngOnInit() {
     if (this.user) {
       console.log(`Card User ${JSON.stringify(this.user)}`);
+      console.log(`Card User Gravatar ${this.user['gravatar']}`);
       if (this.user['gravatar']) {
         this.imageUser = `https://www.gravatar.com/avatar/${this.user['gravatar']}.jpg?s=32`;
       }
@@ -40,6 +42,13 @@ export class CardComponent {
       console.log(`Card User NULL`);
       this.name = "Anonymous";
     }
+    // if (this.media) {
+    //   console.log(`Card Media ${this.media['original_file_url']}`);
+    //   this.imagePhoto = this.media['original_file_url'];
+    // }
+    // else {
+    //   this.imagePhoto = null;
+    // }
   }
 
   onCardSelected(event) {

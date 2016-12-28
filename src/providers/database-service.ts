@@ -59,6 +59,7 @@ export class Posts {
     'deployment': 'INTEGER',
     'form': 'INTEGER',
     'user': 'INTEGER',
+    'media': 'INTEGER',
     'title': 'TEXT',
     'content': 'TEXT',
     'slug': 'TEXT',
@@ -98,6 +99,23 @@ export class Users {
     'gravatar': 'TEXT'};
 }
 
+export class Media {
+  static Table : string = 'media';
+  static Columns : any = {
+    'id': 'INTEGER PRIMARY KEY AUTOINCREMENT',
+    'deployment': 'INTEGER',
+    'post': 'INTEGER',
+    'user': 'INTEGER',
+    'mime': 'TEXT',
+    'created': 'TEXT',
+    'updated': 'TEXT',
+    'caption': 'TEXT',
+    'original_file_url': 'TEXT',
+    'original_file_size': 'INTEGER',
+    'original_width': 'INTEGER',
+    'original_height': 'INTEGER'};
+}
+
 @Injectable()
 export class DatabaseService {
 
@@ -116,6 +134,7 @@ export class DatabaseService {
     this.tables[Values.Table] = Values.Columns;
     this.tables[Forms.Table] = Forms.Columns;
     this.tables[Attributes.Table] = Attributes.Columns;
+    this.tables[Media.Table] = Media.Columns;
   }
 
   testDatabase() {
@@ -339,6 +358,23 @@ export class DatabaseService {
   getUsers(deployment:number) {
     console.log(`Database getUsers ${deployment}`);
     return this.executeSelect(Users.Table, {
+      "deployment": deployment });
+  }
+
+  addMedia(deployment:number, data:{}) {
+    console.log(`Database addMedia Deployment ${deployment} ${JSON.stringify(data)}`);
+    data['deployment'] = deployment;
+    if (data['user_id']) {
+      data['user'] = data['user_id'];
+    }
+    return Promise.all([
+      this.executeUpdate(Media.Table, data['id'], data),
+      this.executeInsert(Media.Table, data)]);
+  }
+
+  getMedia(deployment:number) {
+    console.log(`Database getMedia ${deployment}`);
+    return this.executeSelect(Media.Table, {
       "deployment": deployment });
   }
 

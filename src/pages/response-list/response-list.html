@@ -38,11 +38,12 @@
       <button ion-button block margin-top text-uppercase color="primary"
             (click)="addResponse($event)">Submit A Survey Response</button>
     </div>
-    <div *ngIf="responses && responses.length > 0">
-      <response-card [response]="response" [user]="users[response.user]" [index]="i"
-                  (cardSelected)="showResponse($event, response)"
-                  (menuSelected)="showOptions($event, response)"
-                  *ngFor="let response of responses; let i = index"></response-card>
+    <div *ngIf="responses && users && media">
+      <response-card [response]="response" [user]="users[response.user]"
+                     [media]="media[response.media]" [index]="i"
+                     (cardSelected)="showResponse($event, response)"
+                     (menuSelected)="showOptions($event, response)"
+                     *ngFor="let response of responses; let i = index"></response-card>
     </div>
   </div>
   <div class="map" *ngIf="view == 'map'">

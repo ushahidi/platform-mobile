@@ -168,6 +168,7 @@ export class DeploymentDetailsPage {
         ResponseListPage,
         { token: this.token,
           forms: this.forms,
+          attributes: this.attributes,
           deployment: this.deployment });
     }
 

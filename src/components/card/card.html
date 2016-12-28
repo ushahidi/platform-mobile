@@ -5,7 +5,7 @@
         <ion-col width-10 tappable (click)="onCardSelected($event)">
           <ion-icon ios="ios-globe-outline" md="md-globe" color="grey" *ngIf="response.status=='published'"></ion-icon>
           <ion-icon ios="ios-lock-outline" md="md-lock" color="grey" *ngIf="response.status=='draft'"></ion-icon>
-          <ion-icon ios="ios-trash-oultine" md="md-trash" color="grey" *ngIf="response.status=='archived'"></ion-icon>
+          <ion-icon ios="ios-trash-outline" md="md-trash" color="grey" *ngIf="response.status=='archived'"></ion-icon>
         </ion-col>
         <ion-col width-10 tappable (click)="onCardSelected($event)">
           <img class="lazy profile" [src]="placeholderUser" [lazyLoad]="imageUser" [offset]="offset">
@@ -23,8 +23,8 @@
     <h2 *ngIf="response.title">{{response.title}}</h2>
     <p *ngIf="response.content">{{response.content}}</p>
   </ion-card-content>
-  <ion-card-content tappable (click)="onCardSelected($event)">
-    <img class="lazy" [src]="placeholderPhoto" [lazyLoad]="imagePhoto" [offset]="offset">
+  <ion-card-content *ngIf="media" tappable (click)="onCardSelected($event)">
+    <img class="lazy" [src]="media.original_file_url" [lazyLoad]="media.original_file_url">
   </ion-card-content>
   <ion-card-content tappable (click)="onCardSelected($event)">
     <p class="more">2 more fields...</p>

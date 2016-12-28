@@ -22,8 +22,10 @@ export class ResponseListPage {
   token: string = null;
   deployment: any;
   responses: any;
+  attributes: any;
   forms: any;
   users: any;
+  media: any;
   map: GoogleMap;
   view: string = 'list';
 
@@ -50,6 +52,7 @@ export class ResponseListPage {
     this.token = this.navParams.get("token");
     this.deployment = this.navParams.get("deployment");
     this.forms = this.navParams.get("forms");
+    this.attributes = this.navParams.get("attributes");
     this.loadUpdates(null, true);
   }
 
@@ -61,12 +64,21 @@ export class ResponseListPage {
     console.log("Response List loadUpdates");
     let promises = [
       this.loadUsers(cache),
-      this.loadPosts(cache)];
-    Promise.all(promises).then(done => {
-      if (event) {
-        event.complete();
-      }
-    });
+      this.loadPosts(cache),
+      this.loadMedia(cache)];
+    Promise.all(promises).then(
+      (done) => {
+        console.log(`Response List loadUpdates DONE`);
+        if (event) {
+          event.complete();
+        }
+      },
+      (error) => {
+        console.error(`Response List loadUpdates ${JSON.stringify(error)}`);
+        if (event) {
+          event.complete();
+        }
+      });
   }
 
   loadUsers(cache:boolean=true) {
@@ -83,7 +95,7 @@ export class ResponseListPage {
       });
     }
     else {
-      return this.api.getUsers(this.deployment.url, this.token).then(results => {
+      this.api.getUsers(this.deployment.url, this.token).then(results => {
         let users = <any[]>results;
         console.log(`Response List loadUsers API ${users.length}`);
         this.users = {};
@@ -91,7 +103,7 @@ export class ResponseListPage {
           let user = users[index];
           this.users[user.id] = user;
           this.database.addUser(this.deployment.id, user).then(results => {
-            console.log(`Response List loadUsers Add User ${results}`);
+            console.log(`Response List loadUsers Add ${results}`);
           });
         }
       });
@@ -101,7 +113,7 @@ export class ResponseListPage {
   loadPosts(cache:boolean=true) {
     console.log(`Response List loadPosts Cache ${cache}`);
     if (cache && this.responses) {
-      return this.database.getPosts(this.deployment.id).then(results => {
+      this.database.getPosts(this.deployment.id).then(results => {
         let responses = <any[]>results;
         if (responses && responses.length > 0) {
           let responses = <any[]>results;
@@ -121,7 +133,7 @@ export class ResponseListPage {
         for (let index in responses) {
           let response = responses[index];
           this.database.addPost(this.deployment.id, response).then(results => {
-            console.log(`Response List loadPosts Add Post ${results}`);
+            console.log(`Response List loadPosts Add ${results}`);
           })
           let form = response.form;
           let values = response.values;
@@ -138,6 +150,55 @@ export class ResponseListPage {
           }
         }
       });
+    }
+  }
+
+  loadMedia(cache:boolean=true) {
+    console.log(`Response List loadMedia Cache ${cache}`);
+    if (cache && this.media) {
+      return this.database.getMedia(this.deployment.id).then(results => {
+        let media = <any[]>results;
+        console.log(`Response List loadMedia Database ${media.length}`);
+        this.media = {};
+        for (let index in media) {
+          let item = media[index];
+          this.media[item.id] = item;
+        }
+        this.loadPostMedia(cache);
+      });
+    }
+    else {
+      return this.api.getMedia(this.deployment.url, this.token).then(results => {
+        let media = <any[]>results;
+        console.log(`Response List loadMedia API ${media.length}`);
+        this.media = {};
+        for (let index in media) {
+          let item = media[index];
+          this.media[item.id] = item;
+          this.database.addMedia(this.deployment.id, item).then(results => {
+            console.log(`Response List loadMedia Add ${results}`);
+          });
+        }
+        this.loadPostMedia(cache);
+      });
+    }
+  }
+
+  loadPostMedia(cache:boolean=true) {
+    console.log(`Response List loadPostMedia`);
+    for (let responseIndex in this.responses) {
+      let response = this.responses[responseIndex];
+      for (let key in response.values) {
+        let value = response.values[key];
+        for (let attributeIndex in this.attributes) {
+          let attribute = this.attributes[attributeIndex];
+          if (attribute.form == response.form && attribute.input == 'upload' && attribute.key == key) {
+            console.log(`Response List loadPostMedia Media ${value} ${JSON.stringify(this.media[value])}`);
+            response.media = value;
+            break;
+          }
+        }
+      }
     }
   }
 

@@ -109,12 +109,29 @@ export class MyApp {
     });
   }
 
-  showDeployment(deployment) {
+  showDeployment(deployment, refresh:boolean=false) {
     console.log(`App showDeployment ${deployment.name}`);
     this.deployment = deployment;
-    if (deployment.refresh_token) {
+    if (refresh && deployment.refresh_token) {
       console.log(`App showDeployment Refresh Token ${deployment.refresh_token}`);
       this.api.authRefresh(deployment.url, deployment.refresh_token).then(tokens => {
+        console.log(`App showDeployment Tokens ${JSON.stringify(tokens)}`);
+        if (tokens && tokens['access_token']) {
+          this.nav.setRoot(
+            DeploymentDetailsPage,
+            { token: tokens['access_token'],
+              deployment: deployment });
+        }
+        else {
+          this.nav.setRoot(
+            DeploymentLoginPage,
+            { deployment: deployment });
+        }
+      });
+    }
+    else if (deployment.username && deployment.password) {
+      console.log(`App showDeployment Username ${deployment.username}`);
+      this.api.authLogin(deployment.url, deployment.username, deployment.password).then(tokens => {
         console.log(`App showDeployment Tokens ${JSON.stringify(tokens)}`);
         if (tokens && tokens['access_token']) {
           this.nav.setRoot(
