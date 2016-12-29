@@ -79,7 +79,7 @@ export class Posts {
 export class Values {
   static Table : string = 'values_';
   static Columns : any = {
-    'id': 'INTEGER PRIMARY KEY AUTOINCREMENT',
+    'id': 'TEXT PRIMARY KEY',
     'deployment': 'INTEGER',
     'form': 'INTEGER',
     'post': 'INTEGER',
@@ -563,17 +563,17 @@ export class DatabaseService {
   updateStatement(table:string, columns:{}, id:string, values:{}) : string {
     let params = [];
     for (var column in columns) {
-      if (column in values) {
+      if (column in values && column != 'id') {
         params.push(`${column} = ?`);
       }
     }
-    return `UPDATE OR IGNORE ${table} SET ${params.join(", ")} WHERE id = ${id}`;
+    return `UPDATE OR IGNORE ${table} SET ${params.join(", ")} WHERE id = '${id}'`;
   }
 
   updateParameters(table:string, columns:{}, id:string, values:{}) : any {
     let params = [];
     for (var column in columns) {
-      if (column in values) {
+      if (column in values && column != 'id') {
         params.push(values[column]);
       }
     }

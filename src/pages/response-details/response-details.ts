@@ -20,6 +20,8 @@ export class ResponseDetailsPage {
   deployment: any;
   response: any;
   form: any;
+  media: any;
+  attributes: any = [];
   values: any;
 
   @ViewChild('submit') submit: Button;
@@ -48,11 +50,64 @@ export class ResponseDetailsPage {
     this.deployment = this.navParams.get("deployment");
     this.response = this.navParams.get("response");
     this.form = this.navParams.get("form");
-    this.color = this.form.color;
+    this.media = this.navParams.get("media");
+    this.color = this.response.color;
+    this.loadUpdates(null, true);
   }
 
   ionViewDidEnter() {
     console.log("Response Details ionViewDidEnter");
+  }
+
+  loadUpdates(event, cache:boolean=true) {
+    console.log("Response Details loadUpdates");
+    let promises = [
+      this.loadForm(cache),
+      this.loadAttributes(cache),
+      this.loadValues(cache)];
+    Promise.all(promises).then(
+      (done) => {
+        console.log(`Response Details loadUpdates DONE`);
+        if (event) {
+          event.complete();
+        }
+      },
+      (error) => {
+        console.error(`Response Details loadUpdates ${JSON.stringify(error)}`);
+        if (event) {
+          event.complete();
+        }
+      });
+  }
+
+  loadForm(cache:boolean=true) {
+    console.log(`Response Details loadForm Cache ${cache}`);
+    return this.database.getForm(this.deployment.id, this.response.form).then(results => {
+      console.log(`Response Details Form ${JSON.stringify(results)}`);
+      this.form = results;
+    });
+  }
+
+  loadAttributes(cache:boolean=true) {
+    console.log(`Response Details loadAttributes Cache ${cache}`);
+    return this.database.getAttributes(this.deployment.id, this.response.form).then(results => {
+      let attributes = <any[]>results;
+      console.log(`Response Details loadAttributes Database ${attributes.length}`);
+      this.attributes = attributes;
+    });
+  }
+
+  loadValues(cache:boolean=true) {
+    console.log(`Response Details loadValues Cache ${cache}`);
+    return this.database.getValues(this.deployment.id, this.response.id).then(results => {
+      let values = <any[]>results;
+      console.log(`Response Details loadValues Database ${JSON.stringify(values)}`);
+      this.values = {};
+      for (let index in values) {
+        let value = values[index];
+        this.values[value.key] = value;
+      }
+    });
   }
 
   shareResponse(event) {

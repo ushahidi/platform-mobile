@@ -1,20 +1,33 @@
 <ion-header>
   <ion-navbar color="dark">
-    <ion-title>Response</ion-title>
+    <ion-title *ngIf="response">{{response.title}}</ion-title>
     <ion-buttons end>
-      <button ion-button (click)="editResponse($event)">
+      <!-- <button ion-button (click)="editResponse($event)">
         <ion-icon ios="ios-create-outline" md="md-create"></ion-icon>
-      </button>
+      </button> -->
       <button ion-button (click)="shareResponse($event)">
         <ion-icon ios="ios-share-outline" md="md-share"></ion-icon>
       </button>
     </ion-buttons>
   </ion-navbar>
 </ion-header>
-<ion-content [style.border-left-color]="color" class="page-response-details" padding>
-  <div *ngIf="response">
-    <h1>{{response.title}}</h1>
-    <h4>{{response.content}}</h4>
-    <p>{{response.post_date}}</p>
-  </div>
+<ion-content [style.border-left-color]="color" class="page-response-details">
+  <ion-refresher (ionRefresh)="loadUpdates($event, false)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <ion-list *ngIf="attributes && values">
+    <ion-item no-lines class="value" *ngIf="response.title">
+      <div class="value-label">Title</div>
+      <div class="value-text">{{response.title}}</div>
+    </ion-item>
+    <ion-item no-lines class="value" *ngIf="response.content">
+      <div class="value-label">Description</div>
+      <div class="value-text">{{response.content}}</div>
+    </ion-item>
+    <div *ngFor="let attribute of attributes">
+      <value-text [attribute]="attribute"
+                  [value]="values[attribute.key]"
+                  [media]="media" ></value-text>
+    </div>
+  </ion-list>
 </ion-content>

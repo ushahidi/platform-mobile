@@ -30,8 +30,11 @@ import { SelectComponent } from '../components/select/select';
 import { TextComponent } from '../components/text/text';
 import { TextAreaComponent } from '../components/textarea/textarea';
 import { VideoComponent } from '../components/video/video';
-import { CardComponent } from '../components/card/card';
 
+import { CardComponent } from '../components/card/card';
+import { ValueComponent } from '../components/value/value';
+
+import { DateTimePipe } from '../pipes/date-time';
 import { TimeAgoPipe } from '../pipes/time-ago';
 import { TitleizePipe } from '../pipes/titleize';
 import { CapitalizePipe } from '../pipes/capitalize';
@@ -64,6 +67,8 @@ import { DatabaseService } from '../providers/database-service';
     TextAreaComponent,
     VideoComponent,
     CardComponent,
+    ValueComponent,
+    DateTimePipe,
     TimeAgoPipe,
     TitleizePipe,
     CapitalizePipe

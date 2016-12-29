@@ -141,16 +141,26 @@ export class ResponseListPage {
           }
           let form = response.form;
           let values = response.values;
+          let item = 0;
           for (let key in values) {
+            let attribute = this.getAttribute(key);
             let value = values[key][0];
+            let text = value.toString();
+            if (attribute.input == 'location') {
+              console.log(`Location ${JSON.stringify(value)}`)
+              text = `${value.lat},${value.lon}`;
+            }
             let data = {
+              id: `${this.deployment.id}-${response.id}-${key}`,
               deployment: this.deployment.id,
               form: form.id,
               post: response.id,
               key: key,
-              value: value.toString()};
+              label: attribute.label,
+              value: text};
             console.log(`Response List Value ${JSON.stringify(data)}`);
             this.database.addValue(this.deployment.id, form.id, response.id, data);
+            item = item + 1;
           }
         }
       });
@@ -208,11 +218,37 @@ export class ResponseListPage {
 
   showResponse(response:any) {
     console.log(`Deployment List showResponse ${response.id}`);
-    // this.navController.push(
-    //   ResponseDetailsPage,
-    //   { token: this.token,
-    //     deployment: this.deployment,
-    //     response: response });
+    let form = this.getForm(response.form);
+    let media = this.media[response.media];
+    this.navController.push(
+      ResponseDetailsPage,
+      { token: this.token,
+        form: form,
+        media: media,
+        deployment: this.deployment,
+        response: response });
+  }
+
+  getForm(id:number) {
+    if (this.forms) {
+      for (var i = 0; i < this.forms.length; i++){
+        let form = this.forms[i];
+        if (form.id == id) {
+          return form;
+        }
+      }
+    }
+    return null;
+  }
+
+  getAttribute(key:string) {
+    for (let index in this.attributes) {
+      let attribute = this.attributes[index];
+      if (attribute.key == key) {
+        return attribute;
+      }
+    }
+    return null;
   }
 
   addResponse(event:any) {

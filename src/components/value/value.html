@@ -1,0 +1,22 @@
+<div class="value" *ngIf="attribute && value">
+  <ion-item no-lines>
+    <div class="value-label">{{attribute.label}}</div>
+    <div class="value-checkbox" *ngIf="attribute.input == 'checkbox'">{{value.value}}</div>
+    <div class="value-checkboxes" *ngIf="attribute.input == 'checkboxes'">{{value.value}}</div>
+    <div class="value-date" *ngIf="attribute.input == 'date'">{{value.value | dateTime:'YYYY-MM-DD'}}</div>
+    <div class="value-datetime" *ngIf="attribute.input == 'datetime'">{{value.value | dateTime:'YYYY-MM-DD h:mm A'}}</div>
+    <div class="value-location" *ngIf="attribute.input == 'location'">
+      <img full class="lazy" [src]="map" [lazyLoad]="map" *ngIf="map" />
+    </div>
+    <div class="value-number" *ngIf="attribute.input == 'number'">{{value.value}}</div>
+    <div class="value-radio" *ngIf="attribute.input == 'radio'">{{value.value}}</div>
+    <div class="value-select" *ngIf="attribute.input == 'select'">{{value.value}}</div>
+    <div class="value-text" *ngIf="attribute.input == 'text'">{{value.value}}</div>
+    <div class="value-textarea" *ngIf="attribute.input == 'textarea'">{{value.value}}</div>
+    <div class="value-upload" *ngIf="attribute.input == 'upload'">
+      <img full class="lazy" [src]="media.original_file_url" [lazyLoad]="media.original_file_url" *ngIf="media"/>
+    </div>
+    <div class="value-varchar" *ngIf="attribute.input == 'varchar'">{{value.value}}</div>
+    <div class="value-video" *ngIf="attribute.input == 'video'">{{value.value}}</div>
+  </ion-item>
+</div>

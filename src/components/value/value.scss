@@ -1,0 +1,38 @@
+.value {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  .value-label {
+    color: #212121;
+    font-weight: 500;
+    font-size: 16px;
+  }
+  .value-text,
+  .value-checkbox,
+  .value-checkboxes,
+  .value-date,
+  .value-datetime,
+  .value-location,
+  .value-number,
+  .value-radio,
+  .value-select,
+  .value-text,
+  .value-textarea,
+  .value-upload,
+  .value-varchar,
+  .value-video {
+    color: #838383;
+    font-weight: 400;
+    font-size: 15px;
+    padding-top: 5px;
+  }
+  .value-upload {
+    img {
+      width: 100%;
+    }
+  }
+  .value-location {
+    img {
+      width: 100%;
+    }
+  }
+}
