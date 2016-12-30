@@ -220,11 +220,13 @@ export class ResponseListPage {
     console.log(`Deployment List showResponse ${response.id}`);
     let form = this.getForm(response.form);
     let media = this.media[response.media];
+    let user = this.users[response.user];
     this.navController.push(
       ResponseDetailsPage,
       { token: this.token,
         form: form,
         media: media,
+        user: user,
         deployment: this.deployment,
         response: response });
   }

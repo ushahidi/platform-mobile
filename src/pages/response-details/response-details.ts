@@ -20,6 +20,10 @@ export class ResponseDetailsPage {
   deployment: any;
   response: any;
   form: any;
+  user: any;
+  userName: string;
+  userPhoto: string;
+  userPlaceholder: string = "assets/images/placeholder-user.jpg";
   media: any;
   attributes: any = [];
   values: any;
@@ -50,13 +54,32 @@ export class ResponseDetailsPage {
     this.deployment = this.navParams.get("deployment");
     this.response = this.navParams.get("response");
     this.form = this.navParams.get("form");
+    this.user = this.navParams.get("user");
     this.media = this.navParams.get("media");
     this.color = this.response.color;
+    this.loadUser();
     this.loadUpdates(null, true);
   }
 
   ionViewDidEnter() {
     console.log("Response Details ionViewDidEnter");
+  }
+
+  loadUser() {
+    if (this.user) {
+      if (this.user['gravatar']) {
+        this.userPhoto = `https://www.gravatar.com/avatar/${this.user['gravatar']}.jpg?s=32`;
+      }
+      else {
+        this.userPhoto = null;
+      }
+      if (this.user['realname']) {
+        this.userName = this.user['realname'];
+      }
+    }
+    else {
+      this.userName = "Anonymous";
+    }
   }
 
   loadUpdates(event, cache:boolean=true) {

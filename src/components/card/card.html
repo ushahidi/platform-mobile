@@ -2,15 +2,15 @@
   <ion-card-content>
     <ion-grid>
       <ion-row>
-        <ion-col width-10 tappable (click)="onCardSelected($event)">
+        <!-- <ion-col width-10 tappable (click)="onCardSelected($event)">
           <ion-icon ios="ios-globe-outline" md="md-globe" color="grey" *ngIf="response.status=='published'"></ion-icon>
           <ion-icon ios="ios-lock-outline" md="md-lock" color="grey" *ngIf="response.status=='draft'"></ion-icon>
           <ion-icon ios="ios-trash-outline" md="md-trash" color="grey" *ngIf="response.status=='archived'"></ion-icon>
-        </ion-col>
+        </ion-col> -->
         <ion-col width-10 tappable (click)="onCardSelected($event)">
           <img class="lazy profile" [src]="placeholderUser" [lazyLoad]="imageUser" [offset]="offset">
         </ion-col>
-        <ion-col width-70 tappable (click)="onCardSelected($event)">
+        <ion-col width-80 tappable (click)="onCardSelected($event)">
           <p text-muted>{{name}} {{response.created | timeAgo}}</p>
         </ion-col>
         <ion-col width-10 text-right>

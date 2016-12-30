@@ -3,8 +3,8 @@
     <div class="value-label">{{attribute.label}}</div>
     <div class="value-checkbox" *ngIf="attribute.input == 'checkbox'">{{value.value}}</div>
     <div class="value-checkboxes" *ngIf="attribute.input == 'checkboxes'">{{value.value}}</div>
-    <div class="value-date" *ngIf="attribute.input == 'date'">{{value.value | dateTime:'YYYY-MM-DD'}}</div>
-    <div class="value-datetime" *ngIf="attribute.input == 'datetime'">{{value.value | dateTime:'YYYY-MM-DD h:mm A'}}</div>
+    <div class="value-date" *ngIf="attribute.input == 'date'">{{value.value | dateTime:'MMMM D, YYYY'}}</div>
+    <div class="value-datetime" *ngIf="attribute.input == 'datetime'">{{value.value | dateTime:'h:mm A, MMMM D, YYYY'}}</div>
     <div class="value-location" *ngIf="attribute.input == 'location'">
       <img full class="lazy" [src]="map" [lazyLoad]="map" *ngIf="map" />
     </div>
