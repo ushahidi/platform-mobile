@@ -48,12 +48,12 @@ export class DatabaseService {
             resolve(database);
           },
           (error) => {
-            this.logger.error(this, "openDatabase", "Open Failed", error);
+            this.logger.error(this, "openDatabase", "Failed", error);
             reject(JSON.stringify(error));
           });
       }
       else {
-        this.logger.error(this, "openDatabase", "Open Failed", "Cordova Not Available");
+        this.logger.error(this, "openDatabase", "Failed", "Cordova Not Available");
         reject(`Error Opening Database`);
       }
     });
@@ -125,24 +125,10 @@ export class DatabaseService {
   executeSelect(table:string, where:{}=null, order:{}=null) : Promise<any[]> {
     return new Promise((resolve, reject) => {
       this.openDatabase().then((database:SQLite) => {
-        let query = [`SELECT * FROM ${table}`];
-        if (where != null && Object.keys(where).length > 0) {
-          let clause = [];
-          for (let column in where) {
-            clause.push(`${column} = '${where[column]}'`);
-          }
-          query.push(`WHERE ${clause.join(' AND ')}`);
-        }
-        if (order != null && Object.keys(order).length > 0) {
-          let sort = [];
-          for (let column in order) {
-            sort.push(`${column} ${order[column]}`);
-          }
-          query.push(`ORDER BY ${sort.join(', ')}`);
-        }
-        let sql = query.join(" ");
-        this.logger.info(this, "executeSelect", "Selecting", sql);
-        database.executeSql(sql, []).then(
+        let statement = this.selectStatement(table, where, order);
+        let parameters = this.selectParameters(table, where, order);
+        this.logger.info(this, "executeSelect", "Selecting", statement, parameters);
+        database.executeSql(statement, []).then(
           (data) => {
             let results = [];
             if (data.rows.length > 0) {
@@ -151,11 +137,11 @@ export class DatabaseService {
                 results.push(row);
               }
             }
-            this.logger.info(this, "executeSelect", "Selected", sql, results);
+            this.logger.info(this, "executeSelect", "Selected", statement, results);
             resolve(results);
           },
           (error) => {
-            this.logger.error(this, "executeSelect", "Failed", sql, error);
+            this.logger.error(this, "executeSelect", "Failed", statement, error);
             reject(JSON.stringify(error));
           });
       },
@@ -232,6 +218,35 @@ export class DatabaseService {
         reject(JSON.stringify(error));
       });
     });
+  }
+
+  selectStatement(table:string, where:{}=null, order:{}=null) {
+    let query = [`SELECT * FROM ${table}`];
+    if (where != null && Object.keys(where).length > 0) {
+      let clause = [];
+      for (let column in where) {
+        clause.push(`${column} = ?`);
+      }
+      query.push(`WHERE ${clause.join(' AND ')}`);
+    }
+    if (order != null && Object.keys(order).length > 0) {
+      let sort = [];
+      for (let column in order) {
+        sort.push(`${column} ${order[column]}`);
+      }
+      query.push(`ORDER BY ${sort.join(', ')}`);
+    }
+    return query.join(" ");
+  }
+
+  selectParameters(table:string, where:{}=null, order:{}=null): any[] {
+    let parameters = [];
+    if (where != null && Object.keys(where).length > 0) {
+      for (let column in where) {
+        parameters.push(where[column]);
+      }
+    }
+    return parameters;
   }
 
   insertStatement(table:string, columns:any[], values:{}) : string {
@@ -394,7 +409,7 @@ export class DatabaseService {
 
   getForms(deployment:Deployment) : Promise<Form[]> {
     let where = { deployment_id: deployment.id };
-    let order = {};
+    let order = { name: "ASC" };
     return this.getModels<Form>(new Form(), where, order);
   }
 
@@ -433,7 +448,7 @@ export class DatabaseService {
 
   getPosts(deployment:Deployment) : Promise<Post[]> {
     let where = { deployment_id: deployment.id };
-    let order = {};
+    let order = { created: "DESC" };
     return this.getModels<Post>(new Post(), where, order);
   }
 
@@ -496,7 +511,7 @@ export class DatabaseService {
     if (form != null) {
       where['form_id'] = form.id;
     }
-    let order = {};
+    let order = { cardinality: "ASC" };
     return this.getModels<Attribute>(new Attribute(), where, order);
   }
 
@@ -539,7 +554,7 @@ export class DatabaseService {
     if (post != null) {
       where['post_id'] = post.id;
     }
-    let order = {};
+    let order = { cardinality: "ASC" };
     return this.getModels<Value>(new Value(), where, order);
   }
 

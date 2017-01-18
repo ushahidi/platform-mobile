@@ -42,6 +42,9 @@ export class Value extends Model {
   @Column("type", "TEXT")
   public type: string = null;
 
+  @Column("cardinality", "INTEGER")
+  public cardinality: number = null;
+
   @Column("image", "TEXT")
   public image: string = null;
 
@@ -55,6 +58,7 @@ export class Value extends Model {
          this.type = attribute.type;
          this.input = attribute.input;
          this.label = attribute.label;
+         this.cardinality = attribute.cardinality;
          break;
       }
     }

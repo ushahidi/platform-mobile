@@ -81,29 +81,40 @@ export class DeploymentDetailsPage extends BasePage {
     }
 
     loadUser(cache:boolean=true) {
-      return this.api.getUser(this.deployment).then(
-        (results) => {
-          this.logger.info(this, "loadUser", results);
-          this.user = results;
-          this.database.saveUser(this.deployment, this.user).then(
-            (results) => {
-              this.logger.info(this, "loadUser", "Update User", results);
-            },
-            (error) => {
-              this.logger.error(this, "loadUser", "Update User", results);
-            });
-        },
-        (error) => {
-          this.logger.error(this, "loadUser", error);
-        });
+      if (cache && this.user) {
+        //Ignore If User Has Already Been Loaded
+      }
+      else {
+        return this.api.getUser(this.deployment).then(
+          (results) => {
+            this.logger.info(this, "loadUser", results);
+            this.user = results;
+            this.database.saveUser(this.deployment, this.user).then(
+              (results) => {
+                this.logger.info(this, "loadUser", "Update User", results);
+              },
+              (error) => {
+                this.logger.error(this, "loadUser", "Update User", results);
+              });
+          },
+          (error) => {
+            this.logger.error(this, "loadUser", error);
+          });
+      }
     }
 
     loadDeployment(cache:boolean=true) {
       this.logger.info(this, "loadDeployment", cache);
-      if (cache && this.deployment.image != null && this.deployment.description != null) {
+      if (cache && this.deployment.image && this.deployment.description) {
+        //Ignore If Deployment Has Aleady Been Loaded
+      }
+      else if (cache && (this.deployment.image == null || this.deployment.description == null)) {
         return this.database.getDeployment(this.deployment.id).then(results => {
           this.logger.info(this, "loadDeployment", "Database", results);
           this.deployment.copyInto(results);
+          if (this.deployment.image == null || this.deployment.description == null) {
+            this.loadDeployment(false);
+          }
         });
       }
       else {
@@ -122,7 +133,10 @@ export class DeploymentDetailsPage extends BasePage {
 
     loadForms(cache:boolean=true) {
       this.logger.info(this, "loadForms", cache);
-      if (cache && this.forms) {
+      if (cache && this.forms != null) {
+        //Ignore If Forms Has Already Been Loaded
+      }
+      else if (cache && this.forms == null) {
         return this.database.getFormsWithAttributes(this.deployment).then(results => {
           this.logger.info(this, "loadForms", "Database", results);
           let forms = <Form[]>results;

@@ -65,7 +65,7 @@ export class ResponseDetailsPage extends BasePage {
     this.logger.info(this, "ionViewDidEnter");
   }
 
-  loadUpdates(event, cache:boolean=true) {
+  loadUpdates(event:any, cache:boolean=true) {
     this.logger.info(this, "loadUpdates");
     let promises = [
       this.loadValues(cache)];
@@ -87,7 +87,7 @@ export class ResponseDetailsPage extends BasePage {
   loadValues(cache:boolean=true) {
     this.logger.info(this, "loadValues", "Cache", cache);
     if (cache && this.post && this.post.values && this.post.values.length > 0) {
-      //Post Values Cached
+      //Ignore If Post Values Have Already Been Loaded
     }
     else {
       return this.database.getValues(this.deployment, this.post).then(

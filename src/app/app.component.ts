@@ -93,7 +93,7 @@ export class MyApp {
     });
   }
 
-  loadDeployments(event=null) {
+  loadDeployments(event:any=null) {
     this.logger.info(this, "loadDeployments");
     this.database.getDeployments().then(results => {
       this.logger.info(this, "loadDeployments", results);
@@ -102,14 +102,14 @@ export class MyApp {
         if (this.deployments.length > 0 && this.deployment == null) {
           this.deployment = this.deployments[0];
         }
-        if (event) {
+        if (event != null) {
           event.complete();
         }
       });
     });
   }
 
-  addDeployment(event) {
+  addDeployment(event:any) {
     this.logger.info(this, "addDeployment");
     let modal = this.modalController.create(
       DeploymentAddPage,

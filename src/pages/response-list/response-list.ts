@@ -88,10 +88,10 @@ export class ResponseListPage extends BasePage {
 
   loadPosts(cache:boolean=true) {
     this.logger.info(this, "loadPosts", "Cache", cache);
-    if (cache && this.posts) {
-      //Posts Cached
+    if (cache && this.posts != null) {
+      //Ignore If Posts Already Loaded
     }
-    else if (cache) {
+    else if (cache && this.posts == null) {
       return this.database.getPostsWithValues(this.deployment).then(
         (results) => {
           let posts = <Post[]>results;
