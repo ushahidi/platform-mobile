@@ -18,6 +18,8 @@ import { User } from '../../models/user';
 import { Form } from '../../models/form';
 import { Attribute } from '../../models/attribute';
 
+import { PLACEHOLDER_PHOTO } from '../../helpers/constants';
+
 @Component({
   selector: 'page-deployment-details',
   templateUrl: 'deployment-details.html',
@@ -28,8 +30,7 @@ export class DeploymentDetailsPage extends BasePage {
 
   deployment: Deployment = null;
   forms: Form[] = null;
-  offset: number = 1000;
-  placeholder: string = "assets/images/placeholder-photo.jpg";
+  placeholder: string = PLACEHOLDER_PHOTO;
   user: User = null;
 
   constructor(
