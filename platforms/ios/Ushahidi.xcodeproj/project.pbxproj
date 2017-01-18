@@ -91,6 +91,8 @@
 		C287AA3E661D45389B00FC80 /* CDVAssetLibraryFilesystem.m in Sources */ = {isa = PBXBuildFile; fileRef = E8CB87FE0EFC42CFA8B3B97F /* CDVAssetLibraryFilesystem.m */; };
 		B9BB57F0F1F549B6BE739F64 /* CDVCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 9A6AEC5E6224460CBC1F89F5 /* CDVCapture.m */; };
 		104C4343F52244B6BEBE78C7 /* CDVCapture.bundle in Resources */ = {isa = PBXBuildFile; fileRef = AE0438B4756A453DB9839808 /* CDVCapture.bundle */; };
+		A533DF82515948B6BFDCE184 /* IsDebug.h in Resources */ = {isa = PBXBuildFile; fileRef = 645DBA092FA04BDF9BCCD896 /* IsDebug.h */; };
+		4620026D56EC4D34ACD09B98 /* IsDebug.m in Sources */ = {isa = PBXBuildFile; fileRef = CC7D993E6F50466184AB5979 /* IsDebug.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -268,6 +270,8 @@
 		9A6AEC5E6224460CBC1F89F5 /* CDVCapture.m */ = {isa = PBXFileReference; name = "CDVCapture.m"; path = "cordova-plugin-media-capture/CDVCapture.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
 		2C646185DD92479BA712CA6A /* CDVCapture.h */ = {isa = PBXFileReference; name = "CDVCapture.h"; path = "cordova-plugin-media-capture/CDVCapture.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
 		AE0438B4756A453DB9839808 /* CDVCapture.bundle */ = {isa = PBXFileReference; name = "CDVCapture.bundle"; path = "CDVCapture.bundle"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.plug-in; explicitFileType = undefined; includeInIndex = 0; };
+		645DBA092FA04BDF9BCCD896 /* IsDebug.h */ = {isa = PBXFileReference; name = "IsDebug.h"; path = "cordova-plugin-is-debug/IsDebug.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
+		CC7D993E6F50466184AB5979 /* IsDebug.m */ = {isa = PBXFileReference; name = "IsDebug.m"; path = "cordova-plugin-is-debug/IsDebug.m"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -534,6 +538,8 @@
 				9675A2097A894AB1A67D299B /* CDVAssetLibraryFilesystem.h */,
 				9A6AEC5E6224460CBC1F89F5 /* CDVCapture.m */,
 				2C646185DD92479BA712CA6A /* CDVCapture.h */,
+				645DBA092FA04BDF9BCCD896 /* IsDebug.h */,
+				CC7D993E6F50466184AB5979 /* IsDebug.m */,
 			);
 			name = Plugins;
 			path = Ushahidi/Plugins;
@@ -706,6 +712,8 @@
 				0492C09F0949408FB8A6770E /* CDVLocalFilesystem.m in Sources */,
 				C287AA3E661D45389B00FC80 /* CDVAssetLibraryFilesystem.m in Sources */,
 				B9BB57F0F1F549B6BE739F64 /* CDVCapture.m in Sources */,
+				A533DF82515948B6BFDCE184 /* IsDebug.h in Resources */,
+				4620026D56EC4D34ACD09B98 /* IsDebug.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -2,140 +2,27 @@ import { Injectable } from '@angular/core';
 import { Platform } from 'ionic-angular';
 import { SQLite } from 'ionic-native';
 
-export class Deployments {
-  static Table : string = 'deployments';
-  static Columns : any = {
-    'id': 'INTEGER PRIMARY KEY AUTOINCREMENT',
-    'url': 'TEXT',
-    'name': 'TEXT',
-    'domain': 'TEXT',
-    'subdomain': 'TEXT',
-    'status': 'TEXT',
-    'description': 'TEXT',
-    'image': 'TEXT',
-    'username': 'TEXT',
-    'password': 'TEXT',
-    'access_token': 'TEXT',
-    'refresh_token': 'TEXT'};
-}
+import { Model } from '../models/model';
+import { Deployment } from '../models/deployment';
+import { User } from '../models/user';
+import { Form } from '../models/form';
+import { Attribute } from '../models/attribute';
+import { Post } from '../models/post';
+import { Value } from '../models/value';
+import { Image } from '../models/image';
 
-export class Forms {
-  static Table : string = 'forms';
-  static Columns : any = {
-    'id': 'INTEGER PRIMARY KEY AUTOINCREMENT',
-    'deployment': 'INTEGER',
-    'name': 'TEXT',
-    'description': 'TEXT',
-    'type': 'TEXT',
-    'color': 'TEXT',
-    'disabled': 'INTEGER',
-    'require_approval': 'INTEGER',
-    'everyone_can_create': 'INTEGER',
-    'created': 'TEXT',
-    'updated': 'TEXT'};
-}
-
-export class Attributes {
-  static Table : string = 'attributes';
-  static Columns : any = {
-    'id': 'INTEGER PRIMARY KEY AUTOINCREMENT',
-    'deployment': 'INTEGER',
-    'form': 'INTEGER',
-    'key': 'TEXT',
-    'label': 'TEXT',
-    'instructions': 'TEXT',
-    'input': 'TEXT',
-    'type': 'TEXT',
-    'required': 'INTEGER',
-    'priority': 'INTEGER',
-    'cardinality': 'INTEGER',
-    'options': 'TEXT'};
-}
-
-export class Posts {
-  static Table : string = 'posts';
-  static Columns : any = {
-    'id': 'INTEGER PRIMARY KEY AUTOINCREMENT',
-    'deployment': 'INTEGER',
-    'form': 'INTEGER',
-    'user': 'INTEGER',
-    'media': 'INTEGER',
-    'title': 'TEXT',
-    'content': 'TEXT',
-    'slug': 'TEXT',
-    'type': 'TEXT',
-    'status': 'TEXT',
-    'color': 'TEXT',
-    'message': 'TEXT',
-    'created': 'TEXT',
-    'updated': 'TEXT',
-    'image': 'TEXT',
-    'fields': 'TEXT',
-    'pending': 'INTEGER',
-    'latitude': 'DOUBLE',
-    'longitude': 'DOUBLE'};
-}
-
-export class Values {
-  static Table : string = 'values_';
-  static Columns : any = {
-    'id': 'TEXT PRIMARY KEY',
-    'deployment': 'INTEGER',
-    'form': 'INTEGER',
-    'post': 'INTEGER',
-    'key': 'TEXT',
-    'value': 'TEXT',
-    'label': 'TEXT',
-    'input': 'TEXT',
-    'type': 'TEXT'};
-}
-
-export class Users {
-  static Table : string = 'users';
-  static Columns : any = {
-    'id': 'INTEGER PRIMARY KEY AUTOINCREMENT',
-    'deployment': 'INTEGER',
-    'email': 'TEXT',
-    'realname': 'TEXT',
-    'gravatar': 'TEXT'};
-}
-
-export class Media {
-  static Table : string = 'media';
-  static Columns : any = {
-    'id': 'INTEGER PRIMARY KEY AUTOINCREMENT',
-    'deployment': 'INTEGER',
-    'post': 'INTEGER',
-    'user': 'INTEGER',
-    'mime': 'TEXT',
-    'created': 'TEXT',
-    'updated': 'TEXT',
-    'caption': 'TEXT',
-    'original_file_url': 'TEXT',
-    'original_file_size': 'INTEGER',
-    'original_width': 'INTEGER',
-    'original_height': 'INTEGER'};
-}
+import { LoggerService } from '../providers/logger-service';
 
 @Injectable()
 export class DatabaseService {
 
-  name: string;
-  location: string;
-  database : SQLite;
-  tables : any = {};
+  protected database : SQLite = null;
+  protected name: string = 'ushahidi.db';
+  protected location: string = 'default';
 
-  constructor(public platform:Platform) {
-    this.name = 'ushahidi.db';
-    this.location = 'default';
-    this.database = null;
-    this.tables[Users.Table] = Users.Columns;
-    this.tables[Deployments.Table] = Deployments.Columns;
-    this.tables[Posts.Table] = Posts.Columns;
-    this.tables[Values.Table] = Values.Columns;
-    this.tables[Forms.Table] = Forms.Columns;
-    this.tables[Attributes.Table] = Attributes.Columns;
-    this.tables[Media.Table] = Media.Columns;
+  constructor(
+    public platform:Platform,
+    public logger:LoggerService) {
   }
 
   testDatabase() {
@@ -143,10 +30,10 @@ export class DatabaseService {
   }
 
   openDatabase() {
-    console.log("Database openDatabase");
+    this.logger.info(this, "openDatabase");
     return new Promise((resolve, reject) => {
       if (this.database) {
-        console.log(`Database Cached ${JSON.stringify(this.database)}`);
+        this.logger.info(this, "openDatabase", "Cached", this.database);
         resolve(this.database);
       }
       else if (this.testDatabase()) {
@@ -156,233 +43,72 @@ export class DatabaseService {
           location: this.location
         }).then(
           () => {
-            console.log(`Database Opened ${JSON.stringify(database)}`);
+            this.logger.info(this, "openDatabase", "Opened", database);
             this.database = database;
             resolve(database);
           },
           (error) => {
-            console.error(`Database Open Failed ${JSON.stringify(error)}`);
+            this.logger.error(this, "openDatabase", "Open Failed", error);
             reject(JSON.stringify(error));
           });
       }
       else {
-        console.error(`Database Open Failed Cordova Not Available`);
+        this.logger.error(this, "openDatabase", "Open Failed", "Cordova Not Available");
         reject(`Error Opening Database`);
       }
     });
   }
 
-  createTables() {
-    console.log(`Database createTables`);
+  createTables(models:Model[]) {
+    this.logger.info(this, "createTables", models);
+    let promises = [];
+    for (let index in models) {
+      let model: Model = models[index];
+      promises.push(this.createTable(model));
+    }
+    return Promise.all(promises);
+  }
+
+  createTable<M extends Model>(model:M) {
+    this.logger.info(this, "createTable", model);
     return new Promise((resolve, reject) => {
-      this.openDatabase().then((database:SQLite) => {
-        for (var table in this.tables) {
-          let columns = []
-          let values = this.tables[table];
-          for (var value in values) {
-            columns.push(value + ' ' + values[value]);
+      this.openDatabase().then(
+        (database:SQLite) => {
+          let table:string = model.getTable();
+          let columns:any[] = model.getColumns();
+          let keys:string[] = [];
+          let values:string[] = [];
+          for (var index in columns) {
+            let column = columns[index];
+            values.push(column.name + ' ' + column.type);
+            if (column.key == true) {
+              keys.push(column.name);
+            }
           }
-          let sql = `CREATE TABLE IF NOT EXISTS ${table} (${columns.join(", ")})`;
-          console.log(`Database Creating ${sql}`);
+          let key = "";
+          if (keys.length > 0) {
+            key = `, PRIMARY KEY (${keys.join(", ")})`;
+          }
+          let sql = `CREATE TABLE IF NOT EXISTS ${table} (${values.join(", ")}${key})`;
+          this.logger.info(this, "createTable", "Creating", sql);
           database.executeSql(sql, []).then(
             (data) => {
-              console.log(`Database Created ${sql} ${JSON.stringify(data)}`);
-              resolve(true);
+              this.logger.info(this, "createTable", "Created", sql, data);
+              resolve(data);
             },
             (error) => {
-              console.error(`Database Create Failed ${sql} ${JSON.stringify(error)}`);
+              this.logger.error(this, "createTable", "Failed", sql, error);
               reject(JSON.stringify(error));
             });
-        }
       },
       (error) => {
-        console.error(`Database Create Failed ${error}`);
+        this.logger.error(this, "createTable", "Failed", error);
         reject(`Error Creating Database Tables`);
       });
     });
   }
 
-  addDeployment(data:{}) {
-    console.log(`Database addDeployment ${JSON.stringify(data)}`);
-    data['name'] = data['deployment_name'];
-    data['url'] = `https://${data['subdomain']}.${data['domain']}`;
-    return this.executeInsert(Deployments.Table, data);
-  }
-
-  updateDeployment(id:string, data:{}) {
-    console.log(`Database updateDeployment ${id} ${JSON.stringify(data)}`);
-    return this.executeUpdate(Deployments.Table, id, data);
-  }
-
-  removeDeployment(id:string) {
-    console.log(`Database removeDeployment ${id}`);
-    return this.executeDelete(Deployments.Table, {
-      "id": id });
-  }
-
-  getDeploymentBySubdomain(subdomain:string) {
-    console.log(`Database getDeploymentBySubdomain ${subdomain}`);
-    return this.executeSelect(Deployments.Table, {
-      "subdomain": subdomain });
-  }
-  getDeployments() {
-    console.log(`Database getDeployments`);
-    return this.executeSelect(Deployments.Table);
-  }
-
-  getDeployment(id:number) {
-    console.log(`Database getDeployment ${id}`);
-    return this.executeSelect(Deployments.Table, {
-      "id": id });
-  }
-
-  getPosts(deployment:number) {
-    console.log(`Database getPosts ${deployment}`);
-    return this.executeSelect(Posts.Table, {
-      "deployment": deployment });
-  }
-
-  getPost(deployment:number, post:number) {
-    console.log(`Database getPost ${deployment} ${post}`);
-    return this.executeSelect(Posts.Table, {
-      "deployment": deployment,
-      "id": post });
-  }
-
-  addPost(deployment:number, data:{}) {
-    console.log(`Database addPost Deployment ${deployment} ${JSON.stringify(data)}`);
-    data['deployment'] = deployment;
-    if (data['form'] && data['form']['id']) {
-      data['form'] = data['form']['id'];
-    }
-    if (data['user'] && data['user']['id']) {
-      data['user'] = data['user']['id'];
-    }
-    if (data['values']['location_default']) {
-      let location = data['values']['location_default'][0];
-      data['latitude'] = location['lat'];
-      data['longitude'] = location['lon'];
-    }
-    if (data['values']) {
-      data['fields'] = Object.keys(data['values']).length;
-    }
-    return Promise.all([
-      this.executeUpdate(Posts.Table, data['id'], data),
-      this.executeInsert(Posts.Table, data)]);
-  }
-
-  removePosts(deployment:string) {
-    console.log(`Database removePosts ${deployment}`);
-    return this.executeDelete(Posts.Table, {
-      "deployment": deployment });
-  }
-
-  addValue(deployment:number, form:number, post:number, data:{}) {
-    console.log(`Database addValue ${deployment} ${form} ${post} ${JSON.stringify(data)}`);
-    data['deployment'] = deployment;
-    data['form'] = form;
-    data['post'] = post;
-    return Promise.all([
-      this.executeUpdate(Values.Table, data['id'], data),
-      this.executeInsert(Values.Table, data)]);
-  }
-
-  getValues(deployment:number, post:number) {
-    console.log(`Database getValues ${deployment} ${post}`);
-    return this.executeSelect(Values.Table, {
-      "deployment": deployment,
-      "post": post });
-  }
-
-  getForms(deployment:number) {
-    console.log(`Database getForms ${deployment}`);
-    return this.executeSelect(Forms.Table, {
-      "deployment": deployment });
-  }
-
-  getForm(deployment:number, form:number) {
-    console.log(`Database getForm ${deployment} ${form}`);
-    return this.executeSelect(Forms.Table, {
-      "deployment": deployment,
-      "id": form });
-  }
-
-  addForm(deployment:number, data:{}) {
-    console.log(`Database addForm Deployment ${deployment} ${JSON.stringify(data)}`);
-    data['deployment'] = deployment;
-    return Promise.all([
-      this.executeUpdate(Forms.Table, data['id'], data),
-      this.executeInsert(Forms.Table, data)]);
-  }
-
-  removeForms(deployment:string) {
-    console.log(`Database removeForms ${deployment}`);
-    return this.executeDelete(Forms.Table, {
-      "deployment": deployment });
-  }
-
-  addAttribute(deployment:number, data:{}) {
-    console.log(`Database addAttribute Deployment ${deployment} ${JSON.stringify(data)}`);
-    data['deployment'] = deployment;
-    data['form'] = data['form_stage_id'];
-    return Promise.all([
-      this.executeUpdate(Attributes.Table, data['id'], data),
-      this.executeInsert(Attributes.Table, data)]);
-  }
-
-  getAttributes(deployment:number, form:number) {
-    console.log(`Database getAttributes ${deployment} ${form}`);
-    return this.executeSelect(Attributes.Table,
-      { "deployment": deployment,
-        "form": form },
-      { "cardinality": 'ASC' });
-  }
-
-  removeAttributes(deployment:string) {
-    console.log(`Database removeAttributes ${deployment}`);
-    return this.executeDelete(Attributes.Table, {
-      "deployment": deployment });
-  }
-
-  addUser(deployment:number, data:{}) {
-    console.log(`Database addUser Deployment ${deployment} ${JSON.stringify(data)}`);
-    data['deployment'] = deployment;
-    return Promise.all([
-      this.executeUpdate(Users.Table, data['id'], data),
-      this.executeInsert(Users.Table, data)]);
-  }
-
-  getUser(deployment:number, user:number) {
-    console.log(`Database getUser ${deployment} ${user}`);
-    return this.executeSelect(Users.Table, {
-      "deployment": deployment,
-      "id": user });
-  }
-
-  getUsers(deployment:number) {
-    console.log(`Database getUsers ${deployment}`);
-    return this.executeSelect(Users.Table, {
-      "deployment": deployment });
-  }
-
-  addMedia(deployment:number, data:{}) {
-    console.log(`Database addMedia Deployment ${deployment} ${JSON.stringify(data)}`);
-    data['deployment'] = deployment;
-    if (data['user_id']) {
-      data['user'] = data['user_id'];
-    }
-    return Promise.all([
-      this.executeUpdate(Media.Table, data['id'], data),
-      this.executeInsert(Media.Table, data)]);
-  }
-
-  getMedia(deployment:number) {
-    console.log(`Database getMedia ${deployment}`);
-    return this.executeSelect(Media.Table, {
-      "deployment": deployment });
-  }
-
-  executeFirst(table:string, where:{}=null, order:{}=null) {
+  executeFirst(table:string, where:{}=null, order:{}=null) : Promise<any[]> {
     return new Promise((resolve, reject) => {
       this.executeSelect(table, where, order).then(rows => {
         let results = <any[]>rows;
@@ -396,18 +122,18 @@ export class DatabaseService {
     });
   }
 
-  executeSelect(table:string, where:{}=null, order:{}=null) {
+  executeSelect(table:string, where:{}=null, order:{}=null) : Promise<any[]> {
     return new Promise((resolve, reject) => {
       this.openDatabase().then((database:SQLite) => {
         let query = [`SELECT * FROM ${table}`];
-        if (where != null) {
+        if (where != null && Object.keys(where).length > 0) {
           let clause = [];
           for (let column in where) {
             clause.push(`${column} = '${where[column]}'`);
           }
           query.push(`WHERE ${clause.join(' AND ')}`);
         }
-        if (order != null) {
+        if (order != null && Object.keys(order).length > 0) {
           let sort = [];
           for (let column in order) {
             sort.push(`${column} ${order[column]}`);
@@ -415,169 +141,416 @@ export class DatabaseService {
           query.push(`ORDER BY ${sort.join(', ')}`);
         }
         let sql = query.join(" ");
-        console.log(`Database Selecting ${sql}`);
+        this.logger.info(this, "executeSelect", "Selecting", sql);
         database.executeSql(sql, []).then(
           (data) => {
+            let results = [];
             if (data.rows.length > 0) {
-              let results = [];
-              let columns = this.tables[table];
               for (let i = 0; i < data.rows.length; i++) {
                 let row = data.rows.item(i);
-                let result = {};
-                for (var column in columns) {
-                  if (row[column]) {
-                    result[column] = row[column];
-                  }
-                }
-                results.push(result);
+                results.push(row);
               }
-              console.log(`Database Selected ${sql} ${JSON.stringify(results)}`);
-              resolve(results);
             }
-            else {
-              console.log(`Database Selected ${sql} []`);
-              resolve([]);
-            }
+            this.logger.info(this, "executeSelect", "Selected", sql, results);
+            resolve(results);
           },
           (error) => {
-            console.error(`Database Select Failed ${JSON.stringify(error)}`);
+            this.logger.error(this, "executeSelect", "Failed", sql, error);
             reject(JSON.stringify(error));
           });
       },
       (error) => {
-        console.error(`Database Select Failed ${error}`);
+        this.logger.error(this, "executeSelect", "Failed", error);
         reject(error);
       });
     });
   }
 
-  executeInsert(table:string, data:{}) {
+  executeInsert(table:string, columns:any, values:{}) {
     return new Promise((resolve, reject) => {
       this.openDatabase().then((database:SQLite) => {
-        let columns = this.tables[table];
-        let statement = this.insertStatement(table, columns, data);
-        let parameters = this.insertParameters(table, columns, data);
-        console.log(`Database Inserting ${statement} ${parameters}`);
+        let statement = this.insertStatement(table, columns, values);
+        let parameters = this.insertParameters(table, columns, values);
+        this.logger.info(this, "executeInsert", "Inserting", statement, parameters);
         database.executeSql(statement, parameters).then(
           (results) => {
-            console.log(`Database Inserted ${statement} ${parameters} ${JSON.stringify(results)}`);
+            this.logger.info(this, "executeInsert", "Inserted", statement, parameters, results);
             resolve(results['insertId']);
           },
           (error) => {
-            console.error(`Database Insert Failed ${statement} ${parameters} ${JSON.stringify(error)}`);
+            this.logger.error(this, "executeInsert", "Failed", statement, parameters, error);
             reject(JSON.stringify(error));
           });
       },
       (error) => {
-        console.error(`Database Insert Failed ${error}`);
+        this.logger.error(this, "executeInsert", "Failed", error);
         reject(JSON.stringify(error));
       });
     });
   }
 
-  executeUpdate(table:string, id:string, data:{}) {
-    if (id == null) {
-      return Promise.resolve(false);
-    }
+  executeUpdate(table:string, columns:any[], values:{}) {
     return new Promise((resolve, reject) => {
       this.openDatabase().then((database:SQLite) => {
-        let columns = this.tables[table];
-        let statement = this.updateStatement(table, columns, id, data);
-        let parameters = this.updateParameters(table, columns, id, data);
-        console.log(`Database Updating ${statement} ${parameters}`);
+        let statement = this.updateStatement(table, columns, values);
+        let parameters = this.updateParameters(table, columns, values);
+        this.logger.info(this, "executeUpdate", "Updating", statement, parameters);
         database.executeSql(statement, parameters).then(
           (results) => {
-            console.log(`Database Updated ${statement} ${parameters} ${JSON.stringify(results)}`);
+            this.logger.info(this, "executeUpdate", "Updated", statement, parameters, results);
             resolve(true);
           },
           (error) => {
-            console.error(`Database Update Failed ${statement} ${parameters} ${JSON.stringify(error)}`);
+            this.logger.error(this, "executeUpdate", "Failed", statement, parameters, error);
             reject(JSON.stringify(error));
           });
       },
       (error) => {
-        console.error(`Database Update Failed ${error}`);
+        this.logger.error(this, "executeUpdate", "Failed", error);
         reject(JSON.stringify(error));
       });
     });
   }
 
-  executeDelete(table:string, data:{}) {
+  executeDelete(table:string, where:{}) {
     return new Promise((resolve, reject) => {
       this.openDatabase().then((database:SQLite) => {
-        let statement = this.deleteStatement(table, data);
-        console.log(`Database Deleting ${statement}`);
+        let statement = this.deleteStatement(table, where);
+        this.logger.info(this, "executeDelete", "Deleting", statement);
         database.executeSql(statement, []).then(
           (results) => {
-            console.log(`Database Deleted ${statement} ${JSON.stringify(results)}`);
+            this.logger.info(this, "executeDelete", "Deleted", statement, results);
             resolve(results['insertId']);
           },
           (error) => {
-            console.error(`Database Delete Failed ${statement} ${JSON.stringify(error)}`);
+            this.logger.error(this, "executeDelete", "Failed", statement, error);
             reject(JSON.stringify(error));
           });
       },
       (error) => {
-        console.error(`Database Delete Failed ${error}`);
+        this.logger.error(this, "executeDelete", "Failed", error);
         reject(JSON.stringify(error));
       });
     });
   }
 
-  deleteStatement(table:string, data:{}) : string {
-    let clause = [];
-    for (var column in data) {
-      clause.push(`${column} = '${data[column]}'`);
-    }
-    return `DELETE FROM ${table} WHERE ${clause.join(' AND ')}`;
-  }
-
-  insertStatement(table:string, columns, values) : string {
+  insertStatement(table:string, columns:any[], values:{}) : string {
     let names = [];
     let params = [];
-    for (var column in columns) {
-      if (values[column]) {
-        names.push(column);
+    for (let index in columns) {
+      let column:any = columns[index];
+      let value = values[column.name];
+      if (value != null) {
+        names.push(column.name);
         params.push("?");
       }
     }
     return `INSERT OR IGNORE INTO ${table} (${names.join(", ")}) VALUES (${params.join(", ")})`;
   }
 
-  insertParameters(table:string, columns:{}, values:{}) : any {
+  insertParameters(table:string, columns:any[], values:{}) : any {
     let params = [];
-    for (var column in columns) {
-      if (values[column]) {
-        let type = columns[column];
-        if (type == 'TEXT') {
-          params.push(values[column].toString());
-        }
-        else {
-          params.push(values[column]);
-        }
+    for (let index in columns) {
+      let column:any = columns[index];
+      let value = values[column.name];
+      if (value != null) {
+        params.push(value);
       }
     }
     return params;
   }
 
-  updateStatement(table:string, columns:{}, id:string, values:{}) : string {
+  updateStatement(table:string, columns:any[], values:{}) : string {
     let params = [];
-    for (var column in columns) {
-      if (column in values && column != 'id') {
-        params.push(`${column} = ?`);
+    let clause = [];
+    for (let index in columns) {
+      let column:any = columns[index];
+      if (column.key == true) {
+        clause.push(`${column.name} = ?`);
+      }
+      else if (column.property in values) {
+        params.push(`${column.name} = ?`);
       }
     }
-    return `UPDATE OR IGNORE ${table} SET ${params.join(", ")} WHERE id = '${id}'`;
+    return `UPDATE OR IGNORE ${table} SET ${params.join(", ")} WHERE ${clause.join(" AND ")}`;
   }
 
-  updateParameters(table:string, columns:{}, id:string, values:{}) : any {
+  updateParameters(table:string, columns:any[], values:{}) : any {
     let params = [];
-    for (var column in columns) {
-      if (column in values && column != 'id') {
-        params.push(values[column]);
+    let clause = [];
+    for (let index in columns) {
+      let column:any = columns[index];
+      let value = values[column.property];
+      if (column.key == true) {
+        clause.push(value);
+      }
+      else if (column.property in values) {
+        params.push(value);
       }
     }
-    return params;
+    return params.concat(clause);
+  }
+
+  deleteStatement(table:string, where:{}) : string {
+    let clause = [];
+    for (let column in where) {
+      clause.push(`${column} = '${where[column]}'`);
+    }
+    return `DELETE FROM ${table} WHERE ${clause.join(' AND ')}`;
+  }
+
+  getModels<M extends Model>(type:M, where:{}=null, order:{}=null) : Promise<M[]> {
+    return new Promise((resolve, reject) => {
+      this.executeSelect(type.getTable(), where, order).then(
+        (rows) => {
+          let models = [];
+          let columns = type.getColumns();
+          for (let i = 0; i < rows.length; i++) {
+            let row = rows[i];
+            let values = {};
+            for (let index in columns) {
+              let column = columns[index];
+              values[column.property] = row[column.name];
+            }
+            let model = type.newInstance<M>(values);
+            models.push(model);
+          }
+          resolve(models);
+        },
+        (error) => {
+          reject(error);
+        });
+    });
+  }
+
+  getModel<M extends Model>(type:M, where:{}=null, order:{}=null) : Promise<M> {
+    return new Promise((resolve, reject) => {
+      this.executeFirst(type.getTable(), where, order).then(
+        (row) => {
+          let columns = type.getColumns();
+          let values = {};
+          for (let index in columns) {
+            let column = columns[index];
+            values[column.property] = row[column.name];
+          }
+          let model = type.newInstance<M>(values);
+          resolve(model);
+        },
+        (error) => {
+          reject(error);
+        });
+    });
+  }
+
+  saveModel<M extends Model>(model:M) {
+    return new Promise((resolve, reject) => {
+      let table:string = model.getTable();
+      let columns:any[] = model.getColumns();
+      let values:any[] = model.getValues();
+      if (model.isPersisted()) {
+        this.logger.info(this, "saveModel", "Updating", model);
+        this.executeUpdate(table, columns, values).then(
+          (results) => {
+            resolve(results);
+          },
+          (error) => {
+            reject(error);
+          });
+      }
+      else {
+        this.logger.info(this, "saveModel", "Inserting", model);
+        this.executeInsert(table, columns, values).then(
+          (results) => {
+            resolve(results);
+          },
+          (error) => {
+            reject(error);
+          });
+      }
+    });
+  }
+
+  removeModel<M extends Model>(model:M, where:any) {
+    return this.executeDelete(model.getTable(), where);
+  }
+
+  saveDeployment(deployment:Deployment) {
+    return this.saveModel(deployment);
+  }
+
+  getDeployments(where:{}=null, order:{}=null) : Promise<Deployment[]> {
+    return this.getModels<Deployment>(new Deployment(), where, order);
+  }
+
+  getDeployment(id:number) : Promise<Deployment> {
+    let where = { id: id };
+    return this.getModel<Deployment>(new Deployment(), where);
+  }
+
+  removeDeployment(deployment:Deployment) {
+    let where = { id: deployment.id };
+    return this.removeModel<Deployment>(new Deployment(), where);
+  }
+
+  getForms(deployment:Deployment) : Promise<Form[]> {
+    let where = { deployment_id: deployment.id };
+    let order = {};
+    return this.getModels<Form>(new Form(), where, order);
+  }
+
+  getForm(deployment:Deployment, id:number) : Promise<Form> {
+    let where = {
+      deployment_id: deployment.id,
+      id: id };
+    return this.getModel<Form>(new Form(), where);
+  }
+
+  saveForm(deployment:Deployment, form:Form) {
+    form.deployment_id = deployment.id;
+    return this.saveModel(form);
+  }
+
+  removeForms(deployment:Deployment) {
+    let where = { deployment_id: deployment.id };
+    return this.removeModel<Form>(new Form(), where);
+  }
+
+  getUsers(deployment:Deployment) : Promise<User[]> {
+    let where = { deployment_id: deployment.id };
+    let order = {};
+    return this.getModels<User>(new User(), where, order);
+  }
+
+  saveUser(deployment:Deployment, user:User) {
+    user.deployment_id = deployment.id;
+    return this.saveModel(user);
+  }
+
+  removeUsers(deployment:Deployment) {
+    let where = { deployment_id: deployment.id };
+    return this.removeModel<User>(new User(), where);
+  }
+
+  getPosts(deployment:Deployment) : Promise<Post[]> {
+    let where = { deployment_id: deployment.id };
+    let order = {};
+    return this.getModels<Post>(new Post(), where, order);
+  }
+
+  getPost(deployment:Deployment, id:number) : Promise<Post> {
+    let where = {
+      deployment_id: deployment.id,
+      id: id };
+    return this.getModel<Post>(new Post(), where);
+  }
+
+  savePost(deployment:Deployment, post:Post) {
+    post.deployment_id = deployment.id;
+    return this.saveModel(post);
+  }
+
+  removePosts(deployment:Deployment) {
+    let where = { deployment_id: deployment.id };
+    return this.removeModel<Post>(new Post(), where);
+  }
+
+  getImages(deployment:Deployment) : Promise<Image[]> {
+    let where = { deployment_id: deployment.id };
+    let order = {};
+    return this.getModels<Image>(new Image(), where, order);
+  }
+
+  saveImage(deployment:Deployment, image:Image) {
+    image.deployment_id = deployment.id;
+    return this.saveModel(image);
+  }
+
+  removeImages(deployment:Deployment) {
+    let where = { deployment_id: deployment.id };
+    return this.removeModel<Image>(new Image(), where);
+  }
+
+  getPostsWithValues(deployment:Deployment): Promise<Post[]> {
+    return Promise.all([
+      this.getPosts(deployment),
+      this.getValues(deployment),
+      this.getUsers(deployment),
+      this.getForms(deployment)]).
+      then(results => {
+        let posts = <Post[]>results[0];
+        let values = <Value[]>results[1];
+        let users = <User[]>results[2];
+        let forms = <Form[]>results[3];
+        for (var i = 0; i < posts.length; i++) {
+          let post:Post = posts[i];
+          post.loadUser(users);
+          post.loadForm(forms);
+          post.loadValues(values);
+        }
+        return posts;
+      });
+  }
+
+  getAttributes(deployment:Deployment, form:Form=null) : Promise<Attribute[]> {
+    let where = { deployment_id: deployment.id };
+    if (form != null) {
+      where['form_id'] = form.id;
+    }
+    let order = {};
+    return this.getModels<Attribute>(new Attribute(), where, order);
+  }
+
+  saveAttribute(deployment:Deployment, attribute:Attribute) {
+    attribute.deployment_id = deployment.id;
+    return this.saveModel(attribute);
+  }
+
+  removeAttributes(deployment:Deployment) {
+    let where = { deployment_id: deployment.id };
+    return this.removeModel<Attribute>(new Attribute(), where);
+  }
+
+  getFormsWithAttributes(deployment:Deployment): Promise<Form[]> {
+    return Promise.all([
+      this.getForms(deployment),
+      this.getAttributes(deployment)]).
+      then(results => {
+        let forms = <any[]>results[0];
+        let attributes = <any[]>results[1];
+        for (var i = 0; i < forms.length; i++){
+          let form:Form = forms[i];
+          form.attributes = [];
+          for (var j = 0; j < attributes.length; j++){
+            let attribute:Attribute = attributes[j];
+            if (form.id == attribute.form_id) {
+              form.attributes.push(attribute);
+            }
+          }
+          form.attributes = form.attributes.sort(function(a, b){
+            return a.cardinality - b.cardinality;
+          });
+        }
+        return forms;
+      });
+  }
+
+  getValues(deployment:Deployment, post:Post=null) : Promise<Value[]> {
+    let where = { deployment_id: deployment.id };
+    if (post != null) {
+      where['post_id'] = post.id;
+    }
+    let order = {};
+    return this.getModels<Value>(new Value(), where, order);
+  }
+
+  saveValue(deployment:Deployment, value:Value) {
+    value.deployment_id = deployment.id;
+    return this.saveModel(value);
+  }
+
+  removeValues(deployment:Deployment) {
+    let where = { deployment_id: deployment.id };
+    return this.removeModel<Value>(new Value(), where);
   }
 
 }

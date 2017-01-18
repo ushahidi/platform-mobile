@@ -3,6 +3,8 @@ import { Button, ActionSheetController, AlertController } from 'ionic-angular';
 import { Camera } from 'ionic-native';
 import { FormGroup, FormGroupName, FormControl, FormControlName } from '@angular/forms';
 
+import { LoggerService } from '../../providers/logger-service';
+
 @Component({
   selector: 'field-image',
   templateUrl: 'image.html',
@@ -20,12 +22,13 @@ export class ImageComponent {
   @ViewChild('button') button: Button;
 
   constructor(
+    public logger:LoggerService,
     public alertController:AlertController,
     public actionController:ActionSheetController) {
   }
 
   ngOnInit() {
-    console.log(`Image ${JSON.stringify(this.attribute)}`);
+    this.logger.info(this, "Attribute", this.attribute);
     this.required = this.attribute.required == "true";
   }
 
@@ -54,6 +57,7 @@ export class ImageComponent {
   }
 
   choosePhoto() {
+    this.logger.info(this, "choosePhoto");
     let options = {
       targetWidth: 800,
       targetHeight: 600,
@@ -66,7 +70,7 @@ export class ImageComponent {
         this.imageData = "data:image/jpeg;base64," + data;
       },
       (error) => {
-        console.error(`Camera Choose Photo ${JSON.stringify(error)}`);
+        this.logger.error(this, "choosePhoto", error);
         let alert = this.alertController.create({
           title: 'Problem Choosing Photo',
           subTitle: "There was a problem trying to choose photo from the library.",
@@ -77,6 +81,7 @@ export class ImageComponent {
   }
 
   takePhoto() {
+    this.logger.info(this, "takePhoto");
     let options = {
       targetWidth: 800,
       targetHeight: 600,
@@ -89,7 +94,7 @@ export class ImageComponent {
         this.imageData = "data:image/jpeg;base64," + data;
       },
       (error) => {
-        console.error(`Camera Take Photo ${JSON.stringify(error)}`);
+        this.logger.error(this, "takePhoto", error);
         let alert = this.alertController.create({
           title: 'Problem Taking Photo',
           subTitle: "There was a problem trying to take a photo.",
@@ -100,6 +105,6 @@ export class ImageComponent {
   }
 
   deletePhoto() {
-    console.log(`Image deletePhoto`);
+    this.logger.info(this, "deletePhoto");
   }
 }

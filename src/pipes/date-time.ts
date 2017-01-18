@@ -8,7 +8,6 @@ import * as moment from 'moment';
 export class DateTimePipe {
 
   transform(value, args) {
-    console.log(`DateTimePipe ${value} ${args}`);
     if (value) {
       var date = moment(value).format('YYYY-MM-DD hh:mm:ss');
       if (args) {

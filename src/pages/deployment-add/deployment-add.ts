@@ -1,70 +1,75 @@
 import { Component } from '@angular/core';
-import { Platform, NavParams, NavController, LoadingController, ToastController, AlertController, ViewController } from 'ionic-angular';
+import { Platform, NavParams,
+  NavController, ViewController, ModalController, LoadingController, ToastController, AlertController, ActionSheetController } from 'ionic-angular';
 import { StatusBar } from 'ionic-native';
 
 import { DeploymentLoginPage } from '../deployment-login/deployment-login';
 
 import { ApiService } from '../../providers/api-service';
+import { LoggerService } from '../../providers/logger-service';
 import { DatabaseService } from '../../providers/database-service';
+
+import { BasePage } from '../../pages/base-page/base-page';
+
+import { Deployment } from '../../models/deployment';
 
 @Component({
   selector: 'page-deployment-add',
   templateUrl: 'deployment-add.html',
-  providers: [ ApiService ],
+  providers: [ ApiService, DatabaseService, LoggerService ],
   entryComponents:[ DeploymentLoginPage ]
 })
-export class DeploymentAddPage {
+export class DeploymentAddPage extends BasePage {
 
-  deployments: any = [];
+  deployments: Deployment[] = [];
   loading: boolean = false;
 
   constructor(
     public platform:Platform,
     public api:ApiService,
+    public logger:LoggerService,
     public database:DatabaseService,
     public navParams: NavParams,
     public navController:NavController,
-    public toastController: ToastController,
-    public alertController: AlertController,
-    public viewController: ViewController,
-    public loadingController:LoadingController) {
-
+    public viewController:ViewController,
+    public modalController:ModalController,
+    public toastController:ToastController,
+    public alertController:AlertController,
+    public loadingController:LoadingController,
+    public actionController:ActionSheetController) {
+      super(navController, viewController, modalController, toastController, alertController, loadingController, actionController);
   }
 
   ionViewDidLoad() {
-    console.log('Deployment Add ionViewDidLoad');
+    this.logger.info(this, 'ionViewDidLoad');
   }
 
   ionViewWillEnter() {
-    console.log("Deployment Add ionViewWillEnter");
+    this.logger.info(this, "ionViewWillEnter");
     this.platform.ready().then(() => {
       StatusBar.styleLightContent();
       StatusBar.backgroundColorByHexString('#3f4751');
     });
   }
 
-  onCancel(event) {
-    console.log("Deployment Add onCancel");
-    this.viewController.dismiss();
+  onCancel(event:any) {
+    this.logger.info(this, "onCancel");
+    this.hideModal();
   }
 
-  searchDeployments(event) {
-    console.log(`Deployment Add searchDeployments ${event.target.value}`);
+  searchDeployments(event:any) {
+    this.logger.info(this, `searchDeployments ${event.target.value}`);
     let search = event.target.value;
     if (search && search.length > 0) {
       this.loading = true;
       this.api.searchDeployments(search).then(
         (results) => {
-          this.deployments = <any[]>results;
+          this.deployments = <Deployment[]>results;
           this.loading = false;
         },
         (error) => {
           this.loading = false;
-          let toast = this.toastController.create({
-            message: error,
-            duration: 1500
-          });
-          toast.present();
+          this.showToast(error);
         });
     }
     else {
@@ -72,24 +77,24 @@ export class DeploymentAddPage {
     }
   }
 
-  addDeployment(event, deployment) {
-    console.log(`Deployment Add addDeployment`);
+  addDeployment(event:any, deployment:Deployment) {
+    this.logger.info(this, "addDeployment");
     let loading = this.showLoading("Adding...");
-    this.database.getDeploymentBySubdomain(deployment.subdomain).then(results => {
-      let deployments = <any[]>results;
+    let where = { subdomain: deployment.subdomain };
+    this.database.getDeployments(where).then(results => {
+      let deployments = <Deployment[]>results;
       if (deployments && deployments.length > 0) {
         loading.dismiss();
         this.showAlert('Deployment Already Added', 'Looks like that deployment has already been added.');
       }
       else {
-        this.database.addDeployment(deployment).then(
+        this.database.saveDeployment(deployment).then(
           (results) => {
-            console.log(`Deployment Add addDeployment ID ${results}`);
+            this.logger.info(this, "addDeployment", "ID", results);
             loading.dismiss();
             if (results) {
-              deployment['id'] = results;
-              let data = { 'deployment' : deployment };
-              this.viewController.dismiss(data);
+              deployment.id = <number>results;
+              this.hideModal({ deployment : deployment });
             }
             else {
               this.showAlert('Problem Adding Deployment', 'There was a problem adding your deployment.');
@@ -102,33 +107,6 @@ export class DeploymentAddPage {
           });
       }
     });
-  }
-
-  showLoading(message) {
-    let loading = this.loadingController.create({
-      content: message
-    });
-    loading.present();
-    return loading;
-  }
-
-  showAlert(title, subTitle) {
-    let alert = this.alertController.create({
-      title: title,
-      subTitle: subTitle,
-      buttons: ['OK']
-    });
-    alert.present();
-    return alert;
-  }
-
-  showToast(message, duration:number=1500) {
-    let toast = this.toastController.create({
-      message: message,
-      duration: duration
-    });
-    toast.present();
-    return toast;
   }
 
 }

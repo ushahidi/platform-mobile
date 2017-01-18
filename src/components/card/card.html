@@ -1,17 +1,17 @@
-<ion-card class="response-card" [style.border-left-color]="response.color">
+<ion-card class="post-card" [style.border-left-color]="post.color">
   <ion-card-content>
     <ion-grid>
       <ion-row>
         <!-- <ion-col width-10 tappable (click)="onCardSelected($event)">
-          <ion-icon ios="ios-globe-outline" md="md-globe" color="grey" *ngIf="response.status=='published'"></ion-icon>
-          <ion-icon ios="ios-lock-outline" md="md-lock" color="grey" *ngIf="response.status=='draft'"></ion-icon>
-          <ion-icon ios="ios-trash-outline" md="md-trash" color="grey" *ngIf="response.status=='archived'"></ion-icon>
+          <ion-icon ios="ios-globe-outline" md="md-globe" color="grey" *ngIf="post.status=='published'"></ion-icon>
+          <ion-icon ios="ios-lock-outline" md="md-lock" color="grey" *ngIf="post.status=='draft'"></ion-icon>
+          <ion-icon ios="ios-trash-outline" md="md-trash" color="grey" *ngIf="post.status=='archived'"></ion-icon>
         </ion-col> -->
         <ion-col width-10 tappable (click)="onCardSelected($event)">
-          <img class="lazy profile" [src]="placeholderUser" [lazyLoad]="imageUser" [offset]="offset">
+          <img class="lazy profile" [src]="userPlaceholder" [lazyLoad]="post.user_image || userPlaceholder" offset="1000">
         </ion-col>
         <ion-col width-80 tappable (click)="onCardSelected($event)">
-          <p text-muted>{{name}} {{response.created | timeAgo}}</p>
+          <p>{{post.user_name || userName}} {{post.created | timeAgo}}</p>
         </ion-col>
         <ion-col width-10 text-right>
           <button tappable (click)="onMenuSelected($event)">
@@ -20,13 +20,13 @@
         </ion-col>
       </ion-row>
     </ion-grid>
-    <h2 *ngIf="response.title">{{response.title}}</h2>
-    <p *ngIf="response.content">{{response.content}}</p>
+    <h2 *ngIf="post.title">{{post.title}}</h2>
+    <p *ngIf="post.description">{{post.description}}</p>
   </ion-card-content>
-  <ion-card-content *ngIf="media" tappable (click)="onCardSelected($event)">
-    <img class="lazy" [src]="media.original_file_url" [lazyLoad]="media.original_file_url">
+  <ion-card-content tappable *ngIf="post.image_url" (click)="onCardSelected($event)">
+    <img class="lazy image" [src]="photoPlaceholder" [lazyLoad]="post.image_url" offset="1000">
   </ion-card-content>
-  <ion-card-content *ngIf="response.fields" tappable (click)="onCardSelected($event)">
-    <p class="more">{{response.fields}} more fields...</p>
+  <ion-card-content *ngIf="post.values && post.values.length > 0" tappable (click)="onCardSelected($event)">
+    <p class="more">{{post.values.length}} more fields...</p>
   </ion-card-content>
 </ion-card>

@@ -2,6 +2,8 @@ import { Component, ViewChild } from '@angular/core';
 import { DateTime } from 'ionic-angular';
 import { FormGroup, FormGroupName, FormControl, FormControlName } from '@angular/forms';
 
+import { LoggerService } from '../../providers/logger-service';
+
 @Component({
   selector: 'field-date',
   templateUrl: 'date.html',
@@ -16,11 +18,11 @@ export class DateComponent {
   time: string = null;
   required: boolean = false;
 
-  constructor() {
+  constructor(public logger:LoggerService) {
   }
 
   ngOnInit() {
-    console.log(`Date ${JSON.stringify(this.attribute)}`);
+    this.logger.info(this, "Attribute", this.attribute);
     this.required = this.attribute.required == "true";
   }
 
@@ -31,6 +33,6 @@ export class DateComponent {
     else {
       this.datetime = null;
     }
-    console.log(`Date dateChanged ${this.datetime}`);
+    this.logger.info(this, "dateChanged", this.datetime);
   }
 }

@@ -2,6 +2,8 @@ import { Component, ViewChild } from '@angular/core';
 import { Checkbox } from 'ionic-angular';
 import { FormGroup, FormGroupName, FormControl, FormControlName } from '@angular/forms';
 
+import { LoggerService } from '../../providers/logger-service';
+
 @Component({
   selector: 'field-checkbox',
   templateUrl: 'checkbox.html',
@@ -16,11 +18,11 @@ export class CheckboxComponent {
   values: any = {};
   required: boolean = false;
 
-  constructor() {
+  constructor(public logger:LoggerService) {
   }
 
   ngOnInit() {
-    console.log(`Checkbox ${JSON.stringify(this.attribute)}`);
+    this.logger.info(this, "Attribute", this.attribute);
     if (this.attribute.options) {
       if (Array.isArray(this.attribute.options)) {
         this.options = this.attribute.options;

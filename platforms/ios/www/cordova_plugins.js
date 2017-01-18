@@ -446,6 +446,14 @@ module.exports = [
         "clobbers": [
             "navigator.device.capture"
         ]
+    },
+    {
+        "id": "cordova-plugin-is-debug.IsDebug",
+        "file": "plugins/cordova-plugin-is-debug/www/isDebug.js",
+        "pluginId": "cordova-plugin-is-debug",
+        "clobbers": [
+            "cordova.plugins.IsDebug"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -474,7 +482,8 @@ module.exports.metadata =
     "cordova-plugin-compat": "1.1.0",
     "cordova-plugin-geolocation": "2.4.1",
     "cordova-plugin-file": "4.3.1",
-    "cordova-plugin-media-capture": "1.4.1"
+    "cordova-plugin-media-capture": "1.4.1",
+    "cordova-plugin-is-debug": "1.0.0"
 };
 // BOTTOM OF METADATA
 });

@@ -1,10 +1,10 @@
 <ion-header>
   <ion-navbar color="dark">
-    <ion-title *ngIf="response">{{response.title}}</ion-title>
+    <ion-title *ngIf="post">{{post.form_name}}</ion-title>
     <ion-buttons end>
-      <!-- <button ion-button (click)="editResponse($event)">
+      <button ion-button (click)="editResponse($event)">
         <ion-icon ios="ios-create-outline" md="md-create"></ion-icon>
-      </button> -->
+      </button>
       <button ion-button (click)="shareResponse($event)">
         <ion-icon ios="ios-share-outline" md="md-share"></ion-icon>
       </button>
@@ -15,34 +15,27 @@
   <ion-refresher (ionRefresh)="loadUpdates($event, false)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  <ion-list *ngIf="attributes && values">
-    <ion-grid *ngIf="response">
+  <ion-list *ngIf="post">
+    <ion-grid>
       <ion-row>
-        <!-- <ion-col width-10 tappable (click)="onCardSelected($event)">
-          <ion-icon ios="ios-globe-outline" md="md-globe" color="grey" *ngIf="response.status=='published'"></ion-icon>
-          <ion-icon ios="ios-lock-outline" md="md-lock" color="grey" *ngIf="response.status=='draft'"></ion-icon>
-          <ion-icon ios="ios-trash-outline" md="md-trash" color="grey" *ngIf="response.status=='archived'"></ion-icon>
-        </ion-col> -->
-        <ion-col width-10 tappable (click)="onCardSelected($event)">
-          <img class="lazy profile" [src]="userPlaceholder" [lazyLoad]="userPhoto" [offset]="offset">
+        <ion-col width-10>
+          <img class="lazy profile" [src]="userImage" [lazyLoad]="post.user_image || userImage" offset="1000">
         </ion-col>
-        <ion-col width-80 tappable (click)="onCardSelected($event)">
-          <p>{{userName}} {{response.created | timeAgo}}</p>
+        <ion-col width-80>
+          <p>{{post.user_name || userName}} {{post.created | timeAgo}}</p>
         </ion-col>
       </ion-row>
     </ion-grid>
-    <ion-item no-lines class="value" *ngIf="response.title">
+    <ion-item no-lines class="value" *ngIf="post.title">
       <div class="value-label">Title</div>
-      <div class="value-text">{{response.title}}</div>
+      <div class="value-text">{{post.title}}</div>
     </ion-item>
-    <ion-item no-lines class="value" *ngIf="response.content">
+    <ion-item no-lines class="value" *ngIf="post.description">
       <div class="value-label">Description</div>
-      <div class="value-text">{{response.content}}</div>
+      <div class="value-text">{{post.description}}</div>
     </ion-item>
-    <div *ngFor="let attribute of attributes">
-      <value-text [attribute]="attribute"
-                  [value]="values[attribute.key]"
-                  [media]="media" ></value-text>
+    <div *ngFor="let value of post.values">
+      <value-text [value]="value"></value-text>
     </div>
   </ion-list>
 </ion-content>

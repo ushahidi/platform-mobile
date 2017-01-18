@@ -1,4 +1,4 @@
-.response-card {
+.post-card {
   border-left: thick solid #cccccc;
   ion-grid {
     padding:0;
@@ -13,6 +13,9 @@
           color: #555;
           font-size: 13px;
           padding-top: 2px;
+          span {
+            color: #555;
+          }
         }
       }
     }
@@ -45,6 +48,9 @@
       opacity: 0;
       &.ng2-lazyloaded {
         opacity: 1;
+      }
+      &.image {
+        margin-bottom: 10px;
       }
     }
   }

@@ -3,6 +3,7 @@ import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Storage } from '@ionic/storage';
 
+import 'reflect-metadata';
 import { LazyLoadImageModule } from 'ng2-lazyload-image';
 
 import { MyApp } from './app.component';
@@ -39,8 +40,13 @@ import { TimeAgoPipe } from '../pipes/time-ago';
 import { TitleizePipe } from '../pipes/titleize';
 import { CapitalizePipe } from '../pipes/capitalize';
 
+import { LoggerService } from '../providers/logger-service';
 import { ApiService } from '../providers/api-service';
 import { DatabaseService } from '../providers/database-service';
+
+export function provideStorage() {
+  return new Storage(['sqlite', 'websql', 'indexeddb'], { name: 'ushahidi' });
+}
 
 @NgModule({
   declarations: [
@@ -75,9 +81,9 @@ import { DatabaseService } from '../providers/database-service';
   ],
   imports: [
     IonicModule.forRoot(MyApp),
-    LazyLoadImageModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    LazyLoadImageModule
   ],
   bootstrap: [ IonicApp ],
   entryComponents: [
@@ -92,6 +98,11 @@ import { DatabaseService } from '../providers/database-service';
     ResponseEditPage,
     ResponseMapPage
   ],
-  providers: [ Storage, ApiService, DatabaseService, {provide: ErrorHandler, useClass: IonicErrorHandler} ]
+  providers: [
+    { provide: Storage, useFactory: provideStorage },
+    { provide: ApiService, useClass: ApiService },
+    { provide: LoggerService, useClass: LoggerService },
+    { provide: DatabaseService, useClass: DatabaseService },
+    { provide: ErrorHandler, useClass: IonicErrorHandler } ]
 })
 export class AppModule {}

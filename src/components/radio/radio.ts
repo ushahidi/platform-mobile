@@ -2,6 +2,8 @@ import { Component, ViewChild } from '@angular/core';
 import { RadioGroup } from 'ionic-angular';
 import { FormGroup, FormGroupName, FormControl, FormControlName } from '@angular/forms';
 
+import { LoggerService } from '../../providers/logger-service';
+
 @Component({
   selector: 'field-radio',
   templateUrl: 'radio.html',
@@ -17,11 +19,11 @@ export class RadioComponent {
 
   @ViewChild('radio') radio: RadioGroup;
 
-  constructor() {
+  constructor(public logger:LoggerService) {
   }
 
   ngOnInit() {
-    console.log(`Radio ${JSON.stringify(this.attribute)}`);
+    this.logger.info(this, "Attribute", this.attribute);
     if (this.attribute.options) {
       if (Array.isArray(this.attribute.options)) {
         this.options = this.attribute.options;
@@ -37,7 +39,7 @@ export class RadioComponent {
   }
 
   radioChanged(event) {
-    console.log(`Radio radioChanged ${event}`);
+    this.logger.info(this, "radioChanged", event);
     this.value = event;
   }
 

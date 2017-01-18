@@ -1,12 +1,14 @@
 import { Component, ViewChild } from '@angular/core';
-import { Platform, NavParams, NavController, Button,
-        LoadingController, ToastController, AlertController, ViewController, ModalController } from 'ionic-angular';
+import { Platform, NavParams, Button,
+  NavController, ViewController, LoadingController, ToastController, AlertController, ModalController, ActionSheetController  } from 'ionic-angular';
 import { FormBuilder, FormGroup, FormGroupName, FormControl, Validators } from '@angular/forms';
 
 import { ApiService } from '../../providers/api-service';
+import { LoggerService } from '../../providers/logger-service';
 import { DatabaseService } from '../../providers/database-service';
 
-import { ResponseMapPage } from '../response-map/response-map';
+import { BasePage } from '../../pages/base-page/base-page';
+import { ResponseMapPage } from '../../pages/response-map/response-map';
 
 import { CheckboxComponent } from '../../components/checkbox/checkbox';
 import { CheckboxesComponent } from '../../components/checkboxes/checkboxes';
@@ -24,13 +26,12 @@ import { VideoComponent } from '../../components/video/video';
 @Component({
   selector: 'page-response-add',
   templateUrl: 'response-add.html',
-  providers: [ ApiService, DatabaseService ],
+  providers: [ ApiService, DatabaseService, LoggerService ],
   entryComponents:[ ResponseMapPage ]
 })
-export class ResponseAddPage {
+export class ResponseAddPage extends BasePage {
 
   color: string = "#cccccc";
-  token: string = null;
   deployment: any;
   form: any;
   attributes: any;
@@ -39,21 +40,22 @@ export class ResponseAddPage {
   constructor(
     public platform:Platform,
     public api:ApiService,
+    public logger:LoggerService,
     public database:DatabaseService,
     public navParams: NavParams,
     public navController:NavController,
-    public toastController:ToastController,
-    public alertController:AlertController,
     public viewController:ViewController,
     public modalController:ModalController,
+    public toastController:ToastController,
+    public alertController:AlertController,
     public loadingController:LoadingController,
+    public actionController:ActionSheetController,
     public formBuilder: FormBuilder) {
-
+      super(navController, viewController, modalController, toastController, alertController, loadingController, actionController);
   }
 
   ionViewDidLoad() {
-    console.log('Response Add ionViewDidLoad');
-    this.token = this.navParams.get("token");
+    this.logger.info(this, 'ionViewDidLoad');
     this.deployment = this.navParams.get("deployment");
     this.form = this.navParams.get("form");
     this.attributes = this.navParams.get("attributes");
@@ -94,44 +96,41 @@ export class ResponseAddPage {
   }
 
   ionViewWillEnter() {
-    console.log("Response Add ionViewWillEnter");
+    this.logger.info(this, "ionViewWillEnter");
   }
 
   ionViewDidEnter() {
-    console.log("Response Add ionViewDidEnter");
+    this.logger.info(this, "ionViewDidEnter");
   }
 
   changeLocation(event) {
-    console.log(`Response Add changeLocation ${JSON.stringify(event)}`);
-    // let modal = this.modalController.create(
-    //   ResponseMapPage,
-    //   { latitude: event['latitude'],
-    //     longitude: event['longitude'] },
-    //   { showBackdrop: false,
-    //     enableBackdropDismiss: false });
-    // modal.onDidDismiss(data => {
-    //   console.log(`Response Add Modal ${JSON.stringify(data)}`);
-    // });
-    // modal.present();
+    this.logger.info(this, "changeLocation", event);
+    let modal = this.showModal(ResponseMapPage,
+      { latitude: event['latitude'],
+        longitude: event['longitude'] },
+      { showBackdrop: false,
+        enableBackdropDismiss: false });
+    modal.onDidDismiss(data => {
+      this.logger.info(this, "changeLocation", "Modal");
+    });
   }
 
   onCancel(event) {
-    console.log("Response Add onCancel");
+    this.logger.info(this, "onCancel");
     this.viewController.dismiss();
   }
 
   postResponse(event:any=null) {
-    console.log("Response Add postResponse");
+    this.logger.info(this, "postResponse");
     if (this.formGroup.valid) {
       let host = this.deployment.url;
-      let token = this.token;
       let title = this.getTitle(this.formGroup.value);
       let description = this.getDescription(this.formGroup.value);
       let values = this.sanitizeValues(this.formGroup.value);
       let loading = this.showLoading("Posting...");
-      this.api.createPost(host, token, this.form.id, title, description, values).then(
+      this.api.createPost(this.deployment, this.form.id, title, description, values).then(
         (resp) => {
-          console.log(`Response Add ${JSON.stringify(resp)}`);
+          this.logger.info(this, "postResponse", resp);
           loading.dismiss();
           if (resp) {
             let alert = this.alertController.create({
@@ -152,7 +151,7 @@ export class ResponseAddPage {
           }
         },
         (error) => {
-          console.error(`Response Add ${error}`);
+          this.logger.error(this, "postResponse", error);
           loading.dismiss();
           this.showAlert('Post Failed', error);
         });
@@ -183,13 +182,13 @@ export class ResponseAddPage {
   }
 
   sanitizeValues(values:any) {
-    console.log(`Response Add Values ${JSON.stringify(values)}`);
+    this.logger.info(this, "sanitizeValues", "Values", values);
     let sanitized = {};
     for (let index in this.attributes) {
       let attribute = this.attributes[index];
       let key = attribute.key;
       let value = values[key];
-      console.log(`Response Add Value ${attribute.label} ${attribute.input} ${key} ${value}`);
+      this.logger.info(this, `Value ${attribute.label} ${attribute.input} ${key} ${value}`);
       if (attribute.input == 'checkbox' || attribute.input == 'checkboxes') {
         let checks = [];
         for (let key in value) {
@@ -258,35 +257,8 @@ export class ResponseAddPage {
         //TODO handle video upload
       }
     }
-    console.log(`Response Add Sanitized ${JSON.stringify(sanitized)}`);
+    this.logger.info(this, "sanitizeValues", "Sanitized", sanitized);
     return sanitized;
-  }
-
-  showLoading(message) {
-    let loading = this.loadingController.create({
-      content: message
-    });
-    loading.present();
-    return loading;
-  }
-
-  showAlert(title, subTitle) {
-    let alert = this.alertController.create({
-      title: title,
-      subTitle: subTitle,
-      buttons: ['OK']
-    });
-    alert.present();
-    return alert;
-  }
-
-  showToast(message, duration:number=1500) {
-    let toast = this.toastController.create({
-      message: message,
-      duration: duration
-    });
-    toast.present();
-    return toast;
   }
 
 }

@@ -2,6 +2,8 @@ import { Component, ViewChild } from '@angular/core';
 import { Checkbox } from 'ionic-angular';
 import { FormGroup, FormGroupName, FormControl, FormControlName } from '@angular/forms';
 
+import { LoggerService } from '../../providers/logger-service';
+
 @Component({
   selector: 'field-checkboxes',
   templateUrl: 'checkboxes.html',
@@ -15,11 +17,11 @@ export class CheckboxesComponent {
   values: any = {};
   required: boolean = false;
 
-  constructor() {
+  constructor(public logger:LoggerService) {
   }
 
   ngOnInit() {
-    console.log(`Checkboxes ${JSON.stringify(this.attribute)}`);
+    this.logger.info(this, "Attribute", this.attribute);
     if (this.attribute.options) {
       if (Array.isArray(this.attribute.options)) {
         this.options = this.attribute.options;
@@ -39,7 +41,6 @@ export class CheckboxesComponent {
   }
 
   checkChanged(event) {
-    console.log(`Checkbox checkChanged`);
   }
 
   hasValue() {
@@ -51,5 +52,5 @@ export class CheckboxesComponent {
     }
     return false;
   }
-  
+
 }

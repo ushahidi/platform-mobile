@@ -4,6 +4,8 @@ import { FormGroup, FormGroupName, FormControl, FormControlName } from '@angular
 
 import * as moment from 'moment';
 
+import { LoggerService } from '../../providers/logger-service';
+
 @Component({
   selector: 'field-datetime',
   templateUrl: 'datetime.html',
@@ -18,11 +20,11 @@ export class DateTimeComponent {
   time: string = null;
   required: boolean = false;
 
-  constructor() {
+  constructor(public logger:LoggerService) {
   }
 
   ngOnInit() {
-    console.log(`DateTime ${JSON.stringify(this.attribute)}`);
+    this.logger.info(this, "Attribute", this.attribute);
     this.required = this.attribute.required == "true";
   }
 
@@ -34,7 +36,7 @@ export class DateTimeComponent {
     else {
       this.datetime = null;
     }
-    console.log(`DateTime dateChanged ${this.datetime}`);
+    this.logger.info(this, "dateChanged", this.datetime);
   }
 
 }

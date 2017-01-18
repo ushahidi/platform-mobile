@@ -139,6 +139,10 @@
                         {
                             "xml": "<feature name=\"Capture\"><param name=\"ios-package\" value=\"CDVCapture\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"IsDebug\"><param name=\"ios-package\" value=\"IsDebug\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -298,6 +302,9 @@
             "CAMERA_USAGE_DESCRIPTION": " ",
             "MICROPHONE_USAGE_DESCRIPTION": " ",
             "PHOTOLIBRARY_USAGE_DESCRIPTION": " ",
+            "PACKAGE_NAME": "com.ushahidi.mobile"
+        },
+        "cordova-plugin-is-debug": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         }
     },
@@ -749,6 +756,14 @@
             "clobbers": [
                 "navigator.device.capture"
             ]
+        },
+        {
+            "id": "cordova-plugin-is-debug.IsDebug",
+            "file": "plugins/cordova-plugin-is-debug/www/isDebug.js",
+            "pluginId": "cordova-plugin-is-debug",
+            "clobbers": [
+                "cordova.plugins.IsDebug"
+            ]
         }
     ],
     "plugin_metadata": {
@@ -775,6 +790,7 @@
         "cordova-plugin-compat": "1.1.0",
         "cordova-plugin-geolocation": "2.4.1",
         "cordova-plugin-file": "4.3.1",
-        "cordova-plugin-media-capture": "1.4.1"
+        "cordova-plugin-media-capture": "1.4.1",
+        "cordova-plugin-is-debug": "1.0.0"
     }
 }

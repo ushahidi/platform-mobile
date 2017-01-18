@@ -2,6 +2,8 @@ import { Component, ViewChild } from '@angular/core';
 import { TextArea } from 'ionic-angular';
 import { FormGroup, FormGroupName, FormControl, FormControlName } from '@angular/forms';
 
+import { LoggerService } from '../../providers/logger-service';
+
 @Component({
   selector: 'field-textarea',
   templateUrl: 'textarea.html',
@@ -15,22 +17,23 @@ export class TextAreaComponent {
   focused: boolean = false;
   value: string = "";
 
-  @ViewChild('textarea') textarea: TextArea;
+  @ViewChild('textarea')
+  textarea: TextArea;
 
-  constructor() {
+  constructor(public logger:LoggerService) {
   }
 
   ngOnInit() {
-    console.log(`TextArea ${JSON.stringify(this.attribute)}`);
+    this.logger.info(this, "Attribute", this.attribute);
   }
 
   onFocus(event) {
-    console.log(`TextArea onFocus ${JSON.stringify(this.attribute)}`);
+    this.logger.info(this, "onFocus", this.attribute);
     this.focused = true;
   }
 
   onBlur(event) {
-    console.log(`TextArea onBlur ${JSON.stringify(this.attribute)}`);
+    this.logger.info(this, "onBlur", this.attribute);
     this.focused = false;
   }
 }

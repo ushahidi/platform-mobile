@@ -1,69 +1,77 @@
 import { Component } from '@angular/core';
-import { Platform, NavParams, NavController, LoadingController, ToastController, AlertController, ModalController, ActionSheetController } from 'ionic-angular';
+import { Platform, NavParams,
+  NavController, ViewController, LoadingController, ToastController, AlertController, ModalController, ActionSheetController } from 'ionic-angular';
 import { StatusBar } from 'ionic-native';
 
-import { DeploymentLoginPage } from '../deployment-login/deployment-login';
+import { BasePage } from '../../pages/base-page/base-page';
+import { DeploymentLoginPage } from '../../pages/deployment-login/deployment-login';
 
 import { ResponseListPage } from '../response-list/response-list';
 import { ResponseAddPage } from '../response-add/response-add';
 
 import { ApiService } from '../../providers/api-service';
+import { LoggerService } from '../../providers/logger-service';
 import { DatabaseService } from '../../providers/database-service';
+
+import { Deployment } from '../../models/deployment';
+import { User } from '../../models/user';
+import { Form } from '../../models/form';
+import { Attribute } from '../../models/attribute';
 
 @Component({
   selector: 'page-deployment-details',
   templateUrl: 'deployment-details.html',
-  providers: [ ApiService, DatabaseService ],
+  providers: [ ApiService, DatabaseService, LoggerService ],
   entryComponents:[ ResponseListPage, ResponseAddPage ]
 })
-export class DeploymentDetailsPage {
+export class DeploymentDetailsPage extends BasePage {
 
-  token: string = null;
-  deployment: any;
-  forms: any;
-  attributes: any;
+  deployment: Deployment = null;
+  forms: Form[] = null;
   offset: number = 1000;
   placeholder: string = "assets/images/placeholder-photo.jpg";
-  user: {} = null;
+  user: User = null;
 
   constructor(
     public platform:Platform,
     public api:ApiService,
+    public logger:LoggerService,
     public database:DatabaseService,
     public navParams: NavParams,
     public navController:NavController,
-    public toastController: ToastController,
-    public alertController: AlertController,
-    public modalController: ModalController,
+    public viewController:ViewController,
+    public modalController:ModalController,
+    public toastController:ToastController,
+    public alertController:AlertController,
     public loadingController:LoadingController,
-    public actionController: ActionSheetController) {}
+    public actionController:ActionSheetController) {
+      super(navController, viewController, modalController, toastController, alertController, loadingController, actionController);
+    }
 
     ionViewDidLoad() {
-      console.log('Deployment Details ionViewDidLoad');
+      this.logger.info(this, "ionViewDidLoad");
     }
 
     ionViewWillEnter() {
-      console.log("Deployment Details ionViewWillEnter");
+      this.logger.info(this, "ionViewWillEnter");
       this.platform.ready().then(() => {
         StatusBar.styleLightContent();
         StatusBar.backgroundColorByHexString('#3f4751');
       });
-      this.token = this.navParams.get('token');
       this.deployment = this.navParams.get("deployment");
       this.loadUpdates(null, true);
     }
 
     ionViewDidEnter() {
-      console.log(`Deployment Details ionViewDidEnter`);
+      this.logger.info(this, "ionViewDidEnter");
     }
 
     loadUpdates(event:any=null, cache:boolean=false) {
-      console.log("Response Details loadUpdates");
+      this.logger.info(this, "loadUpdates");
       let promises = [
         this.loadUser(cache),
         this.loadDeployment(cache),
-        this.loadForms(cache),
-        this.loadAttributes(cache)];
+        this.loadForms(cache)];
       Promise.all(promises).then(done => {
         if (event) {
           event.complete();
@@ -72,118 +80,99 @@ export class DeploymentDetailsPage {
     }
 
     loadUser(cache:boolean=true) {
-      return this.api.getUser(this.deployment.url, this.token).then(
+      return this.api.getUser(this.deployment).then(
         (results) => {
-          console.log(`Deployment Details User ${JSON.stringify(results)}`);
+          this.logger.info(this, "loadUser", results);
           this.user = results;
-          this.database.addUser(this.deployment, this.user).then(results => {
-            console.log(`Deployment Details Update User ${JSON.stringify(results)}`);
-          });
+          this.database.saveUser(this.deployment, this.user).then(
+            (results) => {
+              this.logger.info(this, "loadUser", "Update User", results);
+            },
+            (error) => {
+              this.logger.error(this, "loadUser", "Update User", results);
+            });
         },
         (error) => {
-          console.error(`Deployment Details User ${error}`);
+          this.logger.error(this, "loadUser", error);
         });
     }
 
     loadDeployment(cache:boolean=true) {
-      console.log(`Deployment Details loadDeployment ${cache?'CACHED':'REFRESH'}`);
+      this.logger.info(this, "loadDeployment", cache);
       if (cache && this.deployment.image != null && this.deployment.description != null) {
         return this.database.getDeployment(this.deployment.id).then(results => {
-          console.log(`Deployment Details Deployment ${JSON.stringify(results)}`);
-          this.deployment = results[0];
+          this.logger.info(this, "loadDeployment", "Database", results);
+          this.deployment.copyInto(results);
         });
       }
       else {
-        return this.api.getDeployment(this.deployment.url, this.token).then(results => {
-          console.log(`Deployment Details Site ${JSON.stringify(results)}`);
-          this.deployment.image = results['image_header'];
-          this.deployment.description = results['description'];
-          let changes = {
-            image: results['image_header'],
-            description: results['description'] };
-          this.database.updateDeployment(this.deployment.id, changes).then(
+        return this.api.getDeployment(this.deployment).then(deployment => {
+          this.deployment.copyInto(deployment);
+          this.database.saveModel(this.deployment).then(
             (results) => {
-              console.log(`Deployment Details Update Deployment ${results}`);
+              this.logger.info(this, "loadDeployment", "API", results);
             },
             (error) => {
-              console.error(`Deployment Details Update Deployment ${error}`);
-            });
+              this.logger.error(this, "loadDeployment", "API", error);
+          });
         });
       }
     }
 
     loadForms(cache:boolean=true) {
-      console.log(`Deployment Details loadForms ${cache?'CACHED':'REFRESH'}`);
+      this.logger.info(this, "loadForms", cache);
       if (cache && this.forms) {
-        return this.database.getForms(this.deployment.id).then(results => {
-          console.log(`Deployment Details Forms ${JSON.stringify(results)}`);
-          this.forms = <any[]>results;
+        return this.database.getFormsWithAttributes(this.deployment).then(results => {
+          this.logger.info(this, "loadForms", "Database", results);
+          let forms = <Form[]>results;
+          if (forms.length > 0) {
+            this.forms = forms;
+          }
+          else {
+            this.loadForms(false);
+          }
         });
       }
       else {
-        return this.api.getForms(this.deployment.url, this.token).then(
+        return this.api.getFormsWithAttributes(this.deployment).then(
           (results) => {
-            let forms = <any[]>results;
-            console.log(`Deployment Details Forms ${JSON.stringify(forms)}`);
+            let forms = <Form[]>results;
+            this.logger.info(this, "loadForms", "API", results);
             for (var i = 0; i < forms.length; i++){
-              let form = forms[i];
-              this.database.addForm(this.deployment.id, form);
+              let form:Form = forms[i];
+              this.database.saveForm(this.deployment, form);
+              for (var j = 0; j < form.attributes.length; j++){
+                let attribute:Attribute = form.attributes[j];
+                this.database.saveAttribute(this.deployment, attribute);
+              }
             }
             this.forms = forms;
           },
           (error) => {
-            console.error(`Deployment Details Forms ${JSON.stringify(error)}`);
-          });
-      }
-    }
-
-    loadAttributes(cache:boolean=true) {
-      console.log(`Deployment Details loadAttributes ${cache?'CACHED':'REFRESH'}`);
-      if (cache && this.attributes) {
-        // return this.database.getAttributes(this.deployment.id).then(results => {
-        //   console.log(`Deployment Details Forms ${JSON.stringify(results)}`);
-        //   this.forms = <any[]>results;
-        // });
-      }
-      else {
-        return this.api.getAttributes(this.deployment.url, this.token).then(
-          (results) => {
-            let attributes = <any[]>results;
-            console.log(`Deployment Details Attributes ${JSON.stringify(attributes)}`);
-            for (var i = 0; i < attributes.length; i++){
-              let attribute = attributes[i];
-              this.database.addAttribute(this.deployment.id, attribute);
-            }
-            this.attributes = attributes;
-          },
-          (error) => {
-            console.error(`Deployment Details Attributes ${JSON.stringify(error)}`);
+            this.logger.error(this, "loadForms", "API", error);
           });
       }
     }
 
     showResponses(event) {
-      console.log("Deployment Details showResponses");
-      this.navController.push(
-        ResponseListPage,
-        { token: this.token,
-          forms: this.forms,
-          attributes: this.attributes,
+      this.logger.info(this, "showResponses");
+      this.showPage(ResponseListPage,
+        { forms: this.forms,
           deployment: this.deployment });
     }
 
     showCollections(event) {
-      console.log("Deployment Details showCollections");
+      this.logger.info(this, "showCollections");
       this.showToast('Collections Not Implemented');
     }
 
     showSettings(event) {
-      console.log("Deployment Details showSettings");
+      this.logger.info(this, "showSettings");
       this.showToast('Settings Not Implemented');
     }
 
     addResponse(event) {
-      console.log("Deployment Details addResponse");
+      this.logger.info(this, "addResponse");
       let buttons = [];
       if (this.forms) {
         for (var i = 0; i < this.forms.length; i++){
@@ -191,7 +180,7 @@ export class DeploymentDetailsPage {
           buttons.push({
             text: form.name,
             handler: () => {
-              console.log(`Deployment Details Form ${form.name} Selected`);
+              this.logger.info(this, "addResponse", "Form", form);
               this.showResponseAdd(form);
           }});
         }
@@ -199,49 +188,40 @@ export class DeploymentDetailsPage {
       buttons.push({
         text: 'Cancel',
         role: 'cancel' });
-      let actionSheet = this.actionController.create({
-        title: 'Submit a survey response',
-        buttons: buttons
-      });
-      actionSheet.present();
+      this.showActionSheet('Submit a survey response', buttons);
     }
 
-    showResponseAdd(form) {
-      console.log(`Response Details showResponseAdd Form ${JSON.stringify(form)}`);
-      this.database.getAttributes(this.deployment.id, form.id).then(results => {
-        console.log(`Response Details showResponseAdd Attributes ${JSON.stringify(results)}`);
+    showResponseAdd(form:Form) {
+      this.logger.info(this, "showResponseAdd", form);
+      this.database.getAttributes(this.deployment, form).then(results => {
+        this.logger.info(this, "showResponseAdd", "Attribute", results);
         let attributes = <any[]>results;
-        let modal = this.modalController.create(
-          ResponseAddPage,
-          { token: this.token,
-            form: form,
-            attributes: attributes,
-            deployment: this.deployment });
-        modal.present();
+        let modal = this.showModal(ResponseAddPage,
+          { form: form,
+            deployment: this.deployment })
         modal.onDidDismiss(data => {
-          console.log(`Response Details Modal ${JSON.stringify(data)}`);
+          this.logger.info(this, "showResponseAdd", "Modal", data);
         });
       });
     }
 
     shareDeployment(event) {
-      console.log("Deployment Details shareDeployment");
+      this.logger.info(this, "shareDeployment");
       this.showToast('Sharing Not Implemented');
     }
 
     onLogout(event) {
-      console.log("Deployment Details onLogout");
+      this.logger.info(this, "onLogout");
       let loading = this.showLoading("Logging out...");
-      let changes = {
-        access_token: "",
-        refresh_token: "",
-        username: "",
-        password: "" };
-      this.database.updateDeployment(this.deployment.id, changes).then(
+      this.deployment.username = "";
+      this.deployment.password = "";
+      this.deployment.access_token = "";
+      this.deployment.refresh_token = "";
+      this.database.saveDeployment(this.deployment).then(
         (results) => {
           loading.dismiss();
           this.showToast('Logout Successful');
-          this.navController.setRoot(DeploymentLoginPage,
+          this.showRootPage(DeploymentLoginPage,
            { deployment: this.deployment },
            { });
         },
@@ -249,33 +229,6 @@ export class DeploymentDetailsPage {
           loading.dismiss();
           this.showAlert('Problem Logging Out', error);
         });
-    }
-
-    showLoading(message) {
-      let loading = this.loadingController.create({
-        content: message
-      });
-      loading.present();
-      return loading;
-    }
-
-    showAlert(title, subTitle) {
-      let alert = this.alertController.create({
-        title: title,
-        subTitle: subTitle,
-        buttons: ['OK']
-      });
-      alert.present();
-      return alert;
-    }
-
-    showToast(message, duration:number=1500) {
-      let toast = this.toastController.create({
-        message: message,
-        duration: duration
-      });
-      toast.present();
-      return toast;
     }
 
 }

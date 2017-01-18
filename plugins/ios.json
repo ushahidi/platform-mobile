@@ -81,6 +81,9 @@
             "MICROPHONE_USAGE_DESCRIPTION": " ",
             "PHOTOLIBRARY_USAGE_DESCRIPTION": " ",
             "PACKAGE_NAME": "com.ushahidi.mobile"
+        },
+        "cordova-plugin-is-debug": {
+            "PACKAGE_NAME": "com.ushahidi.mobile"
         }
     },
     "dependent_plugins": {

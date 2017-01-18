@@ -2,6 +2,8 @@ import { Component, ViewChild } from '@angular/core';
 import { Select } from 'ionic-angular';
 import { FormGroup, FormGroupName, FormControl, FormControlName } from '@angular/forms';
 
+import { LoggerService } from '../../providers/logger-service';
+
 @Component({
   selector: 'field-select',
   templateUrl: 'select.html',
@@ -18,11 +20,11 @@ export class SelectComponent {
 
   @ViewChild('select') select: Select;
 
-  constructor() {
+  constructor(public logger:LoggerService) {
   }
 
   ngOnInit() {
-    console.log(`Select ${JSON.stringify(this.attribute)}`);
+    this.logger.info(this, "Attribute", this.attribute);
     this.selectOptions = {
       title: this.attribute.label
     };
@@ -41,7 +43,7 @@ export class SelectComponent {
   }
 
   selectChanged(event) {
-    console.log(`Select selectChanged ${this.value}`);
+    this.logger.info(this, "selectChanged", this.value);
   }
 
 }

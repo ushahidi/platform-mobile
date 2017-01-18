@@ -1,7 +1,13 @@
 {
   "name": "ushahidi",
-  "dependencies": {},
+  "dependencies": {
+    "sqlite3": "registry:dt/sqlite3#2.2.3+20160727175746"
+  },
+  "emitDecoratorMetadata": true,
+  "experimentalDecorators": true,
   "globalDependencies": {
-    "moment": "registry:dt/moment#2.11.1+20161010105546"
+    "es6-shim": "registry:dt/es6-shim#0.31.2+20160726072212",
+    "moment": "registry:dt/moment#2.11.1+20161010105546",
+    "reflect-metadata": "registry:dt/reflect-metadata#0.0.0+20161005184000"
   }
 }

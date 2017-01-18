@@ -1,268 +1,153 @@
 import { Component } from '@angular/core';
-import { Platform, NavParams, NavController,
-  LoadingController, ToastController, AlertController, ModalController, ActionSheetController } from 'ionic-angular';
+import { Platform, NavParams,
+  NavController, ViewController, LoadingController, ToastController, AlertController, ModalController, ActionSheetController } from 'ionic-angular';
 import { GoogleMap, GoogleMapsEvent, GoogleMapsLatLng, GoogleMapsLatLngBounds, CameraPosition, GoogleMapsMarkerOptions, GoogleMapsMarker } from 'ionic-native';
 
+import { BasePage } from '../../pages/base-page/base-page';
 import { ResponseAddPage } from '../response-add/response-add';
 import { ResponseDetailsPage } from '../response-details/response-details';
 
 import { CardComponent } from '../../components/card/card';
 
 import { ApiService } from '../../providers/api-service';
+import { LoggerService } from '../../providers/logger-service';
 import { DatabaseService } from '../../providers/database-service';
+
+import { Deployment } from '../../models/deployment';
+import { Post } from '../../models/post';
+import { Form } from '../../models/form';
+import { Image } from '../../models/image';
+import { Value } from '../../models/value';
+import { Attribute } from '../../models/attribute';
 
 @Component({
   selector: 'page-response-list',
   templateUrl: 'response-list.html',
-  providers: [ ApiService, DatabaseService ],
+  providers: [ ApiService, DatabaseService, LoggerService ],
   entryComponents:[ ResponseAddPage, ResponseDetailsPage ]
 })
-export class ResponseListPage {
+export class ResponseListPage extends BasePage {
 
-  token: string = null;
-  deployment: any;
-  responses: any;
-  attributes: any;
-  forms: any;
-  users: any;
-  media: any;
-  values: any;
-  map: GoogleMap;
+  deployment: Deployment = null;
+  posts: Post[] = null;
+  forms: any = null;
+  images: any = null;
+  values: any = null;
+  map: GoogleMap = null;
   view: string = 'list';
 
   constructor(
     public platform:Platform,
     public api:ApiService,
+    public logger:LoggerService,
     public database:DatabaseService,
     public navParams: NavParams,
     public navController:NavController,
-    public toastController: ToastController,
-    public alertController: AlertController,
-    public modalController: ModalController,
+    public viewController:ViewController,
+    public modalController:ModalController,
+    public toastController:ToastController,
+    public alertController:AlertController,
     public loadingController:LoadingController,
-    public actionController: ActionSheetController) {
-
+    public actionController:ActionSheetController) {
+      super(navController, viewController, modalController, toastController, alertController, loadingController, actionController);
   }
 
   ionViewDidLoad() {
-    console.log('Response List ionViewDidLoad');
+    this.logger.info(this, 'ionViewDidLoad');
   }
 
   ionViewWillEnter() {
-    console.log("Response List ionViewWillEnter");
-    this.token = this.navParams.get("token");
+    this.logger.info(this, "ionViewWillEnter");
     this.deployment = this.navParams.get("deployment");
     this.forms = this.navParams.get("forms");
-    this.attributes = this.navParams.get("attributes");
     this.loadUpdates(null, true);
   }
 
   ionViewDidEnter() {
-    console.log("Response List ionViewDidEnter");
+    this.logger.info(this, "ionViewDidEnter");
   }
 
   loadUpdates(event:any=null, cache:boolean=false) {
-    console.log("Response List loadUpdates");
+    this.logger.info(this, "loadUpdates", "Cache", cache);
     let promises = [
-      this.loadUsers(cache),
-      this.loadPosts(cache),
-      this.loadMedia(cache)];
+      this.loadPosts(cache)];
     Promise.all(promises).then(
       (done) => {
-        console.log(`Response List loadUpdates DONE`);
-        if (event) {
+        if (event != null) {
           event.complete();
         }
+        this.logger.info(this, "loadUpdates", "Done");
       },
       (error) => {
-        console.error(`Response List loadUpdates ${JSON.stringify(error)}`);
-        if (event) {
+        if (event != null) {
           event.complete();
         }
+        this.logger.error(this, "loadUpdates", error);
       });
-  }
-
-  loadUsers(cache:boolean=true) {
-    console.log(`Response List loadUsers Cache ${cache}`);
-    if (cache && this.users) {
-      return this.database.getUsers(this.deployment.id).then(results => {
-        let users = <any[]>results;
-        console.log(`Response List loadUsers Database ${users.length}`);
-        this.users = {};
-        for (let index in users) {
-          let user = users[index];
-          this.users[user.id] = user;
-        }
-      });
-    }
-    else {
-      this.api.getUsers(this.deployment.url, this.token).then(results => {
-        let users = <any[]>results;
-        console.log(`Response List loadUsers API ${users.length}`);
-        this.users = {};
-        for (let index in users) {
-          let user = users[index];
-          this.users[user.id] = user;
-          this.database.addUser(this.deployment.id, user).then(results => {
-            console.log(`Response List loadUsers Add ${results}`);
-          });
-        }
-      });
-    }
   }
 
   loadPosts(cache:boolean=true) {
-    console.log(`Response List loadPosts Cache ${cache}`);
-    if (cache && this.responses) {
-      this.database.getPosts(this.deployment.id).then(results => {
-        let responses = <any[]>results;
-        if (responses && responses.length > 0) {
-          let responses = <any[]>results;
-          console.log(`Response List loadPosts Database ${responses.length}`);
-          this.responses = responses;
-        }
-        else {
-          this.loadPosts(false);
-        }
-      });
+    this.logger.info(this, "loadPosts", "Cache", cache);
+    if (cache && this.posts) {
+      //Posts Cached
+    }
+    else if (cache) {
+      return this.database.getPostsWithValues(this.deployment).then(
+        (results) => {
+          let posts = <Post[]>results;
+          this.logger.info(this, "loadPosts", "Database", posts.length);
+          if (posts && posts.length > 0) {
+            this.posts = posts;
+          }
+          else {
+            this.loadPosts(false);
+          }
+        },
+        (error) => {
+          this.logger.error(this, "loadPosts", "Database", error);
+        });
     }
     else {
-      return this.api.getPosts(this.deployment.url, this.token).then(results => {
-        let responses = <any[]>results;
-        console.log(`Response List loadPosts API Response ${responses.length}`);
-        this.responses = responses;
-        for (let index in responses) {
-          let response = responses[index];
-          this.database.addPost(this.deployment.id, response).then(results => {
-            console.log(`Response List loadPosts Add ${results}`);
-          });
-          if (response['values']) {
-            response['fields'] = Object.keys(response['values']).length;
-          }
-          let form = response.form;
-          let values = response.values;
-          let item = 0;
-          for (let key in values) {
-            let attribute = this.getAttribute(key);
-            let value = values[key][0];
-            let text = value.toString();
-            if (attribute.input == 'location') {
-              console.log(`Location ${JSON.stringify(value)}`)
-              text = `${value.lat},${value.lon}`;
+      return this.api.getPostsWithValues(this.deployment).then(
+        (results) => {
+          this.posts = <Post[]>results;
+          this.logger.info(this, "loadPosts", "API", this.posts.length);
+          for (let index in this.posts) {
+            let post:Post = this.posts[index];
+            this.database.savePost(this.deployment, post).then(saved => {
+              this.logger.info(this, "loadPosts", "API", "Post Saved", post.id);
+            });
+            for (let index in post.values) {
+              let value:Value = post.values[index];
+              this.database.saveValue(this.deployment, value).then(saved => {
+                this.logger.info(this, "loadPosts", "API", "Value Saved", value.key);
+              });
             }
-            let data = {
-              id: `${this.deployment.id}-${response.id}-${key}`,
-              deployment: this.deployment.id,
-              form: form.id,
-              post: response.id,
-              key: key,
-              label: attribute.label,
-              value: text};
-            console.log(`Response List Value ${JSON.stringify(data)}`);
-            this.database.addValue(this.deployment.id, form.id, response.id, data);
-            item = item + 1;
           }
-        }
-      });
+        },
+        (error) => {
+          this.logger.error(this, "loadPosts", "API", error);
+        });
     }
   }
 
-  loadMedia(cache:boolean=true) {
-    console.log(`Response List loadMedia Cache ${cache}`);
-    if (cache && this.media) {
-      return this.database.getMedia(this.deployment.id).then(results => {
-        let media = <any[]>results;
-        console.log(`Response List loadMedia Database ${media.length}`);
-        this.media = {};
-        for (let index in media) {
-          let item = media[index];
-          this.media[item.id] = item;
-        }
-        this.loadPostMedia(cache);
-      });
-    }
-    else {
-      return this.api.getMedia(this.deployment.url, this.token).then(results => {
-        let media = <any[]>results;
-        console.log(`Response List loadMedia API ${media.length}`);
-        this.media = {};
-        for (let index in media) {
-          let item = media[index];
-          this.media[item.id] = item;
-          this.database.addMedia(this.deployment.id, item).then(results => {
-            console.log(`Response List loadMedia Add ${results}`);
-          });
-        }
-        this.loadPostMedia(cache);
-      });
-    }
-  }
-
-  loadPostMedia(cache:boolean=true) {
-    console.log(`Response List loadPostMedia`);
-    for (let responseIndex in this.responses) {
-      let response = this.responses[responseIndex];
-      for (let key in response.values) {
-        let value = response.values[key];
-        for (let attributeIndex in this.attributes) {
-          let attribute = this.attributes[attributeIndex];
-          if (attribute.form == response.form && attribute.input == 'upload' && attribute.key == key) {
-            console.log(`Response List loadPostMedia Media ${value} ${JSON.stringify(this.media[value])}`);
-            response.media = value;
-            break;
-          }
-        }
-      }
-    }
-  }
-
-  showResponse(response:any) {
-    console.log(`Deployment List showResponse ${response.id}`);
-    let form = this.getForm(response.form);
-    let media = this.media[response.media];
-    let user = this.users[response.user];
-    this.navController.push(
-      ResponseDetailsPage,
-      { token: this.token,
-        form: form,
-        media: media,
-        user: user,
-        deployment: this.deployment,
-        response: response });
-  }
-
-  getForm(id:number) {
-    if (this.forms) {
-      for (var i = 0; i < this.forms.length; i++){
-        let form = this.forms[i];
-        if (form.id == id) {
-          return form;
-        }
-      }
-    }
-    return null;
-  }
-
-  getAttribute(key:string) {
-    for (let index in this.attributes) {
-      let attribute = this.attributes[index];
-      if (attribute.key == key) {
-        return attribute;
-      }
-    }
-    return null;
+  showResponse(post:Post) {
+    this.logger.info(this, "showResponse", post);
+    this.showPage(ResponseDetailsPage,
+      { deployment: this.deployment,
+        post: post });
   }
 
   addResponse(event:any) {
-    console.log("Deployment Details addResponse");
+    this.logger.info(this, "addResponse");
     let buttons = [];
-    if (this.forms) {
+    if (this.forms != null) {
       for (var i = 0; i < this.forms.length; i++){
         let form = this.forms[i];
         buttons.push({
           text: form.name,
           handler: () => {
-            console.log(`Deployment Details Form ${form.name} Selected`);
+            this.logger.info(this, "addResponse", "Form", form);
             this.showResponseAdd(form);
         }});
       }
@@ -270,78 +155,73 @@ export class ResponseListPage {
     buttons.push({
       text: 'Cancel',
       role: 'cancel'});
-    let actionSheet = this.actionController.create({
-      title: 'Submit a survey response',
-      buttons: buttons
-    });
-    actionSheet.present();
+    this.showActionSheet('Submit a survey response', buttons);
   }
 
   showResponseAdd(form) {
-    let modal = this.modalController.create(
-      ResponseAddPage,
-      { token: this.token,
-        form: form,
-        deployment: this.deployment });
-    modal.present();
+    let modal = this.showModal(ResponseAddPage,
+      { form: form,
+        deployment: this.deployment })
     modal.onDidDismiss(data => {
-      console.log(`Deployment List Modal ${JSON.stringify(data)}`);
+      this.logger.info(this, "showResponseAdd", "Modal", data);
     });
   }
 
   searchResponses(event) {
-    console.log("Deployment List searchResponses");
+    this.logger.info(this, "searchResponses");
     this.showToast('Search Not Implemented');
   }
 
   shareResponses(event) {
-    console.log("Deployment List shareResponses");
+    this.logger.info(this, "shareResponses");
     this.showToast('Sharing Not Implemented');
   }
 
   showOptions(response) {
-    console.log("Deployment List showOptions");
-    let actionSheet = this.actionController.create({
-    buttons: [
+    this.logger.info(this, "showOptions");
+    let buttons = [
       {
          text: 'Edit',
          handler: () => {
-           console.log('Deployment List Edit');
+           this.logger.info(this, "showOptions", 'Edit');
+           this.showToast("Edit Not Implemented");
          }
        },
        {
          text: 'Add to Collection',
          handler: () => {
-           console.log('Deployment List Add');
+           this.logger.info(this, "showOptions", 'Add');
+           this.showToast("Add Not Implemented");
          }
        },
        {
          text: 'Share',
          handler: () => {
-           console.log('Deployment List Share');
+           this.logger.info(this, "showOptions", 'Share');
+           this.showToast("Share Not Implemented");
          }
        },
        {
          text: 'Delete',
          role: 'destructive',
          handler: () => {
-           console.log('Deployment List Delete');
+           this.logger.info(this, "showOptions", 'Delete');
+           this.showToast("Delete Not Implemented");
          }
        },
        {
          text: 'Cancel',
          role: 'cancel',
          handler: () => {
-           console.log('Deployment List Cancel');
+           this.logger.info(this, "showOptions", 'Cancel');
          }
        }
-     ]
-   });
-   actionSheet.present();
+     ];
+   this.showActionSheet(null, buttons);
   }
 
   showList(event) {
-    console.log("Deployment List showList");
+    this.logger.info(this, "showList");
     this.view = 'list';
     if (this.map) {
       this.map.setVisible(false);
@@ -349,7 +229,7 @@ export class ResponseListPage {
   }
 
   showMap(event, attempts:number=0) {
-    console.log(`Deployment List showMap ${attempts}`);
+    this.logger.info(this, "showMap", attempts);
     this.view = 'map';
     let element: HTMLElement = document.getElementById('map');
     if (element) {
@@ -359,25 +239,25 @@ export class ResponseListPage {
       this.map = new GoogleMap(element,
         { 'backgroundColor': '#e7e9ec' });
       this.map.one(GoogleMapsEvent.MAP_READY).then(() => {
-        console.log('Deployment List Map Ready');
+        this.logger.info(this,  "showMap", 'Map Ready');
         let bounds = [];
-        for (var i = 0; i <= this.responses.length; i++){
-          let response = this.responses[i];
-          if (response && response.latitude && response.longitude) {
-            let latitude = Number(response.latitude);
-            let longitude = Number(response.longitude);
+        for (var i = 0; i <= this.posts.length; i++){
+          let post = this.posts[i];
+          if (post && post.latitude && post.longitude) {
+            let latitude = Number(post.latitude);
+            let longitude = Number(post.longitude);
             let coordinate: GoogleMapsLatLng = new GoogleMapsLatLng(latitude, longitude);
-            console.log(`Deployment List Coordinate ${coordinate}`);
+            this.logger.info(this, "showMap", "Coordinate", coordinate);
             this.map.addMarker({
               position: coordinate,
-              title: response.title,
-              snippet: response.content,
+              title: post.title,
+              snippet: post.description,
               infoClick: (marker) => {
-                console.log(`Deployment List Info Clicked ${response.id}`);
-                this.showResponse(response);
+                this.logger.info(this, "showMap", "Info", post.id);
+                this.showResponse(post);
               },
               markerClick: (marker) => {
-                console.log(`Deployment List Marker Clicked ${response.id}`);
+                this.logger.info(this, "showMap", "Marker", post.id);
                 marker.showInfoWindow();
               },
             });
@@ -399,30 +279,4 @@ export class ResponseListPage {
     }
   }
 
-  showLoading(message) {
-    let loading = this.loadingController.create({
-      content: message
-    });
-    loading.present();
-    return loading;
-  }
-
-  showAlert(title, subTitle) {
-    let alert = this.alertController.create({
-      title: title,
-      subTitle: subTitle,
-      buttons: ['OK']
-    });
-    alert.present();
-    return alert;
-  }
-
-  showToast(message, duration:number=1500) {
-    let toast = this.toastController.create({
-      message: message,
-      duration: duration
-    });
-    toast.present();
-    return toast;
-  }
 }

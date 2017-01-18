@@ -1,48 +1,61 @@
 import { Component, ViewChild } from '@angular/core';
-import { Platform, NavParams, NavController, TextInput, Button, LoadingController,
-  ToastController, AlertController, ViewController } from 'ionic-angular';
+import { Platform, TextInput, Button, NavParams,
+  NavController, ViewController, ModalController, LoadingController, ToastController, AlertController, ActionSheetController } from 'ionic-angular';
 import { StatusBar } from 'ionic-native';
 
-import { DeploymentDetailsPage } from '../deployment-details/deployment-details';
+import { BasePage } from '../../pages/base-page/base-page';
+import { DeploymentDetailsPage } from '../../pages/deployment-details/deployment-details';
 
 import { ApiService } from '../../providers/api-service';
+import { LoggerService } from '../../providers/logger-service';
 import { DatabaseService } from '../../providers/database-service';
+
+import { Deployment } from '../../models/deployment';
 
 @Component({
   selector: 'page-deployment-login',
   templateUrl: 'deployment-login.html',
-  providers: [ ApiService, DatabaseService ],
+  providers: [ ApiService, DatabaseService, LoggerService ],
   entryComponents:[ DeploymentDetailsPage ]
 })
-export class DeploymentLoginPage {
+export class DeploymentLoginPage extends BasePage {
 
-  deployment: any;
+  deployment: Deployment = null;
 
-  @ViewChild('login') login: Button;
-  @ViewChild('cancel') cancel: Button;
+  @ViewChild('login')
+  login: Button;
 
-  @ViewChild('username') username: TextInput;
-  @ViewChild('password') password: TextInput;
+  @ViewChild('cancel')
+  cancel: Button;
+
+  @ViewChild('username')
+  username: TextInput;
+
+  @ViewChild('password')
+  password: TextInput;
 
   constructor(
     public platform:Platform,
     public api:ApiService,
+    public logger:LoggerService,
     public database:DatabaseService,
     public navParams: NavParams,
     public navController:NavController,
-    public toastController: ToastController,
-    public alertController: AlertController,
-    public viewController: ViewController,
-    public loadingController:LoadingController) {
-
+    public viewController:ViewController,
+    public modalController:ModalController,
+    public toastController:ToastController,
+    public alertController:AlertController,
+    public loadingController:LoadingController,
+    public actionController:ActionSheetController) {
+      super(navController, viewController, modalController, toastController, alertController, loadingController, actionController);
     }
 
     ionViewDidLoad() {
-      console.log('Deployment Login ionViewDidLoad');
+      this.logger.info(this, 'ionViewDidLoad');
     }
 
     ionViewWillEnter() {
-      console.log("Deployment Login ionViewWillEnter");
+      this.logger.info(this, "ionViewWillEnter");
       this.platform.ready().then(() => {
         StatusBar.styleLightContent();
         StatusBar.backgroundColorByHexString('#3f4751');
@@ -65,35 +78,30 @@ export class DeploymentLoginPage {
     }
 
     ionViewDidEnter() {
-      console.log("Deployment Login ionViewDidEnter");
+      this.logger.info(this, "ionViewDidEnter");
     }
 
-    onCancel(event) {
-      console.log("Deployment Login onCancel");
-      this.viewController.dismiss();
+    onCancel(event:any) {
+      this.logger.info(this, "onCancel");
+      this.hideModal();
     }
 
-    onLogin(event) {
-      console.log("Deployment Login onLogin");
-      let host = this.deployment.url;
+    onLogin(event:any) {
+      this.logger.info(this, "onLogin");
       let username = this.username.value.toString();
       let password = this.password.value.toString();
       if (username.length > 0 && password.length > 0) {
         let loading = this.showLoading("Logging in...");
-        this.api.authLogin(host, username, password).then(
-          (tokens) => {
-            console.log(`Deployment Login ${JSON.stringify(tokens)}`);
-            if (tokens) {
-              let changes = {
-                access_token: tokens['access_token'],
-                refresh_token: tokens['refresh_token'],
-                username: username,
-                password: password };
-              this.database.updateDeployment(this.deployment.id, changes).then(
+        this.api.authLogin(this.deployment, username, password).then(
+          (results) => {
+            this.logger.info(this, "onLogin", "Tokens", results);
+            if (results != null) {
+              this.deployment.copyInto(results);
+              this.database.saveDeployment(this.deployment).then(
                 (results) => {
                   loading.dismiss();
                   this.showToast('Login Successful');
-                  this.showDeployment(tokens['access_token']);
+                  this.showDeployment(this.deployment);
                 },
                 (error) => {
                   loading.dismiss();
@@ -112,43 +120,15 @@ export class DeploymentLoginPage {
       }
     }
 
-    showDeployment(token:string) {
-      this.navController.setRoot(DeploymentDetailsPage,
-       { token: token,
-         deployment: this.deployment },
-       { animate:true,
-         direction: 'forward' });
+    showDeployment(deployment:Deployment) {
+      this.showRootPage(DeploymentDetailsPage,
+        { deployment: deployment },
+        { animate: true,
+          direction: 'forward' });
     }
 
-    showLoading(message) {
-      let loading = this.loadingController.create({
-        content: message
-      });
-      loading.present();
-      return loading;
-    }
-
-    showAlert(title, subTitle) {
-      let alert = this.alertController.create({
-        title: title,
-        subTitle: subTitle,
-        buttons: ['OK']
-      });
-      alert.present();
-      return alert;
-    }
-
-    showToast(message, duration:number=1500) {
-      let toast = this.toastController.create({
-        message: message,
-        duration: duration
-      });
-      toast.present();
-      return toast;
-    }
-
-    showMenu(event) {
-      console.log("Deployment Login showMenu");
+    showMenu(event:any) {
+      this.logger.info(this, "showMenu");
     }
 
 }

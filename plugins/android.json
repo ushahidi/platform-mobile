@@ -76,6 +76,9 @@
         },
         "ionic-plugin-keyboard": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
+        },
+        "cordova-plugin-is-debug": {
+            "PACKAGE_NAME": "com.ushahidi.mobile"
         }
     },
     "dependent_plugins": {

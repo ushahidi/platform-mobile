@@ -3,6 +3,8 @@ import { TextInput } from 'ionic-angular';
 import { Geolocation } from 'ionic-native';
 import { FormGroup, FormGroupName, FormControl, FormControlName } from '@angular/forms';
 
+import { LoggerService } from '../../providers/logger-service';
+
 @Component({
   selector: 'field-location',
   templateUrl: 'location.html',
@@ -19,22 +21,23 @@ export class LocationComponent {
   longitude: number = null;
   required: boolean = false;
 
-  @Output() changeLocation = new EventEmitter();
+  @Output()
+  changeLocation = new EventEmitter();
 
-  constructor() {
+  constructor(public logger:LoggerService) {
   }
 
   ngOnInit() {
-    console.log(`Location ${JSON.stringify(this.attribute)}`);
+    this.logger.info(this, "Attribute", this.attribute);
     this.required = this.attribute.required == "true";
     this.detectLocation();
   }
 
   detectLocation() {
-    console.log(`Location detectLocation`);
+    this.logger.info(this, "detectLocation");
     Geolocation.getCurrentPosition().then(
       (position) => {
-        console.log(`Location ${JSON.stringify(position)}`);
+        this.logger.info(this, "detectLocation", "Location", position);
         this.latitude = position.coords.latitude;
         this.longitude = position.coords.longitude;
         this.mapImage = `https://maps.googleapis.com/maps/api/staticmap`
@@ -43,15 +46,15 @@ export class LocationComponent {
           + `${position.coords.latitude},${position.coords.longitude}&key=${this.key}`;
       },
       (error) => {
-        console.error(`Location ${JSON.stringify(error)}`);
+        this.logger.error(this, "detectLocation", error);
         this.latitude = null;
         this.longitude = null;
         this.mapImage = null;
       });
   }
 
-  changeLocatupdateLocationion(event) {
-    console.log(`Location updateLocation`);
+  updateLocation(event) {
+    this.logger.info(this, "updateLocation");
     this.changeLocation.emit({
       latitude: this.latitude,
       longitude: this.longitude});

@@ -1,56 +1,42 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 
+import { LoggerService } from '../../providers/logger-service';
+
+import { PLACEHOLDER_USER, PLACEHOLDER_PHOTO, PLACEHOLDER_NAME } from '../../helpers/constants';
+
 @Component({
-  selector: 'response-card',
+  selector: 'post-card',
   templateUrl: 'card.html',
-  inputs: ['response', 'user', 'media', 'index']
+  inputs: ['post', 'index']
 })
 export class CardComponent {
 
-  @Output() cardSelected = new EventEmitter();
-  @Output() menuSelected = new EventEmitter();
+  @Output()
+  cardSelected = new EventEmitter();
 
-  index: number = 0;
-  response: any = {};
-  user: any = {};
-  media: any = {};
-  name: string = null;
-  offset: number = 1000;
-  values: number = 0;
-  placeholderUser: string = "assets/images/placeholder-user.jpg";
-  placeholderPhoto: string = "assets/images/placeholder-photo.jpg";
-  imageUser: string = null;
-  imagePhoto: string = null;
+  @Output()
+  menuSelected = new EventEmitter();
 
-  constructor() {
+  post:any = {};
+  index:number = 0;
+
+  userName:string = PLACEHOLDER_NAME;
+  userPlaceholder:string = PLACEHOLDER_USER;
+  photoPlaceholder:string = PLACEHOLDER_PHOTO;
+
+  constructor(public logger:LoggerService) {
   }
 
   ngOnInit() {
-    if (this.user) {
-      console.log(`Card User ${JSON.stringify(this.user)}`);
-      if (this.user['gravatar']) {
-        this.imageUser = `https://www.gravatar.com/avatar/${this.user['gravatar']}.jpg?s=32`;
-      }
-      else {
-        this.imageUser = null;
-      }
-      if (this.user['realname']) {
-        this.name = this.user['realname'];
-      }
-    }
-    else {
-      console.log(`Card User NULL`);
-      this.name = "Anonymous";
-    }
   }
 
   onCardSelected(event) {
-    console.log('Card cardSelected');
+    this.logger.info(this, "onCardSelected");
     this.cardSelected.emit();
   }
 
   onMenuSelected(event) {
-    console.log('Card menuSelected');
+    this.logger.info(this, "onMenuSelected");
     this.menuSelected.emit();
   }
 }

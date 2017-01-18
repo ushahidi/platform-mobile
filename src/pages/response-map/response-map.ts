@@ -1,12 +1,18 @@
 import { Component } from '@angular/core';
-import { Platform, NavParams, NavController, LoadingController, ToastController, AlertController, ViewController, ModalController } from 'ionic-angular';
+import { Platform, NavParams,
+  NavController, ViewController, LoadingController, ToastController, AlertController, ModalController, ActionSheetController  } from 'ionic-angular';
 import { GoogleMap, GoogleMapsEvent, GoogleMapsLatLng, CameraPosition, GoogleMapsMarkerOptions, GoogleMapsMarker } from 'ionic-native';
+
+import { BasePage } from '../../pages/base-page/base-page';
+
+import { LoggerService } from '../../providers/logger-service';
 
 @Component({
   selector: 'page-response-map',
-  templateUrl: 'response-map.html'
+  templateUrl: 'response-map.html',
+  providers: [ LoggerService ],
 })
-export class ResponseMapPage {
+export class ResponseMapPage extends BasePage {
 
   latitude: number;
   longitude: number;
@@ -14,48 +20,53 @@ export class ResponseMapPage {
 
   constructor(
     public platform:Platform,
+    public logger:LoggerService,
     public navParams: NavParams,
     public navController:NavController,
-    public toastController: ToastController,
-    public alertController: AlertController,
-    public viewController: ViewController,
-    public modalController: ModalController,
-    public loadingController:LoadingController) {}
+    public viewController:ViewController,
+    public modalController:ModalController,
+    public toastController:ToastController,
+    public alertController:AlertController,
+    public loadingController:LoadingController,
+    public actionController:ActionSheetController) {
+      super(navController, viewController, modalController, toastController, alertController, loadingController, actionController);
+    }
 
   ionViewDidLoad() {
-    console.log('Response Map ionViewDidLoad');
+    this.logger.info(this, 'ionViewDidLoad');
   }
 
   ionViewWillEnter() {
-    console.log("Response Map ionViewWillEnter");
+    this.logger.info(this, "ionViewWillEnter");
     this.latitude = this.navParams.get("latitude");
     this.longitude = this.navParams.get("longitude");
-    console.log(`Response Map ${this.latitude}, ${this.longitude}`);
   }
 
   ionViewDidEnter() {
-    console.log("Response Map ionViewDidEnter");
+    this.logger.info(this, "ionViewDidEnter");
     this.showMap();
   }
 
   onCancel(event) {
-    console.log('Response Map onCancel');
-    this.viewController.dismiss();
+    this.logger.info(this, 'onCancel');
+    this.hideModal();
   }
 
   onDone(event) {
-    console.log('Response Map onDone');
-    this.viewController.dismiss();
+    this.logger.info(this, 'onDone');
+    this.hideModal({
+      latitude: this.latitude,
+      longitude: this.longitude });
   }
 
   showMap(attempts:number=0) {
-    console.log(`Response Map showMap ${attempts}`);
+    this.logger.info(this, "showMap", attempts);
     let element: HTMLElement = document.getElementById('map');
     if (element) {
       this.map = new GoogleMap(element,
         { 'backgroundColor': '#e7e9ec' });
       this.map.one(GoogleMapsEvent.MAP_READY).then(() => {
-        console.log('Deployment List Map Ready');
+        this.logger.info(this, "showMap", "Map Ready");
         if (this.latitude && this.longitude) {
           let location = new GoogleMapsLatLng(this.latitude, this.longitude);
           let position: CameraPosition = {

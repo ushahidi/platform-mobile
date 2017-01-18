@@ -21,16 +21,16 @@
   <ion-refresher *ngIf="view == 'list'" (ionRefresh)="loadUpdates($event, false)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
+  <ion-fab bottom right *ngIf="posts && posts.length > 0">
+    <button ion-fab mini color="primary" (click)="addResponse($event)">
+      <ion-icon ios="md-add" md="md-add"></ion-icon>
+    </button>
+  </ion-fab>
   <div class="list" *ngIf="view == 'list'">
-    <ion-fab bottom right *ngIf="responses && responses.length > 0">
-      <button ion-fab mini color="primary" (click)="addResponse($event)">
-        <ion-icon ios="md-add" md="md-add"></ion-icon>
-      </button>
-    </ion-fab>
-    <div class="loading" text-center margin-top-lg margin-bottom-lg *ngIf="responses == null">
+    <div class="loading" text-center margin-top-lg margin-bottom-lg *ngIf="posts == null">
       <ion-spinner></ion-spinner>
     </div>
-    <div padding-left padding-right *ngIf="responses && responses.length == 0">
+    <div padding-left padding-right *ngIf="posts && posts.length == 0">
       <h6 text-center class="no-responses">
         This deployment doesn't have any<br>
         survey responses, yet.
@@ -38,20 +38,13 @@
       <button ion-button block margin-top text-uppercase color="primary"
             (click)="addResponse($event)">Submit A Survey Response</button>
     </div>
-    <div *ngIf="responses && users && media">
-      <response-card [response]="response" [user]="users[response.user]"
-                     [media]="media[response.media]" [index]="i"
-                     (cardSelected)="showResponse(response)"
-                     (menuSelected)="showOptions(response)"
-                     *ngFor="let response of responses; let i = index"></response-card>
+    <div *ngIf="posts">
+      <post-card [post]="post" [index]="i"
+                 (cardSelected)="showResponse(post)" (menuSelected)="showOptions(post)"
+                 *ngFor="let post of posts; let i = index"></post-card>
     </div>
   </div>
   <div class="map" *ngIf="view == 'map'">
     <div #map id="map"></div>
-    <ion-fab bottom right *ngIf="responses && responses.length > 0">
-      <button ion-fab mini color="primary" (click)="addResponse($event)">
-        <ion-icon ios="md-add" md="md-add"></ion-icon>
-      </button>
-    </ion-fab>
   </div>
 </ion-content>
