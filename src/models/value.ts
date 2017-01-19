@@ -53,10 +53,6 @@ export class Value extends Model {
 
   public attribute: Attribute = null;
 
-  public isPersisted() : boolean {
-    return this.saved != null;
-  }
-  
   loadAttribute(attributes:Attribute[]) {
     for (var i = 0; i < attributes.length; i++) {
       let attribute:Attribute = attributes[i];

@@ -68,9 +68,5 @@ export class Deployment extends Model {
   public forms: Form[] = [];
 
   public posts: Post[] = [];
-
-  public isPersisted() : boolean {
-    return this.saved != null;
-  }
   
 }

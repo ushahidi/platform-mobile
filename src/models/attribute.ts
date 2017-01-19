@@ -58,8 +58,4 @@ export class Attribute extends Model {
   @Column("saved", TEXT)
   public saved: Date = null;
 
-  public isPersisted() : boolean {
-    return this.saved != null;
-  }
-
 }

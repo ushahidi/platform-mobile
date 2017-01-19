@@ -94,10 +94,6 @@ export class Post extends Model {
 
   public values: Value[] = [];
 
-  public isPersisted() : boolean {
-    return this.saved != null;
-  }
-  
   loadValues(values:Value[]) {
     this.values = [];
     for (var i = 0; i < values.length; i++) {

@@ -52,10 +52,6 @@ export class Form extends Model {
 
   public attributes: Attribute[] = [];
 
-  public isPersisted() : boolean {
-    return this.saved != null;
-  }
-  
   loadAttributes(attributes:Attribute[]) {
     this.attributes = [];
     for (var i = 0; i < attributes.length; i++) {

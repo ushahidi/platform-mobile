@@ -363,7 +363,18 @@ export class DatabaseService {
       let table:string = model.getTable();
       let columns:any[] = model.getColumns();
       let values:any[] = model.getValues();
-      if (model.isPersisted() && model.hasKeys()) {
+      if (model.isPersisted() == false) {
+        this.logger.info(this, "saveModel", "Inserting", model);
+        values['saved'] = new Date();
+        this.executeInsert(table, columns, values).then(
+          (results) => {
+            resolve(results);
+          },
+          (error) => {
+            reject(error);
+          });
+      }
+      else if (model.hasKeys()) {
         this.logger.info(this, "saveModel", "Updating", model);
         values['saved'] = new Date();
         this.executeUpdate(table, columns, values).then(
@@ -375,15 +386,8 @@ export class DatabaseService {
           });
       }
       else {
-        this.logger.info(this, "saveModel", "Inserting", model);
-        values['saved'] = new Date();
-        this.executeInsert(table, columns, values).then(
-          (results) => {
-            resolve(results);
-          },
-          (error) => {
-            reject(error);
-          });
+        this.logger.error(this, "saveModel", "Failed", "Missing Keys");
+        reject('Missing Keys');
       }
     });
   }
