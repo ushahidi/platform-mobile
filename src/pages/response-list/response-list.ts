@@ -173,8 +173,20 @@ export class ResponseListPage extends BasePage {
   }
 
   shareResponses(event:any) {
-    this.logger.info(this, "shareResponses");
-    this.showToast('Sharing Not Implemented');
+    let subject = this.deployment.name;
+    let message = this.deployment.description
+    let file = this.deployment.image;
+    let url = this.deployment.url;
+    this.logger.info(this, "shareResponses", "Subject", subject, "Message", message, "File", file, "URL", url);
+    this.showShare(subject, message, file, url).then(
+      (shared) => {
+        if (shared) {
+          this.showToast("Responses Shared");
+        }
+      },
+      (error) => {
+        this.showToast(error);
+    });
   }
 
   showOptions(post:Post) {

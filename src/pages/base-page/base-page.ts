@@ -6,6 +6,7 @@ import {
   Loading, LoadingController,
   ActionSheet, ActionSheetController,
   NavController, ViewController } from 'ionic-angular';
+import { SocialSharing } from 'ionic-native';
 
 export class BasePage {
 
@@ -72,6 +73,10 @@ export class BasePage {
 
   showRootPage(page:any, params:any={}, options:any={}) {
     this.navController.setRoot(page, params, options);
+  }
+
+  showShare(subject:string, message:string=null, file:string=null, url:string=null) {
+    return SocialSharing.share(message, subject, file, url);
   }
 
 }

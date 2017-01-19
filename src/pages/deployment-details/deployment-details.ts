@@ -231,12 +231,24 @@ export class DeploymentDetailsPage extends BasePage {
       // });
     }
 
-    shareDeployment(event) {
-      this.logger.info(this, "shareDeployment");
-      this.showToast('Sharing Not Implemented');
+    shareDeployment(event:any) {
+      let subject = this.deployment.name;
+      let message = this.deployment.description
+      let file = this.deployment.image;
+      let url = this.deployment.url;
+      this.logger.info(this, "shareDeployment", "Subject", subject, "Message", message, "File", file, "URL", url);
+      this.showShare(subject, message, file, url).then(
+        (shared) => {
+          if (shared) {
+            this.showToast("Deployment Shared");
+          }
+        },
+        (error) => {
+          this.showToast(error);
+      });
     }
 
-    onLogout(event) {
+    onLogout(event:any) {
       this.logger.info(this, "onLogout");
       let loading = this.showLoading("Logging out...");
       this.deployment.username = "";

@@ -41,6 +41,9 @@ export class Post extends Model {
   @Column("description", TEXT)
   public description: string = null;
 
+  @Column("url", TEXT)
+  public url: string = null;
+  
   @Column("slug", TEXT)
   public slug: string = null;
 

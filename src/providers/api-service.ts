@@ -293,6 +293,7 @@ export class ApiService {
             let post:Post = new Post();
             post.deployment_id = deployment.id;
             post.id = item.id;
+            post.url = `${deployment.url}\posts\${item.id}`;
             post.slug = item.slug;
             post.title = item.title;
             post.color = item.color;
