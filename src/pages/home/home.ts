@@ -60,7 +60,7 @@ export class HomePage extends BasePage {
       StatusBar.styleDefault();
       StatusBar.backgroundColorByHexString('#f9f9f8');
       if (data) {
-        console.log(data);
+        this.logger.info(this, "addDeployment", data);
         this.showRootPage(DeploymentLoginPage,
           { deployment: data['deployment'] },
           { animate: true,

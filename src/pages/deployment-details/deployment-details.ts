@@ -70,8 +70,8 @@ export class DeploymentDetailsPage extends BasePage {
     loadUpdates(event:any=null, cache:boolean=false) {
       this.logger.info(this, "loadUpdates");
       let promises = [
-        this.loadUser(cache),
         this.loadDeployment(cache),
+        this.loadUser(cache),
         this.loadForms(cache)];
       Promise.all(promises).then(done => {
         if (event) {
@@ -80,41 +80,22 @@ export class DeploymentDetailsPage extends BasePage {
       });
     }
 
-    loadUser(cache:boolean=true) {
-      if (cache && this.user) {
-        //Ignore If User Has Already Been Loaded
-      }
-      else {
-        return this.api.getUser(this.deployment).then(
-          (results) => {
-            this.logger.info(this, "loadUser", results);
-            this.user = results;
-            this.database.saveUser(this.deployment, this.user).then(
-              (results) => {
-                this.logger.info(this, "loadUser", "Update User", results);
-              },
-              (error) => {
-                this.logger.error(this, "loadUser", "Update User", results);
-              });
-          },
-          (error) => {
-            this.logger.error(this, "loadUser", error);
-          });
-      }
-    }
-
     loadDeployment(cache:boolean=true) {
       this.logger.info(this, "loadDeployment", cache);
       if (cache && this.deployment.image && this.deployment.description) {
-        //Ignore If Deployment Has Aleady Been Loaded
+        this.logger.info(this, "loadDeployment", "Cached");
       }
-      else if (cache && (this.deployment.image == null || this.deployment.description == null)) {
-        return this.database.getDeployment(this.deployment.id).then(results => {
-          this.logger.info(this, "loadDeployment", "Database", results);
-          this.deployment.copyInto(results);
-          if (this.deployment.image == null || this.deployment.description == null) {
-            this.loadDeployment(false);
-          }
+      else if (cache) {
+        return this.database.getDeployment(this.deployment.id).then(
+          (results) => {
+            this.logger.info(this, "loadDeployment", "Database", results);
+            this.deployment.copyInto(results);
+            if (this.deployment.image == null || this.deployment.description == null) {
+              this.loadDeployment(false);
+            }
+          },
+          (error) => {
+            this.logger.error(this, "loadDeployment", "Database", error);
         });
       }
       else {
@@ -131,12 +112,36 @@ export class DeploymentDetailsPage extends BasePage {
       }
     }
 
+    loadUser(cache:boolean=true) {
+      this.logger.info(this, "loadUser", cache);
+      if (cache && this.user) {
+        this.logger.info(this, "loadUser", "Cached", this.user);
+      }
+      else {
+        return this.api.getUser(this.deployment).then(
+          (results) => {
+            this.logger.info(this, "loadUser", "API", results);
+            this.user = <User>results;
+            this.database.saveUser(this.deployment, this.user).then(
+              (results) => {
+                this.logger.info(this, "loadUser", "Saved", results);
+              },
+              (error) => {
+                this.logger.error(this, "loadUser", "Failed", results);
+              });
+          },
+          (error) => {
+            this.logger.error(this, "loadUser", "Failed", error);
+          });
+      }
+    }
+
     loadForms(cache:boolean=true) {
       this.logger.info(this, "loadForms", cache);
-      if (cache && this.forms != null) {
-        //Ignore If Forms Has Already Been Loaded
+      if (cache && this.forms != null && this.forms.length > 0) {
+        this.logger.info(this, "loadForms", "Cached");
       }
-      else if (cache && this.forms == null) {
+      else if (cache) {
         return this.database.getFormsWithAttributes(this.deployment).then(results => {
           this.logger.info(this, "loadForms", "Database", results);
           let forms = <Form[]>results;
@@ -169,24 +174,24 @@ export class DeploymentDetailsPage extends BasePage {
       }
     }
 
-    showResponses(event) {
+    showResponses(event:any) {
       this.logger.info(this, "showResponses");
       this.showPage(ResponseListPage,
         { forms: this.forms,
           deployment: this.deployment });
     }
 
-    showCollections(event) {
+    showCollections(event:any) {
       this.logger.info(this, "showCollections");
       this.showToast('Collections Not Implemented');
     }
 
-    showSettings(event) {
+    showSettings(event:any) {
       this.logger.info(this, "showSettings");
       this.showToast('Settings Not Implemented');
     }
 
-    addResponse(event) {
+    addResponse(event:any) {
       this.logger.info(this, "addResponse");
       let buttons = [];
       if (this.forms) {

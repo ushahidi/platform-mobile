@@ -78,7 +78,7 @@ export class DatabaseService {
           let columns:any[] = model.getColumns();
           let keys:string[] = [];
           let values:string[] = [];
-          for (var index in columns) {
+          for (let index in columns) {
             let column = columns[index];
             values.push(column.name + ' ' + column.type);
             if (column.key == true) {
@@ -116,7 +116,7 @@ export class DatabaseService {
           resolve(results[0]);
         }
         else {
-          reject();
+          reject("No Results");
         }
       });
     });
@@ -128,7 +128,7 @@ export class DatabaseService {
         let statement = this.selectStatement(table, where, order);
         let parameters = this.selectParameters(table, where, order);
         this.logger.info(this, "executeSelect", "Selecting", statement, parameters);
-        database.executeSql(statement, []).then(
+        database.executeSql(statement, parameters).then(
           (data) => {
             let results = [];
             if (data.rows.length > 0) {
@@ -398,6 +398,7 @@ export class DatabaseService {
   }
 
   getDeployment(id:number) : Promise<Deployment> {
+    this.logger.info(this, "getDeployment", id);
     let where = { id: id };
     return this.getModel<Deployment>(new Deployment(), where);
   }
@@ -496,7 +497,7 @@ export class DatabaseService {
         let values = <Value[]>results[1];
         let users = <User[]>results[2];
         let forms = <Form[]>results[3];
-        for (var i = 0; i < posts.length; i++) {
+        for (let i = 0; i < posts.length; i++) {
           let post:Post = posts[i];
           post.loadUser(users);
           post.loadForm(forms);
@@ -532,10 +533,10 @@ export class DatabaseService {
       then(results => {
         let forms = <any[]>results[0];
         let attributes = <any[]>results[1];
-        for (var i = 0; i < forms.length; i++){
+        for (let i = 0; i < forms.length; i++){
           let form:Form = forms[i];
           form.attributes = [];
-          for (var j = 0; j < attributes.length; j++){
+          for (let j = 0; j < attributes.length; j++){
             let attribute:Attribute = attributes[j];
             if (form.id == attribute.form_id) {
               form.attributes.push(attribute);
@@ -550,7 +551,7 @@ export class DatabaseService {
   }
 
   getValues(deployment:Deployment, post:Post=null) : Promise<Value[]> {
-    let where = { deployment_id: deployment.id };
+    let where:any = { deployment_id: deployment.id };
     if (post != null) {
       where['post_id'] = post.id;
     }

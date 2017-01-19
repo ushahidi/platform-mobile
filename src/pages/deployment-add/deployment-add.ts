@@ -58,7 +58,7 @@ export class DeploymentAddPage extends BasePage {
   }
 
   searchDeployments(event:any) {
-    this.logger.info(this, `searchDeployments ${event.target.value}`);
+    this.logger.info(this, "searchDeployments", event.target.value);
     let search = event.target.value;
     if (search && search.length > 0) {
       this.loading = true;
@@ -101,7 +101,7 @@ export class DeploymentAddPage extends BasePage {
             }
           },
           (error) => {
-            console.error(`Deployment Add addDeployment ${error}`);
+            this.logger.error(this, "addDeployment", error);
             loading.dismiss();
             this.showAlert('Problem Adding Deployment', error);
           });

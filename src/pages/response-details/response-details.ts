@@ -87,13 +87,13 @@ export class ResponseDetailsPage extends BasePage {
   loadValues(cache:boolean=true) {
     this.logger.info(this, "loadValues", "Cache", cache);
     if (cache && this.post && this.post.values && this.post.values.length > 0) {
-      //Ignore If Post Values Have Already Been Loaded
+      this.logger.info(this, "loadValues", "Cached", this.post.values);
     }
     else {
       return this.database.getValues(this.deployment, this.post).then(
         (results) => {
+          this.logger.info(this, "loadValues", "Database", results);
           this.post.values = <any[]>results;
-          this.logger.info(this, "loadValues", "Database", this.post.values);
         },
         (error) => {
           this.logger.error(this, "loadValues", "Database", error);

@@ -88,10 +88,10 @@ export class ResponseListPage extends BasePage {
 
   loadPosts(cache:boolean=true) {
     this.logger.info(this, "loadPosts", "Cache", cache);
-    if (cache && this.posts != null) {
-      //Ignore If Posts Already Loaded
+    if (cache && this.posts != null && this.posts.length > 0) {
+      this.logger.info(this, "loadPosts", "Cached", this.posts.length);
     }
-    else if (cache && this.posts == null) {
+    else if (cache) {
       return this.database.getPostsWithValues(this.deployment).then(
         (results) => {
           let posts = <Post[]>results;
@@ -167,17 +167,17 @@ export class ResponseListPage extends BasePage {
     });
   }
 
-  searchResponses(event) {
+  searchResponses(event:any) {
     this.logger.info(this, "searchResponses");
     this.showToast('Search Not Implemented');
   }
 
-  shareResponses(event) {
+  shareResponses(event:any) {
     this.logger.info(this, "shareResponses");
     this.showToast('Sharing Not Implemented');
   }
 
-  showOptions(response) {
+  showOptions(post:Post) {
     this.logger.info(this, "showOptions");
     let buttons = [
       {
@@ -220,7 +220,7 @@ export class ResponseListPage extends BasePage {
    this.showActionSheet(null, buttons);
   }
 
-  showList(event) {
+  showList(event:any) {
     this.logger.info(this, "showList");
     this.view = 'list';
     if (this.map) {
@@ -228,7 +228,7 @@ export class ResponseListPage extends BasePage {
     }
   }
 
-  showMap(event, attempts:number=0) {
+  showMap(event:any, attempts:number=0) {
     this.logger.info(this, "showMap", attempts);
     this.view = 'map';
     let element: HTMLElement = document.getElementById('map');
