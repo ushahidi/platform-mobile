@@ -43,4 +43,10 @@ export class User extends Model {
   @Column("updated", TEXT)
   public updated: Date = null;
 
+  @Column("saved", TEXT)
+  public saved: Date = null;
+
+  public isPersisted() : boolean {
+    return this.saved != null;
+  }
 }

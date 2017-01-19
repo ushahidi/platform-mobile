@@ -47,8 +47,15 @@ export class Form extends Model {
   @Column("updated", TEXT)
   public updated: Date = null;
 
+  @Column("saved", TEXT)
+  public saved: Date = null;
+
   public attributes: Attribute[] = [];
 
+  public isPersisted() : boolean {
+    return this.saved != null;
+  }
+  
   loadAttributes(attributes:Attribute[]) {
     this.attributes = [];
     for (var i = 0; i < attributes.length; i++) {

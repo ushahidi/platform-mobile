@@ -55,4 +55,11 @@ export class Image extends Model {
   @Column("updated", TEXT)
   public updated: string = null;
 
+  @Column("saved", TEXT)
+  public saved: Date = null;
+
+  public isPersisted() : boolean {
+    return this.saved != null;
+  }
+
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
-import { Table } from '../decorators/table';
-import { Column } from '../decorators/column';
+import { Table, TABLE } from '../decorators/table';
+import { Column, COLUMNS } from '../decorators/column';
 
 export let TEXT:string = "TEXT";
 export let INTEGER:string = "INTEGER";
@@ -20,11 +20,11 @@ export class Model {
   }
 
   public getTable() : string {
-    return this.constructor['Table'];
+    return this.constructor[TABLE];
   }
 
   public getColumns() : any[] {
-    return this.constructor['Columns'];
+    return this.constructor[COLUMNS];
   }
 
   public getValues() : any {
@@ -38,7 +38,7 @@ export class Model {
     return values;
   }
 
-  public isPersisted() : boolean {
+  public hasKeys() : boolean {
     let columns = this.getColumns();
     for (let index in columns) {
       let column = columns[index];
@@ -59,6 +59,10 @@ export class Model {
       }
     }
     return this;
+  }
+
+  public isPersisted() : boolean {
+    return false;
   }
 
 }

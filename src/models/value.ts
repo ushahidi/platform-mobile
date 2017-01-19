@@ -27,7 +27,7 @@ export class Value extends Model {
   @Column("post_id", INTEGER, PRIMARY_KEY)
   public post_id: number = null;
 
-  @Column("key", TEXT, true)
+  @Column("key", TEXT, PRIMARY_KEY)
   public key: string = null;
 
   @Column("value", TEXT)
@@ -48,8 +48,15 @@ export class Value extends Model {
   @Column("image", TEXT)
   public image: string = null;
 
+  @Column("saved", TEXT)
+  public saved: Date = null;
+
   public attribute: Attribute = null;
 
+  public isPersisted() : boolean {
+    return this.saved != null;
+  }
+  
   loadAttribute(attributes:Attribute[]) {
     for (var i = 0; i < attributes.length; i++) {
       let attribute:Attribute = attributes[i];

@@ -60,10 +60,17 @@ export class Deployment extends Model {
   @Column("refresh_token", TEXT)
   public refresh_token: string = null;
 
+  @Column("saved", TEXT)
+  public saved: Date = null;
+
   public users: User[] = [];
 
   public forms: Form[] = [];
 
   public posts: Post[] = [];
 
+  public isPersisted() : boolean {
+    return this.saved != null;
+  }
+  
 }

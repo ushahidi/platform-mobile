@@ -60,7 +60,7 @@ export class DatabaseService {
   }
 
   createTables(models:Model[]) {
-    this.logger.info(this, "createTables", models);
+    //this.logger.info(this, "createTables", models);
     let promises = [];
     for (let index in models) {
       let model: Model = models[index];
@@ -70,12 +70,13 @@ export class DatabaseService {
   }
 
   createTable<M extends Model>(model:M) {
-    this.logger.info(this, "createTable", model);
+    //this.logger.info(this, "createTable", model);
     return new Promise((resolve, reject) => {
       this.openDatabase().then(
         (database:SQLite) => {
           let table:string = model.getTable();
           let columns:any[] = model.getColumns();
+          this.logger.info(this, "createTable", table, columns);
           let keys:string[] = [];
           let values:string[] = [];
           for (let index in columns) {
@@ -131,7 +132,7 @@ export class DatabaseService {
         database.executeSql(statement, parameters).then(
           (data) => {
             let results = [];
-            if (data.rows.length > 0) {
+            if (data.rows && data.rows.length > 0) {
               for (let i = 0; i < data.rows.length; i++) {
                 let row = data.rows.item(i);
                 results.push(row);
@@ -362,8 +363,9 @@ export class DatabaseService {
       let table:string = model.getTable();
       let columns:any[] = model.getColumns();
       let values:any[] = model.getValues();
-      if (model.isPersisted()) {
+      if (model.isPersisted() && model.hasKeys()) {
         this.logger.info(this, "saveModel", "Updating", model);
+        values['saved'] = new Date();
         this.executeUpdate(table, columns, values).then(
           (results) => {
             resolve(results);
@@ -374,6 +376,7 @@ export class DatabaseService {
       }
       else {
         this.logger.info(this, "saveModel", "Inserting", model);
+        values['saved'] = new Date();
         this.executeInsert(table, columns, values).then(
           (results) => {
             resolve(results);

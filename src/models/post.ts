@@ -74,6 +74,9 @@ export class Post extends Model {
   @Column("updated", TEXT)
   public updated: Date = null;
 
+  @Column("saved", TEXT)
+  public saved: Date = null;
+
   @Column("user_name", TEXT)
   public user_name: string = null;
 
@@ -91,6 +94,10 @@ export class Post extends Model {
 
   public values: Value[] = [];
 
+  public isPersisted() : boolean {
+    return this.saved != null;
+  }
+  
   loadValues(values:Value[]) {
     this.values = [];
     for (var i = 0; i < values.length; i++) {
