@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { Model } from '../models/model';
+import { Model, TEXT, INTEGER, DOUBLE, PRIMARY_KEY } from '../models/model';
 import { Deployment } from '../models/deployment';
 import { Value } from '../models/value';
 import { Form } from '../models/form';
@@ -23,64 +23,64 @@ export class Post extends Model {
     return new Post(values);
   }
 
-  @Column("id", "INTEGER", true)
+  @Column("id", INTEGER, PRIMARY_KEY)
   public id: number = null;
 
-  @Column("deployment_id", "INTEGER", true)
+  @Column("deployment_id", INTEGER, PRIMARY_KEY)
   public deployment_id: number = null;
 
-  @Column("form_id", "INTEGER")
+  @Column("form_id", INTEGER)
   public form_id: number = null;
 
-  @Column("user_id", "INTEGER")
+  @Column("user_id", INTEGER)
   public user_id: number = null;
 
-  @Column("title", "TEXT")
+  @Column("title", TEXT)
   public title: string = null;
 
-  @Column("description", "TEXT")
+  @Column("description", TEXT)
   public description: string = null;
 
-  @Column("slug", "TEXT")
+  @Column("slug", TEXT)
   public slug: string = null;
 
-  @Column("type", "TEXT")
+  @Column("type", TEXT)
   public type: string = null;
 
-  @Column("status", "TEXT")
+  @Column("status", TEXT)
   public status: string = null;
 
-  @Column("color", "TEXT")
+  @Column("color", TEXT)
   public color: string = null;
 
-  @Column("image_url", "TEXT")
+  @Column("image_url", TEXT)
   public image_url: string = null;
 
-  @Column("pending", "TEXT")
+  @Column("pending", TEXT)
   public pending: boolean = null;
 
-  @Column("latitude", "DOUBLE")
+  @Column("latitude", DOUBLE)
   public latitude: number = null;
 
-  @Column("longitude", "DOUBLE")
+  @Column("longitude", DOUBLE)
   public longitude: number = null;
 
-  @Column("posted", "TEXT")
+  @Column("posted", TEXT)
   public posted: Date = null;
 
-  @Column("created", "TEXT")
+  @Column("created", TEXT)
   public created: Date = null;
 
-  @Column("updated", "TEXT")
+  @Column("updated", TEXT)
   public updated: Date = null;
 
-  @Column("user_name", "TEXT")
+  @Column("user_name", TEXT)
   public user_name: string = null;
 
-  @Column("user_image", "TEXT")
+  @Column("user_image", TEXT)
   public user_image: string = null;
 
-  @Column("form_name", "TEXT")
+  @Column("form_name", TEXT)
   public form_name: string = null;
 
   public form: Form = null;

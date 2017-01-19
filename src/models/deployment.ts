@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { Model } from '../models/model';
+import { Model, TEXT, INTEGER, DOUBLE, PRIMARY_KEY } from '../models/model';
 import { User } from '../models/user';
 import { Form } from '../models/form';
 import { Post } from '../models/post';
@@ -21,43 +21,43 @@ export class Deployment extends Model {
     return new Deployment(values);
   }
 
-  @Column("id", "INTEGER", true)
+  @Column("id", INTEGER, PRIMARY_KEY)
   public id: number = null;
 
-  @Column("url", "TEXT")
+  @Column("url", TEXT)
   public url: string = null;
 
-  @Column("name", "TEXT")
+  @Column("name", TEXT)
   public name: string = null;
 
-  @Column("domain", "TEXT")
+  @Column("domain", TEXT)
   public domain: string = null;
 
-  @Column("subdomain", "TEXT")
+  @Column("subdomain", TEXT)
   public subdomain: string = null;
 
-  @Column("status", "TEXT")
+  @Column("status", TEXT)
   public status: string = null;
 
-  @Column("description", "TEXT")
+  @Column("description", TEXT)
   public description: string = null;
 
-  @Column("email", "TEXT")
+  @Column("email", TEXT)
   public email: string = null;
 
-  @Column("image", "TEXT")
+  @Column("image", TEXT)
   public image: string = null;
 
-  @Column("username", "TEXT")
+  @Column("username", TEXT)
   public username: string = null;
 
-  @Column("password", "TEXT")
+  @Column("password", TEXT)
   public password: string = null;
 
-  @Column("access_token", "TEXT")
+  @Column("access_token", TEXT)
   public access_token: string = null;
 
-  @Column("refresh_token", "TEXT")
+  @Column("refresh_token", TEXT)
   public refresh_token: string = null;
 
   public users: User[] = [];

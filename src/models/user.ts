@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { Model } from '../models/model';
+import { Model, TEXT, INTEGER, DOUBLE, PRIMARY_KEY } from '../models/model';
 import { Deployment } from '../models/deployment';
 
 import { Table } from '../decorators/table';
@@ -19,28 +19,28 @@ export class User extends Model {
     return new User(values);
   }
 
-  @Column("id", "INTEGER", true)
+  @Column("id", INTEGER, PRIMARY_KEY)
   public id: number = null;
 
-  @Column("deployment_id", "INTEGER", true)
+  @Column("deployment_id", INTEGER, PRIMARY_KEY)
   public deployment_id: number = null;
 
-  @Column("email", "TEXT")
+  @Column("email", TEXT)
   public email: string = null;
 
-  @Column("image", "TEXT")
+  @Column("image", TEXT)
   public image: string = null;
 
-  @Column("name", "TEXT")
+  @Column("name", TEXT)
   public name: string = null;
 
-  @Column("gravatar", "TEXT")
+  @Column("gravatar", TEXT)
   public gravatar: string = null;
 
-  @Column("created", "TEXT")
+  @Column("created", TEXT)
   public created: Date = null;
 
-  @Column("updated", "TEXT")
+  @Column("updated", TEXT)
   public updated: Date = null;
 
 }

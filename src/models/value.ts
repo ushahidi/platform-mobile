@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { Model } from '../models/model';
+import { Model, TEXT, INTEGER, DOUBLE, PRIMARY_KEY } from '../models/model';
 import { Post } from '../models/post';
 import { Image } from '../models/image';
 import { Attribute } from '../models/attribute';
@@ -21,31 +21,31 @@ export class Value extends Model {
     return new Value(values);
   }
 
-  @Column("deployment_id", "INTEGER", true)
+  @Column("deployment_id", INTEGER, PRIMARY_KEY)
   public deployment_id: number = null;
 
-  @Column("post_id", "INTEGER", true)
+  @Column("post_id", INTEGER, PRIMARY_KEY)
   public post_id: number = null;
 
-  @Column("key", "TEXT", true)
+  @Column("key", TEXT, true)
   public key: string = null;
 
-  @Column("value", "TEXT")
+  @Column("value", TEXT)
   public value: string = null;
 
-  @Column("label", "TEXT")
+  @Column("label", TEXT)
   public label: string = null;
 
-  @Column("input", "TEXT")
+  @Column("input", TEXT)
   public input: string = null;
 
-  @Column("type", "TEXT")
+  @Column("type", TEXT)
   public type: string = null;
 
-  @Column("cardinality", "INTEGER")
+  @Column("cardinality", INTEGER)
   public cardinality: number = null;
 
-  @Column("image", "TEXT")
+  @Column("image", TEXT)
   public image: string = null;
 
   public attribute: Attribute = null;

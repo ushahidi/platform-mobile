@@ -3,6 +3,11 @@ import { Injectable } from '@angular/core';
 import { Table } from '../decorators/table';
 import { Column } from '../decorators/column';
 
+export let TEXT:string = "TEXT";
+export let INTEGER:string = "INTEGER";
+export let DOUBLE:string = "DOUBLE";
+export let PRIMARY_KEY:boolean = true;
+
 @Injectable()
 export class Model {
 

@@ -308,7 +308,7 @@ export class ApiService {
             }
             for (let key in item.values) {
               let text = item.values[key][0];
-              let value = new Value();
+              let value:Value = new Value();
               value.deployment_id = deployment.id;
               value.post_id = post.id;
               value.key = key;
