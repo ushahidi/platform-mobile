@@ -23,6 +23,10 @@ import { TextComponent } from '../../components/text/text';
 import { TextAreaComponent } from '../../components/textarea/textarea';
 import { VideoComponent } from '../../components/video/video';
 
+import { Deployment } from '../../models/deployment';
+import { Form } from '../../models/form';
+import { Attribute } from '../../models/attribute';
+
 @Component({
   selector: 'page-response-add',
   templateUrl: 'response-add.html',
@@ -31,11 +35,10 @@ import { VideoComponent } from '../../components/video/video';
 })
 export class ResponseAddPage extends BasePage {
 
-  color: string = "#cccccc";
-  deployment: any;
-  form: any;
-  attributes: any;
+  deployment: Deployment = null;
+  form: Form = null;
   formGroup: FormGroup = null;
+  color: string = "#cccccc";
 
   constructor(
     public platform:Platform,
@@ -58,14 +61,13 @@ export class ResponseAddPage extends BasePage {
     this.logger.info(this, 'ionViewDidLoad');
     this.deployment = this.navParams.get("deployment");
     this.form = this.navParams.get("form");
-    this.attributes = this.navParams.get("attributes");
     this.color = this.form.color;
     this.formGroup = new FormGroup({});
-    for (let index in this.attributes) {
-      let attribute = this.attributes[index];
+    for (let index in this.form.attributes) {
+      let attribute:Attribute = this.form.attributes[index];
       if (attribute.input == 'location') {
         let validator: any = null;
-        if (attribute.required == "true") {
+        if (attribute.required) {
           validator = Validators.required;
         }
         let formGroup = new FormGroup({
@@ -75,7 +77,7 @@ export class ResponseAddPage extends BasePage {
       }
       else if (attribute.input == 'checkbox' || attribute.input == 'checkboxes') {
         let validator : any = null;
-        if (attribute.required == "true") {
+        if (attribute.required) {
           validator = Validators.required;
         }
         let formGroup = new FormGroup({}, validator);
@@ -87,7 +89,7 @@ export class ResponseAddPage extends BasePage {
       }
       else {
         let validators = [];
-        if (attribute.required == "true") {
+        if (attribute.required) {
           validators.push(Validators.required);
         }
         this.formGroup.addControl(attribute.key, new FormControl('', validators));
@@ -111,7 +113,7 @@ export class ResponseAddPage extends BasePage {
       { showBackdrop: false,
         enableBackdropDismiss: false });
     modal.onDidDismiss(data => {
-      this.logger.info(this, "changeLocation", "Modal");
+      this.logger.info(this, "changeLocation", "Modal", data);
     });
   }
 
@@ -162,8 +164,8 @@ export class ResponseAddPage extends BasePage {
   }
 
   getTitle(values:any) {
-    for (let index in this.attributes) {
-      let attribute = this.attributes[index];
+    for (let index in this.form.attributes) {
+      let attribute = this.form.attributes[index];
       if (attribute.type == 'title') {
         return values[attribute.key];
       }
@@ -172,8 +174,8 @@ export class ResponseAddPage extends BasePage {
   }
 
   getDescription(values:any) {
-    for (let index in this.attributes) {
-      let attribute = this.attributes[index];
+    for (let index in this.form.attributes) {
+      let attribute = this.form.attributes[index];
       if (attribute.type == 'description') {
         return values[attribute.key];
       }
@@ -184,11 +186,11 @@ export class ResponseAddPage extends BasePage {
   sanitizeValues(values:any) {
     this.logger.info(this, "sanitizeValues", "Values", values);
     let sanitized = {};
-    for (let index in this.attributes) {
-      let attribute = this.attributes[index];
+    for (let index in this.form.attributes) {
+      let attribute:Attribute = this.form.attributes[index];
       let key = attribute.key;
       let value = values[key];
-      this.logger.info(this, `Value ${attribute.label} ${attribute.input} ${key} ${value}`);
+      this.logger.info(this, "sanitizeValues", "Value", attribute.label, attribute.input, key, value);
       if (attribute.input == 'checkbox' || attribute.input == 'checkboxes') {
         let checks = [];
         for (let key in value) {

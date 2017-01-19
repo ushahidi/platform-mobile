@@ -30,7 +30,7 @@ export class ResponseListPage extends BasePage {
 
   deployment: Deployment = null;
   posts: Post[] = null;
-  forms: any = null;
+  forms: Form[] = null;
   images: any = null;
   values: any = null;
   map: GoogleMap = null;
