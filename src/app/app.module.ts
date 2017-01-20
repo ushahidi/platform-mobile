@@ -18,6 +18,7 @@ import { ResponseDetailsPage } from '../pages/response-details/response-details'
 import { ResponseAddPage } from '../pages/response-add/response-add';
 import { ResponseEditPage } from '../pages/response-edit/response-edit';
 import { ResponseMapPage } from '../pages/response-map/response-map';
+import { ResponseSearchPage } from '../pages/response-search/response-search';
 
 import { CheckboxComponent } from '../components/checkbox/checkbox';
 import { CheckboxesComponent } from '../components/checkboxes/checkboxes';
@@ -60,6 +61,7 @@ export function provideStorage() {
     ResponseAddPage,
     ResponseEditPage,
     ResponseMapPage,
+    ResponseSearchPage,
     CheckboxComponent,
     CheckboxesComponent,
     DateComponent,
@@ -96,7 +98,8 @@ export function provideStorage() {
     ResponseDetailsPage,
     ResponseAddPage,
     ResponseEditPage,
-    ResponseMapPage
+    ResponseMapPage,
+    ResponseSearchPage
   ],
   providers: [
     { provide: Storage, useFactory: provideStorage },

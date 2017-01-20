@@ -68,5 +68,5 @@ export class Deployment extends Model {
   public forms: Form[] = [];
 
   public posts: Post[] = [];
-  
+
 }

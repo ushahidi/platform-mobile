@@ -6,6 +6,7 @@ import { GoogleMap, GoogleMapsEvent, GoogleMapsLatLng, GoogleMapsLatLngBounds, C
 import { BasePage } from '../../pages/base-page/base-page';
 import { ResponseAddPage } from '../response-add/response-add';
 import { ResponseDetailsPage } from '../response-details/response-details';
+import { ResponseSearchPage } from '../response-search/response-search';
 
 import { CardComponent } from '../../components/card/card';
 
@@ -19,20 +20,20 @@ import { Form } from '../../models/form';
 import { Image } from '../../models/image';
 import { Value } from '../../models/value';
 import { Attribute } from '../../models/attribute';
+import { Filter } from '../../models/filter';
 
 @Component({
   selector: 'page-response-list',
   templateUrl: 'response-list.html',
   providers: [ ApiService, DatabaseService, LoggerService ],
-  entryComponents:[ ResponseAddPage, ResponseDetailsPage ]
+  entryComponents:[ ResponseAddPage, ResponseDetailsPage, ResponseSearchPage ]
 })
 export class ResponseListPage extends BasePage {
 
   deployment: Deployment = null;
   posts: Post[] = null;
   forms: Form[] = null;
-  images: any = null;
-  values: any = null;
+  filter: Filter = null;
   map: GoogleMap = null;
   view: string = 'list';
 
@@ -70,6 +71,7 @@ export class ResponseListPage extends BasePage {
   loadUpdates(event:any=null, cache:boolean=false) {
     this.logger.info(this, "loadUpdates", "Cache", cache);
     let promises = [
+      this.loadFilters(cache),
       this.loadPosts(cache)];
     Promise.all(promises).then(
       (done) => {
@@ -84,6 +86,22 @@ export class ResponseListPage extends BasePage {
         }
         this.logger.error(this, "loadUpdates", error);
       });
+  }
+
+  loadFilters(cache:boolean=true) {
+    if (cache && this.filter) {
+      this.logger.info(this, "loadFilters", "Cached", this.filter);
+    }
+    else {
+      this.database.getFilter(this.deployment).then(
+        (results) => {
+          this.filter = <Filter>results;
+          this.logger.info(this, "loadFilters", "Database", this.filter);
+        },
+        (error) => {
+          this.logger.error(this, "loadFilters", "Database", error);
+        });
+    }
   }
 
   loadPosts(cache:boolean=true) {
@@ -169,7 +187,13 @@ export class ResponseListPage extends BasePage {
 
   searchResponses(event:any) {
     this.logger.info(this, "searchResponses");
-    this.showToast('Search Not Implemented');
+    let modal = this.showModal(ResponseSearchPage,
+      { deployment: this.deployment,
+        filter: this.filter,
+        forms: this.forms });
+    modal.onDidDismiss(data => {
+      this.logger.info(this, "searchResponses", "Modal", data);
+    });
   }
 
   shareResponses(event:any) {

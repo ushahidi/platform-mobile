@@ -418,12 +418,12 @@ export class ApiService {
             let form:Form = new Form();
             form.deployment_id = deployment.id;
             form.id = item['id'];
-            form.name = item['name'];
-            form.description = item['description'];
-            form.color = item['color'];
             form.type = item['type'];
+            form.name = item['name'];
+            form.color = item['color'];
             form.created = item['created'];
             form.updated = item['updated'];
+            form.description = item['description'];
             forms.push(form);
           }
           resolve(forms);

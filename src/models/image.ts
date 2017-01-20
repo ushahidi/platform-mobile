@@ -50,10 +50,10 @@ export class Image extends Model {
   public height: number = null;
 
   @Column("created", TEXT)
-  public created: string = null;
+  public created: Date = null;
 
   @Column("updated", TEXT)
-  public updated: string = null;
+  public updated: Date = null;
 
   @Column("saved", TEXT)
   public saved: Date = null;

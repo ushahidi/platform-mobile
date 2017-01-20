@@ -10,6 +10,7 @@ import { Attribute } from '../models/attribute';
 import { Post } from '../models/post';
 import { Value } from '../models/value';
 import { Image } from '../models/image';
+import { Filter } from '../models/filter';
 
 import { LoggerService } from '../providers/logger-service';
 
@@ -574,6 +575,21 @@ export class DatabaseService {
   removeValues(deployment:Deployment) {
     let where = { deployment_id: deployment.id };
     return this.removeModel<Value>(new Value(), where);
+  }
+
+  getFilter(deployment:Deployment) : Promise<Filter> {
+    let where:any = { deployment_id: deployment.id };
+    return this.getModel<Filter>(new Filter(), where);
+  }
+
+  saveFilter(deployment:Deployment, filter:Filter) {
+    filter.deployment_id = deployment.id;
+    return this.saveModel(filter);
+  }
+
+  removeFilters(deployment:Deployment) {
+    let where = { deployment_id: deployment.id };
+    return this.removeModel<Filter>(new Filter(), where);
   }
 
 }

@@ -23,6 +23,7 @@ import { Attribute } from '../models/attribute';
 import { Post } from '../models/post';
 import { Value } from '../models/value';
 import { Image } from '../models/image';
+import { Filter } from '../models/filter';
 
 @Component({
   templateUrl: 'app.html',
@@ -63,7 +64,8 @@ export class MyApp {
         new Attribute(),
         new Post(),
         new Value(),
-        new Image()];
+        new Image(),
+        new Filter()];
       this.database.createTables(tables).then(results => {
         this.logger.info(this, "Database Ready");
         this.database.getDeployments().then(results => {
@@ -185,6 +187,7 @@ export class MyApp {
       this.database.removeValues(deployment),
       this.database.removeImages(deployment),
       this.database.removePosts(deployment),
+      this.database.removeFilters(deployment),
       this.database.removeDeployment(deployment)];
     Promise.all(promises).then(
       (results) => {
