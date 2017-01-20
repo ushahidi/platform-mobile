@@ -17,7 +17,7 @@
     </ion-buttons>
   </ion-navbar>
 </ion-header>
-<ion-content class="page-response-list">
+<ion-content class="page-response-list" [class.has-footer]="filter">
   <ion-refresher *ngIf="view == 'list'" (ionRefresh)="loadUpdates($event, false)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
@@ -48,3 +48,13 @@
     <div #map id="map"></div>
   </div>
 </ion-content>
+<ion-footer>
+  <ion-toolbar color="dark" *ngIf="filter">
+    <p color="white" padding-left>Filters applied</p>
+    <ion-buttons end>
+      <button color="white" ion-button text-only text-uppercase (click)="clearFilter($event, filter)">
+        Clear
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-footer>

@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { Platform, NavParams,
+import { Component, ViewChild } from '@angular/core';
+import { Platform, NavParams, Content,
   NavController, ViewController, LoadingController, ToastController, AlertController, ModalController, ActionSheetController } from 'ionic-angular';
 import { GoogleMap, GoogleMapsEvent, GoogleMapsLatLng, GoogleMapsLatLngBounds, CameraPosition, GoogleMapsMarkerOptions, GoogleMapsMarker } from 'ionic-native';
 
@@ -36,6 +36,9 @@ export class ResponseListPage extends BasePage {
   filter: Filter = null;
   map: GoogleMap = null;
   view: string = 'list';
+
+  @ViewChild(Content)
+  content: Content;
 
   constructor(
     public platform:Platform,
@@ -91,12 +94,14 @@ export class ResponseListPage extends BasePage {
   loadFilters(cache:boolean=true) {
     if (cache && this.filter) {
       this.logger.info(this, "loadFilters", "Cached", this.filter);
+      this.resizeContent();
     }
     else {
       this.database.getFilter(this.deployment).then(
         (results) => {
           this.filter = <Filter>results;
           this.logger.info(this, "loadFilters", "Database", this.filter);
+          this.resizeContent();
         },
         (error) => {
           this.logger.error(this, "loadFilters", "Database", error);
@@ -193,6 +198,10 @@ export class ResponseListPage extends BasePage {
         forms: this.forms });
     modal.onDidDismiss(data => {
       this.logger.info(this, "searchResponses", "Modal", data);
+      if (data) {
+        this.filter = data['filter'];
+      }
+      this.resizeContent();
     });
   }
 
@@ -315,4 +324,22 @@ export class ResponseListPage extends BasePage {
     }
   }
 
+  clearFilter(event:any, filter:Filter) {
+    this.logger.info(this, "clearFilter", filter);
+    this.database.removeFilters(this.deployment).then(
+      (results) => {
+        this.filter = null;
+      },
+      (error) => {
+        this.showToast(error);
+      });
+      this.resizeContent();
+  }
+
+  resizeContent(delay:number=100) {
+    this.logger.info(this, "resizeContent");
+    setTimeout(() => {
+      this.content.resize();
+    }, delay);
+  }
 }
