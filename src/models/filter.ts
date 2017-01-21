@@ -43,15 +43,15 @@ export class Filter extends Model {
   public show_forms: string = null;
 
   public showPost(post:Post) : boolean  {
-    // if (this.show_archived && post.status == "archived") {
-    //   return true;
-    // }
-    // if (this.show_published && post.status == "published") {
-    //   return true;
-    // }
-    // if (this.show_inreview && post.status == "pending") {
-    //   return true;
-    // }
+    if (this.show_archived == false && post.status == "archived") {
+      return false;
+    }
+    if (this.show_published == false && post.status == "published") {
+      return false;
+    }
+    if (this.show_inreview == false && post.status == "pending") {
+      return false;
+    }
     if (this.showForm(post.form) == false) {
       return false;
     }
@@ -61,7 +61,7 @@ export class Filter extends Model {
       }
       if (post.description && post.description.includes(this.search_text) == false) {
         return false;
-      }  
+      }
     }
     return true;
   }

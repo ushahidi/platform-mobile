@@ -30,20 +30,18 @@
     <div class="loading" text-center margin-top-lg margin-bottom-lg *ngIf="posts == null">
       <ion-spinner></ion-spinner>
     </div>
-    <div padding-left padding-right *ngIf="posts && posts.length == 0">
-      <h6 text-center class="no-responses">
+    <div padding-left padding-right *ngIf="posts && filtered">
+      <h6 text-center class="no-responses" *ngIf="posts && posts.length == 0">
         This deployment doesn't have any<br>
         survey responses, yet.
       </h6>
-      <button ion-button block margin-top text-uppercase color="primary"
-            (click)="addResponse($event)">Submit A Survey Response</button>
-    </div>
-    <div padding-left padding-right *ngIf="filtered && filtered.length == 0">
-      <h6 text-center class="no-responses">
+      <h6 text-center class="no-responses" *ngIf="posts && posts.length > 0 && filtered && filtered.length == 0">
         There are no responses<br> for the current filter.
       </h6>
+      <button ion-button block margin-top text-uppercase color="primary"
+            (click)="addResponse($event)" *ngIf="posts && posts.length == 0">Submit A Survey Response</button>
     </div>
-    <div *ngIf="filtered">
+    <div *ngIf="filtered && filtered.length > 0">
       <post-card [post]="post" [index]="i"
                  (cardSelected)="showResponse(post)" (menuSelected)="showOptions(post)"
                  *ngFor="let post of filtered; let i = index"></post-card>
