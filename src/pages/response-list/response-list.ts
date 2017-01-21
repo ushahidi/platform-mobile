@@ -32,6 +32,7 @@ export class ResponseListPage extends BasePage {
 
   deployment: Deployment = null;
   posts: Post[] = null;
+  filtered: Post[] = null;
   forms: Form[] = null;
   filter: Filter = null;
   map: GoogleMap = null;
@@ -121,6 +122,7 @@ export class ResponseListPage extends BasePage {
           this.logger.info(this, "loadPosts", "Database", posts.length);
           if (posts && posts.length > 0) {
             this.posts = posts;
+            this.filtered = this.getFiltered(this.posts, this.filter);
           }
           else {
             this.loadPosts(false);
@@ -134,6 +136,7 @@ export class ResponseListPage extends BasePage {
       return this.api.getPostsWithValues(this.deployment).then(
         (results) => {
           this.posts = <Post[]>results;
+          this.filtered = this.getFiltered(this.posts, this.filter);
           this.logger.info(this, "loadPosts", "API", this.posts.length);
           for (let index in this.posts) {
             let post:Post = this.posts[index];
@@ -152,6 +155,20 @@ export class ResponseListPage extends BasePage {
           this.logger.error(this, "loadPosts", "API", error);
         });
     }
+  }
+
+  getFiltered(posts:Post[], filter:Filter): Post[] {
+    let filtered: Post[] = [];
+    for (let index in posts) {
+      let post:Post = posts[index];
+      if (filter == null) {
+        filtered.push(post);
+      }
+      else if (filter.showPost(post)) {
+        filtered.push(post);
+      }
+    }
+    return filtered;
   }
 
   showResponse(post:Post) {
@@ -200,6 +217,7 @@ export class ResponseListPage extends BasePage {
       this.logger.info(this, "searchResponses", "Modal", data);
       if (data) {
         this.filter = data['filter'];
+        this.filtered = this.getFiltered(this.posts, this.filter);
       }
       this.resizeContent();
     });
@@ -329,6 +347,7 @@ export class ResponseListPage extends BasePage {
     this.database.removeFilters(this.deployment).then(
       (results) => {
         this.filter = null;
+        this.filtered = this.getFiltered(this.posts, this.filter);
       },
       (error) => {
         this.showToast(error);

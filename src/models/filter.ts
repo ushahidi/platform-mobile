@@ -42,6 +42,30 @@ export class Filter extends Model {
   @Column("show_forms", TEXT)
   public show_forms: string = null;
 
+  public showPost(post:Post) : boolean  {
+    // if (this.show_archived && post.status == "archived") {
+    //   return true;
+    // }
+    // if (this.show_published && post.status == "published") {
+    //   return true;
+    // }
+    // if (this.show_inreview && post.status == "pending") {
+    //   return true;
+    // }
+    if (this.showForm(post.form) == false) {
+      return false;
+    }
+    if (this.search_text && this.search_text.length > 0) {
+      if (post.title && post.title.includes(this.search_text) == false) {
+        return false;
+      }
+      if (post.description && post.description.includes(this.search_text) == false) {
+        return false;
+      }  
+    }
+    return true;
+  }
+
   public showForm(form:Form) : boolean {
     if (this.show_forms != null && this.show_forms.length > 0) {
       let forms:string[] = this.show_forms.split(",");

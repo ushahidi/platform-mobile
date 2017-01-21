@@ -38,10 +38,15 @@
       <button ion-button block margin-top text-uppercase color="primary"
             (click)="addResponse($event)">Submit A Survey Response</button>
     </div>
-    <div *ngIf="posts">
+    <div padding-left padding-right *ngIf="filtered && filtered.length == 0">
+      <h6 text-center class="no-responses">
+        There are no responses<br> for the current filter.
+      </h6>
+    </div>
+    <div *ngIf="filtered">
       <post-card [post]="post" [index]="i"
                  (cardSelected)="showResponse(post)" (menuSelected)="showOptions(post)"
-                 *ngFor="let post of posts; let i = index"></post-card>
+                 *ngFor="let post of filtered; let i = index"></post-card>
     </div>
   </div>
   <div class="map" *ngIf="view == 'map'">
