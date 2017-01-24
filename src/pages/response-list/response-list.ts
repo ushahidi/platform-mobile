@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Platform, NavParams, Content,
+import { Platform, NavParams, Content, Events,
   NavController, ViewController, LoadingController, ToastController, AlertController, ModalController, ActionSheetController } from 'ionic-angular';
 import { GoogleMap, GoogleMapsEvent, GoogleMapsLatLng, GoogleMapsLatLngBounds, CameraPosition, GoogleMapsMarkerOptions, GoogleMapsMarker } from 'ionic-native';
 
@@ -46,7 +46,8 @@ export class ResponseListPage extends BasePage {
     public api:ApiService,
     public logger:LoggerService,
     public database:DatabaseService,
-    public navParams: NavParams,
+    public events:Events,
+    public navParams:NavParams,
     public navController:NavController,
     public viewController:ViewController,
     public modalController:ModalController,
@@ -59,6 +60,11 @@ export class ResponseListPage extends BasePage {
 
   ionViewDidLoad() {
     this.logger.info(this, 'ionViewDidLoad');
+    this.events.subscribe('post:deleted', (post_id:number) => {
+      this.logger.info(this, 'Events', 'post:deleted', post_id);
+      this.posts = null;
+      this.filtered = null;
+    });
   }
 
   ionViewWillEnter() {
@@ -247,21 +253,14 @@ export class ResponseListPage extends BasePage {
          text: 'Edit',
          handler: () => {
            this.logger.info(this, "showOptions", 'Edit');
-           this.showToast("Edit Not Implemented");
-         }
-       },
-       {
-         text: 'Add to Collection',
-         handler: () => {
-           this.logger.info(this, "showOptions", 'Add');
-           this.showToast("Add Not Implemented");
+           this.editResponse(post);
          }
        },
        {
          text: 'Share',
          handler: () => {
            this.logger.info(this, "showOptions", 'Share');
-           this.showToast("Share Not Implemented");
+           this.shareResponse(post);
          }
        },
        {
@@ -269,7 +268,7 @@ export class ResponseListPage extends BasePage {
          role: 'destructive',
          handler: () => {
            this.logger.info(this, "showOptions", 'Delete');
-           this.showToast("Delete Not Implemented");
+           this.deleteResponse(post);
          }
        },
        {
@@ -281,6 +280,74 @@ export class ResponseListPage extends BasePage {
        }
      ];
    this.showActionSheet(null, buttons);
+  }
+
+  shareResponse(post:Post) {
+    let subject:string = `${this.deployment.name} | ${post.title}`;
+    let message:string = post.description
+    let file:string = post.image_url;
+    let url:string = post.url;
+    this.logger.info(this, "shareResponse", "Subject", subject, "Message", message, "File", file, "URL", url);
+    this.showShare(subject, message, file, url).then(
+      (shared) => {
+        if (shared) {
+          this.showToast("Response Shared");
+        }
+      },
+      (error) => {
+        this.showToast(error);
+    });
+  }
+
+  editResponse(post:Post) {
+    this.logger.info(this, "editResponse");
+    this.showToast('Edit Not Implemented');
+    // let modal = this.showModal(ResponseEditPage,
+    //   { deployment: this.deployment,
+    //     post: this.post });
+    // modal.onDidDismiss(data => {
+    //   this.logger.info(this, "editResponse", "Modal", data);
+    // });
+  }
+
+  deleteResponse(post:Post) {
+    let buttons = [
+       {
+         text: 'Delete',
+         role: 'destructive',
+         handler: () => {
+           this.logger.info(this, "deleteResponse", 'Delete');
+           let loading = this.showLoading("Deleting...");
+           this.api.deletePost(this.deployment, post).then(
+             (results) => {
+               loading.dismiss();
+               this.database.removePost(this.deployment, post).then(removed => {
+                 let postIndex = this.posts.indexOf(post, 0);
+                 if (postIndex > -1) {
+                   this.posts.splice(postIndex, 1);
+                 }
+                 let filteredIndex = this.filtered.indexOf(post, 0);
+                 if (filteredIndex > -1) {
+                   this.filtered.splice(filteredIndex, 1);
+                 }
+                 this.showToast("Response deleted");
+              });
+             },
+             (error) => {
+               loading.dismiss();
+               this.showAlert("Problem Deleting Response", error);
+             });
+         }
+       },
+       {
+         text: 'Cancel',
+         role: 'cancel',
+         handler: () => {
+           this.logger.info(this, "deleteResponse", 'Cancel');
+         }
+       }
+     ];
+     this.showConfirm("Delete Response", "Are you sure you want to delete this response?", buttons);
   }
 
   showList(event:any) {

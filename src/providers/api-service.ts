@@ -123,6 +123,31 @@ export class ApiService {
     });
   }
 
+  httpDelete(url:string, token:string=null, params:any=null) {
+    return new Promise((resolve, reject) => {
+      let search = new URLSearchParams();
+      if (params) {
+        for (let key in params) {
+          search.set(key, params[key])
+        }
+      }
+      let headers = this.authHeaders(token);
+      let options = new RequestOptions({ headers: headers, search: search });
+      this.logger.info(this, "DELETE", url, params);
+      this.http.delete(url, options)
+        .map(res => res.json())
+        .subscribe(
+          (items) => {
+            this.logger.info(this, "DELETE", url, items);
+            resolve(items);
+          },
+          (error) => {
+            this.logger.error(this, "DELETE", url, error);
+            reject(this.errorMessage(error));
+          });
+    });
+  }
+
   searchDeployments(search:string) : Promise<Deployment[]> {
     return new Promise((resolve, reject) => {
       let url = "https://api.ushahidi.io/deployments";
@@ -365,6 +390,21 @@ export class ApiService {
         content: description,
         values: values };
       this.httpPut(url, deployment.access_token, params).then(
+        (json) => {
+          resolve(json);
+        },
+        (error) => {
+          reject(error);
+        })
+    });
+  }
+
+  deletePost(deployment:Deployment, post:Post) {
+    return new Promise((resolve, reject) => {
+      let api = `/api/v3/posts/${post.id}`;
+      let url = deployment.url + api;
+      let params = {};
+      this.httpDelete(url, deployment.access_token, params).then(
         (json) => {
           resolve(json);
         },

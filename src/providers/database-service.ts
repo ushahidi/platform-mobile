@@ -478,6 +478,13 @@ export class DatabaseService {
     return this.removeModel<Post>(new Post(), where);
   }
 
+  removePost(deployment:Deployment, post:Post) {
+    let where = {
+      deployment_id: deployment.id,
+      id: post.id };
+    return this.removeModel<Post>(new Post(), where);
+  }
+
   getImages(deployment:Deployment) : Promise<Image[]> {
     let where = { deployment_id: deployment.id };
     let order = {};

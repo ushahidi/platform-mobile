@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Platform, NavParams, Button,
+import { Platform, NavParams, Button, Events,
   NavController, ViewController, LoadingController, ToastController, AlertController, ModalController, ActionSheetController  } from 'ionic-angular';
 
 import { BasePage } from '../../pages/base-page/base-page';
@@ -38,7 +38,8 @@ export class ResponseDetailsPage extends BasePage {
     public api:ApiService,
     public logger:LoggerService,
     public database:DatabaseService,
-    public navParams: NavParams,
+    public events:Events,
+    public navParams:NavParams,
     public navController:NavController,
     public viewController:ViewController,
     public modalController:ModalController,
@@ -51,6 +52,7 @@ export class ResponseDetailsPage extends BasePage {
 
   ionViewDidLoad() {
     this.logger.info(this, 'ionViewDidLoad');
+
   }
 
   ionViewWillEnter() {
@@ -101,6 +103,43 @@ export class ResponseDetailsPage extends BasePage {
     }
   }
 
+  showOptions(event:any) {
+    this.logger.info(this, "showOptions");
+    this.logger.info(this, "showOptions");
+    let buttons = [
+      {
+         text: 'Edit',
+         handler: () => {
+           this.logger.info(this, "showOptions", 'Edit');
+           this.editResponse(this.post);
+         }
+       },
+       {
+         text: 'Share',
+         handler: () => {
+           this.logger.info(this, "showOptions", 'Share');
+           this.shareResponse(this.post);
+         }
+       },
+       {
+         text: 'Delete',
+         role: 'destructive',
+         handler: () => {
+           this.logger.info(this, "showOptions", 'Delete');
+           this.deleteResponse(this.post);
+         }
+       },
+       {
+         text: 'Cancel',
+         role: 'cancel',
+         handler: () => {
+           this.logger.info(this, "showOptions", 'Cancel');
+         }
+       }
+     ];
+   this.showActionSheet(null, buttons);
+  }
+
   shareResponse(event:any) {
     let subject:string = `${this.deployment.name} | ${this.post.title}`;
     let message:string = this.post.description
@@ -127,6 +166,41 @@ export class ResponseDetailsPage extends BasePage {
     // modal.onDidDismiss(data => {
     //   this.logger.info(this, "editResponse", "Modal", data);
     // });
+  }
+
+  deleteResponse(post:Post) {
+    let buttons = [
+       {
+         text: 'Delete',
+         role: 'destructive',
+         handler: () => {
+           this.logger.info(this, "deleteResponse", 'Delete');
+           let loading = this.showLoading("Deleting...");
+           this.api.deletePost(this.deployment, post).then(
+             (results) => {
+               loading.dismiss();
+               this.database.removePost(this.deployment, post).then(removed => {
+                 this.showToast("Response deleted");
+                 this.logger.info(this, 'Events', 'post:deleted', post.id);
+                 this.events.publish('post:deleted', post.id);
+                 this.closePage();
+              });
+             },
+             (error) => {
+               loading.dismiss();
+               this.showAlert("Problem Deleting Response", error);
+             });
+         }
+       },
+       {
+         text: 'Cancel',
+         role: 'cancel',
+         handler: () => {
+           this.logger.info(this, "deleteResponse", 'Cancel');
+         }
+       }
+     ];
+     this.showConfirm("Delete Response", "Are you sure you want to delete this response?", buttons);
   }
 
 }

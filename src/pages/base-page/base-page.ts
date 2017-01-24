@@ -29,6 +29,15 @@ export class BasePage {
     return loading;
   }
 
+  showToast(message:string, duration:number=1500):Toast {
+    let toast = this.toastController.create({
+      message: message,
+      duration: duration
+    });
+    toast.present();
+    return toast;
+  }
+
   showAlert(title:string, subTitle:string, buttons:any=['OK']):Alert {
     let alert = this.alertController.create({
       title: title,
@@ -39,13 +48,14 @@ export class BasePage {
     return alert;
   }
 
-  showToast(message:string, duration:number=1500):Toast {
-    let toast = this.toastController.create({
-      message: message,
-      duration: duration
+  showConfirm(title:string, subTitle:string, buttons:any=['OK']):Alert {
+    let alert = this.alertController.create({
+      title: title,
+      subTitle: subTitle,
+      buttons: buttons
     });
-    toast.present();
-    return toast;
+    alert.present();
+    return alert;
   }
 
   showActionSheet(title:string, buttons:any):ActionSheet {
@@ -73,6 +83,10 @@ export class BasePage {
 
   showRootPage(page:any, params:any={}, options:any={}) {
     this.navController.setRoot(page, params, options);
+  }
+
+  closePage(data:any=null) {
+    this.viewController.dismiss(data);
   }
 
   showShare(subject:string, message:string=null, file:string=null, url:string=null) {
