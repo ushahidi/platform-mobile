@@ -250,6 +250,13 @@ export class ResponseListPage extends BasePage {
     this.logger.info(this, "showOptions");
     let buttons = [
       {
+        text: 'Share',
+        handler: () => {
+          this.logger.info(this, "showOptions", 'Share');
+          this.shareResponse(post);
+        }
+      },
+      {
          text: 'Edit',
          handler: () => {
            this.logger.info(this, "showOptions", 'Edit');
@@ -257,10 +264,10 @@ export class ResponseListPage extends BasePage {
          }
        },
        {
-         text: 'Share',
+         text: 'Add to Collection',
          handler: () => {
-           this.logger.info(this, "showOptions", 'Share');
-           this.shareResponse(post);
+           this.logger.info(this, "showOptions", 'Add to Collection');
+           this.addToCollection(post);
          }
        },
        {
@@ -308,6 +315,11 @@ export class ResponseListPage extends BasePage {
     // modal.onDidDismiss(data => {
     //   this.logger.info(this, "editResponse", "Modal", data);
     // });
+  }
+
+  addToCollection(post:Post) {
+    this.logger.info(this, "addToCollection");
+    this.showToast('Add To Collection Not Implemented');
   }
 
   deleteResponse(post:Post) {

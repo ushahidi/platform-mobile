@@ -108,6 +108,27 @@ export class ResponseDetailsPage extends BasePage {
     this.logger.info(this, "showOptions");
     let buttons = [
       {
+        text: 'Add to Collection',
+        handler: () => {
+          this.logger.info(this, "showOptions", 'Add to Collection');
+          this.addToCollection(this.post);
+        }
+      },
+      {
+        text: 'Share',
+        handler: () => {
+          this.logger.info(this, "showOptions", 'Share');
+          this.shareResponse(this.post);
+        }
+      },
+      {
+        text: 'Put under review',
+        handler: () => {
+          this.logger.info(this, "showOptions", 'Put Under Review');
+          this.putUnderReview(this.post);
+        }
+      },
+      {
          text: 'Edit',
          handler: () => {
            this.logger.info(this, "showOptions", 'Edit');
@@ -115,12 +136,12 @@ export class ResponseDetailsPage extends BasePage {
          }
        },
        {
-         text: 'Share',
-         handler: () => {
-           this.logger.info(this, "showOptions", 'Share');
-           this.shareResponse(this.post);
-         }
-       },
+          text: 'Archive',
+          handler: () => {
+            this.logger.info(this, "showOptions", 'Archive');
+            this.archiveResponse(this.post);
+          }
+        },
        {
          text: 'Delete',
          role: 'destructive',
@@ -166,6 +187,21 @@ export class ResponseDetailsPage extends BasePage {
     // modal.onDidDismiss(data => {
     //   this.logger.info(this, "editResponse", "Modal", data);
     // });
+  }
+
+  putUnderReview(post:Post) {
+    this.logger.info(this, "putUnderReview");
+    this.showToast('Put Under Review Not Implemented');
+  }
+
+  addToCollection(post:Post) {
+    this.logger.info(this, "addToCollection");
+    this.showToast('Add To Collection Not Implemented');
+  }
+
+  archiveResponse(post:Post) {
+    this.logger.info(this, "archiveResponse");
+    this.showToast('Archive Not Implemented');
   }
 
   deleteResponse(post:Post) {
