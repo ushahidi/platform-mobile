@@ -1,77 +1,76 @@
 .post-card {
   border-left: thick solid #cccccc;
-  ion-grid {
-    padding:0;
-    margin-top: 10px;
-    ion-row {
-      padding:0;
-      margin:0;
-      ion-col {
-        padding:0;
-        margin:0;
-        p {
-          color: #555;
-          font-size: 13px;
-          padding-top: 2px;
-          span {
-            color: #555;
-          }
+  ion-card-content {
+    padding-top: 5px;
+    padding-bottom: 5px;
+  }
+  ion-col {
+    padding: 0;
+    margin: 10px 0 0 0;
+    &.status {
+      font-size: 18px;
+      margin-top: 8px;
+      ion-icon {
+        padding: 0;
+        margin: 0;
+        line-height: 18px;
+      }
+    }
+    &.profile {
+      vertical-align:top;
+      img {
+        width: 18px;
+        border-radius: 50%;
+      }
+    }
+    &.name {
+      p {
+        color: #888;
+        font-size: 13px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+    &.more {
+      text-align: right;
+      margin-right: 0;
+      padding-right: 0;
+      button {
+        margin-right: 0;
+        padding-right: 0;
+        ion-icon {
+          font-weight: bold;
+          font-size: 18px;
         }
       }
     }
   }
-  .lazy {
-    transition: opacity 1s;
-    opacity: 0;
-    &.ng2-lazyloaded {
-      opacity: 1;
-    }
-    &.profile {
-      border-radius: 50%;
-      width: 20px;
-    }
+  .title {
+    font-size: 15px;
+    margin-top: 0;
+    margin-bottom: 0;
   }
-  span {
-    color: #ccc;
+  .description {
+    font-size: 14px;
   }
-  ion-card-content {
-    padding-top: 5px;
-    padding-bottom: 5px;
-    h2 {
-      margin-bottom: 10px;
-    }
-    p {
-
-    }
+  .image {
     img {
       transition: opacity 1s;
-      opacity: 0;
+      &.lazy {
+        opacity: 0;
+      }
       &.ng2-lazyloaded {
         opacity: 1;
       }
-      &.image {
-        margin-bottom: 10px;
-      }
     }
   }
-  ion-item {
+  .fields {
     p {
-      margin-left: 0;
-      padding-left: 0;
+      color: #888;
+      font-size: 13px;
+      font-weight: 500;
+      text-transform: uppercase;
     }
-  }
-  button {
-    margin-right: 0;
-    padding-right: 0;
-    ion-icon {
-      font-size: 2em;
-      margin-right: 0;
-      padding-right: 0;
-    }
-  }
-  .more {
-    margin-top: 5px;
-    margin-bottom: 10px;
-    text-transform: uppercase;
   }
 }

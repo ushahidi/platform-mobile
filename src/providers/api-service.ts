@@ -332,6 +332,18 @@ export class ApiService {
             if (item.form) {
               post.form_id = item.form.id;
             }
+            if (item.allowed_privileges) {
+              post.can_read = item.allowed_privileges.indexOf("read") > -1;
+              post.can_create = item.allowed_privileges.indexOf("create") > -1;
+              post.can_update = item.allowed_privileges.indexOf("update") > -1;
+              post.can_delete = item.allowed_privileges.indexOf("delete") > -1;
+            }
+            else {
+              post.can_read = false;
+              post.can_create = false;
+              post.can_update = false;
+              post.can_delete = false;
+            }
             for (let key in item.values) {
               let text = item.values[key][0];
               let value:Value = new Value();
@@ -379,17 +391,11 @@ export class ApiService {
     });
   }
 
-  updatePost(deployment:Deployment, form:number, title:string, description:string, values:any) {
+  updatePost(deployment:Deployment, post:Post, changes:any) {
     return new Promise((resolve, reject) => {
-      let api = "/api/v3/posts/";
+      let api = `/api/v3/posts/${post.id}`;
       let url = deployment.url + api;
-      let params = {
-        source: this.source,
-        form: { id: form },
-        title: title,
-        content: description,
-        values: values };
-      this.httpPut(url, deployment.access_token, params).then(
+      this.httpPut(url, deployment.access_token, changes).then(
         (json) => {
           resolve(json);
         },

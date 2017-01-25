@@ -2,16 +2,16 @@
   <ion-navbar color="dark">
     <ion-title>Responses</ion-title>
     <ion-buttons end>
-      <button ion-button (click)="searchResponses($event)">
-        <ion-icon name="search"></ion-icon>
+      <button ion-button icon-only (click)="searchResponses($event)">
+        <ion-icon ios="ios-search" md="md-search"></ion-icon>
       </button>
-      <button ion-button (click)="showMap($event)" *ngIf="view == 'list'">
+      <button ion-button icon-only (click)="showMap($event)" *ngIf="view == 'list'">
         <ion-icon ios="ios-map-outline" md="md-map"></ion-icon>
       </button>
-      <button ion-button (click)="showList($event)" *ngIf="view == 'map'">
+      <button ion-button icon-only (click)="showList($event)" *ngIf="view == 'map'">
         <ion-icon ios="ios-list-box-outline" md="md-list-box"></ion-icon>
       </button>
-      <button ion-button (click)="shareResponses($event)">
+      <button ion-button icon-only (click)="shareResponses($event)">
         <ion-icon ios="ios-share-outline" md="md-share"></ion-icon>
       </button>
     </ion-buttons>

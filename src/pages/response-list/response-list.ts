@@ -65,6 +65,11 @@ export class ResponseListPage extends BasePage {
       this.posts = null;
       this.filtered = null;
     });
+    this.events.subscribe('post:updated', (post_id:number) => {
+      this.logger.info(this, 'Events', 'post:deleted', post_id);
+      this.posts = null;
+      this.filtered = null;
+    });
   }
 
   ionViewWillEnter() {
@@ -248,44 +253,46 @@ export class ResponseListPage extends BasePage {
 
   showOptions(post:Post) {
     this.logger.info(this, "showOptions");
-    let buttons = [
-      {
+    let buttons = [];
+    if (post.can_read) {
+      buttons.push({
         text: 'Share',
-        handler: () => {
-          this.logger.info(this, "showOptions", 'Share');
-          this.shareResponse(post);
-        }
-      },
-      {
+        handler:() => this.shareResponse(post)
+      });
+    }
+    if (post.can_update) {
+      buttons.push({
          text: 'Edit',
-         handler: () => {
-           this.logger.info(this, "showOptions", 'Edit');
-           this.editResponse(post);
-         }
-       },
-       {
-         text: 'Add to Collection',
-         handler: () => {
-           this.logger.info(this, "showOptions", 'Add to Collection');
-           this.addToCollection(post);
-         }
-       },
-       {
-         text: 'Delete',
-         role: 'destructive',
-         handler: () => {
-           this.logger.info(this, "showOptions", 'Delete');
-           this.deleteResponse(post);
-         }
-       },
-       {
-         text: 'Cancel',
-         role: 'cancel',
-         handler: () => {
-           this.logger.info(this, "showOptions", 'Cancel');
-         }
-       }
-     ];
+         handler:() => this.editResponse(post)
+       });
+      // buttons.push({
+      //   text: 'Add to Collection',
+      //   handler:() => this.addToCollection(post)
+      // });
+      if (post.status == 'published' || post.status == 'draft') {
+       buttons.push({
+         text: 'Archive',
+         handler:() => this.archiveResponse(post)
+       });
+      }
+      if (post.status == 'archived' || post.status == 'draft') {
+        buttons.push({
+          text: 'Publish',
+          handler:() => this.publishResponse(post)
+        });
+      }
+    }
+    if (post.can_delete) {
+      buttons.push({
+        text: 'Delete',
+        role: 'destructive',
+        handler:() => this.deleteResponse(post)
+      });
+    }
+    buttons.push({
+      text: 'Cancel',
+      role: 'cancel'
+    });
    this.showActionSheet(null, buttons);
   }
 
@@ -320,6 +327,43 @@ export class ResponseListPage extends BasePage {
   addToCollection(post:Post) {
     this.logger.info(this, "addToCollection");
     this.showToast('Add To Collection Not Implemented');
+  }
+
+  archiveResponse(post:Post) {
+    this.logger.info(this, "archiveResponse");
+    let changes = { status: "archived" };
+    let loading = this.showLoading("Archiving...");
+    this.api.updatePost(this.deployment, post, changes).then(
+      (updated) => {
+        post.status = "archived";
+        this.database.savePost(this.deployment, post).then(saved => {
+          loading.dismiss();
+          this.showToast("Responsed archived");
+        });
+      },
+      (error) => {
+        loading.dismiss();
+        this.showAlert("Problme Updating Response", error);
+      });
+  }
+
+  publishResponse(post:Post) {
+    this.logger.info(this, "publishResponse");
+    let changes = { status: "published" };
+    let loading = this.showLoading("Publishing...");
+    this.api.updatePost(this.deployment, post, changes).then(
+      (updated) => {
+        post.status = "published";
+        this.database.savePost(this.deployment, post).then(saved => {
+          loading.dismiss();
+          this.events.publish('post:updated', post.id);
+          this.showToast("Response archived");
+        });
+      },
+      (error) => {
+        loading.dismiss();
+        this.showAlert("Problem Updating Response", error);
+      });
   }
 
   deleteResponse(post:Post) {

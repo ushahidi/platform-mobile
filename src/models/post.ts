@@ -43,7 +43,7 @@ export class Post extends Model {
 
   @Column("url", TEXT)
   public url: string = null;
-  
+
   @Column("slug", TEXT)
   public slug: string = null;
 
@@ -88,6 +88,18 @@ export class Post extends Model {
 
   @Column("form_name", TEXT)
   public form_name: string = null;
+
+  @Column("can_read", DOUBLE)
+  public can_read: boolean = null;
+
+  @Column("can_create", DOUBLE)
+  public can_create: boolean = null;
+
+  @Column("can_update", DOUBLE)
+  public can_update: boolean = null;
+
+  @Column("can_delete", DOUBLE)
+  public can_delete: boolean = null;
 
   public form: Form = null;
 
