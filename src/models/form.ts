@@ -50,6 +50,18 @@ export class Form extends Model {
   @Column("saved", TEXT)
   public saved: Date = null;
 
+  @Column("can_read", DOUBLE)
+  public can_read: boolean = null;
+
+  @Column("can_create", DOUBLE)
+  public can_create: boolean = null;
+
+  @Column("can_update", DOUBLE)
+  public can_update: boolean = null;
+
+  @Column("can_delete", DOUBLE)
+  public can_delete: boolean = null;
+
   public attributes: Attribute[] = [];
 
   loadAttributes(attributes:Attribute[]) {

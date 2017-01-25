@@ -10,6 +10,7 @@ import { Attribute } from '../models/attribute';
 import { Post } from '../models/post';
 import { Value } from '../models/value';
 import { Image } from '../models/image';
+import { Collection } from '../models/collection';
 import { Filter } from '../models/filter';
 
 import { LoggerService } from '../providers/logger-service';
@@ -597,6 +598,22 @@ export class DatabaseService {
   removeFilters(deployment:Deployment) {
     let where = { deployment_id: deployment.id };
     return this.removeModel<Filter>(new Filter(), where);
+  }
+
+  getCollections(deployment:Deployment) : Promise<Collection[]> {
+    let where:any = { deployment_id: deployment.id };
+    let order = { name: "ASC" };
+    return this.getModels<Collection>(new Collection(), where, order);
+  }
+
+  saveCollection(deployment:Deployment, collection:Collection) {
+    collection.deployment_id = deployment.id;
+    return this.saveModel(collection);
+  }
+
+  removeCollections(deployment:Deployment) {
+    let where = { deployment_id: deployment.id };
+    return this.removeModel<Collection>(new Collection(), where);
   }
 
 }

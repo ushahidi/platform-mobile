@@ -4,6 +4,7 @@ import { Model, TEXT, INTEGER, DOUBLE, PRIMARY_KEY } from '../models/model';
 import { User } from '../models/user';
 import { Form } from '../models/form';
 import { Post } from '../models/post';
+import { Collection } from '../models/collection';
 
 import { Table } from '../decorators/table';
 import { Column } from '../decorators/column';
@@ -63,10 +64,24 @@ export class Deployment extends Model {
   @Column("saved", TEXT)
   public saved: Date = null;
 
+  @Column("can_read", DOUBLE)
+  public can_read: boolean = null;
+
+  @Column("can_create", DOUBLE)
+  public can_create: boolean = null;
+
+  @Column("can_update", DOUBLE)
+  public can_update: boolean = null;
+
+  @Column("can_delete", DOUBLE)
+  public can_delete: boolean = null;
+
   public users: User[] = [];
 
   public forms: Form[] = [];
 
   public posts: Post[] = [];
+
+  public collections: Collection[] = [];
 
 }

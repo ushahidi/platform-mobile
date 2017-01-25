@@ -1,22 +1,22 @@
 import { Injectable } from '@angular/core';
 
 import { Model, TEXT, INTEGER, DOUBLE, PRIMARY_KEY } from '../models/model';
-import { Form } from '../models/form';
+import { Deployment } from '../models/deployment';
 
 import { Table } from '../decorators/table';
 import { Column } from '../decorators/column';
 
 @Injectable()
-@Table("attributes")
-export class Attribute extends Model {
+@Table("collections")
+export class Collection extends Model {
 
   constructor(values:any=null) {
     super(values);
     this.copyInto(values);
   }
 
-  public newInstance<M extends Attribute>(values:any=null) : Attribute {
-    return new Attribute(values);
+  public newInstance<M extends Collection>(values:any=null) : Collection {
+    return new Collection(values);
   }
 
   @Column("id", INTEGER, PRIMARY_KEY)
@@ -25,38 +25,26 @@ export class Attribute extends Model {
   @Column("deployment_id", INTEGER, PRIMARY_KEY)
   public deployment_id: number = null;
 
-  @Column("form_id", INTEGER)
-  public form_id: number = null;
+  @Column("name", TEXT)
+  public name: string = null;
 
-  @Column("key", TEXT)
-  public key: string = null;
+  @Column("description", TEXT)
+  public description: string = null;
 
-  @Column("label", TEXT)
-  public label: string = null;
+  @Column("view", TEXT)
+  public view: string = null;
 
-  @Column("instructions", TEXT)
-  public instructions: string = null;
-
-  @Column("input", TEXT)
-  public input: string = null;
-
-  @Column("type", TEXT)
-  public type: string = null;
-
-  @Column("required", TEXT)
-  public required: boolean = null;
-
-  @Column("priority", INTEGER)
-  public priority: number = null;
-
-  @Column("cardinality", INTEGER)
-  public cardinality: number = null;
+  @Column("featured", INTEGER)
+  public featured: boolean = null;
 
   @Column("options", TEXT)
   public options: string = null;
 
-  @Column("saved", TEXT)
-  public saved: Date = null;
+  @Column("created", TEXT)
+  public created: Date = null;
+
+  @Column("updated", TEXT)
+  public updated: Date = null;
 
   @Column("can_read", DOUBLE)
   public can_read: boolean = null;

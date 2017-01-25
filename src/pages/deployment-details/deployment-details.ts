@@ -17,6 +17,7 @@ import { Deployment } from '../../models/deployment';
 import { User } from '../../models/user';
 import { Form } from '../../models/form';
 import { Attribute } from '../../models/attribute';
+import { Collection } from '../../models/collection';
 
 import { PLACEHOLDER_PHOTO } from '../../helpers/constants';
 
@@ -72,7 +73,8 @@ export class DeploymentDetailsPage extends BasePage {
       let promises = [
         this.loadDeployment(cache),
         this.loadUser(cache),
-        this.loadForms(cache)];
+        this.loadForms(cache),
+        this.loadCollections(cache)];
       Promise.all(promises).then(done => {
         if (event) {
           event.complete();
@@ -170,6 +172,40 @@ export class DeploymentDetailsPage extends BasePage {
           },
           (error) => {
             this.logger.error(this, "loadForms", "API", error);
+          });
+      }
+    }
+
+    loadCollections(cache:boolean=true) {
+      this.logger.info(this, "loadCollections", cache);
+      if (cache && this.deployment.collections != null && this.deployment.collections.length > 0) {
+        this.logger.info(this, "loadCollections", "Cached");
+      }
+      else if (cache) {
+        return this.database.getCollections(this.deployment).then(results => {
+          this.logger.info(this, "loadCollections", "Database", results);
+          let collections = <Collection[]>results;
+          if (collections.length > 0) {
+            this.deployment.collections = collections;
+          }
+          else {
+            this.loadCollections(false);
+          }
+        });
+      }
+      else {
+        return this.api.getCollections(this.deployment).then(
+          (results) => {
+            let collections = <Collection[]>results;
+            this.logger.info(this, "loadCollections", "API", collections);
+            for (var i = 0; i < collections.length; i++){
+              let collection:Collection = collections[i];
+              this.database.saveCollection(this.deployment, collection);
+            }
+            this.deployment.collections = collections;
+          },
+          (error) => {
+            this.logger.error(this, "loadCollections", "API", error);
           });
       }
     }

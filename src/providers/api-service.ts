@@ -15,6 +15,7 @@ import { Attribute } from '../models/attribute';
 import { Post } from '../models/post';
 import { Value } from '../models/value';
 import { Image } from '../models/image';
+import { Collection } from '../models/collection';
 
 import { LoggerService } from '../providers/logger-service';
 
@@ -25,6 +26,9 @@ export class ApiService {
   clientId: any = "ushahidiui";
   clientSecret: any = "35e7f0bca957836d05ca0492211b0ac707671261";
   scope: string = "api posts forms tags sets users media config";
+
+  // api posts media forms tags savedsearches sets users stats layers
+  // config messages notifications contacts roles permissions csv
 
   constructor(
     public http: Http,
@@ -285,6 +289,18 @@ export class ApiService {
               deployment.email = item['email'];
               deployment.image = item['image_header'];
               deployment.description = item['description'];
+              if (item.allowed_privileges) {
+                deployment.can_read = item.allowed_privileges.indexOf("read") > -1;
+                deployment.can_create = item.allowed_privileges.indexOf("create") > -1;
+                deployment.can_update = item.allowed_privileges.indexOf("update") > -1;
+                deployment.can_delete = item.allowed_privileges.indexOf("delete") > -1;
+              }
+              else {
+                deployment.can_read = false;
+                deployment.can_create = false;
+                deployment.can_update = false;
+                deployment.can_delete = false;
+              }
               resolve(deployment);
             }
           }
@@ -441,6 +457,18 @@ export class ApiService {
             image.filesize = item['original_file_size'];
             image.created = item['created'];
             image.updated = item['updated'];
+            if (item.allowed_privileges) {
+              image.can_read = item.allowed_privileges.indexOf("read") > -1;
+              image.can_create = item.allowed_privileges.indexOf("create") > -1;
+              image.can_update = item.allowed_privileges.indexOf("update") > -1;
+              image.can_delete = item.allowed_privileges.indexOf("delete") > -1;
+            }
+            else {
+              image.can_read = false;
+              image.can_create = false;
+              image.can_update = false;
+              image.can_delete = false;
+            }
             media.push(image);
           }
           resolve(media);
@@ -470,6 +498,18 @@ export class ApiService {
             form.created = item['created'];
             form.updated = item['updated'];
             form.description = item['description'];
+            if (item.allowed_privileges) {
+              form.can_read = item.allowed_privileges.indexOf("read") > -1;
+              form.can_create = item.allowed_privileges.indexOf("create") > -1;
+              form.can_update = item.allowed_privileges.indexOf("update") > -1;
+              form.can_delete = item.allowed_privileges.indexOf("delete") > -1;
+            }
+            else {
+              form.can_read = false;
+              form.can_create = false;
+              form.can_update = false;
+              form.can_delete = false;
+            }
             forms.push(form);
           }
           resolve(forms);
@@ -503,9 +543,63 @@ export class ApiService {
             attribute.priority = item['priority'];
             attribute.options = item['options'];
             attribute.cardinality = item['cardinality'];
+            if (item.allowed_privileges) {
+              attribute.can_read = item.allowed_privileges.indexOf("read") > -1;
+              attribute.can_create = item.allowed_privileges.indexOf("create") > -1;
+              attribute.can_update = item.allowed_privileges.indexOf("update") > -1;
+              attribute.can_delete = item.allowed_privileges.indexOf("delete") > -1;
+            }
+            else {
+              attribute.can_read = false;
+              attribute.can_create = false;
+              attribute.can_update = false;
+              attribute.can_delete = false;
+            }
             attributes.push(attribute);
           }
           resolve(attributes);
+        },
+        (error) => {
+          reject(error);
+        });
+    });
+  }
+
+  getCollections(deployment:Deployment): Promise<Collection[]> {
+    return new Promise((resolve, reject) => {
+      let api = `/api/v3/collections`;
+      let url = deployment.url + api;
+      this.httpGet(url, deployment.access_token).then(
+        (json) => {
+          let items = <any[]>json['results'];
+          let collections = [];
+          for (let i = 0; i < items.length; i++) {
+            let item = items[i];
+            let collection:Collection = new Collection();
+            collection.deployment_id = deployment.id;
+            collection.id = item['id'];
+            collection.name = item['name'];
+            collection.description = item['description'];
+            collection.view = item['view'];
+            collection.options = item['options'];
+            collection.featured = item['featured'];
+            collection.created = item['created'];
+            collection.updated = item['updated'];
+            if (item.allowed_privileges) {
+              collection.can_read = item.allowed_privileges.indexOf("read") > -1;
+              collection.can_create = item.allowed_privileges.indexOf("create") > -1;
+              collection.can_update = item.allowed_privileges.indexOf("update") > -1;
+              collection.can_delete = item.allowed_privileges.indexOf("delete") > -1;
+            }
+            else {
+              collection.can_read = false;
+              collection.can_create = false;
+              collection.can_update = false;
+              collection.can_delete = false;
+            }
+            collections.push(collection);
+          }
+          resolve(collections);
         },
         (error) => {
           reject(error);

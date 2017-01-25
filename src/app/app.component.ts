@@ -24,6 +24,7 @@ import { Post } from '../models/post';
 import { Value } from '../models/value';
 import { Image } from '../models/image';
 import { Filter } from '../models/filter';
+import { Collection } from '../models/collection';
 
 @Component({
   templateUrl: 'app.html',
@@ -65,6 +66,7 @@ export class MyApp {
         new Post(),
         new Value(),
         new Image(),
+        new Collection(),
         new Filter()];
       this.database.createTables(tables).then(results => {
         this.logger.info(this, "Database Ready");
