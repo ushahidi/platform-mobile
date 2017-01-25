@@ -34,7 +34,6 @@ export class ResponseListPage extends BasePage {
   deployment: Deployment = null;
   posts: Post[] = null;
   filtered: Post[] = null;
-  forms: Form[] = null;
   filter: Filter = null;
   map: GoogleMap = null;
   view: string = 'list';
@@ -76,7 +75,6 @@ export class ResponseListPage extends BasePage {
   ionViewWillEnter() {
     this.logger.info(this, "ionViewWillEnter");
     this.deployment = this.navParams.get("deployment");
-    this.forms = this.navParams.get("forms");
     this.loadUpdates(null, true);
   }
 
@@ -193,9 +191,9 @@ export class ResponseListPage extends BasePage {
   addResponse(event:any) {
     this.logger.info(this, "addResponse");
     let buttons = [];
-    if (this.forms != null) {
-      for (var i = 0; i < this.forms.length; i++){
-        let form = this.forms[i];
+    if (this.deployment.forms != null) {
+      for (var i = 0; i < this.deployment.forms.length; i++){
+        let form = this.deployment.forms[i];
         buttons.push({
           text: form.name,
           handler: () => {
@@ -223,8 +221,7 @@ export class ResponseListPage extends BasePage {
     this.logger.info(this, "searchResponses");
     let modal = this.showModal(ResponseSearchPage,
       { deployment: this.deployment,
-        filter: this.filter,
-        forms: this.forms });
+        filter: this.filter });
     modal.onDidDismiss(data => {
       this.logger.info(this, "searchResponses", "Modal", data);
       if (data) {

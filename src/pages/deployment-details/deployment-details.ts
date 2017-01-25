@@ -30,7 +30,6 @@ import { PLACEHOLDER_PHOTO } from '../../helpers/constants';
 export class DeploymentDetailsPage extends BasePage {
 
   deployment: Deployment = null;
-  forms: Form[] = null;
   user: User = null;
   placeholder: string = PLACEHOLDER_PHOTO;
 
@@ -140,7 +139,7 @@ export class DeploymentDetailsPage extends BasePage {
 
     loadForms(cache:boolean=true) {
       this.logger.info(this, "loadForms", cache);
-      if (cache && this.forms != null && this.forms.length > 0) {
+      if (cache && this.deployment.forms != null && this.deployment.forms.length > 0) {
         this.logger.info(this, "loadForms", "Cached");
       }
       else if (cache) {
@@ -148,7 +147,7 @@ export class DeploymentDetailsPage extends BasePage {
           this.logger.info(this, "loadForms", "Database", results);
           let forms = <Form[]>results;
           if (forms.length > 0) {
-            this.forms = forms;
+            this.deployment.forms = forms;
           }
           else {
             this.loadForms(false);
@@ -168,7 +167,7 @@ export class DeploymentDetailsPage extends BasePage {
                 this.database.saveAttribute(this.deployment, attribute);
               }
             }
-            this.forms = forms;
+            this.deployment.forms = forms;
           },
           (error) => {
             this.logger.error(this, "loadForms", "API", error);
@@ -213,8 +212,7 @@ export class DeploymentDetailsPage extends BasePage {
     showResponses(event:any) {
       this.logger.info(this, "showResponses");
       this.showPage(ResponseListPage,
-        { forms: this.forms,
-          deployment: this.deployment });
+        { deployment: this.deployment });
     }
 
     showCollections(event:any) {
@@ -230,9 +228,9 @@ export class DeploymentDetailsPage extends BasePage {
     addResponse(event:any) {
       this.logger.info(this, "addResponse");
       let buttons = [];
-      if (this.forms) {
-        for (var i = 0; i < this.forms.length; i++){
-          let form = this.forms[i];
+      if (this.deployment.forms) {
+        for (var i = 0; i < this.deployment.forms.length; i++){
+          let form = this.deployment.forms[i];
           buttons.push({
             text: form.name,
             handler: () => {
