@@ -607,6 +607,37 @@ export class ApiService {
     });
   }
 
+  addPostToCollection(deployment:Deployment, post:Post, collection:Collection) {
+    return new Promise((resolve, reject) => {
+      let api = `/api/v3/collections/${collection.id}/posts`;
+      let url = deployment.url + api;
+      let params = {
+        id: post.id };
+      this.httpPost(url, deployment.access_token, params).then(
+        (json) => {
+          resolve(json);
+        },
+        (error) => {
+          reject(error);
+        })
+    });
+  }
+
+  removePostToCollection(deployment:Deployment, post:Post, collection:Collection) {
+    return new Promise((resolve, reject) => {
+      let api = `/api/v3/collections/${collection.id}/posts/${post.id}`;
+      let url = deployment.url + api;
+      let params = { };
+      this.httpDelete(url, deployment.access_token, params).then(
+        (json) => {
+          resolve(json);
+        },
+        (error) => {
+          reject(error);
+        })
+    });
+  }
+
   getFormsWithAttributes(deployment:Deployment): Promise<Form[]> {
     this.logger.info(this, "getFormsWithAttributes");
     return Promise.all([

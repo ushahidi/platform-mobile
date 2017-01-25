@@ -21,6 +21,7 @@ import { Image } from '../../models/image';
 import { Value } from '../../models/value';
 import { Attribute } from '../../models/attribute';
 import { Filter } from '../../models/filter';
+import { Collection } from '../../models/collection';
 
 @Component({
   selector: 'page-response-list',
@@ -265,10 +266,12 @@ export class ResponseListPage extends BasePage {
          text: 'Edit',
          handler:() => this.editResponse(post)
        });
-      // buttons.push({
-      //   text: 'Add to Collection',
-      //   handler:() => this.addToCollection(post)
-      // });
+      if (this.deployment.collections && this.deployment.collections.length > 0) {
+        buttons.push({
+          text: 'Add to Collection',
+          handler:() => this.addToCollection(post)
+        });
+      }
       if (post.status == 'published' || post.status == 'draft') {
        buttons.push({
          text: 'Archive',
@@ -324,9 +327,35 @@ export class ResponseListPage extends BasePage {
     // });
   }
 
-  addToCollection(post:Post) {
+  addToCollection(post:Post, collection:Collection=null) {
     this.logger.info(this, "addToCollection");
-    this.showToast('Add To Collection Not Implemented');
+    if (collection != null) {
+      let loading = this.showLoading("Adding...");
+      this.api.addPostToCollection(this.deployment, post, collection).then(
+        (results) => {
+          loading.dismiss();
+          this.showToast("Added To Collection");
+        },
+        (error) => {
+          loading.dismiss();
+          this.showAlert("Problem Adding To Collection", error);
+      })
+    }
+    else if (this.deployment.collections != null) {
+      let buttons = [];
+      for (let index in this.deployment.collections) {
+        let collection:Collection = this.deployment.collections[index];
+        buttons.push({
+          text: collection.name,
+          handler:() => this.addToCollection(post, collection)
+        });
+      }
+      buttons.push({
+        text: 'Cancel',
+        role: 'cancel'
+      });
+      this.showActionSheet("Select Collection", buttons);
+    }
   }
 
   archiveResponse(post:Post) {

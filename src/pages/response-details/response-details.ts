@@ -16,6 +16,7 @@ import { Form } from '../../models/form';
 import { Image } from '../../models/image';
 import { Value } from '../../models/value';
 import { Attribute } from '../../models/attribute';
+import { Collection } from '../../models/collection';
 
 import { PLACEHOLDER_USER, PLACEHOLDER_NAME } from '../../helpers/constants';
 
@@ -116,10 +117,12 @@ export class ResponseDetailsPage extends BasePage {
         text: 'Edit',
         handler:() => this.editResponse(this.post)
       });
-      // buttons.push({
-      //  text: 'Add to Collection',
-      //  handler:() => this.addToCollection(this.post)
-      // });
+      if (this.deployment.collections && this.deployment.collections.length > 0) {
+        buttons.push({
+         text: 'Add to Collection',
+         handler:() => this.addToCollection(this.post)
+        });
+      }
       if (this.post.status == 'published' || this.post.status == 'draft') {
        buttons.push({
          text: 'Archive',
@@ -175,9 +178,35 @@ export class ResponseDetailsPage extends BasePage {
     // });
   }
 
-  addToCollection(post:Post) {
+  addToCollection(post:Post, collection:Collection=null) {
     this.logger.info(this, "addToCollection");
-    this.showToast('Add To Collection Not Implemented');
+    if (collection != null) {
+      let loading = this.showLoading("Adding...");
+      this.api.addPostToCollection(this.deployment, post, collection).then(
+        (results) => {
+          loading.dismiss();
+          this.showToast("Added To Collection");
+        },
+        (error) => {
+          loading.dismiss();
+          this.showAlert("Problem Adding To Collection", error);
+      })
+    }
+    else if (this.deployment.collections != null) {
+      let buttons = [];
+      for (let index in this.deployment.collections) {
+        let collection:Collection = this.deployment.collections[index];
+        buttons.push({
+          text: collection.name,
+          handler:() => this.addToCollection(post, collection)
+        });
+      }
+      buttons.push({
+        text: 'Cancel',
+        role: 'cancel'
+      });
+      this.showActionSheet("Select Collection", buttons);
+    }
   }
 
   draftResponse(post:Post) {
