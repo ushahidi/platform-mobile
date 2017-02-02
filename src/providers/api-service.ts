@@ -336,6 +336,7 @@ export class ApiService {
             post.url = `${deployment.url}/posts/${item.id}`;
             post.slug = item.slug;
             post.title = item.title;
+            post.description = item.content;
             post.color = item.color;
             post.status = item.status;
             post.created = item.created;
