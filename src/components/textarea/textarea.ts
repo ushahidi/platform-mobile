@@ -2,20 +2,24 @@ import { Component, ViewChild } from '@angular/core';
 import { TextArea } from 'ionic-angular';
 import { FormGroup, FormGroupName, FormControl, FormControlName } from '@angular/forms';
 
+import { Value } from '../../models/value';
+import { Attribute } from '../../models/attribute';
+
 import { LoggerService } from '../../providers/logger-service';
 
 @Component({
   selector: 'field-textarea',
   templateUrl: 'textarea.html',
-  inputs: ['attribute', 'formGroup']
+  inputs: ['value', 'attribute', 'formGroup']
 })
 export class TextAreaComponent {
 
   formGroup: FormGroup;
-  attribute: any = {};
+  attribute: Attribute = null;
+  value: Value = null;
   required: boolean = false;
   focused: boolean = false;
-  value: string = "";
+  text: string = "";
 
   @ViewChild('textarea')
   textarea: TextArea;
@@ -24,7 +28,10 @@ export class TextAreaComponent {
   }
 
   ngOnInit() {
-    this.logger.info(this, "Attribute", this.attribute);
+    this.logger.info(this, "Attribute", this.attribute, "Value", this.value);
+    if (this.value) {
+      this.text = this.value.value;
+    }
   }
 
   onFocus(event) {

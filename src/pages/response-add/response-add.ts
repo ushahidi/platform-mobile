@@ -24,8 +24,10 @@ import { TextAreaComponent } from '../../components/textarea/textarea';
 import { VideoComponent } from '../../components/video/video';
 
 import { Deployment } from '../../models/deployment';
+import { Post } from '../../models/post';
 import { Form } from '../../models/form';
 import { Attribute } from '../../models/attribute';
+import { Value } from '../../models/value';
 
 @Component({
   selector: 'page-response-add',
@@ -36,7 +38,9 @@ import { Attribute } from '../../models/attribute';
 export class ResponseAddPage extends BasePage {
 
   deployment: Deployment = null;
+  post: Post = null;
   form: Form = null;
+  values : {} = {};
   formGroup: FormGroup = null;
   color: string = "#cccccc";
 
@@ -59,42 +63,13 @@ export class ResponseAddPage extends BasePage {
 
   ionViewDidLoad() {
     this.logger.info(this, 'ionViewDidLoad');
-    this.deployment = this.navParams.get("deployment");
-    this.form = this.navParams.get("form");
-    this.color = this.form.color;
-    this.formGroup = new FormGroup({});
-    for (let index in this.form.attributes) {
-      let attribute:Attribute = this.form.attributes[index];
-      if (attribute.input == 'location') {
-        let validator: any = null;
-        if (attribute.required) {
-          validator = Validators.required;
-        }
-        let formGroup = new FormGroup({
-          lat: new FormControl(''),
-          lon: new FormControl('')}, validator);
-        this.formGroup.addControl(attribute.key, formGroup);
-      }
-      else if (attribute.input == 'checkbox' || attribute.input == 'checkboxes') {
-        let validator : any = null;
-        if (attribute.required) {
-          validator = Validators.required;
-        }
-        let formGroup = new FormGroup({}, validator);
-        let options = attribute.options.split(',');
-        for (let index in options) {
-          formGroup.addControl(options[index], new FormControl(''));
-        }
-        this.formGroup.addControl(attribute.key, formGroup);
-      }
-      else {
-        let validators = [];
-        if (attribute.required) {
-          validators.push(Validators.required);
-        }
-        this.formGroup.addControl(attribute.key, new FormControl('', validators));
-      }
+    this.deployment = <Deployment>this.navParams.get("deployment");
+    this.form = <Form>this.navParams.get("form");
+    this.post = <Post>this.navParams.get("post");
+    if (this.form) {
+      this.color = this.form.color;
     }
+    this.loadUpdates();
   }
 
   ionViewWillEnter() {
@@ -105,16 +80,24 @@ export class ResponseAddPage extends BasePage {
     this.logger.info(this, "ionViewDidEnter");
   }
 
-  changeLocation(event) {
-    this.logger.info(this, "changeLocation", event);
-    let modal = this.showModal(ResponseMapPage,
-      { latitude: event['latitude'],
-        longitude: event['longitude'] },
-      { showBackdrop: false,
-        enableBackdropDismiss: false });
-    modal.onDidDismiss(data => {
-      this.logger.info(this, "changeLocation", "Modal", data);
-    });
+  loadUpdates(event:any=null) {
+    this.logger.info(this, "loadUpdates");
+    let promises = [
+      this.loadFormGroup(),
+      this.loadPostValues()];
+    Promise.all(promises).then(
+      (done) => {
+        this.logger.info(this, "loadUpdates", "Done");
+        if (event) {
+          event.complete();
+        }
+      },
+      (error) => {
+        this.logger.error(this, "loadUpdates", error);
+        if (event) {
+          event.complete();
+        }
+      });
   }
 
   onCancel(event) {
@@ -122,8 +105,8 @@ export class ResponseAddPage extends BasePage {
     this.viewController.dismiss();
   }
 
-  postResponse(event:any=null) {
-    this.logger.info(this, "postResponse");
+  onSubmit(event:any=null) {
+    this.logger.info(this, "onSubmit");
     if (this.formGroup.valid) {
       let host = this.deployment.url;
       let title = this.getTitle(this.formGroup.value);
@@ -132,7 +115,7 @@ export class ResponseAddPage extends BasePage {
       let loading = this.showLoading("Posting...");
       this.api.createPost(this.deployment, this.form.id, title, description, values).then(
         (resp) => {
-          this.logger.info(this, "postResponse", resp);
+          this.logger.info(this, "onSubmit", resp);
           loading.dismiss();
           if (resp) {
             let alert = this.alertController.create({
@@ -153,7 +136,7 @@ export class ResponseAddPage extends BasePage {
           }
         },
         (error) => {
-          this.logger.error(this, "postResponse", error);
+          this.logger.error(this, "onSubmit", error);
           loading.dismiss();
           this.showAlert('Post Failed', error);
         });
@@ -161,6 +144,102 @@ export class ResponseAddPage extends BasePage {
     else {
       this.showAlert('Required Fields Missing', 'Please ensure all required fields are entered and try again.');
     }
+  }
+
+  loadPostValues() {
+    this.logger.info(this, "loadPostValues");
+    if (this.post == null) {
+      this.post = new Post();
+      this.post.deployment_id = this.deployment.id;
+      this.post.values = [];
+      for (let index in this.form.attributes) {
+        let attribute:Attribute = this.form.attributes[index];
+        let value:Value = new Value();
+        value.key = attribute.key;
+        value.label = attribute.label;
+        value.input = attribute.input;
+        value.type = attribute.type;
+        value.cardinality = attribute.cardinality;
+        this.post.values.push(value);
+      }
+    }
+    for (let index in this.form.attributes) {
+      let attribute:Attribute = this.form.attributes[index];
+      if (attribute.type == "title") {
+        let title:Value = new Value();
+        title.key = attribute.key;
+        title.input = attribute.input;
+        title.label = attribute.label;
+        title.cardinality = attribute.cardinality;
+        title.value = this.post.title;
+        this.values[title.key] = title;
+      }
+      else if (attribute.type == "description") {
+        let value:Value = new Value();
+        value.key = attribute.key;
+        value.input = attribute.input;
+        value.label = attribute.label;
+        value.cardinality = attribute.cardinality;
+        value.value = this.post.description;
+        this.values[attribute.key] = value;
+      }
+    }
+    for (let index in this.post.values) {
+      let value:Value = this.post.values[index];
+      this.values[value.key] = value;
+    }
+    this.logger.info(this, "loadPostValues", "Values", this.values);
+  }
+
+  loadFormGroup() {
+    this.logger.info(this, "loadFormGroup", "Form", this.form.name);
+    this.formGroup = new FormGroup({});
+    if (this.form && this.form.attributes) {
+      for (let index in this.form.attributes) {
+        let attribute:Attribute = this.form.attributes[index];
+        if (attribute.input == 'location') {
+          let validator: any = null;
+          if (attribute.required) {
+            validator = Validators.required;
+          }
+          let formGroup = new FormGroup({
+            lat: new FormControl(''),
+            lon: new FormControl('')}, validator);
+          this.formGroup.addControl(attribute.key, formGroup);
+        }
+        else if (attribute.input == 'checkbox' || attribute.input == 'checkboxes') {
+          let validator : any = null;
+          if (attribute.required) {
+            validator = Validators.required;
+          }
+          let formGroup = new FormGroup({}, validator);
+          let options = attribute.getOptions();
+          for (let index in options) {
+            formGroup.addControl(options[index], new FormControl(''));
+          }
+          this.formGroup.addControl(attribute.key, formGroup);
+        }
+        else {
+          let validators = [];
+          if (attribute.required) {
+            validators.push(Validators.required);
+          }
+          this.formGroup.addControl(attribute.key, new FormControl('', validators));
+        }
+      }
+    }
+  }
+
+  changeLocation(event) {
+    this.logger.info(this, "changeLocation", event);
+    let modal = this.showModal(ResponseMapPage,
+      { latitude: event['latitude'],
+        longitude: event['longitude'] },
+      { showBackdrop: false,
+        enableBackdropDismiss: false });
+    modal.onDidDismiss(data => {
+      this.logger.info(this, "changeLocation", "Modal", data);
+    });
   }
 
   getTitle(values:any) {

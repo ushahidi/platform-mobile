@@ -2,48 +2,48 @@ import { Component, ViewChild } from '@angular/core';
 import { Select } from 'ionic-angular';
 import { FormGroup, FormGroupName, FormControl, FormControlName } from '@angular/forms';
 
+import { Value } from '../../models/value';
+import { Attribute } from '../../models/attribute';
+
 import { LoggerService } from '../../providers/logger-service';
 
 @Component({
   selector: 'field-select',
   templateUrl: 'select.html',
-  inputs: ['attribute', 'formGroup']
+  inputs: ['value', 'attribute', 'formGroup']
 })
 export class SelectComponent {
 
   formGroup: FormGroup;
-  attribute: any = {};
-  options: any = [];
+  attribute: Attribute = null;
+  value: Value = null;
+  options: string[] = [];
   selectOptions: {} = null;
   required: boolean = false;
-  value: string = "";
+  text: string = "";
 
-  @ViewChild('select') select: Select;
+  @ViewChild('select')
+  select: Select;
 
   constructor(public logger:LoggerService) {
   }
 
   ngOnInit() {
-    this.logger.info(this, "Attribute", this.attribute);
+    this.logger.info(this, "Attribute", this.attribute, "Value", this.value);
     this.selectOptions = {
       title: this.attribute.label
     };
-    if (this.attribute.options) {
-      if (Array.isArray(this.attribute.options)) {
-        this.options = this.attribute.options;
-      }
-      else {
-        this.options = this.attribute.options.split(',');
-      }
+    this.options = this.attribute.getOptions();
+    if (this.value && this.value.value) {
+      this.text = this.value.value;
     }
     else {
-      this.options = [];
+      this.text = "";
     }
-    this.required = this.attribute.required == "true";
   }
 
   selectChanged(event) {
-    this.logger.info(this, "selectChanged", this.value);
+    this.logger.info(this, "selectChanged", this.text);
   }
 
 }

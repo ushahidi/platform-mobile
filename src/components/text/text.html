@@ -1,10 +1,10 @@
-<div class="field-text" [class.focused]="focused" [class.invalid]="required && value.length == 0 && focused == false">
+<div class="field-text" [class.focused]="focused" [class.invalid]="attribute.required == true && (text == null || text.length == 0) && focused == false">
   <ion-item no-lines [formGroup]="formGroup">
     <ion-label floating class="field-label">
       {{attribute.label}}
-      <span color="danger" *ngIf="required">*</span>
+      <span ion-text color="danger" *ngIf="attribute.required == true">*</span>
     </ion-label>
-    <ion-input #input type="text" [formControlName]="attribute.key" [(ngModel)]="value" (focus)="onFocus($event)" (blur)="onBlur($event)"></ion-input>
+    <ion-input #input type="text" [formControlName]="attribute.key" [(ngModel)]="text" (focus)="onFocus($event)" (blur)="onBlur($event)"></ion-input>
   </ion-item>
-  <p padding-left color="red" *ngIf="required && value.length == 0 && focused == false">Text required</p>
+  <p ion-text padding-left color="red" *ngIf="attribute.required == true && (text == null || text.length == 0) && focused == false">Text required</p>
 </div>

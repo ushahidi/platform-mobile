@@ -79,6 +79,9 @@
         },
         "cordova-plugin-is-debug": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
+        },
+        "cordova-plugin-network-information": {
+            "PACKAGE_NAME": "com.ushahidi.mobile"
         }
     },
     "dependent_plugins": {

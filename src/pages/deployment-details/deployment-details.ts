@@ -234,7 +234,7 @@ export class DeploymentDetailsPage extends BasePage {
           buttons.push({
             text: form.name,
             handler: () => {
-              this.logger.info(this, "addResponse", "Form", form);
+              this.logger.info(this, "addResponse", "Form", form.name);
               this.showResponseAdd(form);
           }});
         }
@@ -246,23 +246,13 @@ export class DeploymentDetailsPage extends BasePage {
     }
 
     showResponseAdd(form:Form) {
-      this.logger.info(this, "showResponseAdd", form);
+      this.logger.info(this, "showResponseAdd", form.name);
       let modal = this.showModal(ResponseAddPage,
-        { form: form,
-          deployment: this.deployment })
+        { deployment: this.deployment,
+          form: form })
       modal.onDidDismiss(data => {
         this.logger.info(this, "showResponseAdd", "Modal", data);
       });
-      // this.database.getAttributes(this.deployment, form).then(results => {
-      //   this.logger.info(this, "showResponseAdd", "Attribute", results);
-      //   let attributes = <any[]>results;
-      //   let modal = this.showModal(ResponseAddPage,
-      //     { form: form,
-      //       deployment: this.deployment })
-      //   modal.onDidDismiss(data => {
-      //     this.logger.info(this, "showResponseAdd", "Modal", data);
-      //   });
-      // });
     }
 
     shareDeployment(event:any) {

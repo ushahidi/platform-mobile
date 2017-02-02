@@ -1,8 +1,8 @@
-<div class="field-checkbox" [class.invalid]="required && hasValue() == false">
+<div class="field-checkbox" [class.invalid]="attribute.required == true && hasValue() == false">
   <ion-item no-lines>
     <ion-label class="field-label">
       {{attribute.label}}
-      <span color="danger" *ngIf="required">*</span>
+      <span ion-text color="danger" *ngIf="attribute.required == true">*</span>
     </ion-label>
   </ion-item>
   <div [formGroup]="formGroup" *ngIf="formGroup">
@@ -13,5 +13,5 @@
       </ion-item>
     </div>
   </div>
-  <p padding-left color="red" *ngIf="required && hasValue() == false">Selection required</p>
+  <p ion-text padding-left color="red" *ngIf="attribute.required == true && hasValue() == false">Selection required</p>
 </div>

@@ -3,21 +3,24 @@ import { Button, ActionSheetController, AlertController } from 'ionic-angular';
 import { Camera } from 'ionic-native';
 import { FormGroup, FormGroupName, FormControl, FormControlName } from '@angular/forms';
 
+import { Value } from '../../models/value';
+import { Attribute } from '../../models/attribute';
+
 import { LoggerService } from '../../providers/logger-service';
 
 @Component({
   selector: 'field-image',
   templateUrl: 'image.html',
-  inputs: ['attribute', 'formGroup']
+  inputs: ['value', 'attribute', 'formGroup']
 })
 export class ImageComponent {
 
   formGroup: FormGroup;
-  attribute: any = {};
+  attribute: Attribute = null;
+  value: Value = null;
   //imageData: string = "/assets/images/placeholder-photo.jpg";
   imageData: string = null;
   imageThumbnail: string = null;
-  required: boolean = false;
 
   @ViewChild('button') button: Button;
 
@@ -28,8 +31,7 @@ export class ImageComponent {
   }
 
   ngOnInit() {
-    this.logger.info(this, "Attribute", this.attribute);
-    this.required = this.attribute.required == "true";
+    this.logger.info(this, "Attribute", this.attribute, "Value", this.value);
   }
 
   showOptions() {

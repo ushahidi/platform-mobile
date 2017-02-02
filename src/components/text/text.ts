@@ -2,20 +2,24 @@ import { Component, ViewChild } from '@angular/core';
 import { TextInput } from 'ionic-angular';
 import { FormGroup, FormGroupName, FormControl, FormControlName } from '@angular/forms';
 
+import { Value } from '../../models/value';
+import { Attribute } from '../../models/attribute';
+
 import { LoggerService } from '../../providers/logger-service';
 
 @Component({
   selector: 'field-text',
   templateUrl: 'text.html',
-  inputs: ['attribute', 'formGroup']
+  inputs: ['value', 'attribute', 'formGroup']
 })
 export class TextComponent {
 
   formGroup: FormGroup;
-  attribute: any = {};
+  attribute: Attribute = null;
+  value: Value = null;
   required: boolean = false;
   focused: boolean = false;
-  value: string = "";
+  text: string = "";
 
   @ViewChild('input')
   input: TextInput;
@@ -24,8 +28,10 @@ export class TextComponent {
   }
 
   ngOnInit() {
-    this.logger.info(this, "Attribute", this.attribute);
-    this.required = this.attribute.required == "true";
+    this.logger.info(this, "Attribute", this.attribute, "Value", this.value);
+    if (this.value) {
+      this.text = this.value.value;
+    }
   }
 
   onFocus(event) {

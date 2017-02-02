@@ -119,6 +119,9 @@
     <feature name="IsDebug">
         <param name="ios-package" value="IsDebug" />
     </feature>
+    <feature name="NetworkStatus">
+        <param name="ios-package" value="CDVConnection" />
+    </feature>
     <name>Ushahidi</name>
     <description>Ushahidi Mobile</description>
     <author email="support@ushahidi.com" href="https://www.ushahidi.com/">Ushahidi Team</author>

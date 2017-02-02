@@ -454,6 +454,23 @@ module.exports = [
         "clobbers": [
             "cordova.plugins.IsDebug"
         ]
+    },
+    {
+        "id": "cordova-plugin-network-information.network",
+        "file": "plugins/cordova-plugin-network-information/www/network.js",
+        "pluginId": "cordova-plugin-network-information",
+        "clobbers": [
+            "navigator.connection",
+            "navigator.network.connection"
+        ]
+    },
+    {
+        "id": "cordova-plugin-network-information.Connection",
+        "file": "plugins/cordova-plugin-network-information/www/Connection.js",
+        "pluginId": "cordova-plugin-network-information",
+        "clobbers": [
+            "Connection"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -483,7 +500,8 @@ module.exports.metadata =
     "cordova-plugin-geolocation": "2.4.1",
     "cordova-plugin-file": "4.3.1",
     "cordova-plugin-media-capture": "1.4.1",
-    "cordova-plugin-is-debug": "1.0.0"
+    "cordova-plugin-is-debug": "1.0.0",
+    "cordova-plugin-network-information": "1.3.1"
 };
 // BOTTOM OF METADATA
 });

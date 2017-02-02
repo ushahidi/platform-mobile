@@ -1,8 +1,8 @@
-<div class="field-image" [class.invalid]="required && imageData == null">
+<div class="field-image" [class.invalid]="attribute.required == true && imageData == null">
   <ion-item no-lines [formGroup]="formGroup">
     <ion-label class="field-label">
       {{attribute.label}}
-      <span color="danger" *ngIf="required">*</span>
+      <span ion-text color="danger" *ngIf="attribute.required == true">*</span>
     </ion-label>
     <ion-input type="text" hidden [formControlName]="attribute.key"></ion-input>
   </ion-item>
@@ -18,5 +18,5 @@
   <button ion-button icon-only text-uppercase small color="red" *ngIf="imageData != null" (click)="deletePhoto()">
     <ion-icon name="trash"></ion-icon>
   </button>
-  <p padding-left color="red" *ngIf="required && imageData == null">Image required</p>
+  <p ion-text padding-left color="red" *ngIf="attribute.required == true && imageData == null">Image required</p>
 </div>

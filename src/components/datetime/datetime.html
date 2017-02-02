@@ -1,8 +1,8 @@
-<div class="field-datetime" [class.invalid]="required && (date == null || time == null)">
+<div class="field-datetime" [class.invalid]="attribute.required == true && (date == null || time == null)">
   <ion-item no-lines [formGroup]="formGroup" *ngIf="formGroup">
     <ion-label class="field-label">
       {{attribute.label}}
-      <span color="danger" *ngIf="required">*</span>
+      <span ion-text color="danger" *ngIf="attribute.required == true">*</span>
     </ion-label>
     <ion-input type="text" hidden [formControlName]="attribute.key" [(ngModel)]="datetime"></ion-input>
   </ion-item>
@@ -14,5 +14,5 @@
     <ion-icon ios="ios-calendar-outline" md="md-calendar" color="grey" item-left></ion-icon>
     <ion-datetime class="date-placeholder" displayFormat="YYYY-MM-DD" pickerFormat="YYYY MMMM D" [(ngModel)]="date" (ionChange)="dateChanged($event)"></ion-datetime>
   </ion-item>
-  <p padding-left color="red" *ngIf="required && (date == null || time == null)">Date and time is required</p>
+  <p ion-text padding-left color="red" *ngIf="attribute.required == true && (date == null || time == null)">Date and time is required</p>
 </div>

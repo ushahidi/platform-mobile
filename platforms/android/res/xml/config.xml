@@ -129,4 +129,7 @@
     <feature name="IsDebug">
         <param name="android-package" value="me.mattlewis.isdebug.IsDebug" />
     </feature>
+    <feature name="NetworkStatus">
+        <param name="android-package" value="org.apache.cordova.networkinformation.NetworkManager" />
+    </feature>
 </widget>

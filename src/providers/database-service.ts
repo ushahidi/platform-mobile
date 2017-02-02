@@ -263,7 +263,7 @@ export class DatabaseService {
         params.push("?");
       }
     }
-    return `INSERT OR IGNORE INTO ${table} (${names.join(", ")}) VALUES (${params.join(", ")})`;
+    return `INSERT OR REPLACE INTO ${table} (${names.join(", ")}) VALUES (${params.join(", ")})`;
   }
 
   insertParameters(table:string, columns:any[], values:{}) : any {
@@ -290,7 +290,7 @@ export class DatabaseService {
         params.push(`${column.name} = ?`);
       }
     }
-    return `UPDATE OR IGNORE ${table} SET ${params.join(", ")} WHERE ${clause.join(" AND ")}`;
+    return `UPDATE ${table} SET ${params.join(", ")} WHERE ${clause.join(" AND ")}`;
   }
 
   updateParameters(table:string, columns:any[], values:{}) : any {
@@ -365,18 +365,7 @@ export class DatabaseService {
       let table:string = model.getTable();
       let columns:any[] = model.getColumns();
       let values:any[] = model.getValues();
-      if (model.isPersisted() == false) {
-        this.logger.info(this, "saveModel", "Inserting", model);
-        values['saved'] = new Date();
-        this.executeInsert(table, columns, values).then(
-          (results) => {
-            resolve(results);
-          },
-          (error) => {
-            reject(error);
-          });
-      }
-      else if (model.hasKeys()) {
+      if (model.isPersisted()) {
         this.logger.info(this, "saveModel", "Updating", model);
         values['saved'] = new Date();
         this.executeUpdate(table, columns, values).then(
@@ -388,9 +377,20 @@ export class DatabaseService {
           });
       }
       else {
-        this.logger.error(this, "saveModel", "Failed", "Missing Keys");
-        reject('Missing Keys');
+        this.logger.info(this, "saveModel", "Inserting", model);
+        values['saved'] = new Date();
+        this.executeInsert(table, columns, values).then(
+          (results) => {
+            resolve(results);
+          },
+          (error) => {
+            reject(error);
+          });
       }
+      // else {
+      //   this.logger.error(this, "saveModel", "Failed", "Missing Keys");
+      //   reject('Missing Keys');
+      // }
     });
   }
 
@@ -523,10 +523,10 @@ export class DatabaseService {
       });
   }
 
-  getAttributes(deployment:Deployment, form:Form=null) : Promise<Attribute[]> {
+  getAttributes(deployment:Deployment, form_id:number=null) : Promise<Attribute[]> {
     let where = { deployment_id: deployment.id };
-    if (form != null) {
-      where['form_id'] = form.id;
+    if (form_id != null) {
+      where['form_id'] = form_id;
     }
     let order = { cardinality: "ASC" };
     return this.getModels<Attribute>(new Attribute(), where, order);
@@ -546,23 +546,26 @@ export class DatabaseService {
     return Promise.all([
       this.getForms(deployment),
       this.getAttributes(deployment)]).
-      then(results => {
-        let forms = <any[]>results[0];
-        let attributes = <any[]>results[1];
+      then((results) => {
+        let forms:Form[] = <Form[]>results[0];
+        let attributes:Attribute[] = <Attribute[]>results[1];
         for (let i = 0; i < forms.length; i++){
           let form:Form = forms[i];
-          form.attributes = [];
-          for (let j = 0; j < attributes.length; j++){
-            let attribute:Attribute = attributes[j];
-            if (form.id == attribute.form_id) {
-              form.attributes.push(attribute);
-            }
-          }
-          form.attributes = form.attributes.sort(function(a, b){
-            return a.cardinality - b.cardinality;
-          });
+          form.loadAttributes(attributes);
         }
         return forms;
+      });
+  }
+
+  getFormWithAttributes(deployment:Deployment, id:number): Promise<Form> {
+    return Promise.all([
+      this.getForm(deployment, id),
+      this.getAttributes(deployment, id)]).
+      then(results => {
+        let form:Form = <Form>results[0];
+        let attributes:Attribute[] = <Attribute[]>results[1];
+        form.loadAttributes(attributes);
+        return form;
       });
   }
 

@@ -148,16 +148,12 @@ export class ResponseListPage extends BasePage {
           this.posts = <Post[]>results;
           this.filtered = this.getFiltered(this.posts, this.filter);
           this.logger.info(this, "loadPosts", "API", this.posts.length);
-          for (let index in this.posts) {
-            let post:Post = this.posts[index];
-            this.database.savePost(this.deployment, post).then(saved => {
-              this.logger.info(this, "loadPosts", "API", "Post Saved", post.id);
-            });
-            for (let index in post.values) {
-              let value:Value = post.values[index];
-              this.database.saveValue(this.deployment, value).then(saved => {
-                this.logger.info(this, "loadPosts", "API", "Value Saved", value.key);
-              });
+          for (let postIndex in this.posts) {
+            let post:Post = this.posts[postIndex];
+            this.database.savePost(this.deployment, post);
+            for (let valueIndex in post.values) {
+              let value:Value = post.values[valueIndex];
+              this.database.saveValue(this.deployment, value);
             }
           }
         },
@@ -314,14 +310,24 @@ export class ResponseListPage extends BasePage {
   }
 
   editResponse(post:Post) {
-    this.logger.info(this, "editResponse");
-    this.showToast('Edit Not Implemented');
-    // let modal = this.showModal(ResponseEditPage,
-    //   { deployment: this.deployment,
-    //     post: this.post });
-    // modal.onDidDismiss(data => {
-    //   this.logger.info(this, "editResponse", "Modal", data);
-    // });
+    this.logger.info(this, "editResponse", "Post", post);
+    let modal = this.showModal(ResponseAddPage,
+      { deployment: this.deployment,
+        form: this.getForm(post.form_id),
+        post: post });
+    modal.onDidDismiss(data => {
+      this.logger.info(this, "editResponse", "Modal", data);
+    });
+  }
+
+  getForm(id:number) : Form {
+    for (let index in this.deployment.forms) {
+      let form:Form = this.deployment.forms[index];
+      if (form.id == id) {
+        return form;
+      }
+    }
+    return null;
   }
 
   addToCollection(post:Post, collection:Collection=null) {

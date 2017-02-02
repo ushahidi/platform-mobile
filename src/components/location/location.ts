@@ -3,33 +3,38 @@ import { TextInput } from 'ionic-angular';
 import { Geolocation } from 'ionic-native';
 import { FormGroup, FormGroupName, FormControl, FormControlName } from '@angular/forms';
 
+import { Value } from '../../models/value';
+import { Attribute } from '../../models/attribute';
+
 import { LoggerService } from '../../providers/logger-service';
+
+import { PLACEHOLDER_MAP } from '../../helpers/constants';
 
 @Component({
   selector: 'field-location',
   templateUrl: 'location.html',
-  inputs: ['attribute', 'formGroup', 'formGroupName']
+  inputs: ['value', 'attribute', 'formGroup']
 })
 export class LocationComponent {
 
   formGroup: FormGroup;
-  attribute: any = {};
+  attribute: Attribute = null;
+  value: Value = null;
   key: string = "AIzaSyBjDgMqF6GOdirXn3iFtI6Jlt8jEoWhSq4";
-  mapPlaceholder: string = "/assets/images/placeholder-map.jpg";
+  mapPlaceholder: string = PLACEHOLDER_MAP;
   mapImage: string = null;
   latitude: number = null;
   longitude: number = null;
-  required: boolean = false;
 
   @Output()
   changeLocation = new EventEmitter();
 
   constructor(public logger:LoggerService) {
+
   }
 
   ngOnInit() {
-    this.logger.info(this, "Attribute", this.attribute);
-    this.required = this.attribute.required == "true";
+    this.logger.info(this, "Attribute", this.attribute, "Value", this.value);
     this.detectLocation();
   }
 
@@ -44,6 +49,7 @@ export class LocationComponent {
           + `?center=${position.coords.latitude},${position.coords.longitude}`
           + `&zoom=15&size=300x200&maptype=roadmap&markers=color:red%7C`
           + `${position.coords.latitude},${position.coords.longitude}&key=${this.key}`;
+        this.logger.info(this, "detectLocation", "Map", this.mapImage);
       },
       (error) => {
         this.logger.error(this, "detectLocation", error);

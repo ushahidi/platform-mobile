@@ -16,7 +16,6 @@ import { DeploymentDetailsPage } from '../pages/deployment-details/deployment-de
 import { ResponseListPage } from '../pages/response-list/response-list';
 import { ResponseDetailsPage } from '../pages/response-details/response-details';
 import { ResponseAddPage } from '../pages/response-add/response-add';
-import { ResponseEditPage } from '../pages/response-edit/response-edit';
 import { ResponseMapPage } from '../pages/response-map/response-map';
 import { ResponseSearchPage } from '../pages/response-search/response-search';
 
@@ -59,7 +58,6 @@ export function provideStorage() {
     ResponseListPage,
     ResponseDetailsPage,
     ResponseAddPage,
-    ResponseEditPage,
     ResponseMapPage,
     ResponseSearchPage,
     CheckboxComponent,
@@ -97,7 +95,6 @@ export function provideStorage() {
     ResponseListPage,
     ResponseDetailsPage,
     ResponseAddPage,
-    ResponseEditPage,
     ResponseMapPage,
     ResponseSearchPage
   ],

@@ -26,7 +26,6 @@ export class ApiService {
   clientId: any = "ushahidiui";
   clientSecret: any = "35e7f0bca957836d05ca0492211b0ac707671261";
   scope: string = "api posts forms tags sets users media config";
-
   // api posts media forms tags savedsearches sets users stats layers
   // config messages notifications contacts roles permissions csv
 
@@ -334,7 +333,7 @@ export class ApiService {
             let post:Post = new Post();
             post.deployment_id = deployment.id;
             post.id = item.id;
-            post.url = `${deployment.url}\posts\${item.id}`;
+            post.url = `${deployment.url}/posts/${item.id}`;
             post.slug = item.slug;
             post.title = item.title;
             post.color = item.color;
@@ -644,10 +643,8 @@ export class ApiService {
       this.getForms(deployment),
       this.getAttributes(deployment)]).then(
         (results) => {
-          let forms = <any[]>results[0];
-          this.logger.info(this, "getFormsWithAttributes", "Forms", forms);
-          let attributes = <any[]>results[1];
-          this.logger.info(this, "getFormsWithAttributes", "Attributes", attributes);
+          let forms:Form[] = <Form[]>results[0];
+          let attributes:Attribute[] = <Attribute[]>results[1];
           for (let i = 0; i < forms.length; i++){
             let form:Form = forms[i];
             form.loadAttributes(attributes);
@@ -684,9 +681,6 @@ export class ApiService {
               if (value.input == 'upload') {
                 value.loadImage(images);
                 post.loadImage(images, value.value);
-              }
-              else if (value.input == 'location') {
-
               }
             }
           }

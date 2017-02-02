@@ -8,6 +8,13 @@
     max-width: 90%;
     img {
       width: 100%;
+      transition: opacity 1s;
+      &.lazy {
+        opacity: 0;
+      }
+      &.ng2-lazyloaded {
+        opacity: 1 !important;
+      }
     }
   }
 }

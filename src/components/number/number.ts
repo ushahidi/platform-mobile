@@ -2,20 +2,23 @@ import { Component, ViewChild } from '@angular/core';
 import { TextInput } from 'ionic-angular';
 import { FormGroup, FormGroupName, FormControl, FormControlName } from '@angular/forms';
 
+import { Value } from '../../models/value';
+import { Attribute } from '../../models/attribute';
+
 import { LoggerService } from '../../providers/logger-service';
 
 @Component({
   selector: 'field-number',
   templateUrl: 'number.html',
-  inputs: ['attribute', 'formGroup']
+  inputs: ['value', 'attribute', 'formGroup']
 })
 export class NumberComponent {
 
   formGroup: FormGroup;
-  attribute: any = {};
-  required: boolean = false;
+  attribute: Attribute = null;
+  value: Value = null;
   focused: boolean = false;
-  value: string = "";
+  text: string = "";
 
   @ViewChild('input') input: TextInput;
 
@@ -23,7 +26,10 @@ export class NumberComponent {
   }
 
   ngOnInit() {
-    this.logger.info(this, "Attribute", this.attribute);
+    this.logger.info(this, "Attribute", this.attribute, "Value", this.value);
+    if (this.value && this.value.value) {
+      this.text = this.value.value;
+    }
   }
 
   onFocus(event) {

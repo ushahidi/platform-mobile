@@ -143,6 +143,10 @@
                         {
                             "xml": "<feature name=\"IsDebug\"><param name=\"ios-package\" value=\"IsDebug\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"NetworkStatus\"><param name=\"ios-package\" value=\"CDVConnection\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -305,6 +309,9 @@
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
         "cordova-plugin-is-debug": {
+            "PACKAGE_NAME": "com.ushahidi.mobile"
+        },
+        "cordova-plugin-network-information": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         }
     },
@@ -764,6 +771,23 @@
             "clobbers": [
                 "cordova.plugins.IsDebug"
             ]
+        },
+        {
+            "id": "cordova-plugin-network-information.network",
+            "file": "plugins/cordova-plugin-network-information/www/network.js",
+            "pluginId": "cordova-plugin-network-information",
+            "clobbers": [
+                "navigator.connection",
+                "navigator.network.connection"
+            ]
+        },
+        {
+            "id": "cordova-plugin-network-information.Connection",
+            "file": "plugins/cordova-plugin-network-information/www/Connection.js",
+            "pluginId": "cordova-plugin-network-information",
+            "clobbers": [
+                "Connection"
+            ]
         }
     ],
     "plugin_metadata": {
@@ -791,6 +815,7 @@
         "cordova-plugin-geolocation": "2.4.1",
         "cordova-plugin-file": "4.3.1",
         "cordova-plugin-media-capture": "1.4.1",
-        "cordova-plugin-is-debug": "1.0.0"
+        "cordova-plugin-is-debug": "1.0.0",
+        "cordova-plugin-network-information": "1.3.1"
     }
 }

@@ -3,21 +3,24 @@ import { ActionSheetController, AlertController } from 'ionic-angular';
 import { MediaCapture } from 'ionic-native';
 import { FormGroup, FormGroupName, FormControl, FormControlName } from '@angular/forms';
 
+import { Value } from '../../models/value';
+import { Attribute } from '../../models/attribute';
+
 import { LoggerService } from '../../providers/logger-service';
 
 @Component({
   selector: 'field-video',
   templateUrl: 'video.html',
-  inputs: ['attribute', 'formGroup']
+  inputs: ['value', 'attribute', 'formGroup']
 })
 export class VideoComponent {
 
   formGroup: FormGroup;
-  attribute: any = {};
+  attribute: Attribute = null;
+  value: Value = null;
   //videoData: string = "/assets/images/placeholder-video.jpg";
   videoData: string = null;
   videoThumbail: string = null;
-  required: boolean = false;
 
   constructor(
     public logger:LoggerService,
@@ -26,8 +29,7 @@ export class VideoComponent {
   }
 
   ngOnInit() {
-    this.logger.info(this, "Attribute", this.attribute);
-    this.required = this.attribute.required == "true";
+    this.logger.info(this, "Attribute", this.attribute, "Value", this.value);
   }
 
   captureVideo() {

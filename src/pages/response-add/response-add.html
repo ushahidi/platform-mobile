@@ -7,7 +7,7 @@
     </ion-buttons>
     <ion-title *ngIf="form">{{form.name}}</ion-title>
     <ion-buttons end>
-      <button #submit ion-button icon-only (click)="postResponse($event)">
+      <button #submit ion-button icon-only (click)="onSubmit($event)">
         <ion-icon ios="ios-send" md="md-send"></ion-icon>
       </button>
     </ion-buttons>
@@ -15,22 +15,22 @@
 </ion-header>
 <ion-content [style.border-left-color]="color" class="page-response-add">
   <div *ngIf="form && formGroup">
-    <form [formGroup]="formGroup" (ngSubmit)="postResponse()">
+    <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
       <ion-list>
         <div padding-bottom *ngFor="let attribute of form.attributes">
-          <field-checkbox [attribute]="attribute" [formGroup]="formGroup" *ngIf="attribute.input == 'checkbox'"></field-checkbox>
-          <field-checkboxes [attribute]="attribute" [formGroup]="formGroup" *ngIf="attribute.input == 'checkboxes'"></field-checkboxes>
-          <field-date [attribute]="attribute" [formGroup]="formGroup" *ngIf="attribute.input == 'date'"></field-date>
-          <field-datetime [attribute]="attribute" [formGroup]="formGroup" *ngIf="attribute.input == 'datetime'"></field-datetime>
-          <field-location [attribute]="attribute" [formGroup]="formGroup" *ngIf="attribute.input == 'location'" (changeLocation)="changeLocation($event)"></field-location>
-          <field-number [attribute]="attribute" [formGroup]="formGroup" *ngIf="attribute.input == 'number'"></field-number>
-          <field-radio [attribute]="attribute" [formGroup]="formGroup" *ngIf="attribute.input == 'radio'"></field-radio>
-          <field-select [attribute]="attribute" [formGroup]="formGroup" *ngIf="attribute.input == 'select'"></field-select>
-          <field-text [attribute]="attribute" [formGroup]="formGroup" *ngIf="attribute.input == 'text'"></field-text>
-          <field-textarea [attribute]="attribute" [formGroup]="formGroup" *ngIf="attribute.input == 'textarea'"></field-textarea>
-          <field-image [attribute]="attribute" [formGroup]="formGroup" *ngIf="attribute.input == 'upload'"></field-image>
-          <field-text [attribute]="attribute" [formGroup]="formGroup" *ngIf="attribute.input == 'varchar'"></field-text>
-          <field-video [attribute]="attribute" [formGroup]="formGroup" *ngIf="attribute.input == 'video'"></field-video>
+          <field-checkbox [value]="values[attribute.key]" [attribute]="attribute" [formGroup]="formGroup" *ngIf="attribute.input == 'checkbox'"></field-checkbox>
+          <field-checkboxes [value]="values[attribute.key]" [attribute]="attribute" [formGroup]="formGroup" *ngIf="attribute.input == 'checkboxes'"></field-checkboxes>
+          <field-date [value]="values[attribute.key]" [attribute]="attribute" [formGroup]="formGroup" *ngIf="attribute.input == 'date'"></field-date>
+          <field-datetime [value]="values[attribute.key]" [attribute]="attribute" [formGroup]="formGroup" *ngIf="attribute.input == 'datetime'"></field-datetime>
+          <field-location [value]="values[attribute.key]" [attribute]="attribute" [formGroup]="formGroup" *ngIf="attribute.input == 'location'" (changeLocation)="changeLocation($event)"></field-location>
+          <field-number [value]="values[attribute.key]" [attribute]="attribute" [formGroup]="formGroup" *ngIf="attribute.input == 'number'"></field-number>
+          <field-radio [value]="values[attribute.key]" [attribute]="attribute" [formGroup]="formGroup" *ngIf="attribute.input == 'radio'"></field-radio>
+          <field-select [value]="values[attribute.key]" [attribute]="attribute" [formGroup]="formGroup" *ngIf="attribute.input == 'select'"></field-select>
+          <field-text [value]="values[attribute.key]" [attribute]="attribute" [formGroup]="formGroup" *ngIf="attribute.input == 'text'"></field-text>
+          <field-textarea [value]="values[attribute.key]" [attribute]="attribute" [formGroup]="formGroup" *ngIf="attribute.input == 'textarea'"></field-textarea>
+          <field-image [value]="values[attribute.key]" [attribute]="attribute" [formGroup]="formGroup" *ngIf="attribute.input == 'upload'"></field-image>
+          <field-text [value]="values[attribute.key]" [attribute]="attribute" [formGroup]="formGroup" *ngIf="attribute.input == 'varchar'"></field-text>
+          <field-video [value]="values[attribute.key]" [attribute]="attribute" [formGroup]="formGroup" *ngIf="attribute.input == 'video'"></field-video>
         </div>
       </ion-list>
     </form>

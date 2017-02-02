@@ -1,7 +1,7 @@
 {
     "libz.dylib": 2,
     "libc++.dylib": 1,
-    "SystemConfiguration.framework": 3,
+    "SystemConfiguration.framework": 4,
     "Security.framework": 2,
     "MessageUI.framework": 2,
     "CoreData.framework": 2,
@@ -17,5 +17,6 @@
     "libz.tbd": 1,
     "OpenGLES.framework": 1,
     "QuartzCore.framework": 1,
-    "UIKit.framework": 1
+    "UIKit.framework": 1,
+    "CoreTelephony.framework": 1
 }

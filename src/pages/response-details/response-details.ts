@@ -3,7 +3,7 @@ import { Platform, NavParams, Button, Events,
   NavController, ViewController, LoadingController, ToastController, AlertController, ModalController, ActionSheetController  } from 'ionic-angular';
 
 import { BasePage } from '../../pages/base-page/base-page';
-import { ResponseEditPage } from '../../pages/response-edit/response-edit';
+import { ResponseAddPage } from '../../pages/response-add/response-add';
 
 import { ApiService } from '../../providers/api-service';
 import { LoggerService } from '../../providers/logger-service';
@@ -24,13 +24,14 @@ import { PLACEHOLDER_USER, PLACEHOLDER_NAME } from '../../helpers/constants';
   selector: 'page-response-details',
   templateUrl: 'response-details.html',
   providers: [ ApiService, DatabaseService, LoggerService ],
-  entryComponents:[ ResponseEditPage ]
+  entryComponents:[ ResponseAddPage ]
 })
 export class ResponseDetailsPage extends BasePage {
 
   color: string = "#cccccc";
   deployment: Deployment = null;
   post: Post = null;
+  form: Form = null;
   userName:string = PLACEHOLDER_NAME;
   userImage:string = PLACEHOLDER_USER;
 
@@ -60,16 +61,17 @@ export class ResponseDetailsPage extends BasePage {
     this.deployment = this.navParams.get("deployment");
     this.post = this.navParams.get("post");
     this.color = this.post.color;
-    this.loadUpdates(null, true);
+    this.loadUpdates();
   }
 
   ionViewDidEnter() {
     this.logger.info(this, "ionViewDidEnter");
   }
 
-  loadUpdates(event:any, cache:boolean=true) {
+  loadUpdates(event:any=null, cache:boolean=true) {
     this.logger.info(this, "loadUpdates");
     let promises = [
+      this.loadForm(cache),
       this.loadValues(cache)];
     Promise.all(promises).then(
       (done) => {
@@ -84,6 +86,22 @@ export class ResponseDetailsPage extends BasePage {
           event.complete();
         }
       });
+  }
+
+  loadForm(cache:boolean=true) {
+    if (cache && this.form && this.form.attributes) {
+      this.logger.info(this, "loadForm", "Cache", this.form);
+    }
+    else {
+      return this.database.getFormWithAttributes(this.deployment, this.post.form_id).then(
+        (results) => {
+          this.logger.info(this, "loadForm", "Database", results);
+          this.form = <Form>results;
+        },
+        (error) => {
+          this.logger.error(this, "loadForm", "Database", error);
+        });
+    }
   }
 
   loadValues(cache:boolean=true) {
@@ -169,13 +187,13 @@ export class ResponseDetailsPage extends BasePage {
 
   editResponse(event:any) {
     this.logger.info(this, "editResponse");
-    this.showToast('Edit Not Implemented');
-    // let modal = this.showModal(ResponseEditPage,
-    //   { deployment: this.deployment,
-    //     post: this.post });
-    // modal.onDidDismiss(data => {
-    //   this.logger.info(this, "editResponse", "Modal", data);
-    // });
+    let modal = this.showModal(ResponseAddPage,
+      { deployment: this.deployment,
+        post: this.post,
+        form: this.form });
+    modal.onDidDismiss(data => {
+      this.logger.info(this, "editResponse", "Modal", data);
+    });
   }
 
   addToCollection(post:Post, collection:Collection=null) {

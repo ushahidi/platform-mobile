@@ -2,43 +2,39 @@ import { Component, ViewChild } from '@angular/core';
 import { Checkbox } from 'ionic-angular';
 import { FormGroup, FormGroupName, FormControl, FormControlName } from '@angular/forms';
 
+import { Value } from '../../models/value';
+import { Attribute } from '../../models/attribute';
+
 import { LoggerService } from '../../providers/logger-service';
 
 @Component({
   selector: 'field-checkbox',
   templateUrl: 'checkbox.html',
-  inputs: ['attribute', 'formGroup', 'formGroupChild']
+  inputs: ['value', 'attribute', 'formGroup']
 })
 export class CheckboxComponent {
 
   formGroup: FormGroup;
-  formGroupChild: FormGroup;
-  attribute: any = {};
-  options: any = [];
-  values: any = {};
-  required: boolean = false;
+  attribute: Attribute = null;
+  value: Value = null;
+  options: string[] = [];
+  values: {} = {};
 
   constructor(public logger:LoggerService) {
   }
 
   ngOnInit() {
-    this.logger.info(this, "Attribute", this.attribute);
-    if (this.attribute.options) {
-      if (Array.isArray(this.attribute.options)) {
-        this.options = this.attribute.options;
-      }
-      else {
-        this.options = this.attribute.options.split(',');
-      }
-    }
-    else {
-      this.options = [];
-    }
+    this.logger.info(this, "Attribute", this.attribute, "Value", this.value);
+    this.options = this.attribute.getOptions();
     for (let index in this.options) {
       let option = this.options[index];
-      this.values[option] = false;
+      if (this.value.value == option) {
+        this.values[option] = true;
+      }
+      else {
+        this.values[option] = false;
+      }
     }
-    this.required = this.attribute.required == "true";
   }
 
   hasValue() {
