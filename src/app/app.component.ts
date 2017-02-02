@@ -1,5 +1,5 @@
 import { Component, ViewChild, NgZone } from '@angular/core';
-import { Nav, Platform, ModalController, LoadingController, ToastController, AlertController, MenuController } from 'ionic-angular';
+import { Events, Nav, Platform, ModalController, LoadingController, ToastController, AlertController, MenuController } from 'ionic-angular';
 import { StatusBar, Splashscreen, IsDebug } from 'ionic-native';
 
 import { HomePage } from '../pages/home/home';
@@ -38,13 +38,14 @@ export class MyApp {
 
   @ViewChild(Nav)
   nav: Nav;
-  zone: any;
+  zone: NgZone = null;
   rootPage: any = null;
   deployment : Deployment = null;
   deployments: Deployment[] = null;
 
   constructor(
     zone: NgZone,
+    public events:Events,
     public platform: Platform,
     public api:ApiService,
     public logger:LoggerService,

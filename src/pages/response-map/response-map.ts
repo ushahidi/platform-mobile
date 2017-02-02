@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 import { Platform, NavParams,
   NavController, ViewController, LoadingController, ToastController, AlertController, ModalController, ActionSheetController  } from 'ionic-angular';
 import { GoogleMap, GoogleMapsEvent, GoogleMapsLatLng, CameraPosition, GoogleMapsMarkerOptions, GoogleMapsMarker } from 'ionic-native';
@@ -19,9 +19,10 @@ export class ResponseMapPage extends BasePage {
   map: GoogleMap = null;
 
   constructor(
-    public platform:Platform,
     public logger:LoggerService,
     public navParams: NavParams,
+    public zone: NgZone,
+    public platform:Platform,
     public navController:NavController,
     public viewController:ViewController,
     public modalController:ModalController,
@@ -29,14 +30,16 @@ export class ResponseMapPage extends BasePage {
     public alertController:AlertController,
     public loadingController:LoadingController,
     public actionController:ActionSheetController) {
-      super(navController, viewController, modalController, toastController, alertController, loadingController, actionController);
+      super(zone, platform, navController, viewController, modalController, toastController, alertController, loadingController, actionController);
     }
 
   ionViewDidLoad() {
+    super.ionViewDidLoad();
     this.logger.info(this, 'ionViewDidLoad');
   }
 
   ionViewWillEnter() {
+    super.ionViewWillEnter();
     this.logger.info(this, "ionViewWillEnter");
     this.latitude = this.navParams.get("latitude");
     this.longitude = this.navParams.get("longitude");

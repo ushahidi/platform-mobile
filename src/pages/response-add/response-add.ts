@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, NgZone } from '@angular/core';
 import { Platform, NavParams, Button,
   NavController, ViewController, LoadingController, ToastController, AlertController, ModalController, ActionSheetController  } from 'ionic-angular';
 import { FormBuilder, FormGroup, FormGroupName, FormControl, Validators } from '@angular/forms';
@@ -45,11 +45,12 @@ export class ResponseAddPage extends BasePage {
   color: string = "#cccccc";
 
   constructor(
-    public platform:Platform,
     public api:ApiService,
     public logger:LoggerService,
     public database:DatabaseService,
     public navParams: NavParams,
+    public zone: NgZone,
+    public platform:Platform,
     public navController:NavController,
     public viewController:ViewController,
     public modalController:ModalController,
@@ -58,10 +59,11 @@ export class ResponseAddPage extends BasePage {
     public loadingController:LoadingController,
     public actionController:ActionSheetController,
     public formBuilder: FormBuilder) {
-      super(navController, viewController, modalController, toastController, alertController, loadingController, actionController);
+      super(zone, platform, navController, viewController, modalController, toastController, alertController, loadingController, actionController);
   }
 
   ionViewDidLoad() {
+    super.ionViewDidLoad();
     this.logger.info(this, 'ionViewDidLoad');
     this.deployment = <Deployment>this.navParams.get("deployment");
     this.form = <Form>this.navParams.get("form");
@@ -73,11 +75,8 @@ export class ResponseAddPage extends BasePage {
   }
 
   ionViewWillEnter() {
+    super.ionViewWillEnter();
     this.logger.info(this, "ionViewWillEnter");
-  }
-
-  ionViewDidEnter() {
-    this.logger.info(this, "ionViewDidEnter");
   }
 
   loadUpdates(event:any=null) {

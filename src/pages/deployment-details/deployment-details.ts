@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 import { Platform, NavParams,
   NavController, ViewController, LoadingController, ToastController, AlertController, ModalController, ActionSheetController } from 'ionic-angular';
 import { StatusBar } from 'ionic-native';
@@ -34,11 +34,12 @@ export class DeploymentDetailsPage extends BasePage {
   placeholder: string = PLACEHOLDER_PHOTO;
 
   constructor(
-    public platform:Platform,
     public api:ApiService,
     public logger:LoggerService,
     public database:DatabaseService,
     public navParams: NavParams,
+    public zone: NgZone,
+    public platform:Platform,
     public navController:NavController,
     public viewController:ViewController,
     public modalController:ModalController,
@@ -46,14 +47,16 @@ export class DeploymentDetailsPage extends BasePage {
     public alertController:AlertController,
     public loadingController:LoadingController,
     public actionController:ActionSheetController) {
-      super(navController, viewController, modalController, toastController, alertController, loadingController, actionController);
+      super(zone, platform, navController, viewController, modalController, toastController, alertController, loadingController, actionController);
     }
 
     ionViewDidLoad() {
+      super.ionViewDidLoad();
       this.logger.info(this, "ionViewDidLoad");
     }
 
     ionViewWillEnter() {
+      super.ionViewWillEnter();
       this.logger.info(this, "ionViewWillEnter");
       this.platform.ready().then(() => {
         StatusBar.styleLightContent();
@@ -61,10 +64,6 @@ export class DeploymentDetailsPage extends BasePage {
       });
       this.deployment = this.navParams.get("deployment");
       this.loadUpdates(null, true);
-    }
-
-    ionViewDidEnter() {
-      this.logger.info(this, "ionViewDidEnter");
     }
 
     loadUpdates(event:any=null, cache:boolean=false) {

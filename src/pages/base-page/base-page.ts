@@ -1,16 +1,27 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, NgZone } from '@angular/core';
 import {
+  Content, Platform,
   Alert, AlertController,
   Toast, ToastController,
   Modal, ModalController,
   Loading, LoadingController,
   ActionSheet, ActionSheetController,
   NavController, ViewController } from 'ionic-angular';
-import { SocialSharing } from 'ionic-native';
+import { SocialSharing, Network } from 'ionic-native';
 
 export class BasePage {
 
+  zone: NgZone = null;
+  offline: boolean = false;
+  connection: any = null;
+  disconnection: any = null;
+
+  @ViewChild(Content)
+  content: Content;
+
   constructor(
+    zone: NgZone,
+    protected platform:Platform,
     protected navController:NavController,
     protected viewController:ViewController,
     protected modalController:ModalController,
@@ -18,7 +29,53 @@ export class BasePage {
     protected alertController:AlertController,
     protected loadingController:LoadingController,
     protected actionController:ActionSheetController) {
+    this.zone = zone;
+  }
 
+  ionViewDidLoad() {
+  }
+
+  ionViewWillEnter() {
+    this.connection = Network.onConnect().subscribe(() => {
+      console.log(`Network Connected ${Network.connection}`);
+      this.zone.run(() => {
+        this.offline = false;
+        this.resizeContent();
+      });
+      this.networkConnected(Network.connection);
+    });
+    this.disconnection = Network.onDisconnect().subscribe(() => {
+      console.log(`Network Disconnected`);
+      this.zone.run(() => {
+        this.offline = true;
+        this.resizeContent();
+      });
+      this.networkDisconnected();
+    });
+  }
+
+  ionViewDidEnter() {
+  }
+
+  ionViewWillLeave() {
+    if (this.connection) {
+      this.connection.unsubscribe();
+    }
+    if (this.disconnection) {
+      this.disconnection.unsubscribe();
+    }
+  }
+
+  ionViewDidLeave() {
+  }
+
+  ionViewWillUnload() {
+  }
+
+  networkConnected(type:string) {
+  }
+
+  networkDisconnected() {
   }
 
   showLoading(message:string):Loading {
@@ -91,6 +148,12 @@ export class BasePage {
 
   showShare(subject:string, message:string=null, file:string=null, url:string=null) {
     return SocialSharing.share(message, subject, file, url);
+  }
+
+  resizeContent(delay:number=100) {
+    setTimeout(() => {
+      this.content.resize();
+    }, delay);
   }
 
 }

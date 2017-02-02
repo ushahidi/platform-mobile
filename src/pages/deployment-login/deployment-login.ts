@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, NgZone } from '@angular/core';
 import { Platform, TextInput, Button, NavParams,
   NavController, ViewController, ModalController, LoadingController, ToastController, AlertController, ActionSheetController } from 'ionic-angular';
 import { StatusBar } from 'ionic-native';
@@ -35,11 +35,12 @@ export class DeploymentLoginPage extends BasePage {
   password: TextInput;
 
   constructor(
-    public platform:Platform,
     public api:ApiService,
     public logger:LoggerService,
     public database:DatabaseService,
     public navParams: NavParams,
+    public zone: NgZone,
+    public platform:Platform,
     public navController:NavController,
     public viewController:ViewController,
     public modalController:ModalController,
@@ -47,14 +48,16 @@ export class DeploymentLoginPage extends BasePage {
     public alertController:AlertController,
     public loadingController:LoadingController,
     public actionController:ActionSheetController) {
-      super(navController, viewController, modalController, toastController, alertController, loadingController, actionController);
+      super(zone, platform, navController, viewController, modalController, toastController, alertController, loadingController, actionController);
     }
 
     ionViewDidLoad() {
+      super.ionViewDidLoad();
       this.logger.info(this, 'ionViewDidLoad');
     }
 
     ionViewWillEnter() {
+      super.ionViewWillEnter();
       this.logger.info(this, "ionViewWillEnter");
       this.platform.ready().then(() => {
         StatusBar.styleLightContent();
@@ -75,10 +78,6 @@ export class DeploymentLoginPage extends BasePage {
         //TODO remove this later, hardcoded to speed up development
         this.password.value = "P4NpCNUqLTCnvJAQBBMX";
       }
-    }
-
-    ionViewDidEnter() {
-      this.logger.info(this, "ionViewDidEnter");
     }
 
     onCancel(event:any) {

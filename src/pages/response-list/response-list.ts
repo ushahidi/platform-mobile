@@ -1,5 +1,5 @@
-import { Component, ViewChild } from '@angular/core';
-import { Platform, NavParams, Content, Events,
+import { Component, NgZone } from '@angular/core';
+import { Platform, NavParams, Events,
   NavController, ViewController, LoadingController, ToastController, AlertController, ModalController, ActionSheetController } from 'ionic-angular';
 import { GoogleMap, GoogleMapsEvent, GoogleMapsLatLng, GoogleMapsLatLngBounds, CameraPosition, GoogleMapsMarkerOptions, GoogleMapsMarker } from 'ionic-native';
 
@@ -38,16 +38,14 @@ export class ResponseListPage extends BasePage {
   map: GoogleMap = null;
   view: string = 'list';
 
-  @ViewChild(Content)
-  content: Content;
-
   constructor(
-    public platform:Platform,
     public api:ApiService,
     public logger:LoggerService,
     public database:DatabaseService,
     public events:Events,
     public navParams:NavParams,
+    public zone: NgZone,
+    public platform:Platform,
     public navController:NavController,
     public viewController:ViewController,
     public modalController:ModalController,
@@ -55,10 +53,11 @@ export class ResponseListPage extends BasePage {
     public alertController:AlertController,
     public loadingController:LoadingController,
     public actionController:ActionSheetController) {
-      super(navController, viewController, modalController, toastController, alertController, loadingController, actionController);
+      super(zone, platform, navController, viewController, modalController, toastController, alertController, loadingController, actionController);
   }
 
   ionViewDidLoad() {
+    super.ionViewDidLoad();
     this.logger.info(this, 'ionViewDidLoad');
     this.events.subscribe('post:deleted', (post_id:number) => {
       this.logger.info(this, 'Events', 'post:deleted', post_id);
@@ -73,13 +72,10 @@ export class ResponseListPage extends BasePage {
   }
 
   ionViewWillEnter() {
+    super.ionViewWillEnter();
     this.logger.info(this, "ionViewWillEnter");
     this.deployment = this.navParams.get("deployment");
     this.loadUpdates(null, true);
-  }
-
-  ionViewDidEnter() {
-    this.logger.info(this, "ionViewDidEnter");
   }
 
   loadUpdates(event:any=null, cache:boolean=false) {
@@ -510,10 +506,4 @@ export class ResponseListPage extends BasePage {
       this.resizeContent();
   }
 
-  resizeContent(delay:number=100) {
-    this.logger.info(this, "resizeContent");
-    setTimeout(() => {
-      this.content.resize();
-    }, delay);
-  }
 }

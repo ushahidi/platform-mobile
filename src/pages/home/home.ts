@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 import { Platform, NavParams,
   NavController, ViewController, ModalController, LoadingController, ToastController, AlertController, ActionSheetController } from 'ionic-angular';
 import { StatusBar } from 'ionic-native';
@@ -22,11 +22,12 @@ import { Deployment } from '../../models/deployment';
 export class HomePage extends BasePage {
 
   constructor(
-    public platform:Platform,
     public api:ApiService,
     public logger:LoggerService,
     public database:DatabaseService,
     public navParams: NavParams,
+    public zone: NgZone,
+    public platform:Platform,
     public navController:NavController,
     public viewController:ViewController,
     public modalController:ModalController,
@@ -34,14 +35,16 @@ export class HomePage extends BasePage {
     public alertController:AlertController,
     public loadingController:LoadingController,
     public actionController:ActionSheetController) {
-      super(navController, viewController, modalController, toastController, alertController, loadingController, actionController);
+      super(zone, platform, navController, viewController, modalController, toastController, alertController, loadingController, actionController);
   }
 
-  ionViewLoaded() {
-    this.logger.info(this, "ionViewLoaded");
+  ionViewDidLoad() {
+    super.ionViewDidLoad();
+    this.logger.info(this, "ionViewDidLoad");
   }
 
   ionViewWillEnter() {
+    super.ionViewWillEnter();
     this.logger.info(this, "ionViewWillEnter");
     this.platform.ready().then(() => {
       StatusBar.styleDefault();

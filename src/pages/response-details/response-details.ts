@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, NgZone } from '@angular/core';
 import { Platform, NavParams, Button, Events,
   NavController, ViewController, LoadingController, ToastController, AlertController, ModalController, ActionSheetController  } from 'ionic-angular';
 
@@ -36,12 +36,13 @@ export class ResponseDetailsPage extends BasePage {
   userImage:string = PLACEHOLDER_USER;
 
   constructor(
-    public platform:Platform,
     public api:ApiService,
     public logger:LoggerService,
     public database:DatabaseService,
     public events:Events,
     public navParams:NavParams,
+    public zone: NgZone,
+    public platform:Platform,
     public navController:NavController,
     public viewController:ViewController,
     public modalController:ModalController,
@@ -49,23 +50,21 @@ export class ResponseDetailsPage extends BasePage {
     public alertController:AlertController,
     public loadingController:LoadingController,
     public actionController:ActionSheetController) {
-      super(navController, viewController, modalController, toastController, alertController, loadingController, actionController);
+      super(zone, platform, navController, viewController, modalController, toastController, alertController, loadingController, actionController);
   }
 
   ionViewDidLoad() {
+    super.ionViewDidLoad();
     this.logger.info(this, 'ionViewDidLoad');
   }
 
   ionViewWillEnter() {
+    super.ionViewWillEnter();
     this.logger.info(this, "ionViewWillEnter");
     this.deployment = this.navParams.get("deployment");
     this.post = this.navParams.get("post");
     this.color = this.post.color;
     this.loadUpdates();
-  }
-
-  ionViewDidEnter() {
-    this.logger.info(this, "ionViewDidEnter");
   }
 
   loadUpdates(event:any=null, cache:boolean=true) {

@@ -52,6 +52,9 @@
   </div>
 </ion-content>
 <ion-footer>
+  <ion-toolbar color="black" *ngIf="offline">
+    <p color="white" padding-left>Offline</p>
+  </ion-toolbar>
   <ion-toolbar color="dark" *ngIf="filter">
     <p color="white" padding-left>Filters applied</p>
     <ion-buttons end>
