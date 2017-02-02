@@ -18,6 +18,9 @@
   <ion-list *ngIf="post">
     <ion-item no-lines>
       <ion-row>
+        <ion-col class="pending" *ngIf="post.created == null">
+          <ion-badge text-uppercase color="black">Pending</ion-badge>
+        </ion-col>
         <ion-col width-10 class="status">
           <ion-icon ios="ios-globe" md="md-globe" color="grey" *ngIf="post.status=='published'"></ion-icon>
           <ion-icon ios="ios-lock" md="md-lock" color="grey" *ngIf="post.status=='draft'"></ion-icon>
