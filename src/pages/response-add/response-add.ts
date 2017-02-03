@@ -111,38 +111,90 @@ export class ResponseAddPage extends BasePage {
       let title = this.getTitle(this.formGroup.value);
       let description = this.getDescription(this.formGroup.value);
       let values = this.sanitizeValues(this.formGroup.value);
-      let loading = this.showLoading("Posting...");
-      this.api.createPost(this.deployment, this.form.id, title, description, values).then(
-        (resp) => {
-          this.logger.info(this, "onSubmit", resp);
-          loading.dismiss();
-          if (resp) {
-            let alert = this.alertController.create({
-              title: 'Post Successful',
-              subTitle: 'Your response has been posted!',
-              buttons: [{
-                text: 'Ok',
-                role: 'cancel',
-                handler: () => {
-                  this.viewController.dismiss();
-                }
-              }]
-            });
-            alert.present();
-          }
-          else {
-            this.showAlert('Post Failed', 'There was a problem posting your response.');
-          }
-        },
-        (error) => {
-          this.logger.error(this, "onSubmit", error);
-          loading.dismiss();
-          this.showAlert('Post Failed', error);
-        });
+      if (this.offline) {
+        this.savePost(title, description, values);
+      }
+      else {
+        this.uploadPost(title, description, values);
+      }
     }
     else {
       this.showAlert('Required Fields Missing', 'Please ensure all required fields are entered and try again.');
     }
+  }
+
+  savePost(title:string, description:string, values:any) {
+    let loading = this.showLoading("Saving...");
+    let post:Post = new Post();
+    post.id = -1;
+    post.deployment_id = this.deployment.id;
+    post.title = title;
+    post.description = description;
+    post.color = this.form.color;
+    post.created = new Date();
+    post.updated = new Date();
+    post.posted = new Date();
+    post.pending = true;
+    let location = this.getLocation(this.formGroup.value);
+    if (location) {
+      post.latitude = location.split(",")[0];
+      post.longitude = location.split(",")[1];
+    }
+    post.values = [];
+    for (let key of values) {
+      let item = values[key];
+      let value:Value = new Value();
+      value.deployment_id = this.deployment.id
+      value.post_id = post.id;
+      value.key = key;
+      value.value = item;
+      post.values.push(value);
+    }
+    this.database.savePost(this.deployment, post).then(
+      (saved) => {
+        this.logger.info(this, "onSubmit", "Saved", saved);
+        loading.dismiss();
+        let buttons = [{
+          text: 'Ok',
+          role: 'cancel',
+          handler: () => {
+            this.viewController.dismiss();
+          }
+        }];
+        this.showAlert('Save Successful', 'Your response has been saved!', buttons);
+      },
+      (error) => {
+        this.logger.error(this, "onSubmit", error);
+        loading.dismiss();
+        this.showAlert('Save Failed', error);
+      });
+  }
+
+  uploadPost(title:string, description:string, values:any) {
+    let loading = this.showLoading("Posting...");
+    this.api.createPost(this.deployment, this.form.id, title, description, values).then(
+      (resp) => {
+        this.logger.info(this, "onSubmit", "Posted", resp);
+        loading.dismiss();
+        if (resp) {
+          let buttons = [{
+            text: 'Ok',
+            role: 'cancel',
+            handler: () => {
+              this.viewController.dismiss();
+            }
+          }];
+          this.showAlert('Post Successful', 'Your response has been posted!', buttons);
+        }
+        else {
+          this.showAlert('Post Failed', 'There was a problem posting your response.');
+        }
+      },
+      (error) => {
+        this.logger.error(this, "onSubmit", error);
+        loading.dismiss();
+        this.showAlert('Post Failed', error);
+      });
   }
 
   loadPostValues() {
@@ -198,7 +250,7 @@ export class ResponseAddPage extends BasePage {
         let attribute:Attribute = this.form.attributes[index];
         if (attribute.input == 'location') {
           let validator: any = null;
-          if (attribute.required) {
+          if (attribute.required == true) {
             validator = Validators.required;
           }
           let formGroup = new FormGroup({
@@ -208,7 +260,7 @@ export class ResponseAddPage extends BasePage {
         }
         else if (attribute.input == 'checkbox' || attribute.input == 'checkboxes') {
           let validator : any = null;
-          if (attribute.required) {
+          if (attribute.required == true) {
             validator = Validators.required;
           }
           let formGroup = new FormGroup({}, validator);
@@ -220,7 +272,7 @@ export class ResponseAddPage extends BasePage {
         }
         else {
           let validators = [];
-          if (attribute.required) {
+          if (attribute.required == true) {
             validators.push(Validators.required);
           }
           this.formGroup.addControl(attribute.key, new FormControl('', validators));
@@ -255,6 +307,16 @@ export class ResponseAddPage extends BasePage {
     for (let index in this.form.attributes) {
       let attribute = this.form.attributes[index];
       if (attribute.type == 'description') {
+        return values[attribute.key];
+      }
+    }
+    return null;
+  }
+
+  getLocation(values:any) {
+    for (let index in this.form.attributes) {
+      let attribute = this.form.attributes[index];
+      if (attribute.type == 'location') {
         return values[attribute.key];
       }
     }

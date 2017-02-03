@@ -39,4 +39,5 @@ export class CardComponent {
     this.logger.info(this, "onMenuSelected");
     this.menuSelected.emit();
   }
+
 }
