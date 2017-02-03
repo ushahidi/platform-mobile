@@ -156,4 +156,8 @@ export class BasePage {
     }, delay);
   }
 
+  showOfflineAlert() {
+    this.showAlert("Internet Offline", "There currently is no internet connection available.")
+  }
+
 }

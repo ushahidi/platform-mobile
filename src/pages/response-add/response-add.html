@@ -7,7 +7,10 @@
     </ion-buttons>
     <ion-title *ngIf="form">{{form.name}}</ion-title>
     <ion-buttons end>
-      <button #submit ion-button icon-only (click)="onSubmit($event)">
+      <button #submit ion-button icon-only *ngIf="offline == true" (click)="onSubmit($event)">
+        <ion-icon ios="ios-save" md="md-save"></ion-icon>
+      </button>
+      <button #submit ion-button icon-only *ngIf="offline == false" (click)="onSubmit($event)">
         <ion-icon ios="ios-send" md="md-send"></ion-icon>
       </button>
     </ion-buttons>
@@ -36,3 +39,8 @@
     </form>
   </div>
 </ion-content>
+<ion-footer>
+  <ion-toolbar color="black" *ngIf="offline">
+    <p color="white" padding-left tappable (click)="showOfflineAlert()">Offline</p>
+  </ion-toolbar>
+</ion-footer>

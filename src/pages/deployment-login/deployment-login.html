@@ -29,3 +29,8 @@
           [disabled]="username.value.length == 0 || password.value.length == 0">Log in</button>
   </div>
 </ion-content>
+<ion-footer>
+  <ion-toolbar color="black" *ngIf="offline">
+    <p color="white" padding-left tappable (click)="showOfflineAlert()">Offline</p>
+  </ion-toolbar>
+</ion-footer>
