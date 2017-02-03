@@ -250,7 +250,7 @@ export class ResponseListPage extends BasePage {
         handler:() => this.shareResponse(post)
       });
     }
-    if (post.can_update) {
+    if (this.offline == false && post.can_update) {
       buttons.push({
          text: 'Edit',
          handler:() => this.editResponse(post)
@@ -274,7 +274,7 @@ export class ResponseListPage extends BasePage {
         });
       }
     }
-    if (post.can_delete) {
+    if (this.offline == false && post.can_delete) {
       buttons.push({
         text: 'Delete',
         role: 'destructive',

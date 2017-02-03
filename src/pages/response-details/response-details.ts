@@ -129,7 +129,7 @@ export class ResponseDetailsPage extends BasePage {
          handler:() => this.shareResponse(this.post)
        });
     }
-    if (this.post.can_update) {
+    if (this.offline == false && this.post.can_update) {
       buttons.push({
         text: 'Edit',
         handler:() => this.editResponse(this.post)
@@ -153,7 +153,7 @@ export class ResponseDetailsPage extends BasePage {
         });
       }
     }
-    if (this.post.can_delete) {
+    if (this.offline == false && this.post.can_delete) {
       buttons.push({
        text: 'Delete',
        role: 'destructive',

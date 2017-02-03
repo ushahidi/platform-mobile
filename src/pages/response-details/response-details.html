@@ -2,9 +2,6 @@
   <ion-navbar color="dark">
     <ion-title *ngIf="post">{{post.form_name}}</ion-title>
     <ion-buttons end>
-      <button ion-button icon-only (click)="editResponse($event)">
-        <ion-icon ios="ios-create-outline" md="md-create"></ion-icon>
-      </button>
       <button ion-button icon-only (click)="showOptions($event)">
         <ion-icon ios="ios-more" md="md-more"></ion-icon>
       </button>
