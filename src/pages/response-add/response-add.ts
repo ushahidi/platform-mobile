@@ -107,15 +107,17 @@ export class ResponseAddPage extends BasePage {
   onSubmit(event:any=null) {
     this.logger.info(this, "onSubmit");
     if (this.formGroup.valid) {
-      let host = this.deployment.url;
       let title = this.getTitle(this.formGroup.value);
       let description = this.getDescription(this.formGroup.value);
       let values = this.sanitizeValues(this.formGroup.value);
       if (this.offline) {
         this.savePost(title, description, values);
       }
+      else if (this.post.id > 0) {
+        this.updatePost(this.post, values);
+      }
       else {
-        this.uploadPost(title, description, values);
+        this.createPost(title, description, values);
       }
     }
     else {
@@ -124,35 +126,23 @@ export class ResponseAddPage extends BasePage {
   }
 
   savePost(title:string, description:string, values:any) {
+    this.logger.info(this, "savePost", title, description, values);
     let loading = this.showLoading("Saving...");
-    let post:Post = new Post();
-    post.id = -1;
-    post.deployment_id = this.deployment.id;
-    post.title = title;
-    post.description = description;
-    post.color = this.form.color;
-    post.created = new Date();
-    post.updated = new Date();
-    post.posted = new Date();
-    post.pending = true;
+    this.post.pending = true;
+    this.post.title = title;
+    this.post.description = description;
     let location = this.getLocation(this.formGroup.value);
     if (location) {
-      post.latitude = location.split(",")[0];
-      post.longitude = location.split(",")[1];
+      this.post.latitude = location.split(",")[0];
+      this.post.longitude = location.split(",")[1];
     }
-    post.values = [];
-    for (let key of values) {
-      let item = values[key];
-      let value:Value = new Value();
-      value.deployment_id = this.deployment.id
-      value.post_id = post.id;
-      value.key = key;
-      value.value = item;
-      post.values.push(value);
+    for (let i = 0; i < this.post.values.length; i++) {
+      let value:Value = this.post.values[i];
+      value.value = values[value.key];
     }
-    this.database.savePost(this.deployment, post).then(
+    this.database.savePost(this.deployment, this.post).then(
       (saved) => {
-        this.logger.info(this, "onSubmit", "Saved", saved);
+        this.logger.info(this, "savePost", "Saved", saved);
         loading.dismiss();
         let buttons = [{
           text: 'Ok',
@@ -164,17 +154,18 @@ export class ResponseAddPage extends BasePage {
         this.showAlert('Save Successful', 'Your response has been saved!', buttons);
       },
       (error) => {
-        this.logger.error(this, "onSubmit", error);
+        this.logger.error(this, "savePost", error);
         loading.dismiss();
         this.showAlert('Save Failed', error);
       });
   }
 
-  uploadPost(title:string, description:string, values:any) {
+  createPost(title:string, description:string, values:any) {
+    this.logger.info(this, "createPost", title, description, values);
     let loading = this.showLoading("Posting...");
     this.api.createPost(this.deployment, this.form.id, title, description, values).then(
       (resp) => {
-        this.logger.info(this, "onSubmit", "Posted", resp);
+        this.logger.info(this, "createPost", "Posted", resp);
         loading.dismiss();
         if (resp) {
           let buttons = [{
@@ -191,9 +182,37 @@ export class ResponseAddPage extends BasePage {
         }
       },
       (error) => {
-        this.logger.error(this, "onSubmit", error);
+        this.logger.error(this, "createPost", error);
         loading.dismiss();
         this.showAlert('Post Failed', error);
+      });
+  }
+
+  updatePost(post:Post, values:any) {
+    this.logger.info(this, "updatePost", values);
+    let loading = this.showLoading("Updating...");
+    this.api.updatePost(this.deployment, post, values).then(
+      (success) => {
+        this.logger.info(this, "updatePost", "Posted", success);
+        loading.dismiss();
+        if (success) {
+          let buttons = [{
+            text: 'Ok',
+            role: 'cancel',
+            handler: () => {
+              this.viewController.dismiss();
+            }
+          }];
+          this.showAlert('Update Successful', 'Your response has been updated!', buttons);
+        }
+        else {
+          this.showAlert('Update Failed', 'There was a problem updating your response.');
+        }
+      },
+      (error) => {
+        this.logger.error(this, "updatePost", error);
+        loading.dismiss();
+        this.showAlert('Update Failed', error);
       });
   }
 
@@ -201,7 +220,15 @@ export class ResponseAddPage extends BasePage {
     this.logger.info(this, "loadPostValues");
     if (this.post == null) {
       this.post = new Post();
+      this.database.getPostLowestID().then(id => {
+        this.post.id = Math.min(id, -1);
+      });
       this.post.deployment_id = this.deployment.id;
+      this.post.form_id = this.form.id;
+      this.post.color = this.form.color;
+      this.post.posted = new Date();
+      this.post.created = new Date();
+      this.post.updated = new Date();
       this.post.values = [];
       for (let index in this.form.attributes) {
         let attribute:Attribute = this.form.attributes[index];

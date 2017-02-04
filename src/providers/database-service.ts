@@ -387,15 +387,34 @@ export class DatabaseService {
             reject(error);
           });
       }
-      // else {
-      //   this.logger.error(this, "saveModel", "Failed", "Missing Keys");
-      //   reject('Missing Keys');
-      // }
     });
   }
 
   removeModel<M extends Model>(model:M, where:any) {
     return this.executeDelete(model.getTable(), where);
+  }
+
+  getMinium<M extends Model>(type:M, column:string) : Promise<number> {
+    return new Promise((resolve, reject) => {
+      this.openDatabase().then((database:SQLite) => {
+        let statement = `SELECT MIN(${column}) as value FROM ${type.getTable()}`;
+        database.executeSql(statement, []).then(
+          (data) => {
+            this.logger.info(this, "getMinium", type.getTable(), column, data);
+            if (data.rows && data.rows.length > 0) {
+              let row = data.rows.item(0);
+              resolve(row.value);
+            }
+            else {
+              resolve(0);
+            }
+          },
+          (error) => {
+            this.logger.error(this, "executeSelect", "Failed", statement, error);
+            reject(JSON.stringify(error));
+          });
+      });
+    });
   }
 
   saveDeployment(deployment:Deployment) {
@@ -484,6 +503,10 @@ export class DatabaseService {
       deployment_id: deployment.id,
       id: post.id };
     return this.removeModel<Post>(new Post(), where);
+  }
+
+  getPostLowestID() : Promise<number> {
+    return this.getMinium<Post>(new Post(), "id");
   }
 
   getImages(deployment:Deployment) : Promise<Image[]> {
