@@ -107,17 +107,26 @@ export class ResponseAddPage extends BasePage {
   onSubmit(event:any=null) {
     this.logger.info(this, "onSubmit");
     if (this.formGroup.valid) {
-      let title = this.getTitle(this.formGroup.value);
-      let description = this.getDescription(this.formGroup.value);
+      this.post.title = this.getTitle(this.formGroup.value);
+      this.post.description = this.getDescription(this.formGroup.value);
+      let location = this.getLocation(this.formGroup.value);
+      if (location) {
+        this.post.latitude = location.split(",")[0];
+        this.post.longitude = location.split(",")[1];
+      }
       let values = this.sanitizeValues(this.formGroup.value);
+      for (let i = 0; i < this.post.values.length; i++) {
+        let value:Value = this.post.values[i];
+        value.value = values[value.key];
+      }
       if (this.offline) {
-        this.savePost(title, description, values);
+        this.savePost(this.post);
       }
       else if (this.post.id > 0) {
-        this.updatePost(this.post, values);
+        this.updatePost(this.post);
       }
       else {
-        this.createPost(title, description, values);
+        this.createPost(this.post);
       }
     }
     else {
@@ -125,22 +134,11 @@ export class ResponseAddPage extends BasePage {
     }
   }
 
-  savePost(title:string, description:string, values:any) {
-    this.logger.info(this, "savePost", title, description, values);
+  savePost(post:Post) {
+    this.logger.info(this, "savePost", post);
     let loading = this.showLoading("Saving...");
-    this.post.pending = true;
-    this.post.title = title;
-    this.post.description = description;
-    let location = this.getLocation(this.formGroup.value);
-    if (location) {
-      this.post.latitude = location.split(",")[0];
-      this.post.longitude = location.split(",")[1];
-    }
-    for (let i = 0; i < this.post.values.length; i++) {
-      let value:Value = this.post.values[i];
-      value.value = values[value.key];
-    }
-    this.database.savePost(this.deployment, this.post).then(
+    post.pending = true;
+    this.database.savePost(this.deployment, post).then(
       (saved) => {
         this.logger.info(this, "savePost", "Saved", saved);
         loading.dismiss();
@@ -160,26 +158,24 @@ export class ResponseAddPage extends BasePage {
       });
   }
 
-  createPost(title:string, description:string, values:any) {
-    this.logger.info(this, "createPost", title, description, values);
+  createPost(post:Post) {
+    this.logger.info(this, "createPost", post);
     let loading = this.showLoading("Posting...");
-    this.api.createPost(this.deployment, this.form.id, title, description, values).then(
-      (resp) => {
-        this.logger.info(this, "createPost", "Posted", resp);
-        loading.dismiss();
-        if (resp) {
-          let buttons = [{
-            text: 'Ok',
-            role: 'cancel',
-            handler: () => {
-              this.viewController.dismiss();
-            }
-          }];
-          this.showAlert('Post Successful', 'Your response has been posted!', buttons);
-        }
-        else {
-          this.showAlert('Post Failed', 'There was a problem posting your response.');
-        }
+    this.api.createPost(this.deployment, post).then(
+      (posted) => {
+        this.logger.info(this, "createPost", "Posted", posted);
+        this.database.savePost(this.deployment, post).then(
+          (saved) => {
+            loading.dismiss();
+            let buttons = [{
+              text: 'Ok',
+              role: 'cancel',
+              handler: () => {
+                this.viewController.dismiss();
+              }
+            }];
+            this.showAlert('Post Successful', 'Your response has been posted!', buttons);
+        });
       },
       (error) => {
         this.logger.error(this, "createPost", error);
@@ -188,10 +184,10 @@ export class ResponseAddPage extends BasePage {
       });
   }
 
-  updatePost(post:Post, values:any) {
-    this.logger.info(this, "updatePost", values);
+  updatePost(post:Post) {
+    this.logger.info(this, "updatePost", post);
     let loading = this.showLoading("Updating...");
-    this.api.updatePost(this.deployment, post, values).then(
+    this.api.updatePost(this.deployment, post).then(
       (success) => {
         this.logger.info(this, "updatePost", "Posted", success);
         loading.dismiss();
