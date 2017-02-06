@@ -505,7 +505,7 @@ export class DatabaseService {
     return this.removeModel<Post>(new Post(), where);
   }
 
-  getPostLowestID() : Promise<number> {
+  getPostsLowestID() : Promise<number> {
     return this.getMinium<Post>(new Post(), "id");
   }
 

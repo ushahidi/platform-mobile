@@ -216,7 +216,7 @@ export class ResponseAddPage extends BasePage {
     this.logger.info(this, "loadPostValues");
     if (this.post == null) {
       this.post = new Post();
-      this.database.getPostLowestID().then(id => {
+      this.database.getPostsLowestID().then(id => {
         this.post.id = Math.min(id, -1);
       });
       this.post.deployment_id = this.deployment.id;
