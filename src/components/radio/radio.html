@@ -6,10 +6,10 @@
     </ion-label>
   </ion-item>
   <div [formGroup]="formGroup">
-    <ion-list no-lines radio-group #radioGroup [formControlName]="attribute.key">
+    <ion-list no-lines radio-group #radioGroup [formControlName]="attribute.key" *ngIf="options">
       <ion-item *ngFor="let option of options">
         <ion-label>{{option}}</ion-label>
-        <ion-radio color="blue" checked="{{option == text}}" [value]="option" (ionSelect)="radioChanged($event)"></ion-radio>
+        <ion-radio color="blue" [value]="option" (ionSelect)="radioChanged($event)"></ion-radio>
       </ion-item>
     </ion-list>
   </div>
