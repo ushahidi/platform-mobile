@@ -408,17 +408,22 @@ export class ApiService {
     });
   }
 
-  updatePost(deployment:Deployment, post:Post) {
+  updatePost(deployment:Deployment, post:Post, changes:{}=null) {
     return new Promise((resolve, reject) => {
       let api = `/api/v3/posts/${post.id}`;
       let url = deployment.url + api;
-      let values = {}
-      let params = {
-        form: { id: post.form_id },
-        title: post.title,
-        content: post.description,
-        values: values };
-      this.httpPut(url, deployment.access_token, params).then(
+      if (changes == null) {
+        let values = {}
+        for (let i = 0; i < post.values.length; i++) {
+          let value:Value = post.values[i];
+          values[value.key] = value.value;
+        }
+        changes = {
+          title: post.title,
+          content: post.description,
+          values: values };
+      }
+      this.httpPut(url, deployment.access_token, changes).then(
         (json) => {
           resolve(json);
         },

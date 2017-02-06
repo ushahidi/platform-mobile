@@ -229,8 +229,8 @@ export class ResponseDetailsPage extends BasePage {
   draftResponse(post:Post) {
     this.logger.info(this, "draftResponse");
     let loading = this.showLoading("Updating...");
-    post.status = "draft";
-    this.api.updatePost(this.deployment, post).then(
+    let changes = { status: "draft" };
+    this.api.updatePost(this.deployment, post, changes).then(
       (updated) => {
         post.status = "draft";
         this.database.savePost(this.deployment, post).then(saved => {
@@ -248,8 +248,8 @@ export class ResponseDetailsPage extends BasePage {
   archiveResponse(post:Post) {
     this.logger.info(this, "archiveResponse");
     let loading = this.showLoading("Archiving...");
-    post.status = "archived";
-    this.api.updatePost(this.deployment, post).then(
+    let changes = { status: "archived" };
+    this.api.updatePost(this.deployment, post, changes).then(
       (updated) => {
         post.status = "archived";
         this.database.savePost(this.deployment, post).then(saved => {
@@ -267,8 +267,8 @@ export class ResponseDetailsPage extends BasePage {
   publishResponse(post:Post) {
     this.logger.info(this, "publishResponse");
     let loading = this.showLoading("Publishing...");
-    post.status = "published";
-    this.api.updatePost(this.deployment, post).then(
+    let changes = { status: "published" };
+    this.api.updatePost(this.deployment, post, changes).then(
       (updated) => {
         post.status = "published";
         this.database.savePost(this.deployment, post).then(saved => {
