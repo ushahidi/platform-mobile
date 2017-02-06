@@ -21,7 +21,7 @@ function LocalStorageHandle(success, error, intent, operation, args) {
         var item = {};
         item = localStorage.getItem(reference);
         if (item === null) {
-            error(NativeStorageError.ITEM_NOT_FOUND);
+            error(new NativeStorageError(NativeStorageError.ITEM_NOT_FOUND,"JS",""));
             return;
         }
         try {
@@ -31,6 +31,19 @@ function LocalStorageHandle(success, error, intent, operation, args) {
         } catch (err) {
             error(new NativeStorageError(NativeStorageError.JSON_ERROR, "JS", err));
         }
+    } else if(operation === 'keys') {
+      const keys = [];
+      let key = localStorage.key(0);
+      if(!key) {
+        return success(keys);
+      }
+      let i = 0;
+      while(key) {
+        keys.push(key);
+        i++;
+        key = localStorage.key(i);
+      }
+      success(keys);
     }
 }
 module.exports = LocalStorageHandle;

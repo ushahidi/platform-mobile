@@ -65,23 +65,23 @@ public class EmailComposer extends CordovaPlugin {
 
     /**
      * Executes the request.
-     *
+     * <p>
      * This method is called from the WebView thread.
      * To do a non-trivial amount of work, use:
-     *     cordova.getThreadPool().execute(runnable);
-     *
+     * cordova.getThreadPool().execute(runnable);
+     * <p>
      * To run on the UI thread, use:
-     *     cordova.getActivity().runOnUiThread(runnable);
+     * cordova.getActivity().runOnUiThread(runnable);
      *
      * @param action   The action to execute.
      * @param args     The exec() arguments in JSON form.
      * @param callback The callback context used when calling
      *                 back into JavaScript.
-     * @return         Whether the action was valid.
+     * @return Whether the action was valid.
      */
     @Override
-    public boolean execute (String action, JSONArray args,
-                            CallbackContext callback) throws JSONException {
+    public boolean execute(String action, JSONArray args,
+                           CallbackContext callback) throws JSONException {
 
         this.command = callback;
 
@@ -91,7 +91,7 @@ public class EmailComposer extends CordovaPlugin {
         }
 
         if ("isAvailable".equalsIgnoreCase(action)) {
-            isAvailable(args.getString(0));
+            isAvailable();
             return true;
         }
 
@@ -101,18 +101,17 @@ public class EmailComposer extends CordovaPlugin {
     /**
      * Returns the application context.
      */
-    private Context getContext() { return cordova.getActivity(); }
+    private Context getContext() {
+        return cordova.getActivity();
+    }
 
     /**
      * Tells if the device has the capability to send emails.
-     *
-     * @param id
-     * The app id.
      */
-    private void isAvailable (final String id) {
+    private void isAvailable() {
         cordova.getThreadPool().execute(new Runnable() {
             public void run() {
-                boolean[] available = impl.canSendMail(id, getContext());
+                boolean[] available = impl.canSendMail(null, getContext());
                 List<PluginResult> messages = new ArrayList<PluginResult>();
 
                 messages.add(new PluginResult(PluginResult.Status.OK, available[0]));
@@ -120,8 +119,11 @@ public class EmailComposer extends CordovaPlugin {
 
                 PluginResult result = new PluginResult(
                         PluginResult.Status.OK, messages);
-
-                command.sendPluginResult(result);
+                if (available[0] && available[1]) {
+                    command.success("Can send emails");
+                } else {
+                    command.error("Can not send emails");
+                }
             }
         });
     }
@@ -129,20 +131,19 @@ public class EmailComposer extends CordovaPlugin {
     /**
      * Sends an intent to the email app.
      *
-     * @param args
-     * The email properties like subject or body
+     * @param args The email properties like subject or body
      * @throws JSONException
      */
-    private void open (JSONArray args) throws JSONException {
+    private void open(JSONArray args) throws JSONException {
         JSONObject props = args.getJSONObject(0);
-        String appId     = props.getString("app");
+        String appId = props.optString("app");
 
         if (!(impl.canSendMail(appId, getContext()))[0]) {
             LOG.i(LOG_TAG, "No client or account found for.");
             return;
         }
 
-        Intent draft  = impl.getDraftWithProperties(props, getContext());
+        Intent draft = impl.getDraftWithProperties(props, getContext());
         String header = props.optString("chooserHeader", "Open with");
 
         final Intent chooser = Intent.createChooser(draft, header);
@@ -159,12 +160,12 @@ public class EmailComposer extends CordovaPlugin {
      * Called when an activity you launched exits, giving you the reqCode you
      * started it with, the resCode it returned, and any additional data from it.
      *
-     * @param reqCode     The request code originally supplied to startActivityForResult(),
-     *                    allowing you to identify who this result came from.
-     * @param resCode     The integer result code returned by the child activity
-     *                    through its setResult().
-     * @param intent      An Intent, which can return result data to the caller
-     *                    (various data can be attached to Intent "extras").
+     * @param reqCode The request code originally supplied to startActivityForResult(),
+     *                allowing you to identify who this result came from.
+     * @param resCode The integer result code returned by the child activity
+     *                through its setResult().
+     * @param intent  An Intent, which can return result data to the caller
+     *                (various data can be attached to Intent "extras").
      */
     @Override
     public void onActivityResult(int reqCode, int resCode, Intent intent) {

@@ -9,8 +9,8 @@
   </ion-navbar>
 </ion-header>
 <ion-content class="page-deployment-login">
-  <div class="header">
-    <h4 *ngIf="deployment" text-center padding-top padding-bottom>{{deployment.name}}</h4>
+  <div class="header" *ngIf="deployment && deployment.name">
+    <h3 text-left padding-left padding-top padding-bottom>{{deployment.name}}</h3>
   </div>
   <div margin-bottom>
     <ion-item margin-bottom>

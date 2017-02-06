@@ -31,45 +31,11 @@
     <feature name="EmailComposer">
         <param name="ios-package" value="APPEmailComposer" />
     </feature>
+    <feature name="Geolocation">
+        <param name="ios-package" value="CDVLocation" />
+    </feature>
     <feature name="UniversalAnalytics">
         <param name="ios-package" value="UniversalAnalyticsPlugin" />
-    </feature>
-    <feature name="LongPressFix">
-        <param name="ios-package" value="LongPressFix" />
-        <param name="onload" value="true" />
-    </feature>
-    <feature name="NetworkActivityIndicator">
-        <param name="ios-package" value="NetworkActivityIndicator" />
-    </feature>
-    <feature name="SpinnerDialog">
-        <param name="ios-package" value="CDVSpinnerDialog" />
-    </feature>
-    <feature name="SplashScreen">
-        <param name="ios-package" value="CDVSplashScreen" />
-        <param name="onload" value="true" />
-    </feature>
-    <feature name="StatusBar">
-        <param name="ios-package" value="CDVStatusBar" />
-        <param name="onload" value="true" />
-    </feature>
-    <feature name="SocialSharing">
-        <param name="ios-package" value="SocialSharing" />
-        <param name="onload" value="true" />
-    </feature>
-    <feature name="SecureStorage">
-        <param name="ios-package" value="SecureStorage" />
-    </feature>
-    <feature name="NativeStorage">
-        <param name="ios-package" value="NativeStorage" />
-    </feature>
-    <feature name="SQLitePlugin">
-        <param name="ios-package" value="SQLitePlugin" />
-    </feature>
-    <feature name="IonicDeeplinkPlugin">
-        <param name="ios-package" onload="true" value="IonicDeeplinkPlugin" />
-    </feature>
-    <feature name="Keyboard">
-        <param name="ios-package" onload="true" value="IonicKeyboard" />
     </feature>
     <feature name="GoogleMaps">
         <param name="ios-package" value="GoogleMaps" />
@@ -106,21 +72,48 @@
     <feature name="TileOverlay">
         <param name="ios-package" value="TileOverlay" />
     </feature>
-    <feature name="Geolocation">
-        <param name="ios-package" value="CDVLocation" />
-    </feature>
-    <feature name="File">
-        <param name="ios-package" value="CDVFile" />
+    <feature name="LongPressFix">
+        <param name="ios-package" value="LongPressFix" />
         <param name="onload" value="true" />
-    </feature>
-    <feature name="Capture">
-        <param name="ios-package" value="CDVCapture" />
     </feature>
     <feature name="IsDebug">
         <param name="ios-package" value="IsDebug" />
     </feature>
+    <feature name="NativeStorage">
+        <param name="ios-package" value="NativeStorage" />
+    </feature>
     <feature name="NetworkStatus">
         <param name="ios-package" value="CDVConnection" />
+    </feature>
+    <feature name="NetworkActivityIndicator">
+        <param name="ios-package" value="NetworkActivityIndicator" />
+    </feature>
+    <feature name="SecureStorage">
+        <param name="ios-package" value="SecureStorage" />
+    </feature>
+    <feature name="SpinnerDialog">
+        <param name="ios-package" value="CDVSpinnerDialog" />
+    </feature>
+    <feature name="SplashScreen">
+        <param name="ios-package" value="CDVSplashScreen" />
+        <param name="onload" value="true" />
+    </feature>
+    <feature name="StatusBar">
+        <param name="ios-package" value="CDVStatusBar" />
+        <param name="onload" value="true" />
+    </feature>
+    <feature name="SocialSharing">
+        <param name="ios-package" value="SocialSharing" />
+        <param name="onload" value="true" />
+    </feature>
+    <feature name="SQLitePlugin">
+        <param name="ios-package" value="SQLitePlugin" />
+    </feature>
+    <feature name="IonicDeeplinkPlugin">
+        <param name="ios-package" onload="true" value="IonicDeeplinkPlugin" />
+    </feature>
+    <feature name="Keyboard">
+        <param name="ios-package" onload="true" value="IonicKeyboard" />
     </feature>
     <name>Ushahidi</name>
     <description>Ushahidi Mobile</description>
@@ -135,13 +128,9 @@
     <allow-intent href="geo:*" />
     <allow-navigation href="*" />
     <allow-navigation href="http://*/*" />
-    <allow-navigation href="http://localhost:8000" />
-    <allow-navigation href="http://192.168.0.16:8000" />
-    <allow-navigation href="http://192.168.57.1:8000" />
-    <allow-navigation href="http://192.168.0.21:8000" />
     <allow-navigation href="http://localhost:3000" />
+    <allow-navigation href="http://ionic.local/*" />
     <allow-navigation href="http://localhost:3001" />
-    <allow-navigation href="http://192.168.0.11:8000" />
     <icon src="resources/android/icon/drawable-xhdpi-icon.png" />
     <allow-intent href="itms:*" />
     <allow-intent href="itms-apps:*" />

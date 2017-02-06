@@ -2,7 +2,7 @@
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
         xmlns:android="http://schemas.android.com/apk/res/android"
         id="cordova-plugin-x-socialsharing"
-        version="5.1.3">
+        version="5.1.6">
 
   <name>SocialSharing</name>
 
@@ -61,7 +61,17 @@
       <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     </config-file>
 
+    <config-file target="AndroidManifest.xml" parent="/manifest/application">
+      <provider android:authorities="$PACKAGE_NAME.sharing.provider" android:exported="false" android:grantUriPermissions="true" android:name="nl.xservices.plugins.FileProvider">
+        <meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/sharing_paths" />
+      </provider>
+    </config-file>
+
     <source-file src="src/android/nl/xservices/plugins/SocialSharing.java" target-dir="src/nl/xservices/plugins"/>
+    <source-file src="src/android/nl/xservices/plugins/FileProvider.java" target-dir="src/nl/xservices/plugins"/>
+    <source-file src="src/android/res/xml/sharing_paths.xml" target-dir="res/xml"/>
+
+    <framework src="com.android.support:support-v4:24.1.1+" />
   </platform>
 
   <!-- wp8 -->
@@ -79,7 +89,7 @@
   <!-- windows -->
   <platform name="windows">
     <js-module src="src/windows/SocialSharingProxy.js" name="SocialSharingProxy">
-      <merges target="" />
+      <runs />
     </js-module>
   </platform>
 

@@ -1,10 +1,11 @@
 {
     "name": "cordova-plugin-nativestorage",
-    "version": "2.1.0",
+    "version": "2.2.1",
     "description": "Native storage of variables in Android, iOS and Windows",
     "author": "Gilles Callebaut <callebaut.gilles@gmail.com>",
     "contributors":[
-    {"name":"Alok Rajiv"}
+      {"name":"Alok Rajiv"},
+      {"name":"Yann Deshayes", "email": "deshayes.yann@gmail.com", "url": "https://github.com/ydeshayes"}
     ],
     "cordova": {
         "id": "cordova-plugin-nativestorage",
@@ -12,7 +13,8 @@
             "android",
             "ios",
             "browser",
-            "windows"
+            "windows",
+            "osx"
         ]
     },
     "repository": {

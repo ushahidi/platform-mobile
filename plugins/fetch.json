@@ -2,7 +2,7 @@
     "cordova-fabric-plugin": {
         "source": {
             "type": "registry",
-            "id": "cordova-fabric-plugin@~1.1.1"
+            "id": "cordova-fabric-plugin@~1.1.3"
         },
         "is_top_level": true,
         "variables": {
@@ -21,7 +21,7 @@
     "cordova-plugin-console": {
         "source": {
             "type": "registry",
-            "id": "cordova-plugin-console@~1.0.4"
+            "id": "cordova-plugin-console@~1.0.5"
         },
         "is_top_level": true,
         "variables": {}
@@ -29,7 +29,7 @@
     "cordova-plugin-device": {
         "source": {
             "type": "registry",
-            "id": "cordova-plugin-device@~1.1.3"
+            "id": "cordova-plugin-device@~1.1.4"
         },
         "is_top_level": true,
         "variables": {}
@@ -37,7 +37,15 @@
     "cordova-plugin-email": {
         "source": {
             "type": "registry",
-            "id": "cordova-plugin-email@~1.2.2"
+            "id": "cordova-plugin-email@~1.2.6"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "cordova-plugin-is-debug": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-is-debug@~1.0.0"
         },
         "is_top_level": true,
         "variables": {}
@@ -45,7 +53,7 @@
     "cordova-plugin-google-analytics": {
         "source": {
             "type": "registry",
-            "id": "cordova-plugin-google-analytics@~1.7.1"
+            "id": "cordova-plugin-google-analytics@~1.7.4"
         },
         "is_top_level": true,
         "variables": {}
@@ -74,10 +82,18 @@
         "is_top_level": true,
         "variables": {}
     },
+    "cordova-plugin-network-information": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-network-information@~1.3.1"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
     "cordova-plugin-splashscreen": {
         "source": {
             "type": "registry",
-            "id": "cordova-plugin-splashscreen@~4.0.0"
+            "id": "cordova-plugin-splashscreen@~4.0.1"
         },
         "is_top_level": true,
         "variables": {}
@@ -85,7 +101,7 @@
     "cordova-plugin-statusbar": {
         "source": {
             "type": "registry",
-            "id": "cordova-plugin-statusbar@~2.2.0"
+            "id": "cordova-plugin-statusbar@~2.2.1"
         },
         "is_top_level": true,
         "variables": {}
@@ -93,7 +109,7 @@
     "cordova-plugin-whitelist": {
         "source": {
             "type": "registry",
-            "id": "cordova-plugin-whitelist@~1.3.0"
+            "id": "cordova-plugin-whitelist@~1.3.1"
         },
         "is_top_level": true,
         "variables": {}
@@ -101,7 +117,7 @@
     "cordova-plugin-x-socialsharing": {
         "source": {
             "type": "registry",
-            "id": "cordova-plugin-x-socialsharing@~5.1.3"
+            "id": "cordova-plugin-x-socialsharing@~5.1.6"
         },
         "is_top_level": true,
         "variables": {}
@@ -117,15 +133,7 @@
     "cordova-plugin-nativestorage": {
         "source": {
             "type": "registry",
-            "id": "cordova-plugin-nativestorage@~2.1.0"
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
-    "cordova-sqlite-storage": {
-        "source": {
-            "type": "registry",
-            "id": "cordova-sqlite-storage@~1.5.1"
+            "id": "cordova-plugin-nativestorage@~2.2.1"
         },
         "is_top_level": true,
         "variables": {}
@@ -133,7 +141,7 @@
     "ionic-plugin-deeplinks": {
         "source": {
             "type": "registry",
-            "id": "ionic-plugin-deeplinks@~1.0.12"
+            "id": "ionic-plugin-deeplinks@~1.0.14"
         },
         "is_top_level": true,
         "variables": {
@@ -158,7 +166,9 @@
         "is_top_level": true,
         "variables": {
             "API_KEY_FOR_ANDROID": "AIzaSyDAQq5_U1fm1p_lZY2nm6oH0Lc3bG9MOaI",
-            "API_KEY_FOR_IOS": "AIzaSyClDqDvu3mRUDwJ7EX438kIRhB0xfRelPM"
+            "API_KEY_FOR_IOS": "AIzaSyClDqDvu3mRUDwJ7EX438kIRhB0xfRelPM",
+            "NSLOCATIONWHENINUSEUSAGEDESCRIPTION": "Show your location on the map",
+            "NSLOCATIONALWAYSUSAGEDESCRIPTION": "Trace your location on the map"
         }
     },
     "com.googlemaps.ios": {
@@ -176,7 +186,9 @@
             "id": "cordova-plugin-geolocation@~2.4.1"
         },
         "is_top_level": true,
-        "variables": {}
+        "variables": {
+            "GEOLOCATION_USAGE_DESCRIPTION": "Detect user's location for survey response"
+        }
     },
     "cordova-plugin-compat": {
         "source": {
@@ -186,38 +198,10 @@
         "is_top_level": false,
         "variables": {}
     },
-    "cordova-plugin-media-capture": {
+    "cordova-sqlite-storage": {
         "source": {
             "type": "registry",
-            "id": "cordova-plugin-media-capture"
-        },
-        "is_top_level": true,
-        "variables": {
-            "CAMERA_USAGE_DESCRIPTION": " ",
-            "MICROPHONE_USAGE_DESCRIPTION": " ",
-            "PHOTOLIBRARY_USAGE_DESCRIPTION": " "
-        }
-    },
-    "cordova-plugin-file": {
-        "source": {
-            "type": "registry",
-            "id": "cordova-plugin-file"
-        },
-        "is_top_level": false,
-        "variables": {}
-    },
-    "cordova-plugin-is-debug": {
-        "source": {
-            "type": "registry",
-            "id": "cordova-plugin-is-debug"
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
-    "cordova-plugin-network-information": {
-        "source": {
-            "type": "registry",
-            "id": "cordova-plugin-network-information"
+            "id": "cordova-sqlite-storage@~1.5.3"
         },
         "is_top_level": true,
         "variables": {}

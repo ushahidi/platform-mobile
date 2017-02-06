@@ -23,13 +23,13 @@
 
 package de.martinreinhardt.cordova.plugins.email;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.text.Html;
 import android.util.Base64;
@@ -45,6 +45,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static de.martinreinhardt.cordova.plugins.email.EmailComposer.LOG_TAG;
 
@@ -97,7 +99,7 @@ public class EmailComposerImpl {
         // is possible with specified app
         boolean withScheme = isAppInstalled(id, ctx);
         // is possible in general
-        boolean isPossible = isEmailAccountConfigured(ctx);
+        boolean isPossible = isEmailClientExist(ctx);
 
         return new boolean[] { isPossible, withScheme };
     }
@@ -117,7 +119,7 @@ public class EmailComposerImpl {
             throws JSONException {
 
         Intent mail = getEmailIntent();
-        String app  = params.optString("app", null);
+        String app  = params.optString("app", MAILTO_SCHEME);
 
         if (params.has("subject"))
             setSubject(params.getString("subject"), mail);
@@ -249,9 +251,17 @@ public class EmailComposerImpl {
         if (uris.isEmpty())
             return;
 
-        draft.setAction(Intent.ACTION_SEND_MULTIPLE)
-             .setType("message/rfc822")
-             .putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris);
+        if (uris.size() == 1) {
+            draft.setAction(Intent.ACTION_SEND)
+                    .setType("message/rfc822")
+                    .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    .putExtra(Intent.EXTRA_STREAM, uris.get(0));
+        } else {
+            draft.setAction(Intent.ACTION_SEND_MULTIPLE)
+                    .setType("message/rfc822")
+                    .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    .putExtra(Intent.EXTRA_STREAM, uris);
+        }
     }
 
     /**
@@ -265,17 +275,22 @@ public class EmailComposerImpl {
      * The URI pointing to the given path.
      */
     private Uri getUriForPath (String path, Context ctx) {
+        Uri result = null;
         if (path.startsWith("res:")) {
-            return getUriForResourcePath(path, ctx);
+            result = getUriForResourcePath(path, ctx);
         } else if (path.startsWith("file:///")) {
-            return getUriForAbsolutePath(path);
+            result = getUriForAbsolutePath(path);
         } else if (path.startsWith("file://")) {
-            return getUriForAssetPath(path, ctx);
+            result = getUriForAssetPath(path, ctx);
         } else if (path.startsWith("base64:")) {
-            return getUriForBase64Content(path, ctx);
+            result = getUriForBase64Content(path, ctx);
         }
 
-        return Uri.parse(path);
+        if (result == null) {
+            result = Uri.parse(path);
+        }
+
+        return getCorrespondingMediaFileUriIfPossible(result, ctx);
     }
 
     /**
@@ -454,6 +469,70 @@ public class EmailComposerImpl {
     }
 
     /**
+     * Get corresponding Media File URI for a givin URI
+     * if available, otherwise it returns the same input URI.
+     *
+     * NOTE: Becuase MediaScannerConnection works in callback
+     * fashion, we instead wait for its result using a timing-out
+     * while loop, and we might further think for a better solution.
+     *
+     * @param uri
+     * The given uri.
+     * @param ctx
+     * The application context.
+     * @return
+     * The URI pointing to the corresponding Media File if available,
+     * otherwise it returns the same given uri.
+     */
+    private Uri getCorrespondingMediaFileUriIfPossible(Uri uri, Context ctx) {
+        return getCorrespondingMediaFileUriIfPossible(uri.toString(), ctx);
+    }
+
+    /**
+     * Get corresponding Media File URI for a givin path String
+     * if available, otherwise it returns the same input URI.
+     *
+     * NOTE: Becuase MediaScannerConnection works in callback
+     * fashion, we instead wait for its result using a timing-out
+     * while loop, and we might further think for a better solution.
+     *
+     * @param path
+     * The given path.
+     * @param ctx
+     * The application context.
+     * @return
+     * The URI pointing to the corresponding Media File if available,
+     * otherwise it returns the same given path.
+     */
+    private Uri getCorrespondingMediaFileUriIfPossible(String path, Context ctx) {
+        final AtomicReference<Uri> result = new AtomicReference<Uri>();
+        MediaScannerConnection.scanFile(ctx, new String[]{path}, null, new MediaScannerConnection.OnScanCompletedListener() {
+            @Override
+            public void onScanCompleted(String path, Uri uri) {
+                if (uri != null) {
+                    result.set(uri);
+                } else {
+                    result.set(Uri.parse(path));
+                }
+            }
+        });
+
+        // Wait until media scanner scans path and gets
+        // its corresponding content:// uri
+        long startTime = System.currentTimeMillis();
+        long maxWait = 5 * 1000; // 5 secs
+        while (result.get() == null && System.currentTimeMillis() - startTime < maxWait) {
+            try {
+                Thread.sleep(100);
+            } catch (Exception e) {
+                // ignore
+            }
+        }
+
+        return result.get() != null? result.get() : Uri.parse(path);
+    }
+
+    /**
      * Writes an InputStream to an OutputStream
      *
      * @param in
@@ -510,21 +589,29 @@ public class EmailComposerImpl {
      * @return
      * true if available, otherwise false
      */
-    private boolean isEmailAccountConfigured (Context ctx) {
-        AccountManager am  = AccountManager.get(ctx);
+    private boolean isEmailClientExist (Context ctx) {
+        Log.i(LOG_TAG, "isEmailClientExist()");
 
-        try {
-            for (Account account : am.getAccounts()) {
-                if (account.type.endsWith("mail")) {
-                    return true;
-                }
-            }
-        } catch (Exception e) {
-            Log.e(LOG_TAG, "Missing GET_ACCOUNTS permission.");
-            return true;
-        }
+        return getAppsCountHandlesIntent(ctx, getEmailIntent()) > 0;
+    }
 
-        return false;
+    /**
+     * Get apps count which are able to handle specific Intent.
+     *
+     * @param ctx
+     * The application context.
+     * @param intent
+     * The intent to test against.
+     * @return
+     * The apps count
+     */
+    private int getAppsCountHandlesIntent(Context ctx, Intent intent) {
+        if (ctx == null || intent == null) return 0;
+
+        PackageManager manager = ctx.getPackageManager();
+        List<ResolveInfo> infos = manager.queryIntentActivities(intent, 0);
+
+        return infos.size();
     }
 
     /**
@@ -539,7 +626,7 @@ public class EmailComposerImpl {
      */
     private boolean isAppInstalled (String id, Context ctx) {
 
-        if (id.equalsIgnoreCase(MAILTO_SCHEME)) {
+        if (id == null || id.equalsIgnoreCase(MAILTO_SCHEME)) {
             Intent intent     = getEmailIntent();
             PackageManager pm = ctx.getPackageManager();
             int apps          = pm.queryIntentActivities(intent, 0).size();

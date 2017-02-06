@@ -655,9 +655,9 @@ export class ApiService {
     return Promise.all([
       this.getForms(deployment),
       this.getAttributes(deployment)]).then(
-        (results) => {
-          let forms:Form[] = <Form[]>results[0];
-          let attributes:Attribute[] = <Attribute[]>results[1];
+        (results:any[]) => {
+          let forms = <Form[]>results[0];
+          let attributes = <Attribute[]>results[1];
           for (let i = 0; i < forms.length; i++){
             let form:Form = forms[i];
             form.loadAttributes(attributes);
@@ -678,7 +678,7 @@ export class ApiService {
       this.getUsers(deployment),
       this.getAttributes(deployment)]).
       then(
-        (results) => {
+        (results:any[]) => {
           let posts = <Post[]>results[0];
           let forms = <Form[]>results[1];
           let images = <Image[]>results[2];

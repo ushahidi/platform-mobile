@@ -7,7 +7,8 @@
 Join the chat for questions and updates [![Join the chat at https://gitter.im/TheCocoaProject/cordova-plugin-nativestorage](https://badges.gitter.im/TheCocoaProject/cordova-plugin-nativestorage.svg)](https://gitter.im/TheCocoaProject/cordova-plugin-nativestorage?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 ***
-NEW: Windows is supported!
+NEW: Windows and OS X is supported!
+UPDATE: The Plugin can now also be found at the [Telerik Plugin Market](http://plugins.telerik.com/cordova/plugin/nativestorage).
 
 Documentation about the API prior to v2 can be found at the [wiki](https://github.com/TheCocoaProject/cordova-plugin-nativestorage/wiki/Usage-API-(prior-to-v2.0.0))
 ***
@@ -21,12 +22,15 @@ Please consider reading our [wiki](https://github.com/TheCocoaProject/cordova-pl
 	* [When to use the plugin](#when)
 - [Installation](#installation)
 - [Supported Platforms](#supported_platforms)
+- [Supported Frameworks](#supported_frameworks)
 - [Usage](#usage)
 	* [Supported data types] (#supported_data_types)
 	* [Storing values](#storing_values)
 	* [Retrieving values](#retrieving_values)
+	* [Retrieving all keys](#retrieving_keys)
 	* [Removing values](#removing_values)
 	* [Demo Example](#demo_example)
+- [Security](#security)
 - [Errors](#errors)
 - [Problems](#problems)
 - [F.A.Q](#FAQ)
@@ -85,12 +89,28 @@ bower install git://github.com/TheCocoaProject/ngcordova-wrapper-nativestorage -
 ```
 For more information about the usage of the plugin check the repo for the [ngCordova-wrapper](https://github.com/TheCocoaProject/ngcordova-wrapper-nativestorage) - Ionic 1. The plugin is also supported for Ionic 2, pleas check the [official Ionic documentation](http://ionicframework.com/docs/v2/native/native-storage/) for the installation procedure and use.
 
+###<a name="reinstalling_dev"></a>Reinstalling/installing developer version
+Remove the plugin from the current project:
+```sh
+cordova plugin remove cordova-plugin-nativestorage
+```
+Install the developer version from Github:
+```sh
+cordova plugin add https://github.com/TheCocoaProject/cordova-plugin-nativestorage
+```
+
 ##<a name="supported_platforms"></a>Supported platforms
 - Android
 - iOS
 - Browser (for testing purposes)
 - Windows (thanks to Christian Helbig see [PR](https://github.com/TheCocoaProject/cordova-plugin-nativestorage/pull/38))
+- OS X (thanks to [Javier Ribó](https://github.com/elribonazo) see [PR](https://github.com/TheCocoaProject/cordova-plugin-nativestorage/pull/58))
 
+##<a name="supported_frameworks"></a>Supported frameworks
+- [vanilla Cordova](https://www.npmjs.com/package/cordova-plugin-nativestorage)
+- [Cordova 3.9.2](https://github.com/GillesC/cordova-plugin-nativestorage-3.9.2-compatible) and previous versions
+- [Ionic 2](http://ionicframework.com/docs/v2/native/nativestorage/)
+- [ngCordova](https://github.com/TheCocoaProject/ngcordova-wrapper-nativestorage) (not all functions are yet supported)
 
 ##<a name="usage"></a>Usage
 The parameter of the success-callback function will be the saved or retrieved value, the error-callback will specify the occurred error.
@@ -105,6 +125,11 @@ NativeStorage.setItem("reference_to_value",<value>, <success-callback>, <error-c
 ###<a name="retrieving_values"></a>Retrieving values
 ```javascript
 NativeStorage.getItem("reference_to_value",<success-callback>, <error-callback>);
+```
+
+###<a name="retrieving_keys"></a>Retrieving all keys
+```javascript
+NativeStorage.keys(<success-callback>, <error-callback>);
 ```
 
 ###<a name="removing_values"></a>Removing values
@@ -201,6 +226,7 @@ cd cordova-plugin-nativestorage/examples/demo/
 cordova platform add ios
 cordova platform add android
 cordova platform add browser
+cordova platform add windows
 ```
 * Adding the plugin
 ```sh
@@ -216,7 +242,12 @@ cordova plugin add https://github.com/TheCocoaProject/cordova-plugin-nativestora
 cordova emulate ios
 cordova run android
 cordova run browser
+cordova run windows
 ```
+
+##<a name="security"></a>Security
+Is it safe to store sensitive data via this plugin?
+ - Yes and No, all stored values are only accessible by your application, which makes it safe. However, the values can be viewed when the attacker has access to your phone's password (e.g. lock-pattern) through an un-encrypted back-up on Android (if back-up is enabled) or through root-access. The latter is only possible if the phone is rooted. An extra encryption mechanism would be of value when an extra user-supplied password is used. This mode is on our [Future Track](https://github.com/TheCocoaProject/cordova-plugin-nativestorage/wiki/Future-track) list.
 
 ##<a name="errors"></a>Errors
 Error object contains:
@@ -265,12 +296,15 @@ If you have code issues, things not related to a bug of the plugin please consid
 		- See our own [issues page](https://github.com/TheCocoaProject/cordova-plugin-nativestorage/issues)
 		- Check out our [chat](https://gitter.im/TheCocoaProject/cordova-plugin-nativestorage?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) on Gitter
 - Can I access the saved value in Android?
-	* Yes, check out [this thread](http://stackoverflow.com/questions/39159754/how-get-data-from-cordova-plugin-nativestorage-in-android-java/39269620#39269620) on StackOverflow.
+	* Yes, check out [this thread](http://stackoverflow.com/questions/39159754/how-get-data-from-cordova-plugin-nativestorage-in-android-java/39269620#39269620) on StackOverflow. Or see [this issue](https://github.com/TheCocoaProject/cordova-plugin-nativestorage/issues/53) on Github.
+- Can I access saved values in JavaScript?
+	* Yes, see [this thread](http://stackoverflow.com/questions/25657749/cordova-plugin-expose-js-variable-android-cardflight/39331899#39331899) on StackOverflow.
+- Does this plugin supports Cordova 3.9.2?
+	* Yes, look at [this fork](cordova-plugin-nativestorage-3.9.2-compatible)
 
 
 ##<a name="applications"></a>Applications using this plugin
 
 - [Battles of East March](https://itunes.apple.com/us/app/id1135312617) (it was made using the Phaser game engine and compiled using CocoonJS)
-- [Brain Lift](https://itunes.apple.com/us/app/brain-lift/id1130098860?mt=8) by Michael Brown
 
 If you're utilizing this plugin and wish to add your application to this readme, please contact [me](mailto:callebaut.gilles@gmail.com).

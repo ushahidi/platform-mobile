@@ -48,27 +48,8 @@ Using this interface does not guarantee immediate delivery of the corresponding 
 - __Android__
 - __Amazon FireOS__
 - __Windows__
+- __Browser__
 
-
-## Installation
-The plugin can either be installed from git repository, from local file system through the [Command-line Interface][CLI] for debugging. It's available as an [npm package][npm] for [PhoneGap Build][PGB] as well.
-
-### Local development environment
-From master:
-```bash
-# ~~ from master branch ~~
-cordova plugin add https://github.com/katzer/cordova-plugin-email-composer.git
-```
-from a local folder:
-```bash
-# ~~ local folder ~~
-cordova plugin add cordova-plugin-email-composer --searchpath path/to/plugin --link
-```
-or to use the last stable version:
-```bash
-# ~~ stable version ~~
-cordova plugin add cordova-plugin-email-composer@0.8.3
-```
 
 ### PhoneGap Build
 Add the following xml to your config.xml to always use the latest version of this plugin:
@@ -77,16 +58,9 @@ Add the following xml to your config.xml to always use the latest version of thi
 ```
 
 
-## ChangeLog
+## Changelog
 
-#### Known issues
-- _\<img\>_ tags do not work on Android.
-- Callbacks for windows platform are called immediately.
-- _isAvailable_ does always return _true_ for windows platform.
-
-#### Further informations
 - See [CHANGELOG.md][changelog] to get the full changelog for the plugin.
-
 
 ## Using the plugin
 The plugin creates the object ```cordova.plugins.email``` with following methods:
@@ -185,6 +159,8 @@ cordova.plugins.email.open({
     isHtml:  true
 });
 ```
+
+When building for the browser, you *cannot* use HTML in the body content. Internally, this plugin generates a "mailto:"-style link to support browsers, and the mailto URI scheme only supports plain text body content. See [RFC6068](https://www.ietf.org/rfc/rfc6068.txt) for more details on mailto URIs.
 
 ### Get informed when the view has been dismissed
 The `open` method supports additional callback to get informed when the view has been dismissed.

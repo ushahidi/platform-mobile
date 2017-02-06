@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { TextArea } from 'ionic-angular';
+import { TextInput } from 'ionic-angular';
 import { FormGroup, FormGroupName, FormControl, FormControlName } from '@angular/forms';
 
 import { Value } from '../../models/value';
@@ -21,8 +21,8 @@ export class TextAreaComponent {
   focused: boolean = false;
   text: string = "";
 
-  @ViewChild('textarea')
-  textarea: TextArea;
+  @ViewChild('input')
+  input: TextInput;
 
   constructor(public logger:LoggerService) {
   }

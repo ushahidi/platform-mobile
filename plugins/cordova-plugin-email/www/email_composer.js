@@ -65,7 +65,9 @@ EmailComposerPlugin.prototype = {
      */
     isAvailable: function (callback, scope) {
         var fn = this.createCallbackFn(callback, scope);
-        exec(fn, function () {
+        exec(function () {
+            fn(true);
+        }, function () {
             fn(false);
         }, 'EmailComposer', 'isAvailable', []);
     },
@@ -187,12 +189,14 @@ EmailComposerPlugin.prototype = {
      *      The new callback function
      */
     createCallbackFn: function (callbackFn, scope) {
-        if (typeof callbackFn != 'function')
-            return;
-
-        return function () {
-            callbackFn.apply(scope || this, arguments);
-        };
+        if (typeof callbackFn != 'function') {
+            return function () {
+            };
+        } else {
+            return function () {
+                callbackFn.apply(scope || this, arguments);
+            };
+        }
     }
 
 };

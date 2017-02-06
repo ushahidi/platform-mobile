@@ -3,7 +3,7 @@ var NativeStorageError = require('./NativeStorageError');
 
 
 function isInBrowser() {
-  inBrowser = (window.cordova && window.cordova.platformId === 'browser') || !(window.phonegap || window.cordova);
+  inBrowser = (window.cordova && (window.cordova.platformId === 'browser' || window.cordova.platformId === 'osx')) || !(window.phonegap || window.cordova);
   return inBrowser;
 }
 
@@ -390,6 +390,11 @@ StorageHandle.prototype.getSecretItem = function(reference, encryptConfig, succe
     function(code) {
       error(new NativeStorageError(code, "Native", ""));
     }, "NativeStorage", action, params);
+};
+
+/* list keys */
+StorageHandle.prototype.keys = function(success, error) {
+  this.storageHandlerDelegate(success, error, "NativeStorage", "keys");
 };
 
 

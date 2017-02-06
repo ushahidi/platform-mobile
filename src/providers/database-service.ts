@@ -531,7 +531,7 @@ export class DatabaseService {
       this.getValues(deployment),
       this.getUsers(deployment),
       this.getForms(deployment)]).
-      then(results => {
+      then((results:any[]) => {
         let posts = <Post[]>results[0];
         let values = <Value[]>results[1];
         let users = <User[]>results[2];
@@ -569,7 +569,7 @@ export class DatabaseService {
     return Promise.all([
       this.getForms(deployment),
       this.getAttributes(deployment)]).
-      then((results) => {
+      then((results:any[]) => {
         let forms:Form[] = <Form[]>results[0];
         let attributes:Attribute[] = <Attribute[]>results[1];
         for (let i = 0; i < forms.length; i++){
@@ -584,7 +584,7 @@ export class DatabaseService {
     return Promise.all([
       this.getForm(deployment, id),
       this.getAttributes(deployment, id)]).
-      then(results => {
+      then((results:any[]) => {
         let form:Form = <Form>results[0];
         let attributes:Attribute[] = <Attribute[]>results[1];
         form.loadAttributes(attributes);

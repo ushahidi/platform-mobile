@@ -25,6 +25,7 @@
 #ifndef __CORDOVA_4_0_0
     #import <Cordova/NSData+Base64.h>
 #endif
+#import <MessageUI/MFMailComposeViewController.h>
 #import <MobileCoreServices/MobileCoreServices.h>
 
 #include "TargetConditionals.h"
@@ -90,10 +91,10 @@
     _command = command;
 
     [self.commandDelegate runInBackground:^{
-        NSString* scheme = [props objectForKey:@"app"];
-        if (!scheme) {
-            scheme = @"mailto";
+        if (![props objectForKey:@"app"]) {
+            [props setValue:@"mailto" forKey:@"app"];
         }
+        NSString* scheme = [props objectForKey:@"app"];
 
         if (![self canUseAppleMail:scheme]) {
             [self openURLFromProperties:props];
@@ -171,7 +172,7 @@
  */
 - (BOOL) canUseAppleMail:(NSString*) scheme
 {
-    return [scheme hasPrefix:@"mailto"];
+    return [MFMailComposeViewController canSendMail] && [scheme hasPrefix:@"mailto"];
 }
 
 /**

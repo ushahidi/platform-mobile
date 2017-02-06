@@ -37,10 +37,13 @@
         "cordova-plugin-ios-longpress-fix": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
-        "cordova-plugin-media-capture": {
+        "cordova-plugin-is-debug": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
         "cordova-plugin-nativestorage": {
+            "PACKAGE_NAME": "com.ushahidi.mobile"
+        },
+        "cordova-plugin-network-information": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
         "cordova-plugin-networkactivityindicator": {
@@ -72,15 +75,21 @@
             "DEEPLINK_SCHEME": "https",
             "DEEPLINK_HOST": "ushahidi.com",
             "ANDROID_PATH_PREFIX": "/",
+            "ANDROID_2_PATH_PREFIX": "/",
+            "ANDROID_3_PATH_PREFIX": "/",
+            "ANDROID_4_PATH_PREFIX": "/",
+            "ANDROID_5_PATH_PREFIX": "/",
+            "DEEPLINK_2_SCHEME": " ",
+            "DEEPLINK_2_HOST": " ",
+            "DEEPLINK_3_SCHEME": " ",
+            "DEEPLINK_3_HOST": " ",
+            "DEEPLINK_4_SCHEME": " ",
+            "DEEPLINK_4_HOST": " ",
+            "DEEPLINK_5_SCHEME": " ",
+            "DEEPLINK_5_HOST": " ",
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
         "ionic-plugin-keyboard": {
-            "PACKAGE_NAME": "com.ushahidi.mobile"
-        },
-        "cordova-plugin-is-debug": {
-            "PACKAGE_NAME": "com.ushahidi.mobile"
-        },
-        "cordova-plugin-network-information": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         }
     },
@@ -89,9 +98,6 @@
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
         "cordova-plugin-compat": {
-            "PACKAGE_NAME": "com.ushahidi.mobile"
-        },
-        "cordova-plugin-file": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         }
     }

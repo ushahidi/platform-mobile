@@ -120,6 +120,8 @@
 {
     NSString* mailto     = [props objectForKey:@"app"];
     NSString* query      = @"";
+    
+    BOOL isHTML = [[props objectForKey:@"isHtml"] boolValue];
 
     NSString* subject    = [props objectForKey:@"subject"];
     NSString* body       = [props objectForKey:@"body"];
@@ -137,22 +139,25 @@
               [to componentsJoinedByString:@","]];
 
     if (body.length > 0) {
-        query = [NSString stringWithFormat: @"%@&body=%@",
-                   query, body];
+        if (isHTML) {
+            body = [[NSAttributedString alloc] initWithData:[body dataUsingEncoding:NSUTF8StringEncoding] options:@{NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType, NSCharacterEncodingDocumentAttribute: [NSNumber numberWithInt:NSUTF8StringEncoding]} documentAttributes:nil error:nil].string;
+        }
+        query = [NSString stringWithFormat: @"%@%@body=%@",
+                   query, query.length > 0? @"&":@"", [body stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
     }
     if (subject.length > 0) {
-        query = [NSString stringWithFormat: @"%@&subject=%@",
-                   query, body];
+        query = [NSString stringWithFormat: @"%@%@subject=%@",
+                   query, query.length > 0? @"&":@"", [subject stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
     }
 
     if (cc.count > 0) {
-        query = [NSString stringWithFormat: @"%@&cc=%@",
-                   query, [cc componentsJoinedByString:@","]];
+        query = [NSString stringWithFormat: @"%@%@cc=%@",
+                   query, query.length > 0? @"&":@"", [cc componentsJoinedByString:@","]];
     }
 
     if (bcc.count > 0) {
-        query = [NSString stringWithFormat: @"%@&bcc=%@",
-                   query, [cc componentsJoinedByString:@","]];
+        query = [NSString stringWithFormat: @"%@%@bcc=%@",
+                   query, query.length > 0? @"&":@"", [bcc componentsJoinedByString:@","]];
     }
 
     if (attachments.count > 0) {

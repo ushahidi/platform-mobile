@@ -4,7 +4,7 @@
       {{attribute.label}}
       <span ion-text color="danger" *ngIf="attribute.required == true">*</span>
     </ion-label>
-    <ion-textarea #textarea type="text" [(ngModel)]="text" [formControlName]="attribute.key" (focus)="onFocus($event)" (blur)="onBlur($event)"></ion-textarea>
+    <ion-textarea #input type="text" [(ngModel)]="text" [formControlName]="attribute.key" (focus)="onFocus($event)" (blur)="onBlur($event)"></ion-textarea>
   </ion-item>
   <p ion-text padding-left color="red" *ngIf="attribute.required == true && (text == null || text.length == 0) && focused == false">Text required</p>
 </div>

@@ -37,12 +37,12 @@ export class BasePage {
 
   ionViewWillEnter() {
     this.connection = Network.onConnect().subscribe(() => {
-      console.log(`Network Connected ${Network.connection}`);
+      console.log(`Network Connected ${Network.type}`);
       this.zone.run(() => {
         this.offline = false;
         this.resizeContent();
       });
-      this.networkConnected(Network.connection);
+      this.networkConnected(Network.type);
     });
     this.disconnection = Network.onDisconnect().subscribe(() => {
       console.log(`Network Disconnected`);

@@ -9,7 +9,9 @@
   </ion-navbar>
 </ion-header>
 <ion-content class="page-deployment-add">
-  <ion-searchbar #search color="light" placeholder="Find deployment by name" (ionInput)="searchDeployments($event)"></ion-searchbar>
+  <ion-searchbar #searchbar color="light" type="search" debounce="500" placeholder="Find deployment by name"
+                 animated="true" autocomplete="false" autocorrect="false" spellcheck="false"
+                 (ionFocus)="onFocus($event)" (ionBlur)="onBlur($event)" (ionInput)="onSearch($event)"></ion-searchbar>
   <div class="loading" text-center *ngIf="deployments.length == 0 && loading == true">
     <ion-spinner></ion-spinner>
   </div>

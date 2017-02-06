@@ -1,5 +1,5 @@
-import { Component, NgZone } from '@angular/core';
-import { Platform, NavParams,
+import { Component, ViewChild, NgZone } from '@angular/core';
+import { Platform, NavParams, Searchbar,
   NavController, ViewController, ModalController, LoadingController, ToastController, AlertController, ActionSheetController } from 'ionic-angular';
 import { StatusBar } from 'ionic-native';
 
@@ -21,8 +21,11 @@ import { Deployment } from '../../models/deployment';
 })
 export class DeploymentAddPage extends BasePage {
 
-  deployments: Deployment[] = [];
   loading: boolean = false;
+  deployments: Deployment[] = [];
+
+  @ViewChild('searchbar')
+  searchbar: Searchbar;
 
   constructor(
     public api:ApiService,
@@ -60,8 +63,16 @@ export class DeploymentAddPage extends BasePage {
     this.hideModal();
   }
 
-  searchDeployments(event:any) {
-    this.logger.info(this, "searchDeployments", event.target.value);
+  onFocus(event:any) {
+    this.logger.info(this, "onFocus", event.target.value);
+  }
+
+  onBlur(event:any) {
+    this.logger.info(this, "onBlur", event.target.value);
+  }
+
+  onSearch(event:any) {
+    this.logger.info(this, "onSearch", event.target.value);
     let search = event.target.value;
     if (search && search.length > 0) {
       this.loading = true;

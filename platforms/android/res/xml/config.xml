@@ -13,11 +13,6 @@
     <feature name="EmailComposer">
         <param name="android-package" value="de.martinreinhardt.cordova.plugins.email.EmailComposer" />
     </feature>
-    <feature name="File">
-        <param name="android-package" value="org.apache.cordova.file.FileUtils" />
-        <param name="onload" value="true" />
-    </feature>
-    <allow-navigation href="cdvfile:*" />
     <feature name="Geolocation">
         <param name="android-package" value="org.apache.cordova.geolocation.Geolocation" />
     </feature>
@@ -35,11 +30,14 @@
     <feature name="Geocoder">
         <param name="android-package" value="plugin.google.maps.MyGeocoder" />
     </feature>
-    <feature name="Capture">
-        <param name="android-package" value="org.apache.cordova.mediacapture.Capture" />
+    <feature name="IsDebug">
+        <param name="android-package" value="me.mattlewis.isdebug.IsDebug" />
     </feature>
     <feature name="NativeStorage">
         <param name="android-package" value="NativeStorage" />
+    </feature>
+    <feature name="NetworkStatus">
+        <param name="android-package" value="org.apache.cordova.networkinformation.NetworkManager" />
     </feature>
     <feature name="SecureStorage">
         <param name="android-package" value="com.crypho.plugins.SecureStorage" />
@@ -86,13 +84,8 @@
     <allow-intent href="geo:*" />
     <allow-navigation href="*" />
     <allow-navigation href="http://*/*" />
-    <allow-navigation href="http://localhost:8000" />
-    <allow-navigation href="http://192.168.0.16:8000" />
-    <allow-navigation href="http://192.168.57.1:8000" />
-    <allow-navigation href="http://192.168.0.21:8000" />
     <allow-navigation href="http://localhost:3000" />
-    <allow-navigation href="http://localhost:3001" />
-    <allow-navigation href="http://192.168.0.11:8000" />
+    <allow-navigation href="http://ionic.local/*" />
     <icon src="resources/android/icon/drawable-xhdpi-icon.png" />
     <allow-intent href="market:*" />
     <splash density="port-ldpi" src="resources/android/splash/drawable-port-ldpi-screen.png" />
@@ -126,10 +119,5 @@
     <preference name="android-targetSdkVersion" value="24" />
     <preference name="android-minSdkVersion" value="19" />
     <preference name="LoadUrlTimeoutValue" value="50000" />
-    <feature name="IsDebug">
-        <param name="android-package" value="me.mattlewis.isdebug.IsDebug" />
-    </feature>
-    <feature name="NetworkStatus">
-        <param name="android-package" value="org.apache.cordova.networkinformation.NetworkManager" />
-    </feature>
+    <preference name="KeyboardDisplayRequiresUserAction" value="false" />
 </widget>

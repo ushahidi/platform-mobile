@@ -24,13 +24,35 @@
         "cordova-plugin-email": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
+        "cordova-plugin-geolocation": {
+            "GEOLOCATION_USAGE_DESCRIPTION": "Detect user's location for survey response",
+            "PACKAGE_NAME": "com.ushahidi.mobile"
+        },
         "cordova-plugin-google-analytics": {
+            "PACKAGE_NAME": "com.ushahidi.mobile"
+        },
+        "cordova-plugin-googlemaps": {
+            "API_KEY_FOR_IOS": "AIzaSyClDqDvu3mRUDwJ7EX438kIRhB0xfRelPM",
+            "NSLOCATIONWHENINUSEUSAGEDESCRIPTION": "Show your location on the map",
+            "NSLOCATIONALWAYSUSAGEDESCRIPTION": "Trace your location on the map",
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
         "cordova-plugin-ios-longpress-fix": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
+        "cordova-plugin-is-debug": {
+            "PACKAGE_NAME": "com.ushahidi.mobile"
+        },
+        "cordova-plugin-nativestorage": {
+            "PACKAGE_NAME": "com.ushahidi.mobile"
+        },
+        "cordova-plugin-network-information": {
+            "PACKAGE_NAME": "com.ushahidi.mobile"
+        },
         "cordova-plugin-networkactivityindicator": {
+            "PACKAGE_NAME": "com.ushahidi.mobile"
+        },
+        "cordova-plugin-secure-storage": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
         "cordova-plugin-spinner-dialog": {
@@ -48,12 +70,6 @@
         "cordova-plugin-x-socialsharing": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
-        "cordova-plugin-secure-storage": {
-            "PACKAGE_NAME": "com.ushahidi.mobile"
-        },
-        "cordova-plugin-nativestorage": {
-            "PACKAGE_NAME": "com.ushahidi.mobile"
-        },
         "cordova-sqlite-storage": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
@@ -65,28 +81,6 @@
         },
         "ionic-plugin-keyboard": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
-        },
-        "cordova-plugin-googlemaps": {
-            "API_KEY_FOR_IOS": "AIzaSyClDqDvu3mRUDwJ7EX438kIRhB0xfRelPM",
-            "NSLOCATIONWHENINUSEUSAGEDESCRIPTION": "Show your location on the map",
-            "NSLOCATIONALWAYSUSAGEDESCRIPTION": "Trace your location on the map",
-            "PACKAGE_NAME": "com.ushahidi.mobile"
-        },
-        "cordova-plugin-geolocation": {
-            "GEOLOCATION_USAGE_DESCRIPTION": "Detect user's location for survey response",
-            "PACKAGE_NAME": "com.ushahidi.mobile"
-        },
-        "cordova-plugin-media-capture": {
-            "CAMERA_USAGE_DESCRIPTION": " ",
-            "MICROPHONE_USAGE_DESCRIPTION": " ",
-            "PHOTOLIBRARY_USAGE_DESCRIPTION": " ",
-            "PACKAGE_NAME": "com.ushahidi.mobile"
-        },
-        "cordova-plugin-is-debug": {
-            "PACKAGE_NAME": "com.ushahidi.mobile"
-        },
-        "cordova-plugin-network-information": {
-            "PACKAGE_NAME": "com.ushahidi.mobile"
         }
     },
     "dependent_plugins": {
@@ -94,9 +88,6 @@
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
         "cordova-plugin-compat": {
-            "PACKAGE_NAME": "com.ushahidi.mobile"
-        },
-        "cordova-plugin-file": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         }
     }
