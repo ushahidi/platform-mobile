@@ -19,7 +19,7 @@
   </ion-refresher>
   <div *ngIf="deployment">
     <div class="header" *ngIf="deployment.name">
-      <h4 text-center padding-top padding-bottom>{{deployment.name}}</h4>
+      <h3 text-left padding-left padding-top padding-bottom>{{deployment.name}}</h3>
     </div>
     <div class="image" *ngIf="deployment.image">
       <img class="lazy" padding [src]="placeholder" [lazyLoad]="deployment.image" offset="1000">
