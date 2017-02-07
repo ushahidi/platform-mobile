@@ -7,13 +7,19 @@
   <div margin-bottom>
     <ion-item margin-bottom *ngIf="deployment">
       <ion-label floating>Name</ion-label>
-      <ion-input #name type="text" clearInput="true" [(ngModel)]="deployment.name"></ion-input>
+      <ion-input #name type="text" [(ngModel)]="deployment.name"></ion-input>
     </ion-item>
   </div>
   <div margin-top margin-bottom>
     <ion-item *ngIf="deployment">
       <ion-label floating>Description</ion-label>
-      <ion-input #description type="text" clearInput="true" [(ngModel)]="deployment.description"></ion-input>
+      <ion-textarea #description type="text" [(ngModel)]="deployment.description"></ion-textarea>
+    </ion-item>
+  </div>
+  <div margin-bottom>
+    <ion-item margin-bottom *ngIf="deployment">
+      <ion-label floating>Email</ion-label>
+      <ion-input #email type="text" [(ngModel)]="deployment.email"></ion-input>
     </ion-item>
   </div>
   <div text-right padding>

@@ -27,6 +27,9 @@ export class DeploymentSettingsPage extends BasePage {
   @ViewChild('description')
   description: TextInput;
 
+  @ViewChild('email')
+  email: TextInput;
+
   constructor(
     public api:ApiService,
     public logger:LoggerService,
@@ -60,6 +63,7 @@ export class DeploymentSettingsPage extends BasePage {
       let loading = this.showLoading("Saving...");
       let changes = {
         name: this.deployment.name,
+        email: this.deployment.email,
         description: this.deployment.description };
       this.api.updateDeployment(this.deployment, changes).then(
         (results) => {

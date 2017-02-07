@@ -273,33 +273,29 @@ export class ApiService {
 
   getDeployment(deployment:Deployment): Promise<Deployment> {
     return new Promise((resolve, reject) => {
-      let api = `/api/v3/config`;
+      let api = `/api/v3/config/site`;
       let url = deployment.url + api;
       this.httpGet(url, deployment.access_token).then(
         (json) => {
-          let items = <any[]>json['results'];
-          for (let item of items) {
-            if (item.id == 'site') {
-              let deployment:Deployment = new Deployment();
-              deployment.name = item['name'];
-              deployment.email = item['email'];
-              deployment.image = item['image_header'];
-              deployment.description = item['description'];
-              if (item.allowed_privileges) {
-                deployment.can_read = item.allowed_privileges.indexOf("read") > -1;
-                deployment.can_create = item.allowed_privileges.indexOf("create") > -1;
-                deployment.can_update = item.allowed_privileges.indexOf("update") > -1;
-                deployment.can_delete = item.allowed_privileges.indexOf("delete") > -1;
-              }
-              else {
-                deployment.can_read = false;
-                deployment.can_create = false;
-                deployment.can_update = false;
-                deployment.can_delete = false;
-              }
-              resolve(deployment);
-            }
+          let data:any = <any>json;
+          let deployment:Deployment = new Deployment();
+          deployment.name = data.name;
+          deployment.email = data.email;
+          deployment.image = data.image_header;
+          deployment.description = data.description;
+          if (data.allowed_privileges) {
+            deployment.can_read = data.allowed_privileges.indexOf("read") > -1;
+            deployment.can_create = data.allowed_privileges.indexOf("create") > -1;
+            deployment.can_update = data.allowed_privileges.indexOf("update") > -1;
+            deployment.can_delete = data.allowed_privileges.indexOf("delete") > -1;
           }
+          else {
+            deployment.can_read = false;
+            deployment.can_create = false;
+            deployment.can_update = false;
+            deployment.can_delete = false;
+          }
+          resolve(deployment);
         },
         (error) => {
           reject(error);
@@ -309,11 +305,12 @@ export class ApiService {
 
   updateDeployment(deployment:Deployment, changes:{}=null) {
     return new Promise((resolve, reject) => {
-      let api = `/api/v3/config`;
+      let api = `/api/v3/config/site`;
       let url = deployment.url + api;
       if (changes == null) {
         changes = {
           name: deployment.name,
+          email: deployment.email,
           description: deployment.description };
       }
       this.httpPut(url, deployment.access_token, changes).then(

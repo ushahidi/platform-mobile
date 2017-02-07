@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { ActionSheetController, AlertController } from 'ionic-angular';
-import { MediaCapture } from 'ionic-native';
+import { MediaCapture, MediaFile, CaptureError, CaptureImageOptions } from 'ionic-native';
 import { FormGroup, FormGroupName, FormControl, FormControlName } from '@angular/forms';
 
 import { Value } from '../../models/value';
@@ -30,6 +30,7 @@ export class VideoComponent {
 
   ngOnInit() {
     this.logger.info(this, "Attribute", this.attribute, "Value", this.value);
+    this.logger.info(this, "SupportedVideoModes", MediaCapture.supportedVideoModes);
   }
 
   captureVideo() {
@@ -37,8 +38,8 @@ export class VideoComponent {
     let options = {
       limit: 3
     };
-    MediaCapture.captureImage(options).then(
-      (data) => {
+    MediaCapture.captureVideo(options).then(
+      (data:MediaFile[]) => {
         this.logger.info(this, "captureVideo", data);
       },
       (error) => {
