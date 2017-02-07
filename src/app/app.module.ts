@@ -12,6 +12,7 @@ import { HomePage } from '../pages/home/home';
 import { DeploymentAddPage } from '../pages/deployment-add/deployment-add';
 import { DeploymentLoginPage } from '../pages/deployment-login/deployment-login';
 import { DeploymentDetailsPage } from '../pages/deployment-details/deployment-details';
+import { DeploymentSettingsPage } from '../pages/deployment-settings/deployment-settings';
 
 import { ResponseListPage } from '../pages/response-list/response-list';
 import { ResponseDetailsPage } from '../pages/response-details/response-details';
@@ -55,6 +56,7 @@ export function provideStorage() {
     DeploymentAddPage,
     DeploymentLoginPage,
     DeploymentDetailsPage,
+    DeploymentSettingsPage,
     ResponseListPage,
     ResponseDetailsPage,
     ResponseAddPage,
@@ -92,6 +94,7 @@ export function provideStorage() {
     DeploymentAddPage,
     DeploymentLoginPage,
     DeploymentDetailsPage,
+    DeploymentSettingsPage,
     ResponseListPage,
     ResponseDetailsPage,
     ResponseAddPage,

@@ -31,12 +31,6 @@
         "cordova-plugin-google-analytics": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
-        "cordova-plugin-googlemaps": {
-            "API_KEY_FOR_IOS": "AIzaSyClDqDvu3mRUDwJ7EX438kIRhB0xfRelPM",
-            "NSLOCATIONWHENINUSEUSAGEDESCRIPTION": "Show your location on the map",
-            "NSLOCATIONALWAYSUSAGEDESCRIPTION": "Trace your location on the map",
-            "PACKAGE_NAME": "com.ushahidi.mobile"
-        },
         "cordova-plugin-ios-longpress-fix": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
@@ -81,13 +75,19 @@
         },
         "ionic-plugin-keyboard": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
+        },
+        "cordova-plugin-googlemaps": {
+            "API_KEY_FOR_IOS": "AIzaSyClDqDvu3mRUDwJ7EX438kIRhB0xfRelPM",
+            "NSLOCATIONWHENINUSEUSAGEDESCRIPTION": "Show your location on the map",
+            "NSLOCATIONALWAYSUSAGEDESCRIPTION": "Trace your location on the map",
+            "PACKAGE_NAME": "com.ushahidi.mobile"
         }
     },
     "dependent_plugins": {
-        "com.googlemaps.ios": {
+        "cordova-plugin-compat": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
-        "cordova-plugin-compat": {
+        "com.googlemaps.ios": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         }
     }

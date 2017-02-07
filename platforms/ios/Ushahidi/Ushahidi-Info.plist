@@ -77,14 +77,14 @@
       <string>googlechromes</string>
       <string>comgooglemaps</string>
     </array>
-    <key>NSLocationWhenInUseUsageDescription</key>
-    <string>$NSLocationWhenInUseUsageDescription</string>
-    <key>Google Maps API Key</key>
-    <string>AIzaSyClDqDvu3mRUDwJ7EX438kIRhB0xfRelPM</string>
-    <key>NSLocationAlwaysUsageDescription</key>
-    <string>$NSLocationAlwaysUsageDescription</string>
     <key>CFBundleURLTypes</key>
     <array>
+      <dict>
+        <key>CFBundleURLSchemes</key>
+        <array>
+          <string>ushahidi</string>
+        </array>
+      </dict>
       <dict>
         <key>CFBundleTypeRole</key>
         <string>Editor</string>
@@ -95,12 +95,12 @@
           <string>com.ushahidi.mobile</string>
         </array>
       </dict>
-      <dict>
-        <key>CFBundleURLSchemes</key>
-        <array>
-          <string>ushahidi</string>
-        </array>
-      </dict>
     </array>
+    <key>Google Maps API Key</key>
+    <string>AIzaSyClDqDvu3mRUDwJ7EX438kIRhB0xfRelPM</string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>$NSLocationWhenInUseUsageDescription</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>$NSLocationAlwaysUsageDescription</string>
   </dict>
 </plist>

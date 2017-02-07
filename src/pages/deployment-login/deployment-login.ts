@@ -25,9 +25,6 @@ export class DeploymentLoginPage extends BasePage {
   @ViewChild('login')
   login: Button;
 
-  @ViewChild('cancel')
-  cancel: Button;
-
   @ViewChild('username')
   username: TextInput;
 

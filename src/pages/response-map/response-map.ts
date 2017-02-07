@@ -64,10 +64,9 @@ export class ResponseMapPage extends BasePage {
 
   showMap(attempts:number=0) {
     this.logger.info(this, "showMap", attempts);
-    let element: HTMLElement = document.getElementById('map');
+    let element: HTMLElement = document.getElementById('modalMap');
     if (element) {
-      this.map = new GoogleMap(element,
-        { 'backgroundColor': '#e7e9ec' });
+      this.map = new GoogleMap(element, { backgroundColor: '#e7e9ec' });
       this.map.one(GoogleMapsEvent.MAP_READY).then(() => {
         this.logger.info(this, "showMap", "Map Ready");
         if (this.latitude && this.longitude) {
@@ -79,11 +78,13 @@ export class ResponseMapPage extends BasePage {
           this.map.moveCamera(position);
           let markerOptions: GoogleMapsMarkerOptions = {
             position: location,
-            title: 'My Location'
+            title: 'Current Location'
           };
           this.map.addMarker(markerOptions).then(
             (marker) => {
-              marker.showInfoWindow();
+              marker.on(GoogleMapsEvent.MARKER_CLICK, () => {
+                marker.showInfoWindow();
+              });
             });
         }
       });

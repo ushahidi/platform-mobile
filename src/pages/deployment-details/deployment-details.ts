@@ -5,6 +5,7 @@ import { StatusBar } from 'ionic-native';
 
 import { BasePage } from '../../pages/base-page/base-page';
 import { DeploymentLoginPage } from '../../pages/deployment-login/deployment-login';
+import { DeploymentSettingsPage } from '../../pages/deployment-settings/deployment-settings';
 
 import { ResponseListPage } from '../response-list/response-list';
 import { ResponseAddPage } from '../response-add/response-add';
@@ -25,7 +26,7 @@ import { PLACEHOLDER_PHOTO } from '../../helpers/constants';
   selector: 'page-deployment-details',
   templateUrl: 'deployment-details.html',
   providers: [ ApiService, DatabaseService, LoggerService ],
-  entryComponents:[ ResponseListPage, ResponseAddPage ]
+  entryComponents:[ ResponseListPage, ResponseAddPage, DeploymentSettingsPage ]
 })
 export class DeploymentDetailsPage extends BasePage {
 
@@ -218,7 +219,8 @@ export class DeploymentDetailsPage extends BasePage {
 
     showSettings(event:any) {
       this.logger.info(this, "showSettings");
-      this.showToast('Settings Not Implemented');
+      this.showPage(DeploymentSettingsPage,
+        { deployment: this.deployment });
     }
 
     addResponse(event:any) {

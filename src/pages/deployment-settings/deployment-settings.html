@@ -1,0 +1,22 @@
+<ion-header>
+  <ion-navbar color="dark">
+    <ion-title>Settings</ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content class="deployment-settings">
+  <div margin-bottom>
+    <ion-item margin-bottom *ngIf="deployment">
+      <ion-label floating>Name</ion-label>
+      <ion-input #name type="text" clearInput="true" [(ngModel)]="deployment.name"></ion-input>
+    </ion-item>
+  </div>
+  <div margin-top margin-bottom>
+    <ion-item *ngIf="deployment">
+      <ion-label floating>Description</ion-label>
+      <ion-input #description type="text" clearInput="true" [(ngModel)]="deployment.description"></ion-input>
+    </ion-item>
+  </div>
+  <div text-right padding>
+    <button #save ion-button text-uppercase block color="primary" (click)="saveSettings($event)">Save Settings</button>
+  </div>
+</ion-content>

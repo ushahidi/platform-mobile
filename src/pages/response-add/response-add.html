@@ -18,7 +18,7 @@
 </ion-header>
 <ion-content [style.border-left-color]="color" class="page-response-add">
   <div *ngIf="form && formGroup">
-    <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+    <form [formGroup]="formGroup">
       <ion-list>
         <div padding-bottom *ngFor="let attribute of form.attributes">
           <field-checkbox [value]="values[attribute.key]" [attribute]="attribute" [formGroup]="formGroup" *ngIf="attribute.input == 'checkbox'"></field-checkbox>

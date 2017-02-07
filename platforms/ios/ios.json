@@ -37,50 +37,6 @@
                             "count": 1
                         },
                         {
-                            "xml": "<feature name=\"GoogleMaps\"><param name=\"ios-package\" value=\"GoogleMaps\" /><param name=\"onload\" value=\"true\" /><param name=\"onreset\" value=\"true\" /></feature>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<feature name=\"External\"><param name=\"ios-package\" value=\"External\" /></feature>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<feature name=\"Geocoder\"><param name=\"ios-package\" value=\"Geocoder\" /></feature>",
-                            "count": 2
-                        },
-                        {
-                            "xml": "<feature name=\"Map\"><param name=\"ios-package\" value=\"Map\" /></feature>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<feature name=\"Circle\"><param name=\"ios-package\" value=\"Circle\" /></feature>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<feature name=\"GroundOverlay\"><param name=\"ios-package\" value=\"GroundOverlay\" /></feature>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<feature name=\"KmlOverlay\"><param name=\"ios-package\" value=\"KmlOverlay\" /></feature>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<feature name=\"Marker\"><param name=\"ios-package\" value=\"Marker\" /></feature>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<feature name=\"Polygon\"><param name=\"ios-package\" value=\"Polygon\" /></feature>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<feature name=\"Polyline\"><param name=\"ios-package\" value=\"Polyline\" /></feature>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<feature name=\"TileOverlay\"><param name=\"ios-package\" value=\"TileOverlay\" /></feature>",
-                            "count": 1
-                        },
-                        {
                             "xml": "<feature name=\"LongPressFix\"><param name=\"ios-package\" value=\"LongPressFix\" /><param name=\"onload\" value=\"true\" /></feature>",
                             "count": 1
                         },
@@ -139,6 +95,54 @@
                         {
                             "xml": "<feature name=\"Keyboard\"><param name=\"ios-package\" onload=\"true\" value=\"IonicKeyboard\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"CordovaGoogleMaps\"><param name=\"ios-package\" value=\"CordovaGoogleMaps\" /><param name=\"onload\" value=\"true\" /><param name=\"onreset\" value=\"true\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Environment\"><param name=\"ios-package\" value=\"Environment\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"External\"><param name=\"ios-package\" value=\"External\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Geocoder\"><param name=\"ios-package\" value=\"PluginGeocoder\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Map\"><param name=\"ios-package\" value=\"PluginMap\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Circle\"><param name=\"ios-package\" value=\"PluginCircle\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"GroundOverlay\"><param name=\"ios-package\" value=\"PluginGroundOverlay\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"KmlOverlay\"><param name=\"ios-package\" value=\"PluginKmlOverlay\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Marker\"><param name=\"ios-package\" value=\"PluginMarker\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Polygon\"><param name=\"ios-package\" value=\"PluginPolygon\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Polyline\"><param name=\"ios-package\" value=\"PluginPolyline\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"TileOverlay\"><param name=\"ios-package\" value=\"PluginTileOverlay\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -185,11 +189,11 @@
                     ],
                     "CFBundleURLTypes": [
                         {
-                            "xml": "<array><dict><key>CFBundleTypeRole</key><string>Editor</string><key>CFBundleURLName</key><string>com.ushahidi.mobile</string><key>CFBundleURLSchemes</key><array><string>com.ushahidi.mobile</string></array></dict></array>",
+                            "xml": "<array><dict><key>CFBundleURLSchemes</key><array><string>ushahidi</string></array></dict></array>",
                             "count": 1
                         },
                         {
-                            "xml": "<array><dict><key>CFBundleURLSchemes</key><array><string>ushahidi</string></array></dict></array>",
+                            "xml": "<array><dict><key>CFBundleTypeRole</key><string>Editor</string><key>CFBundleURLName</key><string>com.ushahidi.mobile</string><key>CFBundleURLSchemes</key><array><string>com.ushahidi.mobile</string></array></dict></array>",
                             "count": 1
                         }
                     ]
@@ -198,9 +202,6 @@
         }
     },
     "installed_plugins": {
-        "com.googlemaps.ios": {
-            "PACKAGE_NAME": "com.ushahidi.mobile"
-        },
         "cordova-fabric-plugin": {
             "FABRIC_API_KEY": "ce67fdba44588767037fbff566b67932e811c332",
             "FABRIC_API_SECRET": "7b24e06a9561fa04b86ae87ef1a0942faaba38b606ac787935af6583d22c3392",
@@ -226,12 +227,6 @@
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
         "cordova-plugin-google-analytics": {
-            "PACKAGE_NAME": "com.ushahidi.mobile"
-        },
-        "cordova-plugin-googlemaps": {
-            "API_KEY_FOR_IOS": "AIzaSyClDqDvu3mRUDwJ7EX438kIRhB0xfRelPM",
-            "NSLOCATIONWHENINUSEUSAGEDESCRIPTION": "Show your location on the map",
-            "NSLOCATIONALWAYSUSAGEDESCRIPTION": "Trace your location on the map",
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
         "cordova-plugin-ios-longpress-fix": {
@@ -277,6 +272,15 @@
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
         "ionic-plugin-keyboard": {
+            "PACKAGE_NAME": "com.ushahidi.mobile"
+        },
+        "com.googlemaps.ios": {
+            "PACKAGE_NAME": "com.ushahidi.mobile"
+        },
+        "cordova-plugin-googlemaps": {
+            "API_KEY_FOR_IOS": "AIzaSyClDqDvu3mRUDwJ7EX438kIRhB0xfRelPM",
+            "NSLOCATIONWHENINUSEUSAGEDESCRIPTION": "Show your location on the map",
+            "NSLOCATIONALWAYSUSAGEDESCRIPTION": "Trace your location on the map",
             "PACKAGE_NAME": "com.ushahidi.mobile"
         }
     },
@@ -386,14 +390,6 @@
             "clobbers": [
                 "analytics",
                 "ga"
-            ]
-        },
-        {
-            "id": "cordova-plugin-googlemaps.cordova-plugin-googlemaps",
-            "file": "plugins/cordova-plugin-googlemaps/www/googlemaps-cdv-plugin.js",
-            "pluginId": "cordova-plugin-googlemaps",
-            "clobbers": [
-                "cordova-plugin-googlemaps"
             ]
         },
         {
@@ -518,10 +514,155 @@
                 "cordova.plugins.Keyboard"
             ],
             "runs": true
+        },
+        {
+            "id": "cordova-plugin-googlemaps.BaseClass",
+            "file": "plugins/cordova-plugin-googlemaps/www/BaseClass.js",
+            "pluginId": "cordova-plugin-googlemaps",
+            "runs": true
+        },
+        {
+            "id": "cordova-plugin-googlemaps.BaseArrayClass",
+            "file": "plugins/cordova-plugin-googlemaps/www/BaseArrayClass.js",
+            "pluginId": "cordova-plugin-googlemaps",
+            "runs": true
+        },
+        {
+            "id": "cordova-plugin-googlemaps.LatLng",
+            "file": "plugins/cordova-plugin-googlemaps/www/LatLng.js",
+            "pluginId": "cordova-plugin-googlemaps",
+            "runs": true
+        },
+        {
+            "id": "cordova-plugin-googlemaps.LatLngBounds",
+            "file": "plugins/cordova-plugin-googlemaps/www/LatLngBounds.js",
+            "pluginId": "cordova-plugin-googlemaps",
+            "runs": true
+        },
+        {
+            "id": "cordova-plugin-googlemaps.Location",
+            "file": "plugins/cordova-plugin-googlemaps/www/Location.js",
+            "pluginId": "cordova-plugin-googlemaps",
+            "runs": true
+        },
+        {
+            "id": "cordova-plugin-googlemaps.CameraPosition",
+            "file": "plugins/cordova-plugin-googlemaps/www/CameraPosition.js",
+            "pluginId": "cordova-plugin-googlemaps",
+            "runs": true
+        },
+        {
+            "id": "cordova-plugin-googlemaps.Polyline",
+            "file": "plugins/cordova-plugin-googlemaps/www/Polyline.js",
+            "pluginId": "cordova-plugin-googlemaps",
+            "runs": true
+        },
+        {
+            "id": "cordova-plugin-googlemaps.Polygon",
+            "file": "plugins/cordova-plugin-googlemaps/www/Polygon.js",
+            "pluginId": "cordova-plugin-googlemaps",
+            "runs": true
+        },
+        {
+            "id": "cordova-plugin-googlemaps.Marker",
+            "file": "plugins/cordova-plugin-googlemaps/www/Marker.js",
+            "pluginId": "cordova-plugin-googlemaps",
+            "runs": true
+        },
+        {
+            "id": "cordova-plugin-googlemaps.InfoWindow",
+            "file": "plugins/cordova-plugin-googlemaps/www/InfoWindow.js",
+            "pluginId": "cordova-plugin-googlemaps",
+            "runs": true
+        },
+        {
+            "id": "cordova-plugin-googlemaps.Circle",
+            "file": "plugins/cordova-plugin-googlemaps/www/Circle.js",
+            "pluginId": "cordova-plugin-googlemaps",
+            "runs": true
+        },
+        {
+            "id": "cordova-plugin-googlemaps.TileOverlay",
+            "file": "plugins/cordova-plugin-googlemaps/www/TileOverlay.js",
+            "pluginId": "cordova-plugin-googlemaps",
+            "runs": true
+        },
+        {
+            "id": "cordova-plugin-googlemaps.GroundOverlay",
+            "file": "plugins/cordova-plugin-googlemaps/www/GroundOverlay.js",
+            "pluginId": "cordova-plugin-googlemaps",
+            "runs": true
+        },
+        {
+            "id": "cordova-plugin-googlemaps.Common",
+            "file": "plugins/cordova-plugin-googlemaps/www/Common.js",
+            "pluginId": "cordova-plugin-googlemaps",
+            "runs": true
+        },
+        {
+            "id": "cordova-plugin-googlemaps.encoding",
+            "file": "plugins/cordova-plugin-googlemaps/www/encoding.js",
+            "pluginId": "cordova-plugin-googlemaps",
+            "runs": true
+        },
+        {
+            "id": "cordova-plugin-googlemaps.spherical",
+            "file": "plugins/cordova-plugin-googlemaps/www/spherical.js",
+            "pluginId": "cordova-plugin-googlemaps",
+            "runs": true
+        },
+        {
+            "id": "cordova-plugin-googlemaps.Geocoder",
+            "file": "plugins/cordova-plugin-googlemaps/www/Geocoder.js",
+            "pluginId": "cordova-plugin-googlemaps",
+            "runs": true
+        },
+        {
+            "id": "cordova-plugin-googlemaps.ExternalService",
+            "file": "plugins/cordova-plugin-googlemaps/www/ExternalService.js",
+            "pluginId": "cordova-plugin-googlemaps",
+            "runs": true
+        },
+        {
+            "id": "cordova-plugin-googlemaps.Map",
+            "file": "plugins/cordova-plugin-googlemaps/www/Map.js",
+            "pluginId": "cordova-plugin-googlemaps",
+            "runs": true
+        },
+        {
+            "id": "cordova-plugin-googlemaps.event",
+            "file": "plugins/cordova-plugin-googlemaps/www/event.js",
+            "pluginId": "cordova-plugin-googlemaps",
+            "runs": true
+        },
+        {
+            "id": "cordova-plugin-googlemaps.MapTypeId",
+            "file": "plugins/cordova-plugin-googlemaps/www/MapTypeId.js",
+            "pluginId": "cordova-plugin-googlemaps",
+            "runs": true
+        },
+        {
+            "id": "cordova-plugin-googlemaps.KmlOverlay",
+            "file": "plugins/cordova-plugin-googlemaps/www/KmlOverlay.js",
+            "pluginId": "cordova-plugin-googlemaps",
+            "runs": true
+        },
+        {
+            "id": "cordova-plugin-googlemaps.Environment",
+            "file": "plugins/cordova-plugin-googlemaps/www/Environment.js",
+            "pluginId": "cordova-plugin-googlemaps",
+            "runs": true
+        },
+        {
+            "id": "cordova-plugin-googlemaps.CordovaGoogleMaps",
+            "file": "plugins/cordova-plugin-googlemaps/www/googlemaps-cdv-plugin.js",
+            "pluginId": "cordova-plugin-googlemaps",
+            "clobbers": [
+                "plugin.google.maps"
+            ]
         }
     ],
     "plugin_metadata": {
-        "com.googlemaps.ios": "2.1.1",
         "cordova-fabric-plugin": "1.1.3",
         "cordova-plugin-app-version": "0.1.9",
         "cordova-plugin-compat": "1.1.0",
@@ -530,7 +671,6 @@
         "cordova-plugin-email": "1.2.6",
         "cordova-plugin-geolocation": "2.4.1",
         "cordova-plugin-google-analytics": "1.7.4",
-        "cordova-plugin-googlemaps": "1.4.0",
         "cordova-plugin-ios-longpress-fix": "1.1.0",
         "cordova-plugin-is-debug": "1.0.0",
         "cordova-plugin-nativestorage": "2.2.1",
@@ -544,6 +684,8 @@
         "cordova-plugin-x-socialsharing": "5.1.6",
         "cordova-sqlite-storage": "1.5.3",
         "ionic-plugin-deeplinks": "1.0.14",
-        "ionic-plugin-keyboard": "2.2.1"
+        "ionic-plugin-keyboard": "2.2.1",
+        "com.googlemaps.ios": "2.1.1",
+        "cordova-plugin-googlemaps": "2.0.0-beta"
     }
 }

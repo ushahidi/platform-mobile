@@ -1,6 +1,6 @@
 {
   "name": "cordova-plugin-googlemaps",
-  "version": "1.4.0",
+  "version": "2.0.0-beta",
   "description": "Google Maps native SDK for Android and iOS",
   "cordova": {
     "id": "cordova-plugin-googlemaps",
@@ -18,19 +18,14 @@
     "maps",
     "geo",
     "google maps",
-    "nightstomp",
     "ecosystem:cordova",
     "cordova-android",
     "cordova-ios"
   ],
   "engines": [
     {
-      "name": "cordova-android",
-      "version": ">=5.1.0"
-    },
-    {
-      "name": "cordova-ios",
-      "version": ">=4.0.0"
+      "name": "cordova",
+      "version": ">=6.2.0"
     }
   ],
   "author": "Masashi Katsumata, Hirbod Mirjavadi",

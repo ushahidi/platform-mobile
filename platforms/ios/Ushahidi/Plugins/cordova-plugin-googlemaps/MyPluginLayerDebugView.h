@@ -7,16 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "GoogleMapsViewController.h"
 
 @interface MyPluginLayerDebugView : UIView
-@property (nonatomic) NSDictionary *embedRect;
 @property (nonatomic) UIView *webView;
-@property (nonatomic) float offsetX;
-@property (nonatomic) float offsetY;
 @property (nonatomic) BOOL debuggable;
-@property (nonatomic) BOOL clickable;
+@property (nonatomic) NSMutableDictionary *mapCtrls;
 @property (nonatomic) NSMutableDictionary *HTMLNodes;
-- (void)putHTMLElement:(NSString *)domId size:(NSDictionary *)size;
-- (void)removeHTMLElement:(NSString *)domId;
-- (void)clearHTMLElement;
 @end

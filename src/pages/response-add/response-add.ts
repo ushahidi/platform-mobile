@@ -407,11 +407,11 @@ export class ResponseAddPage extends BasePage {
       else if (attribute.input == 'textarea') {
         sanitized[key] = [value];
       }
-      else if (attribute.input == 'upload') {
-        //TODO handle image upload
-      }
       else if (attribute.input == 'varchar') {
         sanitized[key] = [value];
+      }
+      else if (attribute.input == 'upload') {
+        //TODO handle image upload
       }
       else if (attribute.input == 'video') {
         //TODO handle video upload

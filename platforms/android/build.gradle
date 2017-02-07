@@ -251,9 +251,9 @@ dependencies {
     debugCompile(project(path: "CordovaLib", configuration: "debug"))
     releaseCompile(project(path: "CordovaLib", configuration: "release"))
     compile "com.google.android.gms:play-services-analytics:+"
-    compile "com.google.android.gms:play-services-maps:9.8.0"
-    compile "com.google.android.gms:play-services-location:9.8.0"
     compile "com.android.support:support-v4:24.1.1+"
+    compile "com.google.android.gms:play-services-maps:10.0.0"
+    compile "com.google.android.gms:play-services-location:10.0.0"
     // SUB-PROJECT DEPENDENCIES END
 }
 

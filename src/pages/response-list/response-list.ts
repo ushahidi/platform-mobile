@@ -444,8 +444,7 @@ export class ResponseListPage extends BasePage {
       if (this.map) {
         this.map.remove();
       }
-      this.map = new GoogleMap(element,
-        { 'backgroundColor': '#e7e9ec' });
+      this.map = new GoogleMap(element, { backgroundColor: '#e7e9ec' });
       this.map.one(GoogleMapsEvent.MAP_READY).then(() => {
         this.logger.info(this,  "showMap", 'Map Ready');
         let bounds = [];
@@ -455,19 +454,22 @@ export class ResponseListPage extends BasePage {
             let longitude = Number(post.longitude);
             let coordinate: GoogleMapsLatLng = new GoogleMapsLatLng(latitude, longitude);
             this.logger.info(this, "showMap", "Coordinate", coordinate);
-            this.map.addMarker({
-              position: coordinate,
+            let markerOptions: GoogleMapsMarkerOptions = {
               title: post.title,
-              snippet: post.description,
-              infoClick: (marker) => {
-                this.logger.info(this, "showMap", "Info", post.id);
-                this.showResponse(post);
-              },
-              markerClick: (marker) => {
-                this.logger.info(this, "showMap", "Marker", post.id);
-                marker.showInfoWindow();
-              },
-            });
+              position: coordinate,
+              snippet: post.description
+            };
+            this.map.addMarker(markerOptions).then(
+              (marker) => {
+                marker.addEventListener(GoogleMapsEvent.MARKER_CLICK, () => {
+                  this.logger.info(this, "showMap", "Marker", post.id);
+                  marker.showInfoWindow();
+                });
+                marker.addEventListener(GoogleMapsEvent.INFO_CLICK, () => {
+                  this.logger.info(this, "showMap", "Info", post.id);
+                  this.showResponse(post);
+                });
+              });
             bounds.push(coordinate);
           }
         }

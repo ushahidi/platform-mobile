@@ -307,6 +307,25 @@ export class ApiService {
     });
   }
 
+  updateDeployment(deployment:Deployment, changes:{}=null) {
+    return new Promise((resolve, reject) => {
+      let api = `/api/v3/config`;
+      let url = deployment.url + api;
+      if (changes == null) {
+        changes = {
+          name: deployment.name,
+          description: deployment.description };
+      }
+      this.httpPut(url, deployment.access_token, changes).then(
+        (json) => {
+          resolve(json);
+        },
+        (error) => {
+          reject(error);
+        })
+    });
+  }
+
   getPosts(deployment:Deployment, search:string=null, form:string=null, user:string=null): Promise<Post[]> {
     return new Promise((resolve, reject) => {
       let api = `/api/v3/posts/`;
