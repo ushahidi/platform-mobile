@@ -18,7 +18,9 @@
     </div>
     <div class="value-varchar" *ngIf="value.input == 'varchar'">{{value.value}}</div>
     <div class="value-video" *ngIf="value.input == 'video'">
-      <iframe height="190" onload="this.width=screen.width" [src]="video" frameborder="0" *ngIf="video"></iframe>
+      <div class="video" *ngIf="video">
+        <iframe width="560" height="349" [src]="video" frameborder="0" allowfullscreen></iframe>
+      </div>
     </div>
   </ion-item>
 </div>
