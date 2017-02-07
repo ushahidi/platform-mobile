@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { Model, TEXT, INTEGER, DOUBLE, PRIMARY_KEY } from '../models/model';
+import { Model, TEXT, INTEGER, DOUBLE, BOOLEAN, PRIMARY_KEY } from '../models/model';
 import { User } from '../models/user';
 import { Form } from '../models/form';
 import { Post } from '../models/post';
@@ -30,13 +30,13 @@ export class Filter extends Model {
   @Column("search_text", TEXT)
   public search_text: string = null;
 
-  @Column("show_inreview", INTEGER)
+  @Column("show_inreview", BOOLEAN)
   public show_inreview: boolean = null;
 
-  @Column("show_published", INTEGER)
+  @Column("show_published", BOOLEAN)
   public show_published: boolean = null;
 
-  @Column("show_archived", INTEGER)
+  @Column("show_archived", BOOLEAN)
   public show_archived: boolean = null;
 
   @Column("show_forms", TEXT)

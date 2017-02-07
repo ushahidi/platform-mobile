@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Platform } from 'ionic-angular';
 import { SQLite } from 'ionic-native';
 
-import { Model } from '../models/model';
+import { Model, TEXT, INTEGER, DOUBLE, BOOLEAN, PRIMARY_KEY } from '../models/model';
 import { Deployment } from '../models/deployment';
 import { User } from '../models/user';
 import { Form } from '../models/form';
@@ -137,6 +137,7 @@ export class DatabaseService {
             if (data.rows && data.rows.length > 0) {
               for (let i = 0; i < data.rows.length; i++) {
                 let row = data.rows.item(i);
+                this.logger.info(this, "executeSelect", table, row);
                 results.push(row);
               }
             }
@@ -267,7 +268,7 @@ export class DatabaseService {
   }
 
   insertParameters(table:string, columns:any[], values:{}) : any {
-    let params = [];
+    let params:any[] = [];
     for (let index in columns) {
       let column:any = columns[index];
       let value = values[column.name];
@@ -279,7 +280,7 @@ export class DatabaseService {
   }
 
   updateStatement(table:string, columns:any[], values:{}) : string {
-    let params = [];
+    let params:any[] = [];
     let clause = [];
     for (let index in columns) {
       let column:any = columns[index];
@@ -294,7 +295,7 @@ export class DatabaseService {
   }
 
   updateParameters(table:string, columns:any[], values:{}) : any {
-    let params = [];
+    let params:any[] = [];
     let clause = [];
     for (let index in columns) {
       let column:any = columns[index];
@@ -328,7 +329,21 @@ export class DatabaseService {
             let values = {};
             for (let index in columns) {
               let column = columns[index];
-              values[column.property] = row[column.name];
+              if (column.type == INTEGER) {
+                values[column.property] = row[column.name];
+              }
+              else if (column.type == DOUBLE) {
+                values[column.property] = row[column.name];
+              }
+              else if (column.type == BOOLEAN) {
+                values[column.property] = (row[column.name] == 'true');
+              }
+              else if (column.type == TEXT) {
+                values[column.property] = row[column.name];
+              }
+              else {
+                values[column.property] = row[column.name];
+              }
             }
             let model = type.newInstance<M>(values);
             models.push(model);
@@ -349,7 +364,21 @@ export class DatabaseService {
           let values = {};
           for (let index in columns) {
             let column = columns[index];
-            values[column.property] = row[column.name];
+            if (column.type == INTEGER) {
+              values[column.property] = row[column.name];
+            }
+            else if (column.type == DOUBLE) {
+              values[column.property] = row[column.name];
+            }
+            else if (column.type == BOOLEAN) {
+              values[column.property] = (row[column.name] == 'true');
+            }
+            else if (column.type == TEXT) {
+              values[column.property] = row[column.name];
+            }
+            else {
+              values[column.property] = row[column.name];
+            }
           }
           let model = type.newInstance<M>(values);
           resolve(model);

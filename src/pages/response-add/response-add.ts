@@ -293,6 +293,13 @@ export class ResponseAddPage extends BasePage {
           }
           this.formGroup.addControl(attribute.key, formGroup);
         }
+        else if (attribute.input == 'radio') {
+          let validators = [];
+          if (attribute.required == true) {
+            validators.push(Validators.required);
+          }
+          this.formGroup.addControl(attribute.key, new FormControl('', validators));
+        }
         else {
           let validators = [];
           if (attribute.required == true) {

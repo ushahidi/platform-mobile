@@ -14,7 +14,7 @@ import { LoggerService } from '../../providers/logger-service';
 })
 export class RadioComponent {
 
-  formGroup: FormGroup;
+  formGroup: FormGroup = null;
   attribute: Attribute = null;
   value: Value = null;
   options: string[] = [];
@@ -42,7 +42,7 @@ export class RadioComponent {
   }
 
   ngAfterViewInit() {
-    
+
   }
 
   radioChanged(event) {

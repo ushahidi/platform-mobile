@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { Model, TEXT, INTEGER, DOUBLE, PRIMARY_KEY } from '../models/model';
+import { Model, TEXT, INTEGER, DOUBLE, BOOLEAN, PRIMARY_KEY } from '../models/model';
 import { Form } from '../models/form';
 
 import { Table } from '../decorators/table';
@@ -43,7 +43,7 @@ export class Attribute extends Model {
   @Column("type", TEXT)
   public type: string = null;
 
-  @Column("required", INTEGER)
+  @Column("required", BOOLEAN)
   public required: boolean = null;
 
   @Column("priority", INTEGER)
@@ -58,16 +58,16 @@ export class Attribute extends Model {
   @Column("saved", TEXT)
   public saved: Date = null;
 
-  @Column("can_read", INTEGER)
+  @Column("can_read", BOOLEAN)
   public can_read: boolean = null;
 
-  @Column("can_create", INTEGER)
+  @Column("can_create", BOOLEAN)
   public can_create: boolean = null;
 
-  @Column("can_update", INTEGER)
+  @Column("can_update", BOOLEAN)
   public can_update: boolean = null;
 
-  @Column("can_delete", INTEGER)
+  @Column("can_delete", BOOLEAN)
   public can_delete: boolean = null;
 
   getOptions() : string[] {

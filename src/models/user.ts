@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { Model, TEXT, INTEGER, DOUBLE, PRIMARY_KEY } from '../models/model';
+import { Model, TEXT, INTEGER, DOUBLE, BOOLEAN, PRIMARY_KEY } from '../models/model';
 import { Deployment } from '../models/deployment';
 
 import { Table } from '../decorators/table';

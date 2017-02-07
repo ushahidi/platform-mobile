@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { Model, TEXT, INTEGER, DOUBLE, PRIMARY_KEY } from '../models/model';
+import { Model, TEXT, INTEGER, DOUBLE, BOOLEAN, PRIMARY_KEY } from '../models/model';
 import { Post } from '../models/post';
 import { Image } from '../models/image';
 import { Attribute } from '../models/attribute';

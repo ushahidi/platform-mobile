@@ -6,6 +6,7 @@ import { Column, COLUMNS } from '../decorators/column';
 export let TEXT:string = "TEXT";
 export let INTEGER:string = "INTEGER";
 export let DOUBLE:string = "DOUBLE";
+export let BOOLEAN:string = "BOOLEAN";
 export let PRIMARY_KEY:boolean = true;
 
 @Injectable()

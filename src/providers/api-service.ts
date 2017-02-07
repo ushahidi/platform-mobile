@@ -555,6 +555,7 @@ export class ApiService {
             attribute.priority = item['priority'];
             attribute.options = item['options'];
             attribute.cardinality = item['cardinality'];
+            this.logger.info(this, "getAttributes", "Attribute", attribute.label, "Required", item['required'], attribute.required)
             if (item.allowed_privileges) {
               attribute.can_read = item.allowed_privileges.indexOf("read") > -1;
               attribute.can_create = item.allowed_privileges.indexOf("create") > -1;

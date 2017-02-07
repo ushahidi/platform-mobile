@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { Model, TEXT, INTEGER, DOUBLE, PRIMARY_KEY } from '../models/model';
+import { Model, TEXT, INTEGER, DOUBLE, BOOLEAN, PRIMARY_KEY } from '../models/model';
 import { Deployment } from '../models/deployment';
 
 import { Table } from '../decorators/table';
@@ -34,7 +34,7 @@ export class Collection extends Model {
   @Column("view", TEXT)
   public view: string = null;
 
-  @Column("featured", INTEGER)
+  @Column("featured", BOOLEAN)
   public featured: boolean = null;
 
   @Column("options", TEXT)
@@ -46,16 +46,16 @@ export class Collection extends Model {
   @Column("updated", TEXT)
   public updated: Date = null;
 
-  @Column("can_read", INTEGER)
+  @Column("can_read", BOOLEAN)
   public can_read: boolean = null;
 
-  @Column("can_create", INTEGER)
+  @Column("can_create", BOOLEAN)
   public can_create: boolean = null;
 
-  @Column("can_update", INTEGER)
+  @Column("can_update", BOOLEAN)
   public can_update: boolean = null;
 
-  @Column("can_delete", INTEGER)
+  @Column("can_delete", BOOLEAN)
   public can_delete: boolean = null;
 
 }
