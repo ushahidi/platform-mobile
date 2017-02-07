@@ -161,8 +161,7 @@ export class ApiService {
         (results) => {
           let items = <any[]>results;
           let deployments = [];
-          for (let i = 0; i < items.length; i++) {
-            let item = items[i];
+          for (let item of items) {
             let deployment:Deployment = new Deployment();
             deployment.name = item['deployment_name'];
             deployment.domain = item['domain'];
@@ -235,8 +234,7 @@ export class ApiService {
         (json) => {
           let items = <any[]>json['results'];
           let users = [];
-          for (let i = 0; i < items.length; i++) {
-            let item = items[i];
+          for (let item of items) {
             let user:User = new User();
             user.id = item['id'];
             user.email = item['email'];
@@ -279,9 +277,8 @@ export class ApiService {
       let url = deployment.url + api;
       this.httpGet(url, deployment.access_token).then(
         (json) => {
-          let results = json['results'];
-          for (let i = 0; i < results.length; i++) {
-            let item = results[i];
+          let items = <any[]>json['results'];
+          for (let item of items) {
             if (item.id == 'site') {
               let deployment:Deployment = new Deployment();
               deployment.name = item['name'];
@@ -328,8 +325,7 @@ export class ApiService {
         (json) => {
           let items = <any[]>json['results'];
           let posts = [];
-          for (let i = 0; i < items.length; i++) {
-            let item:any = items[i];
+          for (let item of items) {
             let post:Post = new Post();
             post.deployment_id = deployment.id;
             post.id = item.id;
@@ -414,8 +410,7 @@ export class ApiService {
       let url = deployment.url + api;
       if (changes == null) {
         let values = {}
-        for (let i = 0; i < post.values.length; i++) {
-          let value:Value = post.values[i];
+        for (let value of post.values) {
           values[value.key] = value.value;
         }
         changes = {
@@ -456,8 +451,7 @@ export class ApiService {
         (json) => {
           let items = <any[]>json['results'];
           let media = [];
-          for (let i = 0; i < items.length; i++) {
-            let item = items[i];
+          for (let item of items) {
             let image:Image = new Image();
             image.deployment_id = deployment.id;
             image.id = item['id'];
@@ -499,8 +493,7 @@ export class ApiService {
         (json) => {
           let items = <any[]>json['results'];
           let forms = [];
-          for (let i = 0; i < items.length; i++) {
-            let item = items[i];
+          for (let item of items) {
             let form:Form = new Form();
             form.deployment_id = deployment.id;
             form.id = item['id'];
@@ -540,8 +533,7 @@ export class ApiService {
         (json) => {
           let items = <any[]>json['results'];
           let attributes = [];
-          for (let i = 0; i < items.length; i++) {
-            let item = items[i];
+          for (let item of items) {
             let attribute:Attribute = new Attribute();
             attribute.deployment_id = deployment.id;
             attribute.id = item['id'];
@@ -586,8 +578,7 @@ export class ApiService {
         (json) => {
           let items = <any[]>json['results'];
           let collections = [];
-          for (let i = 0; i < items.length; i++) {
-            let item = items[i];
+          for (let item of items) {
             let collection:Collection = new Collection();
             collection.deployment_id = deployment.id;
             collection.id = item['id'];
@@ -659,8 +650,7 @@ export class ApiService {
         (results:any[]) => {
           let forms = <Form[]>results[0];
           let attributes = <Attribute[]>results[1];
-          for (let i = 0; i < forms.length; i++){
-            let form:Form = forms[i];
+          for (let form of forms) {
             form.loadAttributes(attributes);
           }
           return forms;
@@ -685,12 +675,10 @@ export class ApiService {
           let images = <Image[]>results[2];
           let users = <User[]>results[3];
           let attributes = <Attribute[]>results[4];
-          for (let i = 0; i < posts.length; i++) {
-            let post:Post = posts[i];
+          for (let post of posts) {
             post.loadUser(users);
             post.loadForm(forms);
-            for (let j = 0; j < post.values.length; j++) {
-              let value:Value = post.values[j];
+            for (let value of post.values) {
               value.loadAttribute(attributes);
               if (value.input == 'upload') {
                 value.loadImage(images);
@@ -711,8 +699,7 @@ export class ApiService {
       if (json['errors']) {
         let errors = json['errors'];
         let message = [];
-        for (let i = 0; i < errors.length; i++) {
-          let error = errors[i];
+        for (let error of errors) {
           message.push(error['message']);
         }
         return message.join(", ");

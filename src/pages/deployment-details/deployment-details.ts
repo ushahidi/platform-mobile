@@ -157,12 +157,10 @@ export class DeploymentDetailsPage extends BasePage {
         return this.api.getFormsWithAttributes(this.deployment).then(
           (results) => {
             let forms = <Form[]>results;
-            this.logger.info(this, "loadForms", "API", results);
-            for (var i = 0; i < forms.length; i++){
-              let form:Form = forms[i];
+            this.logger.info(this, "loadForms", "API", forms);
+            for (let form of forms) {
               this.database.saveForm(this.deployment, form);
-              for (var j = 0; j < form.attributes.length; j++){
-                let attribute:Attribute = form.attributes[j];
+              for (let attribute of form.attributes) {
                 this.database.saveAttribute(this.deployment, attribute);
               }
             }
@@ -196,8 +194,7 @@ export class DeploymentDetailsPage extends BasePage {
           (results) => {
             let collections = <Collection[]>results;
             this.logger.info(this, "loadCollections", "API", collections);
-            for (var i = 0; i < collections.length; i++){
-              let collection:Collection = collections[i];
+            for (let collection of collections) {
               this.database.saveCollection(this.deployment, collection);
             }
             this.deployment.collections = collections;
@@ -228,8 +225,7 @@ export class DeploymentDetailsPage extends BasePage {
       this.logger.info(this, "addResponse");
       let buttons = [];
       if (this.deployment.forms) {
-        for (var i = 0; i < this.deployment.forms.length; i++){
-          let form = this.deployment.forms[i];
+        for (let form of this.deployment.forms){
           buttons.push({
             text: form.name,
             handler: () => {

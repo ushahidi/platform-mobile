@@ -49,7 +49,7 @@ export class Filter extends Model {
     if (this.show_published == false && post.status == "published") {
       return false;
     }
-    if (this.show_inreview == false && post.status == "pending") {
+    if (this.show_inreview == false && post.status == "draft") {
       return false;
     }
     if (this.showForm(post.form) == false) {

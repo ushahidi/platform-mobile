@@ -62,17 +62,14 @@ export class DatabaseService {
   }
 
   createTables(models:Model[]) {
-    //this.logger.info(this, "createTables", models);
     let promises = [];
-    for (let index in models) {
-      let model: Model = models[index];
+    for (let model of models) {
       promises.push(this.createTable(model));
     }
     return Promise.all(promises);
   }
 
   createTable<M extends Model>(model:M) {
-    //this.logger.info(this, "createTable", model);
     return new Promise((resolve, reject) => {
       this.openDatabase().then(
         (database:SQLite) => {
@@ -81,8 +78,7 @@ export class DatabaseService {
           this.logger.info(this, "createTable", table, columns);
           let keys:string[] = [];
           let values:string[] = [];
-          for (let index in columns) {
-            let column = columns[index];
+          for (let column of columns) {
             values.push(column.name + ' ' + column.type);
             if (column.key == true) {
               keys.push(column.name);
@@ -256,8 +252,7 @@ export class DatabaseService {
   insertStatement(table:string, columns:any[], values:{}) : string {
     let names = [];
     let params = [];
-    for (let index in columns) {
-      let column:any = columns[index];
+    for (let column of columns) {
       let value = values[column.name];
       if (value != null) {
         names.push(column.name);
@@ -269,8 +264,7 @@ export class DatabaseService {
 
   insertParameters(table:string, columns:any[], values:{}) : any {
     let params:any[] = [];
-    for (let index in columns) {
-      let column:any = columns[index];
+    for (let column of columns) {
       let value = values[column.name];
       if (value != null) {
         params.push(value);
@@ -282,8 +276,7 @@ export class DatabaseService {
   updateStatement(table:string, columns:any[], values:{}) : string {
     let params:any[] = [];
     let clause = [];
-    for (let index in columns) {
-      let column:any = columns[index];
+    for (let column of columns) {
       if (column.key == true) {
         clause.push(`${column.name} = ?`);
       }
@@ -297,8 +290,7 @@ export class DatabaseService {
   updateParameters(table:string, columns:any[], values:{}) : any {
     let params:any[] = [];
     let clause = [];
-    for (let index in columns) {
-      let column:any = columns[index];
+    for (let column of columns) {
       let value = values[column.property];
       if (column.key == true) {
         clause.push(value);
@@ -327,8 +319,7 @@ export class DatabaseService {
           for (let i = 0; i < rows.length; i++) {
             let row = rows[i];
             let values = {};
-            for (let index in columns) {
-              let column = columns[index];
+            for (let column of columns) {
               if (column.type == INTEGER) {
                 values[column.property] = row[column.name];
               }
@@ -362,8 +353,7 @@ export class DatabaseService {
         (row) => {
           let columns = type.getColumns();
           let values = {};
-          for (let index in columns) {
-            let column = columns[index];
+          for (let column of columns) {
             if (column.type == INTEGER) {
               values[column.property] = row[column.name];
             }
@@ -565,8 +555,7 @@ export class DatabaseService {
         let values = <Value[]>results[1];
         let users = <User[]>results[2];
         let forms = <Form[]>results[3];
-        for (let i = 0; i < posts.length; i++) {
-          let post:Post = posts[i];
+        for (let post of posts) {
           post.loadUser(users);
           post.loadForm(forms);
           post.loadValues(values);
@@ -601,8 +590,7 @@ export class DatabaseService {
       then((results:any[]) => {
         let forms:Form[] = <Form[]>results[0];
         let attributes:Attribute[] = <Attribute[]>results[1];
-        for (let i = 0; i < forms.length; i++){
-          let form:Form = forms[i];
+        for (let form of forms){
           form.loadAttributes(attributes);
         }
         return forms;

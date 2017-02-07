@@ -59,7 +59,7 @@ export class Post extends Model {
   @Column("image_url", TEXT)
   public image_url: string = null;
 
-  @Column("pending", TEXT)
+  @Column("pending", BOOLEAN)
   public pending: boolean = null;
 
   @Column("latitude", DOUBLE)

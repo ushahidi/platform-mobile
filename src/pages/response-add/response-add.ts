@@ -82,8 +82,8 @@ export class ResponseAddPage extends BasePage {
   loadUpdates(event:any=null) {
     this.logger.info(this, "loadUpdates");
     let promises = [
-      this.loadFormGroup(),
-      this.loadPostValues()];
+      this.loadPostValues(),
+      this.loadFormGroup()];
     Promise.all(promises).then(
       (done) => {
         this.logger.info(this, "loadUpdates", "Done");
@@ -99,7 +99,7 @@ export class ResponseAddPage extends BasePage {
       });
   }
 
-  onCancel(event) {
+  onCancel(event:any=null) {
     this.logger.info(this, "onCancel");
     this.viewController.dismiss();
   }
@@ -115,8 +115,7 @@ export class ResponseAddPage extends BasePage {
         this.post.longitude = location.split(",")[1];
       }
       let values = this.sanitizeValues(this.formGroup.value);
-      for (let i = 0; i < this.post.values.length; i++) {
-        let value:Value = this.post.values[i];
+      for (let value of this.post.values) {
         value.value = values[value.key];
       }
       if (this.offline) {
@@ -216,6 +215,7 @@ export class ResponseAddPage extends BasePage {
     this.logger.info(this, "loadPostValues");
     if (this.post == null) {
       this.post = new Post();
+      this.post.pending = true;
       this.database.getPostsLowestID().then(id => {
         this.post.id = Math.min(id, -1);
       });
@@ -226,9 +226,10 @@ export class ResponseAddPage extends BasePage {
       this.post.created = new Date();
       this.post.updated = new Date();
       this.post.values = [];
-      for (let index in this.form.attributes) {
-        let attribute:Attribute = this.form.attributes[index];
+      for (let attribute of this.form.attributes) {
         let value:Value = new Value();
+        value.post_id = this.post.id;
+        value.deployment_id = this.deployment.id;
         value.key = attribute.key;
         value.label = attribute.label;
         value.input = attribute.input;
@@ -237,10 +238,11 @@ export class ResponseAddPage extends BasePage {
         this.post.values.push(value);
       }
     }
-    for (let index in this.form.attributes) {
-      let attribute:Attribute = this.form.attributes[index];
+    for (let attribute of this.form.attributes) {
       if (attribute.type == "title") {
         let title:Value = new Value();
+        title.post_id = this.post.id;
+        title.deployment_id = this.deployment.id;
         title.key = attribute.key;
         title.input = attribute.input;
         title.label = attribute.label;
@@ -249,63 +251,53 @@ export class ResponseAddPage extends BasePage {
         this.values[title.key] = title;
       }
       else if (attribute.type == "description") {
-        let value:Value = new Value();
-        value.key = attribute.key;
-        value.input = attribute.input;
-        value.label = attribute.label;
-        value.cardinality = attribute.cardinality;
-        value.value = this.post.description;
-        this.values[attribute.key] = value;
+        let description:Value = new Value();
+        description.post_id = this.post.id;
+        description.deployment_id = this.deployment.id;
+        description.key = attribute.key;
+        description.input = attribute.input;
+        description.label = attribute.label;
+        description.cardinality = attribute.cardinality;
+        description.value = this.post.description;
+        this.values[attribute.key] = description;
       }
     }
-    for (let index in this.post.values) {
-      let value:Value = this.post.values[index];
+    for (let value of this.post.values) {
       this.values[value.key] = value;
     }
-    this.logger.info(this, "loadPostValues", "Values", this.values);
   }
 
   loadFormGroup() {
     this.logger.info(this, "loadFormGroup", "Form", this.form.name);
     this.formGroup = new FormGroup({});
     if (this.form && this.form.attributes) {
-      for (let index in this.form.attributes) {
-        let attribute:Attribute = this.form.attributes[index];
+      for (let attribute of this.form.attributes) {
+        let value:Value = this.values[attribute.key];
+        let text:string = (value != null) ? value.value : '';
+        let validator = (attribute.required == true) ? Validators.required : null;
+        this.logger.info(this, "loadFormGroup", "Form", this.form.name, "Attribute", attribute.input, "Value", text);
         if (attribute.input == 'location') {
-          let validator: any = null;
-          if (attribute.required == true) {
-            validator = Validators.required;
-          }
+          let coordinates = (text != null) ? text.split(',') : '';
+          let latitude = (coordinates.length > 1) ? coordinates[0] : '';
+          let longitude = (coordinates.length > 1) ? coordinates[1] : '';
           let formGroup = new FormGroup({
-            lat: new FormControl(''),
-            lon: new FormControl('')}, validator);
+            lat: new FormControl(latitude),
+            lon: new FormControl(longitude)}, validator);
           this.formGroup.addControl(attribute.key, formGroup);
         }
         else if (attribute.input == 'checkbox' || attribute.input == 'checkboxes') {
-          let validator : any = null;
-          if (attribute.required == true) {
-            validator = Validators.required;
-          }
           let formGroup = new FormGroup({}, validator);
           let options = attribute.getOptions();
-          for (let index in options) {
-            formGroup.addControl(options[index], new FormControl(''));
+          for (let option of options) {
+            formGroup.addControl(option, new FormControl(''));
           }
           this.formGroup.addControl(attribute.key, formGroup);
         }
         else if (attribute.input == 'radio') {
-          let validators = [];
-          if (attribute.required == true) {
-            validators.push(Validators.required);
-          }
-          this.formGroup.addControl(attribute.key, new FormControl('', validators));
+          this.formGroup.addControl(attribute.key, new FormControl(text, validator));
         }
         else {
-          let validators = [];
-          if (attribute.required == true) {
-            validators.push(Validators.required);
-          }
-          this.formGroup.addControl(attribute.key, new FormControl('', validators));
+          this.formGroup.addControl(attribute.key, new FormControl(text, validator));
         }
       }
     }
@@ -324,8 +316,7 @@ export class ResponseAddPage extends BasePage {
   }
 
   getTitle(values:any) {
-    for (let index in this.form.attributes) {
-      let attribute = this.form.attributes[index];
+    for (let attribute of this.form.attributes) {
       if (attribute.type == 'title') {
         return values[attribute.key];
       }
@@ -334,8 +325,7 @@ export class ResponseAddPage extends BasePage {
   }
 
   getDescription(values:any) {
-    for (let index in this.form.attributes) {
-      let attribute = this.form.attributes[index];
+    for (let attribute of this.form.attributes) {
       if (attribute.type == 'description') {
         return values[attribute.key];
       }
@@ -344,8 +334,7 @@ export class ResponseAddPage extends BasePage {
   }
 
   getLocation(values:any) {
-    for (let index in this.form.attributes) {
-      let attribute = this.form.attributes[index];
+    for (let attribute of this.form.attributes) {
       if (attribute.type == 'location') {
         return values[attribute.key];
       }
@@ -356,8 +345,7 @@ export class ResponseAddPage extends BasePage {
   sanitizeValues(values:any) {
     this.logger.info(this, "sanitizeValues", "Values", values);
     let sanitized = {};
-    for (let index in this.form.attributes) {
-      let attribute:Attribute = this.form.attributes[index];
+    for (let attribute of this.form.attributes) {
       let key = attribute.key;
       let value = values[key];
       this.logger.info(this, "sanitizeValues", "Value", attribute.label, attribute.input, key, value);

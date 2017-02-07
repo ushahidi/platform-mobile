@@ -63,14 +63,6 @@ export class DeploymentAddPage extends BasePage {
     this.hideModal();
   }
 
-  onFocus(event:any) {
-    this.logger.info(this, "onFocus", event.target.value);
-  }
-
-  onBlur(event:any) {
-    this.logger.info(this, "onBlur", event.target.value);
-  }
-
   onSearch(event:any) {
     this.logger.info(this, "onSearch", event.target.value);
     let search = event.target.value;

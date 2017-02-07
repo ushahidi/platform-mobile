@@ -144,11 +144,9 @@ export class ResponseListPage extends BasePage {
           this.posts = <Post[]>results;
           this.filtered = this.getFiltered(this.posts, this.filter);
           this.logger.info(this, "loadPosts", "API", this.posts.length);
-          for (let postIndex in this.posts) {
-            let post:Post = this.posts[postIndex];
+          for (let post of this.posts) {
             this.database.savePost(this.deployment, post);
-            for (let valueIndex in post.values) {
-              let value:Value = post.values[valueIndex];
+            for (let value of post.values) {
               this.database.saveValue(this.deployment, value);
             }
           }
@@ -161,8 +159,7 @@ export class ResponseListPage extends BasePage {
 
   getFiltered(posts:Post[], filter:Filter): Post[] {
     let filtered: Post[] = [];
-    for (let index in posts) {
-      let post:Post = posts[index];
+    for (let post of posts) {
       if (filter == null) {
         filtered.push(post);
       }
@@ -184,8 +181,7 @@ export class ResponseListPage extends BasePage {
     this.logger.info(this, "addResponse");
     let buttons = [];
     if (this.deployment.forms != null) {
-      for (var i = 0; i < this.deployment.forms.length; i++){
-        let form = this.deployment.forms[i];
+      for (let form of this.deployment.forms){
         buttons.push({
           text: form.name,
           handler: () => {
@@ -317,8 +313,7 @@ export class ResponseListPage extends BasePage {
   }
 
   getForm(id:number) : Form {
-    for (let index in this.deployment.forms) {
-      let form:Form = this.deployment.forms[index];
+    for (let form of this.deployment.forms) {
       if (form.id == id) {
         return form;
       }
@@ -454,8 +449,7 @@ export class ResponseListPage extends BasePage {
       this.map.one(GoogleMapsEvent.MAP_READY).then(() => {
         this.logger.info(this,  "showMap", 'Map Ready');
         let bounds = [];
-        for (var i = 0; i <= this.posts.length; i++){
-          let post = this.posts[i];
+        for (let post of this.posts){
           if (post && post.latitude && post.longitude) {
             let latitude = Number(post.latitude);
             let longitude = Number(post.longitude);
