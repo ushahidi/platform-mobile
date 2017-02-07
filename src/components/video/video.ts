@@ -18,7 +18,6 @@ export class VideoComponent {
   formGroup: FormGroup;
   attribute: Attribute = null;
   value: Value = null;
-  //videoData: string = "/assets/images/placeholder-video.jpg";
   videoData: string = null;
   videoThumbail: string = null;
 

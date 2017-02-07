@@ -6,8 +6,8 @@
     </ion-label>
     <ion-input type="text" hidden [formControlName]="attribute.key"></ion-input>
   </ion-item>
-  <ion-card margin-left margin-right *ngIf="imageData != null">
-    <img full [src]="imageData" />
+  <ion-card margin-left margin-right *ngIf="imageThumbnail != null">
+    <img full [src]="imageThumbnail" />
   </ion-card>
   <button ion-button margin-left icon-left text-uppercase small color="light" *ngIf="imageData == null" (click)="showOptions()">
     <ion-icon name="camera"></ion-icon> Add Photo

@@ -36,6 +36,7 @@
   },
   "cordovaPlugins": [
     "cordova-plugin-app-version",
+    "cordova-plugin-camera",
     "cordova-plugin-console",
     "cordova-plugin-crosswalk-webview",
     "cordova-plugin-device",
@@ -44,6 +45,7 @@
     "cordova-plugin-googlemaps",
     "cordova-plugin-ios-longpress-fix",
     "cordova-plugin-is-debug",
+    "cordova-plugin-media-capture",
     "cordova-plugin-networkactivityindicator",
     "cordova-plugin-network-information",
     "cordova-plugin-secure-storage",

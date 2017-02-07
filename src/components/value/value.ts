@@ -1,4 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
+import { SafeResourceUrl, DomSanitizer } from '@angular/platform-browser';
 
 import { LoggerService } from '../../providers/logger-service';
 
@@ -12,8 +13,11 @@ export class ValueComponent {
   key: string = "AIzaSyBjDgMqF6GOdirXn3iFtI6Jlt8jEoWhSq4";
   value: any;
   map: string = null;
+  video: SafeResourceUrl = null;
 
-  constructor(public logger:LoggerService) {
+  constructor(
+    public logger:LoggerService,
+    public sanitizer:DomSanitizer) {
   }
 
   ngOnInit() {
@@ -25,6 +29,9 @@ export class ValueComponent {
         + `&zoom=15&size=300x200&maptype=roadmap&markers=color:red%7C`
         + `${coordinates}&key=${this.key}`;
       this.logger.info(this, "Map", this.map);
+    }
+    else if (this.value.input == 'video') {
+      this.video = this.sanitizer.bypassSecurityTrustResourceUrl(this.value.value);
     }
   }
 

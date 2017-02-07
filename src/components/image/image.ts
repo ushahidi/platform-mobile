@@ -1,6 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { Button, ActionSheetController, AlertController } from 'ionic-angular';
 import { Camera } from 'ionic-native';
+import { SafeResourceUrl, DomSanitizer } from '@angular/platform-browser';
 import { FormGroup, FormGroupName, FormControl, FormControlName } from '@angular/forms';
 
 import { Value } from '../../models/value';
@@ -18,13 +19,13 @@ export class ImageComponent {
   formGroup: FormGroup;
   attribute: Attribute = null;
   value: Value = null;
-  //imageData: string = "/assets/images/placeholder-photo.jpg";
   imageData: string = null;
-  imageThumbnail: string = null;
+  imageThumbnail: SafeResourceUrl = null;
 
   @ViewChild('button') button: Button;
 
   constructor(
+    public sanitizer:DomSanitizer,
     public logger:LoggerService,
     public alertController:AlertController,
     public actionController:ActionSheetController) {
@@ -58,8 +59,8 @@ export class ImageComponent {
     actionSheet.present();
   }
 
-  choosePhoto() {
-    this.logger.info(this, "choosePhoto");
+  takePhoto() {
+    this.logger.info(this, "takePhoto");
     let options = {
       targetWidth: 800,
       targetHeight: 600,
@@ -70,20 +71,21 @@ export class ImageComponent {
     Camera.getPicture(options).then (
       (data) => {
         this.imageData = "data:image/jpeg;base64," + data;
+        this.imageThumbnail = this.sanitizer.bypassSecurityTrustResourceUrl(this.imageData);
       },
       (error) => {
         this.logger.error(this, "choosePhoto", error);
         let alert = this.alertController.create({
-          title: 'Problem Choosing Photo',
-          subTitle: "There was a problem trying to choose photo from the library.",
+          title: 'Problem Taking Photo',
+          subTitle: "There was a problem trying to take a photo.",
           buttons: ['OK']
         });
         alert.present();
       });
   }
 
-  takePhoto() {
-    this.logger.info(this, "takePhoto");
+  choosePhoto() {
+    this.logger.info(this, "choosePhoto");
     let options = {
       targetWidth: 800,
       targetHeight: 600,
@@ -94,12 +96,13 @@ export class ImageComponent {
     Camera.getPicture(options).then(
       (data) => {
         this.imageData = "data:image/jpeg;base64," + data;
+        this.imageThumbnail = this.sanitizer.bypassSecurityTrustResourceUrl(this.imageData);
       },
       (error) => {
         this.logger.error(this, "takePhoto", error);
         let alert = this.alertController.create({
-          title: 'Problem Taking Photo',
-          subTitle: "There was a problem trying to take a photo.",
+          title: 'Problem Choosing Photo',
+          subTitle: "There was a problem trying to choose photo from the library.",
           buttons: ['OK']
         });
         alert.present();
