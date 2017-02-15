@@ -446,20 +446,6 @@ export class ResponseAddPage extends BasePage {
     }
   }
 
-  // {"6b30d6a3-a7d6-4d78-9edb-b547b79132eb":"Title",
-  // "e84a9f13-f666-4f24-b35e-6256bf398004":"Description",
-  // "936bdaf8-d5ba-415d-8145-3f1416f7bbd2":{"Yes":true,"No":false},
-  // "location_default":{"lat":37.33233141,"lon":-122.0312186},
-  // "13479cd8-5612-4462-95f4-6c5af1d13aa8":null,
-  // "c699d37a-92b5-45d7-add6-69051f2a9df8":"0.8",
-  // "c784b4c9-18a7-4213-9275-278e01e5fe38":"2017-01-01T00:00:00.000Z",
-  // "96bd0d3b-fd3b-41c1-a6e9-00fad86de627":"2017-01-01T19:00:00.000Z",
-  // "4d8a0452-141f-4a34-bd01-925c3eb52ca9":"100",
-  // "311794f7-5646-4f02-9e37-4da0dd522476":"Cat",
-  // "f82f4ec8-958c-4994-a841-450e22454970":"Boy",
-  // "80dd426a-e44c-4a02-a620-6670367bd827":null,
-  // "6c10f2c4-c78b-4f20-b18e-bb88eb18aa19":"Paragraph"}
-
   loadFormValues() {
     let formValues = this.formGroup.value;
     this.logger.info(this, "loadFormValues", formValues);
@@ -513,8 +499,8 @@ export class ResponseAddPage extends BasePage {
   }
 
   getVideos():string[] {
-    let values = this.formGroup.value;
     let videos:string[] = [];
+    let values = this.formGroup.value;
     for (let attribute of this.form.attributes) {
       if (attribute.input == 'video') {
         let video = values[attribute.key];
@@ -527,8 +513,8 @@ export class ResponseAddPage extends BasePage {
   }
 
   getImages():string[] {
-    let values = this.formGroup.value;
     let images:string[] = [];
+    let values = this.formGroup.value;
     for (let attribute of this.form.attributes) {
       if (attribute.input == 'upload') {
         let image = values[attribute.key];
@@ -539,16 +525,5 @@ export class ResponseAddPage extends BasePage {
     }
     return images;
   }
-
-  // getUrlParameter(url:string, parameter:string): string {
-  //    let parameters = decodeURIComponent(url).split("&");
-  //    for (let i = 0; i < parameters.length; i++) {
-  //      let pair = parameters[i].split("=");
-  //      if (pair[0] === parameter) {
-  //        return pair[1];
-  //      }
-  //    }
-  //    return null;
-  // }
 
 }
