@@ -10,7 +10,7 @@ import { LoggerService } from '../../providers/logger-service';
 @Component({
   selector: 'field-textarea',
   templateUrl: 'textarea.html',
-  inputs: ['value', 'attribute', 'formGroup']
+  inputs: ['value', 'attribute', 'formGroup', 'submitted']
 })
 export class TextAreaComponent {
 
@@ -19,6 +19,7 @@ export class TextAreaComponent {
   value: Value = null;
   required: boolean = false;
   focused: boolean = false;
+  submitted: boolean = false;
   text: string = "";
 
   @ViewChild('input')

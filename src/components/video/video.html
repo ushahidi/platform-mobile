@@ -1,4 +1,4 @@
-<div class="field-video" [class.invalid]="attribute.required == true && videoPath == null">
+<div class="field-video" [class.invalid]="attribute.required == true && videoPath == null && submitted == true">
   <ion-item no-lines [formGroup]="formGroup" *ngIf="formGroup">
     <ion-label class="field-label">
       {{attribute.label}}
@@ -18,5 +18,5 @@
   <button ion-button text-uppercase icon-left small color="red" *ngIf="videoPath != null" (click)="deleteVideo()">
     <ion-icon name="trash"></ion-icon> Delete Video
   </button>
-  <p ion-text padding-left color="red" *ngIf="attribute.required == true && videoPath == null">Video required</p>
+  <p ion-text padding-left color="red" *ngIf="attribute.required == true && videoPath == null && submitted == true">Video required</p>
 </div>

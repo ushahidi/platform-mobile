@@ -10,15 +10,15 @@ import { LoggerService } from '../../providers/logger-service';
 @Component({
   selector: 'field-text',
   templateUrl: 'text.html',
-  inputs: ['value', 'attribute', 'formGroup']
+  inputs: ['value', 'attribute', 'formGroup', 'submitted']
 })
 export class TextComponent {
 
   formGroup: FormGroup;
   attribute: Attribute = null;
   value: Value = null;
-  required: boolean = false;
   focused: boolean = false;
+  submitted: boolean = false;
   text: string = "";
 
   @ViewChild('input')

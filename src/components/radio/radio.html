@@ -1,4 +1,4 @@
-<div class="field-radio" [class.invalid]="attribute.required == true && text.length == 0">
+<div class="field-radio" [class.invalid]="attribute.required == true && text.length == 0 && submitted == true">
   <ion-item no-lines>
     <ion-label class="field-label">
       {{attribute.label}}
@@ -13,5 +13,5 @@
       </ion-item>
     </ion-list>
   </div>
-  <p ion-text padding-left color="red" *ngIf="attribute.required == true && text.length == 0">Selection required</p>
+  <p ion-text padding-left color="red" *ngIf="attribute.required == true && text.length == 0 && submitted == true">Selection required</p>
 </div>

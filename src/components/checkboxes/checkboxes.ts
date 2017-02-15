@@ -10,7 +10,7 @@ import { LoggerService } from '../../providers/logger-service';
 @Component({
   selector: 'field-checkboxes',
   templateUrl: 'checkboxes.html',
-  inputs: ['value', 'attribute', 'formGroup']
+  inputs: ['value', 'attribute', 'formGroup', 'submitted']
 })
 export class CheckboxesComponent {
 
@@ -18,6 +18,7 @@ export class CheckboxesComponent {
   attribute: Attribute = null;
   value: Value = null;
   options: string[] = [];
+  submitted: boolean = false;
   values: {} = {};
 
   constructor(public logger:LoggerService) {

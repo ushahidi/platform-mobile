@@ -10,7 +10,7 @@ import { LoggerService } from '../../providers/logger-service';
 @Component({
   selector: 'field-radio',
   templateUrl: 'radio.html',
-  inputs: ['value', 'attribute', 'formGroup']
+  inputs: ['value', 'attribute', 'formGroup', 'submitted']
 })
 export class RadioComponent {
 
@@ -18,7 +18,7 @@ export class RadioComponent {
   attribute: Attribute = null;
   value: Value = null;
   options: string[] = [];
-  required: boolean = false;
+  submitted: boolean = false;
   selection: string = "";
 
   @ViewChild('radioGroup')

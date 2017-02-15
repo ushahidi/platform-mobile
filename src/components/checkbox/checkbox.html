@@ -1,4 +1,4 @@
-<div class="field-checkbox" [class.invalid]="attribute.required == true && hasValue() == false">
+<div class="field-checkbox" [class.invalid]="attribute.required == true && hasValue() == false && submitted == true">
   <ion-item no-lines>
     <ion-label class="field-label">
       {{attribute.label}}
@@ -13,5 +13,5 @@
       </ion-item>
     </div>
   </div>
-  <p ion-text padding-left color="red" *ngIf="attribute.required == true && hasValue() == false">Selection required</p>
+  <p ion-text padding-left color="red" *ngIf="attribute.required == true && hasValue() == false && submitted == true">Selection required</p>
 </div>

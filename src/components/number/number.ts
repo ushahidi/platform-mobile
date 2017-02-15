@@ -10,7 +10,7 @@ import { LoggerService } from '../../providers/logger-service';
 @Component({
   selector: 'field-number',
   templateUrl: 'number.html',
-  inputs: ['value', 'attribute', 'formGroup']
+  inputs: ['value', 'attribute', 'formGroup', 'submitted']
 })
 export class NumberComponent {
 
@@ -18,6 +18,7 @@ export class NumberComponent {
   attribute: Attribute = null;
   value: Value = null;
   focused: boolean = false;
+  submitted: boolean = false;
   text: string = "";
 
   @ViewChild('input') input: TextInput;

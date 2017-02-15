@@ -45,6 +45,7 @@ export class ResponseAddPage extends BasePage {
   values : {} = {};
   formGroup: FormGroup = null;
   color: string = "#cccccc";
+  submitted: boolean = false;
 
   constructor(
     public vimeo:VimeoService,
@@ -114,6 +115,7 @@ export class ResponseAddPage extends BasePage {
 
   onSubmit(event:any=null) {
     this.logger.info(this, "onSubmit");
+    this.submitted = true;
     if (this.hasRequiredValues()) {
       this.loadFormValues();
       if (this.offline) {

@@ -10,7 +10,7 @@ import { LoggerService } from '../../providers/logger-service';
 @Component({
   selector: 'field-select',
   templateUrl: 'select.html',
-  inputs: ['value', 'attribute', 'formGroup']
+  inputs: ['value', 'attribute', 'formGroup', 'submitted']
 })
 export class SelectComponent {
 
@@ -19,7 +19,7 @@ export class SelectComponent {
   value: Value = null;
   options: string[] = [];
   selectOptions: {} = null;
-  required: boolean = false;
+  submitted: boolean = false;
   text: string = "";
 
   @ViewChild('select')

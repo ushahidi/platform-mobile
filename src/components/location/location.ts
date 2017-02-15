@@ -13,7 +13,7 @@ import { PLACEHOLDER_MAP } from '../../helpers/constants';
 @Component({
   selector: 'field-location',
   templateUrl: 'location.html',
-  inputs: ['value', 'attribute', 'formGroup']
+  inputs: ['value', 'attribute', 'formGroup', 'submitted']
 })
 export class LocationComponent {
 
@@ -25,6 +25,7 @@ export class LocationComponent {
   mapImage: string = null;
   latitude: number = null;
   longitude: number = null;
+  submitted: boolean = false;
 
   @Output()
   changeLocation = new EventEmitter();

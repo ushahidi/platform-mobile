@@ -14,7 +14,7 @@ declare var cordova:any;
 @Component({
   selector: 'field-image',
   templateUrl: 'image.html',
-  inputs: ['value', 'attribute', 'formGroup']
+  inputs: ['value', 'attribute', 'formGroup', 'submitted']
 })
 export class ImageComponent {
 
@@ -23,6 +23,7 @@ export class ImageComponent {
   value: Value = null;
   imagePath: string = null;
   imageThumbnail: SafeResourceUrl = null;
+  submitted: boolean = false;
 
   constructor(
     public platform:Platform,

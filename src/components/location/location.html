@@ -1,4 +1,4 @@
-<div class="field-location" [class.invalid]="attribute.required == true && latitude == null && longitude == null">
+<div class="field-location" [class.invalid]="attribute.required == true && latitude == null && longitude == null && submitted == true">
   <ion-item no-lines [formGroup]="formGroup">
     <ion-label class="field-label">
       {{attribute.label}}
@@ -15,5 +15,5 @@
   <button ion-button margin-left icon-left text-uppercase small color="light" *ngIf="mapImage" (click)="updateLocation($event)">
     <ion-icon name="pin"></ion-icon> Change Location
   </button>
-  <p ion-text padding-left color="red" *ngIf="attribute.required == true && latitude == null && longitude == null">Location required</p>
+  <p ion-text padding-left color="red" *ngIf="attribute.required == true && latitude == null && longitude == null && submitted == true">Location required</p>
 </div>

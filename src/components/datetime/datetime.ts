@@ -12,7 +12,7 @@ import { LoggerService } from '../../providers/logger-service';
 @Component({
   selector: 'field-datetime',
   templateUrl: 'datetime.html',
-  inputs: ['value', 'attribute', 'formGroup']
+  inputs: ['value', 'attribute', 'formGroup', 'submitted']
 })
 export class DateTimeComponent {
 
@@ -22,6 +22,7 @@ export class DateTimeComponent {
   datetime: string = null;
   date: string = null;
   time: string = null;
+  submitted: boolean = false;
 
   constructor(public logger:LoggerService) {
   }

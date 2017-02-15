@@ -14,7 +14,7 @@ declare var cordova:any;
 @Component({
   selector: 'field-video',
   templateUrl: 'video.html',
-  inputs: ['value', 'attribute', 'formGroup']
+  inputs: ['value', 'attribute', 'formGroup', 'submitted']
 })
 export class VideoComponent {
 
@@ -23,6 +23,7 @@ export class VideoComponent {
   value: Value = null;
   videoPath: string = null;
   videoPreview: SafeResourceUrl = null;
+  submitted: boolean = false;
 
   constructor(
     public platform:Platform,

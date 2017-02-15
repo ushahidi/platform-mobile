@@ -1,4 +1,4 @@
-<div class="field-textarea" [class.focused]="focused" [class.invalid]="attribute.required == true && (text == null || text.length == 0) && focused == false">
+<div class="field-textarea" [class.focused]="focused" [class.invalid]="attribute.required == true && (text == null || text.length == 0) && focused == false && submitted == true">
   <ion-item [formGroup]="formGroup">
     <ion-label floating class="field-label">
       {{attribute.label}}
@@ -6,5 +6,5 @@
     </ion-label>
     <ion-textarea #input type="text" [(ngModel)]="text" [formControlName]="attribute.key" (focus)="onFocus($event)" (blur)="onBlur($event)"></ion-textarea>
   </ion-item>
-  <p ion-text padding-left color="red" *ngIf="attribute.required == true && (text == null || text.length == 0) && focused == false">Text required</p>
+  <p ion-text padding-left color="red" *ngIf="attribute.required == true && (text == null || text.length == 0) && focused == false && submitted == true">Text required</p>
 </div>

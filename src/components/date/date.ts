@@ -10,7 +10,7 @@ import { LoggerService } from '../../providers/logger-service';
 @Component({
   selector: 'field-date',
   templateUrl: 'date.html',
-  inputs: ['value', 'attribute', 'formGroup']
+  inputs: ['value', 'attribute', 'formGroup', 'submitted']
 })
 export class DateComponent {
 
@@ -19,6 +19,7 @@ export class DateComponent {
   value: Value = null;
   datetime: string = null;
   date: string = null;
+  submitted: boolean = false;
 
   constructor(public logger:LoggerService) {
   }

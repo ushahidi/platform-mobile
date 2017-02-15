@@ -1,4 +1,4 @@
-<div class="field-select" [class.invalid]="attribute.required == true && (text == null || text.length == 0)">
+<div class="field-select" [class.invalid]="attribute.required == true && (text == null || text.length == 0) && submitted == true">
   <ion-item [formGroup]="formGroup">
     <ion-label class="field-label">
       {{attribute.label}}
@@ -8,5 +8,5 @@
       <ion-option value="{{option}}" *ngFor="let option of options">{{option}}</ion-option>
     </ion-select>
   </ion-item>
-  <p ion-text padding-left color="red" *ngIf="attribute.required == true && (text == null || text.length == 0)">Selection required</p>
+  <p ion-text padding-left color="red" *ngIf="attribute.required == true && (text == null || text.length == 0) && submitted == true">Selection required</p>
 </div>
