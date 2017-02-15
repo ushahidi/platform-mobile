@@ -1,12 +1,15 @@
 import { Component, ViewChild } from '@angular/core';
-import { ActionSheetController, AlertController } from 'ionic-angular';
-import { MediaCapture, MediaFile, CaptureError, CaptureImageOptions } from 'ionic-native';
+import { Platform, ActionSheetController, AlertController } from 'ionic-angular';
+import { MediaCapture, MediaFile, CaptureError, CaptureImageOptions, File, FilePath, Entry, FileError } from 'ionic-native';
 import { FormGroup, FormGroupName, FormControl, FormControlName } from '@angular/forms';
+import { SafeResourceUrl, DomSanitizer } from '@angular/platform-browser';
 
 import { Value } from '../../models/value';
 import { Attribute } from '../../models/attribute';
 
 import { LoggerService } from '../../providers/logger-service';
+
+declare var cordova:any;
 
 @Component({
   selector: 'field-video',
@@ -18,10 +21,12 @@ export class VideoComponent {
   formGroup: FormGroup;
   attribute: Attribute = null;
   value: Value = null;
-  videoData: string = null;
-  videoThumbail: string = null;
+  videoPath: string = null;
+  videoPreview: SafeResourceUrl = null;
 
   constructor(
+    public platform:Platform,
+    public sanitizer:DomSanitizer,
     public logger:LoggerService,
     public alertController:AlertController,
     public actionController:ActionSheetController) {
@@ -39,10 +44,24 @@ export class VideoComponent {
     };
     MediaCapture.captureVideo(options).then(
       (data:MediaFile[]) => {
+        let mediaFile = data[0];
         this.logger.info(this, "captureVideo", data);
+        this.copyFile(mediaFile.fullPath).then(
+          (filePath:string) => {
+            this.logger.info(this, "captureVideo", filePath);
+            this.videoPath = filePath;
+            this.videoPreview = this.sanitizer.bypassSecurityTrustResourceUrl(filePath);
+          },
+          (error) => {
+            this.logger.error(this, "captureVideo", error);
+            this.videoPath = null;
+            this.videoPreview = null;
+          });
       },
       (error) => {
         this.logger.error(this, "captureVideo", error);
+        this.videoPath = null;
+        this.videoPreview = null;
         let alert = this.alertController.create({
           title: 'Problem Taking Video',
           subTitle: "There was a problem trying to capture video.",
@@ -55,5 +74,26 @@ export class VideoComponent {
 
   deleteVideo() {
     this.logger.info(this, "deleteVideo");
+    this.videoPath = null;
+    this.videoPreview = null;
   }
+
+  copyFile(filePath:string){
+    return new Promise((resolve, reject) => {
+      let fileName = filePath.substr(filePath.lastIndexOf('/') + 1).split('?').shift();
+      let fileDirectory = `file://${filePath.substr(0, filePath.lastIndexOf('/') + 1)}`;
+      let storeDirectory = this.platform.is('ios') ? cordova.file.documentsDirectory : cordova.file.dataDirectory;
+      let storePath = `${storeDirectory}${fileName}`;
+      this.logger.info(this, "copyFile", fileDirectory, fileName, storeDirectory);
+      File.copyFile(fileDirectory, fileName, storeDirectory, fileName).then(
+        (entry:Entry) => {
+          this.logger.info(this, "copyFile", entry.fullPath, storePath);
+          resolve(storePath);
+        },
+        (error:FileError) => {
+          reject(error);
+        });
+    });
+  }
+
 }

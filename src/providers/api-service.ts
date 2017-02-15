@@ -1,11 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers, URLSearchParams, RequestOptions } from '@angular/http';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/retry';
-import 'rxjs/add/operator/delay';
-import 'rxjs/add/operator/timeout';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/mergeMap';
+import { Http } from '@angular/http';
 
 import { Model } from '../models/model';
 import { Deployment } from '../models/deployment';
@@ -17,138 +11,23 @@ import { Value } from '../models/value';
 import { Image } from '../models/image';
 import { Collection } from '../models/collection';
 
+import { HttpService } from '../providers/http-service';
 import { LoggerService } from '../providers/logger-service';
 
 @Injectable()
-export class ApiService {
+export class ApiService extends HttpService {
 
-  source: string = "mobile";
-  clientId: any = "ushahidiui";
-  clientSecret: any = "35e7f0bca957836d05ca0492211b0ac707671261";
-  scope: string = "api posts forms tags sets users media config";
+  private source: string = "mobile";
+  private clientId: any = "ushahidiui";
+  private clientSecret: any = "35e7f0bca957836d05ca0492211b0ac707671261";
+  private scope: string = "api posts forms tags sets users media config";
   // api posts media forms tags savedsearches sets users stats layers
   // config messages notifications contacts roles permissions csv
 
   constructor(
     public http: Http,
     public logger:LoggerService) {
-
-  }
-
-  authHeaders(accessToken:string=null) {
-    let headers = new Headers();
-    headers.set('Accept', 'application/json');
-    headers.set('Content-Type', 'application/json');
-    if (accessToken != null) {
-      headers.set("Authorization", `Bearer ${accessToken}`)
-    }
-    return headers;
-  }
-
-  httpGet(url:string, token:string=null, params:any=null) {
-    return new Promise((resolve, reject) => {
-      let search = new URLSearchParams();
-      if (params) {
-        for (let key in params) {
-          search.set(key, params[key])
-        }
-      }
-      let headers = this.authHeaders(token);
-      let options = new RequestOptions({ headers: headers, search: search });
-      this.logger.info(this, "GET", url, params);
-      this.http.get(url, options)
-        .map(res => res.json())
-        .subscribe(
-          (items) => {
-            this.logger.info(this, "GET", url, items);
-            resolve(items);
-          },
-          (error) => {
-            this.logger.error(this, "GET", url, error);
-            reject(this.errorMessage(error));
-          });
-    });
-  }
-
-  httpPost(url:string, token:string=null, params:any=null) {
-    return new Promise((resolve, reject) => {
-      let body = JSON.stringify(params);
-      let headers = this.authHeaders(token);
-      let options = new RequestOptions({ headers: headers });
-      this.logger.info(this, "POST", url, body);
-      this.http.post(url, body, options)
-        .map(res => {
-          if (res.status == 204) {
-            return {}
-          }
-          else {
-            return res.json();
-          }
-        })
-        .subscribe(
-          (json) => {
-            this.logger.info(this, "POST", url, json);
-            resolve(json);
-          },
-          (error) => {
-            this.logger.error(this, "POST", url, error);
-            reject(this.errorMessage(error));
-          }
-        );
-    });
-  }
-
-  httpPut(url:string, token:string=null, params:any=null) {
-    return new Promise((resolve, reject) => {
-      let body = JSON.stringify(params);
-      let headers = this.authHeaders(token);
-      let options = new RequestOptions({ headers: headers });
-      this.logger.info(this, "PUT", url, body);
-      this.http.put(url, body, options)
-        .map(res => {
-          if (res.status == 204) {
-            return {}
-          }
-          else {
-            return res.json();
-          }
-        })
-        .subscribe(
-          (json) => {
-            this.logger.info(this, "PUT", url, json);
-            resolve(json);
-          },
-          (error) => {
-            this.logger.error(this, "PUT", url, error);
-            reject(this.errorMessage(error));
-          }
-        );
-    });
-  }
-
-  httpDelete(url:string, token:string=null, params:any=null) {
-    return new Promise((resolve, reject) => {
-      let search = new URLSearchParams();
-      if (params) {
-        for (let key in params) {
-          search.set(key, params[key])
-        }
-      }
-      let headers = this.authHeaders(token);
-      let options = new RequestOptions({ headers: headers, search: search });
-      this.logger.info(this, "DELETE", url, params);
-      this.http.delete(url, options)
-        .map(res => res.json())
-        .subscribe(
-          (items) => {
-            this.logger.info(this, "DELETE", url, items);
-            resolve(items);
-          },
-          (error) => {
-            this.logger.error(this, "DELETE", url, error);
-            reject(this.errorMessage(error));
-          });
-    });
+    super(http, logger);
   }
 
   searchDeployments(search:string) : Promise<Deployment[]> {
@@ -236,11 +115,11 @@ export class ApiService {
           let users = [];
           for (let item of items) {
             let user:User = new User();
-            user.id = item['id'];
-            user.email = item['email'];
-            user.name = item['realname'];
-            user.gravatar = item['gravatar'];
-            user.image = `https://www.gravatar.com/avatar/${item['gravatar']}.jpg?s=32`;
+            user.id = item.id;
+            user.email = item.email;
+            user.name = item.realname;
+            user.gravatar = item.gravatar;
+            user.image = `https://www.gravatar.com/avatar/${item.gravatar}.jpg?s=32`;
             users.push(user);
           }
           resolve(users);
@@ -256,13 +135,13 @@ export class ApiService {
       let api = `/api/v3/users/${user}`;
       let url = deployment.url + api;
       this.httpGet(url, deployment.access_token).then(
-        (json) => {
+        (data:any) => {
           let user:User = new User();
-          user.id = json['id'];
-          user.email = json['email'];
-          user.name = json['realname'];
-          user.gravatar = json['gravatar'];
-          user.image = `https://www.gravatar.com/avatar/${json['gravatar']}.jpg?s=32`;
+          user.id = data.id;
+          user.email = data.email;
+          user.name = data.realname;
+          user.gravatar = data.gravatar;
+          user.image = `https://www.gravatar.com/avatar/${data.gravatar}.jpg?s=32`;
           resolve(user);
         },
         (error) => {
@@ -380,9 +259,9 @@ export class ApiService {
               value.key = key;
               value.value = text;
               if (key == 'location_default') {
-                post.latitude = text['lat'];
-                post.longitude = text['lon'];
-                value.value = `${text['lat']},${text['lon']}`;
+                post.latitude = text.lat;
+                post.longitude = text.lon;
+                value.value = `${text.lat},${text.lon}`;
               }
               else {
                 value.value = text;
@@ -404,6 +283,17 @@ export class ApiService {
       let api = "/api/v3/posts/";
       let url = deployment.url + api;
       let values = {}
+      for (let value of post.values) {
+        if (value.value == null || value.value.length == 0) {
+          values[value.key] = [];
+        }
+        else if (value.input == 'number' || value.input == 'upload' || value.input == 'video') {
+          values[value.key] = [Number(value.value)];
+        }
+        else {
+          values[value.key] = [value.value];
+        }
+      }
       let params = {
         source: this.source,
         form: { id: post.form_id },
@@ -427,7 +317,15 @@ export class ApiService {
       if (changes == null) {
         let values = {}
         for (let value of post.values) {
-          values[value.key] = value.value;
+          if (value.value == null || value.value.length == 0) {
+            values[value.key] = [];
+          }
+          else if (value.input == 'number' || value.input == 'upload' || value.input == 'video') {
+            values[value.key] = [Number(value.value)];
+          }
+          else {
+            values[value.key] = [value.value];
+          }
         }
         changes = {
           title: post.title,
@@ -470,15 +368,15 @@ export class ApiService {
           for (let item of items) {
             let image:Image = new Image();
             image.deployment_id = deployment.id;
-            image.id = item['id'];
-            image.url = item['original_file_url'];
-            image.mime = item['mime'];
-            image.caption = item['caption'];
-            image.width = item['original_width'];
-            image.height = item['original_height'];
-            image.filesize = item['original_file_size'];
-            image.created = item['created'];
-            image.updated = item['updated'];
+            image.id = item.id;
+            image.url = item.original_file_url;
+            image.mime = item.mime;
+            image.caption = item.caption;
+            image.width = item.original_width;
+            image.height = item.original_height;
+            image.filesize = item.original_file_size;
+            image.created = item.created;
+            image.updated = item.updated;
             if (item.allowed_privileges) {
               image.can_read = item.allowed_privileges.indexOf("read") > -1;
               image.can_create = item.allowed_privileges.indexOf("create") > -1;
@@ -501,6 +399,47 @@ export class ApiService {
     });
   }
 
+  uploadImage(deployment:Deployment, file:string): Promise<Image> {
+    return new Promise((resolve, reject) => {
+      let api = `/api/v3/media`;
+      let url = deployment.url + api;
+      let mimeType = this.getMimeType(file);
+      this.fileUpload(url, deployment.access_token, file, "POST", mimeType).then(
+        (data:any) => {
+          this.logger.info(this, "uploadImage", "Data", data);
+          let item = JSON.parse(data.response);
+          this.logger.info(this, "uploadImage", "Response", item);
+          let image:Image = new Image();
+          image.deployment_id = deployment.id;
+          image.id = item.id;
+          image.url = item.original_file_url;
+          image.mime = item.mime;
+          image.caption = item.caption;
+          image.width = item.original_width;
+          image.height = item.original_height;
+          image.filesize = item.original_file_size;
+          image.created = item.created;
+          image.updated = item.updated;
+          if (item.allowed_privileges) {
+            image.can_read = item.allowed_privileges.indexOf("read") > -1;
+            image.can_create = item.allowed_privileges.indexOf("create") > -1;
+            image.can_update = item.allowed_privileges.indexOf("update") > -1;
+            image.can_delete = item.allowed_privileges.indexOf("delete") > -1;
+          }
+          else {
+            image.can_read = false;
+            image.can_create = false;
+            image.can_update = false;
+            image.can_delete = false;
+          }
+          resolve(image);
+        },
+        (error) => {
+          reject(error);
+        });
+    });
+  }
+
   getForms(deployment:Deployment): Promise<Form[]> {
     return new Promise((resolve, reject) => {
       let api = `/api/v3/forms`;
@@ -512,13 +451,13 @@ export class ApiService {
           for (let item of items) {
             let form:Form = new Form();
             form.deployment_id = deployment.id;
-            form.id = item['id'];
-            form.type = item['type'];
-            form.name = item['name'];
-            form.color = item['color'];
-            form.created = item['created'];
-            form.updated = item['updated'];
-            form.description = item['description'];
+            form.id = item.id;
+            form.type = item.type;
+            form.name = item.name;
+            form.color = item.color;
+            form.created = item.created;
+            form.updated = item.updated;
+            form.description = item.description;
             if (item.allowed_privileges) {
               form.can_read = item.allowed_privileges.indexOf("read") > -1;
               form.can_create = item.allowed_privileges.indexOf("create") > -1;
@@ -552,18 +491,17 @@ export class ApiService {
           for (let item of items) {
             let attribute:Attribute = new Attribute();
             attribute.deployment_id = deployment.id;
-            attribute.id = item['id'];
-            attribute.form_id = item['form_stage_id'];
-            attribute.key = item['key'];
-            attribute.label = item['label'];
-            attribute.instructions = item['instructions'];
-            attribute.input = item['input'];
-            attribute.type = item['type'];
-            attribute.required = item['required'];
-            attribute.priority = item['priority'];
-            attribute.options = item['options'];
-            attribute.cardinality = item['cardinality'];
-            this.logger.info(this, "getAttributes", "Attribute", attribute.label, "Required", item['required'], attribute.required)
+            attribute.id = item.id;
+            attribute.form_id = item.form_stage_id;
+            attribute.key = item.key;
+            attribute.label = item.label;
+            attribute.instructions = item.instructions;
+            attribute.input = item.input;
+            attribute.type = item.type;
+            attribute.required = item.required;
+            attribute.priority = item.priority;
+            attribute.options = item.options;
+            attribute.cardinality = item.cardinality;
             if (item.allowed_privileges) {
               attribute.can_read = item.allowed_privileges.indexOf("read") > -1;
               attribute.can_create = item.allowed_privileges.indexOf("create") > -1;
@@ -597,14 +535,14 @@ export class ApiService {
           for (let item of items) {
             let collection:Collection = new Collection();
             collection.deployment_id = deployment.id;
-            collection.id = item['id'];
-            collection.name = item['name'];
-            collection.description = item['description'];
-            collection.view = item['view'];
-            collection.options = item['options'];
-            collection.featured = item['featured'];
-            collection.created = item['created'];
-            collection.updated = item['updated'];
+            collection.id = item.id;
+            collection.name = item.name;
+            collection.description = item.description;
+            collection.view = item.view;
+            collection.options = item.options;
+            collection.featured = item.featured;
+            collection.created = item.created;
+            collection.updated = item.updated;
             if (item.allowed_privileges) {
               collection.can_read = item.allowed_privileges.indexOf("read") > -1;
               collection.can_create = item.allowed_privileges.indexOf("create") > -1;
@@ -707,24 +645,6 @@ export class ApiService {
         (error) => {
           this.logger.error(this, "getPostsWithValues", error);
         });
-  }
-
-  errorMessage(err) {
-    try {
-      let json = err.json();
-      if (json['errors']) {
-        let errors = json['errors'];
-        let message = [];
-        for (let error of errors) {
-          message.push(error['message']);
-        }
-        return message.join(", ");
-      }
-    }
-    catch (error) {
-      this.logger.error(this, "errorMessage", error);
-    }
-    return JSON.stringify(err);
   }
 
 }

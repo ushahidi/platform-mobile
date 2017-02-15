@@ -1,11 +1,10 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="com.ushahidi.mobile" version="0.1.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <feature name="FabricPlugin">
-        <param name="android-package" value="com.sarriaroman.fabric.FabricPlugin" />
-        <param name="onload" value="true" />
-    </feature>
     <feature name="AppVersion">
         <param name="android-package" value="uk.co.whiteoctober.cordova.AppVersion" />
+    </feature>
+    <feature name="Camera">
+        <param name="android-package" value="org.apache.cordova.camera.CameraLauncher" />
     </feature>
     <feature name="Device">
         <param name="android-package" value="org.apache.cordova.device.Device" />
@@ -13,17 +12,43 @@
     <feature name="EmailComposer">
         <param name="android-package" value="de.martinreinhardt.cordova.plugins.email.EmailComposer" />
     </feature>
+    <feature name="File">
+        <param name="android-package" value="org.apache.cordova.file.FileUtils" />
+        <param name="onload" value="true" />
+    </feature>
+    <allow-navigation href="cdvfile:*" />
+    <feature name="FileTransfer">
+        <param name="android-package" value="org.apache.cordova.filetransfer.FileTransfer" />
+    </feature>
+    <feature name="FilePath">
+        <param name="android-package" value="com.hiddentao.cordova.filepath.FilePath" />
+        <param name="onload" value="true" />
+    </feature>
     <feature name="Geolocation">
         <param name="android-package" value="org.apache.cordova.geolocation.Geolocation" />
     </feature>
     <feature name="UniversalAnalytics">
         <param name="android-package" value="com.danielcwilson.plugins.analytics.UniversalAnalyticsPlugin" />
     </feature>
+    <feature name="GoogleMaps">
+        <param name="android-package" value="plugin.google.maps.GoogleMaps" />
+        <param name="onload" value="true" />
+        <param name="onreset" value="true" />
+    </feature>
+    <feature name="External">
+        <param name="android-package" value="plugin.google.maps.External" />
+    </feature>
+    <feature name="Geocoder">
+        <param name="android-package" value="plugin.google.maps.MyGeocoder" />
+    </feature>
+    <feature name="InAppBrowser">
+        <param name="android-package" value="org.apache.cordova.inappbrowser.InAppBrowser" />
+    </feature>
     <feature name="IsDebug">
         <param name="android-package" value="me.mattlewis.isdebug.IsDebug" />
     </feature>
-    <feature name="NativeStorage">
-        <param name="android-package" value="NativeStorage" />
+    <feature name="Capture">
+        <param name="android-package" value="org.apache.cordova.mediacapture.Capture" />
     </feature>
     <feature name="NetworkStatus">
         <param name="android-package" value="org.apache.cordova.networkinformation.NetworkManager" />
@@ -73,8 +98,14 @@
     <allow-intent href="geo:*" />
     <allow-navigation href="*" />
     <allow-navigation href="http://*/*" />
-    <allow-navigation href="http://localhost:3000" />
+    <allow-navigation href="https://*/*" />
+    <allow-navigation href="*://*.youtube.com/*" />
+    <allow-navigation href="*youtube*" />
+    <allow-navigation href="*ytimg*" />
     <allow-navigation href="http://ionic.local/*" />
+    <allow-navigation href="http://localhost:3000" />
+    <allow-navigation href="http://localhost:3001" />
+    <allow-navigation href="http://192.168.0.18:8100" />
     <icon src="resources/android/icon/drawable-xhdpi-icon.png" />
     <allow-intent href="market:*" />
     <splash density="port-ldpi" src="resources/android/splash/drawable-port-ldpi-screen.png" />
@@ -109,53 +140,6 @@
     <preference name="android-minSdkVersion" value="19" />
     <preference name="LoadUrlTimeoutValue" value="50000" />
     <preference name="KeyboardDisplayRequiresUserAction" value="false" />
-    <feature name="CordovaGoogleMaps">
-        <param name="android-package" value="plugin.google.maps.CordovaGoogleMaps" />
-        <param name="onload" value="true" />
-        <param name="onreset" value="true" />
-    </feature>
-    <feature name="Map">
-        <param name="android-package" value="plugin.google.maps.PluginMap" />
-    </feature>
-    <feature name="Polyline">
-        <param name="android-package" value="plugin.google.maps.PluginPolyline" />
-    </feature>
-    <feature name="Polygon">
-        <param name="android-package" value="plugin.google.maps.PluginPolygon" />
-    </feature>
-    <feature name="Marker">
-        <param name="android-package" value="plugin.google.maps.PluginMarker" />
-    </feature>
-    <feature name="Circle">
-        <param name="android-package" value="plugin.google.maps.PluginCircle" />
-    </feature>
-    <feature name="TileOverlay">
-        <param name="android-package" value="plugin.google.maps.PluginTileOverlay" />
-    </feature>
-    <feature name="GroundOverlay">
-        <param name="android-package" value="plugin.google.maps.PluginGroundOverlay" />
-    </feature>
-    <feature name="KmlOverlay">
-        <param name="android-package" value="plugin.google.maps.PluginKmlOverlay" />
-    </feature>
-    <feature name="External">
-        <param name="android-package" value="plugin.google.maps.External" />
-    </feature>
-    <feature name="Geocoder">
-        <param name="android-package" value="plugin.google.maps.PluginGeocoder" />
-    </feature>
-    <feature name="Environment">
-        <param name="android-package" value="plugin.google.maps.Environment" />
-    </feature>
-    <feature name="File">
-        <param name="android-package" value="org.apache.cordova.file.FileUtils" />
-        <param name="onload" value="true" />
-    </feature>
-    <allow-navigation href="cdvfile:*" />
-    <feature name="Capture">
-        <param name="android-package" value="org.apache.cordova.mediacapture.Capture" />
-    </feature>
-    <feature name="Camera">
-        <param name="android-package" value="org.apache.cordova.camera.CameraLauncher" />
-    </feature>
+    <preference name="AllowInlineMediaPlayback" value="true" />
+    <preference name="MediaPlaybackRequiresUserAction" value="false" />
 </widget>

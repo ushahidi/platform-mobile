@@ -1,8 +1,5 @@
 package plugin.google.maps;
 
-import android.os.AsyncTask;
-import android.os.Bundle;
-
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.CordovaWebView;
@@ -10,8 +7,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class PluginKmlOverlay extends MyPlugin implements MyPluginInterface {
+import android.annotation.SuppressLint;
+import android.os.Bundle;
 
+public class PluginKmlOverlay extends MyPlugin {
+  
+  @SuppressLint("UseSparseArrays")
   @Override
   public void initialize(CordovaInterface cordova, final CordovaWebView webView) {
     super.initialize(cordova, webView);
@@ -24,51 +25,30 @@ public class PluginKmlOverlay extends MyPlugin implements MyPluginInterface {
    * @param callbackContext
    * @throws JSONException
    */
-  public void create(final JSONArray args, final CallbackContext callbackContext) throws JSONException {
-
-    final JSONObject opts = args.getJSONObject(1);
-    self = this;
-
-    if (!opts.has("url")) {
-      callbackContext.error("No kml file is specified");
-      return;
-    }
-    final Bundle params = PluginUtil.Json2Bundle(opts);
-    final String kmlId = opts.getString("kmlId");
-
-    String urlStr = null;
-
-    try {
-      urlStr = opts.getString("url");
-    } catch (JSONException e) {
-      e.printStackTrace();
-    }
-    if (urlStr == null || urlStr.length() == 0) {
-      callbackContext.error("No kml file is specified");
-      return;
-    }
-
-    if (!urlStr.contains("://") &&
-        !urlStr.startsWith("/") &&
-        !urlStr.startsWith("www/") &&
-        !urlStr.startsWith("data:image") &&
-        !urlStr.startsWith("./") &&
-        !urlStr.startsWith("../")) {
+  @SuppressWarnings("unused")
+  private void createKmlOverlay(JSONArray args, CallbackContext callbackContext) throws JSONException {
+    JSONObject opts = args.getJSONObject(1);
+    Bundle params = PluginUtil.Json2Bundle(opts);
+    
+    String urlStr = opts.getString("url");
+    if (urlStr.indexOf("://") == -1 && 
+        urlStr.startsWith("/") == false && 
+        urlStr.startsWith("www/") == false) {
       urlStr = "./" + urlStr;
     }
-    if (urlStr.startsWith("./")  || urlStr.startsWith("../")) {
-      urlStr = urlStr.replace("././", "./");
-      String currentPage = CURRENT_PAGE_URL;
+    if (urlStr.indexOf("./") == 0) {
+      String currentPage = this.webView.getUrl();
       currentPage = currentPage.replaceAll("[^\\/]*$", "");
-      urlStr = currentPage + "/" + urlStr;
+      urlStr = urlStr.replace("./", currentPage);
     }
-    if (urlStr.startsWith("cdvfile://")) {
-      urlStr = PluginUtil.getAbsolutePathFromCDVFilePath(webView.getResourceApi(), urlStr);
+    if (urlStr.indexOf("cdvfile://") == 0 ) {
+      urlStr = PluginUtil.getAbsolutePathFromCDVFilePath(this.webView.getResourceApi(), urlStr);
     }
-
-    AsyncKmlParser kmlParser = new AsyncKmlParser(cordova.getActivity(), pluginMap, kmlId, params, callbackContext);
-    kmlParser.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, urlStr);
-
+    
+    String kmlId = opts.getString("kmlId");
+    
+    AsyncKmlParser kmlParser = new AsyncKmlParser(this.cordova.getActivity(), this.mapCtrl, kmlId, callbackContext, params);
+    kmlParser.execute(urlStr);
   }
 
 }

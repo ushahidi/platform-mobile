@@ -7,9 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <Cordova/CDV.h>
 
 @protocol MyPlgunProtocol <NSObject>
-@property (nonatomic, strong) NSMutableDictionary* objects;
-- (void)pluginUnload;
+- (void)setGoogleMapsViewController: (GoogleMapsViewController*)viewCtrl;
 @end

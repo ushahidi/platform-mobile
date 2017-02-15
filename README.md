@@ -146,17 +146,17 @@ If you run into permission problems, try using `sudo`
 sudo npm install -g ionic@latest
 ```
 
-Install some Ionic utilities
+Install some Ionic and Cordova utilities
 
 ```
-npm install -g xcode
-npm install -g cordova-common
-npm install -g cordova-ios
-npm install -g cordova-android
-npm install -g cordova-browser
-npm install -g ios-sim
-npm install -g ios-deploy
-npm install -g android-simulator
+npm install -g xcode@latest
+npm install -g cordova-common@latest
+npm install -g cordova-ios@latest
+npm install -g cordova-android@latest
+npm install -g cordova-browser@latest
+npm install -g ios-sim@latest
+npm install -g ios-deploy@latest
+npm install -g android-simulator@latest
 ```
 
 Check the version of Ionic

@@ -7,12 +7,10 @@
         "files": {}
     },
     "installed_plugins": {
-        "cordova-fabric-plugin": {
-            "FABRIC_API_KEY": "ce67fdba44588767037fbff566b67932e811c332",
-            "FABRIC_API_SECRET": "7b24e06a9561fa04b86ae87ef1a0942faaba38b606ac787935af6583d22c3392",
+        "cordova-plugin-app-version": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
-        "cordova-plugin-app-version": {
+        "cordova-plugin-camera": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
         "cordova-plugin-console": {
@@ -24,10 +22,26 @@
         "cordova-plugin-email": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
+        "cordova-plugin-file": {
+            "PACKAGE_NAME": "com.ushahidi.mobile"
+        },
+        "cordova-plugin-file-transfer": {
+            "PACKAGE_NAME": "com.ushahidi.mobile"
+        },
+        "cordova-plugin-filepath": {
+            "PACKAGE_NAME": "com.ushahidi.mobile"
+        },
         "cordova-plugin-geolocation": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
         "cordova-plugin-google-analytics": {
+            "PACKAGE_NAME": "com.ushahidi.mobile"
+        },
+        "cordova-plugin-googlemaps": {
+            "API_KEY_FOR_ANDROID": "AIzaSyDAQq5_U1fm1p_lZY2nm6oH0Lc3bG9MOaI",
+            "PACKAGE_NAME": "com.ushahidi.mobile"
+        },
+        "cordova-plugin-inappbrowser": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
         "cordova-plugin-ios-longpress-fix": {
@@ -36,7 +50,7 @@
         "cordova-plugin-is-debug": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
-        "cordova-plugin-nativestorage": {
+        "cordova-plugin-media-capture": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
         "cordova-plugin-network-information": {
@@ -87,16 +101,6 @@
         },
         "ionic-plugin-keyboard": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
-        },
-        "cordova-plugin-googlemaps": {
-            "API_KEY_FOR_ANDROID": "AIzaSyDAQq5_U1fm1p_lZY2nm6oH0Lc3bG9MOaI",
-            "PACKAGE_NAME": "com.ushahidi.mobile"
-        },
-        "cordova-plugin-media-capture": {
-            "PACKAGE_NAME": "com.ushahidi.mobile"
-        },
-        "cordova-plugin-camera": {
-            "PACKAGE_NAME": "com.ushahidi.mobile"
         }
     },
     "dependent_plugins": {
@@ -104,9 +108,6 @@
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
         "cordova-plugin-compat": {
-            "PACKAGE_NAME": "com.ushahidi.mobile"
-        },
-        "cordova-plugin-file": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         }
     }

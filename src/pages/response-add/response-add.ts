@@ -1,11 +1,12 @@
 import { Component, ViewChild, NgZone } from '@angular/core';
-import { Platform, NavParams, Button,
+import { Platform, NavParams,
   NavController, ViewController, LoadingController, ToastController, AlertController, ModalController, ActionSheetController  } from 'ionic-angular';
 import { FormBuilder, FormGroup, FormGroupName, FormControl, Validators } from '@angular/forms';
 
 import { ApiService } from '../../providers/api-service';
 import { LoggerService } from '../../providers/logger-service';
 import { DatabaseService } from '../../providers/database-service';
+import { VimeoService } from '../../providers/vimeo-service';
 
 import { BasePage } from '../../pages/base-page/base-page';
 import { ResponseMapPage } from '../../pages/response-map/response-map';
@@ -28,11 +29,12 @@ import { Post } from '../../models/post';
 import { Form } from '../../models/form';
 import { Attribute } from '../../models/attribute';
 import { Value } from '../../models/value';
+import { Image } from '../../models/image';
 
 @Component({
   selector: 'page-response-add',
   templateUrl: 'response-add.html',
-  providers: [ ApiService, DatabaseService, LoggerService ],
+  providers: [ ApiService, DatabaseService, LoggerService, VimeoService ],
   entryComponents:[ ResponseMapPage ]
 })
 export class ResponseAddPage extends BasePage {
@@ -45,6 +47,7 @@ export class ResponseAddPage extends BasePage {
   color: string = "#cccccc";
 
   constructor(
+    public vimeo:VimeoService,
     public api:ApiService,
     public logger:LoggerService,
     public database:DatabaseService,
@@ -79,6 +82,11 @@ export class ResponseAddPage extends BasePage {
     this.logger.info(this, "ionViewWillEnter");
   }
 
+  ionViewDidEnter() {
+    super.ionViewDidEnter();
+    this.logger.info(this, "ionViewDidEnter");
+  }
+
   loadUpdates(event:any=null) {
     this.logger.info(this, "loadUpdates");
     let promises = [
@@ -106,64 +114,11 @@ export class ResponseAddPage extends BasePage {
 
   onSubmit(event:any=null) {
     this.logger.info(this, "onSubmit");
-    if (this.formGroup.valid) {
-      this.post.title = this.getTitle(this.formGroup.value);
-      this.post.description = this.getDescription(this.formGroup.value);
-      let location = this.getLocation(this.formGroup.value);
-      if (location) {
-        this.post.latitude = location.split(",")[0];
-        this.post.longitude = location.split(",")[1];
-      }
-      let values = this.sanitizeValues(this.formGroup.value);
-      for (let value of this.post.values) {
-        value.value = values[value.key];
-      }
+    if (this.hasRequiredValues()) {
+      this.loadFormValues();
       if (this.offline) {
-        this.savePost(this.post);
-      }
-      else if (this.post.id > 0) {
-        this.updatePost(this.post);
-      }
-      else {
-        this.createPost(this.post);
-      }
-    }
-    else {
-      this.showAlert('Required Fields Missing', 'Please ensure all required fields are entered and try again.');
-    }
-  }
-
-  savePost(post:Post) {
-    this.logger.info(this, "savePost", post);
-    let loading = this.showLoading("Saving...");
-    post.pending = true;
-    this.database.savePost(this.deployment, post).then(
-      (saved) => {
-        this.logger.info(this, "savePost", "Saved", saved);
-        loading.dismiss();
-        let buttons = [{
-          text: 'Ok',
-          role: 'cancel',
-          handler: () => {
-            this.viewController.dismiss();
-          }
-        }];
-        this.showAlert('Save Successful', 'Your response has been saved!', buttons);
-      },
-      (error) => {
-        this.logger.error(this, "savePost", error);
-        loading.dismiss();
-        this.showAlert('Save Failed', error);
-      });
-  }
-
-  createPost(post:Post) {
-    this.logger.info(this, "createPost", post);
-    let loading = this.showLoading("Posting...");
-    this.api.createPost(this.deployment, post).then(
-      (posted) => {
-        this.logger.info(this, "createPost", "Posted", posted);
-        this.database.savePost(this.deployment, post).then(
+        let loading = this.showLoading("Saving...");
+        this.savePost(this.post).then(
           (saved) => {
             loading.dismiss();
             let buttons = [{
@@ -173,42 +128,230 @@ export class ResponseAddPage extends BasePage {
                 this.viewController.dismiss();
               }
             }];
-            this.showAlert('Post Successful', 'Your response has been posted!', buttons);
+            this.showAlert('Save Successful', 'Your response has been saved!', buttons);
+          },
+          (error) => {
+            loading.dismiss();
+            this.showAlert('Save Failed', 'There was a problem saving your response.');
+          });
+      }
+      else if (this.post.id > 0) {
+        let loading = this.showLoading("Updating...");
+        this.updatePost(this.post).then(
+          (updated) => {
+            loading.dismiss();
+            let buttons = [{
+              text: 'Ok',
+              role: 'cancel',
+              handler: () => {
+                this.viewController.dismiss();
+              }
+            }];
+            this.showAlert('Update Successful', 'Your response has been updated!', buttons);
+          },
+          (error) => {
+            loading.dismiss();
+            this.showAlert('Update Failed', 'There was a problem updating your response.');
+          });
+      }
+      else {
+        let uploads = [];
+        for (let image of this.getImages()) {
+          uploads.push(this.uploadImage(this.post, image));
+        }
+        for (let video of this.getVideos()) {
+          uploads.push(this.uploadVideo(this.post, video));
+        }
+        let loading = this.showLoading("Uploading...");
+        Promise.all(uploads).then(
+          (uploaded) => {
+            loading.setContent("Posting...");
+            this.createPost(this.post).then(
+              (updated) => {
+                loading.dismiss();
+                let buttons = [{
+                  text: 'Ok',
+                  role: 'cancel',
+                  handler: () => {
+                    this.viewController.dismiss();
+                  }
+                }];
+                this.showAlert('Post Successful', 'Your response has been posted!', buttons);
+              },
+              (error) => {
+                loading.dismiss();
+                this.showAlert('Post Failed', 'There was a problem posting your response.');
+              });
+            },
+            (error) => {
+              loading.dismiss();
+              this.showAlert('Upload Failed', 'There was a problem uploading your data.');
+          });
+      }
+    }
+    else {
+      this.showAlert('Required Fields Missing', 'Please ensure all required fields are entered and try again.');
+    }
+  }
+
+  savePost(post:Post) {
+    this.logger.info(this, "savePost", post);
+    return new Promise((resolve, reject) => {
+      post.pending = true;
+      this.logger.info(this, "savePost", "Saving...");
+      let promises = [
+        this.database.savePost(this.deployment, post)
+      ];
+      for (let value of post.values) {
+        promises.push(this.database.saveValue(this.deployment, value));
+      }
+      Promise.all(promises).then(
+        (saved) => {
+          this.logger.info(this, "savePost", "Saved", saved);
+          resolve();
+        },
+        (error) => {
+          this.logger.error(this, "savePost", "Failed", error);
+          reject(error);
         });
-      },
-      (error) => {
-        this.logger.error(this, "createPost", error);
-        loading.dismiss();
-        this.showAlert('Post Failed', error);
-      });
+    });
+  }
+
+  createPost(post:Post) {
+    this.logger.info(this, "createPost", post);
+    return new Promise((resolve, reject) => {
+      this.logger.info(this, "createPost", "Posting...");
+      this.api.createPost(this.deployment, post).then(
+        (posted:any) => {
+          this.logger.info(this, "createPost", "Posted", posted);
+          post.id = posted.id;
+          post.pending = false;
+          let promises = [
+            this.database.savePost(this.deployment, post)
+          ];
+          for (let value of post.values) {
+            value.post_id = posted.id;
+            promises.push(this.database.saveValue(this.deployment, value));
+          }
+          Promise.all(promises).then(
+            (saved) => {
+              this.logger.info(this, "createPost", "Saved", saved);
+              resolve();
+            },
+            (error) => {
+              this.logger.error(this, "createPost", "Failed", error);
+              reject(error);
+            });
+        },
+        (error) => {
+          this.logger.error(this, "createPost", "Failed", error);
+          reject(error);
+        });
+    });
   }
 
   updatePost(post:Post) {
     this.logger.info(this, "updatePost", post);
-    let loading = this.showLoading("Updating...");
-    this.api.updatePost(this.deployment, post).then(
-      (success) => {
-        this.logger.info(this, "updatePost", "Posted", success);
-        loading.dismiss();
-        if (success) {
-          let buttons = [{
-            text: 'Ok',
-            role: 'cancel',
-            handler: () => {
-              this.viewController.dismiss();
+    return new Promise((resolve, reject) => {
+      this.logger.info(this, "updatePost", "Updating...");
+      this.api.updatePost(this.deployment, post).then(
+        (success) => {
+          this.logger.info(this, "updatePost", "Updated", success);
+          let promises = [
+            this.database.savePost(this.deployment, post)
+          ];
+          for (let value of post.values) {
+            promises.push(this.database.saveValue(this.deployment, value));
+          }
+          Promise.all(promises).then(
+            (saved) => {
+              this.logger.info(this, "updatePost", "Saved", saved);
+              resolve();
+            },
+            (error) => {
+              this.logger.error(this, "updatePost", "Failed", error);
+              reject(error);
+            });
+        },
+        (error) => {
+          this.logger.error(this, "updatePost", "Failed", error);
+          reject(error);
+        });
+    });
+  }
+
+  uploadImage(post:Post, file:string): Promise<Image> {
+    this.logger.info(this, "uploadImage", file);
+    return new Promise((resolve, reject) => {
+      this.logger.info(this, "uploadImage", "Uploading...");
+      this.api.uploadImage(this.deployment, file).then(
+        (image:Image) => {
+          this.logger.info(this, "uploadImage", "Uploaded", image);
+          for (let value of this.post.values) {
+            if (value.input == 'upload' && value.value == file) {
+              value.value = "" + image.id;
+              this.logger.info(this, "uploadImage", "Uploaded", value.key, "Image", image.id);
+              break;
             }
-          }];
-          this.showAlert('Update Successful', 'Your response has been updated!', buttons);
-        }
-        else {
-          this.showAlert('Update Failed', 'There was a problem updating your response.');
-        }
-      },
-      (error) => {
-        this.logger.error(this, "updatePost", error);
-        loading.dismiss();
-        this.showAlert('Update Failed', error);
+          }
+          this.database.saveImage(this.deployment, image).then((saved) => {
+              this.logger.info(this, "uploadImage", "Saved", saved);
+              resolve(image);
+            });
+        },
+        (error) => {
+          this.logger.error(this, "uploadImage", "Failed", error);
+          reject(error);
+        });
+    });
+  }
+
+  uploadVideo(post:Post, file:string): Promise<string> {
+    this.logger.info(this, "uploadVideo", file);
+    return new Promise((resolve, reject) => {
+      this.vimeo.createTicket().then(
+        (ticket:any) => {
+          this.logger.info(this, "uploadVideo", "createTicket", ticket);
+          let complete = ticket['complete_uri'];
+          let upload = ticket['upload_link_secure'];
+          let video = null;
+          this.vimeo.uploadVideo(upload, file).then(
+            (uploaded:any) => {
+              this.logger.info(this, "uploadVideo", "uploadVideo", uploaded);
+              this.vimeo.updateVideo(video, post.title, post.description).then(
+                (updated:any) => {
+                  this.logger.info(this, "uploadVideo", "updateVideo", updated);
+                  this.vimeo.completeVideo(complete).then(
+                    (completed:any) => {
+                      this.logger.info(this, "uploadVideo", "completeVideo", completed);
+                      for (let value of this.post.values) {
+                        if (value.input == 'video' && value.value === file) {
+                          value.value = "" + video;
+                          break;
+                        }
+                      }
+                      resolve(video);
+                    },
+                    (error) => {
+                      this.logger.error(this, "uploadVideo", "completeVideo", error);
+                      reject(error);
+                    });
+                },
+                (error) => {
+                  this.logger.error(this, "uploadVideo", "updateVideo", error);
+                  reject(error);
+                });
+            },
+            (error) => {
+              this.logger.error(this, "uploadVideo", "uploadVideo", error);
+              reject(error);
+            });
+        },
+        (error) => {
+          this.logger.error(this, "uploadVideo", "createTicket", error);
+          reject(error);
       });
+    });
   }
 
   loadPostValues() {
@@ -303,6 +446,56 @@ export class ResponseAddPage extends BasePage {
     }
   }
 
+  // {"6b30d6a3-a7d6-4d78-9edb-b547b79132eb":"Title",
+  // "e84a9f13-f666-4f24-b35e-6256bf398004":"Description",
+  // "936bdaf8-d5ba-415d-8145-3f1416f7bbd2":{"Yes":true,"No":false},
+  // "location_default":{"lat":37.33233141,"lon":-122.0312186},
+  // "13479cd8-5612-4462-95f4-6c5af1d13aa8":null,
+  // "c699d37a-92b5-45d7-add6-69051f2a9df8":"0.8",
+  // "c784b4c9-18a7-4213-9275-278e01e5fe38":"2017-01-01T00:00:00.000Z",
+  // "96bd0d3b-fd3b-41c1-a6e9-00fad86de627":"2017-01-01T19:00:00.000Z",
+  // "4d8a0452-141f-4a34-bd01-925c3eb52ca9":"100",
+  // "311794f7-5646-4f02-9e37-4da0dd522476":"Cat",
+  // "f82f4ec8-958c-4994-a841-450e22454970":"Boy",
+  // "80dd426a-e44c-4a02-a620-6670367bd827":null,
+  // "6c10f2c4-c78b-4f20-b18e-bb88eb18aa19":"Paragraph"}
+
+  loadFormValues() {
+    let formValues = this.formGroup.value;
+    this.logger.info(this, "loadFormValues", formValues);
+    for (let attribute of this.form.attributes) {
+      let value = formValues[attribute.key];
+      if (attribute.type == 'title') {
+        this.post.title = value;
+      }
+      else if (attribute.type == 'description') {
+        this.post.description = value;
+      }
+      else if (attribute.type == 'location') {
+        if (value) {
+          this.post.latitude = value.lat;
+          this.post.longitude = value.lon;
+        }
+      }
+    }
+    for (let postValue of this.post.values) {
+      let formValue = formValues[postValue.key];
+      if (postValue.input == 'checkbox' || postValue.input == 'checkboxes') {
+        let checks = [];
+        for (let key in formValue) {
+          if (formValue[key] == true || formValue[key] == 1) {
+            checks.push(key);
+          }
+        }
+        postValue.value = checks.join(",");
+      }
+      else {
+        postValue.value = formValue;
+      }
+    }
+    this.logger.info(this, "loadFormValues", "Post", this.post);
+  }
+
   changeLocation(event) {
     this.logger.info(this, "changeLocation", event);
     let modal = this.showModal(ResponseMapPage,
@@ -315,110 +508,47 @@ export class ResponseAddPage extends BasePage {
     });
   }
 
-  getTitle(values:any) {
-    for (let attribute of this.form.attributes) {
-      if (attribute.type == 'title') {
-        return values[attribute.key];
-      }
-    }
-    return null;
+  hasRequiredValues():boolean {
+    return this.formGroup.valid;
   }
 
-  getDescription(values:any) {
+  getVideos():string[] {
+    let values = this.formGroup.value;
+    let videos:string[] = [];
     for (let attribute of this.form.attributes) {
-      if (attribute.type == 'description') {
-        return values[attribute.key];
+      if (attribute.input == 'video') {
+        let video = values[attribute.key];
+        if (video && video.length > 0) {
+          videos.push(video);
+        }
       }
     }
-    return null;
+    return videos;
   }
 
-  getLocation(values:any) {
+  getImages():string[] {
+    let values = this.formGroup.value;
+    let images:string[] = [];
     for (let attribute of this.form.attributes) {
-      if (attribute.type == 'location') {
-        return values[attribute.key];
+      if (attribute.input == 'upload') {
+        let image = values[attribute.key];
+        if (image && image.length > 0) {
+          images.push(image);
+        }
       }
     }
-    return null;
+    return images;
   }
 
-  sanitizeValues(values:any) {
-    this.logger.info(this, "sanitizeValues", "Values", values);
-    let sanitized = {};
-    for (let attribute of this.form.attributes) {
-      let key = attribute.key;
-      let value = values[key];
-      this.logger.info(this, "sanitizeValues", "Value", attribute.label, attribute.input, key, value);
-      if (attribute.input == 'checkbox' || attribute.input == 'checkboxes') {
-        let checks = [];
-        for (let key in value) {
-          if (value[key] == true || value[key] == 1) {
-            checks.push(key);
-          }
-        }
-        sanitized[key] = checks;
-      }
-      else if (attribute.input == 'date') {
-        if (value && value.length > 0) {
-          sanitized[key] = [value];
-        }
-        else {
-          sanitized[key] = [];
-        }
-      }
-      else if (attribute.input == 'datetime') {
-        if (value && value.length > 0) {
-          sanitized[key] = [value];
-        }
-        else {
-          sanitized[key] = [];
-        }
-      }
-      else if (attribute.input == 'location') {
-        sanitized[key] = [value];
-      }
-      else if (attribute.input == 'number') {
-        if (value && value.length > 0) {
-          sanitized[key] = [Number(value)];
-        }
-        else {
-          sanitized[key] = [];
-        }
-      }
-      else if (attribute.input == 'radio') {
-        if (value && value.length > 0) {
-          sanitized[key] = [value];
-        }
-        else {
-          sanitized[key] = [];
-        }
-      }
-      else if (attribute.input == 'select') {
-        if (value && value.length > 0) {
-          sanitized[key] = [value];
-        }
-        else {
-          sanitized[key] = [];
-        }
-      }
-      else if (attribute.input == 'text') {
-        sanitized[key] = [value];
-      }
-      else if (attribute.input == 'textarea') {
-        sanitized[key] = [value];
-      }
-      else if (attribute.input == 'varchar') {
-        sanitized[key] = [value];
-      }
-      else if (attribute.input == 'upload') {
-        //TODO handle image upload
-      }
-      else if (attribute.input == 'video') {
-        //TODO handle video upload
-      }
-    }
-    this.logger.info(this, "sanitizeValues", "Sanitized", sanitized);
-    return sanitized;
-  }
+  // getUrlParameter(url:string, parameter:string): string {
+  //    let parameters = decodeURIComponent(url).split("&");
+  //    for (let i = 0; i < parameters.length; i++) {
+  //      let pair = parameters[i].split("=");
+  //      if (pair[0] === parameter) {
+  //        return pair[1];
+  //      }
+  //    }
+  //    return null;
+  // }
 
 }

@@ -21,30 +21,41 @@ public class AsyncLoadImage extends AsyncTask<String, Void, Bitmap> {
   private AsyncLoadImageInterface targetPlugin;
   private int mWidth = -1;
   private int mHeight = -1;
-  private float density = Resources.getSystem().getDisplayMetrics().density;
 
   public static BitmapCache mIconCache;
-  private String userAgent = null;
-  private boolean noCaching = false;
+
+  class BitmapCache extends LruCache<String, Bitmap> {
+
+    public BitmapCache(int maxSize) {
+      super(maxSize);
+    }
+
+    @Override
+    protected int sizeOf(String key, Bitmap bitmap) {
+      // The cache size will be measured in kilobytes rather than
+      // number of items.
+      return bitmap.getByteCount() / 1024;
+    }
+
+    @Override
+    protected void entryRemoved(boolean evicted, String key,
+                                Bitmap oldValue, Bitmap newValue) {
+      if (!oldValue.isRecycled()) {
+        oldValue.recycle();
+        oldValue = null;
+      }
+    }
+  }
 
   public AsyncLoadImage(AsyncLoadImageInterface plugin) {
     targetPlugin = plugin;
     privateInit();
   }
 
-  public AsyncLoadImage(String userAgent, int width, int height, boolean noCaching, AsyncLoadImageInterface plugin) {
+  public AsyncLoadImage(int width, int height, AsyncLoadImageInterface plugin) {
     targetPlugin = plugin;
     mWidth = width;
     mHeight = height;
-    this.userAgent = userAgent == null ? "Mozilla" : userAgent;
-    this.noCaching = noCaching;
-    privateInit();
-  }
-  public AsyncLoadImage(String userAgent, int width, int height, AsyncLoadImageInterface plugin) {
-    targetPlugin = plugin;
-    mWidth = width;
-    mHeight = height;
-    this.userAgent = userAgent == null ? "Mozilla" : userAgent;
     privateInit();
   }
 
@@ -79,17 +90,6 @@ public class AsyncLoadImage extends AsyncTask<String, Void, Bitmap> {
   }
 
 
-  @Override
-  protected void onCancelled(Bitmap bitmap) {
-    super.onCancelled(bitmap);
-
-    if (bitmap != null && !bitmap.isRecycled()) {
-      bitmap.recycle();
-    }
-    bitmap = null;
-  }
-
-
   @SuppressLint("NewApi")
   protected Bitmap doInBackground(String... urls) {
     try {
@@ -99,48 +99,42 @@ public class AsyncLoadImage extends AsyncTask<String, Void, Bitmap> {
       if (image != null) {
         return image;
       }
+      HttpURLConnection http = (HttpURLConnection)url.openConnection();
+      http.setRequestMethod("GET");
+      http.setUseCaches(true);
+      http.addRequestProperty("Accept-Language", "en-US,en;q=0.8");
+      http.addRequestProperty("User-Agent", "Mozilla");
+      http.setInstanceFollowRedirects(true);
+      HttpURLConnection.setFollowRedirects(true);
 
-      boolean redirect = true;
-      HttpURLConnection http = null;
-      String cookies = null;
-      int redirectCnt = 0;
-      while(redirect && redirectCnt < 10) {
-        redirect = false;
-        http = (HttpURLConnection)url.openConnection();
-        http.setRequestMethod("GET");
-        if (cookies != null) {
-          http.setRequestProperty("Cookie", cookies);
-        }
+      boolean redirect = false;
+      // normally, 3xx is redirect
+      int status = http.getResponseCode();
+      if (status != HttpURLConnection.HTTP_OK) {
+        if (status == HttpURLConnection.HTTP_MOVED_TEMP
+          || status == HttpURLConnection.HTTP_MOVED_PERM
+          || status == HttpURLConnection.HTTP_SEE_OTHER)
+          redirect = true;
+      }
+      if (redirect) {
+
+        // get redirect URL from "location" header field
+        String newUrl = http.getHeaderField("Location");
+
+        // get the cookie if need, for login
+        String cookies = http.getHeaderField("Set-Cookie");
+
+        // open the new connection again
+        http = (HttpURLConnection) new URL(newUrl).openConnection();
+        http.setUseCaches(true);
+        http.setRequestProperty("Cookie", cookies);
         http.addRequestProperty("Accept-Language", "en-US,en;q=0.8");
-        http.addRequestProperty("User-Agent", userAgent);
-        http.setInstanceFollowRedirects(true);
-        HttpURLConnection.setFollowRedirects(true);
-
-        // normally, 3xx is redirect
-        int status = http.getResponseCode();
-        if (status != HttpURLConnection.HTTP_OK) {
-          if (status == HttpURLConnection.HTTP_MOVED_TEMP
-              || status == HttpURLConnection.HTTP_MOVED_PERM
-              || status == HttpURLConnection.HTTP_SEE_OTHER)
-            redirect = true;
-        }
-        if (redirect) {
-          // get redirect url from "location" header field
-          url = new URL(http.getHeaderField("Location"));
-
-          // get the cookie if need, for login
-          cookies = http.getHeaderField("Set-Cookie");
-
-          // Disconnect the current connection
-          http.disconnect();
-          redirectCnt++;
-        }
+        http.addRequestProperty("User-Agent", "Mozilla");
       }
 
-      
       Bitmap myBitmap = null;
       InputStream inputStream = http.getInputStream();
-      
+
       ByteArrayOutputStream buffer = new ByteArrayOutputStream();
       int nRead;
       byte[] data = new byte[16384];
@@ -150,21 +144,22 @@ public class AsyncLoadImage extends AsyncTask<String, Void, Bitmap> {
       buffer.flush();
       inputStream.close();
       byte[] imageBytes = buffer.toByteArray();
-      
+
       BitmapFactory.Options options = new BitmapFactory.Options();
       options.inJustDecodeBounds = true;
       myBitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.length, options);
-      
+
       if (mWidth < 1 && mHeight < 1) {
         mWidth = options.outWidth;
         mHeight = options.outHeight;
       }
-      
+
       // Resize
+      float density = Resources.getSystem().getDisplayMetrics().density;
       int newWidth = (int)(mWidth * density);
       int newHeight = (int)(mHeight * density);
 
-      
+
       /**
        * http://stackoverflow.com/questions/4821488/bad-image-quality-after-resizing-scaling-bitmap#7468636
        */
@@ -174,7 +169,7 @@ public class AsyncLoadImage extends AsyncTask<String, Void, Bitmap> {
       float ratioY = newHeight / (float) options.outHeight;
       float middleX = newWidth / 2.0f;
       float middleY = newHeight / 2.0f;
-      
+
       options.inJustDecodeBounds = false;
       //options.inSampleSize = (int) Math.max(ratioX, ratioY);
       options.outWidth = newWidth;
@@ -192,9 +187,8 @@ public class AsyncLoadImage extends AsyncTask<String, Void, Bitmap> {
       canvas = null;
       imageBytes = null;
 
-      if (!noCaching) {
-        addBitmapToMemoryCache(cacheKey, scaledBitmap);
-      }
+      addBitmapToMemoryCache(cacheKey, scaledBitmap);
+
       return scaledBitmap;
     } catch (Exception e) {
       e.printStackTrace();
@@ -206,5 +200,4 @@ public class AsyncLoadImage extends AsyncTask<String, Void, Bitmap> {
     System.gc();
     this.targetPlugin.onPostExecute(image);
   }
-
 }

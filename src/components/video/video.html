@@ -1,22 +1,22 @@
-<div class="field-video" [class.invalid]="attribute.required == true && videoData == null">
+<div class="field-video" [class.invalid]="attribute.required == true && videoPath == null">
   <ion-item no-lines [formGroup]="formGroup" *ngIf="formGroup">
     <ion-label class="field-label">
       {{attribute.label}}
       <span ion-text color="danger" *ngIf="attribute.required == true">*</span>
     </ion-label>
-    <ion-input type="text" hidden [formControlName]="attribute.key"></ion-input>
+    <ion-input type="text" hidden [(ngModel)]="videoPath" [formControlName]="attribute.key"></ion-input>
   </ion-item>
-  <ion-card margin-left margin-right *ngIf="videoData != null" (click)="captureVideo()">
-    <img full [src]="videoData" />
+  <ion-card margin-left margin-right *ngIf="videoPreview != null" (click)="captureVideo()">
+    <video controls="controls" autoplay="false" [src]="videoPreview"></video>
   </ion-card>
-  <button ion-button margin-left icon-left text-uppercase small color="light" *ngIf="videoData == null" (click)="captureVideo()">
+  <button ion-button margin-left icon-left text-uppercase small color="light" *ngIf="videoPath == null" (click)="captureVideo()">
     <ion-icon name="videocam"></ion-icon> Take Video
   </button>
-  <button ion-button margin-left icon-left text-uppercase small color="light" *ngIf="videoData != null" (click)="captureVideo()">
+  <button ion-button margin-left icon-left text-uppercase small color="light" *ngIf="videoPath != null" (click)="captureVideo()">
     <ion-icon name="videocam"></ion-icon> Replace Video
   </button>
-  <button ion-button icon-only text-uppercase small color="red" *ngIf="videoData != null" (click)="deleteVideo()">
-    <ion-icon name="trash"></ion-icon>
+  <button ion-button text-uppercase icon-left small color="red" *ngIf="videoPath != null" (click)="deleteVideo()">
+    <ion-icon name="trash"></ion-icon> Delete Video
   </button>
-  <p ion-text padding-left color="red" *ngIf="attribute.required == true && videoData == null">Image required</p>
+  <p ion-text padding-left color="red" *ngIf="attribute.required == true && videoPath == null">Video required</p>
 </div>

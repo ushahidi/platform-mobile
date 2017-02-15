@@ -16,7 +16,6 @@
 #import <objc/runtime.h>
 //#import "MFGoogleMapAdditions/GMSCoordinateBounds+Geometry.h"
 #import "GMSCoordinateBounds+Geometry.h"
-#import <math.h>
 
 typedef void (^MYCompletionHandler)(NSError *error);
 
@@ -64,14 +63,10 @@ typedef void (^TIFAnimationGroupCompletionBlock)();
 - (void)setCompletionBlock:(TIFAnimationGroupCompletionBlock)handler;
 @end
 
-
 @interface PluginUtil : NSObject
-+ (BOOL)isPolygonContains:(GMSPath *)path coordinate:(CLLocationCoordinate2D)coordinate projection:(GMSProjection *)projection;
-+ (BOOL)isPointOnTheLine:(GMSPath *)path coordinate:(CLLocationCoordinate2D)coordinate projection:(GMSProjection *)projection;
-+ (BOOL)isPointOnTheGeodesicLine:(GMSPath *)path coordinate:(CLLocationCoordinate2D)coordinate threshold:(double)threshold;
-+ (BOOL)isCircleContains:(GMSCircle *)circle coordinate:(CLLocationCoordinate2D)point;
++ (BOOL)isIOS7_OR_OVER;
++ (BOOL)isIOS8_OR_OVER;
 + (BOOL)isInDebugMode;
-+ (GMSMutablePath *)getMutablePathFromCircle:(CLLocationCoordinate2D)center radius:(double)radius;
 + (NSString *)getAbsolutePathFromCDVFilePath:(UIView*)theWebView cdvFilePath:(NSString *)cdvFilePath;
 @end
 

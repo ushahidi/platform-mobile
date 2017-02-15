@@ -3,6 +3,10 @@ import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Storage } from '@ionic/storage';
 
+import { Oauth } from 'ng2-cordova-oauth/oauth'
+import { OauthBrowser}  from 'ng2-cordova-oauth/platform/browser'
+import { OauthCordova } from 'ng2-cordova-oauth/platform/cordova'
+
 import 'reflect-metadata';
 import { LazyLoadImageModule } from 'ng2-lazyload-image';
 
@@ -44,6 +48,7 @@ import { CapitalizePipe } from '../pipes/capitalize';
 import { LoggerService } from '../providers/logger-service';
 import { ApiService } from '../providers/api-service';
 import { DatabaseService } from '../providers/database-service';
+import { VimeoService } from '../providers/vimeo-service';
 
 export function provideStorage() {
   return new Storage(['sqlite', 'websql', 'indexeddb'], { name: 'ushahidi' });
@@ -102,8 +107,10 @@ export function provideStorage() {
     ResponseSearchPage
   ],
   providers: [
-    { provide: Storage, useFactory: provideStorage },
+    { provide: Oauth, useFactory: OauthCordova },
     { provide: ApiService, useClass: ApiService },
+    { provide: Storage, useFactory: provideStorage },
+    { provide: VimeoService, useClass: VimeoService },
     { provide: LoggerService, useClass: LoggerService },
     { provide: DatabaseService, useClass: DatabaseService },
     { provide: ErrorHandler, useClass: IonicErrorHandler } ]
