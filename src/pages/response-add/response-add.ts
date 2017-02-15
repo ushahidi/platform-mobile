@@ -489,10 +489,14 @@ export class ResponseAddPage extends BasePage {
     let modal = this.showModal(ResponseMapPage,
       { latitude: event['latitude'],
         longitude: event['longitude'] },
-      { showBackdrop: false,
+      { showBackdrop: true,
         enableBackdropDismiss: false });
     modal.onDidDismiss(data => {
       this.logger.info(this, "changeLocation", "Modal", data);
+      if (data) {
+        this.post.latitude = data['latitude'];
+        this.post.longitude = data['longitude'];
+      }
     });
   }
 

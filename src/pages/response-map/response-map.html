@@ -14,9 +14,10 @@
   </ion-navbar>
 </ion-header>
 <ion-content class="page-response-map">
-  <div class="map">
+  <!-- <div class="map">
     <div #modalMap id="modalMap"></div>
-  </div>
+  </div> -->
+  <iframe width="100%" height="100%" frameborder="0" style="border:0" [src]="mapSrc"></iframe>
 </ion-content>
 <ion-footer>
   <ion-toolbar color="black" *ngIf="offline">

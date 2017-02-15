@@ -2,6 +2,7 @@ import { Component, NgZone } from '@angular/core';
 import { Platform, NavParams,
   NavController, ViewController, LoadingController, ToastController, AlertController, ModalController, ActionSheetController  } from 'ionic-angular';
 import { GoogleMap, GoogleMapsEvent, GoogleMapsLatLng, CameraPosition, GoogleMapsMarkerOptions, GoogleMapsMarker } from 'ionic-native';
+import { SafeResourceUrl, DomSanitizer } from '@angular/platform-browser';
 
 import { BasePage } from '../../pages/base-page/base-page';
 
@@ -17,12 +18,17 @@ export class ResponseMapPage extends BasePage {
   latitude: number;
   longitude: number;
   map: GoogleMap = null;
+  mapUrl: string = "https://www.google.com/maps/embed/v1/place";
+  mapSrc: SafeResourceUrl = null;
+  mapKeyIOS: string = "AIzaSyDkaRT-VLExcP6B9ObyEgppKbDN9-szc8E";
+  mapKeyAndroid: string = "AIzaSyDPK1w611ECN1TiR7CSgomPE_vLy321XBI";
 
   constructor(
     public logger:LoggerService,
     public navParams: NavParams,
     public zone: NgZone,
     public platform:Platform,
+    public sanitizer:DomSanitizer,
     public navController:NavController,
     public viewController:ViewController,
     public modalController:ModalController,
@@ -36,6 +42,12 @@ export class ResponseMapPage extends BasePage {
   ionViewDidLoad() {
     super.ionViewDidLoad();
     this.logger.info(this, 'ionViewDidLoad');
+    if (this.platform.is('ios')) {
+      this.mapSrc = this.sanitizer.bypassSecurityTrustResourceUrl(`${this.mapUrl}?key=${this.mapKeyIOS}&q=${this.latitude},${this.longitude}`);
+    }
+    else {
+      this.mapSrc = this.sanitizer.bypassSecurityTrustResourceUrl(`${this.mapUrl}?key=${this.mapKeyAndroid}&q=${this.latitude},${this.longitude}`);
+    }
   }
 
   ionViewWillEnter() {
@@ -47,7 +59,7 @@ export class ResponseMapPage extends BasePage {
 
   ionViewDidEnter() {
     this.logger.info(this, "ionViewDidEnter");
-    this.showMap();
+    //this.showMap();
   }
 
   onCancel(event) {
