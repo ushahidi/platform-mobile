@@ -15,9 +15,9 @@
 </ion-header>
 <ion-content class="page-response-search">
   <ion-searchbar #searchbar color="light" placeholder="Search" [(ngModel)]="filter.search_text" (ionInput)="onSearch($event)" *ngIf="filter"></ion-searchbar>
-  <ion-list *ngIf="filter">
+  <ion-list *ngIf="deployment && filter">
     <ion-list-header>Surveys</ion-list-header>
-    <ion-item *ngFor="let form of forms; let i = index">
+    <ion-item *ngFor="let form of deployment.forms">
       <ion-label>{{form.name}}</ion-label>
       <ion-checkbox [color]="form.color" [checked]="filter.showForm(form)" (ionChange)="formChanged($event, form)"></ion-checkbox>
     </ion-item>

@@ -110,6 +110,7 @@ export class ResponseAddPage extends BasePage {
 
   onCancel(event:any=null) {
     this.logger.info(this, "onCancel");
+    this.post = null;
     this.viewController.dismiss();
   }
 

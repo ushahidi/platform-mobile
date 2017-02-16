@@ -20,7 +20,7 @@ import { Form } from '../../models/form';
 import { Attribute } from '../../models/attribute';
 import { Collection } from '../../models/collection';
 
-import { PLACEHOLDER_PHOTO } from '../../helpers/constants';
+import { PLACEHOLDER_BLANK } from '../../helpers/constants';
 
 @Component({
   selector: 'page-deployment-details',
@@ -32,7 +32,7 @@ export class DeploymentDetailsPage extends BasePage {
 
   deployment: Deployment = null;
   user: User = null;
-  placeholder: string = PLACEHOLDER_PHOTO;
+  placeholder: string = PLACEHOLDER_BLANK;
 
   constructor(
     public api:ApiService,

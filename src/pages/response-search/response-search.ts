@@ -21,8 +21,6 @@ export class ResponseSearchPage extends BasePage {
 
   deployment: Deployment = null;
   filter: Filter = null;
-  forms: Form[] = null;
-
 
   @ViewChild('searchbar')
   searchbar: Searchbar;
@@ -53,7 +51,6 @@ export class ResponseSearchPage extends BasePage {
     super.ionViewWillEnter();
     this.logger.info(this, "ionViewWillEnter");
     this.deployment = <Deployment>this.navParams.get("deployment");
-    this.forms = <Form[]>this.navParams.get("forms");
     this.filter = <Filter>this.navParams.get("filter");
     if (this.filter == null) {
       this.filter = new Filter();
@@ -62,7 +59,7 @@ export class ResponseSearchPage extends BasePage {
       this.filter.show_inreview = true;
       this.filter.show_archived = true;
       this.filter.show_published = true;
-      this.filter.show_forms = this.forms.map((form:Form) => form.id).join(",");
+      this.filter.show_forms = this.deployment.forms.map((form:Form) => form.id).join(",");
     }
     this.logger.info(this, "ionViewWillEnter", "Filter", this.filter);
   }

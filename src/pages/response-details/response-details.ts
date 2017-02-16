@@ -34,6 +34,7 @@ export class ResponseDetailsPage extends BasePage {
   form: Form = null;
   userName:string = PLACEHOLDER_NAME;
   userImage:string = PLACEHOLDER_USER;
+  userPlaceholder:string = PLACEHOLDER_USER;
 
   constructor(
     public api:ApiService,

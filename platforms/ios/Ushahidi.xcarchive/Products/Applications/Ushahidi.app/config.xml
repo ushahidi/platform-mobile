@@ -146,6 +146,7 @@
     <allow-navigation href="http://localhost:3001" />
     <allow-navigation href="http://192.168.0.18:8100" />
     <allow-navigation href="https://www.google.com/maps/embed/*" />
+    <allow-navigation href="*://*.googleapis.com/*" />
     <icon src="resources/android/icon/drawable-xhdpi-icon.png" />
     <allow-intent href="itms:*" />
     <allow-intent href="itms-apps:*" />
