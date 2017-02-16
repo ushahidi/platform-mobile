@@ -15,9 +15,9 @@
 </ion-header>
 <ion-content class="page-response-map">
   <sebm-google-map [latitude]="latitude" [longitude]="longitude" [zoom]="mapZoom"
-                    [mapDraggable]="mapDraggable" [zoomControl]="zoomControl" [disableDefaultUI]="disableDefaultUI">
-    <sebm-google-map-marker [markerDraggable]="markerDraggable" [latitude]="latitude" [longitude]="longitude"
-      (markerClick)="markerClick($event)" (dragEnd)="dragEnd($event)"></sebm-google-map-marker>
+    [mapDraggable]="mapDraggable" [zoomControl]="zoomControl" [disableDefaultUI]="disableDefaultUI">
+    <sebm-google-map-marker [latitude]="latitude" [longitude]="longitude"
+      [markerDraggable]="markerDraggable" (dragEnd)="dragEnd($event)"></sebm-google-map-marker>
   </sebm-google-map>
 </ion-content>
 <ion-footer>

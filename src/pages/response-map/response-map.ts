@@ -77,10 +77,6 @@ export class ResponseMapPage extends BasePage {
       longitude: this.longitude });
   }
 
-  markerClick(event:any) {
-    this.logger.info(this, 'markerClick', event);
-  }
-
   dragEnd(event:any) {
     this.logger.info(this, 'dragEnd', event);
     if (event && event.coords) {
