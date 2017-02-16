@@ -91,9 +91,6 @@
     <feature name="Capture">
         <param name="ios-package" value="CDVCapture" />
     </feature>
-    <feature name="NativeStorage">
-        <param name="ios-package" value="NativeStorage" />
-    </feature>
     <feature name="NetworkActivityIndicator">
         <param name="ios-package" value="NetworkActivityIndicator" />
     </feature>
@@ -130,7 +127,7 @@
     <name>Ushahidi</name>
     <description>Ushahidi Mobile</description>
     <author email="support@ushahidi.com" href="https://www.ushahidi.com/">Ushahidi Team</author>
-    <content original-src="index.html" src="http://192.168.0.18:8100" />
+    <content src="index.html" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -148,6 +145,7 @@
     <allow-navigation href="http://localhost:3000" />
     <allow-navigation href="http://localhost:3001" />
     <allow-navigation href="http://192.168.0.18:8100" />
+    <allow-navigation href="https://www.google.com/maps/embed/*" />
     <icon src="resources/android/icon/drawable-xhdpi-icon.png" />
     <allow-intent href="itms:*" />
     <allow-intent href="itms-apps:*" />

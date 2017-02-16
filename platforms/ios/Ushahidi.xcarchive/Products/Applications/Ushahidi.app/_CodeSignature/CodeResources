@@ -206,7 +206,7 @@
 		</data>
 		<key>CDVLaunchScreen.storyboardc/01J-lp-oVM-view-Ze5-6b-2t3.nib</key>
 		<data>
-		Ng3dR5uUjRyFPwu5eaYiVcu+WfU=
+		ZtEevC1RSMLuhtZEyvGyT8GiRLY=
 		</data>
 		<key>CDVLaunchScreen.storyboardc/Info.plist</key>
 		<data>
@@ -214,7 +214,7 @@
 		</data>
 		<key>CDVLaunchScreen.storyboardc/UIViewController-01J-lp-oVM.nib</key>
 		<data>
-		VE9onV0bfYrC4F9h25I/ofBgdRM=
+		uGhQEPAPjeN6rP5QYJnUPoVt+dQ=
 		</data>
 		<key>GoogleMaps.bundle/GMSCacheStorage.momd/Storage.mom</key>
 		<data>
@@ -897,7 +897,7 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		EbIwBDiZMLkuqOyreZQz3st9EJc=
+		fGy86IoM4cebd3URYd8WlEqscXo=
 		</data>
 		<key>LaunchImage-568h@2x.png</key>
 		<data>
@@ -957,7 +957,7 @@
 		</data>
 		<key>MainViewController.nib</key>
 		<data>
-		IPocPNeNaswpV2qtagzAqQhK6M8=
+		K6JqiSJp8vdUF4WWHn5Hj0XBCik=
 		</data>
 		<key>PkgInfo</key>
 		<data>
@@ -982,7 +982,7 @@
 		</data>
 		<key>config.xml</key>
 		<data>
-		eoGRBUS3BFd/48eSqk0cc0JOt8w=
+		hFElAO9Kzz8qp4U390rSvF9scvY=
 		</data>
 		<key>embedded.mobileprovision</key>
 		<data>
@@ -1090,7 +1090,7 @@
 		</data>
 		<key>www/build/main.css</key>
 		<data>
-		Z8VNyHknl91+FzApshUwabEKdmI=
+		T0o8Cm7syW8No7FovcPk30vQqiA=
 		</data>
 		<key>www/build/main.css.map</key>
 		<data>
@@ -1098,11 +1098,11 @@
 		</data>
 		<key>www/build/main.js</key>
 		<data>
-		xAgtRii6BY4Sz/pyv+coHGje0jU=
+		0zVDfFntmg+r738N9kgAUDiRnsI=
 		</data>
 		<key>www/build/main.js.map</key>
 		<data>
-		HRPoB/glPA3ySTiVLRqZuQDdIGA=
+		OVSVkT2ixryL4xWa2X9EDkjya08=
 		</data>
 		<key>www/build/polyfills.js</key>
 		<data>
@@ -1126,7 +1126,7 @@
 		</data>
 		<key>www/cordova_plugins.js</key>
 		<data>
-		/gp1Muv5eYI4grQ6hTfJB1i6bl8=
+		+cwOsH1ppUfN3RqEG7AwUm8j1OU=
 		</data>
 		<key>www/index.html</key>
 		<data>
@@ -1331,18 +1331,6 @@
 		<key>www/plugins/cordova-plugin-media-capture/www/helpers.js</key>
 		<data>
 		HMmroA/+GSI+y81p4FJeTSivJPw=
-		</data>
-		<key>www/plugins/cordova-plugin-nativestorage/www/LocalStorageHandle.js</key>
-		<data>
-		XBDXqPhrBnmyLwR8c85hmk3jRxk=
-		</data>
-		<key>www/plugins/cordova-plugin-nativestorage/www/NativeStorageError.js</key>
-		<data>
-		MvHxdygizAp99m0mqxazhzI9n/k=
-		</data>
-		<key>www/plugins/cordova-plugin-nativestorage/www/mainHandle.js</key>
-		<data>
-		5xZOKKH/qzwaA2UxHoOO3LOHrLI=
 		</data>
 		<key>www/plugins/cordova-plugin-network-information/www/Connection.js</key>
 		<data>
@@ -1906,11 +1894,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			Ng3dR5uUjRyFPwu5eaYiVcu+WfU=
+			ZtEevC1RSMLuhtZEyvGyT8GiRLY=
 			</data>
 			<key>hash2</key>
 			<data>
-			Fcu/RN4iI36Ujf1+Z6yptBqaIBK53dVT0izndvpLJNs=
+			UYvBCreSCkgQTg8w6xG0X0tLhefe2ZtvlrQwgniBL/Y=
 			</data>
 		</dict>
 		<key>CDVLaunchScreen.storyboardc/Info.plist</key>
@@ -1928,11 +1916,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			VE9onV0bfYrC4F9h25I/ofBgdRM=
+			uGhQEPAPjeN6rP5QYJnUPoVt+dQ=
 			</data>
 			<key>hash2</key>
 			<data>
-			lADqf/sgse54FAST6aCABO3TX3iDWOLQYB+PW5WsbK4=
+			t42e2GDWTUD7NkaGbC5ORdb1T14id8/4FhKF4ybDhLw=
 			</data>
 		</dict>
 		<key>GoogleMaps.bundle/GMSCacheStorage.momd/Storage.mom</key>
@@ -3455,11 +3443,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			IPocPNeNaswpV2qtagzAqQhK6M8=
+			K6JqiSJp8vdUF4WWHn5Hj0XBCik=
 			</data>
 			<key>hash2</key>
 			<data>
-			YuApjWD0xw4M1uFwUonRLxxGZ11Jlm5IBwhQ24yAX4k=
+			O60999SG6iCXM6Hfct7QDpB5BCtXSY8haT+gofpUqMU=
 			</data>
 		</dict>
 		<key>SAMKeychain.bundle/en.lproj/SAMKeychain.strings</key>
@@ -3501,11 +3489,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			eoGRBUS3BFd/48eSqk0cc0JOt8w=
+			hFElAO9Kzz8qp4U390rSvF9scvY=
 			</data>
 			<key>hash2</key>
 			<data>
-			8YOPgpHMV7ghVRKH7vVhuuM4e9qL/26b/ZV7ry04nt4=
+			pbVYcHNOTWtHT62s//kvWi8N605KwJvvU1kw4nTzKE0=
 			</data>
 		</dict>
 		<key>embedded.mobileprovision</key>
@@ -3798,11 +3786,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			Z8VNyHknl91+FzApshUwabEKdmI=
+			T0o8Cm7syW8No7FovcPk30vQqiA=
 			</data>
 			<key>hash2</key>
 			<data>
-			37G22FGTyKkZBx5DUpdsfsZjgFDRrTHDXTDoJ7G2Z8Y=
+			fIq26y+I6pi3lBxBnM/IZhXzxXPJoYzBBBJKIddMUoA=
 			</data>
 		</dict>
 		<key>www/build/main.css.map</key>
@@ -3820,22 +3808,22 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			xAgtRii6BY4Sz/pyv+coHGje0jU=
+			0zVDfFntmg+r738N9kgAUDiRnsI=
 			</data>
 			<key>hash2</key>
 			<data>
-			VHvFxY3GVdc6Dik7PtwU4oRGlXaFfcSIN3QYGpPtS3A=
+			mDQ/uA1oIp9mG4ic5PCVSjp8eNxXNjj9Tzhvzqhy3LA=
 			</data>
 		</dict>
 		<key>www/build/main.js.map</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			HRPoB/glPA3ySTiVLRqZuQDdIGA=
+			OVSVkT2ixryL4xWa2X9EDkjya08=
 			</data>
 			<key>hash2</key>
 			<data>
-			NDAG+T7sPPtiZ9Xjp+HYQDaQwjM5pb2ya5Wvm2aiIBM=
+			VfJGgir6fB4JT89vQ3cA7aOUo+FTsA8TwOSetMqjJs0=
 			</data>
 		</dict>
 		<key>www/build/polyfills.js</key>
@@ -3897,11 +3885,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			/gp1Muv5eYI4grQ6hTfJB1i6bl8=
+			+cwOsH1ppUfN3RqEG7AwUm8j1OU=
 			</data>
 			<key>hash2</key>
 			<data>
-			7ptpHZ1eC1Lc+sXbdwjl76kDSBJ7wQUmg6jhp1DZaT4=
+			u3vcdCJCLJOC3J65IkSqgdTzNTofx5P2ecPdke/AQF4=
 			</data>
 		</dict>
 		<key>www/index.html</key>
@@ -4463,39 +4451,6 @@
 			<key>hash2</key>
 			<data>
 			pJQMWFlJJSQNQh1Ma8YEMugNAdXNLGdD2H0Q3yCx2hA=
-			</data>
-		</dict>
-		<key>www/plugins/cordova-plugin-nativestorage/www/LocalStorageHandle.js</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			XBDXqPhrBnmyLwR8c85hmk3jRxk=
-			</data>
-			<key>hash2</key>
-			<data>
-			F8R+f9M9A8FpC6ypldYqR6YjjI77Neset0e4/H6IyTA=
-			</data>
-		</dict>
-		<key>www/plugins/cordova-plugin-nativestorage/www/NativeStorageError.js</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			MvHxdygizAp99m0mqxazhzI9n/k=
-			</data>
-			<key>hash2</key>
-			<data>
-			LhZeknAThubs5XMXHVEDI+6xOKIH0An+uCv/99Y2jPw=
-			</data>
-		</dict>
-		<key>www/plugins/cordova-plugin-nativestorage/www/mainHandle.js</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			5xZOKKH/qzwaA2UxHoOO3LOHrLI=
-			</data>
-			<key>hash2</key>
-			<data>
-			bLW/ZoVJcWaMrylcVKhzmG7VF7HGQIwL7RYhcZ+TkZ8=
 			</data>
 		</dict>
 		<key>www/plugins/cordova-plugin-network-information/www/Connection.js</key>

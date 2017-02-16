@@ -391,24 +391,6 @@ module.exports = [
         ]
     },
     {
-        "id": "cordova-plugin-nativestorage.mainHandle",
-        "file": "plugins/cordova-plugin-nativestorage/www/mainHandle.js",
-        "pluginId": "cordova-plugin-nativestorage",
-        "clobbers": [
-            "NativeStorage"
-        ]
-    },
-    {
-        "id": "cordova-plugin-nativestorage.LocalStorageHandle",
-        "file": "plugins/cordova-plugin-nativestorage/www/LocalStorageHandle.js",
-        "pluginId": "cordova-plugin-nativestorage"
-    },
-    {
-        "id": "cordova-plugin-nativestorage.NativeStorageError",
-        "file": "plugins/cordova-plugin-nativestorage/www/NativeStorageError.js",
-        "pluginId": "cordova-plugin-nativestorage"
-    },
-    {
         "id": "cordova-plugin-networkactivityindicator.NetworkActivityIndicator",
         "file": "plugins/cordova-plugin-networkactivityindicator/www/NetworkActivityIndicator.js",
         "pluginId": "cordova-plugin-networkactivityindicator",
@@ -526,7 +508,6 @@ module.exports.metadata =
     "cordova-plugin-ios-longpress-fix": "1.1.0",
     "cordova-plugin-is-debug": "1.0.0",
     "cordova-plugin-media-capture": "1.4.1",
-    "cordova-plugin-nativestorage": "2.2.1",
     "cordova-plugin-networkactivityindicator": "0.1.1",
     "cordova-plugin-network-information": "1.3.1",
     "cordova-plugin-secure-storage": "2.6.3",

@@ -14,10 +14,11 @@
   </ion-navbar>
 </ion-header>
 <ion-content class="page-response-map">
-  <!-- <div class="map">
-    <div #modalMap id="modalMap"></div>
-  </div> -->
-  <iframe width="100%" height="100%" frameborder="0" style="border:0" [src]="mapSrc"></iframe>
+  <sebm-google-map [latitude]="latitude" [longitude]="longitude" [zoom]="mapZoom"
+                    [mapDraggable]="mapDraggable" [zoomControl]="zoomControl" [disableDefaultUI]="disableDefaultUI">
+    <sebm-google-map-marker [markerDraggable]="markerDraggable" [latitude]="latitude" [longitude]="longitude"
+      (markerClick)="markerClick($event)" (dragEnd)="dragEnd($event)"></sebm-google-map-marker>
+  </sebm-google-map>
 </ion-content>
 <ion-footer>
   <ion-toolbar color="black" *ngIf="offline">

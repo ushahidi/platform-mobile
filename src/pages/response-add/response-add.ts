@@ -484,7 +484,7 @@ export class ResponseAddPage extends BasePage {
     this.logger.info(this, "loadFormValues", "Post", this.post);
   }
 
-  changeLocation(event) {
+  changeLocation(event, key) {
     this.logger.info(this, "changeLocation", event);
     let modal = this.showModal(ResponseMapPage,
       { latitude: event['latitude'],
@@ -496,6 +496,8 @@ export class ResponseAddPage extends BasePage {
       if (data) {
         this.post.latitude = data['latitude'];
         this.post.longitude = data['longitude'];
+        let value = this.values[key];
+        value.value = `${data['latitude']},${data['longitude']}`
       }
     });
   }

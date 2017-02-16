@@ -3,6 +3,8 @@ import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Storage } from '@ionic/storage';
 
+import { AgmCoreModule } from 'angular2-google-maps/core';
+
 import { Oauth } from 'ng2-cordova-oauth/oauth'
 import { OauthBrowser}  from 'ng2-cordova-oauth/platform/browser'
 import { OauthCordova } from 'ng2-cordova-oauth/platform/cordova'
@@ -90,7 +92,10 @@ export function provideStorage() {
     IonicModule.forRoot(MyApp),
     FormsModule,
     ReactiveFormsModule,
-    LazyLoadImageModule
+    LazyLoadImageModule,
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyCz949LrCe3x7rC82OVuHneMvoyZoNwJsM'
+    })
   ],
   bootstrap: [ IonicApp ],
   entryComponents: [

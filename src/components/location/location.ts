@@ -8,8 +8,6 @@ import { Attribute } from '../../models/attribute';
 
 import { LoggerService } from '../../providers/logger-service';
 
-import { PLACEHOLDER_MAP } from '../../helpers/constants';
-
 @Component({
   selector: 'field-location',
   templateUrl: 'location.html',
@@ -21,8 +19,6 @@ export class LocationComponent {
   attribute: Attribute = null;
   value: Value = null;
   key: string = "AIzaSyBjDgMqF6GOdirXn3iFtI6Jlt8jEoWhSq4";
-  mapPlaceholder: string = PLACEHOLDER_MAP;
-  mapImage: string = null;
   latitude: number = null;
   longitude: number = null;
   submitted: boolean = false;
@@ -36,7 +32,29 @@ export class LocationComponent {
 
   ngOnInit() {
     this.logger.info(this, "Attribute", this.attribute, "Value", this.value);
-    this.detectLocation();
+    if (this.value && this.value.value) {
+      let location:any = this.value.value.split(",");
+      this.latitude = Number(location[0]);
+      this.longitude = Number(location[1]);
+    }
+    else {
+      this.detectLocation();
+    }
+  }
+
+  ngAfterContentChecked() {
+    this.logger.info(this, "ngAfterContentChecked", this.latitude, this.longitude);
+    if (this.value && this.value.value) {
+      let location:any = this.value.value.split(",");
+      let latitude = Number(location[0]);
+      let longitude = Number(location[1]);
+      if (this.latitude != latitude) {
+        this.latitude = latitude;
+      }
+      if (this.longitude != longitude) {
+        this.longitude = longitude;
+      }
+    }
   }
 
   detectLocation() {
@@ -46,17 +64,11 @@ export class LocationComponent {
         this.logger.info(this, "detectLocation", "Location", position);
         this.latitude = position.coords.latitude;
         this.longitude = position.coords.longitude;
-        this.mapImage = `https://maps.googleapis.com/maps/api/staticmap`
-          + `?center=${position.coords.latitude},${position.coords.longitude}`
-          + `&zoom=15&size=300x200&maptype=roadmap&markers=color:red%7C`
-          + `${position.coords.latitude},${position.coords.longitude}&key=${this.key}`;
-        this.logger.info(this, "detectLocation", "Map", this.mapImage);
       },
       (error) => {
-        this.logger.error(this, "detectLocation", error);
+        this.logger.error(this, "detectLocation", "Error", error);
         this.latitude = null;
         this.longitude = null;
-        this.mapImage = null;
       });
   }
 
