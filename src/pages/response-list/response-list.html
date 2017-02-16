@@ -48,7 +48,16 @@
     </div>
   </div>
   <div class="map" *ngIf="view == 'map'">
-    <div #map id="map"></div>
+    <sebm-google-map [fitBounds]="latLngBounds" [zoomControl]="zoomControl" [disableDefaultUI]="disableDefaultUI" [mapDraggable]="mapDraggable">
+      <sebm-google-map-marker [latitude]="post.latitude" [longitude]="post.longitude" *ngFor="let post of filtered">
+          <sebm-google-map-info-window>
+            <div tappable (click)="showResponse(post)">
+              <div class="title">{{post.title}}</div>
+              <div class="description">{{post.description}}</div>
+            </div>
+          </sebm-google-map-info-window>
+      </sebm-google-map-marker>
+    </sebm-google-map>
   </div>
 </ion-content>
 <ion-footer>

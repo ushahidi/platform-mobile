@@ -49,50 +49,6 @@
                             "count": 1
                         },
                         {
-                            "xml": "<feature name=\"GoogleMaps\"><param name=\"ios-package\" value=\"GoogleMaps\" /><param name=\"onload\" value=\"true\" /><param name=\"onreset\" value=\"true\" /></feature>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<feature name=\"External\"><param name=\"ios-package\" value=\"External\" /></feature>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<feature name=\"Geocoder\"><param name=\"ios-package\" value=\"Geocoder\" /></feature>",
-                            "count": 2
-                        },
-                        {
-                            "xml": "<feature name=\"Map\"><param name=\"ios-package\" value=\"Map\" /></feature>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<feature name=\"Circle\"><param name=\"ios-package\" value=\"Circle\" /></feature>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<feature name=\"GroundOverlay\"><param name=\"ios-package\" value=\"GroundOverlay\" /></feature>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<feature name=\"KmlOverlay\"><param name=\"ios-package\" value=\"KmlOverlay\" /></feature>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<feature name=\"Marker\"><param name=\"ios-package\" value=\"Marker\" /></feature>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<feature name=\"Polygon\"><param name=\"ios-package\" value=\"Polygon\" /></feature>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<feature name=\"Polyline\"><param name=\"ios-package\" value=\"Polyline\" /></feature>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<feature name=\"TileOverlay\"><param name=\"ios-package\" value=\"TileOverlay\" /></feature>",
-                            "count": 1
-                        },
-                        {
                             "xml": "<feature name=\"InAppBrowser\"><param name=\"ios-package\" value=\"CDVInAppBrowser\" /></feature>",
                             "count": 1
                         },
@@ -181,47 +137,23 @@
                         {
                             "xml": "<string>Detect user's location for survey response</string>",
                             "count": 1
-                        },
-                        {
-                            "xml": "<string>$NSLocationWhenInUseUsageDescription</string>",
-                            "count": 1
                         }
                     ],
                     "LSApplicationQueriesSchemes": [
                         {
                             "xml": "<array><string>mailto</string></array>",
                             "count": 1
-                        },
-                        {
-                            "xml": "<array><string>googlechromes</string><string>comgooglemaps</string></array>",
-                            "count": 1
-                        }
-                    ],
-                    "Google Maps API Key": [
-                        {
-                            "xml": "<string>AIzaSyClDqDvu3mRUDwJ7EX438kIRhB0xfRelPM</string>",
-                            "count": 1
-                        }
-                    ],
-                    "NSLocationAlwaysUsageDescription": [
-                        {
-                            "xml": "<string>$NSLocationAlwaysUsageDescription</string>",
-                            "count": 1
-                        }
-                    ],
-                    "CFBundleURLTypes": [
-                        {
-                            "xml": "<array><dict><key>CFBundleTypeRole</key><string>Editor</string><key>CFBundleURLName</key><string>com.ushahidi.mobile</string><key>CFBundleURLSchemes</key><array><string>com.ushahidi.mobile</string></array></dict></array>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<array><dict><key>CFBundleURLSchemes</key><array><string>ushahidi</string></array></dict></array>",
-                            "count": 1
                         }
                     ],
                     "NSMicrophoneUsageDescription": [
                         {
                             "xml": "<string> </string>",
+                            "count": 1
+                        }
+                    ],
+                    "CFBundleURLTypes": [
+                        {
+                            "xml": "<array><dict><key>CFBundleURLSchemes</key><array><string>ushahidi</string></array></dict></array>",
                             "count": 1
                         }
                     ]
@@ -264,15 +196,6 @@
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
         "cordova-plugin-google-analytics": {
-            "PACKAGE_NAME": "com.ushahidi.mobile"
-        },
-        "com.googlemaps.ios": {
-            "PACKAGE_NAME": "com.ushahidi.mobile"
-        },
-        "cordova-plugin-googlemaps": {
-            "API_KEY_FOR_IOS": "AIzaSyClDqDvu3mRUDwJ7EX438kIRhB0xfRelPM",
-            "NSLOCATIONWHENINUSEUSAGEDESCRIPTION": "Show your location on the map",
-            "NSLOCATIONALWAYSUSAGEDESCRIPTION": "Trace your location on the map",
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
         "cordova-plugin-inappbrowser": {
@@ -633,14 +556,6 @@
             ]
         },
         {
-            "id": "cordova-plugin-googlemaps.cordova-plugin-googlemaps",
-            "file": "plugins/cordova-plugin-googlemaps/www/googlemaps-cdv-plugin.js",
-            "pluginId": "cordova-plugin-googlemaps",
-            "clobbers": [
-                "cordova-plugin-googlemaps"
-            ]
-        },
-        {
             "id": "cordova-plugin-inappbrowser.inappbrowser",
             "file": "plugins/cordova-plugin-inappbrowser/www/inappbrowser.js",
             "pluginId": "cordova-plugin-inappbrowser",
@@ -829,8 +744,6 @@
         "cordova-plugin-file-transfer": "1.6.1",
         "cordova-plugin-geolocation": "2.4.1",
         "cordova-plugin-google-analytics": "1.7.4",
-        "com.googlemaps.ios": "2.1.1",
-        "cordova-plugin-googlemaps": "1.4.0",
         "cordova-plugin-inappbrowser": "1.6.1",
         "cordova-plugin-ios-longpress-fix": "1.1.0",
         "cordova-plugin-is-debug": "1.0.0",

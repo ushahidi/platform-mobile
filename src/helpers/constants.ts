@@ -8,4 +8,4 @@ export let PLACEHOLDER_VIDEO:string = "assets/images/placeholder-video.jpg";
 
 export let PLACEHOLDER_MAP:string = "assets/images/placeholder-map.jpg";
 
-export let PLACEHOLDER_BLANK:string = "assets/images/placeholder-blank.jpg";
+export let PLACEHOLDER_BLANK:string = "assets/images/placeholder-blank.png";

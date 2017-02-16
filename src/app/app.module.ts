@@ -5,11 +5,6 @@ import { Storage } from '@ionic/storage';
 
 import { AgmCoreModule } from 'angular2-google-maps/core';
 
-import { Oauth } from 'ng2-cordova-oauth/oauth'
-import { OauthBrowser}  from 'ng2-cordova-oauth/platform/browser'
-import { OauthCordova } from 'ng2-cordova-oauth/platform/cordova'
-
-import 'reflect-metadata';
 import { LazyLoadImageModule } from 'ng2-lazyload-image';
 
 import { MyApp } from './app.component';
@@ -112,7 +107,6 @@ export function provideStorage() {
     ResponseSearchPage
   ],
   providers: [
-    { provide: Oauth, useFactory: OauthCordova },
     { provide: ApiService, useClass: ApiService },
     { provide: Storage, useFactory: provideStorage },
     { provide: VimeoService, useClass: VimeoService },

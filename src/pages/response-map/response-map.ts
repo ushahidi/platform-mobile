@@ -1,16 +1,12 @@
 import { Component, NgZone } from '@angular/core';
 import { Platform, NavParams,
   NavController, ViewController, LoadingController, ToastController, AlertController, ModalController, ActionSheetController  } from 'ionic-angular';
-import { GoogleMap, GoogleMapsEvent, GoogleMapsLatLng, CameraPosition, GoogleMapsMarkerOptions, GoogleMapsMarker } from 'ionic-native';
-import { SafeResourceUrl, DomSanitizer } from '@angular/platform-browser';
 
 import { SebmGoogleMap, SebmGoogleMapMarker } from 'angular2-google-maps/core';
 
 import { BasePage } from '../../pages/base-page/base-page';
 
 import { LoggerService } from '../../providers/logger-service';
-
-declare var google: any;
 
 @Component({
   selector: 'page-response-map',
@@ -32,7 +28,6 @@ export class ResponseMapPage extends BasePage {
     public navParams: NavParams,
     public zone: NgZone,
     public platform:Platform,
-    public sanitizer:DomSanitizer,
     public navController:NavController,
     public viewController:ViewController,
     public modalController:ModalController,

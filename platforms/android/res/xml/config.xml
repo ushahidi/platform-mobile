@@ -30,17 +30,6 @@
     <feature name="UniversalAnalytics">
         <param name="android-package" value="com.danielcwilson.plugins.analytics.UniversalAnalyticsPlugin" />
     </feature>
-    <feature name="GoogleMaps">
-        <param name="android-package" value="plugin.google.maps.GoogleMaps" />
-        <param name="onload" value="true" />
-        <param name="onreset" value="true" />
-    </feature>
-    <feature name="External">
-        <param name="android-package" value="plugin.google.maps.External" />
-    </feature>
-    <feature name="Geocoder">
-        <param name="android-package" value="plugin.google.maps.MyGeocoder" />
-    </feature>
     <feature name="InAppBrowser">
         <param name="android-package" value="org.apache.cordova.inappbrowser.InAppBrowser" />
     </feature>
@@ -106,6 +95,8 @@
     <allow-navigation href="http://localhost:3000" />
     <allow-navigation href="http://localhost:3001" />
     <allow-navigation href="http://192.168.0.18:8100" />
+    <allow-navigation href="https://www.google.com/maps/embed/*" />
+    <allow-navigation href="*://*.googleapis.com/*" />
     <icon src="resources/android/icon/drawable-xhdpi-icon.png" />
     <allow-intent href="market:*" />
     <splash density="port-ldpi" src="resources/android/splash/drawable-port-ldpi-screen.png" />

@@ -278,14 +278,6 @@ module.exports = [
         ]
     },
     {
-        "id": "cordova-plugin-googlemaps.cordova-plugin-googlemaps",
-        "file": "plugins/cordova-plugin-googlemaps/www/googlemaps-cdv-plugin.js",
-        "pluginId": "cordova-plugin-googlemaps",
-        "clobbers": [
-            "cordova-plugin-googlemaps"
-        ]
-    },
-    {
         "id": "cordova-plugin-inappbrowser.inappbrowser",
         "file": "plugins/cordova-plugin-inappbrowser/www/inappbrowser.js",
         "pluginId": "cordova-plugin-inappbrowser",
@@ -471,7 +463,6 @@ module.exports = [
 module.exports.metadata = 
 // TOP OF METADATA
 {
-    "com.googlemaps.ios": "2.1.1",
     "cordova-plugin-app-version": "0.1.9",
     "cordova-plugin-compat": "1.1.0",
     "cordova-plugin-camera": "2.3.1",
@@ -483,7 +474,6 @@ module.exports.metadata =
     "cordova-plugin-filepath": "1.0.2",
     "cordova-plugin-geolocation": "2.4.1",
     "cordova-plugin-google-analytics": "1.7.4",
-    "cordova-plugin-googlemaps": "1.4.0",
     "cordova-plugin-inappbrowser": "1.6.1",
     "cordova-plugin-ios-longpress-fix": "1.1.0",
     "cordova-plugin-is-debug": "1.0.0",

@@ -28,7 +28,6 @@
     "moment": "2.17.1",
     "ng2-cordova-oauth": "0.0.8",
     "ng2-lazyload-image": "2.3.2",
-    "reflect-metadata": "0.1.9",
     "rxjs": "5.0.0-beta.12",
     "sw-toolbox": "3.4.0",
     "zone.js": "0.6.26"
@@ -48,7 +47,6 @@
     "cordova-plugin-file-transfer",
     "cordova-plugin-geolocation",
     "cordova-plugin-google-analytics",
-    "cordova-plugin-googlemaps",
     "cordova-plugin-inappbrowser",
     "cordova-plugin-ios-longpress-fix",
     "cordova-plugin-is-debug",

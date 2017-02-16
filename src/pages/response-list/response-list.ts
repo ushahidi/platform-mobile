@@ -1,7 +1,7 @@
 import { Component, NgZone } from '@angular/core';
 import { Platform, NavParams, Events,
   NavController, ViewController, LoadingController, ToastController, AlertController, ModalController, ActionSheetController } from 'ionic-angular';
-import { GoogleMap, GoogleMapsEvent, GoogleMapsLatLng, GoogleMapsLatLngBounds, CameraPosition, GoogleMapsMarkerOptions, GoogleMapsMarker } from 'ionic-native';
+import { SebmGoogleMap, SebmGoogleMapMarker, SebmGoogleMapInfoWindow, LatLngBounds, MapsAPILoader } from 'angular2-google-maps/core';
 
 import { BasePage } from '../../pages/base-page/base-page';
 import { ResponseAddPage } from '../response-add/response-add';
@@ -23,6 +23,8 @@ import { Attribute } from '../../models/attribute';
 import { Filter } from '../../models/filter';
 import { Collection } from '../../models/collection';
 
+declare var google: any;
+
 @Component({
   selector: 'page-response-list',
   templateUrl: 'response-list.html',
@@ -35,10 +37,14 @@ export class ResponseListPage extends BasePage {
   posts: Post[] = null;
   filtered: Post[] = null;
   filter: Filter = null;
-  map: GoogleMap = null;
   view: string = 'list';
+  mapDraggable: boolean = true;
+  zoomControl : boolean = false;
+  disableDefaultUI : boolean = true;
+  latLngBounds: LatLngBounds = null;
 
   constructor(
+    private mapsAPILoader:MapsAPILoader,
     public api:ApiService,
     public logger:LoggerService,
     public database:DatabaseService,
@@ -431,61 +437,21 @@ export class ResponseListPage extends BasePage {
   showList(event:any) {
     this.logger.info(this, "showList");
     this.view = 'list';
-    if (this.map) {
-      this.map.setVisible(false);
-    }
   }
 
   showMap(event:any, attempts:number=0) {
     this.logger.info(this, "showMap", attempts);
     this.view = 'map';
-    let element: HTMLElement = document.getElementById('map');
-    if (element) {
-      if (this.map) {
-        this.map.remove();
-      }
-      this.map = new GoogleMap(element, { backgroundColor: '#e7e9ec' });
-      this.map.one(GoogleMapsEvent.MAP_READY).then(() => {
-        this.logger.info(this,  "showMap", 'Map Ready');
-        let bounds = [];
-        for (let post of this.posts){
-          if (post && post.latitude && post.longitude) {
-            let latitude = Number(post.latitude);
-            let longitude = Number(post.longitude);
-            let coordinate: GoogleMapsLatLng = new GoogleMapsLatLng(latitude, longitude);
-            this.logger.info(this, "showMap", "Coordinate", coordinate);
-            let markerOptions: GoogleMapsMarkerOptions = {
-              title: post.title,
-              position: coordinate,
-              snippet: post.description
-            };
-            this.map.addMarker(markerOptions).then(
-              (marker) => {
-                marker.addEventListener(GoogleMapsEvent.MARKER_CLICK, () => {
-                  this.logger.info(this, "showMap", "Marker", post.id);
-                  marker.showInfoWindow();
-                });
-                marker.addEventListener(GoogleMapsEvent.INFO_CLICK, () => {
-                  this.logger.info(this, "showMap", "Info", post.id);
-                  this.showResponse(post);
-                });
-              });
-            bounds.push(coordinate);
-          }
+    this.mapsAPILoader.load().then(() => {
+      this.logger.info(this, "showMap", "mapsAPILoader");
+      this.latLngBounds = new google.maps.LatLngBounds();
+      for (let post of this.filtered) {
+        if (post.latitude && post.longitude) {
+          this.latLngBounds.extend(new google.maps.LatLng(post.latitude, post.longitude));
         }
-        if (bounds.length > 0) {
-          this.map.animateCamera({
-            target: bounds,
-            duration: 2000
-          });
-        }
-      });
-    }
-    else {
-      setTimeout((attempts) => {
-        this.showMap(event, attempts+1);
-      }, 1000, attempts);
-    }
+	    }
+      this.logger.info(this, "showMap", "mapsAPILoader", this.latLngBounds);
+    });
   }
 
   clearFilter(event:any, filter:Filter) {

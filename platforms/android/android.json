@@ -49,18 +49,6 @@
                             "count": 1
                         },
                         {
-                            "xml": "<feature name=\"GoogleMaps\"><param name=\"android-package\" value=\"plugin.google.maps.GoogleMaps\" /><param name=\"onload\" value=\"true\" /><param name=\"onreset\" value=\"true\" /></feature>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<feature name=\"External\"><param name=\"android-package\" value=\"plugin.google.maps.External\" /></feature>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<feature name=\"Geocoder\"><param name=\"android-package\" value=\"plugin.google.maps.MyGeocoder\" /></feature>",
-                            "count": 1
-                        },
-                        {
                             "xml": "<feature name=\"InAppBrowser\"><param name=\"android-package\" value=\"org.apache.cordova.inappbrowser.InAppBrowser\" /></feature>",
                             "count": 1
                         },
@@ -165,38 +153,6 @@
                         {
                             "xml": "<uses-permission android:name=\"android.permission.GET_ACCOUNTS\" />",
                             "count": 1
-                        },
-                        {
-                            "xml": "<uses-permission android:name=\"android.permission.INTERNET\" />",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\" />",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<uses-permission android:name=\"com.google.android.providers.gsf.permission.READ_GSERVICES\" />",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<uses-permission android:name=\"android.permission.ACCESS_COARSE_LOCATION\" />",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<uses-permission android:name=\"android.permission.ACCESS_FINE_LOCATION\" />",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<uses-feature android:glEsVersion=\"0x00020000\" android:required=\"true\" />",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<uses-feature android:name=\"android.hardware.location\" />",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<uses-feature android:name=\"android.hardware.location.gps\" />",
-                            "count": 1
                         }
                     ],
                     "/manifest/application": [
@@ -214,14 +170,6 @@
                         },
                         {
                             "xml": "<service android:enabled=\"true\" android:exported=\"false\" android:name=\"com.google.android.gms.analytics.CampaignTrackingService\" />",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<meta-data android:name=\"com.google.android.geo.API_KEY\" android:value=\"AIzaSyDAQq5_U1fm1p_lZY2nm6oH0Lc3bG9MOaI\" />",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<meta-data android:name=\"com.google.android.gms.version\" android:value=\"@integer/google_play_services_version\" />",
                             "count": 1
                         },
                         {
@@ -244,9 +192,6 @@
         }
     },
     "installed_plugins": {
-        "com.googlemaps.ios": {
-            "PACKAGE_NAME": "com.ushahidi.mobile"
-        },
         "cordova-plugin-app-version": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
@@ -278,10 +223,6 @@
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
         "cordova-plugin-google-analytics": {
-            "PACKAGE_NAME": "com.ushahidi.mobile"
-        },
-        "cordova-plugin-googlemaps": {
-            "API_KEY_FOR_ANDROID": "AIzaSyDAQq5_U1fm1p_lZY2nm6oH0Lc3bG9MOaI",
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
         "cordova-plugin-inappbrowser": {
@@ -626,14 +567,6 @@
             ]
         },
         {
-            "id": "cordova-plugin-googlemaps.cordova-plugin-googlemaps",
-            "file": "plugins/cordova-plugin-googlemaps/www/googlemaps-cdv-plugin.js",
-            "pluginId": "cordova-plugin-googlemaps",
-            "clobbers": [
-                "cordova-plugin-googlemaps"
-            ]
-        },
-        {
             "id": "cordova-plugin-inappbrowser.inappbrowser",
             "file": "plugins/cordova-plugin-inappbrowser/www/inappbrowser.js",
             "pluginId": "cordova-plugin-inappbrowser",
@@ -817,7 +750,6 @@
         }
     ],
     "plugin_metadata": {
-        "com.googlemaps.ios": "2.1.1",
         "cordova-plugin-app-version": "0.1.9",
         "cordova-plugin-compat": "1.1.0",
         "cordova-plugin-camera": "2.3.1",
@@ -829,7 +761,6 @@
         "cordova-plugin-filepath": "1.0.2",
         "cordova-plugin-geolocation": "2.4.1",
         "cordova-plugin-google-analytics": "1.7.4",
-        "cordova-plugin-googlemaps": "1.4.0",
         "cordova-plugin-inappbrowser": "1.6.1",
         "cordova-plugin-ios-longpress-fix": "1.1.0",
         "cordova-plugin-is-debug": "1.0.0",
