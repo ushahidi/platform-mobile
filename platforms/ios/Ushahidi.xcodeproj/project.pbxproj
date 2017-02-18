@@ -38,6 +38,7 @@
 		6D346C296F7946E097F8A52B /* libGoogleAnalyticsServices.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F1B1EFF5EDF4AA8BBBB0FE7 /* libGoogleAnalyticsServices.a */; };
 		6EEA135729B54AE4B9F32E76 /* UIImage+CropScaleOrientation.m in Sources */ = {isa = PBXBuildFile; fileRef = E253805F4C0E42CF9069CBDD /* UIImage+CropScaleOrientation.m */; };
 		6FBE15E39EE14A93999A49ED /* sqlite3.c in Sources */ = {isa = PBXBuildFile; fileRef = 2CB90D1E95574213A3DBDEAE /* sqlite3.c */; settings = {COMPILER_FLAGS = "-DSQLITE_TEMP_STORE=2 -DSQLITE_THREADSAFE=1 -DSQLITE_ENABLE_FTS3 -DSQLITE_ENABLE_FTS3_PARENTHESIS -DSQLITE_ENABLE_FTS4 -DSQLITE_ENABLE_RTREE  -DSQLITE_OMIT_BUILTIN_TEST -DSQLITE_OMIT_LOAD_EXTENSION -DSQLITE_DEFAULT_PAGE_SIZE=1024 -DSQLITE_DEFAULT_CACHE_SIZE=2000"; }; };
+		7F93D150D8794BCA87C65D36 /* Ushahidi.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 6CA68CE2E1AA4ADA9F86614A /* Ushahidi.entitlements */; };
 		80760771D5D7438999D67410 /* NetworkActivityIndicator.m in Sources */ = {isa = PBXBuildFile; fileRef = 6EB7DFD4D34D42F680BD4BB6 /* NetworkActivityIndicator.m */; };
 		825CBAF6601F45CAA4A3FADF /* SQLitePlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = A864A91A06124528947792C0 /* SQLitePlugin.m */; };
 		85122B6887FF4642B8E951E3 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C02A4841230846F793C47AC1 /* SystemConfiguration.framework */; };
@@ -65,7 +66,6 @@
 		FB2344EE8EBC42E0BED9A60A /* CDVCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = A8760BE33ED24230808BB7E0 /* CDVCapture.m */; };
 		FEEBA7D07AC54711A80D898C /* IsDebug.m in Sources */ = {isa = PBXBuildFile; fileRef = 53CE502DB40747759A2F6209 /* IsDebug.m */; };
 		FF6C25B63798404C816A694E /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = C02EDDC0DA0C47028490F2EB /* libsqlite3.dylib */; };
-		7F93D150D8794BCA87C65D36 /* Ushahidi.entitlements in Resources */ = {isa = PBXBuildFile; fileRef = 6CA68CE2E1AA4ADA9F86614A /* Ushahidi.entitlements */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -148,6 +148,7 @@
 		67F043AB590749D68E6D396B /* SAMKeychainQuery.m */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.objc; name = SAMKeychainQuery.m; path = "cordova-plugin-secure-storage/SAMKeychainQuery.m"; sourceTree = "<group>"; };
 		691F505240D1466890868A63 /* GAITrackedViewController.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = GAITrackedViewController.h; path = "cordova-plugin-google-analytics/GAITrackedViewController.h"; sourceTree = "<group>"; };
 		6AFF5BF81D6E424B00AB3073 /* CDVLaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = CDVLaunchScreen.storyboard; path = Ushahidi/CDVLaunchScreen.storyboard; sourceTree = SOURCE_ROOT; };
+		6CA68CE2E1AA4ADA9F86614A /* Ushahidi.entitlements */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; path = Ushahidi.entitlements; sourceTree = "<group>"; };
 		6CE604C0EB644A01B0963F51 /* CDVViewController+SplashScreen.m */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.objc; name = "CDVViewController+SplashScreen.m"; path = "cordova-plugin-splashscreen/CDVViewController+SplashScreen.m"; sourceTree = "<group>"; };
 		6CEF68E7FB124B4A8A18D206 /* GAITracker.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = GAITracker.h; path = "cordova-plugin-google-analytics/GAITracker.h"; sourceTree = "<group>"; };
 		6D380849984A4B1AA618ECCC /* CDVExif.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = CDVExif.h; path = "cordova-plugin-camera/CDVExif.h"; sourceTree = "<group>"; };
@@ -202,7 +203,6 @@
 		FBC5BCF9B5D54F1498742FC7 /* CDVAssetLibraryFilesystem.m */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.objc; name = CDVAssetLibraryFilesystem.m; path = "cordova-plugin-file/CDVAssetLibraryFilesystem.m"; sourceTree = "<group>"; };
 		FED1929CEC9C43518D65B50D /* CDVSplashScreen.m */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.objc; name = CDVSplashScreen.m; path = "cordova-plugin-splashscreen/CDVSplashScreen.m"; sourceTree = "<group>"; };
 		FF139C494A294E9183F61929 /* APPEmailComposer.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = APPEmailComposer.h; path = "cordova-plugin-email/APPEmailComposer.h"; sourceTree = "<group>"; };
-		6CA68CE2E1AA4ADA9F86614A /* Ushahidi.entitlements */ = {isa = PBXFileReference; name = "Ushahidi.entitlements"; path = "Ushahidi.entitlements"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -599,6 +599,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_ENTITLEMENTS = "Ushahidi/Resources/Ushahidi.entitlements";
 				COPY_PHASE_STRIP = NO;
 				DEVELOPMENT_TEAM = K4L62494Y2;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -618,7 +619,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.ushahidi.mobile;
 				PRODUCT_NAME = Ushahidi;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				CODE_SIGN_ENTITLEMENTS = "Ushahidi/Resources/Ushahidi.entitlements";
 			};
 			name = Debug;
 		};
@@ -631,6 +631,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CODE_SIGN_ENTITLEMENTS = "Ushahidi/Resources/Ushahidi.entitlements";
 				COPY_PHASE_STRIP = YES;
 				DEVELOPMENT_TEAM = K4L62494Y2;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -648,7 +649,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.ushahidi.mobile;
 				PRODUCT_NAME = Ushahidi;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				CODE_SIGN_ENTITLEMENTS = "Ushahidi/Resources/Ushahidi.entitlements";
 			};
 			name = Release;
 		};
@@ -668,6 +668,7 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_ENTITLEMENTS = "Ushahidi/Resources/Ushahidi.entitlements";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = c99;
@@ -680,11 +681,10 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = NO;
-				CODE_SIGN_ENTITLEMENTS = "Ushahidi/Resources/Ushahidi.entitlements";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 			};
 			name = Debug;
 		};
@@ -704,6 +704,7 @@
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_ENTITLEMENTS = "Ushahidi/Resources/Ushahidi.entitlements";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = c99;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -715,10 +716,9 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = NO;
-				CODE_SIGN_ENTITLEMENTS = "Ushahidi/Resources/Ushahidi.entitlements";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 			};
 			name = Release;
 		};

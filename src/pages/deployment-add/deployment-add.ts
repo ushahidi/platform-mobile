@@ -69,11 +69,11 @@ export class DeploymentAddPage extends BasePage {
     if (search && search.length > 0) {
       this.loading = true;
       this.api.searchDeployments(search).then(
-        (results) => {
-          this.deployments = <Deployment[]>results;
+        (deployments:Deployment[]) => {
+          this.deployments = deployments;
           this.loading = false;
         },
-        (error) => {
+        (error:any) => {
           this.loading = false;
           this.showToast(error);
         });
@@ -87,32 +87,32 @@ export class DeploymentAddPage extends BasePage {
     this.logger.info(this, "addDeployment");
     let loading = this.showLoading("Adding...");
     let where = { subdomain: deployment.subdomain };
-    this.database.getDeployments(where).then(results => {
-      let deployments = <Deployment[]>results;
-      if (deployments && deployments.length > 0) {
-        loading.dismiss();
-        this.showAlert('Deployment Already Added', 'Looks like that deployment has already been added.');
-      }
-      else {
-        this.database.saveDeployment(deployment).then(
-          (results) => {
-            this.logger.info(this, "addDeployment", "ID", results);
-            loading.dismiss();
-            if (results) {
-              deployment.id = <number>results;
-              this.hideModal({ deployment : deployment });
-            }
-            else {
-              this.showAlert('Problem Adding Deployment', 'There was a problem adding your deployment.');
-            }
-          },
-          (error) => {
-            this.logger.error(this, "addDeployment", error);
-            loading.dismiss();
-            this.showAlert('Problem Adding Deployment', error);
-          });
-      }
-    });
+    this.database.getDeployments(where).then(
+      (deployments:Deployment[]) => {
+        if (deployments && deployments.length > 0) {
+          loading.dismiss();
+          this.showAlert('Deployment Already Added', 'Looks like that deployment has already been added.');
+        }
+        else {
+          this.database.saveDeployment(deployment).then(
+            (id:number) => {
+              this.logger.info(this, "addDeployment", "ID", id);
+              loading.dismiss();
+              if (id) {
+                deployment.id = id;
+                this.hideModal({ deployment : deployment });
+              }
+              else {
+                this.showAlert('Problem Adding Deployment', 'There was a problem adding your deployment.');
+              }
+            },
+            (error:any) => {
+              this.logger.error(this, "addDeployment", error);
+              loading.dismiss();
+              this.showAlert('Problem Adding Deployment', error);
+            });
+        }
+      });
   }
 
 }

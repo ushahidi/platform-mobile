@@ -8,6 +8,7 @@ import { AgmCoreModule } from 'angular2-google-maps/core';
 import { LazyLoadImageModule } from 'ng2-lazyload-image';
 
 import { MyApp } from './app.component';
+import { BasePage } from '../pages/base-page/base-page';
 import { HomePage } from '../pages/home/home';
 
 import { DeploymentAddPage } from '../pages/deployment-add/deployment-add';
@@ -54,6 +55,7 @@ export function provideStorage() {
 @NgModule({
   declarations: [
     MyApp,
+    BasePage,
     HomePage,
     DeploymentAddPage,
     DeploymentLoginPage,

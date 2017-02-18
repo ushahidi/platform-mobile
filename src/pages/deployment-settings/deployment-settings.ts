@@ -66,19 +66,19 @@ export class DeploymentSettingsPage extends BasePage {
         email: this.deployment.email,
         description: this.deployment.description };
       this.api.updateDeployment(this.deployment, changes).then(
-        (results) => {
+        (updated:any) => {
           this.deployment.copyInto(changes);
           this.database.saveDeployment(this.deployment).then(
-            (results) => {
+            (saved:any) => {
               loading.dismiss();
               this.showToast('Settings Saved');
             },
-            (error) => {
+            (error:any) => {
               loading.dismiss();
               this.showAlert('Problem Saving Settings', error);
             });
         },
-        (error) => {
+        (error:any) => {
           loading.dismiss();
           this.showAlert('Problem Saving Settings', error);
       });

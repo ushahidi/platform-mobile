@@ -88,36 +88,46 @@ export class ResponseDetailsPage extends BasePage {
       });
   }
 
-  loadForm(cache:boolean=true) {
+  loadForm(cache:boolean=true):Promise<any> {
     if (cache && this.form && this.form.attributes) {
       this.logger.info(this, "loadForm", "Cache", this.form);
+      return Promise.resolve();
     }
     else {
-      return this.database.getFormWithAttributes(this.deployment, this.post.form_id).then(
-        (results) => {
-          this.logger.info(this, "loadForm", "Database", results);
-          this.form = <Form>results;
-        },
-        (error) => {
-          this.logger.error(this, "loadForm", "Database", error);
-        });
+      return new Promise((resolve, reject) => {
+        this.database.getFormWithAttributes(this.deployment, this.post.form_id).then(
+          (form:Form) => {
+            this.logger.info(this, "loadForm", "Database", form);
+            this.form = form;
+            resolve();
+          },
+          (error:any) => {
+            this.logger.error(this, "loadForm", "Database", error);
+            reject(error);
+          });
+      });
     }
   }
 
-  loadValues(cache:boolean=true) {
+  loadValues(cache:boolean=true):Promise<any> {
     this.logger.info(this, "loadValues", "Cache", cache);
     if (cache && this.post && this.post.values && this.post.values.length > 0) {
       this.logger.info(this, "loadValues", "Cached", this.post.values);
+      return Promise.resolve();
     }
     else {
-      return this.database.getValues(this.deployment, this.post).then(
-        (results) => {
-          this.logger.info(this, "loadValues", "Database", results);
-          this.post.values = <any[]>results;
-        },
-        (error) => {
-          this.logger.error(this, "loadValues", "Database", error);
-        });
+      return new Promise((resolve, reject) => {
+        this.database.getValues(this.deployment, this.post).then(
+         (values:Value[]) => {
+           this.logger.info(this, "loadValues", "Database", values);
+           this.post.values = values;
+           resolve();
+         },
+         (error:any) => {
+           this.logger.error(this, "loadValues", "Database", error);
+           reject(error);
+         });
+      });
     }
   }
 
@@ -175,12 +185,12 @@ export class ResponseDetailsPage extends BasePage {
     let url:string = this.post.url;
     this.logger.info(this, "shareResponse", "Subject", subject, "Message", message, "File", file, "URL", url);
     this.showShare(subject, message, file, url).then(
-      (shared) => {
+      (shared:boolean) => {
         if (shared) {
           this.showToast("Response Shared");
         }
       },
-      (error) => {
+      (error:any) => {
         this.showToast(error);
     });
   }
@@ -201,11 +211,11 @@ export class ResponseDetailsPage extends BasePage {
     if (collection != null) {
       let loading = this.showLoading("Adding...");
       this.api.addPostToCollection(this.deployment, post, collection).then(
-        (results) => {
+        (results:any) => {
           loading.dismiss();
           this.showToast("Added To Collection");
         },
-        (error) => {
+        (error:any) => {
           loading.dismiss();
           this.showAlert("Problem Adding To Collection", error);
       })
@@ -232,7 +242,7 @@ export class ResponseDetailsPage extends BasePage {
     let loading = this.showLoading("Updating...");
     let changes = { status: "draft" };
     this.api.updatePost(this.deployment, post, changes).then(
-      (updated) => {
+      (updated:any) => {
         post.status = "draft";
         this.database.savePost(this.deployment, post).then(saved => {
           loading.dismiss();
@@ -240,7 +250,7 @@ export class ResponseDetailsPage extends BasePage {
           this.showToast("Responsed put under review");
         });
       },
-      (error) => {
+      (error:any) => {
         loading.dismiss();
         this.showAlert("Problem Updating Response", error);
       });
@@ -251,7 +261,7 @@ export class ResponseDetailsPage extends BasePage {
     let loading = this.showLoading("Archiving...");
     let changes = { status: "archived" };
     this.api.updatePost(this.deployment, post, changes).then(
-      (updated) => {
+      (updated:any) => {
         post.status = "archived";
         this.database.savePost(this.deployment, post).then(saved => {
           loading.dismiss();
@@ -259,7 +269,7 @@ export class ResponseDetailsPage extends BasePage {
           this.showToast("Response archived");
         });
       },
-      (error) => {
+      (error:any) => {
         loading.dismiss();
         this.showAlert("Problem Updating Response", error);
       });
@@ -270,7 +280,7 @@ export class ResponseDetailsPage extends BasePage {
     let loading = this.showLoading("Publishing...");
     let changes = { status: "published" };
     this.api.updatePost(this.deployment, post, changes).then(
-      (updated) => {
+      (updated:any) => {
         post.status = "published";
         this.database.savePost(this.deployment, post).then(saved => {
           loading.dismiss();
@@ -278,7 +288,7 @@ export class ResponseDetailsPage extends BasePage {
           this.showToast("Response archived");
         });
       },
-      (error) => {
+      (error:any) => {
         loading.dismiss();
         this.showAlert("Problem Updating Response", error);
       });
@@ -293,7 +303,7 @@ export class ResponseDetailsPage extends BasePage {
            this.logger.info(this, "deleteResponse", 'Delete');
            let loading = this.showLoading("Deleting...");
            this.api.deletePost(this.deployment, post).then(
-             (results) => {
+             (results:any) => {
                loading.dismiss();
                this.database.removePost(this.deployment, post).then(removed => {
                  this.showToast("Response deleted");
@@ -302,7 +312,7 @@ export class ResponseDetailsPage extends BasePage {
                  this.closePage();
               });
              },
-             (error) => {
+             (error:any) => {
                loading.dismiss();
                this.showAlert("Problem Deleting Response", error);
              });

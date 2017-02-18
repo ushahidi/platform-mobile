@@ -104,61 +104,49 @@ export class ResponseListPage extends BasePage {
       });
   }
 
-  loadFilters(cache:boolean=true) {
+  loadFilters(cache:boolean=true):Promise<any> {
     if (cache && this.filter) {
       this.logger.info(this, "loadFilters", "Cached", this.filter);
       this.resizeContent();
+      return Promise.resolve();
     }
     else {
-      this.database.getFilter(this.deployment).then(
-        (results) => {
-          this.filter = <Filter>results;
-          this.logger.info(this, "loadFilters", "Database", this.filter);
-          this.resizeContent();
-        },
-        (error) => {
-          this.logger.error(this, "loadFilters", "Database", error);
-        });
+      return new Promise((resolve, reject) => {
+        this.database.getFilter(this.deployment).then(
+          (filter:Filter) => {
+            this.logger.info(this, "loadFilters", "Database", filter);
+            this.filter = filter;
+            this.resizeContent();
+            resolve();
+          },
+          (error:any) => {
+            this.logger.info(this, "loadFilters", "Database", error);
+            this.filter = null;
+            resolve();
+          });
+      });
     }
   }
 
-  loadPosts(cache:boolean=true) {
+  loadPosts(cache:boolean=true):Promise<any> {
     this.logger.info(this, "loadPosts", "Cache", cache);
     if (cache && this.posts != null && this.posts.length > 0) {
       this.logger.info(this, "loadPosts", "Cached", this.posts.length);
-    }
-    else if (cache) {
-      return this.database.getPostsWithValues(this.deployment).then(
-        (results) => {
-          let posts = <Post[]>results;
-          this.logger.info(this, "loadPosts", "Database", posts.length);
-          if (posts && posts.length > 0) {
-            this.posts = posts;
-            this.filtered = this.getFiltered(this.posts, this.filter);
-          }
-          else {
-            this.loadPosts(false);
-          }
-        },
-        (error) => {
-          this.logger.error(this, "loadPosts", "Database", error);
-        });
+      return Promise.resolve();
     }
     else {
-      return this.api.getPostsWithValues(this.deployment).then(
-        (results) => {
-          this.posts = <Post[]>results;
-          this.filtered = this.getFiltered(this.posts, this.filter);
-          this.logger.info(this, "loadPosts", "API", this.posts.length);
-          for (let post of this.posts) {
-            this.database.savePost(this.deployment, post);
-            for (let value of post.values) {
-              this.database.saveValue(this.deployment, value);
-            }
-          }
-        },
-        (error) => {
-          this.logger.error(this, "loadPosts", "API", error);
+      return new Promise((resolve, reject) => {
+        this.api.getPostsWithValues(this.deployment, cache).then(
+          (posts:Post[]) => {
+            this.logger.info(this, "loadPosts", "API", posts.length);
+            this.posts = posts;
+            this.filtered = this.getFiltered(posts, this.filter);
+            resolve();
+          },
+          (error:any) => {
+            this.logger.error(this, "loadPosts", "API", error);
+            reject(error);
+          });
         });
     }
   }
@@ -233,12 +221,12 @@ export class ResponseListPage extends BasePage {
     let url = this.deployment.url;
     this.logger.info(this, "shareResponses", "Subject", subject, "Message", message, "File", file, "URL", url);
     this.showShare(subject, message, file, url).then(
-      (shared) => {
+      (shared:boolean) => {
         if (shared) {
           this.showToast("Responses Shared");
         }
       },
-      (error) => {
+      (error:any) => {
         this.showToast(error);
     });
   }
@@ -297,12 +285,12 @@ export class ResponseListPage extends BasePage {
     let url:string = post.url;
     this.logger.info(this, "shareResponse", "Subject", subject, "Message", message, "File", file, "URL", url);
     this.showShare(subject, message, file, url).then(
-      (shared) => {
+      (shared:boolean) => {
         if (shared) {
           this.showToast("Response Shared");
         }
       },
-      (error) => {
+      (error:any) => {
         this.showToast(error);
     });
   }
@@ -332,11 +320,11 @@ export class ResponseListPage extends BasePage {
     if (collection != null) {
       let loading = this.showLoading("Adding...");
       this.api.addPostToCollection(this.deployment, post, collection).then(
-        (results) => {
+        (results:any) => {
           loading.dismiss();
           this.showToast("Added To Collection");
         },
-        (error) => {
+        (error:any) => {
           loading.dismiss();
           this.showAlert("Problem Adding To Collection", error);
       })
@@ -363,14 +351,14 @@ export class ResponseListPage extends BasePage {
     let loading = this.showLoading("Archiving...");
     let changes = { status: "archived" };
     this.api.updatePost(this.deployment, post, changes).then(
-      (updated) => {
+      (updated:any) => {
         post.status = "archived";
         this.database.savePost(this.deployment, post).then(saved => {
           loading.dismiss();
           this.showToast("Responsed archived");
         });
       },
-      (error) => {
+      (error:any) => {
         loading.dismiss();
         this.showAlert("Problme Updating Response", error);
       });
@@ -381,14 +369,14 @@ export class ResponseListPage extends BasePage {
     let loading = this.showLoading("Publishing...");
     let changes = { status: "published" };
     this.api.updatePost(this.deployment, post, changes).then(
-      (updated) => {
+      (updated:any) => {
         post.status = "published";
         this.database.savePost(this.deployment, post).then(saved => {
           loading.dismiss();
           this.showToast("Response archived");
         });
       },
-      (error) => {
+      (error:any) => {
         loading.dismiss();
         this.showAlert("Problem Updating Response", error);
       });
@@ -403,7 +391,7 @@ export class ResponseListPage extends BasePage {
            this.logger.info(this, "deleteResponse", 'Delete');
            let loading = this.showLoading("Deleting...");
            this.api.deletePost(this.deployment, post).then(
-             (results) => {
+             (results:any) => {
                loading.dismiss();
                this.database.removePost(this.deployment, post).then(removed => {
                  let postIndex = this.posts.indexOf(post, 0);
@@ -417,7 +405,7 @@ export class ResponseListPage extends BasePage {
                  this.showToast("Response deleted");
               });
              },
-             (error) => {
+             (error:any) => {
                loading.dismiss();
                this.showAlert("Problem Deleting Response", error);
              });
@@ -457,11 +445,11 @@ export class ResponseListPage extends BasePage {
   clearFilter(event:any, filter:Filter) {
     this.logger.info(this, "clearFilter", filter);
     this.database.removeFilters(this.deployment).then(
-      (results) => {
+      (results:any) => {
         this.filter = null;
         this.filtered = this.getFiltered(this.posts, this.filter);
       },
-      (error) => {
+      (error:any) => {
         this.showToast(error);
       });
       this.resizeContent();

@@ -7,8 +7,8 @@ import { LoggerService } from '../providers/logger-service';
 @Injectable()
 export class VimeoService extends HttpService {
 
-  //private accessToken: string = "413e6801c73e70fec5e1468249a114e5";
-  private accessToken: string = "74b4152349da27210ee8278380926b84";
+  private accessToken: string = "413e6801c73e70fec5e1468249a114e5";
+  //private accessToken: string = "74b4152349da27210ee8278380926b84";
 
   constructor(
     public http: Http,
@@ -19,7 +19,8 @@ export class VimeoService extends HttpService {
   createTicket(): Promise<any> {
     return new Promise((resolve, reject) => {
       let url = "https://api.vimeo.com/me/videos";
-      this.httpPost(url, this.accessToken, {}).then(
+      let params = { type:"streaming" };
+      this.httpPost(url, this.accessToken, params).then(
         (data) => {
           this.logger.info(this, "createTicket", data);
           resolve(data);
@@ -30,7 +31,7 @@ export class VimeoService extends HttpService {
     });
   }
 
-  uploadVideo(url:string, file:any): Promise<string> {
+  uploadVideo(url:string, file:any): Promise<any> {
     return new Promise((resolve, reject) => {
       this.logger.info(this, "uploadVideo", url, file);
       this.fileUpload(url, this.accessToken, file, "PUT", "video/quicktime", "application/vnd.vimeo.*+json;version=3.2").then(
@@ -44,7 +45,7 @@ export class VimeoService extends HttpService {
     });
   }
 
-  updateVideo(video:string, name:string=null, description:string=null) {
+  updateVideo(video:string, name:string=null, description:string=null): Promise<any> {
     return new Promise((resolve, reject) => {
       let url = `https://api.vimeo.com/videos/${video}`;
       let params = {
@@ -62,7 +63,7 @@ export class VimeoService extends HttpService {
     });
   }
 
-  completeVideo(url:string) {
+  completeVideo(url:string): Promise<any> {
     return new Promise((resolve, reject) => {
       this.httpDelete(url, this.accessToken).then(
         (data) => {
@@ -75,7 +76,7 @@ export class VimeoService extends HttpService {
     });
   }
 
-  getVideos() {
+  getVideos(): Promise<any> {
     return new Promise((resolve, reject) => {
       let url = "https://api.vimeo.com/me/videos";
       this.httpGet(url, this.accessToken).then(

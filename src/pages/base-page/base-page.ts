@@ -9,6 +9,10 @@ import {
   NavController, ViewController } from 'ionic-angular';
 import { SocialSharing, Network } from 'ionic-native';
 
+@Component({
+  selector: 'base-page',
+  templateUrl: 'base-page.html'
+})
 export class BasePage {
 
   zone: NgZone = null;
@@ -152,7 +156,9 @@ export class BasePage {
 
   resizeContent(delay:number=100) {
     setTimeout(() => {
-      this.content.resize();
+      if (this.content) {
+        this.content.resize();
+      }
     }, delay);
   }
 

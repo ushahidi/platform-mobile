@@ -496,6 +496,21 @@ export class DatabaseService {
 
   getPosts(deployment:Deployment) : Promise<Post[]> {
     let where = { deployment_id: deployment.id };
+    return Promise.all([
+      this.getModels<Post>(new Post(), where, { created: "DESC" }),
+      this.getModels<Value>(new Value(), where,  { cardinality: "ASC" })]).
+      then((results:any[]) => {
+        let posts = <Post[]>results[0];
+        let values = <Value[]>results[1];
+        for (let post of posts) {
+          post.loadValues(values);
+        }
+        return posts;
+      });
+  }
+
+  getPostsPending(deployment:Deployment) : Promise<Post[]> {
+    let where = { deployment_id: deployment.id, pending: true };
     let order = { created: "DESC" };
     return this.getModels<Post>(new Post(), where, order);
   }

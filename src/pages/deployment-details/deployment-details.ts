@@ -81,128 +81,106 @@ export class DeploymentDetailsPage extends BasePage {
       });
     }
 
-    loadDeployment(cache:boolean=true) {
+    loadDeployment(cache:boolean=true):Promise<any> {
       this.logger.info(this, "loadDeployment", cache);
       if (cache && this.deployment.image && this.deployment.description) {
         this.logger.info(this, "loadDeployment", "Cached");
-      }
-      else if (cache) {
-        return this.database.getDeployment(this.deployment.id).then(
-          (results) => {
-            this.logger.info(this, "loadDeployment", "Database", results);
-            this.deployment.copyInto(results);
-            if (this.deployment.image == null || this.deployment.description == null) {
-              this.loadDeployment(false);
-            }
-          },
-          (error) => {
-            this.logger.error(this, "loadDeployment", "Database", error);
-        });
+        return Promise.resolve();
       }
       else {
-        return this.api.getDeployment(this.deployment).then(deployment => {
-          this.deployment.copyInto(deployment);
-          this.database.saveModel(this.deployment).then(
-            (results) => {
-              this.logger.info(this, "loadDeployment", "API", results);
+        return new Promise((resolve, reject) => {
+          this.api.getDeployment(this.deployment, cache).then(
+            (deployment:Deployment) => {
+              this.deployment.copyInto(deployment);
+              this.database.saveModel(this.deployment).then(
+                (saved:any) => {
+                  this.logger.info(this, "loadDeployment", "API", saved);
+                  resolve();
+                },
+                (error:any) => {
+                  this.logger.error(this, "loadDeployment", "API", error);
+                  reject(error);
+              });
             },
-            (error) => {
+            (error:any) => {
               this.logger.error(this, "loadDeployment", "API", error);
+              reject(error);
           });
         });
       }
     }
 
-    loadUser(cache:boolean=true) {
+    loadUser(cache:boolean=true):Promise<any> {
       this.logger.info(this, "loadUser", cache);
       if (cache && this.user) {
         this.logger.info(this, "loadUser", "Cached", this.user);
+        return Promise.resolve();
       }
       else {
-        return this.api.getUser(this.deployment).then(
-          (results) => {
-            this.logger.info(this, "loadUser", "API", results);
-            this.user = <User>results;
-            this.database.saveUser(this.deployment, this.user).then(
-              (results) => {
-                this.logger.info(this, "loadUser", "Saved", results);
-              },
-              (error) => {
-                this.logger.error(this, "loadUser", "Failed", results);
-              });
-          },
-          (error) => {
-            this.logger.error(this, "loadUser", "Failed", error);
-          });
+        return new Promise((resolve, reject) => {
+          this.api.getUser(this.deployment).then(
+            (user:User) => {
+              this.logger.info(this, "loadUser", "API", user);
+              this.user = user;
+              this.database.saveUser(this.deployment, this.user).then(
+                (saved:any) => {
+                  this.logger.info(this, "loadUser", "Saved", saved);
+                  resolve();
+                },
+                (error) => {
+                  this.logger.error(this, "loadUser", "Failed", error);
+                  reject(error);
+                });
+            },
+            (error:any) => {
+              this.logger.error(this, "loadUser", "Failed", error);
+              reject(error);
+            });
+        });
       }
     }
 
-    loadForms(cache:boolean=true) {
+    loadForms(cache:boolean=true):Promise<any> {
       this.logger.info(this, "loadForms", cache);
       if (cache && this.deployment.forms != null && this.deployment.forms.length > 0) {
         this.logger.info(this, "loadForms", "Cached");
-      }
-      else if (cache) {
-        return this.database.getFormsWithAttributes(this.deployment).then(results => {
-          this.logger.info(this, "loadForms", "Database", results);
-          let forms = <Form[]>results;
-          if (forms.length > 0) {
-            this.deployment.forms = forms;
-          }
-          else {
-            this.loadForms(false);
-          }
-        });
+        return Promise.resolve();
       }
       else {
-        return this.api.getFormsWithAttributes(this.deployment).then(
-          (results) => {
-            let forms = <Form[]>results;
-            this.logger.info(this, "loadForms", "API", forms);
-            for (let form of forms) {
-              this.database.saveForm(this.deployment, form);
-              for (let attribute of form.attributes) {
-                this.database.saveAttribute(this.deployment, attribute);
-              }
-            }
-            this.deployment.forms = forms;
-          },
-          (error) => {
-            this.logger.error(this, "loadForms", "API", error);
-          });
+        return new Promise((resolve, reject) => {
+          this.api.getFormsWithAttributes(this.deployment, cache).then(
+            (forms:Form[]) => {
+              this.logger.info(this, "loadForms", "API", forms);
+              this.deployment.forms = forms;
+              resolve();
+            },
+            (error) => {
+              this.logger.error(this, "loadForms", "API", error);
+              reject(error);
+            });
+        });
       }
     }
 
-    loadCollections(cache:boolean=true) {
+    loadCollections(cache:boolean=true):Promise<any> {
       this.logger.info(this, "loadCollections", cache);
       if (cache && this.deployment.collections != null && this.deployment.collections.length > 0) {
         this.logger.info(this, "loadCollections", "Cached");
-      }
-      else if (cache) {
-        return this.database.getCollections(this.deployment).then(results => {
-          this.logger.info(this, "loadCollections", "Database", results);
-          let collections = <Collection[]>results;
-          if (collections.length > 0) {
-            this.deployment.collections = collections;
-          }
-          else {
-            this.loadCollections(false);
-          }
-        });
+        return Promise.resolve();
       }
       else {
-        return this.api.getCollections(this.deployment).then(
-          (results) => {
-            let collections = <Collection[]>results;
-            this.logger.info(this, "loadCollections", "API", collections);
-            for (let collection of collections) {
-              this.database.saveCollection(this.deployment, collection);
-            }
-            this.deployment.collections = collections;
-          },
-          (error) => {
-            this.logger.error(this, "loadCollections", "API", error);
-          });
+        return new Promise((resolve, reject) => {
+          this.api.getCollections(this.deployment, cache).then(
+            (collections:Collection[]) => {
+              this.logger.info(this, "loadCollections", "API", collections);
+              this.deployment.collections = collections;
+              resolve();
+            },
+            (error:any) => {
+              this.logger.error(this, "loadCollections", "API", error);
+              reject(error);
+            });
+        });
       }
     }
 

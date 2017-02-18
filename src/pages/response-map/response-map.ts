@@ -43,12 +43,6 @@ export class ResponseMapPage extends BasePage {
     this.logger.info(this, 'ionViewDidLoad');
   }
 
-  toQueryString(url, params) {
-    return url + '?' + Object.keys(params).map((key) => {
-      return encodeURIComponent(key) + '=' + encodeURIComponent(params[key]);
-    }).join('&');
-  }
-
   ionViewWillEnter() {
     super.ionViewWillEnter();
     this.logger.info(this, "ionViewWillEnter");

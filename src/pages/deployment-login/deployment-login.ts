@@ -89,17 +89,17 @@ export class DeploymentLoginPage extends BasePage {
       if (username.length > 0 && password.length > 0) {
         let loading = this.showLoading("Logging in...");
         this.api.authLogin(this.deployment, username, password).then(
-          (results) => {
-            this.logger.info(this, "onLogin", "Tokens", results);
-            if (results != null) {
-              this.deployment.copyInto(results);
+          (tokens:any) => {
+            this.logger.info(this, "onLogin", "Tokens", tokens);
+            if (tokens != null) {
+              this.deployment.copyInto(tokens);
               this.database.saveDeployment(this.deployment).then(
-                (results) => {
+                (saved:any) => {
                   loading.dismiss();
                   this.showToast('Login Successful');
                   this.showDeployment(this.deployment);
                 },
-                (error) => {
+                (error:any) => {
                   loading.dismiss();
                   this.showAlert('Problem Updating Deployment', error);
                 });
@@ -109,7 +109,7 @@ export class DeploymentLoginPage extends BasePage {
               this.showAlert('Invalid Credentials', 'Please verify your email and password, then try again.');
             }
           },
-          (error) => {
+          (error:any) => {
             loading.dismiss();
             this.showAlert('Invalid Credentials', 'Please verify your email and password, then try again.');
           });
