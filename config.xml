@@ -17,12 +17,11 @@
   <allow-navigation href="*://*.youtube.com/*"/>
   <allow-navigation href="*youtube*"/>
   <allow-navigation href="*ytimg*"/>
+  <allow-navigation href="*://*.googleapis.com/*"/>
   <allow-navigation href="http://ionic.local/*"/>
   <allow-navigation href="http://localhost:3000"/>
   <allow-navigation href="http://localhost:3001"/>
   <allow-navigation href="http://192.168.0.18:8100"/>
-  <allow-navigation href="https://www.google.com/maps/embed/*"/>
-  <allow-navigation href="*://*.googleapis.com/*"/>
   <platform name="android">
     <allow-intent href="market:*"/>
     <splash density="port-ldpi" src="resources/android/splash/drawable-port-ldpi-screen.png"/>

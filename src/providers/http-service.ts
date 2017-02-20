@@ -19,17 +19,22 @@ export class HttpService {
 
   }
 
-  httpHeaders(accessToken:string=null, contentType:string='application/json'): Headers {
+  httpHeaders(accessToken:string=null, otherHeaders:any=null): Headers {
     let headers = new Headers();
     headers.set('Accept', 'application/json');
-    headers.set('Content-Type', contentType);
+    headers.set('Content-Type', 'application/json');
     if (accessToken != null) {
-      headers.set("Authorization", `Bearer ${accessToken}`)
+      headers.set("Authorization", `Bearer ${accessToken}`);
+    }
+    if (otherHeaders) {
+      for (let key of otherHeaders) {
+        headers.set(key, otherHeaders[key]);
+      }
     }
     return headers;
   }
 
-  httpGet(url:string, token:string=null, params:any=null) {
+  httpGet(url:string, token:string=null, params:any=null, otherHeaders:any=null) {
     return new Promise((resolve, reject) => {
       let search = new URLSearchParams();
       if (params) {
@@ -37,8 +42,10 @@ export class HttpService {
           search.set(key, params[key])
         }
       }
-      let headers = this.httpHeaders(token);
-      let options = new RequestOptions({ headers: headers, search: search });
+      let headers = this.httpHeaders(token, otherHeaders);
+      let options = new RequestOptions({
+        headers: headers,
+        search: search });
       this.logger.info(this, "GET", url, params);
       this.http.get(url, options)
         .map(res => res.json())
@@ -54,11 +61,12 @@ export class HttpService {
     });
   }
 
-  httpPost(url:string, token:string=null, params:any=null) {
+  httpPost(url:string, token:string=null, params:any=null, otherHeaders:any=null) {
     return new Promise((resolve, reject) => {
       let body = (params != null) ? JSON.stringify(params) : "";
-      let headers = this.httpHeaders(token);
-      let options = new RequestOptions({ headers: headers });
+      let headers = this.httpHeaders(token, otherHeaders);
+      let options = new RequestOptions({
+        headers: headers });
       this.logger.info(this, "POST", url, body);
       this.http.post(url, body, options)
         .map(res => {
@@ -82,11 +90,12 @@ export class HttpService {
     });
   }
 
-  httpPut(url:string, token:string=null, params:any=null) {
+  httpPut(url:string, token:string=null, params:any=null, otherHeaders:any=null) {
     return new Promise((resolve, reject) => {
       let body = JSON.stringify(params);
-      let headers = this.httpHeaders(token);
-      let options = new RequestOptions({ headers: headers });
+      let headers = this.httpHeaders(token, otherHeaders);
+      let options = new RequestOptions({
+        headers: headers });
       this.logger.info(this, "PUT", url, body);
       this.http.put(url, body, options)
         .map(res => {
@@ -110,11 +119,12 @@ export class HttpService {
     });
   }
 
-  httpPatch(url:string, token:string=null, params:any=null) {
+  httpPatch(url:string, token:string=null, params:any=null, otherHeaders:any=null) {
     return new Promise((resolve, reject) => {
       let body = JSON.stringify(params);
-      let headers = this.httpHeaders(token);
-      let options = new RequestOptions({ headers: headers });
+      let headers = this.httpHeaders(token, otherHeaders);
+      let options = new RequestOptions({
+        headers: headers });
       this.logger.info(this, "PATCH", url, body);
       this.http.patch(url, body, options)
         .map(res => {
@@ -138,19 +148,25 @@ export class HttpService {
     });
   }
 
-  httpDelete(url:string, token:string=null, params:any=null) {
+  httpDelete(url:string, token:string=null, otherHeaders:any=null) {
     return new Promise((resolve, reject) => {
-      let search = new URLSearchParams();
-      if (params) {
-        for (let key in params) {
-          search.set(key, params[key])
-        }
-      }
-      let headers = this.httpHeaders(token);
-      let options = new RequestOptions({ headers: headers, search: search });
-      this.logger.info(this, "DELETE", url, params);
+      let headers = this.httpHeaders(token, otherHeaders);
+      let options = new RequestOptions({
+        headers: headers });
+      this.logger.info(this, "DELETE", url);
       this.http.delete(url, options)
-        .map(res => res.json())
+        .map(res => {
+          this.logger.info(this, "DELETE", url, res);
+          if (res.status == 201) {
+            return res.headers.toJSON();
+          }
+          else if (res.status == 204) {
+            return res.headers.toJSON();
+          }
+          else {
+            return res.json();
+          }
+        })
         .subscribe(
           (items) => {
             this.logger.info(this, "DELETE", url, items);
@@ -163,20 +179,36 @@ export class HttpService {
     });
   }
 
-  fileUpload(url:string, token:string, file:string, httpMethod:string="POST", mimeType:string='application/binary', accept:string="application/json", contentType:string="multipart/form-data", fileKey:string='file', chunkedMode:boolean=false) {
+  fileUpload(url:string, token:string, file:string,
+             httpMethod:string="POST",
+             mimeType:string='application/binary',
+             accept:string="application/json",
+             contentType:string="multipart/form-data",
+             contentLength:number=null,
+             fileKey:string='file',
+             chunkedMode:boolean=false) {
     return new Promise((resolve, reject) => {
       let transfer = new Transfer();
+      let headers = {};
+      if (accept) {
+        headers['Accept'] = accept;
+      }
+      if (contentType) {
+        headers['Content-Type'] = contentType;
+      }
+      if (contentLength) {
+        headers['Content-Length'] = contentLength;
+      }
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
       var options:FileUploadOptions = {
         fileKey: fileKey,
         httpMethod: httpMethod,
         mimeType: mimeType,
         chunkedMode: chunkedMode,
         fileName: file.substr(file.lastIndexOf('/') + 1).split('?').shift(),
-        headers: {
-          'Accept' : accept,
-          'Content-Type' : undefined,
-          'Authorization' : `Bearer ${token}`
-        }
+        headers: headers
       };
       this.logger.info(this, "UPLOAD", url, file, options);
       transfer.upload(file, url, options, true).then(

@@ -54,6 +54,13 @@
           <key>NSExceptionAllowsInsecureHTTPLoads</key>
           <true/>
         </dict>
+        <key>googleapis.com/*</key>
+        <dict>
+          <key>NSIncludesSubdomains</key>
+          <true/>
+          <key>NSExceptionAllowsInsecureHTTPLoads</key>
+          <true/>
+        </dict>
         <key>ionic.local</key>
         <dict>
           <key>NSExceptionAllowsInsecureHTTPLoads</key>
@@ -66,15 +73,6 @@
         </dict>
         <key>192.168.0.18</key>
         <dict>
-          <key>NSExceptionAllowsInsecureHTTPLoads</key>
-          <true/>
-        </dict>
-        <key>www.google.com</key>
-        <dict/>
-        <key>googleapis.com/*</key>
-        <dict>
-          <key>NSIncludesSubdomains</key>
-          <true/>
           <key>NSExceptionAllowsInsecureHTTPLoads</key>
           <true/>
         </dict>

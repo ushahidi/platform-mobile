@@ -92,7 +92,7 @@
     <name>Ushahidi</name>
     <description>Ushahidi Mobile</description>
     <author email="support@ushahidi.com" href="https://www.ushahidi.com/">Ushahidi Team</author>
-    <content original-src="index.html" src="http://localhost:3000" />
+    <content original-src="index.html" src="http://192.168.0.18:8100" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -106,12 +106,11 @@
     <allow-navigation href="*://*.youtube.com/*" />
     <allow-navigation href="*youtube*" />
     <allow-navigation href="*ytimg*" />
+    <allow-navigation href="*://*.googleapis.com/*" />
     <allow-navigation href="http://ionic.local/*" />
     <allow-navigation href="http://localhost:3000" />
     <allow-navigation href="http://localhost:3001" />
     <allow-navigation href="http://192.168.0.18:8100" />
-    <allow-navigation href="https://www.google.com/maps/embed/*" />
-    <allow-navigation href="*://*.googleapis.com/*" />
     <icon src="resources/android/icon/drawable-xhdpi-icon.png" />
     <allow-intent href="itms:*" />
     <allow-intent href="itms-apps:*" />

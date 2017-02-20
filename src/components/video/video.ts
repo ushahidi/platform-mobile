@@ -92,6 +92,7 @@ export class VideoComponent {
           resolve(storePath);
         },
         (error:FileError) => {
+          this.logger.error(this, "copyFile", error);
           reject(error);
         });
     });

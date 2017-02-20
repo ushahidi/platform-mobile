@@ -312,48 +312,21 @@ export class ResponseAddPage extends BasePage {
   uploadVideo(post:Post, file:string): Promise<string> {
     this.logger.info(this, "uploadVideo", file);
     return new Promise((resolve, reject) => {
-      this.vimeo.createTicket().then(
-        (ticket:any) => {
-          this.logger.info(this, "uploadVideo", "createTicket", ticket);
-          let complete = ticket['complete_uri'];
-          let upload = ticket['upload_link_secure'];
-          let video = null;
-          this.vimeo.uploadVideo(upload, file).then(
-            (uploaded:any) => {
-              this.logger.info(this, "uploadVideo", "uploadVideo", uploaded);
-              this.vimeo.updateVideo(video, post.title, post.description).then(
-                (updated:any) => {
-                  this.logger.info(this, "uploadVideo", "updateVideo", updated);
-                  this.vimeo.completeVideo(complete).then(
-                    (completed:any) => {
-                      this.logger.info(this, "uploadVideo", "completeVideo", completed);
-                      for (let value of this.post.values) {
-                        if (value.input == 'video' && value.value === file) {
-                          value.value = "" + video;
-                          break;
-                        }
-                      }
-                      resolve(video);
-                    },
-                    (error) => {
-                      this.logger.error(this, "uploadVideo", "completeVideo", error);
-                      reject(error);
-                    });
-                },
-                (error) => {
-                  this.logger.error(this, "uploadVideo", "updateVideo", error);
-                  reject(error);
-                });
-            },
-            (error) => {
-              this.logger.error(this, "uploadVideo", "uploadVideo", error);
-              reject(error);
-            });
+      this.vimeo.uploadVideo(file, post.title, post.description).then(
+        (url:any) => {
+          this.logger.info(this, "uploadVideo", url);
+          for (let value of this.post.values) {
+            if (value.input == 'video' && value.value == file) {
+              value.value = url;
+              break;
+            }
+          }
+          resolve(url);
         },
-        (error) => {
-          this.logger.error(this, "uploadVideo", "createTicket", error);
+        (error:any) => {
+          this.logger.error(this, "uploadVideo", error);
           reject(error);
-      });
+        });
     });
   }
 
@@ -423,7 +396,7 @@ export class ResponseAddPage extends BasePage {
         let validator = (attribute.required == true) ? Validators.required : null;
         this.logger.info(this, "loadFormGroup", "Form", this.form.name, "Attribute", attribute.input, "Value", text);
         if (attribute.input == 'location') {
-          let coordinates = (text != null) ? text.split(',') : '';
+          let coordinates = (text) ? text.split(',') : [];
           let latitude = (coordinates.length > 1) ? coordinates[0] : '';
           let longitude = (coordinates.length > 1) ? coordinates[1] : '';
           let formGroup = new FormGroup({

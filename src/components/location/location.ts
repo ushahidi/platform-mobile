@@ -43,7 +43,7 @@ export class LocationComponent {
   }
 
   ngAfterContentChecked() {
-    if (this.value && this.value.value) {
+    if (this.value && this.value.value && this.value.value.length > 0) {
       let location:any = this.value.value.split(",");
       let latitude = Number(location[0]);
       let longitude = Number(location[1]);

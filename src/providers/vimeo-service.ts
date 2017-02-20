@@ -1,14 +1,17 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
+import { File, FileEntry, Entry, Metadata } from 'ionic-native';
 
 import { HttpService } from '../providers/http-service';
 import { LoggerService } from '../providers/logger-service';
 
+declare var cordova: any;
+
 @Injectable()
 export class VimeoService extends HttpService {
 
-  private accessToken: string = "413e6801c73e70fec5e1468249a114e5";
-  //private accessToken: string = "74b4152349da27210ee8278380926b84";
+  //private accessToken: string = "413e6801c73e70fec5e1468249a114e5";
+  private accessToken: string = "74b4152349da27210ee8278380926b84";
 
   constructor(
     public http: Http,
@@ -16,48 +19,109 @@ export class VimeoService extends HttpService {
     super(http, logger);
   }
 
+  uploadVideo(file:string, title, description) {
+    this.logger.info(this, "uploadVideo", file);
+    return new Promise((resolve, reject) => {
+      this.createTicket().then(
+        (ticket:any) => {
+          this.logger.info(this, "uploadVideo", "createTicket", ticket);
+          let uploadUrl = ticket['upload_link_secure'];
+          let completeUrl = `https://api.vimeo.com${ticket['complete_uri']}`;
+          this.uploadFile(uploadUrl, file).then(
+            (uploaded:any) => {
+              this.logger.info(this, "uploadVideo", "uploadFile", uploaded);
+              this.completeVideo(completeUrl).then(
+                (completed:any) => {
+                  this.logger.info(this, "uploadVideo", "completeVideo", completed);
+                  let location = completed['Location'][0];
+                  let videoUrl = `https://vimeo.com${location}`;
+                  let videoId = location.substr(location.lastIndexOf('/') + 1);
+                  this.logger.info(this, "uploadVideo", "completeVideo", videoId, videoUrl);
+                  this.updateVideo(videoId, title, description).then(
+                    (updated:any) => {
+                      this.logger.info(this, "uploadVideo", "updateVideo", updated);
+                      resolve(videoUrl);
+                    },
+                    (error) => {
+                      this.logger.error(this, "uploadVideo", "updateVideo", error);
+                      reject(error);
+                    });
+                },
+                (error) => {
+                  this.logger.error(this, "uploadVideo", "completeVideo", error);
+                  reject(error);
+                });
+            },
+            (error) => {
+              this.logger.error(this, "uploadVideo", "uploadFile", error);
+              reject(error);
+            });
+        },
+        (error) => {
+          this.logger.error(this, "uploadVideo", "createTicket", error);
+          reject(error);
+      });
+    });
+  }
+
   createTicket(): Promise<any> {
     return new Promise((resolve, reject) => {
       let url = "https://api.vimeo.com/me/videos";
-      let params = { type:"streaming" };
+      let params = { type: "streaming" };
       this.httpPost(url, this.accessToken, params).then(
-        (data) => {
+        (data:any) => {
           this.logger.info(this, "createTicket", data);
           resolve(data);
         },
-        (error) => {
+        (error:any) => {
           reject(error);
         })
     });
   }
 
-  uploadVideo(url:string, file:any): Promise<any> {
+  uploadFile(url:string, file:any): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.logger.info(this, "uploadVideo", url, file);
-      this.fileUpload(url, this.accessToken, file, "PUT", "video/quicktime", "application/vnd.vimeo.*+json;version=3.2").then(
-        (data) => {
-          this.logger.info(this, "uploadVideo", url, file, data);
-          resolve(data);
+      this.logger.info(this, "uploadFile", url, file);
+      this.fileSize(file).then(
+        (fileSize) => {
+          this.logger.info(this, "uploadFile", "fileSize", fileSize);
+          this.fileUpload(url, this.accessToken, file, "PUT", "video/quicktime", "application/vnd.vimeo.*+json;version=3.2", "video/quicktime", fileSize).then(
+            (data:any) => {
+              this.logger.info(this, "uploadFile", url, file, data);
+              resolve(data);
+            },
+            (error:any) => {
+              this.logger.error(this, "uploadFile", url, file, error);
+              reject(error);
+            })
         },
-        (error) => {
+        (error:any) => {
+          this.logger.error(this, "uploadFile", "fileSize", error);
           reject(error);
-        })
-    });
+        });
+      });
   }
 
-  updateVideo(video:string, name:string=null, description:string=null): Promise<any> {
+  updateVideo(id:string, name:string=null, description:string=null): Promise<any> {
     return new Promise((resolve, reject) => {
-      let url = `https://api.vimeo.com/videos/${video}`;
+      this.logger.info(this, "updateVideo", id);
+      let url = `https://api.vimeo.com/videos/${id}`;
       let params = {
         'name': name,
         'description': description,
-        'privacy.view': 'unlisted' };
+        'privacy': {
+          'download': false,
+          'view': 'unlisted',
+          'comments': 'nobody'
+        }
+      };
       this.httpPatch(url, this.accessToken, params).then(
-        (data) => {
-          this.logger.info(this, "createTicket", data);
+        (data:any) => {
+          this.logger.info(this, "updateVideo", id, data);
           resolve(data);
         },
-        (error) => {
+        (error:any) => {
+          this.logger.error(this, "updateVideo", id, error);
           reject(error);
         })
     });
@@ -65,50 +129,39 @@ export class VimeoService extends HttpService {
 
   completeVideo(url:string): Promise<any> {
     return new Promise((resolve, reject) => {
+      this.logger.info(this, "completeVideo", url);
       this.httpDelete(url, this.accessToken).then(
-        (data) => {
-          this.logger.info(this, "completeVideo", data);
+        (data:any) => {
+          this.logger.info(this, "completeVideo", url, data);
           resolve(data);
         },
-        (error) => {
+        (error:any) => {
+          this.logger.error(this, "completeVideo", url, error);
           reject(error);
         })
     });
   }
 
-  getVideos(): Promise<any> {
+  fileSize(filePath:any):Promise<number> {
     return new Promise((resolve, reject) => {
-      let url = "https://api.vimeo.com/me/videos";
-      this.httpGet(url, this.accessToken).then(
-        (data) => {
-          let videos = data['data'];
-          this.logger.info(this, "getVideos", data);
-          resolve(videos);
+      this.logger.info(this, "fileSize", filePath);
+      File.resolveLocalFilesystemUrl(filePath).then(
+        (entry:Entry) => {
+          this.logger.info(this, "fileSize", filePath, "Entry", entry.fullPath);
+          entry.getMetadata(
+            (metadata:Metadata) => {
+              this.logger.info(this, "fileSize", filePath, "Metadata", metadata);
+              resolve(metadata.size);
+            },
+            (error:any) => {
+              this.logger.error(this, "fileSize", filePath, "Metadata", error);
+              reject(error);
+            });
         },
         (error) => {
+          this.logger.error(this, "fileSize", filePath, "Error", error);
           reject(error);
-        })
-    });
-  }
-
-  getVideoUrl(name:string="Untitled"):Promise<string> {
-    return new Promise((resolve, reject) => {
-      let url = "https://api.vimeo.com/me/videos";
-      this.httpGet(url, this.accessToken).then(
-        (data) => {
-          let videos = data['data'];
-          this.logger.info(this, "getVideoUrl", url, data);
-          for (let video of videos) {
-            if (video.name === name) {
-              resolve(video.link);
-              return;
-            }
-          }
-          reject('Video Not Found');
-        },
-        (error) => {
-          reject(error);
-        })
+        });
     });
   }
 
