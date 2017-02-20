@@ -36,6 +36,7 @@ export class ResponseListPage extends BasePage {
   deployment: Deployment = null;
   posts: Post[] = null;
   filtered: Post[] = null;
+  pending: Post[] = null;
   filter: Filter = null;
   view: string = 'list';
   mapDraggable: boolean = true;
@@ -59,37 +60,38 @@ export class ResponseListPage extends BasePage {
     public alertController:AlertController,
     public loadingController:LoadingController,
     public actionController:ActionSheetController) {
-      super(zone, platform, navController, viewController, modalController, toastController, alertController, loadingController, actionController);
+      super(zone, platform, logger, navParams, navController, viewController, modalController, toastController, alertController, loadingController, actionController);
   }
 
   ionViewDidLoad() {
     super.ionViewDidLoad();
-    this.logger.info(this, 'ionViewDidLoad');
     this.events.subscribe('post:deleted', (post_id:number) => {
       this.logger.info(this, 'Events', 'post:deleted', post_id);
       this.posts = null;
       this.filtered = null;
+      this.loadPosts(true);
     });
     this.events.subscribe('post:updated', (post_id:number) => {
-      this.logger.info(this, 'Events', 'post:deleted', post_id);
+      this.logger.info(this, 'Events', 'post:updated', post_id);
       this.posts = null;
       this.filtered = null;
+      this.loadPosts(true);
     });
   }
 
   ionViewWillEnter() {
     super.ionViewWillEnter();
-    this.logger.info(this, "ionViewWillEnter");
-    this.deployment = this.navParams.get("deployment");
+    this.deployment = this.getParameter<Deployment>("deployment");
     this.loadUpdates(null, true);
   }
 
   loadUpdates(event:any=null, cache:boolean=false) {
     this.logger.info(this, "loadUpdates", "Cache", cache);
-    let promises = [
+    let updates = [
       this.loadFilters(cache),
-      this.loadPosts(cache)];
-    Promise.all(promises).then(
+      this.loadPosts(cache),
+      this.uploadPending(cache)];
+    return Promise.all(updates).then(
       (done) => {
         if (event != null) {
           event.complete();
@@ -136,11 +138,12 @@ export class ResponseListPage extends BasePage {
     }
     else {
       return new Promise((resolve, reject) => {
-        this.api.getPostsWithValues(this.deployment, cache).then(
+        this.api.getPostsWithValues(this.deployment, cache, this.offline).then(
           (posts:Post[]) => {
             this.logger.info(this, "loadPosts", "API", posts.length);
             this.posts = posts;
             this.filtered = this.getFiltered(posts, this.filter);
+            this.pending = this.getPending(posts);
             resolve();
           },
           (error:any) => {
@@ -151,17 +154,116 @@ export class ResponseListPage extends BasePage {
     }
   }
 
+  uploadPending(cache:boolean=true):Promise<any> {
+    if (cache || this.offline) {
+      this.logger.info(this, "uploadPending", "Skipping");
+      return Promise.resolve();
+    }
+    else if (this.pending == null || this.pending.length == 0) {
+      this.logger.info(this, "uploadPending", "None");
+      return Promise.resolve();
+    }
+    else {
+      this.logger.info(this, "uploadPending", "Pending", this.pending.length);
+      return new Promise((resolve, reject) => {
+        let loading = this.showLoading("Posting...");
+        let uploads = [];
+        for (let post of this.pending) {
+          uploads.push(this.createPost(post));
+        }
+        Promise.all(uploads).then(
+          (uploaded) => {
+            this.pending = null;
+            loading.dismiss();
+            this.showAlert('Response Posted', 'Your pending responses have been posted!');
+            resolve();
+          },
+          (error) => {
+            loading.dismiss();
+            this.showAlert('Response Failed', 'There was a problem posting your pending responses.');
+            reject(error);
+        });
+      });
+    }
+  }
+
+  createPost(post:Post):Promise<any> {
+    this.logger.info(this, "createPost", post);
+    return new Promise((resolve, reject) => {
+      this.logger.info(this, "createPost", "Posting...");
+      this.api.createPost(this.deployment, post).then(
+        (posted:any) => {
+          this.logger.info(this, "createPost", "Posted", posted);
+          let removes = [
+            this.database.removePost(this.deployment, post),
+            this.database.removeValues(this.deployment, post),
+          ];
+          Promise.all(removes).then(
+            (removed) => {
+              this.logger.info(this, "createPost", "Pending Removed", removed);
+              let pendingIndex = this.pending.indexOf(post);
+              if (pendingIndex > -1) {
+                this.pending.splice(pendingIndex, 1);
+                this.logger.info(this, "createPost", "Pending Spliced", post.title);
+              }
+              post.id = posted.id;
+              post.saved = null;
+              post.pending = false;
+              let saves = [
+                this.database.savePost(this.deployment, post),
+              ];
+              for (let value of post.values) {
+                value.post_id = posted.id;
+                value.saved = null;
+                saves.push(this.database.saveValue(this.deployment, value));
+              }
+              Promise.all(saves).then(
+                (saved) => {
+                  this.logger.info(this, "createPost", "Saved", saved);
+                  resolve();
+                },
+                (error) => {
+                  this.logger.error(this, "createPost", "Failed", error);
+                  reject(error);
+                });
+            },
+            (error) => {
+              this.logger.error(this, "createPost", "Failed", error);
+              reject(error);
+            });
+        },
+        (error) => {
+          this.logger.error(this, "createPost", "Failed", error);
+          reject(error);
+        });
+    });
+  }
+
   getFiltered(posts:Post[], filter:Filter): Post[] {
     let filtered: Post[] = [];
-    for (let post of posts) {
-      if (filter == null) {
-        filtered.push(post);
-      }
-      else if (filter.showPost(post)) {
-        filtered.push(post);
+    if (posts) {
+      for (let post of posts) {
+        if (filter == null) {
+          filtered.push(post);
+        }
+        else if (filter.showPost(post)) {
+          filtered.push(post);
+        }
       }
     }
     return filtered;
+  }
+
+  getPending(posts:Post[]): Post[] {
+    let pending: Post[] = [];
+    if (posts) {
+      for (let post of posts) {
+        if (post.pending == true) {
+          pending.push(post);
+        }
+      }
+    }
+    return pending;
   }
 
   showResponse(post:Post) {
@@ -269,6 +371,13 @@ export class ResponseListPage extends BasePage {
         text: 'Delete',
         role: 'destructive',
         handler:() => this.deleteResponse(post)
+      });
+    }
+    if (post.pending == true) {
+      buttons.push({
+        text: 'Remove',
+        role: 'destructive',
+        handler:() => this.removeResponse(post)
       });
     }
     buttons.push({
@@ -380,6 +489,42 @@ export class ResponseListPage extends BasePage {
         loading.dismiss();
         this.showAlert("Problem Updating Response", error);
       });
+  }
+
+  removeResponse(post:Post) {
+    this.logger.info(this, "removeResponse");
+    let loading = this.showLoading("Removing...");
+    this.database.removeValues(this.deployment, post).then(
+      (values) => {
+        this.database.removePost(this.deployment, post).then(
+          (removed) => {
+            let pendingIndex = this.pending.indexOf(post);
+            if (pendingIndex > -1) {
+              this.pending.splice(pendingIndex, 1);
+              this.logger.info(this, "removeResponse", "Pending Removed");
+            }
+            let postIndex = this.posts.indexOf(post);
+            if (postIndex > -1) {
+              this.posts.splice(postIndex, 1);
+              this.logger.info(this, "removeResponse", "Post Removed")
+            }
+            let filteredIndex = this.filtered.indexOf(post);
+            if (filteredIndex > -1) {
+              this.filtered.splice(filteredIndex, 1);
+              this.logger.info(this, "removeResponse", "Filtered Removed");
+            }
+            loading.dismiss();
+            this.showToast("Responsed removed");
+          },
+          (error) => {
+            loading.dismiss();
+            this.showAlert("Problem Removing Response", error);
+        });
+      },
+      (error) => {
+        loading.dismiss();
+        this.showAlert("Problem Removing Response", error);
+    });
   }
 
   deleteResponse(post:Post) {

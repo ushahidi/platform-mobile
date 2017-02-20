@@ -1,5 +1,5 @@
 import { Component, ViewChild, NgZone } from '@angular/core';
-import { Platform, NavParams,
+import { Platform, NavParams, Events,
   NavController, ViewController, LoadingController, ToastController, AlertController, ModalController, ActionSheetController  } from 'ionic-angular';
 import { FormBuilder, FormGroup, FormGroupName, FormControl, Validators } from '@angular/forms';
 
@@ -52,6 +52,7 @@ export class ResponseAddPage extends BasePage {
     public api:ApiService,
     public logger:LoggerService,
     public database:DatabaseService,
+    public events:Events,
     public navParams: NavParams,
     public zone: NgZone,
     public platform:Platform,
@@ -63,37 +64,26 @@ export class ResponseAddPage extends BasePage {
     public loadingController:LoadingController,
     public actionController:ActionSheetController,
     public formBuilder: FormBuilder) {
-      super(zone, platform, navController, viewController, modalController, toastController, alertController, loadingController, actionController);
+      super(zone, platform, logger, navParams, navController, viewController, modalController, toastController, alertController, loadingController, actionController);
   }
 
   ionViewDidLoad() {
     super.ionViewDidLoad();
-    this.logger.info(this, 'ionViewDidLoad');
-    this.deployment = <Deployment>this.navParams.get("deployment");
-    this.form = <Form>this.navParams.get("form");
-    this.post = <Post>this.navParams.get("post");
+    this.deployment = this.getParameter<Deployment>("deployment");
+    this.form = this.getParameter<Form>("form");
+    this.post = this.getParameter<Post>("post");
     if (this.form) {
       this.color = this.form.color;
     }
     this.loadUpdates();
   }
 
-  ionViewWillEnter() {
-    super.ionViewWillEnter();
-    this.logger.info(this, "ionViewWillEnter");
-  }
-
-  ionViewDidEnter() {
-    super.ionViewDidEnter();
-    this.logger.info(this, "ionViewDidEnter");
-  }
-
   loadUpdates(event:any=null) {
     this.logger.info(this, "loadUpdates");
-    let promises = [
+    let updates = [
       this.loadPostValues(),
       this.loadFormGroup()];
-    Promise.all(promises).then(
+    Promise.all(updates).then(
       (done) => {
         this.logger.info(this, "loadUpdates", "Done");
         if (event) {
@@ -123,6 +113,7 @@ export class ResponseAddPage extends BasePage {
         let loading = this.showLoading("Saving...");
         this.savePost(this.post).then(
           (saved) => {
+            this.events.publish('post:updated', this.post.id);
             loading.dismiss();
             let buttons = [{
               text: 'Ok',
@@ -131,7 +122,7 @@ export class ResponseAddPage extends BasePage {
                 this.viewController.dismiss();
               }
             }];
-            this.showAlert('Save Successful', 'Your response has been saved!', buttons);
+            this.showAlert('Response Saved', 'Your response has been saved!', buttons);
           },
           (error) => {
             loading.dismiss();
@@ -142,6 +133,7 @@ export class ResponseAddPage extends BasePage {
         let loading = this.showLoading("Updating...");
         this.updatePost(this.post).then(
           (updated) => {
+            this.events.publish('post:updated', this.post.id);
             loading.dismiss();
             let buttons = [{
               text: 'Ok',
@@ -150,7 +142,7 @@ export class ResponseAddPage extends BasePage {
                 this.viewController.dismiss();
               }
             }];
-            this.showAlert('Update Successful', 'Your response has been updated!', buttons);
+            this.showAlert('Response Updated', 'Your response has been updated!', buttons);
           },
           (error) => {
             loading.dismiss();
@@ -171,6 +163,7 @@ export class ResponseAddPage extends BasePage {
             loading.setContent("Posting...");
             this.createPost(this.post).then(
               (updated) => {
+                this.events.publish('post:updated', this.post.id);
                 loading.dismiss();
                 let buttons = [{
                   text: 'Ok',
@@ -179,7 +172,7 @@ export class ResponseAddPage extends BasePage {
                     this.viewController.dismiss();
                   }
                 }];
-                this.showAlert('Post Successful', 'Your response has been posted!', buttons);
+                this.showAlert('Response Posted', 'Your response has been posted!', buttons);
               },
               (error) => {
                 loading.dismiss();
@@ -202,13 +195,14 @@ export class ResponseAddPage extends BasePage {
     return new Promise((resolve, reject) => {
       post.pending = true;
       this.logger.info(this, "savePost", "Saving...");
-      let promises = [
+      let saves = [
         this.database.savePost(this.deployment, post)
       ];
       for (let value of post.values) {
-        promises.push(this.database.saveValue(this.deployment, value));
+        value.post_id = post.id;
+        saves.push(this.database.saveValue(this.deployment, value));
       }
-      Promise.all(promises).then(
+      Promise.all(saves).then(
         (saved) => {
           this.logger.info(this, "savePost", "Saved", saved);
           resolve();
@@ -229,14 +223,14 @@ export class ResponseAddPage extends BasePage {
           this.logger.info(this, "createPost", "Posted", posted);
           post.id = posted.id;
           post.pending = false;
-          let promises = [
+          let saves = [
             this.database.savePost(this.deployment, post)
           ];
           for (let value of post.values) {
             value.post_id = posted.id;
-            promises.push(this.database.saveValue(this.deployment, value));
+            saves.push(this.database.saveValue(this.deployment, value));
           }
-          Promise.all(promises).then(
+          Promise.all(saves).then(
             (saved) => {
               this.logger.info(this, "createPost", "Saved", saved);
               resolve();
@@ -260,13 +254,13 @@ export class ResponseAddPage extends BasePage {
       this.api.updatePost(this.deployment, post).then(
         (success) => {
           this.logger.info(this, "updatePost", "Updated", success);
-          let promises = [
+          let saves = [
             this.database.savePost(this.deployment, post)
           ];
           for (let value of post.values) {
-            promises.push(this.database.saveValue(this.deployment, value));
+            saves.push(this.database.saveValue(this.deployment, value));
           }
-          Promise.all(promises).then(
+          Promise.all(saves).then(
             (saved) => {
               this.logger.info(this, "updatePost", "Saved", saved);
               resolve();
@@ -335,6 +329,7 @@ export class ResponseAddPage extends BasePage {
     if (this.post == null) {
       this.post = new Post();
       this.post.pending = true;
+      this.post.status = 'draft';
       this.database.getPostsLowestID().then(id => {
         this.post.id = Math.min(id, -1);
       });
@@ -451,6 +446,14 @@ export class ResponseAddPage extends BasePage {
         }
         postValue.value = checks.join(",");
       }
+      else if (postValue.input == 'location') {
+        if (formValue && formValue.lat && formValue.lon) {
+          postValue.value = `${formValue.lat},${formValue.lon}`;
+        }
+        else {
+          postValue.value = formValue;
+        }
+      }
       else {
         postValue.value = formValue;
       }
@@ -477,7 +480,7 @@ export class ResponseAddPage extends BasePage {
   }
 
   hasRequiredValues():boolean {
-    return this.formGroup.valid;
+    return this.formGroup.valid == true;
   }
 
   getVideos():string[] {

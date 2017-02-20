@@ -41,17 +41,15 @@ export class DeploymentAddPage extends BasePage {
     public alertController:AlertController,
     public loadingController:LoadingController,
     public actionController:ActionSheetController) {
-      super(zone, platform, navController, viewController, modalController, toastController, alertController, loadingController, actionController);
+      super(zone, platform, logger, navParams, navController, viewController, modalController, toastController, alertController, loadingController, actionController);
   }
 
   ionViewDidLoad() {
     super.ionViewDidLoad();
-    this.logger.info(this, 'ionViewDidLoad');
   }
 
   ionViewWillEnter() {
     super.ionViewWillEnter();
-    this.logger.info(this, "ionViewWillEnter");
     this.platform.ready().then(() => {
       StatusBar.styleLightContent();
       StatusBar.backgroundColorByHexString('#3f4751');

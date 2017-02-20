@@ -51,29 +51,27 @@ export class ResponseDetailsPage extends BasePage {
     public alertController:AlertController,
     public loadingController:LoadingController,
     public actionController:ActionSheetController) {
-      super(zone, platform, navController, viewController, modalController, toastController, alertController, loadingController, actionController);
+      super(zone, platform, logger, navParams, navController, viewController, modalController, toastController, alertController, loadingController, actionController);
   }
 
   ionViewDidLoad() {
     super.ionViewDidLoad();
-    this.logger.info(this, 'ionViewDidLoad');
   }
 
   ionViewWillEnter() {
     super.ionViewWillEnter();
-    this.logger.info(this, "ionViewWillEnter");
-    this.deployment = this.navParams.get("deployment");
-    this.post = this.navParams.get("post");
+    this.deployment = this.getParameter<Deployment>("deployment");
+    this.post = this.getParameter<Post>("post");
     this.color = this.post.color;
     this.loadUpdates();
   }
 
   loadUpdates(event:any=null, cache:boolean=true) {
     this.logger.info(this, "loadUpdates");
-    let promises = [
+    let updates = [
       this.loadForm(cache),
       this.loadValues(cache)];
-    Promise.all(promises).then(
+    Promise.all(updates).then(
       (done) => {
         this.logger.info(this, "loadUpdates", "Done");
         if (event) {

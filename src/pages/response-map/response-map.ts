@@ -35,23 +35,17 @@ export class ResponseMapPage extends BasePage {
     public alertController:AlertController,
     public loadingController:LoadingController,
     public actionController:ActionSheetController) {
-      super(zone, platform, navController, viewController, modalController, toastController, alertController, loadingController, actionController);
+      super(zone, platform, logger, navParams, navController, viewController, modalController, toastController, alertController, loadingController, actionController);
     }
 
   ionViewDidLoad() {
     super.ionViewDidLoad();
-    this.logger.info(this, 'ionViewDidLoad');
   }
 
   ionViewWillEnter() {
     super.ionViewWillEnter();
-    this.logger.info(this, "ionViewWillEnter");
-    this.latitude = this.navParams.get("latitude");
-    this.longitude = this.navParams.get("longitude");
-  }
-
-  ionViewDidEnter() {
-    this.logger.info(this, "ionViewDidEnter");
+    this.latitude = this.getParameter<number>("latitude");
+    this.longitude = this.getParameter<number>("longitude");
   }
 
   onCancel(event:any) {

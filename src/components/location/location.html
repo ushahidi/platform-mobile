@@ -10,7 +10,7 @@
     </div>
   </ion-item>
   <ion-card margin-left margin-right *ngIf="latitude && longitude">
-    <img full src="https://maps.googleapis.com/maps/api/staticmap?center={{latitude}},{{longitude}}&zoom=15&size=300x200&maptype=roadmap&markers=color:red%7C{{latitude}},{{longitude}}&key={{key}}" />
+    <img full (error)="this.display='none'" src="https://maps.googleapis.com/maps/api/staticmap?center={{latitude}},{{longitude}}&zoom=15&size=300x200&maptype=roadmap&markers=color:red%7C{{latitude}},{{longitude}}&key={{key}}" />
   </ion-card>
   <button ion-button margin-left icon-left text-uppercase small color="light" *ngIf="latitude && longitude" (click)="updateLocation($event)">
     <ion-icon name="pin"></ion-icon> Change Location

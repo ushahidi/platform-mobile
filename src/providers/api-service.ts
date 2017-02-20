@@ -107,13 +107,16 @@ export class ApiService extends HttpService {
     });
   }
 
-  getUsers(deployment:Deployment, cache:boolean=false) : Promise<User[]> {
+  getUsers(deployment:Deployment, cache:boolean=false, offline:boolean=false) : Promise<User[]> {
     return new Promise((resolve, reject) => {
-      if (cache) {
+      if (cache || offline) {
         this.database.getUsers(deployment).then(
           (users:User[]) => {
             if (users && users.length > 0) {
               resolve(users);
+            }
+            else if (offline) {
+              resolve([]);
             }
             else {
               this.getUsers(deployment, false).then(
@@ -161,7 +164,7 @@ export class ApiService extends HttpService {
     });
   }
 
-  getUser(deployment:Deployment, user:any="me", cache:boolean=false): Promise<User>  {
+  getUser(deployment:Deployment, user:any="me", cache:boolean=false, offline:boolean=false): Promise<User>  {
     return new Promise((resolve, reject) => {
       let api = `/api/v3/users/${user}`;
       let url = deployment.url + api;
@@ -181,12 +184,15 @@ export class ApiService extends HttpService {
     });
   }
 
-  getDeployment(deployment:Deployment, cache:boolean=false): Promise<Deployment> {
+  getDeployment(deployment:Deployment, cache:boolean=false, offline:boolean=false): Promise<Deployment> {
     return new Promise((resolve, reject) => {
-      if (cache) {
+      if (cache || offline) {
         this.database.getDeployment(deployment.id).then(
           (deployment:Deployment) => {
             if (deployment.image && deployment.description) {
+              resolve(deployment);
+            }
+            else if (offline) {
               resolve(deployment);
             }
             else {
@@ -260,13 +266,16 @@ export class ApiService extends HttpService {
     });
   }
 
-  getPosts(deployment:Deployment, cache:boolean=false): Promise<Post[]> {
+  getPosts(deployment:Deployment, cache:boolean=false, offline:boolean=false): Promise<Post[]> {
     return new Promise((resolve, reject) => {
-      if (cache) {
+      if (cache || offline) {
         this.database.getPosts(deployment).then(
           (posts:Post[]) => {
             if (posts && posts.length > 0) {
               resolve(posts);
+            }
+            else if (offline) {
+              resolve([]);
             }
             else {
               this.getPosts(deployment, false).then(
@@ -357,7 +366,7 @@ export class ApiService extends HttpService {
     });
   }
 
-  createPost(deployment:Deployment, post:Post) {
+  createPost(deployment:Deployment, post:Post): Promise<any> {
     return new Promise((resolve, reject) => {
       let api = "/api/v3/posts/";
       let url = deployment.url + api;
@@ -368,6 +377,17 @@ export class ApiService extends HttpService {
         }
         else if (value.input == 'number' || value.input == 'upload' || value.input == 'video') {
           values[value.key] = [Number(value.value)];
+        }
+        else if (value.input == 'location') {
+          if (value.value.indexOf(",") > -1) {
+            let location = value.value.split(",");
+            values[value.key] = [{
+              lat: Number(location[0]),
+              lon: Number(location[1])}];
+          }
+          else {
+            values[value.key] = [value.value];
+          }
         }
         else {
           values[value.key] = [value.value];
@@ -401,6 +421,17 @@ export class ApiService extends HttpService {
           }
           else if (value.input == 'number' || value.input == 'upload' || value.input == 'video') {
             values[value.key] = [Number(value.value)];
+          }
+          else if (value.input == 'location') {
+            if (value.value.indexOf(",") > -1) {
+              let location = value.value.split(",");
+              values[value.key] = [{
+                lat: Number(location[0]),
+                lon: Number(location[1])}]
+  ;          }
+            else {
+              values[value.key] = [value.value];
+            }
           }
           else {
             values[value.key] = [value.value];
@@ -436,13 +467,16 @@ export class ApiService extends HttpService {
     });
   }
 
-  getImages(deployment:Deployment, cache:boolean=false): Promise<Image[]> {
+  getImages(deployment:Deployment, cache:boolean=false, offline:boolean=false): Promise<Image[]> {
     return new Promise((resolve, reject) => {
-      if (cache) {
+      if (cache || offline) {
         this.database.getImages(deployment).then(
           (images:Image[]) => {
             if (images && images.length > 0) {
               resolve(images);
+            }
+            else if (offline) {
+              resolve([]);
             }
             else {
               this.getImages(deployment, false).then(
@@ -555,13 +589,16 @@ export class ApiService extends HttpService {
     });
   }
 
-  getForms(deployment:Deployment, cache:boolean=false): Promise<Form[]> {
+  getForms(deployment:Deployment, cache:boolean=false, offline:boolean=false): Promise<Form[]> {
     return new Promise((resolve, reject) => {
-      if (cache) {
+      if (cache || offline) {
         this.database.getForms(deployment).then(
           (forms:Form[]) => {
             if (forms && forms.length > 0) {
               resolve(forms);
+            }
+            else if (offline) {
+              resolve([]);
             }
             else {
               this.getForms(deployment, false).then(
@@ -624,13 +661,16 @@ export class ApiService extends HttpService {
     });
   }
 
-  getAttributes(deployment:Deployment, cache:boolean=false): Promise<Attribute[]> {
+  getAttributes(deployment:Deployment, cache:boolean=false, offline:boolean=false): Promise<Attribute[]> {
     return new Promise((resolve, reject) => {
-      if (cache) {
+      if (cache || offline) {
         this.database.getAttributes(deployment).then(
           (attributes:Attribute[]) => {
             if (attributes && attributes.length > 0) {
               resolve(attributes);
+            }
+            else if (offline) {
+              resolve([]);
             }
             else {
               this.getAttributes(deployment, false).then(
@@ -698,13 +738,16 @@ export class ApiService extends HttpService {
     });
   }
 
-  getCollections(deployment:Deployment, cache:boolean=false): Promise<Collection[]> {
+  getCollections(deployment:Deployment, cache:boolean=false, offline:boolean=false): Promise<Collection[]> {
     return new Promise((resolve, reject) => {
-      if (cache) {
+      if (cache || offline) {
         this.database.getCollections(deployment).then(
           (collections:Collection[]) => {
             if (collections && collections.length > 0) {
               resolve(collections);
+            }
+            else if (offline) {
+              resolve([]);
             }
             else {
               this.getCollections(deployment, false).then(
@@ -799,11 +842,11 @@ export class ApiService extends HttpService {
     });
   }
 
-  getFormsWithAttributes(deployment:Deployment, cache:boolean=false): Promise<Form[]> {
+  getFormsWithAttributes(deployment:Deployment, cache:boolean=false, offline:boolean=false): Promise<Form[]> {
     this.logger.info(this, "getFormsWithAttributes", cache);
     return Promise.all([
-      this.getForms(deployment, cache),
-      this.getAttributes(deployment, cache)]).then(
+      this.getForms(deployment, cache, offline),
+      this.getAttributes(deployment, cache, offline)]).then(
         (results:any[]) => {
           let forms = <Form[]>results[0];
           let attributes = <Attribute[]>results[1];
@@ -817,14 +860,14 @@ export class ApiService extends HttpService {
         });
   }
 
-  getPostsWithValues(deployment:Deployment, cache:boolean=false): Promise<Post[]> {
+  getPostsWithValues(deployment:Deployment, cache:boolean=false, offline:boolean=false): Promise<Post[]> {
     this.logger.info(this, "getPostsWithValues", cache);
     return Promise.all([
-      this.getPosts(deployment, cache),
-      this.getForms(deployment, cache),
-      this.getImages(deployment, cache),
-      this.getUsers(deployment, cache),
-      this.getAttributes(deployment, cache)]).
+      this.getPosts(deployment, cache, offline),
+      this.getForms(deployment, cache, offline),
+      this.getImages(deployment, cache, offline),
+      this.getUsers(deployment, cache, offline),
+      this.getAttributes(deployment, cache, offline)]).
       then(
         (results:any[]) => {
           let posts = <Post[]>results[0];

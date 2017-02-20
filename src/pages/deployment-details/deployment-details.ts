@@ -48,33 +48,31 @@ export class DeploymentDetailsPage extends BasePage {
     public alertController:AlertController,
     public loadingController:LoadingController,
     public actionController:ActionSheetController) {
-      super(zone, platform, navController, viewController, modalController, toastController, alertController, loadingController, actionController);
+      super(zone, platform, logger, navParams, navController, viewController, modalController, toastController, alertController, loadingController, actionController);
     }
 
     ionViewDidLoad() {
       super.ionViewDidLoad();
-      this.logger.info(this, "ionViewDidLoad");
     }
 
     ionViewWillEnter() {
       super.ionViewWillEnter();
-      this.logger.info(this, "ionViewWillEnter");
       this.platform.ready().then(() => {
         StatusBar.styleLightContent();
         StatusBar.backgroundColorByHexString('#3f4751');
       });
-      this.deployment = this.navParams.get("deployment");
+      this.deployment = this.getParameter<Deployment>("deployment");
       this.loadUpdates(null, true);
     }
 
     loadUpdates(event:any=null, cache:boolean=false) {
       this.logger.info(this, "loadUpdates");
-      let promises = [
+      let updates = [
         this.loadDeployment(cache),
         this.loadUser(cache),
         this.loadForms(cache),
         this.loadCollections(cache)];
-      Promise.all(promises).then(done => {
+      Promise.all(updates).then(done => {
         if (event) {
           event.complete();
         }
@@ -89,7 +87,7 @@ export class DeploymentDetailsPage extends BasePage {
       }
       else {
         return new Promise((resolve, reject) => {
-          this.api.getDeployment(this.deployment, cache).then(
+          this.api.getDeployment(this.deployment, cache, this.offline).then(
             (deployment:Deployment) => {
               this.deployment.copyInto(deployment);
               this.database.saveModel(this.deployment).then(
@@ -148,7 +146,7 @@ export class DeploymentDetailsPage extends BasePage {
       }
       else {
         return new Promise((resolve, reject) => {
-          this.api.getFormsWithAttributes(this.deployment, cache).then(
+          this.api.getFormsWithAttributes(this.deployment, cache, this.offline).then(
             (forms:Form[]) => {
               this.logger.info(this, "loadForms", "API", forms);
               this.deployment.forms = forms;
@@ -170,7 +168,7 @@ export class DeploymentDetailsPage extends BasePage {
       }
       else {
         return new Promise((resolve, reject) => {
-          this.api.getCollections(this.deployment, cache).then(
+          this.api.getCollections(this.deployment, cache, this.offline).then(
             (collections:Collection[]) => {
               this.logger.info(this, "loadCollections", "API", collections);
               this.deployment.collections = collections;

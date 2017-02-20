@@ -10,8 +10,8 @@ declare var cordova: any;
 @Injectable()
 export class VimeoService extends HttpService {
 
-  //private accessToken: string = "413e6801c73e70fec5e1468249a114e5";
-  private accessToken: string = "74b4152349da27210ee8278380926b84";
+  //private accessToken: string = "413e6801c73e70fec5e1468249a114e5"; //Test
+  private accessToken: string = "74b4152349da27210ee8278380926b84"; //Main
 
   constructor(
     public http: Http,

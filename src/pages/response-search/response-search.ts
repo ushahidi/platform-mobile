@@ -39,19 +39,17 @@ export class ResponseSearchPage extends BasePage {
     public alertController:AlertController,
     public loadingController:LoadingController,
     public actionController:ActionSheetController) {
-      super(zone, platform, navController, viewController, modalController, toastController, alertController, loadingController, actionController);
+      super(zone, platform, logger, navParams, navController, viewController, modalController, toastController, alertController, loadingController, actionController);
   }
 
   ionViewDidLoad() {
     super.ionViewDidLoad();
-    this.logger.info(this, 'ionViewDidLoad');
   }
 
   ionViewWillEnter() {
     super.ionViewWillEnter();
-    this.logger.info(this, "ionViewWillEnter");
-    this.deployment = <Deployment>this.navParams.get("deployment");
-    this.filter = <Filter>this.navParams.get("filter");
+    this.deployment = this.getParameter<Deployment>("deployment");
+    this.filter = this.getParameter<Filter>("filter");
     if (this.filter == null) {
       this.filter = new Filter();
       this.filter.deployment_id = this.deployment.id;
@@ -78,7 +76,7 @@ export class ResponseSearchPage extends BasePage {
   }
 
   onSearch(event:any) {
-    this.logger.info(this, "onSearch");
+    this.logger.info(this, "onSearch", event);
   }
 
   formChanged(event:any, form:Form) {

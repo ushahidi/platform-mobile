@@ -1,6 +1,6 @@
 import { Component, ViewChild, NgZone } from '@angular/core';
 import {
-  Content, Platform,
+  Content, Platform, NavParams,
   Alert, AlertController,
   Toast, ToastController,
   Modal, ModalController,
@@ -9,9 +9,12 @@ import {
   NavController, ViewController } from 'ionic-angular';
 import { SocialSharing, Network } from 'ionic-native';
 
+import { LoggerService } from '../../providers/logger-service';
+
 @Component({
   selector: 'base-page',
-  templateUrl: 'base-page.html'
+  templateUrl: 'base-page.html',
+  providers: [ LoggerService ],
 })
 export class BasePage {
 
@@ -26,6 +29,8 @@ export class BasePage {
   constructor(
     zone: NgZone,
     protected platform:Platform,
+    protected logger:LoggerService,
+    protected navParams: NavParams,
     protected navController:NavController,
     protected viewController:ViewController,
     protected modalController:ModalController,
@@ -37,31 +42,39 @@ export class BasePage {
   }
 
   ionViewDidLoad() {
+    this.logger.info(this, "ionViewDidLoad");
   }
 
   ionViewWillEnter() {
+    this.logger.info(this, "ionViewWillEnter", "Network", Network.type);
+    if (Network.type == 'none') {
+      this.offline = true;
+    }
+    else {
+      this.offline = false;
+    }
     this.connection = Network.onConnect().subscribe(() => {
-      console.log(`Network Connected ${Network.type}`);
+      this.logger.info(this, "Network Connected", Network.type);
       this.zone.run(() => {
         this.offline = false;
         this.resizeContent();
       });
-      this.networkConnected(Network.type);
     });
     this.disconnection = Network.onDisconnect().subscribe(() => {
-      console.log(`Network Disconnected`);
+      this.logger.info(this, "Network Disconnected", Network.type);
       this.zone.run(() => {
         this.offline = true;
         this.resizeContent();
       });
-      this.networkDisconnected();
     });
   }
 
   ionViewDidEnter() {
+    this.logger.info(this, "ionViewDidEnter");
   }
 
   ionViewWillLeave() {
+    this.logger.info(this, "ionViewWillLeave");
     if (this.connection) {
       this.connection.unsubscribe();
     }
@@ -71,15 +84,15 @@ export class BasePage {
   }
 
   ionViewDidLeave() {
+    this.logger.info(this, "ionViewDidLeave");
   }
 
   ionViewWillUnload() {
+    this.logger.info(this, "ionViewWillUnload");
   }
 
-  networkConnected(type:string) {
-  }
-
-  networkDisconnected() {
+  getParameter<T extends Object>(param:string):T {
+    return <T>this.navParams.get(param);
   }
 
   showLoading(message:string):Loading {
@@ -164,6 +177,14 @@ export class BasePage {
 
   showOfflineAlert() {
     this.showAlert("Internet Offline", "There currently is no internet connection available.")
+  }
+
+  runSequentially(tasks):Promise<any> {
+    var result = Promise.resolve();
+    tasks.forEach(task => {
+      result = result.then(() => task());
+    });
+    return result;
   }
 
 }

@@ -445,7 +445,6 @@ export class DatabaseService {
   }
 
   getDeployment(id:number) : Promise<Deployment> {
-    this.logger.info(this, "getDeployment", id);
     let where = { id: id };
     return this.getModel<Deployment>(new Deployment(), where);
   }
@@ -638,8 +637,11 @@ export class DatabaseService {
     return this.saveModel(value);
   }
 
-  removeValues(deployment:Deployment) {
+  removeValues(deployment:Deployment, post:Post=null) {
     let where = { deployment_id: deployment.id };
+    if (post != null) {
+      where['post_id'] = post.id;
+    }
     return this.removeModel<Value>(new Value(), where);
   }
 
