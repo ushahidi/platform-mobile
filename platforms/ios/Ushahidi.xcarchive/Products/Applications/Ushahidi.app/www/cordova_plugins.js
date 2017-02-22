@@ -508,7 +508,8 @@ module.exports.metadata =
     "cordova-plugin-x-socialsharing": "5.1.6",
     "cordova-sqlite-storage": "1.5.3",
     "ionic-plugin-deeplinks": "1.0.14",
-    "ionic-plugin-keyboard": "2.2.1"
+    "ionic-plugin-keyboard": "2.2.1",
+    "cordova-plugin-ios-no-export-compliance": "0.0.1"
 };
 // BOTTOM OF METADATA
 });

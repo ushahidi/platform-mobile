@@ -11,7 +11,7 @@ import { DatabaseService } from '../../providers/database-service';
 import { Deployment } from '../../models/deployment';
 
 @Component({
-  selector: 'page-deployment-settings',
+  selector: 'deployment-settings-page',
   templateUrl: 'deployment-settings.html'
 })
 export class DeploymentSettingsPage extends BasePage {

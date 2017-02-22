@@ -21,7 +21,7 @@ import { Collection } from '../../models/collection';
 declare var google: any;
 
 @Component({
-  selector: 'page-response-list',
+  selector: 'response-list-page',
   templateUrl: 'response-list.html',
   providers: [ ApiService, DatabaseService, LoggerService ],
   entryComponents:[ ResponseAddPage, ResponseDetailsPage, ResponseSearchPage ]

@@ -16,7 +16,7 @@ import { Form } from '../../models/form';
 import { Value } from '../../models/value';
 
 @Component({
-  selector: 'page-response-add',
+  selector: 'esponse-add-page',
   templateUrl: 'response-add.html',
   providers: [ ApiService, DatabaseService, LoggerService ],
   entryComponents:[ ResponseMapPage ]

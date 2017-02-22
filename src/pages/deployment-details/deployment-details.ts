@@ -22,7 +22,7 @@ import { Collection } from '../../models/collection';
 import { PLACEHOLDER_BLANK } from '../../helpers/constants';
 
 @Component({
-  selector: 'page-deployment-details',
+  selector: 'deployment-details-page',
   templateUrl: 'deployment-details.html',
   providers: [ ApiService, DatabaseService, LoggerService ],
   entryComponents:[ ResponseListPage, ResponseAddPage, DeploymentSettingsPage ]

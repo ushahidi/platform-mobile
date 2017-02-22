@@ -7,6 +7,8 @@ import { Attribute } from '../../models/attribute';
 
 import { LoggerService } from '../../providers/logger-service';
 
+import { GOOGLE_API_KEY } from '../../helpers/constants';
+
 @Component({
   selector: 'field-location',
   templateUrl: 'location.html',
@@ -14,10 +16,10 @@ import { LoggerService } from '../../providers/logger-service';
 })
 export class LocationComponent {
 
+  key: string = GOOGLE_API_KEY;
   formGroup: FormGroup;
   attribute: Attribute = null;
   value: Value = null;
-  key: string = "AIzaSyBjDgMqF6GOdirXn3iFtI6Jlt8jEoWhSq4";
   latitude: number = null;
   longitude: number = null;
   submitted: boolean = false;

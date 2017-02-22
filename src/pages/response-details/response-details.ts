@@ -18,7 +18,7 @@ import { Collection } from '../../models/collection';
 import { PLACEHOLDER_USER, PLACEHOLDER_NAME } from '../../helpers/constants';
 
 @Component({
-  selector: 'page-response-details',
+  selector: 'response-details-page',
   templateUrl: 'response-details.html',
   providers: [ ApiService, DatabaseService, LoggerService ],
   entryComponents:[ ResponseAddPage ]

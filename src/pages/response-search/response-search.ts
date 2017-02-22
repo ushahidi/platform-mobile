@@ -13,7 +13,7 @@ import { LoggerService } from '../../providers/logger-service';
 import { DatabaseService } from '../../providers/database-service';
 
 @Component({
-  selector: 'page-response-search',
+  selector: 'response-search-page',
   templateUrl: 'response-search.html',
   providers: [ ApiService, DatabaseService, LoggerService ]
 })

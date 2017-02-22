@@ -14,7 +14,7 @@ import { BasePage } from '../../pages/base-page/base-page';
 import { Deployment } from '../../models/deployment';
 
 @Component({
-  selector: 'page-deployment-add',
+  selector: 'deployment-add-page',
   templateUrl: 'deployment-add.html',
   providers: [ ApiService, DatabaseService, LoggerService ],
   entryComponents:[ DeploymentLoginPage ]

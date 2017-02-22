@@ -7,7 +7,7 @@ import { BasePage } from '../../pages/base-page/base-page';
 import { LoggerService } from '../../providers/logger-service';
 
 @Component({
-  selector: 'page-response-map',
+  selector: 'response-map-page',
   templateUrl: 'response-map.html',
   providers: [ LoggerService ],
 })

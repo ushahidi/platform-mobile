@@ -12,7 +12,7 @@ import { DeploymentAddPage } from '../../pages/deployment-add/deployment-add';
 import { DeploymentLoginPage } from '../../pages/deployment-login/deployment-login';
 
 @Component({
-  selector: 'page-home',
+  selector: 'home-page',
   templateUrl: 'home.html',
   providers: [ ApiService, DatabaseService, LoggerService ],
   entryComponents:[ DeploymentAddPage, DeploymentLoginPage ]

@@ -13,7 +13,7 @@ import { DatabaseService } from '../../providers/database-service';
 import { Deployment } from '../../models/deployment';
 
 @Component({
-  selector: 'page-deployment-login',
+  selector: 'deployment-login-page',
   templateUrl: 'deployment-login.html',
   providers: [ ApiService, DatabaseService, LoggerService ],
   entryComponents:[ DeploymentDetailsPage ]
