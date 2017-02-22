@@ -166,7 +166,7 @@ export class ImageComponent {
           }
         },
         (error:FileError) => {
-          this.logger.error(this, "checkFile", "checkFile", error);
+          this.logger.info(this, "checkFile", "checkFile", error);
           File.copyFile(fileDirectory, fileName, storeDirectory, fileName).then(
             (entry:Entry) => {
               this.logger.info(this, "copyFile", entry.fullPath, storePath);

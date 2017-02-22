@@ -55,6 +55,9 @@ export class Deployment extends Model {
   @Column("password", TEXT)
   public password: string = null;
 
+  @Column("user_id", INTEGER)
+  public user_id: number = null;
+
   @Column("access_token", TEXT)
   public access_token: string = null;
 

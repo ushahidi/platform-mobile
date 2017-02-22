@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, URLSearchParams, RequestOptions } from '@angular/http';
-import { Transfer, FileUploadOptions, FileUploadResult, FileTransferError } from 'ionic-native';
+import { Transfer, FileUploadOptions, FileUploadResult, FileTransferError, File, Entry, Metadata } from 'ionic-native';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/retry';
 import 'rxjs/add/operator/delay';
@@ -182,16 +182,15 @@ export class HttpService {
   fileUpload(url:string, token:string, file:string,
              httpMethod:string="POST",
              mimeType:string='application/binary',
-             accept:string="application/json",
-             contentType:string="multipart/form-data",
-             contentLength:number=null,
-             fileKey:string='file',
-             chunkedMode:boolean=false) {
+             acceptType:string="application/json",
+             contentType:string=undefined,
+             contentLength:number=null) {
     return new Promise((resolve, reject) => {
       let transfer = new Transfer();
+      let fileName = file.substr(file.lastIndexOf('/') + 1).split('?').shift();
       let headers = {};
-      if (accept) {
-        headers['Accept'] = accept;
+      if (acceptType) {
+        headers['Accept'] = acceptType;
       }
       if (contentType) {
         headers['Content-Type'] = contentType;
@@ -203,11 +202,9 @@ export class HttpService {
         headers['Authorization'] = `Bearer ${token}`;
       }
       var options:FileUploadOptions = {
-        fileKey: fileKey,
         httpMethod: httpMethod,
         mimeType: mimeType,
-        chunkedMode: chunkedMode,
-        fileName: file.substr(file.lastIndexOf('/') + 1).split('?').shift(),
+        fileName: fileName,
         headers: headers
       };
       this.logger.info(this, "UPLOAD", url, file, options);
@@ -228,21 +225,50 @@ export class HttpService {
     });
   }
 
-  getMimeType(file:string):string {
-    let extension = file.toLowerCase().substr(file.lastIndexOf('.')+1)
+  mimeType(file:string):string {
+    let extension = file.toLowerCase().substr(file.lastIndexOf('.')+1);
     if (extension == "mov") {
       return "video/quicktime";
     }
     else if (extension == "avi") {
       return "video/avi";
     }
+    else if (extension == "mp4") {
+      return "video/mp4";
+    }
     else if (extension == "jpg") {
+      return "image/jpeg";
+    }
+    else if (extension == "jpeg") {
       return "image/jpeg";
     }
     else if (extension == "png") {
       return "image/png";
     }
     return "application/binary"
+  }
+
+  fileSize(filePath:any):Promise<number> {
+    return new Promise((resolve, reject) => {
+      this.logger.info(this, "fileSize", filePath);
+      File.resolveLocalFilesystemUrl(filePath).then(
+        (entry:Entry) => {
+          this.logger.info(this, "fileSize", filePath, "Entry", entry.fullPath);
+          entry.getMetadata(
+            (metadata:Metadata) => {
+              this.logger.info(this, "fileSize", filePath, "Metadata", metadata);
+              resolve(metadata.size);
+            },
+            (error:any) => {
+              this.logger.error(this, "fileSize", filePath, "Metadata", error);
+              reject(error);
+            });
+        },
+        (error) => {
+          this.logger.error(this, "fileSize", filePath, "Error", error);
+          reject(error);
+        });
+    });
   }
 
   errorMessage(err): string {

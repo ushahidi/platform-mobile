@@ -395,6 +395,7 @@ export class ApiService extends HttpService {
       }
       let params = {
         source: this.source,
+        user: { id: post.user_id },
         form: { id: post.form_id },
         title: post.title,
         content: post.description,
@@ -427,8 +428,8 @@ export class ApiService extends HttpService {
               let location = value.value.split(",");
               values[value.key] = [{
                 lat: Number(location[0]),
-                lon: Number(location[1])}]
-  ;          }
+                lon: Number(location[1])}];
+            }
             else {
               values[value.key] = [value.value];
             }
@@ -546,7 +547,7 @@ export class ApiService extends HttpService {
     return new Promise((resolve, reject) => {
       let api = `/api/v3/media`;
       let url = deployment.url + api;
-      let mimeType = this.getMimeType(file);
+      let mimeType = this.mimeType(file);
       this.fileUpload(url, deployment.access_token, file, "POST", mimeType).then(
         (data:any) => {
           this.logger.info(this, "uploadImage", "Data", data);

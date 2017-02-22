@@ -120,7 +120,12 @@ export class DeploymentDetailsPage extends BasePage {
             (user:User) => {
               this.logger.info(this, "loadUser", "API", user);
               this.user = user;
-              this.database.saveUser(this.deployment, this.user).then(
+              this.deployment.user_id = user.id;
+              let saves = [
+                this.database.saveDeployment(this.deployment),
+                this.database.saveUser(this.deployment, this.user)
+              ];
+              Promise.all(saves).then(
                 (saved:any) => {
                   this.logger.info(this, "loadUser", "Saved", saved);
                   resolve();

@@ -169,6 +169,7 @@ export class ResponseListPage extends BasePage {
         let loading = this.showLoading("Posting...");
         let uploads = [];
         for (let post of this.pending) {
+          this.logger.info(this, "uploadPending", "Queuing", post.title);
           uploads.push(this.createPost(post));
         }
         Promise.all(uploads).then(
@@ -188,7 +189,7 @@ export class ResponseListPage extends BasePage {
   }
 
   createPost(post:Post):Promise<any> {
-    this.logger.info(this, "createPost", post);
+    this.logger.info(this, "createPost", post.title);
     return new Promise((resolve, reject) => {
       this.logger.info(this, "createPost", "Posting...");
       this.api.createPost(this.deployment, post).then(
@@ -201,11 +202,6 @@ export class ResponseListPage extends BasePage {
           Promise.all(removes).then(
             (removed) => {
               this.logger.info(this, "createPost", "Pending Removed", removed);
-              let pendingIndex = this.pending.indexOf(post);
-              if (pendingIndex > -1) {
-                this.pending.splice(pendingIndex, 1);
-                this.logger.info(this, "createPost", "Pending Spliced", post.title);
-              }
               post.id = posted.id;
               post.saved = null;
               post.pending = false;

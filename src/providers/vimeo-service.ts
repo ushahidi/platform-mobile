@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
-import { File, FileEntry, Entry, Metadata } from 'ionic-native';
 
 import { HttpService } from '../providers/http-service';
 import { LoggerService } from '../providers/logger-service';
@@ -12,6 +11,7 @@ export class VimeoService extends HttpService {
 
   //private accessToken: string = "413e6801c73e70fec5e1468249a114e5"; //Test
   private accessToken: string = "74b4152349da27210ee8278380926b84"; //Main
+  private acceptType: string = "application/vnd.vimeo.*+json;version=3.2";
 
   constructor(
     public http: Http,
@@ -85,7 +85,8 @@ export class VimeoService extends HttpService {
       this.fileSize(file).then(
         (fileSize) => {
           this.logger.info(this, "uploadFile", "fileSize", fileSize);
-          this.fileUpload(url, this.accessToken, file, "PUT", "video/quicktime", "application/vnd.vimeo.*+json;version=3.2", "video/quicktime", fileSize).then(
+          let mimeType = this.mimeType(file);
+          this.fileUpload(url, this.accessToken, file, "PUT", mimeType, this.acceptType, mimeType, fileSize).then(
             (data:any) => {
               this.logger.info(this, "uploadFile", url, file, data);
               resolve(data);
@@ -139,29 +140,6 @@ export class VimeoService extends HttpService {
           this.logger.error(this, "completeVideo", url, error);
           reject(error);
         })
-    });
-  }
-
-  fileSize(filePath:any):Promise<number> {
-    return new Promise((resolve, reject) => {
-      this.logger.info(this, "fileSize", filePath);
-      File.resolveLocalFilesystemUrl(filePath).then(
-        (entry:Entry) => {
-          this.logger.info(this, "fileSize", filePath, "Entry", entry.fullPath);
-          entry.getMetadata(
-            (metadata:Metadata) => {
-              this.logger.info(this, "fileSize", filePath, "Metadata", metadata);
-              resolve(metadata.size);
-            },
-            (error:any) => {
-              this.logger.error(this, "fileSize", filePath, "Metadata", error);
-              reject(error);
-            });
-        },
-        (error) => {
-          this.logger.error(this, "fileSize", filePath, "Error", error);
-          reject(error);
-        });
     });
   }
 

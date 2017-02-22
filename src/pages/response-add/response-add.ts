@@ -193,8 +193,8 @@ export class ResponseAddPage extends BasePage {
   savePost(post:Post) {
     this.logger.info(this, "savePost", post);
     return new Promise((resolve, reject) => {
-      post.pending = true;
       this.logger.info(this, "savePost", "Saving...");
+      post.pending = true;
       let saves = [
         this.database.savePost(this.deployment, post)
       ];
@@ -331,9 +331,10 @@ export class ResponseAddPage extends BasePage {
       this.post.pending = true;
       this.post.status = 'draft';
       this.database.getPostsLowestID().then(id => {
-        this.post.id = Math.min(id, -1);
+        this.post.id = Math.min(id, 0) - 1;
       });
       this.post.deployment_id = this.deployment.id;
+      this.post.user_id = this.deployment.user_id;
       this.post.form_id = this.form.id;
       this.post.color = this.form.color;
       this.post.posted = new Date();
