@@ -6,7 +6,6 @@ import { FormBuilder, FormGroup, FormGroupName, FormControl, Validators } from '
 import { ApiService } from '../../providers/api-service';
 import { LoggerService } from '../../providers/logger-service';
 import { DatabaseService } from '../../providers/database-service';
-import { VimeoService } from '../../providers/vimeo-service';
 
 import { BasePage } from '../../pages/base-page/base-page';
 import { ResponseMapPage } from '../../pages/response-map/response-map';
@@ -34,7 +33,7 @@ import { Image } from '../../models/image';
 @Component({
   selector: 'page-response-add',
   templateUrl: 'response-add.html',
-  providers: [ ApiService, DatabaseService, LoggerService, VimeoService ],
+  providers: [ ApiService, DatabaseService, LoggerService ],
   entryComponents:[ ResponseMapPage ]
 })
 export class ResponseAddPage extends BasePage {
@@ -48,7 +47,6 @@ export class ResponseAddPage extends BasePage {
   submitted: boolean = false;
 
   constructor(
-    public vimeo:VimeoService,
     public api:ApiService,
     public logger:LoggerService,
     public database:DatabaseService,
@@ -150,38 +148,23 @@ export class ResponseAddPage extends BasePage {
           });
       }
       else {
-        let uploads = [];
-        for (let image of this.getImages()) {
-          uploads.push(this.uploadImage(this.post, image));
-        }
-        for (let video of this.getVideos()) {
-          uploads.push(this.uploadVideo(this.post, video));
-        }
-        let loading = this.showLoading("Uploading...");
-        Promise.all(uploads).then(
-          (uploaded) => {
-            loading.setContent("Posting...");
-            this.createPost(this.post).then(
-              (updated) => {
-                this.events.publish('post:updated', this.post.id);
-                loading.dismiss();
-                let buttons = [{
-                  text: 'Ok',
-                  role: 'cancel',
-                  handler: () => {
-                    this.viewController.dismiss();
-                  }
-                }];
-                this.showAlert('Response Posted', 'Your response has been posted!', buttons);
-              },
-              (error) => {
-                loading.dismiss();
-                this.showAlert('Post Failed', 'There was a problem posting your response.');
-              });
-            },
-            (error) => {
-              loading.dismiss();
-              this.showAlert('Upload Failed', 'There was a problem uploading your data.');
+        let loading = this.showLoading("Posting...");
+        this.createPost(this.post).then(
+          (updated) => {
+            this.events.publish('post:updated', this.post.id);
+            loading.dismiss();
+            let buttons = [{
+              text: 'Ok',
+              role: 'cancel',
+              handler: () => {
+                this.viewController.dismiss();
+              }
+            }];
+            this.showAlert('Response Posted', 'Your response has been posted!', buttons);
+          },
+          (error) => {
+            loading.dismiss();
+            this.showAlert('Post Failed', 'There was a problem posting your response.');
           });
       }
     }
@@ -218,7 +201,7 @@ export class ResponseAddPage extends BasePage {
     this.logger.info(this, "createPost", post);
     return new Promise((resolve, reject) => {
       this.logger.info(this, "createPost", "Posting...");
-      this.api.createPost(this.deployment, post).then(
+      this.api.createPostWithMedia(this.deployment, post).then(
         (posted:any) => {
           this.logger.info(this, "createPost", "Posted", posted);
           post.id = posted.id;
@@ -251,7 +234,7 @@ export class ResponseAddPage extends BasePage {
     this.logger.info(this, "updatePost", post);
     return new Promise((resolve, reject) => {
       this.logger.info(this, "updatePost", "Updating...");
-      this.api.updatePost(this.deployment, post).then(
+      this.api.updatePostWithMedia(this.deployment, post).then(
         (success) => {
           this.logger.info(this, "updatePost", "Updated", success);
           let saves = [
@@ -272,53 +255,6 @@ export class ResponseAddPage extends BasePage {
         },
         (error) => {
           this.logger.error(this, "updatePost", "Failed", error);
-          reject(error);
-        });
-    });
-  }
-
-  uploadImage(post:Post, file:string): Promise<Image> {
-    this.logger.info(this, "uploadImage", file);
-    return new Promise((resolve, reject) => {
-      this.logger.info(this, "uploadImage", "Uploading...");
-      this.api.uploadImage(this.deployment, file).then(
-        (image:Image) => {
-          this.logger.info(this, "uploadImage", "Uploaded", image);
-          for (let value of this.post.values) {
-            if (value.input == 'upload' && value.value == file) {
-              value.value = "" + image.id;
-              this.logger.info(this, "uploadImage", "Uploaded", value.key, "Image", image.id);
-              break;
-            }
-          }
-          this.database.saveImage(this.deployment, image).then((saved) => {
-              this.logger.info(this, "uploadImage", "Saved", saved);
-              resolve(image);
-            });
-        },
-        (error) => {
-          this.logger.error(this, "uploadImage", "Failed", error);
-          reject(error);
-        });
-    });
-  }
-
-  uploadVideo(post:Post, file:string): Promise<string> {
-    this.logger.info(this, "uploadVideo", file);
-    return new Promise((resolve, reject) => {
-      this.vimeo.uploadVideo(file, post.title, post.description).then(
-        (url:any) => {
-          this.logger.info(this, "uploadVideo", url);
-          for (let value of this.post.values) {
-            if (value.input == 'video' && value.value == file) {
-              value.value = url;
-              break;
-            }
-          }
-          resolve(url);
-        },
-        (error:any) => {
-          this.logger.error(this, "uploadVideo", error);
           reject(error);
         });
     });

@@ -192,7 +192,7 @@ export class ResponseListPage extends BasePage {
     this.logger.info(this, "createPost", post.title);
     return new Promise((resolve, reject) => {
       this.logger.info(this, "createPost", "Posting...");
-      this.api.createPost(this.deployment, post).then(
+      this.api.createPostWithMedia(this.deployment, post).then(
         (posted:any) => {
           this.logger.info(this, "createPost", "Posted", posted);
           let removes = [

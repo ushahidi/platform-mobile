@@ -14,6 +14,7 @@ import { Collection } from '../models/collection';
 import { HttpService } from '../providers/http-service';
 import { LoggerService } from '../providers/logger-service';
 import { DatabaseService } from '../providers/database-service';
+import { VimeoService } from '../providers/vimeo-service';
 
 @Injectable()
 export class ApiService extends HttpService {
@@ -27,6 +28,7 @@ export class ApiService extends HttpService {
 
   constructor(
     public http: Http,
+    public vimeo:VimeoService,
     public logger:LoggerService,
     public database:DatabaseService) {
     super(http, logger);
@@ -410,6 +412,35 @@ export class ApiService extends HttpService {
     });
   }
 
+  createPostWithMedia(deployment:Deployment, post:Post) {
+    return new Promise((resolve, reject) => {
+      let uploads = [];
+      for (let value of post.values) {
+        if (value.input == 'upload' && value.value && value.value.indexOf("file:") > -1) {
+          let file:string = value.value;
+          uploads.push(this.uploadImage(deployment, post, file));
+        }
+        else if (value.input == 'video' && value.value && value.value.indexOf("file:") > -1) {
+          let file:string = value.value;
+          uploads.push(this.uploadVideo(deployment, post, file));
+        }
+      }
+      Promise.all(uploads).then(
+        (uploaded) => {
+          this.createPost(deployment, post).then(
+            (posted) => {
+              resolve(posted);
+            },
+            (error) => {
+              reject(error);
+            });
+        },
+        (error) => {
+          reject(error);
+        });
+      });
+  }
+  
   updatePost(deployment:Deployment, post:Post, changes:{}=null) {
     return new Promise((resolve, reject) => {
       let api = `/api/v3/posts/${post.id}`;
@@ -453,7 +484,36 @@ export class ApiService extends HttpService {
     });
   }
 
-  deletePost(deployment:Deployment, post:Post) {
+  updatePostWithMedia(deployment:Deployment, post:Post) {
+    return new Promise((resolve, reject) => {
+      let uploads = [];
+      for (let value of post.values) {
+        if (value.input == 'upload' && value.value && value.value.indexOf("file:") > -1) {
+          let file:string = value.value;
+          uploads.push(this.uploadImage(deployment, post, file));
+        }
+        else if (value.input == 'video' && value.value && value.value.indexOf("file:") > -1) {
+          let file:string = value.value;
+          uploads.push(this.uploadVideo(deployment, post, file));
+        }
+      }
+      Promise.all(uploads).then(
+        (uploaded) => {
+          this.updatePost(deployment, post).then(
+            (posted) => {
+              resolve(posted);
+            },
+            (error) => {
+              reject(error);
+            });
+        },
+        (error) => {
+          reject(error);
+        });
+      });
+  }
+
+  deletePost(deployment:Deployment, post:Post):Promise<any> {
     return new Promise((resolve, reject) => {
       let api = `/api/v3/posts/${post.id}`;
       let url = deployment.url + api;
@@ -465,6 +525,35 @@ export class ApiService extends HttpService {
         (error:any) => {
           reject(error);
         })
+    });
+  }
+
+  uploadVideo(deployment:Deployment, post:Post, file:string): Promise<string> {
+    this.logger.info(this, "uploadVideo", file);
+    return new Promise((resolve, reject) => {
+      this.vimeo.uploadVideo(file, post.title, post.description).then(
+        (url:any) => {
+          this.logger.info(this, "uploadVideo", url);
+          let saves = [];
+          for (let value of post.values) {
+            if (value.input == 'video' && value.value == file) {
+              value.value = url;
+              saves.push(this.database.saveValue(deployment, value));
+              break;
+            }
+          }
+          Promise.all(saves).then(
+            (saved:any) => {
+              resolve(url);
+            },
+            (error:any) => {
+              reject(error);
+            });
+        },
+        (error:any) => {
+          this.logger.error(this, "uploadVideo", error);
+          reject(error);
+        });
     });
   }
 
@@ -543,7 +632,7 @@ export class ApiService extends HttpService {
     });
   }
 
-  uploadImage(deployment:Deployment, file:string): Promise<Image> {
+  uploadImage(deployment:Deployment, post:Post, file:string): Promise<Image> {
     return new Promise((resolve, reject) => {
       let api = `/api/v3/media`;
       let url = deployment.url + api;
@@ -576,7 +665,17 @@ export class ApiService extends HttpService {
             image.can_update = false;
             image.can_delete = false;
           }
-          this.database.saveImage(deployment, image).then(
+          let saves = [
+            this.database.saveImage(deployment, image)
+          ];
+          for (let value of post.values) {
+            if (value.input == 'upload' && value.value == file) {
+              value.value = "" + image.id;
+              saves.push(this.database.saveValue(deployment, value));
+              break;
+            }
+          }
+          Promise.all(saves).then(
             (saved:any) => {
               resolve(image);
             },
