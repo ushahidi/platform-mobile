@@ -1,6 +1,5 @@
-import { Component, ViewChild } from '@angular/core';
-import { DateTime } from 'ionic-angular';
-import { FormGroup, FormGroupName, FormControl, FormControlName } from '@angular/forms';
+import { Component } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 
 import * as moment from 'moment';
 

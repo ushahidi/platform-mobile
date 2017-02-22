@@ -1,7 +1,7 @@
-import { Component, ViewChild, NgZone } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 import { Platform, NavParams, Events,
   NavController, ViewController, LoadingController, ToastController, AlertController, ModalController, ActionSheetController  } from 'ionic-angular';
-import { FormBuilder, FormGroup, FormGroupName, FormControl, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 
 import { ApiService } from '../../providers/api-service';
 import { LoggerService } from '../../providers/logger-service';
@@ -10,25 +10,10 @@ import { DatabaseService } from '../../providers/database-service';
 import { BasePage } from '../../pages/base-page/base-page';
 import { ResponseMapPage } from '../../pages/response-map/response-map';
 
-import { CheckboxComponent } from '../../components/checkbox/checkbox';
-import { CheckboxesComponent } from '../../components/checkboxes/checkboxes';
-import { DateComponent } from '../../components/date/date';
-import { DateTimeComponent } from '../../components/datetime/datetime';
-import { ImageComponent } from '../../components/image/image';
-import { LocationComponent } from '../../components/location/location';
-import { NumberComponent } from '../../components/number/number';
-import { RadioComponent } from '../../components/radio/radio';
-import { SelectComponent } from '../../components/select/select';
-import { TextComponent } from '../../components/text/text';
-import { TextAreaComponent } from '../../components/textarea/textarea';
-import { VideoComponent } from '../../components/video/video';
-
 import { Deployment } from '../../models/deployment';
 import { Post } from '../../models/post';
 import { Form } from '../../models/form';
-import { Attribute } from '../../models/attribute';
 import { Value } from '../../models/value';
-import { Image } from '../../models/image';
 
 @Component({
   selector: 'page-response-add',

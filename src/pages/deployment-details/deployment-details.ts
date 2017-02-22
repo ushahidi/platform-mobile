@@ -17,7 +17,6 @@ import { DatabaseService } from '../../providers/database-service';
 import { Deployment } from '../../models/deployment';
 import { User } from '../../models/user';
 import { Form } from '../../models/form';
-import { Attribute } from '../../models/attribute';
 import { Collection } from '../../models/collection';
 
 import { PLACEHOLDER_BLANK } from '../../helpers/constants';

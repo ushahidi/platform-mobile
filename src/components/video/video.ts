@@ -1,7 +1,7 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { Platform, ActionSheetController, AlertController } from 'ionic-angular';
-import { MediaCapture, MediaFile, CaptureError, CaptureImageOptions, File, FilePath, Entry, FileError } from 'ionic-native';
-import { FormGroup, FormGroupName, FormControl, FormControlName } from '@angular/forms';
+import { MediaCapture, MediaFile, CaptureError, CaptureImageOptions, File, Entry, FileError } from 'ionic-native';
+import { FormGroup } from '@angular/forms';
 import { SafeResourceUrl, DomSanitizer } from '@angular/platform-browser';
 
 import { Value } from '../../models/value';
@@ -40,7 +40,7 @@ export class VideoComponent {
 
   captureVideo() {
     this.logger.info(this, "captureVideo");
-    let options = {
+    let options:CaptureImageOptions = {
       limit: 3
     };
     MediaCapture.captureVideo(options).then(
@@ -59,7 +59,7 @@ export class VideoComponent {
             this.videoPreview = null;
           });
       },
-      (error) => {
+      (error:CaptureError) => {
         this.logger.error(this, "captureVideo", error);
         this.videoPath = null;
         this.videoPreview = null;

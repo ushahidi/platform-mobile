@@ -1,7 +1,6 @@
-import { Component, ViewChild, Output, EventEmitter } from '@angular/core';
-import { TextInput } from 'ionic-angular';
+import { Component, Output, EventEmitter } from '@angular/core';
 import { Geolocation } from 'ionic-native';
-import { FormGroup, FormGroupName, FormControl, FormControlName } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 
 import { Value } from '../../models/value';
 import { Attribute } from '../../models/attribute';

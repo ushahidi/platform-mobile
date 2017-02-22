@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
-import { Table, TABLE } from '../decorators/table';
-import { Column, COLUMNS } from '../decorators/column';
+import { TABLE } from '../decorators/table';
+import { COLUMNS } from '../decorators/column';
 
 export let TEXT:string = "TEXT";
 export let INTEGER:string = "INTEGER";

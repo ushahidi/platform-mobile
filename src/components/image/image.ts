@@ -1,8 +1,8 @@
-import { Component, ViewChild } from '@angular/core';
-import { Platform, Button, ActionSheetController, AlertController } from 'ionic-angular';
-import { Camera, File, FilePath, Entry, FileError } from 'ionic-native';
+import { Component } from '@angular/core';
+import { Platform, ActionSheetController, AlertController } from 'ionic-angular';
+import { Camera, File, Entry, FileError } from 'ionic-native';
 import { SafeResourceUrl, DomSanitizer } from '@angular/platform-browser';
-import { FormGroup, FormGroupName, FormControl, FormControlName } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 
 import { Value } from '../../models/value';
 import { Attribute } from '../../models/attribute';

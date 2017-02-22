@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 
-import { Model } from '../models/model';
 import { Deployment } from '../models/deployment';
 import { User } from '../models/user';
 import { Form } from '../models/form';
@@ -440,7 +439,7 @@ export class ApiService extends HttpService {
         });
       });
   }
-  
+
   updatePost(deployment:Deployment, post:Post, changes:{}=null) {
     return new Promise((resolve, reject) => {
       let api = `/api/v3/posts/${post.id}`;

@@ -1,6 +1,5 @@
-import { Component, ViewChild } from '@angular/core';
-import { Checkbox } from 'ionic-angular';
-import { FormGroup, FormGroupName, FormControl, FormControlName } from '@angular/forms';
+import { Component } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 
 import { Value } from '../../models/value';
 import { Attribute } from '../../models/attribute';

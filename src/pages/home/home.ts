@@ -11,8 +11,6 @@ import { BasePage } from '../../pages/base-page/base-page';
 import { DeploymentAddPage } from '../../pages/deployment-add/deployment-add';
 import { DeploymentLoginPage } from '../../pages/deployment-login/deployment-login';
 
-import { Deployment } from '../../models/deployment';
-
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html',

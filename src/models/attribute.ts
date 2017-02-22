@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { Model, TEXT, INTEGER, DOUBLE, BOOLEAN, PRIMARY_KEY } from '../models/model';
-import { Form } from '../models/form';
+import { Model, TEXT, INTEGER, BOOLEAN, PRIMARY_KEY } from '../models/model';
 
 import { Table } from '../decorators/table';
 import { Column } from '../decorators/column';

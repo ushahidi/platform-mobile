@@ -1,6 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
-import { RadioButton, RadioGroup } from 'ionic-angular';
-import { FormGroup, FormGroupName, FormControl, FormControlName } from '@angular/forms';
+import { RadioGroup } from 'ionic-angular';
+import { FormGroup } from '@angular/forms';
 
 import { Value } from '../../models/value';
 import { Attribute } from '../../models/attribute';

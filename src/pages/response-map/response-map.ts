@@ -2,8 +2,6 @@ import { Component, NgZone } from '@angular/core';
 import { Platform, NavParams,
   NavController, ViewController, LoadingController, ToastController, AlertController, ModalController, ActionSheetController  } from 'ionic-angular';
 
-import { SebmGoogleMap, SebmGoogleMapMarker } from 'angular2-google-maps/core';
-
 import { BasePage } from '../../pages/base-page/base-page';
 
 import { LoggerService } from '../../providers/logger-service';

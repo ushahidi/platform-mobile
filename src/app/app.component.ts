@@ -1,6 +1,6 @@
 import { Component, ViewChild, NgZone } from '@angular/core';
 import { Events, Nav, Platform, ModalController, LoadingController, ToastController, AlertController, MenuController } from 'ionic-angular';
-import { StatusBar, Splashscreen, IsDebug } from 'ionic-native';
+import { StatusBar, Splashscreen } from 'ionic-native';
 
 import { HomePage } from '../pages/home/home';
 
@@ -12,10 +12,6 @@ import { DeploymentAddPage } from '../pages/deployment-add/deployment-add';
 import { DeploymentLoginPage } from '../pages/deployment-login/deployment-login';
 import { DeploymentDetailsPage } from '../pages/deployment-details/deployment-details';
 
-import { Table } from '../decorators/table';
-import { Column } from '../decorators/column';
-
-import { Model } from '../models/model';
 import { Deployment } from '../models/deployment';
 import { User } from '../models/user';
 import { Form } from '../models/form';

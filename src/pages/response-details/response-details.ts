@@ -1,5 +1,5 @@
-import { Component, ViewChild, NgZone } from '@angular/core';
-import { Platform, NavParams, Button, Events,
+import { Component, NgZone } from '@angular/core';
+import { Platform, NavParams, Events,
   NavController, ViewController, LoadingController, ToastController, AlertController, ModalController, ActionSheetController  } from 'ionic-angular';
 
 import { BasePage } from '../../pages/base-page/base-page';
@@ -11,11 +11,8 @@ import { DatabaseService } from '../../providers/database-service';
 
 import { Deployment } from '../../models/deployment';
 import { Post } from '../../models/post';
-import { User } from '../../models/user';
 import { Form } from '../../models/form';
-import { Image } from '../../models/image';
 import { Value } from '../../models/value';
-import { Attribute } from '../../models/attribute';
 import { Collection } from '../../models/collection';
 
 import { PLACEHOLDER_USER, PLACEHOLDER_NAME } from '../../helpers/constants';

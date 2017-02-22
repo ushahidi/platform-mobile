@@ -1,14 +1,12 @@
 import { Component, NgZone } from '@angular/core';
 import { Platform, NavParams, Events,
   NavController, ViewController, LoadingController, ToastController, AlertController, ModalController, ActionSheetController } from 'ionic-angular';
-import { SebmGoogleMap, SebmGoogleMapMarker, SebmGoogleMapInfoWindow, LatLngBounds, MapsAPILoader } from 'angular2-google-maps/core';
+import { LatLngBounds, MapsAPILoader } from 'angular2-google-maps/core';
 
 import { BasePage } from '../../pages/base-page/base-page';
 import { ResponseAddPage } from '../response-add/response-add';
 import { ResponseDetailsPage } from '../response-details/response-details';
 import { ResponseSearchPage } from '../response-search/response-search';
-
-import { CardComponent } from '../../components/card/card';
 
 import { ApiService } from '../../providers/api-service';
 import { LoggerService } from '../../providers/logger-service';
@@ -17,9 +15,6 @@ import { DatabaseService } from '../../providers/database-service';
 import { Deployment } from '../../models/deployment';
 import { Post } from '../../models/post';
 import { Form } from '../../models/form';
-import { Image } from '../../models/image';
-import { Value } from '../../models/value';
-import { Attribute } from '../../models/attribute';
 import { Filter } from '../../models/filter';
 import { Collection } from '../../models/collection';
 
