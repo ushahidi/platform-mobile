@@ -463,6 +463,7 @@
 				TargetAttributes = {
 					1D6058900D05DD3D006BFB54 = {
 						DevelopmentTeam = K4L62494Y2;
+						ProvisioningStyle = Manual;
 					};
 				};
 			};
@@ -618,6 +619,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.ushahidi.mobile;
 				PRODUCT_NAME = Ushahidi;
+				PROVISIONING_PROFILE = "b840f346-dbe4-4c05-835b-5e074fb3d022";
+				PROVISIONING_PROFILE_SPECIFIER = "Ushahidi Mobile Development";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -648,6 +651,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.ushahidi.mobile;
 				PRODUCT_NAME = Ushahidi;
+				PROVISIONING_PROFILE = "69742b67-158a-4b2a-8fa7-b2708b46b97a";
+				PROVISIONING_PROFILE_SPECIFIER = "Ushahidi Mobile App Store";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
