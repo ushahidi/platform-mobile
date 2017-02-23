@@ -325,7 +325,6 @@ export class ApiService extends HttpService {
                 post.can_update = false;
                 post.can_delete = false;
               }
-              saves.push(this.database.savePost(deployment, post));
               post.values = [];
               for (let key in item.values) {
                 let text = item.values[key][0];
@@ -345,6 +344,7 @@ export class ApiService extends HttpService {
                 post.values.push(value);
                 saves.push(this.database.saveValue(deployment, value));
               }
+              saves.push(this.database.savePost(deployment, post));
             }
             Promise.all(saves).then(saved => {
               this.database.getPosts(deployment).then(

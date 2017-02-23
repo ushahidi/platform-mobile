@@ -48,7 +48,7 @@ import { ApiService } from '../providers/api-service';
 import { DatabaseService } from '../providers/database-service';
 import { VimeoService } from '../providers/vimeo-service';
 
-import { VIMEO_ACCESS_TOKEN } from '../helpers/constants';
+import { GOOGLE_API_KEY } from '../helpers/constants';
 
 export function provideStorage() {
   return new Storage(['sqlite', 'websql', 'indexeddb'], { name: 'ushahidi' });
@@ -93,7 +93,7 @@ export function provideStorage() {
     ReactiveFormsModule,
     LazyLoadImageModule,
     AgmCoreModule.forRoot({
-      apiKey: VIMEO_ACCESS_TOKEN
+      apiKey: GOOGLE_API_KEY
     })
   ],
   bootstrap: [ IonicApp ],

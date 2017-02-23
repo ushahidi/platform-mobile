@@ -570,6 +570,7 @@ export class ResponseListPage extends BasePage {
       this.logger.info(this, "showMap", "mapsAPILoader");
       this.latLngBounds = new google.maps.LatLngBounds();
       for (let post of this.filtered) {
+        this.logger.info(this, "showMap", "mapsAPILoader", post.latitude, post.longitude);
         if (post.latitude && post.longitude) {
           this.latLngBounds.extend(new google.maps.LatLng(post.latitude, post.longitude));
         }
