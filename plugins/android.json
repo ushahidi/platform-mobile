@@ -10,9 +10,6 @@
         "cordova-plugin-app-version": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
-        "cordova-plugin-camera": {
-            "PACKAGE_NAME": "com.ushahidi.mobile"
-        },
         "cordova-plugin-console": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
@@ -99,6 +96,9 @@
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
         "cordova-plugin-ios-no-export-compliance": {
+            "PACKAGE_NAME": "com.ushahidi.mobile"
+        },
+        "cordova-plugin-camera": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         }
     },

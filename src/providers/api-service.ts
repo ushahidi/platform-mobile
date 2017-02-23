@@ -15,12 +15,14 @@ import { LoggerService } from '../providers/logger-service';
 import { DatabaseService } from '../providers/database-service';
 import { VimeoService } from '../providers/vimeo-service';
 
+import { USHAHIDI_CLIENT_ID, USHAHIDI_CLIENT_SECRET } from '../helpers/constants';
+
 @Injectable()
 export class ApiService extends HttpService {
 
   private source: string = "mobile";
-  private clientId: any = "ushahidiui";
-  private clientSecret: any = "35e7f0bca957836d05ca0492211b0ac707671261";
+  private clientId: string = USHAHIDI_CLIENT_ID;
+  private clientSecret: string = USHAHIDI_CLIENT_SECRET;
   private scope: string = "api posts forms tags sets users media config";
   // api posts media forms tags savedsearches sets users stats layers
   // config messages notifications contacts roles permissions csv

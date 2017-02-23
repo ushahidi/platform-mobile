@@ -7,17 +7,6 @@
         "is_top_level": true,
         "variables": {}
     },
-    "cordova-plugin-camera": {
-        "source": {
-            "type": "registry",
-            "id": "cordova-plugin-camera@~2.3.1"
-        },
-        "is_top_level": true,
-        "variables": {
-            "CAMERA_USAGE_DESCRIPTION": " ",
-            "PHOTOLIBRARY_USAGE_DESCRIPTION": " "
-        }
-    },
     "cordova-plugin-compat": {
         "source": {
             "type": "registry",
@@ -225,6 +214,14 @@
             "type": "git",
             "url": "https://github.com/mikaoelitiana/cordova-plugin-ios-no-export-compliance.git",
             "subdir": "."
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
+    "cordova-plugin-camera": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-plugin-camera@~2.3.1"
         },
         "is_top_level": true,
         "variables": {}

@@ -13,14 +13,6 @@
                             "count": 1
                         },
                         {
-                            "xml": "<feature name=\"Camera\"><param name=\"ios-package\" value=\"CDVCamera\" /></feature>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<preference name=\"CameraUsesGeolocation\" value=\"false\" />",
-                            "count": 1
-                        },
-                        {
                             "xml": "<feature name=\"Console\"><param name=\"ios-package\" value=\"CDVLogger\" /></feature>",
                             "count": 1
                         },
@@ -111,6 +103,14 @@
                         {
                             "xml": "<feature name=\"Keyboard\"><param name=\"ios-package\" onload=\"true\" value=\"IonicKeyboard\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Camera\"><param name=\"ios-package\" value=\"CDVCamera\" /></feature>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<preference name=\"CameraUsesGeolocation\" value=\"false\" />",
+                            "count": 1
                         }
                     ]
                 }
@@ -120,22 +120,30 @@
                     "NSCameraUsageDescription": [
                         {
                             "xml": "<string> </string>",
-                            "count": 2
+                            "count": 1
+                        },
+                        {
+                            "xml": "<string>Ushahidi would like to access your camera to let you take a new profile picture.</string>",
+                            "count": 1
                         }
                     ],
                     "NSPhotoLibraryUsageDescription": [
                         {
                             "xml": "<string> </string>",
-                            "count": 2
+                            "count": 1
+                        },
+                        {
+                            "xml": "<string>Ushahidi would like to access your photo library to let you select a profile picture.</string>",
+                            "count": 1
                         }
                     ],
                     "NSLocationWhenInUseUsageDescription": [
                         {
-                            "xml": "<string />",
+                            "xml": "<string>Detect user's location for survey response</string>",
                             "count": 1
                         },
                         {
-                            "xml": "<string>Detect user's location for survey response</string>",
+                            "xml": "<string />",
                             "count": 1
                         }
                     ],
@@ -178,11 +186,6 @@
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
         "cordova-plugin-compat": {
-            "PACKAGE_NAME": "com.ushahidi.mobile"
-        },
-        "cordova-plugin-camera": {
-            "CAMERA_USAGE_DESCRIPTION": " ",
-            "PHOTOLIBRARY_USAGE_DESCRIPTION": " ",
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
         "cordova-plugin-console": {
@@ -263,6 +266,11 @@
         },
         "cordova-plugin-ios-no-export-compliance": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
+        },
+        "cordova-plugin-camera": {
+            "CAMERA_USAGE_DESCRIPTION": "Ushahidi would like to access your camera to let you take a new profile picture.",
+            "PHOTOLIBRARY_USAGE_DESCRIPTION": "Ushahidi would like to access your photo library to let you select a profile picture.",
+            "PACKAGE_NAME": "com.ushahidi.mobile"
         }
     },
     "dependent_plugins": {},
@@ -273,38 +281,6 @@
             "pluginId": "cordova-plugin-app-version",
             "clobbers": [
                 "cordova.getAppVersion"
-            ]
-        },
-        {
-            "id": "cordova-plugin-camera.Camera",
-            "file": "plugins/cordova-plugin-camera/www/CameraConstants.js",
-            "pluginId": "cordova-plugin-camera",
-            "clobbers": [
-                "Camera"
-            ]
-        },
-        {
-            "id": "cordova-plugin-camera.CameraPopoverOptions",
-            "file": "plugins/cordova-plugin-camera/www/CameraPopoverOptions.js",
-            "pluginId": "cordova-plugin-camera",
-            "clobbers": [
-                "CameraPopoverOptions"
-            ]
-        },
-        {
-            "id": "cordova-plugin-camera.camera",
-            "file": "plugins/cordova-plugin-camera/www/Camera.js",
-            "pluginId": "cordova-plugin-camera",
-            "clobbers": [
-                "navigator.camera"
-            ]
-        },
-        {
-            "id": "cordova-plugin-camera.CameraPopoverHandle",
-            "file": "plugins/cordova-plugin-camera/www/ios/CameraPopoverHandle.js",
-            "pluginId": "cordova-plugin-camera",
-            "clobbers": [
-                "CameraPopoverHandle"
             ]
         },
         {
@@ -745,12 +721,43 @@
                 "cordova.plugins.Keyboard"
             ],
             "runs": true
+        },
+        {
+            "id": "cordova-plugin-camera.Camera",
+            "file": "plugins/cordova-plugin-camera/www/CameraConstants.js",
+            "pluginId": "cordova-plugin-camera",
+            "clobbers": [
+                "Camera"
+            ]
+        },
+        {
+            "id": "cordova-plugin-camera.CameraPopoverOptions",
+            "file": "plugins/cordova-plugin-camera/www/CameraPopoverOptions.js",
+            "pluginId": "cordova-plugin-camera",
+            "clobbers": [
+                "CameraPopoverOptions"
+            ]
+        },
+        {
+            "id": "cordova-plugin-camera.camera",
+            "file": "plugins/cordova-plugin-camera/www/Camera.js",
+            "pluginId": "cordova-plugin-camera",
+            "clobbers": [
+                "navigator.camera"
+            ]
+        },
+        {
+            "id": "cordova-plugin-camera.CameraPopoverHandle",
+            "file": "plugins/cordova-plugin-camera/www/ios/CameraPopoverHandle.js",
+            "pluginId": "cordova-plugin-camera",
+            "clobbers": [
+                "CameraPopoverHandle"
+            ]
         }
     ],
     "plugin_metadata": {
         "cordova-plugin-app-version": "0.1.9",
         "cordova-plugin-compat": "1.1.0",
-        "cordova-plugin-camera": "2.3.1",
         "cordova-plugin-console": "1.0.5",
         "cordova-plugin-device": "1.1.4",
         "cordova-plugin-email": "1.2.6",
@@ -774,6 +781,7 @@
         "cordova-sqlite-storage": "1.5.3",
         "ionic-plugin-deeplinks": "1.0.14",
         "ionic-plugin-keyboard": "2.2.1",
-        "cordova-plugin-ios-no-export-compliance": "0.0.1"
+        "cordova-plugin-ios-no-export-compliance": "0.0.1",
+        "cordova-plugin-camera": "2.3.1"
     }
 }

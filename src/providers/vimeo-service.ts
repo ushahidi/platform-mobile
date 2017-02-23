@@ -4,14 +4,14 @@ import { Http } from '@angular/http';
 import { HttpService } from '../providers/http-service';
 import { LoggerService } from '../providers/logger-service';
 
-import { VIMEO_API_KEY } from '../helpers/constants';
+import { VIMEO_ACCESS_TOKEN } from '../helpers/constants';
 
 declare var cordova: any;
 
 @Injectable()
 export class VimeoService extends HttpService {
 
-  private accessToken: string = VIMEO_API_KEY;
+  private accessToken: string = VIMEO_ACCESS_TOKEN;
   private acceptType: string = "application/vnd.vimeo.*+json;version=3.2";
 
   constructor(
