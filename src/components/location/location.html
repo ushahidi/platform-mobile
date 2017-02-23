@@ -16,4 +16,5 @@
     <ion-icon name="pin"></ion-icon> Change Location
   </button>
   <p ion-text padding-left color="red" *ngIf="attribute.required == true && latitude == null && longitude == null && submitted == true">Location required</p>
+  <p ion-text padding-left color="red" *ngIf="error == true">There was an error obtaining your current location.</p>
 </div>

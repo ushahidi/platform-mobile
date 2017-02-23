@@ -1,5 +1,5 @@
 import { Component, Output, EventEmitter } from '@angular/core';
-import { Geolocation } from 'ionic-native';
+import { Geolocation, GeolocationOptions, Geoposition } from 'ionic-native';
 import { FormGroup } from '@angular/forms';
 
 import { Value } from '../../models/value';
@@ -23,6 +23,7 @@ export class LocationComponent {
   latitude: number = null;
   longitude: number = null;
   submitted: boolean = false;
+  error: boolean = false;
 
   @Output()
   changeLocation = new EventEmitter();
@@ -59,16 +60,27 @@ export class LocationComponent {
 
   detectLocation() {
     this.logger.info(this, "detectLocation");
-    Geolocation.getCurrentPosition().then(
-      (position) => {
-        this.logger.info(this, "detectLocation", "Location", position);
+    let options:GeolocationOptions = {
+      timeout: 6000,
+      enableHighAccuracy: true };
+    Geolocation.getCurrentPosition(options).then(
+      (position:Geoposition) => {
+        this.logger.info(this, "detectLocation", "Position", position);
         this.latitude = position.coords.latitude;
         this.longitude = position.coords.longitude;
+        this.error = false;
       },
       (error) => {
         this.logger.error(this, "detectLocation", "Error", error);
         this.latitude = null;
         this.longitude = null;
+        this.error = true;
+      }).catch(
+        (error) => {
+          this.logger.error(this, "detectLocation", "Error", error);
+          this.latitude = null;
+          this.longitude = null;
+          this.error = true;
       });
   }
 
