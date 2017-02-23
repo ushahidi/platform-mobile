@@ -7,7 +7,7 @@ import {
   Loading, LoadingController,
   ActionSheet, ActionSheetController,
   NavController, ViewController } from 'ionic-angular';
-import { SocialSharing, Network } from 'ionic-native';
+import { SocialSharing, Network, IsDebug } from 'ionic-native';
 
 import { LoggerService } from '../../providers/logger-service';
 
@@ -19,6 +19,7 @@ import { LoggerService } from '../../providers/logger-service';
 export class BasePage {
 
   zone: NgZone = null;
+  debug: boolean = true;
   offline: boolean = false;
   connection: any = null;
   disconnection: any = null;
@@ -43,6 +44,11 @@ export class BasePage {
 
   ionViewDidLoad() {
     this.logger.info(this, "ionViewDidLoad");
+    this.platform.ready().then(() => {
+      IsDebug.getIsDebug().then((isDebug:boolean) => {
+        this.debug = isDebug;
+      });
+    });
   }
 
   ionViewWillEnter() {

@@ -62,14 +62,14 @@ export class DeploymentLoginPage extends BasePage {
       if (this.deployment.username) {
         this.username.value = this.deployment.username;
       }
-      else if (this.deployment.subdomain == 'dale') {
+      else if (this.debug && this.deployment.subdomain == 'dale') {
         //TODO remove this later, hardcoded to speed up development
         this.username.value = "dalezak@gmail.com";
       }
       if (this.deployment.password) {
         this.password.value = this.deployment.password;
       }
-      else if (this.deployment.subdomain == 'dale') {
+      else if (this.debug && this.deployment.subdomain == 'dale') {
         //TODO remove this later, hardcoded to speed up development
         this.password.value = "P4NpCNUqLTCnvJAQBBMX";
       }

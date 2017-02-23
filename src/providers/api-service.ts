@@ -234,13 +234,7 @@ export class ApiService extends HttpService {
               deployment.can_update = false;
               deployment.can_delete = false;
             }
-            this.database.saveDeployment(deployment).then(
-              (saved:any) => {
-                resolve(deployment);
-              },
-              (error:any) => {
-                reject(error);
-            });
+            resolve(deployment);
           },
           (error:any) => {
             reject(error);
