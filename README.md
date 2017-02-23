@@ -270,6 +270,12 @@ Run the app in the iOS Simulator or attached iOS device
 ionic run ios --livereload --consolelogs --serverlogs
 ```
 
+Build the app in release and production mode for archiving
+
+```
+ionic build ios --prod --release
+```
+
 More information on Cordova's [iOS Platform Guide](https://cordova.apache.org/docs/en/latest/guide/platforms/ios/)
 
 ```
@@ -297,6 +303,20 @@ Run the app in the Android Emulator or attached Android device
 
 ```
 ionic run android --livereload --consolelogs --serverlogs
+```
+
+Build the app in release and production mode for archiving
+
+```
+ionic build android --prod --release
+```
+
+```
+jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore ushahidi.keystore platforms/android/build/outputs/apk/android-release-unsigned.apk ushahidi
+```
+
+```
+./zipalign -f -v 4 platforms/android/build/outputs/apk/android-release-unsigned.apk platforms/android/build/outputs/apk/Ushahidi.apk
 ```
 
 More information on Cordova's [Android Platform Guide](https://cordova.apache.org/docs/en/latest/guide/platforms/android/)
