@@ -1,5 +1,5 @@
-import { Component, NgZone } from '@angular/core';
-import { Platform, NavParams, Events,
+import { Component, NgZone, ViewChild } from '@angular/core';
+import { Platform, NavParams, Events, Content,
   NavController, ViewController, LoadingController, ToastController, AlertController, ModalController, ActionSheetController } from 'ionic-angular';
 import { LatLngBounds, MapsAPILoader } from 'angular2-google-maps/core';
 
@@ -39,8 +39,11 @@ export class ResponseListPage extends BasePage {
   disableDefaultUI : boolean = true;
   latLngBounds: LatLngBounds = null;
 
+  @ViewChild(Content)
+  content: Content;
+  
   constructor(
-    private mapsAPILoader:MapsAPILoader,
+    public mapsAPILoader:MapsAPILoader,
     public api:ApiService,
     public logger:LoggerService,
     public database:DatabaseService,
@@ -303,7 +306,7 @@ export class ResponseListPage extends BasePage {
         this.filter = data['filter'];
         this.filtered = this.getFiltered(this.posts, this.filter);
       }
-      this.resizeContent();
+      this.resizeContent(400);
     });
   }
 

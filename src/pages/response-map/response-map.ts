@@ -1,5 +1,5 @@
-import { Component, NgZone } from '@angular/core';
-import { Platform, NavParams,
+import { Component, NgZone, ViewChild } from '@angular/core';
+import { Platform, NavParams, Content,
   NavController, ViewController, LoadingController, ToastController, AlertController, ModalController, ActionSheetController  } from 'ionic-angular';
 
 import { BasePage } from '../../pages/base-page/base-page';
@@ -21,6 +21,9 @@ export class ResponseMapPage extends BasePage {
   zoomControl : boolean = false;
   disableDefaultUI : boolean = true;
 
+  @ViewChild(Content)
+  content: Content;
+  
   constructor(
     public logger:LoggerService,
     public navParams: NavParams,

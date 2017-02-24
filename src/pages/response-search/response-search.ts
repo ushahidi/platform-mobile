@@ -1,5 +1,5 @@
 import { Component, ViewChild, NgZone } from '@angular/core';
-import { Platform, NavParams, Searchbar,
+import { Platform, NavParams, Searchbar, Content,
   NavController, ViewController, LoadingController, ToastController, AlertController, ModalController, ActionSheetController } from 'ionic-angular';
 
 import { BasePage } from '../../pages/base-page/base-page';
@@ -22,6 +22,9 @@ export class ResponseSearchPage extends BasePage {
   deployment: Deployment = null;
   filter: Filter = null;
 
+  @ViewChild(Content)
+  content: Content;
+  
   @ViewChild('searchbar')
   searchbar: Searchbar;
 

@@ -1,5 +1,5 @@
 import { Component, NgZone, ViewChild } from '@angular/core';
-import { Platform, NavParams, Button, TextInput,
+import { Platform, NavParams, TextInput, Content,
   NavController, ViewController, LoadingController, ToastController, AlertController, ModalController, ActionSheetController } from 'ionic-angular';
 
 import { BasePage } from '../../pages/base-page/base-page';
@@ -18,8 +18,8 @@ export class DeploymentSettingsPage extends BasePage {
 
   deployment: Deployment = null;
 
-  @ViewChild('save')
-  save: Button;
+  @ViewChild(Content)
+  content: Content;
 
   @ViewChild('name')
   name: TextInput;

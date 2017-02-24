@@ -1,5 +1,5 @@
-import { Component, NgZone } from '@angular/core';
-import { Platform, NavParams,
+import { Component, NgZone, ViewChild } from '@angular/core';
+import { Platform, NavParams, Content,
   NavController, ViewController, LoadingController, ToastController, AlertController, ModalController, ActionSheetController } from 'ionic-angular';
 import { StatusBar } from 'ionic-native';
 
@@ -32,6 +32,9 @@ export class DeploymentDetailsPage extends BasePage {
   deployment: Deployment = null;
   user: User = null;
   placeholder: string = PLACEHOLDER_BLANK;
+
+  @ViewChild(Content)
+  content: Content;
 
   constructor(
     public api:ApiService,

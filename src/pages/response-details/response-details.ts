@@ -1,5 +1,5 @@
-import { Component, NgZone } from '@angular/core';
-import { Platform, NavParams, Events,
+import { Component, NgZone, ViewChild } from '@angular/core';
+import { Platform, NavParams, Events, Content,
   NavController, ViewController, LoadingController, ToastController, AlertController, ModalController, ActionSheetController  } from 'ionic-angular';
 
 import { BasePage } from '../../pages/base-page/base-page';
@@ -32,6 +32,9 @@ export class ResponseDetailsPage extends BasePage {
   userName:string = PLACEHOLDER_NAME;
   userImage:string = PLACEHOLDER_USER;
   userPlaceholder:string = PLACEHOLDER_USER;
+
+  @ViewChild(Content)
+  content: Content;
 
   constructor(
     public api:ApiService,

@@ -176,7 +176,11 @@ export class BasePage {
   resizeContent(delay:number=100) {
     setTimeout(() => {
       if (this.content) {
+        this.logger.info(this, "resizeContent");
         this.content.resize();
+      }
+      else {
+        this.logger.error(this, "resizeContent", "NULL");
       }
     }, delay);
   }

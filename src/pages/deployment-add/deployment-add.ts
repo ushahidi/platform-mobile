@@ -1,5 +1,5 @@
 import { Component, ViewChild, NgZone } from '@angular/core';
-import { Platform, NavParams, Searchbar,
+import { Platform, NavParams, Searchbar, Content,
   NavController, ViewController, ModalController, LoadingController, ToastController, AlertController, ActionSheetController } from 'ionic-angular';
 import { StatusBar } from 'ionic-native';
 
@@ -24,6 +24,9 @@ export class DeploymentAddPage extends BasePage {
   loading: boolean = false;
   deployments: Deployment[] = [];
 
+  @ViewChild(Content)
+  content: Content;
+  
   @ViewChild('searchbar')
   searchbar: Searchbar;
 

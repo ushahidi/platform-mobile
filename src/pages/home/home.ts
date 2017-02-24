@@ -1,5 +1,5 @@
-import { Component, NgZone } from '@angular/core';
-import { Platform, NavParams,
+import { Component, NgZone, ViewChild } from '@angular/core';
+import { Platform, NavParams, Content,
   NavController, ViewController, ModalController, LoadingController, ToastController, AlertController, ActionSheetController } from 'ionic-angular';
 import { StatusBar } from 'ionic-native';
 
@@ -35,6 +35,9 @@ export class HomePage extends BasePage {
     public actionController:ActionSheetController) {
       super(zone, platform, logger, navParams, navController, viewController, modalController, toastController, alertController, loadingController, actionController);
   }
+
+  @ViewChild(Content)
+  content: Content;
 
   ionViewDidLoad() {
     super.ionViewDidLoad();
