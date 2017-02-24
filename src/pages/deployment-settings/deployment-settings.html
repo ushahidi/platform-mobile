@@ -1,6 +1,16 @@
 <ion-header>
   <ion-navbar color="dark">
+    <ion-buttons start>
+      <button #cancel ion-button icon-only (click)="onCancel($event)">
+        <ion-icon ios="md-close" md="md-close"></ion-icon>
+      </button>
+    </ion-buttons>
     <ion-title>Settings</ion-title>
+    <ion-buttons end>
+      <button #cancel ion-button text-only (click)="onDone($event)">
+        Done
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 <ion-content class="deployment-settings">
@@ -21,8 +31,5 @@
       <ion-label floating>Email</ion-label>
       <ion-input #email type="text" [(ngModel)]="deployment.email"></ion-input>
     </ion-item>
-  </div>
-  <div text-right padding>
-    <button #save ion-button text-uppercase block color="primary" (click)="saveSettings($event)">Save Settings</button>
   </div>
 </ion-content>

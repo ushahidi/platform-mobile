@@ -56,8 +56,13 @@ export class DeploymentSettingsPage extends BasePage {
       this.deployment = this.getParameter<Deployment>("deployment");
     }
 
-    saveSettings(event) {
-      this.logger.info(this, "saveSettings");
+    onCancel(event:any) {
+      this.logger.info(this, 'onCancel');
+      this.hideModal();
+    }
+
+    onDone(event:any) {
+      this.logger.info(this, 'onDone');
       let loading = this.showLoading("Saving...");
       let changes = {
         name: this.deployment.name,
@@ -69,7 +74,7 @@ export class DeploymentSettingsPage extends BasePage {
           this.database.saveDeployment(this.deployment).then(
             (saved:any) => {
               loading.dismiss();
-              this.showToast('Settings Saved');
+              this.hideModal();
             },
             (error:any) => {
               loading.dismiss();

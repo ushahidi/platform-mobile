@@ -199,7 +199,7 @@ export class DeploymentDetailsPage extends BasePage {
 
     showSettings(event:any) {
       this.logger.info(this, "showSettings");
-      this.showPage(DeploymentSettingsPage,
+      this.showModal(DeploymentSettingsPage,
         { deployment: this.deployment });
     }
 
