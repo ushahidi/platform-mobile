@@ -8,7 +8,7 @@
     <ion-title>Add Deployment</ion-title>
   </ion-navbar>
 </ion-header>
-<ion-content class="page-deployment-add">
+<ion-content class="deployment-add-page">
   <ion-searchbar #searchbar color="light" type="search" debounce="500" placeholder="Find deployment by name"
                  autocomplete="false" autocorrect="false" spellcheck="false" (ionInput)="onSearch($event)"></ion-searchbar>
   <div class="loading" text-center *ngIf="deployments.length == 0 && loading == true">

@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 
+import { Table } from '../decorators/table';
+import { Column } from '../decorators/column';
+
 import { Model, TEXT, INTEGER, PRIMARY_KEY } from '../models/model';
 import { Image } from '../models/image';
 import { Attribute } from '../models/attribute';
-
-import { Table } from '../decorators/table';
-import { Column } from '../decorators/column';
 
 @Injectable()
 @Table("values_")

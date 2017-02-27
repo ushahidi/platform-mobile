@@ -3,20 +3,20 @@ import { Platform, NavParams, Events, Content,
   NavController, ViewController, LoadingController, ToastController, AlertController, ModalController, ActionSheetController } from 'ionic-angular';
 import { LatLngBounds, MapsAPILoader } from 'angular2-google-maps/core';
 
-import { BasePage } from '../../pages/base-page/base-page';
-import { ResponseAddPage } from '../response-add/response-add';
-import { ResponseDetailsPage } from '../response-details/response-details';
-import { ResponseSearchPage } from '../response-search/response-search';
-
-import { ApiService } from '../../providers/api-service';
-import { LoggerService } from '../../providers/logger-service';
-import { DatabaseService } from '../../providers/database-service';
-
 import { Deployment } from '../../models/deployment';
 import { Post } from '../../models/post';
 import { Form } from '../../models/form';
 import { Filter } from '../../models/filter';
 import { Collection } from '../../models/collection';
+
+import { ApiService } from '../../providers/api-service';
+import { LoggerService } from '../../providers/logger-service';
+import { DatabaseService } from '../../providers/database-service';
+
+import { BasePage } from '../../pages/base-page/base-page';
+import { ResponseAddPage } from '../response-add/response-add';
+import { ResponseDetailsPage } from '../response-details/response-details';
+import { ResponseSearchPage } from '../response-search/response-search';
 
 declare var google: any;
 
@@ -41,7 +41,7 @@ export class ResponseListPage extends BasePage {
 
   @ViewChild(Content)
   content: Content;
-  
+
   constructor(
     public mapsAPILoader:MapsAPILoader,
     public api:ApiService,

@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 
+import { Table } from '../decorators/table';
+import { Column } from '../decorators/column';
+
 import { Model, TEXT, INTEGER, BOOLEAN, PRIMARY_KEY } from '../models/model';
+
 import { User } from '../models/user';
 import { Form } from '../models/form';
 import { Post } from '../models/post';
 import { Collection } from '../models/collection';
-
-import { Table } from '../decorators/table';
-import { Column } from '../decorators/column';
 
 @Injectable()
 @Table("deployments")
@@ -86,5 +87,29 @@ export class Deployment extends Model {
   public posts: Post[] = [];
 
   public collections: Collection[] = [];
+
+  public hasUsername():boolean {
+    return this.username != null && this.username.length > 0;
+  }
+
+  public hasPassword():boolean {
+    return this.password != null && this.password.length > 0;
+  }
+
+  public hasAccessToken():boolean {
+    return this.access_token != null && this.access_token.length > 0;
+  }
+
+  public canRead():boolean {
+    return this.can_read != null && this.can_read == true;
+  }
+
+  public canUpdate():boolean {
+    return this.can_update != null && this.can_update == true;
+  }
+
+  public canDelete():boolean {
+    return this.can_delete != null && this.can_delete == true;
+  }
 
 }

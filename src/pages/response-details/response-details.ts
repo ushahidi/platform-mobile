@@ -2,18 +2,18 @@ import { Component, NgZone, ViewChild } from '@angular/core';
 import { Platform, NavParams, Events, Content,
   NavController, ViewController, LoadingController, ToastController, AlertController, ModalController, ActionSheetController  } from 'ionic-angular';
 
-import { BasePage } from '../../pages/base-page/base-page';
-import { ResponseAddPage } from '../../pages/response-add/response-add';
-
-import { ApiService } from '../../providers/api-service';
-import { LoggerService } from '../../providers/logger-service';
-import { DatabaseService } from '../../providers/database-service';
-
 import { Deployment } from '../../models/deployment';
 import { Post } from '../../models/post';
 import { Form } from '../../models/form';
 import { Value } from '../../models/value';
 import { Collection } from '../../models/collection';
+  
+import { ApiService } from '../../providers/api-service';
+import { LoggerService } from '../../providers/logger-service';
+import { DatabaseService } from '../../providers/database-service';
+
+import { BasePage } from '../../pages/base-page/base-page';
+import { ResponseAddPage } from '../../pages/response-add/response-add';
 
 import { PLACEHOLDER_USER, PLACEHOLDER_NAME } from '../../helpers/constants';
 

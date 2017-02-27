@@ -2,8 +2,6 @@ import { Component, ViewChild, NgZone } from '@angular/core';
 import { Platform, NavParams, Searchbar, Content,
   NavController, ViewController, LoadingController, ToastController, AlertController, ModalController, ActionSheetController } from 'ionic-angular';
 
-import { BasePage } from '../../pages/base-page/base-page';
-
 import { Deployment } from '../../models/deployment';
 import { Filter } from '../../models/filter';
 import { Form } from '../../models/form';
@@ -11,6 +9,8 @@ import { Form } from '../../models/form';
 import { ApiService } from '../../providers/api-service';
 import { LoggerService } from '../../providers/logger-service';
 import { DatabaseService } from '../../providers/database-service';
+
+import { BasePage } from '../../pages/base-page/base-page';
 
 @Component({
   selector: 'response-search-page',
@@ -24,7 +24,7 @@ export class ResponseSearchPage extends BasePage {
 
   @ViewChild(Content)
   content: Content;
-  
+
   @ViewChild('searchbar')
   searchbar: Searchbar;
 

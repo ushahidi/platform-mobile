@@ -2,13 +2,13 @@ import { Component, NgZone, ViewChild } from '@angular/core';
 import { Platform, NavParams, TextInput, Content,
   NavController, ViewController, LoadingController, ToastController, AlertController, ModalController, ActionSheetController } from 'ionic-angular';
 
-import { BasePage } from '../../pages/base-page/base-page';
+import { Deployment } from '../../models/deployment';
 
 import { ApiService } from '../../providers/api-service';
 import { LoggerService } from '../../providers/logger-service';
 import { DatabaseService } from '../../providers/database-service';
 
-import { Deployment } from '../../models/deployment';
+import { BasePage } from '../../pages/base-page/base-page';
 
 @Component({
   selector: 'deployment-settings-page',

@@ -2,16 +2,6 @@ import { Component, ViewChild, NgZone } from '@angular/core';
 import { Events, Nav, Platform, ModalController, LoadingController, ToastController, AlertController, MenuController } from 'ionic-angular';
 import { StatusBar, Splashscreen } from 'ionic-native';
 
-import { HomePage } from '../pages/home/home';
-
-import { ApiService } from '../providers/api-service';
-import { LoggerService } from '../providers/logger-service';
-import { DatabaseService } from '../providers/database-service';
-
-import { DeploymentAddPage } from '../pages/deployment-add/deployment-add';
-import { DeploymentLoginPage } from '../pages/deployment-login/deployment-login';
-import { DeploymentDetailsPage } from '../pages/deployment-details/deployment-details';
-
 import { Deployment } from '../models/deployment';
 import { User } from '../models/user';
 import { Form } from '../models/form';
@@ -22,22 +12,27 @@ import { Image } from '../models/image';
 import { Filter } from '../models/filter';
 import { Collection } from '../models/collection';
 
+import { ApiService } from '../providers/api-service';
+import { LoggerService } from '../providers/logger-service';
+import { DatabaseService } from '../providers/database-service';
+
+import { HomePage } from '../pages/home/home';
+import { DeploymentAddPage } from '../pages/deployment-add/deployment-add';
+import { DeploymentDetailsPage } from '../pages/deployment-details/deployment-details';
+
 @Component({
   templateUrl: 'app.html',
-  entryComponents:[
-    HomePage,
-    DeploymentAddPage,
-    DeploymentLoginPage,
-    DeploymentDetailsPage ]
+  entryComponents:[ HomePage, DeploymentAddPage, DeploymentDetailsPage ]
 })
 export class MyApp {
 
-  @ViewChild(Nav)
-  nav: Nav;
   zone: NgZone = null;
   rootPage: any = null;
   deployment : Deployment = null;
   deployments: Deployment[] = null;
+
+  @ViewChild(Nav)
+  nav: Nav;
 
   constructor(
     zone: NgZone,
@@ -65,49 +60,58 @@ export class MyApp {
         new Image(),
         new Collection(),
         new Filter()];
-      this.database.createTables(tables).then(results => {
-        this.logger.info(this, "Database Ready");
-        this.database.getDeployments().then(results => {
-          this.logger.info(this, "Deployments", results);
-          this.deployments = <Deployment[]>results;
-          if (this.deployments && this.deployments.length > 0) {
-            let deployment = this.deployments[0];
-            this.logger.info(this, "Deployment", deployment);
-            this.showDeployment(deployment);
-          }
-          else {
-            this.rootPage = HomePage;
-          }
-          Splashscreen.hide();
+      this.database.createTables(tables).then(
+        (created:any) => {
+          this.logger.info(this, "Database Ready");
+          this.database.getDeployments().then(
+            (deployments:Deployment[]) => {
+              this.logger.info(this, "Deployments", deployments);
+              if (deployments && deployments.length > 0) {
+                this.deployments = deployments;
+                let deployment = this.deployments[0];
+                this.logger.info(this, "Deployment", deployment);
+                this.loginDeployment(deployment);
+                //TODO hide Splashscreen after login completed
+                Splashscreen.hide();
+              }
+              else {
+                this.deployments = [];
+                this.rootPage = HomePage;
+                Splashscreen.hide();
+              }
+            },
+            (error:any) => {
+              this.logger.error(this, "Deployments Error", error);
+              this.rootPage = HomePage;
+              Splashscreen.hide();
+            });
         },
-        (error) => {
-          this.logger.error(this, "Deployments Error", error);
+        (error:any) => {
+          this.logger.error(this, "Database Error", error);
           this.rootPage = HomePage;
           Splashscreen.hide();
         });
-      },
-      (error) => {
-        this.logger.error(this, "Database Error", error);
-        this.rootPage = HomePage;
-        Splashscreen.hide();
-      });
     });
   }
 
   loadDeployments(event:any=null) {
     this.logger.info(this, "loadDeployments");
-    this.database.getDeployments().then(results => {
-      this.logger.info(this, "loadDeployments", results);
-      this.zone.run(() => {
-        this.deployments = <Deployment[]>results;
-        if (this.deployments.length > 0 && this.deployment == null) {
-          this.deployment = this.deployments[0];
-        }
-        if (event != null) {
-          event.complete();
-        }
+    this.database.getDeployments().then(
+      (deployments:Deployment[]) => {
+        this.logger.info(this, "loadDeployments", deployments);
+        this.zone.run(() => {
+          this.deployments = deployments;
+          if (this.deployments.length > 0 && this.deployment == null) {
+            this.deployment = this.deployments[0];
+          }
+          if (event != null) {
+            event.complete();
+          }
+        });
+      },
+      (error:any) => {
+        this.logger.error(this, "loadDeployments", error);
       });
-    });
   }
 
   addDeployment(event:any) {
@@ -116,64 +120,73 @@ export class MyApp {
       DeploymentAddPage,
       { });
     modal.present();
-    modal.onDidDismiss(data => {
+    modal.onDidDismiss((data:any) => {
       StatusBar.styleDefault();
       StatusBar.backgroundColorByHexString('#f9f9f8');
-      if (data) {
-        this.logger.info(this, data);
-        this.showDeployment(data['deployment']);
+      if (data && data.deployment) {
+        this.logger.info(this, "addDeployment", data);
+        let deployment:Deployment = data.deployment;
+        this.loginDeployment(deployment);
       }
     });
   }
 
-  showDeployment(deployment:Deployment, refresh:boolean=false) {
-    this.logger.info(this, "showDeployment", deployment);
+  loginDeployment(deployment:Deployment) {
+    this.logger.info(this, "loginDeployment", deployment);
     this.deployment = deployment;
-    // if (refresh && deployment.refresh_token) {
-    //   this.logger.info(this, "showDeployment", "Refresh Token", deployment.refresh_token);
-    //   this.api.authRefresh(deployment, deployment.refresh_token).then(tokens => {
-    //     this.logger.info(this, "showDeployment", "Tokens", tokens);
-    //     if (tokens && tokens['access_token']) {
-    //       this.deployment.copyInto(tokens);
-    //       this.database.saveDeployment(this.deployment).then(saved => {
-    //         this.nav.setRoot(
-    //           DeploymentDetailsPage,
-    //           { deployment: deployment });
-    //       });
-    //     }
-    //     else {
-    //       this.nav.setRoot(
-    //         DeploymentLoginPage,
-    //         { deployment: deployment });
-    //     }
-    //   });
-    // }
-    // else
-    if (deployment.username && deployment.password) {
-      this.logger.info(this, "showDeployment", "Username", deployment.username);
-      this.api.authLogin(deployment, deployment.username, deployment.password).then(tokens => {
-        this.logger.info(this, "showDeployment", "Tokens", tokens);
-        if (tokens && tokens['access_token']) {
-          this.deployment.copyInto(tokens);
-          this.database.saveDeployment(this.deployment).then(saved => {
-            this.nav.setRoot(
-              DeploymentDetailsPage,
-              { deployment: deployment });
-          });
-        }
-        else {
-          this.nav.setRoot(
-            DeploymentLoginPage,
-            { deployment: deployment });
-        }
-      });
+    if (deployment.hasUsername() && deployment.hasPassword()) {
+      this.logger.info(this, "loginDeployment", "Username", deployment.username);
+      this.api.authLogin(deployment, deployment.username, deployment.password).then(
+        (tokens:any) => {
+          this.logger.info(this, "loginDeployment", "Username", deployment.username, "Tokens", tokens);
+          if (tokens) {
+            this.showDeployment(deployment, tokens);
+          }
+          else {
+            this.api.clientLogin(deployment).then(
+              (tokens:any) => {
+                this.logger.info(this, "loginDeployment", "Client", tokens);
+                this.showDeployment(deployment, tokens);
+              },
+              (error:any) => {
+                this.logger.error(this, "loginDeployment", "Client", error);
+              });
+          }
+        },
+        (error:any) => {
+          this.logger.error(this, "loginDeployment", "Username", error);
+          this.api.clientLogin(deployment).then(
+            (tokens:any) => {
+              this.logger.info(this, "loginDeployment", "Client", tokens);
+              this.showDeployment(deployment, tokens);
+            },
+            (error:any) => {
+              this.logger.error(this, "loginDeployment", "Client", error);
+            });
+        });
     }
     else {
-      this.logger.info(this, "showDeployment", "Refresh Token NONE");
-      this.nav.setRoot(
-        DeploymentLoginPage,
-        { deployment: deployment });
+      this.logger.info(this, "loginDeployment", "Client");
+      this.api.clientLogin(deployment).then(
+        (tokens:any) => {
+          this.logger.info(this, "loginDeployment", "Client", tokens);
+          this.showDeployment(deployment, tokens);
+        },
+        (error:any) => {
+          this.logger.error(this, "loginDeployment", "Client", error);
+        });
     }
+  }
+
+  showDeployment(deployment:Deployment, tokens:any) {
+    this.logger.info(this, "showDeployment", tokens, deployment);
+    deployment.copyInto(tokens);
+    this.database.saveDeployment(deployment).then(
+      (saved) => {
+        this.nav.setRoot(
+          DeploymentDetailsPage,
+          { deployment: deployment });
+      });
   }
 
   removeDeployment(event:any, deployment:Deployment) {
@@ -200,7 +213,7 @@ export class MyApp {
             }
             else if (this.deployment.id == deployment.id){
               this.deployment = this.deployments[0];
-              this.showDeployment(this.deployment);
+              this.loginDeployment(this.deployment);
             }
           });
         });

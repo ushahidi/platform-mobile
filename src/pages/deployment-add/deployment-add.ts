@@ -3,7 +3,7 @@ import { Platform, NavParams, Searchbar, Content,
   NavController, ViewController, ModalController, LoadingController, ToastController, AlertController, ActionSheetController } from 'ionic-angular';
 import { StatusBar } from 'ionic-native';
 
-import { DeploymentLoginPage } from '../deployment-login/deployment-login';
+import { Deployment } from '../../models/deployment';
 
 import { ApiService } from '../../providers/api-service';
 import { LoggerService } from '../../providers/logger-service';
@@ -11,13 +11,10 @@ import { DatabaseService } from '../../providers/database-service';
 
 import { BasePage } from '../../pages/base-page/base-page';
 
-import { Deployment } from '../../models/deployment';
-
 @Component({
   selector: 'deployment-add-page',
   templateUrl: 'deployment-add.html',
-  providers: [ ApiService, DatabaseService, LoggerService ],
-  entryComponents:[ DeploymentLoginPage ]
+  providers: [ ApiService, DatabaseService, LoggerService ]
 })
 export class DeploymentAddPage extends BasePage {
 
@@ -26,7 +23,7 @@ export class DeploymentAddPage extends BasePage {
 
   @ViewChild(Content)
   content: Content;
-  
+
   @ViewChild('searchbar')
   searchbar: Searchbar;
 
@@ -47,10 +44,6 @@ export class DeploymentAddPage extends BasePage {
       super(zone, platform, logger, navParams, navController, viewController, modalController, toastController, alertController, loadingController, actionController);
   }
 
-  ionViewDidLoad() {
-    super.ionViewDidLoad();
-  }
-
   ionViewWillEnter() {
     super.ionViewWillEnter();
     this.platform.ready().then(() => {
@@ -66,7 +59,7 @@ export class DeploymentAddPage extends BasePage {
 
   onSearch(event:any) {
     this.logger.info(this, "onSearch", event.target.value);
-    let search = event.target.value;
+    let search:string = event.target.value;
     if (search && search.length > 0) {
       this.loading = true;
       this.api.searchDeployments(search).then(
@@ -101,7 +94,9 @@ export class DeploymentAddPage extends BasePage {
               loading.dismiss();
               if (id) {
                 deployment.id = id;
-                this.hideModal({ deployment : deployment });
+                this.hideModal({
+                  deployment : deployment
+                });
               }
               else {
                 this.showAlert('Problem Adding Deployment', 'There was a problem adding your deployment.');

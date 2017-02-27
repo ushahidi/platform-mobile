@@ -24,7 +24,7 @@
     <div class="image" *ngIf="deployment.image">
       <img class="lazy" padding [src]="placeholder" [lazyLoad]="deployment.image" (error)="this.display='none'" offset="1000">
     </div>
-    <p padding-left padding-right *ngIf="deployment.description" [innerHTML]="deployment.description"></p>
+    <p padding-left padding-right [innerHTML]="deployment.description" *ngIf="deployment.description"></p>
     <div padding-top padding-left padding-right padding-bottom margin-bottom>
       <button ion-button block text-uppercase color="primary" (click)="addResponse($event)">Submit A Survey Response</button>
     </div>
@@ -35,10 +35,13 @@
       <!-- <ion-item detail-push (click)="showCollections($event)">
         Collections
       </ion-item> -->
-      <ion-item detail-push (click)="showSettings($event)">
+      <ion-item detail-push *ngIf="deployment.hasUsername() && deployment.canUpdate()" (click)="showSettings($event)">
         Settings
       </ion-item>
-      <ion-item detail-push (click)="onLogout($event)">
+      <ion-item detail-push *ngIf="deployment.hasUsername() == false" (click)="userLogin($event)">
+        Login
+      </ion-item>
+      <ion-item detail-push *ngIf="deployment.hasUsername() == true" (click)="userLogout($event)">
         Logout
       </ion-item>
     </ion-list>

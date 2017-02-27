@@ -1,16 +1,14 @@
 <ion-header>
   <ion-navbar color="dark">
-    <ion-buttons>
-      <button ion-button icon-only menuToggle>
-        <ion-icon name="menu"></ion-icon>
-      </button>
-    </ion-buttons>
-    <ion-title></ion-title>
+    <ion-title>Log in</ion-title>
   </ion-navbar>
 </ion-header>
-<ion-content class="page-deployment-login">
+<ion-content class="deployment-login-page">
   <div class="header" *ngIf="deployment && deployment.name">
     <h3 text-left padding-left padding-top padding-bottom>{{deployment.name}}</h3>
+  </div>
+  <div class="image" *ngIf="deployment && deployment.image">
+    <img class="lazy" padding [src]="placeholder" [lazyLoad]="deployment.image" (error)="this.display='none'" offset="1000">
   </div>
   <div margin-bottom>
     <ion-item margin-bottom>

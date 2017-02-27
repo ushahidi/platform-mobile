@@ -35,15 +35,15 @@ export class ApiService extends HttpService {
     super(http, logger);
   }
 
-  searchDeployments(search:string) : Promise<Deployment[]> {
+  searchDeployments(search:string):Promise<Deployment[]> {
     return new Promise((resolve, reject) => {
       let url = "https://api.ushahidi.io/deployments";
       let params = {
         q: search
       };
       this.httpGet(url, null, params).then(
-        (results) => {
-          let items = <any[]>results;
+        (data) => {
+          let items = <any[]>data;
           let deployments = [];
           for (let item of items) {
             let deployment:Deployment = new Deployment();
@@ -61,7 +61,28 @@ export class ApiService extends HttpService {
     });
   }
 
-  authLogin(deployment:Deployment, username:string, password:string) {
+  clientLogin(deployment:Deployment):Promise<any> {
+    return new Promise((resolve, reject) => {
+      let api = "/oauth/token";
+      let url = deployment.url + api;
+      let params = {
+        grant_type: "client_credentials",
+        scope: this.scope,
+        client_id: this.clientId,
+        client_secret: this.clientSecret};
+      this.httpPost(url, null, params).then(
+        (data:any) => {
+          let tokens = {
+            access_token: data.access_token };
+          resolve(tokens);
+        },
+        (error) => {
+          reject(error);
+        })
+    });
+  }
+
+  authLogin(deployment:Deployment, username:string, password:string):Promise<any> {
     return new Promise((resolve, reject) => {
       let api = "/oauth/token";
       let url = deployment.url + api;
@@ -73,12 +94,12 @@ export class ApiService extends HttpService {
         username: username,
         password: password};
       this.httpPost(url, null, params).then(
-        (json) => {
+        (data:any) => {
           let tokens = {
             username: username,
             password: password,
-            access_token: json['access_token'],
-            refresh_token: json['refresh_token'] }
+            access_token: data.access_token,
+            refresh_token: data.refresh_token }
           resolve(tokens);
         },
         (error) => {
@@ -87,7 +108,7 @@ export class ApiService extends HttpService {
     });
   }
 
-  authRefresh(deployment:Deployment, refreshToken:string) {
+  authRefresh(deployment:Deployment, refreshToken:string):Promise<any> {
     return new Promise((resolve, reject) => {
       let api = "/oauth/token";
       let url = deployment.url + api;
@@ -98,13 +119,13 @@ export class ApiService extends HttpService {
         client_secret: this.clientSecret,
         refresh_token: refreshToken};
       this.httpPost(url, null, params).then(
-        (json) => {
+        (data:any) => {
           let tokens = {
-            access_token: json['access_token'],
-            refresh_token: json['refresh_token'] }
+            access_token: data.access_token,
+            refresh_token: data.refresh_token }
           resolve(tokens);
         },
-        (error) => {
+        (error:any) => {
           reject(error);
         })
     });

@@ -12,8 +12,8 @@ import { BasePage } from '../pages/base-page/base-page';
 import { HomePage } from '../pages/home/home';
 
 import { DeploymentAddPage } from '../pages/deployment-add/deployment-add';
-import { DeploymentLoginPage } from '../pages/deployment-login/deployment-login';
 import { DeploymentDetailsPage } from '../pages/deployment-details/deployment-details';
+import { DeploymentLoginPage } from '../pages/deployment-login/deployment-login';
 import { DeploymentSettingsPage } from '../pages/deployment-settings/deployment-settings';
 
 import { ResponseListPage } from '../pages/response-list/response-list';
@@ -60,9 +60,9 @@ export function provideStorage() {
     BasePage,
     HomePage,
     DeploymentAddPage,
-    DeploymentLoginPage,
     DeploymentDetailsPage,
     DeploymentSettingsPage,
+    DeploymentLoginPage,
     ResponseListPage,
     ResponseDetailsPage,
     ResponseAddPage,

@@ -3,20 +3,18 @@ import { Platform, TextInput, Button, NavParams,
   NavController, ViewController, ModalController, LoadingController, ToastController, AlertController, ActionSheetController } from 'ionic-angular';
 import { StatusBar } from 'ionic-native';
 
-import { BasePage } from '../../pages/base-page/base-page';
-import { DeploymentDetailsPage } from '../../pages/deployment-details/deployment-details';
+import { Deployment } from '../../models/deployment';
 
 import { ApiService } from '../../providers/api-service';
 import { LoggerService } from '../../providers/logger-service';
 import { DatabaseService } from '../../providers/database-service';
 
-import { Deployment } from '../../models/deployment';
+import { BasePage } from '../../pages/base-page/base-page';
 
 @Component({
   selector: 'deployment-login-page',
   templateUrl: 'deployment-login.html',
   providers: [ ApiService, DatabaseService, LoggerService ],
-  entryComponents:[ DeploymentDetailsPage ]
 })
 export class DeploymentLoginPage extends BasePage {
 
@@ -48,10 +46,6 @@ export class DeploymentLoginPage extends BasePage {
       super(zone, platform, logger, navParams, navController, viewController, modalController, toastController, alertController, loadingController, actionController);
     }
 
-    ionViewDidLoad() {
-      super.ionViewDidLoad();
-    }
-
     ionViewWillEnter() {
       super.ionViewWillEnter();
       this.platform.ready().then(() => {
@@ -73,11 +67,6 @@ export class DeploymentLoginPage extends BasePage {
         //TODO remove this later, hardcoded to speed up development
         this.password.value = "P4NpCNUqLTCnvJAQBBMX";
       }
-    }
-
-    onCancel(event:any) {
-      this.logger.info(this, "onCancel");
-      this.hideModal();
     }
 
     onLogin(event:any) {
@@ -115,14 +104,9 @@ export class DeploymentLoginPage extends BasePage {
     }
 
     showDeployment(deployment:Deployment) {
-      this.showRootPage(DeploymentDetailsPage,
-        { deployment: deployment },
-        { animate: true,
-          direction: 'forward' });
-    }
-
-    showMenu(event:any) {
-      this.logger.info(this, "showMenu");
+      this.closePage({
+        deployment:deployment
+      });
     }
 
 }

@@ -3,17 +3,17 @@ import { Platform, NavParams, Events, Content,
   NavController, ViewController, LoadingController, ToastController, AlertController, ModalController, ActionSheetController  } from 'ionic-angular';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 
+import { Deployment } from '../../models/deployment';
+import { Post } from '../../models/post';
+import { Form } from '../../models/form';
+import { Value } from '../../models/value';
+
 import { ApiService } from '../../providers/api-service';
 import { LoggerService } from '../../providers/logger-service';
 import { DatabaseService } from '../../providers/database-service';
 
 import { BasePage } from '../../pages/base-page/base-page';
 import { ResponseMapPage } from '../../pages/response-map/response-map';
-
-import { Deployment } from '../../models/deployment';
-import { Post } from '../../models/post';
-import { Form } from '../../models/form';
-import { Value } from '../../models/value';
 
 @Component({
   selector: 'esponse-add-page',
@@ -33,7 +33,7 @@ export class ResponseAddPage extends BasePage {
 
   @ViewChild(Content)
   content: Content;
-  
+
   constructor(
     public api:ApiService,
     public logger:LoggerService,

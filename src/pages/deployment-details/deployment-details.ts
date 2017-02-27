@@ -3,29 +3,28 @@ import { Platform, NavParams, Content,
   NavController, ViewController, LoadingController, ToastController, AlertController, ModalController, ActionSheetController } from 'ionic-angular';
 import { StatusBar } from 'ionic-native';
 
-import { BasePage } from '../../pages/base-page/base-page';
-import { DeploymentLoginPage } from '../../pages/deployment-login/deployment-login';
-import { DeploymentSettingsPage } from '../../pages/deployment-settings/deployment-settings';
-
-import { ResponseListPage } from '../response-list/response-list';
-import { ResponseAddPage } from '../response-add/response-add';
-
-import { ApiService } from '../../providers/api-service';
-import { LoggerService } from '../../providers/logger-service';
-import { DatabaseService } from '../../providers/database-service';
+import { PLACEHOLDER_BLANK } from '../../helpers/constants';
 
 import { Deployment } from '../../models/deployment';
 import { User } from '../../models/user';
 import { Form } from '../../models/form';
 import { Collection } from '../../models/collection';
 
-import { PLACEHOLDER_BLANK } from '../../helpers/constants';
+import { ApiService } from '../../providers/api-service';
+import { LoggerService } from '../../providers/logger-service';
+import { DatabaseService } from '../../providers/database-service';
+
+import { BasePage } from '../../pages/base-page/base-page';
+import { DeploymentLoginPage } from '../../pages/deployment-login/deployment-login';
+import { DeploymentSettingsPage } from '../../pages/deployment-settings/deployment-settings';
+import { ResponseAddPage } from '../../pages/response-add/response-add';
+import { ResponseListPage } from '../../pages/response-list/response-list';
 
 @Component({
   selector: 'deployment-details-page',
   templateUrl: 'deployment-details.html',
   providers: [ ApiService, DatabaseService, LoggerService ],
-  entryComponents:[ ResponseListPage, ResponseAddPage, DeploymentSettingsPage ]
+  entryComponents:[ DeploymentLoginPage, DeploymentSettingsPage, ResponseAddPage, ResponseListPage ]
 })
 export class DeploymentDetailsPage extends BasePage {
 
@@ -51,10 +50,6 @@ export class DeploymentDetailsPage extends BasePage {
     public loadingController:LoadingController,
     public actionController:ActionSheetController) {
       super(zone, platform, logger, navParams, navController, viewController, modalController, toastController, alertController, loadingController, actionController);
-    }
-
-    ionViewDidLoad() {
-      super.ionViewDidLoad();
     }
 
     ionViewWillEnter() {
@@ -91,19 +86,20 @@ export class DeploymentDetailsPage extends BasePage {
         return new Promise((resolve, reject) => {
           this.api.getDeployment(this.deployment, cache, this.offline).then(
             (deployment:Deployment) => {
+              this.logger.info(this, "loadDeployment", "Loaded", deployment);
               this.deployment.copyInto(deployment);
               this.database.saveModel(this.deployment).then(
                 (saved:any) => {
-                  this.logger.info(this, "loadDeployment", "API", saved);
+                  this.logger.info(this, "loadDeployment", "Saved", saved);
                   resolve();
                 },
                 (error:any) => {
-                  this.logger.error(this, "loadDeployment", "API", error);
+                  this.logger.error(this, "loadDeployment", "Failed", error);
                   reject(error);
               });
             },
             (error:any) => {
-              this.logger.error(this, "loadDeployment", "API", error);
+              this.logger.error(this, "loadDeployment", "Failed", error);
               reject(error);
           });
         });
@@ -116,11 +112,19 @@ export class DeploymentDetailsPage extends BasePage {
         this.logger.info(this, "loadUser", "Cached", this.user);
         return Promise.resolve();
       }
+      else if (this.deployment.hasUsername() == false) {
+        this.logger.info(this, "loadUser", "No Username");
+        return Promise.resolve();
+      }
+      else if (this.deployment.hasPassword() == false) {
+        this.logger.info(this, "loadUser", "No Password");
+        return Promise.resolve();
+      }
       else {
         return new Promise((resolve, reject) => {
           this.api.getUser(this.deployment).then(
             (user:User) => {
-              this.logger.info(this, "loadUser", "API", user);
+              this.logger.info(this, "loadUser", "Loaded", user);
               this.user = user;
               this.deployment.user_id = user.id;
               let saves = [
@@ -155,12 +159,12 @@ export class DeploymentDetailsPage extends BasePage {
         return new Promise((resolve, reject) => {
           this.api.getFormsWithAttributes(this.deployment, cache, this.offline).then(
             (forms:Form[]) => {
-              this.logger.info(this, "loadForms", "API", forms);
+              this.logger.info(this, "loadForms", "Loaded", forms);
               this.deployment.forms = forms;
               resolve();
             },
             (error) => {
-              this.logger.error(this, "loadForms", "API", error);
+              this.logger.error(this, "loadForms", "Failed", error);
               reject(error);
             });
         });
@@ -177,12 +181,12 @@ export class DeploymentDetailsPage extends BasePage {
         return new Promise((resolve, reject) => {
           this.api.getCollections(this.deployment, cache, this.offline).then(
             (collections:Collection[]) => {
-              this.logger.info(this, "loadCollections", "API", collections);
+              this.logger.info(this, "loadCollections", "Loaded", collections);
               this.deployment.collections = collections;
               resolve();
             },
             (error:any) => {
-              this.logger.error(this, "loadCollections", "API", error);
+              this.logger.error(this, "loadCollections", "Failed", error);
               reject(error);
             });
         });
@@ -252,15 +256,21 @@ export class DeploymentDetailsPage extends BasePage {
       });
     }
 
-    onLogout(event:any) {
-      this.logger.info(this, "onLogout");
+    userLogin(event:any) {
+      this.logger.info(this, "userLogin");
+      this.showPage(DeploymentLoginPage,
+        { deployment: this.deployment });
+    }
+
+    userLogout(event:any) {
+      this.logger.info(this, "userLogout");
       let loading = this.showLoading("Logging out...");
       this.deployment.username = "";
       this.deployment.password = "";
       this.deployment.access_token = "";
       this.deployment.refresh_token = "";
       this.database.saveDeployment(this.deployment).then(
-        (results) => {
+        (saved) => {
           loading.dismiss();
           this.showToast('Logout Successful');
           this.showRootPage(DeploymentLoginPage,
