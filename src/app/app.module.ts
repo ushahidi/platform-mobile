@@ -49,7 +49,7 @@ import { ApiService } from '../providers/api-service';
 import { DatabaseService } from '../providers/database-service';
 import { VimeoService } from '../providers/vimeo-service';
 
-import { GOOGLE_API_KEY } from '../helpers/constants';
+import { GOOGLE_API_KEY } from '../constants/secrets';
 
 export function provideStorage() {
   return new Storage(['sqlite', 'websql', 'indexeddb'], { name: 'ushahidi' });

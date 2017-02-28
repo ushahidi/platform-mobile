@@ -15,7 +15,7 @@ import { LoggerService } from '../providers/logger-service';
 import { DatabaseService } from '../providers/database-service';
 import { VimeoService } from '../providers/vimeo-service';
 
-import { USHAHIDI_CLIENT_ID, USHAHIDI_CLIENT_SECRET } from '../helpers/constants';
+import { USHAHIDI_CLIENT_ID, USHAHIDI_CLIENT_SECRET } from '../constants/secrets';
 
 @Injectable()
 export class ApiService extends HttpService {

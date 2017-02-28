@@ -7,7 +7,7 @@ import { Attribute } from '../../models/attribute';
 
 import { LoggerService } from '../../providers/logger-service';
 
-import { GOOGLE_API_KEY } from '../../helpers/constants';
+import { GOOGLE_API_KEY } from '../../constants/secrets';
 
 @Component({
   selector: 'field-location',

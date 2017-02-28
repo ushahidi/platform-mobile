@@ -1,5 +1,6 @@
-#IONIC 
+#IONIC
 
+secrets.ts
 node_modules
 .tmp
 .sass-cache

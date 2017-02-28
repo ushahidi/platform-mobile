@@ -4,7 +4,7 @@ import { Http } from '@angular/http';
 import { HttpService } from '../providers/http-service';
 import { LoggerService } from '../providers/logger-service';
 
-import { VIMEO_ACCESS_TOKEN } from '../helpers/constants';
+import { VIMEO_ACCESS_TOKEN } from '../constants/secrets';
 
 declare var cordova: any;
 

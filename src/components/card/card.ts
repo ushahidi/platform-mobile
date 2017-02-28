@@ -2,7 +2,7 @@ import { Component, Output, EventEmitter } from '@angular/core';
 
 import { LoggerService } from '../../providers/logger-service';
 
-import { PLACEHOLDER_USER, PLACEHOLDER_PHOTO, PLACEHOLDER_NAME } from '../../helpers/constants';
+import { PLACEHOLDER_USER, PLACEHOLDER_PHOTO, PLACEHOLDER_NAME } from '../../constants/placeholders';
 
 @Component({
   selector: 'post-card',

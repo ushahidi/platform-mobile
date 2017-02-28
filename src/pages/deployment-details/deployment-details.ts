@@ -3,7 +3,7 @@ import { Platform, NavParams, Content,
   NavController, ViewController, LoadingController, ToastController, AlertController, ModalController, ActionSheetController } from 'ionic-angular';
 import { StatusBar } from 'ionic-native';
 
-import { PLACEHOLDER_BLANK } from '../../helpers/constants';
+import { PLACEHOLDER_BLANK } from '../../constants/placeholders';
 
 import { Deployment } from '../../models/deployment';
 import { User } from '../../models/user';
