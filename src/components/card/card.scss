@@ -3,6 +3,35 @@
   ion-card-content {
     padding-top: 5px;
     padding-bottom: 5px;
+    &.title {
+      color: #333;
+      font-size: 15px;
+    }
+    &.description {
+      color: #888;
+      font-size: 14px;
+      margin-top: 0;
+      padding-top: 0;
+    }
+    &.image {
+      img {
+        transition: opacity 1s;
+        &.lazy {
+          opacity: 0;
+        }
+        &.ng2-lazyloaded {
+          opacity: 1;
+        }
+      }
+    }
+    &.fields {
+      p {
+        color: #888;
+        font-size: 13px;
+        font-weight: 500;
+        text-transform: uppercase;
+      }
+    }
   }
   ion-col {
     margin: 0;
@@ -78,36 +107,6 @@
           font-weight: bold;
         }
       }
-    }
-  }
-  .title {
-    color: #333;
-    font-size: 15px;
-    margin-top: 0;
-    margin-bottom: 0;
-  }
-  .description {
-    color: #888;
-    margin-top: 4px;
-    font-size: 14px;
-  }
-  .image {
-    img {
-      transition: opacity 1s;
-      &.lazy {
-        opacity: 0;
-      }
-      &.ng2-lazyloaded {
-        opacity: 1;
-      }
-    }
-  }
-  .fields {
-    p {
-      color: #888;
-      font-size: 13px;
-      font-weight: 500;
-      text-transform: uppercase;
     }
   }
 }

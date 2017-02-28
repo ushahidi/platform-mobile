@@ -69,11 +69,19 @@ export class DeploymentDetailsPage extends BasePage {
         this.loadUser(cache),
         this.loadForms(cache),
         this.loadCollections(cache)];
-      Promise.all(updates).then(done => {
-        if (event) {
-          event.complete();
-        }
-      });
+      Promise.all(updates).then(
+        (updated) => {
+          this.logger.info(this, "loadUpdates", "Finished");
+          if (event) {
+            event.complete();
+          }
+        },
+        (error) => {
+          this.logger.error(this, "loadUpdates", "Failed", error);
+          if (event) {
+            event.complete();
+          }
+        });
     }
 
     loadDeployment(cache:boolean=true):Promise<any> {

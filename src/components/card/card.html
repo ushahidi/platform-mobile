@@ -26,11 +26,13 @@
       </ion-col>
     </ion-row>
   </ion-card-content>
-  <ion-card-content *ngIf="post.title || post.description" tappable (click)="onCardSelected($event)">
-    <div *ngIf="post.title" class="title">{{post.title}}</div>
-    <div *ngIf="post.description" class="description">{{post.description}}</div>
+  <ion-card-content class="title" *ngIf="post.title" tappable (click)="onCardSelected($event)">
+    <div class="line-clamp-3">{{post.title}}</div>
   </ion-card-content>
-  <ion-card-content class="image" tappable *ngIf="post.image_url" (click)="onCardSelected($event)">
+  <ion-card-content class="description" *ngIf="post.description" tappable (click)="onCardSelected($event)">
+    <div class="line-clamp-5">{{post.description}}</div>
+  </ion-card-content>
+  <ion-card-content class="image" *ngIf="post.image_url" tappable (click)="onCardSelected($event)">
     <img class="lazy" [src]="photoPlaceholder" [lazyLoad]="post.image_url" offset="1000" (error)="this.display='none'">
   </ion-card-content>
   <ion-card-content class="fields" *ngIf="post.values && post.values.length > 0" tappable (click)="onCardSelected($event)">

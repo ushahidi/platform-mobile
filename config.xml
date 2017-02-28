@@ -3,7 +3,7 @@
   <name>Ushahidi</name>
   <description>Ushahidi Mobile</description>
   <author email="support@ushahidi.com" href="https://www.ushahidi.com/">Ushahidi Team</author>
-  <content src="http://localhost:3000" original-src="index.html"/>
+  <content src="index.html"/>
   <access origin="*"/>
   <allow-intent href="http://*/*"/>
   <allow-intent href="https://*/*"/>

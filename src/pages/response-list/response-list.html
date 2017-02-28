@@ -41,11 +41,13 @@
       <button ion-button block margin-top text-uppercase color="primary"
             (click)="addResponse($event)" *ngIf="posts && posts.length == 0">Submit A Survey Response</button>
     </div>
-    <div *ngIf="filtered && filtered.length > 0">
-      <post-card [post]="post" [index]="i"
-                 (cardSelected)="showResponse(post)" (menuSelected)="showOptions(post)"
-                 *ngFor="let post of filtered; let i = index"></post-card>
-    </div>
+    <ion-list *ngIf="filtered && filtered.length > 0">
+      <post-card [post]="post" (cardSelected)="showResponse(post)" (menuSelected)="showOptions(post)"
+                 *ngFor="let post of filtered"></post-card>
+    </ion-list>
+    <ion-infinite-scroll (ionInfinite)="loadMore($event)">
+      <ion-infinite-scroll-content></ion-infinite-scroll-content>
+    </ion-infinite-scroll>
   </div>
   <div class="map" *ngIf="view == 'map'">
     <sebm-google-map [fitBounds]="latLngBounds" [zoomControl]="zoomControl" [disableDefaultUI]="disableDefaultUI" [mapDraggable]="mapDraggable">

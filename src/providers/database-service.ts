@@ -109,7 +109,7 @@ export class DatabaseService {
 
   executeFirst(table:string, where:{}=null, order:{}=null) : Promise<any[]> {
     return new Promise((resolve, reject) => {
-      this.executeSelect(table, where, order).then(rows => {
+      this.executeSelect(table, where, order, 1, 0).then(rows => {
         let results = <any[]>rows;
         if (results && results.length > 0) {
           resolve(results[0]);
@@ -121,10 +121,10 @@ export class DatabaseService {
     });
   }
 
-  executeSelect(table:string, where:{}=null, order:{}=null) : Promise<any[]> {
+  executeSelect(table:string, where:{}=null, order:{}=null, limit:number=null, offset:number=null) : Promise<any[]> {
     return new Promise((resolve, reject) => {
       this.openDatabase().then((database:SQLite) => {
-        let statement = this.selectStatement(table, where, order);
+        let statement = this.selectStatement(table, where, order, limit, offset);
         let parameters = this.selectParameters(table, where, order);
         this.logger.info(this, "executeSelect", "Selecting", statement, parameters);
         database.executeSql(statement, parameters).then(
@@ -220,7 +220,7 @@ export class DatabaseService {
     });
   }
 
-  selectStatement(table:string, where:{}=null, order:{}=null) {
+  selectStatement(table:string, where:{}=null, order:{}=null, limit:number=null, offset:number=null) {
     let query = [`SELECT * FROM ${table}`];
     if (where != null && Object.keys(where).length > 0) {
       let clause = [];
@@ -235,6 +235,12 @@ export class DatabaseService {
         sort.push(`${column} ${order[column]}`);
       }
       query.push(`ORDER BY ${sort.join(', ')}`);
+    }
+    if (limit != null) {
+      query.push(`LIMIT ${limit}`);
+    }
+    if (offset != null) {
+      query.push(`OFFSET ${offset}`);
     }
     return query.join(" ");
   }
@@ -310,9 +316,9 @@ export class DatabaseService {
     return `DELETE FROM ${table} WHERE ${clause.join(' AND ')}`;
   }
 
-  getModels<M extends Model>(type:M, where:{}=null, order:{}=null) : Promise<M[]> {
+  getModels<M extends Model>(type:M, where:{}=null, order:{}=null, limit:number=null, offset:number=null) : Promise<M[]> {
     return new Promise((resolve, reject) => {
-      this.executeSelect(type.getTable(), where, order).then(
+      this.executeSelect(type.getTable(), where, order, limit, offset).then(
         (rows) => {
           let models = [];
           let columns = type.getColumns();
@@ -493,10 +499,10 @@ export class DatabaseService {
     return this.removeModel<User>(new User(), where);
   }
 
-  getPosts(deployment:Deployment) : Promise<Post[]> {
+  getPosts(deployment:Deployment, limit:number=null, offset:number=null) : Promise<Post[]> {
     let where = { deployment_id: deployment.id };
     return Promise.all([
-      this.getModels<Post>(new Post(), where, { created: "DESC" }),
+      this.getModels<Post>(new Post(), where, { created: "DESC" }, limit, offset),
       this.getModels<Value>(new Value(), where,  { cardinality: "ASC" })]).
       then((results:any[]) => {
         let posts = <Post[]>results[0];
@@ -542,10 +548,10 @@ export class DatabaseService {
     return this.getMinium<Post>(new Post(), "id");
   }
 
-  getImages(deployment:Deployment) : Promise<Image[]> {
+  getImages(deployment:Deployment, limit:number=null, offset:number=null) : Promise<Image[]> {
     let where = { deployment_id: deployment.id };
-    let order = {};
-    return this.getModels<Image>(new Image(), where, order);
+    let order = { created: "DESC" };
+    return this.getModels<Image>(new Image(), where, order, limit, offset);
   }
 
   saveImage(deployment:Deployment, image:Image) {

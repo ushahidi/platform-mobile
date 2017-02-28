@@ -42,6 +42,9 @@ export class HttpService {
           search.set(key, params[key])
         }
       }
+      else {
+        params = "";
+      }
       let headers = this.httpHeaders(token, otherHeaders);
       let options = new RequestOptions({
         headers: headers,
@@ -276,11 +279,11 @@ export class HttpService {
       let json = err.json();
       if (json['errors']) {
         let errors = json['errors'];
-        let message = [];
+        let messages = [];
         for (let error of errors) {
-          message.push(error['message']);
+          messages.push(error['message']);
         }
-        return message.join(", ");
+        return messages.join(", ");
       }
     }
     catch (error) {

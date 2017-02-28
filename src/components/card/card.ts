@@ -7,7 +7,7 @@ import { PLACEHOLDER_USER, PLACEHOLDER_PHOTO, PLACEHOLDER_NAME } from '../../hel
 @Component({
   selector: 'post-card',
   templateUrl: 'card.html',
-  inputs: ['post', 'index']
+  inputs: ['post']
 })
 export class CardComponent {
 
@@ -18,7 +18,6 @@ export class CardComponent {
   menuSelected = new EventEmitter();
 
   post:any = {};
-  index:number = 0;
 
   userName:string = PLACEHOLDER_NAME;
   userPlaceholder:string = PLACEHOLDER_USER;

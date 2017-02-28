@@ -79,35 +79,50 @@ export class DeploymentAddPage extends BasePage {
 
   addDeployment(event:any, deployment:Deployment) {
     this.logger.info(this, "addDeployment");
-    let loading = this.showLoading("Adding...");
     let where = { subdomain: deployment.subdomain };
-    this.database.getDeployments(where).then(
+    return this.database.getDeployments(where).then(
       (deployments:Deployment[]) => {
         if (deployments && deployments.length > 0) {
-          loading.dismiss();
           this.showAlert('Deployment Already Added', 'Looks like that deployment has already been added.');
         }
         else {
-          this.database.saveDeployment(deployment).then(
-            (id:number) => {
-              this.logger.info(this, "addDeployment", "ID", id);
-              loading.dismiss();
-              if (id) {
-                deployment.id = id;
-                this.hideModal({
-                  deployment : deployment
-                });
-              }
-              else {
-                this.showAlert('Problem Adding Deployment', 'There was a problem adding your deployment.');
-              }
-            },
-            (error:any) => {
-              this.logger.error(this, "addDeployment", error);
-              loading.dismiss();
-              this.showAlert('Problem Adding Deployment', error);
-            });
+          this.loginDeployment(deployment);
         }
+      });
+  }
+
+  loginDeployment(deployment:Deployment) {
+    this.logger.info(this, "loginDeployment");
+    let loading = this.showLoading("Adding...");
+    return this.api.clientLogin(deployment).then(
+      (tokens:any) => {
+        this.logger.info(this, "loginDeployment", "Tokens", tokens);
+        deployment.copyInto(tokens);
+        this.database.saveDeployment(deployment).then(
+          (id:number) => {
+            this.logger.info(this, "loginDeployment", "ID", id);
+            if (id) {
+              deployment.id = id;
+              loading.dismiss();
+              this.hideModal({
+                deployment : deployment
+              });
+            }
+            else {
+              loading.dismiss();
+              this.showAlert('Problem Adding Deployment', 'There was a problem adding your deployment.');
+            }
+          },
+          (error:any) => {
+            this.logger.error(this, "loginDeployment", error);
+            loading.dismiss();
+            this.showAlert('Problem Adding Deployment', error);
+          });
+      },
+      (error:any) => {
+        this.logger.error(this, "loginDeployment", "Client", error);
+        loading.dismiss();
+        this.showAlert('Problem Logging In', error);
       });
   }
 

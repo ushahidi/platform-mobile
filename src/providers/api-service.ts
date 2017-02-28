@@ -220,7 +220,7 @@ export class ApiService extends HttpService {
               resolve(deployment);
             }
             else {
-              this.getDeployment(deployment, false).then(
+              this.getDeployment(deployment, false, offline).then(
                 (deployment:Deployment) => {
                   resolve(deployment);
                 },
@@ -284,10 +284,10 @@ export class ApiService extends HttpService {
     });
   }
 
-  getPosts(deployment:Deployment, cache:boolean=false, offline:boolean=false): Promise<Post[]> {
+  getPosts(deployment:Deployment, cache:boolean=false, offline:boolean=false, limit:number=10, offset:number=0): Promise<Post[]> {
     return new Promise((resolve, reject) => {
       if (cache || offline) {
-        this.database.getPosts(deployment).then(
+        this.database.getPosts(deployment, limit, offset).then(
           (posts:Post[]) => {
             if (posts && posts.length > 0) {
               resolve(posts);
@@ -296,7 +296,7 @@ export class ApiService extends HttpService {
               resolve([]);
             }
             else {
-              this.getPosts(deployment, false).then(
+              this.getPosts(deployment, false, offline, limit, offset).then(
                 (posts:Post[]) => {
                   resolve(posts);
                 },
@@ -312,7 +312,10 @@ export class ApiService extends HttpService {
       else {
         let api = `/api/v3/posts/`;
         let url = deployment.url + api;
-        this.httpGet(url, deployment.access_token).then(
+        let params = {
+          limit: limit,
+          offset: offset };
+        this.httpGet(url, deployment.access_token, params).then(
           (data:any) => {
             let saves = [];
             for (let item of data.results) {
@@ -368,7 +371,7 @@ export class ApiService extends HttpService {
               saves.push(this.database.savePost(deployment, post));
             }
             Promise.all(saves).then(saved => {
-              this.database.getPosts(deployment).then(
+              this.database.getPosts(deployment, limit, offset).then(
                 (posts:Post[]) => {
                   resolve(posts);
                 },
@@ -573,10 +576,10 @@ export class ApiService extends HttpService {
     });
   }
 
-  getImages(deployment:Deployment, cache:boolean=false, offline:boolean=false): Promise<Image[]> {
+  getImages(deployment:Deployment, cache:boolean=false, offline:boolean=false, limit:number=10, offset:number=0): Promise<Image[]> {
     return new Promise((resolve, reject) => {
       if (cache || offline) {
-        this.database.getImages(deployment).then(
+        this.database.getImages(deployment, limit, offset).then(
           (images:Image[]) => {
             if (images && images.length > 0) {
               resolve(images);
@@ -585,7 +588,7 @@ export class ApiService extends HttpService {
               resolve([]);
             }
             else {
-              this.getImages(deployment, false).then(
+              this.getImages(deployment, false, offline, limit, offset).then(
                 (images:Image[]) => {
                   resolve(images);
                 },
@@ -602,7 +605,10 @@ export class ApiService extends HttpService {
       else {
         let api = `/api/v3/media`;
         let url = deployment.url + api;
-        this.httpGet(url, deployment.access_token).then(
+        let params = {
+          limit: limit,
+          offset: offset };
+        this.httpGet(url, deployment.access_token, params).then(
           (data:any) => {
             let images = [];
             let saves = [];
@@ -717,7 +723,7 @@ export class ApiService extends HttpService {
               resolve([]);
             }
             else {
-              this.getForms(deployment, false).then(
+              this.getForms(deployment, false, offline).then(
                 (forms:Form[]) => {
                   resolve(forms);
                 },
@@ -789,7 +795,7 @@ export class ApiService extends HttpService {
               resolve([]);
             }
             else {
-              this.getAttributes(deployment, false).then(
+              this.getAttributes(deployment, false, offline).then(
                 (attributes:Attribute[]) => {
                   resolve(attributes);
                 },
@@ -866,7 +872,7 @@ export class ApiService extends HttpService {
               resolve([]);
             }
             else {
-              this.getCollections(deployment, false).then(
+              this.getCollections(deployment, false, offline).then(
                 (collections:Collection[]) => {
                   resolve(collections);
                 },
@@ -976,21 +982,23 @@ export class ApiService extends HttpService {
         });
   }
 
-  getPostsWithValues(deployment:Deployment, cache:boolean=false, offline:boolean=false): Promise<Post[]> {
-    this.logger.info(this, "getPostsWithValues", cache);
+  getPostsWithValues(deployment:Deployment, cache:boolean=false, offline:boolean=false, limit:number=10, offset:number=0):Promise<Post[]> {
+    this.logger.info(this, "getPostsWithValues", "Cache", cache, "Offline", offline, "Limit", limit, "Offset", offset);
     return Promise.all([
-      this.getPosts(deployment, cache, offline),
-      this.getForms(deployment, cache, offline),
-      this.getImages(deployment, cache, offline),
-      this.getUsers(deployment, cache, offline),
-      this.getAttributes(deployment, cache, offline)]).
+      this.getPosts(deployment, cache, offline, limit, offset),
+      this.getImages(deployment, cache, offline, limit, offset),
+      this.getForms(deployment, true, offline),
+      this.getUsers(deployment, true, offline),
+      this.getAttributes(deployment, true, offline)]).
       then(
         (results:any[]) => {
+          this.logger.info(this, "getPostsWithValues", "Cache", cache, "Offline", offline, "Limit", limit, "Offset", offset);
           let posts = <Post[]>results[0];
-          let forms = <Form[]>results[1];
-          let images = <Image[]>results[2];
+          let images = <Image[]>results[1];
+          let forms = <Form[]>results[2];
           let users = <User[]>results[3];
           let attributes = <Attribute[]>results[4];
+          let saves = [];
           for (let post of posts) {
             post.loadUser(users);
             post.loadForm(forms);
@@ -1001,12 +1009,15 @@ export class ApiService extends HttpService {
                 post.loadImage(images, value.value);
               }
             }
-            this.database.savePost(deployment, post);
+            saves.push(this.database.savePost(deployment, post));
           }
-          return posts;
+          return Promise.all(saves).then((saved) => {
+            this.logger.info(this, "getPostsWithValues", "Cache", cache, "Offline", offline, "Limit", limit, "Offset", offset, "Posts", posts.length);
+            return posts;
+          });
         },
         (error:any) => {
-          this.logger.error(this, "getPostsWithValues", error);
+          this.logger.error(this, "getPostsWithValues", "Failed", error);
         });
   }
 

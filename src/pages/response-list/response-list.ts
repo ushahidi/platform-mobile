@@ -28,16 +28,18 @@ declare var google: any;
 })
 export class ResponseListPage extends BasePage {
 
-  deployment: Deployment = null;
-  posts: Post[] = null;
-  filtered: Post[] = null;
-  pending: Post[] = null;
-  filter: Filter = null;
-  view: string = 'list';
-  mapDraggable: boolean = true;
-  zoomControl : boolean = false;
-  disableDefaultUI : boolean = true;
-  latLngBounds: LatLngBounds = null;
+  deployment:Deployment = null;
+  posts:Post[] = null;
+  filtered:Post[] = null;
+  pending:Post[] = null;
+  filter:Filter = null;
+  view:string = 'list';
+  mapDraggable:boolean = true;
+  zoomControl:boolean = false;
+  disableDefaultUI:boolean = true;
+  latLngBounds:LatLngBounds = null;
+  limit:number = 5;
+  offset:number = 0;
 
   @ViewChild(Content)
   content: Content;
@@ -84,23 +86,23 @@ export class ResponseListPage extends BasePage {
   }
 
   loadUpdates(event:any=null, cache:boolean=false) {
-    this.logger.info(this, "loadUpdates", "Cache", cache);
+    this.logger.info(this, "loadUpdates", cache);
     let updates = [
       this.loadFilters(cache),
       this.loadPosts(cache),
       this.uploadPending(cache)];
     return Promise.all(updates).then(
-      (done) => {
+      (updated) => {
         if (event != null) {
           event.complete();
         }
-        this.logger.info(this, "loadUpdates", "Done");
+        this.logger.info(this, "loadUpdates", "Updated");
       },
       (error) => {
         if (event != null) {
           event.complete();
         }
-        this.logger.error(this, "loadUpdates", error);
+        this.logger.error(this, "loadUpdates", "Failed", error);
       });
   }
 
@@ -114,13 +116,13 @@ export class ResponseListPage extends BasePage {
       return new Promise((resolve, reject) => {
         this.database.getFilter(this.deployment).then(
           (filter:Filter) => {
-            this.logger.info(this, "loadFilters", "Database", filter);
+            this.logger.info(this, "loadFilters", "Loaded", filter);
             this.filter = filter;
             this.resizeContent();
             resolve();
           },
           (error:any) => {
-            this.logger.info(this, "loadFilters", "Database", error);
+            this.logger.info(this, "loadFilters", "Loaded", error);
             this.filter = null;
             resolve();
           });
@@ -136,18 +138,52 @@ export class ResponseListPage extends BasePage {
     }
     else {
       return new Promise((resolve, reject) => {
-        this.api.getPostsWithValues(this.deployment, cache, this.offline).then(
+        this.offset = 0;
+        this.api.getPostsWithValues(this.deployment, cache, this.offline, this.limit, this.offset).then(
           (posts:Post[]) => {
-            this.logger.info(this, "loadPosts", "API", posts.length);
+            this.logger.info(this, "loadPosts", "Posts", posts.length);
             this.posts = posts;
             this.filtered = this.getFiltered(posts, this.filter);
             this.pending = this.getPending(posts);
+            this.logger.info(this, "loadPosts", "Filtered", this.filtered.length, "Pending", this.pending.length);
             resolve();
           },
           (error:any) => {
             this.logger.error(this, "loadPosts", "API", error);
             reject(error);
           });
+        });
+    }
+  }
+
+  loadMore(event) {
+    this.logger.info(this, "loadMore");
+    if (this.offline) {
+      this.showToast("Currently offline, unable to download more responses");
+      if (event) {
+        event.complete();
+      }
+    }
+    else {
+      this.offset = this.offset + this.limit;
+      this.logger.info(this, "loadMore", "Limit", this.limit, "Offset", this.offset);
+      this.api.getPostsWithValues(this.deployment, false, this.offline, this.limit, this.offset).then(
+        (posts:Post[]) => {
+          this.posts = this.posts.concat(posts);
+          this.logger.info(this, "loadMore", "Limit", this.limit, "Offset", this.offset, "Posts", this.posts.length);        
+          this.filtered = this.getFiltered(this.posts, this.filter);
+          this.pending = this.getPending(this.posts);
+          this.logger.info(this, "loadMore", "Limit", this.limit, "Offset", this.offset, "Filtered", this.filtered.length, "Pending", this.pending.length);
+          if (event) {
+            event.complete();
+          }
+        },
+        (error:any) => {
+          this.logger.error(this, "loadMore", "Failed", error);
+          if (event) {
+            event.complete();
+          }
+          this.showToast(error);
         });
     }
   }
