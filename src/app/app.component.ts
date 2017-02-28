@@ -70,9 +70,9 @@ export class MyApp {
                 this.deployments = deployments;
                 let deployment = this.deployments[0];
                 this.logger.info(this, "Deployment", deployment);
-                this.loginDeployment(deployment);
-                //TODO hide Splashscreen after login completed
-                Splashscreen.hide();
+                this.loginDeployment(deployment).then((ready) => {
+                  Splashscreen.hide();
+                });
               }
               else {
                 this.deployments = [];
@@ -136,14 +136,14 @@ export class MyApp {
     this.deployment = deployment;
     if (deployment.hasUsername() && deployment.hasPassword()) {
       this.logger.info(this, "loginDeployment", "Username", deployment.username);
-      this.api.authLogin(deployment, deployment.username, deployment.password).then(
+      return this.api.authLogin(deployment, deployment.username, deployment.password).then(
         (tokens:any) => {
           this.logger.info(this, "loginDeployment", "Username", deployment.username, "Tokens", tokens);
           if (tokens) {
             this.showDeployment(deployment, tokens);
           }
           else {
-            this.api.clientLogin(deployment).then(
+            return this.api.clientLogin(deployment).then(
               (tokens:any) => {
                 this.logger.info(this, "loginDeployment", "Client", tokens);
                 this.showDeployment(deployment, tokens);
@@ -155,7 +155,7 @@ export class MyApp {
         },
         (error:any) => {
           this.logger.error(this, "loginDeployment", "Username", error);
-          this.api.clientLogin(deployment).then(
+          return this.api.clientLogin(deployment).then(
             (tokens:any) => {
               this.logger.info(this, "loginDeployment", "Client", tokens);
               this.showDeployment(deployment, tokens);
@@ -167,7 +167,7 @@ export class MyApp {
     }
     else {
       this.logger.info(this, "loginDeployment", "Client");
-      this.api.clientLogin(deployment).then(
+      return this.api.clientLogin(deployment).then(
         (tokens:any) => {
           this.logger.info(this, "loginDeployment", "Client", tokens);
           this.showDeployment(deployment, tokens);

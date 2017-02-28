@@ -20,7 +20,7 @@
     <ion-list *ngIf="deployments && deployments.length > 0">
       <ion-item-sliding *ngFor="let _deployment of deployments">
         <ion-item menuClose [class.selected]="deployment != null && deployment.url === _deployment.url"
-                  (click)="showDeployment(_deployment)">
+                  (click)="loginDeployment(_deployment)">
           <div class="name">{{_deployment.name}}</div>
           <div class="domain">{{_deployment.subdomain}}.{{_deployment.domain}}</div>
         </ion-item>
@@ -37,7 +37,6 @@
         </div>
       </ion-item>
     </ion-list>
-
   </ion-content>
 </ion-menu>
 <ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>

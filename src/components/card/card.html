@@ -30,7 +30,7 @@
     <div class="line-clamp-3">{{post.title}}</div>
   </ion-card-content>
   <ion-card-content class="description" *ngIf="post.description" tappable (click)="onCardSelected($event)">
-    <div class="line-clamp-5">{{post.description}}</div>
+    <p class="line-clamp-5">{{post.description | truncate:25}}</p>
   </ion-card-content>
   <ion-card-content class="image" *ngIf="post.image_url" tappable (click)="onCardSelected($event)">
     <img class="lazy" [src]="photoPlaceholder" [lazyLoad]="post.image_url" offset="1000" (error)="this.display='none'">
