@@ -168,8 +168,10 @@ export class ApiService extends HttpService {
               user.id = item.id;
               user.email = item.email;
               user.name = item.realname;
-              user.gravatar = item.gravatar;
-              user.image = `https://www.gravatar.com/avatar/${item.gravatar}.jpg?s=32`;
+              if (item.gravatar) {
+                user.gravatar = item.gravatar;
+                user.image = `https://www.gravatar.com/avatar/${item.gravatar}.jpg?s=32`;
+              }
               users.push(user);
               saves.push(this.database.saveUser(deployment, user));
             }
@@ -606,6 +608,7 @@ export class ApiService extends HttpService {
         let api = `/api/v3/media`;
         let url = deployment.url + api;
         let params = {
+          order: "desc",
           limit: limit,
           offset: offset };
         this.httpGet(url, deployment.access_token, params).then(
