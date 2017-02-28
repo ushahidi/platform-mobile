@@ -1,4 +1,4 @@
-<ion-menu [content]="content" side="left" type="reveal" swipeEnabled="false" (ionOpen)="loadDeployments()">
+<ion-menu #menu [content]="content" side="left" type="reveal" swipeEnabled="false" (ionOpen)="loadDeployments()">
   <ion-header>
     <ion-toolbar color="dark">
       <ion-buttons>
@@ -19,8 +19,8 @@
     </ion-refresher>
     <ion-list *ngIf="deployments && deployments.length > 0">
       <ion-item-sliding *ngFor="let _deployment of deployments">
-        <ion-item menuClose [class.selected]="deployment != null && deployment.url === _deployment.url"
-                  (click)="loginDeployment(_deployment)">
+        <ion-item [class.selected]="deployment != null && deployment.url === _deployment.url"
+                  (click)="changeDeployment(_deployment)">
           <div class="name">{{_deployment.name}}</div>
           <div class="domain">{{_deployment.subdomain}}.{{_deployment.domain}}</div>
         </ion-item>

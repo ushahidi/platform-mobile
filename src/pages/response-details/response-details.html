@@ -26,7 +26,7 @@
         <ion-col width-10 class="profile">
           <img class="lazy" [src]="userPlaceholder" [lazyLoad]="post.user_image" [errorImage]="userPlaceholder">
         </ion-col>
-        <ion-col width-80 class="name">
+        <ion-col class="name">
           <p>{{post.user_name || userName}} {{post.created | timeAgo}}</p>
         </ion-col>
       </ion-row>

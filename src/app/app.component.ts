@@ -131,6 +131,13 @@ export class MyApp {
     });
   }
 
+  changeDeployment(deployment:Deployment) {
+    let loading = this.showLoading("Loading...");
+    this.loginDeployment(deployment).then((loaded) => {
+      loading.dismiss();
+    })
+  }
+
   loginDeployment(deployment:Deployment) {
     this.logger.info(this, "loginDeployment", deployment);
     this.deployment = deployment;
@@ -183,6 +190,7 @@ export class MyApp {
     deployment.copyInto(tokens);
     this.database.saveDeployment(deployment).then(
       (saved) => {
+        this.menuController.close();
         this.nav.setRoot(
           DeploymentDetailsPage,
           { deployment: deployment });
