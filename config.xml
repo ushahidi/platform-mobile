@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<widget id="com.ushahidi.mobile" version="0.1" ios-CFBundleVersion="0.1.7" android-versionCode="107" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.ushahidi.mobile" version="0.1" ios-CFBundleVersion="0.1.8" android-versionCode="108" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
   <name>Ushahidi</name>
   <description>Ushahidi Mobile</description>
   <author email="support@ushahidi.com" href="https://www.ushahidi.com/">Ushahidi Team</author>
