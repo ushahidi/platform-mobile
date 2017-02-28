@@ -16,7 +16,7 @@ cd Ushahidi_Mobile
 
 1. Rename `src/constants/secrets.ts.template` to `/src/constants/secrets.ts`
 2. Get a Google API Key at https://console.developers.google.com
-3. Get a Vimeo API key at https://developer.vimeo.com/apps
+3. Get a Vimeo Access Token at https://developer.vimeo.com/apps
 4. Update `GOOGLE_API_KEY` and `VIMEO_ACCESS_TOKEN` with your own API keys
 
 ---
