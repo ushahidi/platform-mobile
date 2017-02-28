@@ -8,7 +8,9 @@ import { PLACEHOLDER_BLANK } from '../../constants/placeholders';
 import { Deployment } from '../../models/deployment';
 import { User } from '../../models/user';
 import { Form } from '../../models/form';
+import { Attribute } from '../../models/attribute';
 import { Collection } from '../../models/collection';
+import { Post } from '../../models/post';
 
 import { ApiService } from '../../providers/api-service';
 import { LoggerService } from '../../providers/logger-service';
@@ -273,22 +275,117 @@ export class DeploymentDetailsPage extends BasePage {
     userLogout(event:any) {
       this.logger.info(this, "userLogout");
       let loading = this.showLoading("Logging out...");
-      this.deployment.username = "";
-      this.deployment.password = "";
-      this.deployment.access_token = "";
-      this.deployment.refresh_token = "";
-      this.database.saveDeployment(this.deployment).then(
-        (saved) => {
+      let updates = [
+        this.updateDeployment(),
+        this.updatePosts(),
+        this.updateForms(),
+        this.updateAttributes(),
+        this.updateCollections()
+      ];
+      Promise.all(updates).then(
+        (updated) => {
           loading.dismiss();
           this.showToast('Logout Successful');
-          this.showRootPage(DeploymentLoginPage,
-           { deployment: this.deployment },
-           { });
         },
         (error) => {
           loading.dismiss();
           this.showAlert('Problem Logging Out', error);
+      });
+    }
+
+    updateDeployment() {
+      this.deployment.username = "";
+      this.deployment.password = "";
+      this.deployment.access_token = "";
+      this.deployment.refresh_token = "";
+      this.deployment.can_create = false;
+      this.deployment.can_update = false;
+      this.deployment.can_delete = false;
+      return this.database.saveDeployment(this.deployment);
+    }
+
+    updatePosts() {
+      return new Promise((resolve, reject) => {
+        this.database.getPosts(this.deployment).then((posts:Post[]) => {
+          let updates = [];
+          for (let post of posts) {
+            post.can_create = false;
+            post.can_update = false;
+            post.can_delete = false;
+            updates.push(this.database.savePost(this.deployment, post));
+          }
+          Promise.all(updates).then(
+            (updated) => {
+              resolve(updated);
+            },
+            (error) => {
+              reject(error);
+            });
         });
+      });
+    }
+
+    updateForms() {
+      return new Promise((resolve, reject) => {
+        this.database.getForms(this.deployment).then((forms:Form[]) => {
+          let updates = [];
+          for (let form of forms) {
+            form.can_create = false;
+            form.can_update = false;
+            form.can_delete = false;
+            updates.push(this.database.saveForm(this.deployment, form));
+          }
+          Promise.all(updates).then(
+            (updated) => {
+              resolve(updated);
+            },
+            (error) => {
+              reject(error);
+            });
+        });
+      });
+    }
+
+    updateAttributes() {
+      return new Promise((resolve, reject) => {
+        this.database.getAttributes(this.deployment).then((attributes:Attribute[]) => {
+          let updates = [];
+          for (let attribute of attributes) {
+            attribute.can_create = false;
+            attribute.can_update = false;
+            attribute.can_delete = false;
+            updates.push(this.database.saveAttribute(this.deployment, attribute));
+          }
+          Promise.all(updates).then(
+            (updated) => {
+              resolve(updated);
+            },
+            (error) => {
+              reject(error);
+            });
+        });
+      });
+    }
+
+    updateCollections() {
+      return new Promise((resolve, reject) => {
+        this.database.getCollections(this.deployment).then((collections:Collection[]) => {
+          let updates = [];
+          for (let collection of collections) {
+            collection.can_create = false;
+            collection.can_update = false;
+            collection.can_delete = false;
+            updates.push(this.database.saveCollection(this.deployment, collection));
+          }
+          Promise.all(updates).then(
+            (updated) => {
+              resolve(updated);
+            },
+            (error) => {
+              reject(error);
+            });
+        });
+      });
     }
 
 }

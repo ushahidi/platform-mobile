@@ -1,15 +1,21 @@
 import { Component, ViewChild, NgZone } from '@angular/core';
-import { Platform, TextInput, Button, NavParams,
+import { Platform, TextInput, Button, NavParams, Events,
   NavController, ViewController, ModalController, LoadingController, ToastController, AlertController, ActionSheetController } from 'ionic-angular';
 import { StatusBar } from 'ionic-native';
 
 import { Deployment } from '../../models/deployment';
+import { Collection } from '../../models/collection';
+import { Form } from '../../models/form';
+import { Attribute } from '../../models/attribute';
+import { Post } from '../../models/post';
 
 import { ApiService } from '../../providers/api-service';
 import { LoggerService } from '../../providers/logger-service';
 import { DatabaseService } from '../../providers/database-service';
 
 import { BasePage } from '../../pages/base-page/base-page';
+
+import { DEPLOYMENT_UPDATED } from '../../constants/events';
 
 @Component({
   selector: 'deployment-login-page',
@@ -30,6 +36,7 @@ export class DeploymentLoginPage extends BasePage {
   password: TextInput;
 
   constructor(
+    public events:Events,
     public api:ApiService,
     public logger:LoggerService,
     public database:DatabaseService,
@@ -69,20 +76,26 @@ export class DeploymentLoginPage extends BasePage {
       }
     }
 
-    onLogin(event:any) {
-      this.logger.info(this, "onLogin");
+    userLogin(event:any) {
+      this.logger.info(this, "userLogin");
       let username = this.username.value.toString();
       let password = this.password.value.toString();
       if (username.length > 0 && password.length > 0) {
         let loading = this.showLoading("Logging in...");
         this.api.authLogin(this.deployment, username, password).then(
           (tokens:any) => {
-            this.logger.info(this, "onLogin", "Tokens", tokens);
+            this.logger.info(this, "userLogin", "Tokens", tokens);
             if (tokens != null) {
               this.deployment.copyInto(tokens);
-              this.database.saveDeployment(this.deployment).then(
-                (saved:any) => {
+              let updates = [
+                this.loadDeployment(),
+                this.loadForms(),
+                this.loadCollections(),
+                this.loadPosts()];
+              Promise.all(updates).then(
+                (updated) => {
                   loading.dismiss();
+                  this.events.publish(DEPLOYMENT_UPDATED, this.deployment.id);
                   this.showToast('Login Successful');
                   this.showDeployment(this.deployment);
                 },
@@ -108,5 +121,75 @@ export class DeploymentLoginPage extends BasePage {
         deployment:deployment
       });
     }
+
+    loadDeployment():Promise<any> {
+      this.logger.info(this, "loadDeployment");
+      return new Promise((resolve, reject) => {
+        this.api.getDeployment(this.deployment, false, this.offline).then(
+          (deployment:Deployment) => {
+            this.logger.info(this, "loadDeployment", "Loaded", deployment);
+            this.deployment.copyInto(deployment);
+            this.database.saveModel(this.deployment).then(
+              (saved:any) => {
+                this.logger.info(this, "loadDeployment", "Saved", saved);
+                resolve();
+              },
+              (error:any) => {
+                this.logger.error(this, "loadDeployment", "Failed", error);
+                reject(error);
+            });
+          },
+          (error:any) => {
+            this.logger.error(this, "loadDeployment", "Failed", error);
+            reject(error);
+        });
+      });
+  }
+
+  loadForms():Promise<any> {
+    this.logger.info(this, "loadForms");
+    return new Promise((resolve, reject) => {
+      this.api.getFormsWithAttributes(this.deployment, false, this.offline).then(
+        (forms:Form[]) => {
+          this.logger.info(this, "loadForms", "Loaded", forms.length);
+          this.deployment.forms = forms;
+          resolve();
+        },
+        (error) => {
+          this.logger.error(this, "loadForms", "Failed", error);
+          reject(error);
+        });
+    });
+  }
+
+  loadCollections():Promise<any> {
+    this.logger.info(this, "loadCollections");
+    return new Promise((resolve, reject) => {
+      this.api.getCollections(this.deployment, false, this.offline).then(
+        (collections:Collection[]) => {
+          this.logger.info(this, "loadCollections", "Loaded", collections.length);
+          this.deployment.collections = collections;
+          resolve();
+        },
+        (error:any) => {
+          this.logger.error(this, "loadCollections", "Failed", error);
+          reject(error);
+        });
+    });
+  }
+
+  loadPosts():Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.api.getPosts(this.deployment, false, this.offline).then(
+        (posts:Post[]) => {
+          this.logger.info(this, "loadPosts", "Loaded", posts.length);
+          resolve();
+        },
+        (error:any) => {
+          this.logger.error(this, "loadPosts", "Failed", error);
+          reject(error);
+        });
+      });
+  }
 
 }

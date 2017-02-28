@@ -1,5 +1,5 @@
 import { Component, NgZone, ViewChild } from '@angular/core';
-import { Platform, NavParams, TextInput, Content,
+import { Platform, NavParams, TextInput, Content, Events,
   NavController, ViewController, LoadingController, ToastController, AlertController, ModalController, ActionSheetController } from 'ionic-angular';
 
 import { Deployment } from '../../models/deployment';
@@ -9,6 +9,8 @@ import { LoggerService } from '../../providers/logger-service';
 import { DatabaseService } from '../../providers/database-service';
 
 import { BasePage } from '../../pages/base-page/base-page';
+
+import { DEPLOYMENT_UPDATED } from '../../constants/events';
 
 @Component({
   selector: 'deployment-settings-page',
@@ -31,6 +33,7 @@ export class DeploymentSettingsPage extends BasePage {
   email: TextInput;
 
   constructor(
+    public events:Events,
     public api:ApiService,
     public logger:LoggerService,
     public database:DatabaseService,
@@ -73,6 +76,7 @@ export class DeploymentSettingsPage extends BasePage {
           this.deployment.copyInto(changes);
           this.database.saveDeployment(this.deployment).then(
             (saved:any) => {
+              this.events.publish(DEPLOYMENT_UPDATED, this.deployment.id);
               loading.dismiss();
               this.hideModal();
             },
