@@ -15,6 +15,8 @@ import { DatabaseService } from '../../providers/database-service';
 import { BasePage } from '../../pages/base-page/base-page';
 import { ResponseMapPage } from '../../pages/response-map/response-map';
 
+import { POST_UPDATED } from '../../constants/events';
+
 @Component({
   selector: 'esponse-add-page',
   templateUrl: 'response-add.html',
@@ -99,7 +101,7 @@ export class ResponseAddPage extends BasePage {
         let loading = this.showLoading("Saving...");
         this.savePost(this.post).then(
           (saved) => {
-            this.events.publish('post:updated', this.post.id);
+            this.events.publish(POST_UPDATED, this.post.id);
             loading.dismiss();
             let buttons = [{
               text: 'Ok',
@@ -119,7 +121,7 @@ export class ResponseAddPage extends BasePage {
         let loading = this.showLoading("Updating...");
         this.updatePost(this.post).then(
           (updated) => {
-            this.events.publish('post:updated', this.post.id);
+            this.events.publish(POST_UPDATED, this.post.id);
             loading.dismiss();
             let buttons = [{
               text: 'Ok',
@@ -139,7 +141,7 @@ export class ResponseAddPage extends BasePage {
         let loading = this.showLoading("Posting...");
         this.createPost(this.post).then(
           (updated) => {
-            this.events.publish('post:updated', this.post.id);
+            this.events.publish(POST_UPDATED, this.post.id);
             loading.dismiss();
             let buttons = [{
               text: 'Ok',

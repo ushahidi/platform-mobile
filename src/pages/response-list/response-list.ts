@@ -18,6 +18,8 @@ import { ResponseAddPage } from '../response-add/response-add';
 import { ResponseDetailsPage } from '../response-details/response-details';
 import { ResponseSearchPage } from '../response-search/response-search';
 
+import { POST_UPDATED, POST_DELETED } from '../../constants/events';
+
 declare var google: any;
 
 @Component({
@@ -65,14 +67,14 @@ export class ResponseListPage extends BasePage {
 
   ionViewDidLoad() {
     super.ionViewDidLoad();
-    this.events.subscribe('post:deleted', (post_id:number) => {
-      this.logger.info(this, 'Events', 'post:deleted', post_id);
+    this.events.subscribe(POST_DELETED, (post_id:number) => {
+      this.logger.info(this, 'Events', POST_DELETED, post_id);
       this.posts = null;
       this.filtered = null;
       this.loadPosts(true);
     });
-    this.events.subscribe('post:updated', (post_id:number) => {
-      this.logger.info(this, 'Events', 'post:updated', post_id);
+    this.events.subscribe(POST_UPDATED, (post_id:number) => {
+      this.logger.info(this, 'Events', POST_UPDATED, post_id);
       this.posts = null;
       this.filtered = null;
       this.loadPosts(true);
@@ -170,7 +172,7 @@ export class ResponseListPage extends BasePage {
       this.api.getPostsWithValues(this.deployment, false, this.offline, this.limit, this.offset).then(
         (posts:Post[]) => {
           this.posts = this.posts.concat(posts);
-          this.logger.info(this, "loadMore", "Limit", this.limit, "Offset", this.offset, "Posts", this.posts.length);        
+          this.logger.info(this, "loadMore", "Limit", this.limit, "Offset", this.offset, "Posts", this.posts.length);
           this.filtered = this.getFiltered(this.posts, this.filter);
           this.pending = this.getPending(this.posts);
           this.logger.info(this, "loadMore", "Limit", this.limit, "Offset", this.offset, "Filtered", this.filtered.length, "Pending", this.pending.length);

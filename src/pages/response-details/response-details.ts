@@ -15,6 +15,7 @@ import { DatabaseService } from '../../providers/database-service';
 import { BasePage } from '../../pages/base-page/base-page';
 import { ResponseAddPage } from '../../pages/response-add/response-add';
 
+import { POST_UPDATED, POST_DELETED } from '../../constants/events';
 import { PLACEHOLDER_USER, PLACEHOLDER_NAME } from '../../constants/placeholders';
 
 @Component({
@@ -244,7 +245,7 @@ export class ResponseDetailsPage extends BasePage {
         post.status = "draft";
         this.database.savePost(this.deployment, post).then(saved => {
           loading.dismiss();
-          this.events.publish('post:updated', post.id);
+          this.events.publish(POST_UPDATED, post.id);
           this.showToast("Responsed put under review");
         });
       },
@@ -263,7 +264,7 @@ export class ResponseDetailsPage extends BasePage {
         post.status = "archived";
         this.database.savePost(this.deployment, post).then(saved => {
           loading.dismiss();
-          this.events.publish('post:updated', post.id);
+          this.events.publish(POST_UPDATED, post.id);
           this.showToast("Response archived");
         });
       },
@@ -305,8 +306,7 @@ export class ResponseDetailsPage extends BasePage {
                loading.dismiss();
                this.database.removePost(this.deployment, post).then(removed => {
                  this.showToast("Response deleted");
-                 this.logger.info(this, 'Events', 'post:deleted', post.id);
-                 this.events.publish('post:deleted', post.id);
+                 this.events.publish(POST_DELETED, post.id);
                  this.closePage();
               });
              },
