@@ -50,12 +50,12 @@
     </ion-infinite-scroll>
   </div>
   <div class="map" *ngIf="view == 'map'">
-    <sebm-google-map [fitBounds]="latLngBounds" [zoomControl]="zoomControl" [disableDefaultUI]="disableDefaultUI" [mapDraggable]="mapDraggable">
+    <sebm-google-map #map [fitBounds]="latLngBounds" [zoom]="zoom" [zoomControl]="zoomControl" [disableDefaultUI]="disableDefaultUI" [mapDraggable]="mapDraggable">
       <sebm-google-map-marker [latitude]="post.latitude" [longitude]="post.longitude" *ngFor="let post of filtered">
           <sebm-google-map-info-window>
             <div tappable (click)="showResponse(post)">
-              <div class="title">{{post.title}}</div>
-              <div class="description">{{post.description}}</div>
+              <div class="title">{{post.title | truncate:15}}</div>
+              <div class="description">{{post.description | truncate:25}}</div>
             </div>
           </sebm-google-map-info-window>
       </sebm-google-map-marker>

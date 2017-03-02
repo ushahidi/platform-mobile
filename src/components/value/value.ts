@@ -3,7 +3,7 @@ import { SafeResourceUrl, DomSanitizer } from '@angular/platform-browser';
 
 import { LoggerService } from '../../providers/logger-service';
 
-import { PLACEHOLDER_PHOTO } from '../../constants/placeholders';
+import { PLACEHOLDER_PHOTO, PLACEHOLDER_MAP } from '../../constants/placeholders';
 
 @Component({
   selector: 'value-text',
@@ -16,6 +16,7 @@ export class ValueComponent {
   value: any;
   map: string = null;
   video: SafeResourceUrl = null;
+  mapPaceholder: string = PLACEHOLDER_MAP;
   photoPaceholder: string = PLACEHOLDER_PHOTO;
 
   constructor(

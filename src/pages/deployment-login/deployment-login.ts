@@ -6,8 +6,6 @@ import { StatusBar } from 'ionic-native';
 import { Deployment } from '../../models/deployment';
 import { Collection } from '../../models/collection';
 import { Form } from '../../models/form';
-import { Attribute } from '../../models/attribute';
-import { Post } from '../../models/post';
 
 import { ApiService } from '../../providers/api-service';
 import { LoggerService } from '../../providers/logger-service';
@@ -91,7 +89,7 @@ export class DeploymentLoginPage extends BasePage {
                 this.loadDeployment(),
                 this.loadForms(),
                 this.loadCollections(),
-                this.loadPosts()];
+                this.removePosts()];
               Promise.all(updates).then(
                 (updated) => {
                   loading.dismiss();
@@ -178,15 +176,15 @@ export class DeploymentLoginPage extends BasePage {
     });
   }
 
-  loadPosts():Promise<any> {
+  removePosts():Promise<any> {
     return new Promise((resolve, reject) => {
-      this.api.getPosts(this.deployment, false, this.offline).then(
-        (posts:Post[]) => {
-          this.logger.info(this, "loadPosts", "Loaded", posts.length);
+      this.database.removePosts(this.deployment).then(
+        (removed:any) => {
+          this.logger.info(this, "removePosts", "Removed", removed);
           resolve();
         },
         (error:any) => {
-          this.logger.error(this, "loadPosts", "Failed", error);
+          this.logger.error(this, "removePosts", "Failed", error);
           reject(error);
         });
       });

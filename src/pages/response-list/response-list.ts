@@ -1,7 +1,8 @@
 import { Component, NgZone, ViewChild } from '@angular/core';
 import { Platform, NavParams, Events, Content,
   NavController, ViewController, LoadingController, ToastController, AlertController, ModalController, ActionSheetController } from 'ionic-angular';
-import { LatLngBounds, MapsAPILoader } from 'angular2-google-maps/core';
+import { SebmGoogleMap, LatLngBounds, MapsAPILoader } from 'angular2-google-maps/core';
+import { Geolocation, GeolocationOptions, Geoposition } from 'ionic-native';
 
 import { Deployment } from '../../models/deployment';
 import { Post } from '../../models/post';
@@ -20,7 +21,7 @@ import { ResponseSearchPage } from '../response-search/response-search';
 
 import { POST_UPDATED, POST_DELETED } from '../../constants/events';
 
-declare var google: any;
+export declare var google: any;
 
 @Component({
   selector: 'response-list-page',
@@ -42,9 +43,14 @@ export class ResponseListPage extends BasePage {
   latLngBounds:LatLngBounds = null;
   limit:number = 5;
   offset:number = 0;
+  latitude:number;
+  longitude:number;
 
   @ViewChild(Content)
   content: Content;
+
+  @ViewChild("map")
+  map:SebmGoogleMap;
 
   constructor(
     public mapsAPILoader:MapsAPILoader,
@@ -607,15 +613,32 @@ export class ResponseListPage extends BasePage {
   showMap(event:any, attempts:number=0) {
     this.logger.info(this, "showMap", attempts);
     this.view = 'map';
+    let options:GeolocationOptions = {
+      timeout: 6000,
+      enableHighAccuracy: true };
+    Geolocation.getCurrentPosition(options).then(
+      (position:Geoposition) => {
+        this.logger.info(this, "showMap", "getCurrentPosition", position);
+        this.latitude = position.coords.latitude;
+        this.longitude = position.coords.longitude;
+      },
+      (error) => {
+        this.logger.error(this, "showMap", "getCurrentPosition", error);
+        this.latitude = null;
+        this.longitude = null;
+      });
     this.mapsAPILoader.load().then(() => {
       this.logger.info(this, "showMap", "mapsAPILoader");
       this.latLngBounds = new google.maps.LatLngBounds();
       for (let post of this.filtered) {
-        this.logger.info(this, "showMap", "mapsAPILoader", post.latitude, post.longitude);
-        if (post.latitude && post.longitude) {
+        if (post.latitude != null && post.longitude != null) {
+          this.logger.info(this, "showMap", "mapsAPILoader", post.latitude, post.longitude);
           this.latLngBounds.extend(new google.maps.LatLng(post.latitude, post.longitude));
         }
 	    }
+      if (this.latLngBounds.isEmpty()) {
+        this.latLngBounds.extend(new google.maps.LatLng(this.latitude, this.longitude));
+      }
       this.logger.info(this, "showMap", "mapsAPILoader", this.latLngBounds);
     });
   }

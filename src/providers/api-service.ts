@@ -353,13 +353,13 @@ export class ApiService extends HttpService {
               }
               post.values = [];
               for (let key in item.values) {
-                let text = item.values[key][0];
+                let text:any = item.values[key][0];
                 let value:Value = new Value();
                 value.deployment_id = deployment.id;
                 value.post_id = post.id;
                 value.key = key;
                 value.value = text;
-                if (key == 'location_default') {
+                if (text && text.lat && text.lon) {
                   post.latitude = text.lat;
                   post.longitude = text.lon;
                   value.value = `${text.lat},${text.lon}`;
