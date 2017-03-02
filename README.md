@@ -358,3 +358,16 @@ git add -u
 git commit -m "message about the changes"
 git push
 ```
+
+## NPM
+#### Some handy NPM commands
+
+Check outdated NPM dependencies
+```
+npm outdated
+```
+
+Update all dependencies to latest Ionic2
+```
+npm install ionic-angular@latest --save --save-exact
+```
