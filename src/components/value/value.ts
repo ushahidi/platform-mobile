@@ -3,6 +3,7 @@ import { SafeResourceUrl, DomSanitizer } from '@angular/platform-browser';
 
 import { LoggerService } from '../../providers/logger-service';
 
+import { GOOGLE_API_KEY } from '../../constants/secrets';
 import { PLACEHOLDER_PHOTO, PLACEHOLDER_MAP } from '../../constants/placeholders';
 
 @Component({
@@ -12,7 +13,7 @@ import { PLACEHOLDER_PHOTO, PLACEHOLDER_MAP } from '../../constants/placeholders
 })
 export class ValueComponent {
 
-  key: string = "AIzaSyBjDgMqF6GOdirXn3iFtI6Jlt8jEoWhSq4";
+  key: string = GOOGLE_API_KEY;
   value: any;
   map: string = null;
   video: SafeResourceUrl = null;
@@ -26,17 +27,32 @@ export class ValueComponent {
 
   ngOnInit() {
     this.logger.info(this, "Value", this.value);
-    if (this.value.input == 'location') {
-      let coordinates = this.value.value;
-      this.map = `https://maps.googleapis.com/maps/api/staticmap`
-        + `?center=${coordinates}`
-        + `&zoom=15&size=300x200&maptype=roadmap&markers=color:red%7C`
-        + `${coordinates}&key=${this.key}`;
-      this.logger.info(this, "Map", this.map);
+    if (this.value && this.value.input == 'location') {
+      this.loadMapSrc(this.value.value);
     }
-    else if (this.value.input == 'video') {
-      this.video = this.sanitizer.bypassSecurityTrustResourceUrl(this.value.value);
+    else if (this.value && this.value.input == 'video') {
+      this.loadVideoSrc(this.value.value);
     }
+  }
+
+  ngAfterContentChecked() {
+    if (this.value && this.value.input == 'location' && this.map == null) {
+      this.loadMapSrc(this.value.value);
+    }
+    else if (this.value && this.value.input == 'video' && this.video == null) {
+      this.loadVideoSrc(this.value.value);
+    }
+  }
+
+  loadMapSrc(coordinates:string) {
+    this.map = `https://maps.googleapis.com/maps/api/staticmap`
+      + `?center=${coordinates}`
+      + `&zoom=15&size=300x200&maptype=roadmap&markers=color:red%7C`
+      + `${coordinates}&key=${this.key}`;
+  }
+
+  loadVideoSrc(url:string) {
+    this.video = this.sanitizer.bypassSecurityTrustResourceUrl(url);
   }
 
 }

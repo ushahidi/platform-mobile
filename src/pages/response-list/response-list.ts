@@ -20,6 +20,7 @@ import { ResponseDetailsPage } from '../response-details/response-details';
 import { ResponseSearchPage } from '../response-search/response-search';
 
 import { POST_UPDATED, POST_DELETED } from '../../constants/events';
+import { PLACEHOLDER_LATITUDE, PLACEHOLDER_LONGITUDE } from '../../constants/placeholders';
 
 export declare var google: any;
 
@@ -35,16 +36,17 @@ export class ResponseListPage extends BasePage {
   posts:Post[] = null;
   filtered:Post[] = null;
   pending:Post[] = null;
+  markers:Post[] = null;
   filter:Filter = null;
   view:string = 'list';
   mapDraggable:boolean = true;
   zoomControl:boolean = false;
   disableDefaultUI:boolean = true;
-  latLngBounds:LatLngBounds = null;
+  zoom:number = 6;
   limit:number = 5;
   offset:number = 0;
-  latitude:number;
-  longitude:number;
+  latitude:number = PLACEHOLDER_LATITUDE;
+  longitude:number = PLACEHOLDER_LONGITUDE;
 
   @ViewChild(Content)
   content: Content;
@@ -164,36 +166,28 @@ export class ResponseListPage extends BasePage {
     }
   }
 
-  loadMore(event) {
-    this.logger.info(this, "loadMore");
-    if (this.offline) {
-      this.showToast("Currently offline, unable to download more responses");
-      if (event) {
-        event.complete();
-      }
-    }
-    else {
-      this.offset = this.offset + this.limit;
-      this.logger.info(this, "loadMore", "Limit", this.limit, "Offset", this.offset);
-      this.api.getPostsWithValues(this.deployment, false, this.offline, this.limit, this.offset).then(
-        (posts:Post[]) => {
-          this.posts = this.posts.concat(posts);
-          this.logger.info(this, "loadMore", "Limit", this.limit, "Offset", this.offset, "Posts", this.posts.length);
-          this.filtered = this.getFiltered(this.posts, this.filter);
-          this.pending = this.getPending(this.posts);
-          this.logger.info(this, "loadMore", "Limit", this.limit, "Offset", this.offset, "Filtered", this.filtered.length, "Pending", this.pending.length);
-          if (event) {
-            event.complete();
-          }
-        },
-        (error:any) => {
-          this.logger.error(this, "loadMore", "Failed", error);
-          if (event) {
-            event.complete();
-          }
-          this.showToast(error);
-        });
-    }
+  loadMore(event, cache:boolean=true) {
+    this.logger.info(this, "loadMore", cache);
+    this.offset = this.offset + this.limit;
+    this.logger.info(this, "loadMore", "Limit", this.limit, "Offset", this.offset);
+    this.api.getPostsWithValues(this.deployment, cache, this.offline, this.limit, this.offset).then(
+      (posts:Post[]) => {
+        this.posts = this.posts.concat(posts);
+        this.logger.info(this, "loadMore", "Limit", this.limit, "Offset", this.offset, "Posts", this.posts.length);
+        this.filtered = this.getFiltered(this.posts, this.filter);
+        this.pending = this.getPending(this.posts);
+        this.logger.info(this, "loadMore", "Limit", this.limit, "Offset", this.offset, "Filtered", this.filtered.length, "Pending", this.pending.length);
+        if (event) {
+          event.complete();
+        }
+      },
+      (error:any) => {
+        this.logger.error(this, "loadMore", "Failed", error);
+        if (event) {
+          event.complete();
+        }
+        this.showToast(error);
+      });
   }
 
   uploadPending(cache:boolean=true):Promise<any> {
@@ -605,44 +599,6 @@ export class ResponseListPage extends BasePage {
      this.showConfirm("Delete Response", "Are you sure you want to delete this response?", buttons);
   }
 
-  showList(event:any) {
-    this.logger.info(this, "showList");
-    this.view = 'list';
-  }
-
-  showMap(event:any, attempts:number=0) {
-    this.logger.info(this, "showMap", attempts);
-    this.view = 'map';
-    let options:GeolocationOptions = {
-      timeout: 6000,
-      enableHighAccuracy: true };
-    Geolocation.getCurrentPosition(options).then(
-      (position:Geoposition) => {
-        this.logger.info(this, "showMap", "getCurrentPosition", position);
-        this.latitude = position.coords.latitude;
-        this.longitude = position.coords.longitude;
-      },
-      (error) => {
-        this.logger.error(this, "showMap", "getCurrentPosition", error);
-        this.latitude = null;
-        this.longitude = null;
-      });
-    this.mapsAPILoader.load().then(() => {
-      this.logger.info(this, "showMap", "mapsAPILoader");
-      this.latLngBounds = new google.maps.LatLngBounds();
-      for (let post of this.filtered) {
-        if (post.latitude != null && post.longitude != null) {
-          this.logger.info(this, "showMap", "mapsAPILoader", post.latitude, post.longitude);
-          this.latLngBounds.extend(new google.maps.LatLng(post.latitude, post.longitude));
-        }
-	    }
-      if (this.latLngBounds.isEmpty()) {
-        this.latLngBounds.extend(new google.maps.LatLng(this.latitude, this.longitude));
-      }
-      this.logger.info(this, "showMap", "mapsAPILoader", this.latLngBounds);
-    });
-  }
-
   clearFilter(event:any, filter:Filter) {
     this.logger.info(this, "clearFilter", filter);
     this.database.removeFilters(this.deployment).then(
@@ -654,6 +610,103 @@ export class ResponseListPage extends BasePage {
         this.showToast(error);
       });
       this.resizeContent();
+  }
+
+  showList(event:any) {
+    this.logger.info(this, "showList");
+    this.view = 'list';
+  }
+
+  showMap(event:any) {
+    this.logger.info(this, "showMap");
+    this.view = 'map';
+    this.detectLocation().then(
+      () => {
+        this.logger.info(this, "showMap", "detectLocation", "Done");
+        this.loadMarkers().then(
+          (markers) => {
+            this.logger.info(this, "showMap", "loadMarkers", "Done");
+          },
+          (error) => {
+            this.logger.error(this, "showMap", "loadMarkers", error);
+            this.showToast("Problem loading the map markers");
+          });
+      },
+      (error) => {
+        this.logger.error(this, "showMap", "detectLocation", error);
+        this.showToast("Problem detecting your location");
+      });
+  }
+
+  detectLocation():Promise<any> {
+    this.logger.info(this, "detectLocation");
+    return new Promise((resolve, reject) => {
+      let options:GeolocationOptions = {
+        timeout: 6000,
+        enableHighAccuracy: true };
+      Geolocation.getCurrentPosition(options).then(
+        (position:Geoposition) => {
+          this.logger.info(this, "detectLocation", position);
+          this.latitude = position.coords.latitude;
+          this.longitude = position.coords.longitude;
+          resolve();
+        },
+        (error) => {
+          this.logger.error(this, "detectLocation", error);
+          this.latitude = PLACEHOLDER_LATITUDE;
+          this.longitude = PLACEHOLDER_LONGITUDE;
+          reject(error);
+        });
+    });
+  }
+
+  loadMarkers(cache:boolean=true):Promise<any> {
+    this.logger.info(this, "loadMarkers", "Cache", cache);
+    if (cache && this.markers != null && this.markers.length > 0) {
+      this.logger.info(this, "loadMarkers", "Cached", this.markers.length);
+      return Promise.resolve();
+    }
+    else {
+      return new Promise((resolve, reject) => {
+        this.markers = [];
+        let limit = 10;
+        let promise = Promise.resolve();
+        for (let offset = 0; offset < this.deployment.posts_count; offset += limit) {
+          this.logger.info(this, "loadMarkers", "Limit", limit, "Offset", offset, "Queued");
+          promise = promise.then(() =>
+            this.api.getPosts(this.deployment, cache, this.offline, limit, offset).then(posts => {
+              this.logger.info(this, "loadMarkers", "Limit", limit, "Offset", offset, "Finished");
+              this.markers = this.markers.concat(posts);
+          }));
+        }
+      });
+    }
+  }
+
+  extendBounds(markers:Post[]):Promise<any> {
+    this.logger.info(this, "extendBounds", markers.length);
+    return new Promise((resolve, reject) => {
+      this.mapsAPILoader.load().then(() => {
+        let latLngBounds:LatLngBounds = new google.maps.LatLngBounds();
+        for (let post of markers) {
+          if (post.latitude != null && post.longitude != null) {
+            this.logger.info(this, "extendBounds", post.latitude, post.longitude);
+            latLngBounds.extend(new google.maps.LatLng(post.latitude, post.longitude));
+          }
+        }
+        if (latLngBounds.isEmpty()) {
+          this.logger.info(this, "extendBounds", "Bounds", "Empty");
+        }
+        else if (this.map) {
+          this.map.fitBounds = latLngBounds;
+          this.logger.info(this, "extendBounds", "Bounds", latLngBounds);
+        }
+        else {
+          this.logger.info(this, "extendBounds", "Bounds", "Map NULL");
+        }
+        resolve();
+      });
+    });
   }
 
 }

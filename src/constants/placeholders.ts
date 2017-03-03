@@ -9,3 +9,7 @@ export let PLACEHOLDER_VIDEO:string = "assets/images/placeholder-video.jpg";
 export let PLACEHOLDER_MAP:string = "assets/images/placeholder-map.jpg";
 
 export let PLACEHOLDER_BLANK:string = "assets/images/placeholder-blank.png";
+
+export let PLACEHOLDER_LATITUDE:number = 42.877742;
+
+export let PLACEHOLDER_LONGITUDE:number = -97.380979;

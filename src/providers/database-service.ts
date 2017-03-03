@@ -584,7 +584,7 @@ export class DatabaseService {
       });
   }
 
-  getAttributes(deployment:Deployment, form_id:number=null) : Promise<Attribute[]> {
+  getAttributes(deployment:Deployment, form_id:number=null): Promise<Attribute[]> {
     let where = { deployment_id: deployment.id };
     if (form_id != null) {
       where['form_id'] = form_id;

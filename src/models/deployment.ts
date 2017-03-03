@@ -65,6 +65,21 @@ export class Deployment extends Model {
   @Column("refresh_token", TEXT)
   public refresh_token: string = null;
 
+  @Column("users_count", INTEGER)
+  public users_count: number = null;
+
+  @Column("posts_count", INTEGER)
+  public posts_count: number = null;
+
+  @Column("forms_count", INTEGER)
+  public forms_count: number = null;
+
+  @Column("collections_count", INTEGER)
+  public collections_count: number = null;
+
+  @Column("images_count", INTEGER)
+  public images_count: number = null;
+
   @Column("saved", TEXT)
   public saved: Date = null;
 

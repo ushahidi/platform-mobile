@@ -5,7 +5,9 @@ import { Platform, NavParams, Events, Content,
 import { Deployment } from '../../models/deployment';
 import { Post } from '../../models/post';
 import { Form } from '../../models/form';
-import { Value } from '../../models/value';
+import { User } from '../../models/user';
+import { Image } from '../../models/image';
+import { Attribute } from '../../models/attribute';
 import { Collection } from '../../models/collection';
 
 import { ApiService } from '../../providers/api-service';
@@ -53,10 +55,6 @@ export class ResponseDetailsPage extends BasePage {
     public loadingController:LoadingController,
     public actionController:ActionSheetController) {
       super(zone, platform, logger, navParams, navController, viewController, modalController, toastController, alertController, loadingController, actionController);
-  }
-
-  ionViewDidLoad() {
-    super.ionViewDidLoad();
   }
 
   ionViewWillEnter() {
@@ -110,22 +108,43 @@ export class ResponseDetailsPage extends BasePage {
 
   loadValues(cache:boolean=true):Promise<any> {
     this.logger.info(this, "loadValues", "Cache", cache);
-    if (cache && this.post && this.post.values && this.post.values.length > 0) {
+    if (cache && this.post.hasValues()) {
       this.logger.info(this, "loadValues", "Cached", this.post.values);
       return Promise.resolve();
     }
     else {
       return new Promise((resolve, reject) => {
-        this.database.getValues(this.deployment, this.post).then(
-         (values:Value[]) => {
-           this.logger.info(this, "loadValues", "Database", values);
-           this.post.values = values;
-           resolve();
-         },
-         (error:any) => {
-           this.logger.error(this, "loadValues", "Database", error);
-           reject(error);
-         });
+        Promise.all([
+          this.database.getUsers(this.deployment),
+          this.database.getImages(this.deployment),
+          this.database.getForms(this.deployment),
+          this.database.getAttributes(this.deployment)]).then((results:any[]) => {
+          let users:User[] = <User[]>results[0];
+          let images:Image[] = <Image[]>results[1];
+          let forms:Form[] = <Form[]>results[2];
+          let attributes:Attribute[] = <Attribute[]>results[3];
+          this.post.loadUser(users);
+          this.post.loadForm(forms);
+          let saves = [];
+          for (let value of this.post.values) {
+            value.loadAttribute(attributes);
+            if (value.input == 'upload') {
+              value.loadImage(images);
+              this.post.loadImage(images, value.value);
+            }
+            saves.push(this.database.saveValue(this.deployment, value));
+          }
+          saves.push(this.database.savePost(this.deployment, this.post));
+          Promise.all(saves).then(
+            (saved) => {
+              this.logger.info(this, "loadValues", "Loaded");
+              resolve();
+            },
+            (error) => {
+              this.logger.error(this, "loadValues", "Failed", error);
+              reject(error);
+            });
+        });
       });
     }
   }

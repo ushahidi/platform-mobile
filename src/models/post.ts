@@ -152,4 +152,18 @@ export class Post extends Model {
     }
   }
 
+  hasValues():boolean {
+    if (this.values && this.values.length > 0) {
+      for (let value of this.values) {
+        if (value.input == null) {
+          return false;
+        }
+      }
+      return true;
+    }
+    else {
+      return false;
+    }
+  }
+
 }

@@ -161,8 +161,10 @@ export class ApiService extends HttpService {
         let url = deployment.url + api;
         this.httpGet(url, deployment.access_token).then(
           (data:any) => {
-            let users = [];
             let saves = [];
+            let users = [];
+            deployment.users_count = data.total_count;
+            saves.push(this.database.saveDeployment(deployment));
             for (let item of data.results) {
               let user:User = new User();
               user.id = item.id;
@@ -320,6 +322,8 @@ export class ApiService extends HttpService {
         this.httpGet(url, deployment.access_token, params).then(
           (data:any) => {
             let saves = [];
+            deployment.posts_count = data.total_count;
+            saves.push(this.database.saveDeployment(deployment));
             for (let item of data.results) {
               let post:Post = new Post();
               post.deployment_id = deployment.id;
@@ -613,8 +617,10 @@ export class ApiService extends HttpService {
           offset: offset };
         this.httpGet(url, deployment.access_token, params).then(
           (data:any) => {
-            let images = [];
             let saves = [];
+            let images = [];
+            deployment.images_count = data.total_count;
+            saves.push(this.database.saveDeployment(deployment));
             for (let item of data.results) {
               let image:Image = new Image();
               image.deployment_id = deployment.id;
@@ -746,6 +752,8 @@ export class ApiService extends HttpService {
           (data:any) => {
             let forms = [];
             let saves = [];
+            deployment.forms_count = data.total_count;
+            saves.push(this.database.saveDeployment(deployment));
             for (let item of data.results) {
               let form:Form = new Form();
               form.deployment_id = deployment.id;
@@ -895,6 +903,8 @@ export class ApiService extends HttpService {
           (data:any) => {
             let saves = [];
             let collections = [];
+            deployment.collections_count = data.total_count;
+            saves.push(this.database.saveDeployment(deployment));
             for (let item of data.results) {
               let collection:Collection = new Collection();
               collection.deployment_id = deployment.id;
@@ -989,7 +999,7 @@ export class ApiService extends HttpService {
     this.logger.info(this, "getPostsWithValues", "Cache", cache, "Offline", offline, "Limit", limit, "Offset", offset);
     return Promise.all([
       this.getPosts(deployment, cache, offline, limit, offset),
-      this.getImages(deployment, cache, offline),
+      this.getImages(deployment, true, offline),
       this.getForms(deployment, true, offline),
       this.getUsers(deployment, true, offline),
       this.getAttributes(deployment, true, offline)]).
@@ -1011,6 +1021,7 @@ export class ApiService extends HttpService {
                 value.loadImage(images);
                 post.loadImage(images, value.value);
               }
+              saves.push(this.database.saveValue(deployment, value));
             }
             saves.push(this.database.savePost(deployment, post));
           }
