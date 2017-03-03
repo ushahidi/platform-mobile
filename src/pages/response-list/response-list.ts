@@ -36,17 +36,20 @@ export class ResponseListPage extends BasePage {
   posts:Post[] = null;
   filtered:Post[] = null;
   pending:Post[] = null;
-  markers:Post[] = null;
+  markers:Post[] = [];
   filter:Filter = null;
   view:string = 'list';
+  mapLoaded:boolean = false;
   mapDraggable:boolean = true;
   zoomControl:boolean = false;
   disableDefaultUI:boolean = true;
   zoom:number = 6;
   limit:number = 5;
   offset:number = 0;
+  spinner:boolean = false;
   latitude:number = PLACEHOLDER_LATITUDE;
   longitude:number = PLACEHOLDER_LONGITUDE;
+  interrupted:string = "Interrupted";
 
   @ViewChild(Content)
   content: Content;
@@ -623,13 +626,15 @@ export class ResponseListPage extends BasePage {
     this.detectLocation().then(
       () => {
         this.logger.info(this, "showMap", "detectLocation", "Done");
-        this.loadMarkers().then(
+        this.loadMarkers(true).then(
           (markers) => {
             this.logger.info(this, "showMap", "loadMarkers", "Done");
           },
           (error) => {
             this.logger.error(this, "showMap", "loadMarkers", error);
-            this.showToast("Problem loading the map markers");
+            if (error != this.interrupted) {
+              this.showToast("Problem loading the map markers");
+            }
           });
       },
       (error) => {
@@ -661,24 +666,45 @@ export class ResponseListPage extends BasePage {
   }
 
   loadMarkers(cache:boolean=true):Promise<any> {
-    this.logger.info(this, "loadMarkers", "Cache", cache);
-    if (cache && this.markers != null && this.markers.length > 0) {
+    if (cache && this.markers != null && this.markers.length > 0 && this.mapLoaded) {
       this.logger.info(this, "loadMarkers", "Cached", this.markers.length);
       return Promise.resolve();
     }
     else {
       return new Promise((resolve, reject) => {
         this.markers = [];
+        this.spinner = true;
         let limit = 10;
         let promise = Promise.resolve();
         for (let offset = 0; offset < this.deployment.posts_count; offset += limit) {
           this.logger.info(this, "loadMarkers", "Limit", limit, "Offset", offset, "Queued");
-          promise = promise.then(() =>
-            this.api.getPosts(this.deployment, cache, this.offline, limit, offset).then(posts => {
-              this.logger.info(this, "loadMarkers", "Limit", limit, "Offset", offset, "Finished");
-              this.markers = this.markers.concat(posts);
-          }));
+          promise = promise.then(
+            () => {
+              if (this.view == 'map') {
+                return this.api.getPosts(this.deployment, cache, this.offline, limit, offset).then(posts => {
+                  this.logger.info(this, "loadMarkers", "Limit", limit, "Offset", offset, "Loaded");
+                  this.markers = this.markers.concat(posts);
+                })
+              }
+              else {
+                this.logger.error(this, "loadMarkers", "Interrupted");
+                return Promise.reject(this.interrupted);
+              }
+            });
         }
+        promise.then(
+          () => {
+            this.logger.info(this, "loadMarkers", "Finished");
+            this.spinner = false;
+            this.mapLoaded = true;
+            resolve();
+          },
+          (error) => {
+            this.logger.error(this, "loadMarkers", "Rejected");
+            this.spinner = false;
+            this.mapLoaded = false;
+            reject(error);
+          });
       });
     }
   }

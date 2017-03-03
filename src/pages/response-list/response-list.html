@@ -26,9 +26,12 @@
       <ion-icon ios="md-add" md="md-add"></ion-icon>
     </button>
   </ion-fab>
+  <div class="mapSpinner" *ngIf="view == 'map' && spinner == true">
+    <ion-spinner name="ios" color="white"></ion-spinner>
+  </div>
   <div class="list" *ngIf="view == 'list'">
-    <div class="loading" text-center margin-top-lg margin-bottom-lg *ngIf="posts == null">
-      <ion-spinner></ion-spinner>
+    <div class="listSpinner" text-center margin-top-lg margin-bottom-lg *ngIf="posts == null">
+      <ion-spinner name="ios"></ion-spinner>
     </div>
     <div padding-left padding-right *ngIf="posts && filtered">
       <h6 text-center class="no-responses" *ngIf="posts && posts.length == 0">

@@ -43,7 +43,15 @@
     margin-top: 120px;
     color: #888;
   }
-  .loading {
+  .listSpinner {
     margin-top: 100px;
+  }
+  .mapSpinner {
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    left: 20px;
+    bottom: 25px;
+    z-index: 1000;
   }
 }
