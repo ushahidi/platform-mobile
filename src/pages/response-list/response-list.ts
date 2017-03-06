@@ -1,8 +1,9 @@
 import { Component, NgZone, ViewChild } from '@angular/core';
 import { Platform, NavParams, Events, Content,
   NavController, ViewController, LoadingController, ToastController, AlertController, ModalController, ActionSheetController } from 'ionic-angular';
-import { SebmGoogleMap, LatLngBounds, MapsAPILoader } from 'angular2-google-maps/core';
 import { Geolocation, GeolocationOptions, Geoposition } from 'ionic-native';
+
+import 'leaflet';
 
 import { Deployment } from '../../models/deployment';
 import { Post } from '../../models/post';
@@ -19,6 +20,7 @@ import { ResponseAddPage } from '../response-add/response-add';
 import { ResponseDetailsPage } from '../response-details/response-details';
 import { ResponseSearchPage } from '../response-search/response-search';
 
+import { MAPBOX_ACCESS_TOKEN } from '../../constants/secrets';
 import { POST_UPDATED, POST_DELETED } from '../../constants/events';
 import { PLACEHOLDER_LATITUDE, PLACEHOLDER_LONGITUDE } from '../../constants/placeholders';
 
@@ -36,29 +38,24 @@ export class ResponseListPage extends BasePage {
   posts:Post[] = null;
   filtered:Post[] = null;
   pending:Post[] = null;
-  markers:Post[] = [];
   filter:Filter = null;
   view:string = 'list';
   mapLoaded:boolean = false;
-  mapDraggable:boolean = true;
-  zoomControl:boolean = false;
-  disableDefaultUI:boolean = true;
-  zoom:number = 6;
+  mapCenter:string = `${PLACEHOLDER_LATITUDE},${PLACEHOLDER_LONGITUDE}`;
+  mapZoom:number = 8;
+  mapOptions:string= null;
   limit:number = 5;
   offset:number = 0;
   spinner:boolean = false;
   latitude:number = PLACEHOLDER_LATITUDE;
   longitude:number = PLACEHOLDER_LONGITUDE;
   interrupted:string = "Interrupted";
+  map:any=null;
 
   @ViewChild(Content)
   content: Content;
 
-  @ViewChild("map")
-  map:SebmGoogleMap;
-
   constructor(
-    public mapsAPILoader:MapsAPILoader,
     public api:ApiService,
     public logger:LoggerService,
     public database:DatabaseService,
@@ -620,27 +617,42 @@ export class ResponseListPage extends BasePage {
     this.view = 'list';
   }
 
-  showMap(event:any) {
-    this.logger.info(this, "showMap");
+  showMap(event:any, attempts:number=0) {
+    this.logger.info(this, "showMap", attempts);
     this.view = 'map';
-    this.detectLocation().then(
-      () => {
-        this.logger.info(this, "showMap", "detectLocation", "Done");
-        this.loadMarkers(true).then(
-          (markers) => {
-            this.logger.info(this, "showMap", "loadMarkers", "Done");
-          },
-          (error) => {
-            this.logger.error(this, "showMap", "loadMarkers", error);
-            if (error != this.interrupted) {
-              this.showToast("Problem loading the map markers");
-            }
-          });
-      },
-      (error) => {
-        this.logger.error(this, "showMap", "detectLocation", error);
-        this.showToast("Problem detecting your location");
-      });
+    let element: HTMLElement = document.getElementById('map');
+    if (element) {
+      this.detectLocation().then(
+        () => {
+          this.loadMap().then(
+            (map)=> {
+              this.logger.info(this, "showMap", "loadMap", "Done");
+              this.loadMarkers(true).then(
+                (markers) => {
+                  this.logger.info(this, "showMap", "loadMarkers", "Done");
+                },
+                (error) => {
+                  this.logger.error(this, "showMap", "loadMarkers", error);
+                  if (error != this.interrupted) {
+                    this.showToast("Problem loading the map markers");
+                  }
+                });
+            },
+            (error) => {
+              this.logger.error(this, "showMap", "loadMarkers", error);
+              this.showToast("Problem loading the map");
+            });
+        },
+        (error) => {
+          this.logger.error(this, "showMap", "detectLocation", error);
+          this.showToast("Problem detecting your location");
+        });
+    }
+    else {
+      setTimeout((attempts) => {
+        this.showMap(event, attempts+1);
+      }, 1000, attempts);
+    }
   }
 
   detectLocation():Promise<any> {
@@ -665,14 +677,25 @@ export class ResponseListPage extends BasePage {
     });
   }
 
+  loadMap():Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.logger.info(this, "loadMap");
+      this.map = L.map('map').setView([this.latitude, this.longitude], 8);
+      L.tileLayer(`https://api.tiles.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token=${MAPBOX_ACCESS_TOKEN}`, {
+        maxZoom: 18,
+        accessToken: MAPBOX_ACCESS_TOKEN
+      }).addTo(this.map);
+      resolve(this.map);
+    });
+  }
+
   loadMarkers(cache:boolean=true):Promise<any> {
-    if (cache && this.markers != null && this.markers.length > 0 && this.mapLoaded) {
-      this.logger.info(this, "loadMarkers", "Cached", this.markers.length);
+    if (cache && this.mapLoaded) {
+      this.logger.info(this, "loadMarkers", "Cached");
       return Promise.resolve();
     }
     else {
       return new Promise((resolve, reject) => {
-        this.markers = [];
         this.spinner = true;
         let limit = 10;
         let promise = Promise.resolve();
@@ -681,10 +704,15 @@ export class ResponseListPage extends BasePage {
           promise = promise.then(
             () => {
               if (this.view == 'map') {
-                return this.api.getPosts(this.deployment, cache, this.offline, limit, offset).then(posts => {
+                return this.api.getPosts(this.deployment, cache, this.offline, limit, offset).then((posts:Post[]) => {
                   this.logger.info(this, "loadMarkers", "Limit", limit, "Offset", offset, "Loaded");
-                  this.markers = this.markers.concat(posts);
-                })
+                  for (let post of posts) {
+                    if (post.latitude && post.longitude) {
+                      let marker = this.loadMarker(post);
+                      marker.addTo(this.map);
+                    }
+                  }
+                });
               }
               else {
                 this.logger.error(this, "loadMarkers", "Interrupted");
@@ -709,30 +737,25 @@ export class ResponseListPage extends BasePage {
     }
   }
 
-  extendBounds(markers:Post[]):Promise<any> {
-    this.logger.info(this, "extendBounds", markers.length);
-    return new Promise((resolve, reject) => {
-      this.mapsAPILoader.load().then(() => {
-        let latLngBounds:LatLngBounds = new google.maps.LatLngBounds();
-        for (let post of markers) {
-          if (post.latitude != null && post.longitude != null) {
-            this.logger.info(this, "extendBounds", post.latitude, post.longitude);
-            latLngBounds.extend(new google.maps.LatLng(post.latitude, post.longitude));
-          }
-        }
-        if (latLngBounds.isEmpty()) {
-          this.logger.info(this, "extendBounds", "Bounds", "Empty");
-        }
-        else if (this.map) {
-          this.map.fitBounds = latLngBounds;
-          this.logger.info(this, "extendBounds", "Bounds", latLngBounds);
-        }
-        else {
-          this.logger.info(this, "extendBounds", "Bounds", "Map NULL");
-        }
-        resolve();
-      });
+  loadMarker(post:Post):L.Marker {
+    this.logger.info(this, "loadMarker", post.title, post.latitude, post.longitude);
+    let icon = L.icon({
+      iconUrl: `https://api.mapbox.com/v4/marker/pin-m+${post.color.replace('#','')}.png?access_token=${MAPBOX_ACCESS_TOKEN}`,
+      iconSize: [30, 70],
+      popupAnchor: [0, -20]
     });
+    this.logger.info(this, "loadMarker", "Icon", icon);
+    let marker = L.marker([post.latitude, post.longitude], {icon: icon});
+    let content = document.createElement('div');
+    content.className = "popup";
+    content.innerHTML = `<h4>${post.title}</h4><p>${post.description}</p>`;
+    content.onclick = () => {
+      this.logger.info(this, "loadMarker", "Clicked", post.title);
+      this.showResponse(post);
+    };
+    let popup = L.popup().setContent(content);
+    marker.bindPopup(popup);
+    return marker;
   }
 
 }

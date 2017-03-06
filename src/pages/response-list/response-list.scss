@@ -10,19 +10,23 @@
     left: 0;
     right: 0;
     bottom: 0;
-    .sebm-google-map-container {
-      width: 100%;
+    #map {
       height: 100%;
-      .title {
-        font-size: 16px;
-        font-weight: 500;
-        padding-top: 5px;
+      width: 100%;
+    }
+    .leaflet {
+      height: 100%;
+      width: 100%;
+    }
+    .popup {
+      h4 {
+        font-size: 17px;
+        margin-bottom: 5px;
       }
-      .description {
+      p {
+        margin-top: 0;
+        color: #888;
         font-size: 14px;
-        font-weight: 400;
-        padding-top: 5px;
-        padding-bottom: 5px;
       }
     }
   }
