@@ -5,7 +5,7 @@
         <ion-icon ios="md-close" md="md-close"></ion-icon>
       </button>
     </ion-buttons>
-    <ion-title>Location</ion-title>
+    <ion-title>{{title || "Location"}}</ion-title>
     <ion-buttons end>
       <button #cancel ion-button icon-only *ngIf="modal" (click)="onDone($event)">
         <ion-icon ios="md-checkmark" md="md-checkmark"></ion-icon>

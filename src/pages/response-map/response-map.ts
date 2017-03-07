@@ -24,6 +24,7 @@ export class ResponseMapPage extends BasePage {
   latitude:number = null;
   longitude:number = null;
   modal:boolean = true;
+  title:string = "Location";
 
   @ViewChild(Content)
   content: Content;
@@ -41,15 +42,12 @@ export class ResponseMapPage extends BasePage {
     public loadingController:LoadingController,
     public actionController:ActionSheetController) {
       super(zone, platform, logger, navParams, navController, viewController, modalController, toastController, alertController, loadingController, actionController);
-    }
-
-  ionViewDidLoad() {
-    super.ionViewDidLoad();
   }
 
   ionViewWillEnter() {
     super.ionViewWillEnter();
     this.modal = this.getParameter<boolean>("modal");
+    this.title = this.getParameter<string>("title");
     this.latitude = this.getParameter<number>("latitude");
     this.longitude = this.getParameter<number>("longitude");
     this.draggable = this.getParameter<boolean>("draggable");

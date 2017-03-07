@@ -1,0 +1,8 @@
+<ion-header>
+  <ion-navbar color="dark">
+    <ion-title>{{title || "Image"}}</ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content class="response-image-page">
+  <img class="lazy" [src]="image" [lazyLoad]="image" [errorImage]="placeholder">
+</ion-content>

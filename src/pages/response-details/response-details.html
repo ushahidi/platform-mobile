@@ -40,7 +40,7 @@
       <div class="value-text">{{post.description}}</div>
     </ion-item>
     <div *ngFor="let value of post.values">
-      <value-text [value]="value" (showImage)="showImage(value.value)" (showLocation)="showLocation(value.value)"></value-text>
+      <value-text [value]="value" (showImage)="showImage(value.label,value.image)" (showLocation)="showLocation(value.label,value.value)"></value-text>
     </div>
   </ion-list>
 </ion-content>

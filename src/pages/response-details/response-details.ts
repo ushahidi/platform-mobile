@@ -17,6 +17,7 @@ import { DatabaseService } from '../../providers/database-service';
 import { BasePage } from '../../pages/base-page/base-page';
 import { ResponseAddPage } from '../../pages/response-add/response-add';
 import { ResponseMapPage } from '../../pages/response-map/response-map';
+import { ResponseImagePage } from '../../pages/response-image/response-image';
 
 import { POST_UPDATED, POST_DELETED } from '../../constants/events';
 import { PLACEHOLDER_USER, PLACEHOLDER_NAME } from '../../constants/placeholders';
@@ -25,7 +26,7 @@ import { PLACEHOLDER_USER, PLACEHOLDER_NAME } from '../../constants/placeholders
   selector: 'response-details-page',
   templateUrl: 'response-details.html',
   providers: [ ApiService, DatabaseService, LoggerService ],
-  entryComponents:[ ResponseAddPage, ResponseMapPage ]
+  entryComponents:[ ResponseAddPage, ResponseMapPage, ResponseImagePage ]
 })
 export class ResponseDetailsPage extends BasePage {
 
@@ -225,17 +226,22 @@ export class ResponseDetailsPage extends BasePage {
     });
   }
 
-  showImage(event:any) {
-    this.logger.info(this, "showImage");
+  showImage(title:string, image:string) {
+    this.logger.info(this, "showImage", title, image);
+    this.showPage(ResponseImagePage, {
+      title: title,
+      image: image
+    });
   }
-  
-  showLocation(event:any) {
-    this.logger.info(this, "showLocation");
+
+  showLocation(title:string, coordinates:string) {
+    this.logger.info(this, "showLocation", title, coordinates);
     this.showPage(ResponseMapPage, {
-      latitude: this.post.latitude,
-      longitude: this.post.longitude,
+      modal: false,
       draggable: false,
-      modal: false
+      title: title,
+      latitude: this.post.latitude,
+      longitude: this.post.longitude
     });
   }
 

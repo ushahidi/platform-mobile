@@ -19,6 +19,7 @@ import { ResponseDetailsPage } from '../pages/response-details/response-details'
 import { ResponseAddPage } from '../pages/response-add/response-add';
 import { ResponseMapPage } from '../pages/response-map/response-map';
 import { ResponseSearchPage } from '../pages/response-search/response-search';
+import { ResponseImagePage } from '../pages/response-image/response-image';
 
 import { CheckboxComponent } from '../components/checkbox/checkbox';
 import { CheckboxesComponent } from '../components/checkboxes/checkboxes';
@@ -64,6 +65,7 @@ export function provideStorage() {
     ResponseDetailsPage,
     ResponseAddPage,
     ResponseMapPage,
+    ResponseImagePage,
     ResponseSearchPage,
     CheckboxComponent,
     CheckboxesComponent,
@@ -103,6 +105,7 @@ export function provideStorage() {
     ResponseDetailsPage,
     ResponseAddPage,
     ResponseMapPage,
+    ResponseImagePage,
     ResponseSearchPage
   ],
   providers: [

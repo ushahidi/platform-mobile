@@ -1,0 +1,13 @@
+.response-image-page {
+  background-color: #e7e9ec;
+  img {
+    width: 100%;
+    &.lazy {
+      transition: opacity 1s;
+      opacity: 0;
+      &.ng2-lazyloaded {
+        opacity: 1;
+      }
+    }
+  }
+}
