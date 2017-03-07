@@ -26,6 +26,11 @@
       <ion-icon ios="md-add" md="md-add"></ion-icon>
     </button>
   </ion-fab>
+  <ion-fab bottom left *ngIf="view == 'map'">
+    <button ion-fab mini color="grey" (click)="showStyles($event)">
+      <ion-icon ios="ios-map" md="md-map"></ion-icon>
+    </button>
+  </ion-fab>
   <div class="mapSpinner" *ngIf="view == 'map' && spinner == true">
     <ion-spinner name="ios" color="white"></ion-spinner>
   </div>

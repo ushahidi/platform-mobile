@@ -11,6 +11,8 @@ export class MapMarker {
   }
 
   getUrl() {
-    return `https://api.mapbox.com/v4/marker/${this.pin}+${this.color}.png?access_token=${MAPBOX_ACCESS_TOKEN}`;
+    let url = `https://api.mapbox.com/v4/marker/${this.pin}+${this.color}.png?access_token=${MAPBOX_ACCESS_TOKEN}`;
+    console.log(url);
+    return url;
   }
 }

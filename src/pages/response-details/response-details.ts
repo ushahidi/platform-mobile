@@ -16,6 +16,7 @@ import { DatabaseService } from '../../providers/database-service';
 
 import { BasePage } from '../../pages/base-page/base-page';
 import { ResponseAddPage } from '../../pages/response-add/response-add';
+import { ResponseMapPage } from '../../pages/response-map/response-map';
 
 import { POST_UPDATED, POST_DELETED } from '../../constants/events';
 import { PLACEHOLDER_USER, PLACEHOLDER_NAME } from '../../constants/placeholders';
@@ -24,7 +25,7 @@ import { PLACEHOLDER_USER, PLACEHOLDER_NAME } from '../../constants/placeholders
   selector: 'response-details-page',
   templateUrl: 'response-details.html',
   providers: [ ApiService, DatabaseService, LoggerService ],
-  entryComponents:[ ResponseAddPage ]
+  entryComponents:[ ResponseAddPage, ResponseMapPage ]
 })
 export class ResponseDetailsPage extends BasePage {
 
@@ -221,6 +222,20 @@ export class ResponseDetailsPage extends BasePage {
         form: this.form });
     modal.onDidDismiss(data => {
       this.logger.info(this, "editResponse", "Modal", data);
+    });
+  }
+
+  showImage(event:any) {
+    this.logger.info(this, "showImage");
+  }
+  
+  showLocation(event:any) {
+    this.logger.info(this, "showLocation");
+    this.showPage(ResponseMapPage, {
+      latitude: this.post.latitude,
+      longitude: this.post.longitude,
+      draggable: false,
+      modal: false
     });
   }
 

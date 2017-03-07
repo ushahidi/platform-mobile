@@ -5,6 +5,11 @@ import { Geolocation, GeolocationOptions, Geoposition } from 'ionic-native';
 
 import 'leaflet';
 
+import { TileLayer } from '../../maps/tile-layer';
+import { MapMarker } from '../../maps/map-marker';
+
+import { TruncatePipe } from '../../pipes/truncate';
+
 import { Deployment } from '../../models/deployment';
 import { Post } from '../../models/post';
 import { Form } from '../../models/form';
@@ -23,9 +28,6 @@ import { ResponseSearchPage } from '../response-search/response-search';
 import { POST_UPDATED, POST_DELETED } from '../../constants/events';
 import { PLACEHOLDER_LATITUDE, PLACEHOLDER_LONGITUDE } from '../../constants/placeholders';
 
-import { TileLayer } from '../../maps/tile-layer';
-import { MapMarker } from '../../maps/map-marker';
-
 export declare var google: any;
 
 @Component({
@@ -42,10 +44,12 @@ export class ResponseListPage extends BasePage {
   pending:Post[] = null;
   filter:Filter = null;
   view:string = 'list';
-  mapLoaded:boolean = false;
+  //mapLoaded:boolean = false;
   mapCenter:string = `${PLACEHOLDER_LATITUDE},${PLACEHOLDER_LONGITUDE}`;
   mapZoom:number = 8;
   mapOptions:string= null;
+  mapStyle:string = "streets";
+  mapLayer:any = null;
   limit:number = 5;
   offset:number = 0;
   spinner:boolean = false;
@@ -629,7 +633,7 @@ export class ResponseListPage extends BasePage {
           this.loadMap().then(
             (map)=> {
               this.logger.info(this, "showMap", "loadMap", "Done");
-              this.loadMarkers(true).then(
+              this.loadMarkers().then(
                 (markers) => {
                   this.logger.info(this, "showMap", "loadMarkers", "Done");
                 },
@@ -682,60 +686,51 @@ export class ResponseListPage extends BasePage {
   loadMap():Promise<any> {
     return new Promise((resolve, reject) => {
       this.logger.info(this, "loadMap");
-      this.map = L.map('map').setView([this.latitude, this.longitude], 8);
-      L.tileLayer(new TileLayer().getUrl(), {
-        maxZoom: 18
-      }).addTo(this.map);
+      this.map = L.map('map').setView([this.latitude, this.longitude], this.mapZoom);
+      this.mapLayer = L.tileLayer(new TileLayer(this.mapStyle).getUrl(), { maxZoom: 20 });
+      this.mapLayer.addTo(this.map);
       resolve(this.map);
     });
   }
 
   loadMarkers(cache:boolean=true):Promise<any> {
-    if (cache && this.mapLoaded) {
-      this.logger.info(this, "loadMarkers", "Cached");
-      return Promise.resolve();
-    }
-    else {
-      return new Promise((resolve, reject) => {
-        this.spinner = true;
-        let limit = 10;
-        let promise = Promise.resolve();
-        for (let offset = 0; offset < this.deployment.posts_count; offset += limit) {
-          this.logger.info(this, "loadMarkers", "Limit", limit, "Offset", offset, "Queued");
-          promise = promise.then(
-            () => {
-              if (this.view == 'map') {
-                return this.api.getPosts(this.deployment, cache, this.offline, limit, offset).then((posts:Post[]) => {
-                  this.logger.info(this, "loadMarkers", "Limit", limit, "Offset", offset, "Loaded");
-                  for (let post of posts) {
-                    if (post.latitude && post.longitude) {
-                      let marker = this.loadMarker(post);
-                      marker.addTo(this.map);
-                    }
-                  }
-                });
-              }
-              else {
-                this.logger.error(this, "loadMarkers", "Interrupted");
-                return Promise.reject(this.interrupted);
-              }
-            });
-        }
-        promise.then(
+    return new Promise((resolve, reject) => {
+      this.spinner = true;
+      let limit = 10;
+      let promise = Promise.resolve();
+      for (let offset = 0; offset < this.deployment.posts_count; offset += limit) {
+        this.logger.info(this, "loadMarkers", "Limit", limit, "Offset", offset, "Queued");
+        promise = promise.then(
           () => {
-            this.logger.info(this, "loadMarkers", "Finished");
-            this.spinner = false;
-            this.mapLoaded = true;
-            resolve();
-          },
-          (error) => {
-            this.logger.error(this, "loadMarkers", "Rejected");
-            this.spinner = false;
-            this.mapLoaded = false;
-            reject(error);
+            if (this.view == 'map') {
+              return this.api.getPosts(this.deployment, cache, this.offline, limit, offset).then((posts:Post[]) => {
+                this.logger.info(this, "loadMarkers", "Limit", limit, "Offset", offset, "Loaded");
+                for (let post of posts) {
+                  if (post.latitude && post.longitude) {
+                    let marker = this.loadMarker(post);
+                    marker.addTo(this.map);
+                  }
+                }
+              });
+            }
+            else {
+              this.logger.error(this, "loadMarkers", "Interrupted");
+              return Promise.reject(this.interrupted);
+            }
           });
-      });
-    }
+      }
+      promise.then(
+        () => {
+          this.logger.info(this, "loadMarkers", "Finished");
+          this.spinner = false;
+          resolve();
+        },
+        (error) => {
+          this.logger.error(this, "loadMarkers", "Rejected");
+          this.spinner = false;
+          reject(error);
+        });
+    });
   }
 
   loadMarker(post:Post):L.Marker {
@@ -743,20 +738,63 @@ export class ResponseListPage extends BasePage {
     let icon = L.icon({
       iconUrl: new MapMarker(post.color).getUrl(),
       iconSize: [30, 70],
-      popupAnchor: [0, -26]
+      popupAnchor: [0, -25]
     });
+    let truncate = new TruncatePipe();
     let marker = L.marker([post.latitude, post.longitude], {
       icon: icon });
     let content = document.createElement('div');
     content.className = "popup";
-    content.innerHTML = `<h4>${post.title}</h4><p>${post.description}</p>`;
+    content.innerHTML = `<h4>${truncate.transform(post.title,20)}</h4><p>${truncate.transform(post.description,20)}</p>`;
     content.onclick = () => {
-      this.logger.info(this, "loadMarker", "Clicked", post.title);
       this.showResponse(post);
     };
     let popup = L.popup().setContent(content);
     marker.bindPopup(popup);
     return marker;
+  }
+
+  showStyles(event) {
+    this.logger.info(this, "showStyles");
+    let buttons = [
+      {
+        text: 'Streets',
+        handler:() => this.changeStyle("streets")
+      },
+      {
+        text: 'Outdoors',
+        handler:() => this.changeStyle("outdoors")
+      },
+      {
+        text: 'Light',
+        handler:() => this.changeStyle("light")
+      },
+      {
+        text: 'Dark',
+        handler:() => this.changeStyle("dark")
+      },
+      {
+        text: 'Satellite',
+        handler:() => this.changeStyle("satellite")
+      },
+      {
+        text: 'Satellite Streets',
+        handler:() => this.changeStyle("satellite-streets")
+      },
+      {
+        text: 'Cancel',
+        role: 'cancel'
+      }
+    ];
+    this.showActionSheet("Change map style", buttons);
+  }
+
+  changeStyle(mapStyle:string) {
+    this.logger.info(this, "changeStyle", mapStyle);
+    this.mapStyle = mapStyle;
+    this.map.removeLayer(this.mapLayer);
+    this.mapLayer = L.tileLayer(new TileLayer(this.mapStyle).getUrl(), { maxZoom: 20 });
+    this.mapLayer.addTo(this.map);
   }
 
 }
