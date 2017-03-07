@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
 import { SafeResourceUrl, DomSanitizer } from '@angular/platform-browser';
 
+import { Static } from '../../maps/static';
+
 import { LoggerService } from '../../providers/logger-service';
 
-import { GOOGLE_API_KEY } from '../../constants/secrets';
+import { MAPBOX_ACCESS_TOKEN } from '../../constants/secrets';
 import { PLACEHOLDER_PHOTO, PLACEHOLDER_MAP } from '../../constants/placeholders';
 
 @Component({
@@ -13,10 +15,10 @@ import { PLACEHOLDER_PHOTO, PLACEHOLDER_MAP } from '../../constants/placeholders
 })
 export class ValueComponent {
 
-  key: string = GOOGLE_API_KEY;
   value: any;
   map: string = null;
   video: SafeResourceUrl = null;
+  accessToken: string = MAPBOX_ACCESS_TOKEN;
   mapPaceholder: string = PLACEHOLDER_MAP;
   photoPaceholder: string = PLACEHOLDER_PHOTO;
 
@@ -45,10 +47,20 @@ export class ValueComponent {
   }
 
   loadMapSrc(coordinates:string) {
-    this.map = `https://maps.googleapis.com/maps/api/staticmap`
-      + `?center=${coordinates}`
-      + `&zoom=15&size=300x200&maptype=roadmap&markers=color:red%7C`
-      + `${coordinates}&key=${this.key}`;
+    if (coordinates && coordinates.length > 1) {
+      let components = coordinates.split(",");
+      if (components && components.length > 1) {
+        let latitude = Number(components[0]);
+        let longitude = Number(components[1]);
+        this.map = new Static(latitude, longitude).getUrl();
+      }
+      else {
+        this.map = null;
+      }
+    }
+    else {
+      this.map = null;
+    }
   }
 
   loadVideoSrc(url:string) {

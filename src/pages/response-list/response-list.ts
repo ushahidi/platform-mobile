@@ -20,9 +20,11 @@ import { ResponseAddPage } from '../response-add/response-add';
 import { ResponseDetailsPage } from '../response-details/response-details';
 import { ResponseSearchPage } from '../response-search/response-search';
 
-import { MAPBOX_ACCESS_TOKEN } from '../../constants/secrets';
 import { POST_UPDATED, POST_DELETED } from '../../constants/events';
 import { PLACEHOLDER_LATITUDE, PLACEHOLDER_LONGITUDE } from '../../constants/placeholders';
+
+import { Layer } from '../../maps/layer';
+import { Marker } from '../../maps/marker';
 
 export declare var google: any;
 
@@ -681,9 +683,8 @@ export class ResponseListPage extends BasePage {
     return new Promise((resolve, reject) => {
       this.logger.info(this, "loadMap");
       this.map = L.map('map').setView([this.latitude, this.longitude], 8);
-      L.tileLayer(`https://api.tiles.mapbox.com/v4/mapbox.streets/{z}/{x}/{y}.png?access_token=${MAPBOX_ACCESS_TOKEN}`, {
-        maxZoom: 18,
-        accessToken: MAPBOX_ACCESS_TOKEN
+      L.tileLayer(new Layer().getUrl(), {
+        maxZoom: 18
       }).addTo(this.map);
       resolve(this.map);
     });
@@ -740,12 +741,12 @@ export class ResponseListPage extends BasePage {
   loadMarker(post:Post):L.Marker {
     this.logger.info(this, "loadMarker", post.title, post.latitude, post.longitude);
     let icon = L.icon({
-      iconUrl: `https://api.mapbox.com/v4/marker/pin-m+${post.color.replace('#','')}.png?access_token=${MAPBOX_ACCESS_TOKEN}`,
+      iconUrl: new Marker(post.color).getUrl(),
       iconSize: [30, 70],
-      popupAnchor: [0, -20]
+      popupAnchor: [0, -26]
     });
-    this.logger.info(this, "loadMarker", "Icon", icon);
-    let marker = L.marker([post.latitude, post.longitude], {icon: icon});
+    let marker = L.marker([post.latitude, post.longitude], {
+      icon: icon });
     let content = document.createElement('div');
     content.className = "popup";
     content.innerHTML = `<h4>${post.title}</h4><p>${post.description}</p>`;

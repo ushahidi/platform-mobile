@@ -15,9 +15,9 @@ cd Ushahidi_Mobile
 #### Update the secrets with your own API keys
 
 1. Rename `src/constants/secrets.ts.template` to `/src/constants/secrets.ts`
-2. Get a Google API Key at https://console.developers.google.com
-3. Get a Vimeo Access Token at https://developer.vimeo.com/apps
-4. Update `GOOGLE_API_KEY` and `VIMEO_ACCESS_TOKEN` with your own API keys
+2. Get a Vimeo Access Token at https://developer.vimeo.com/apps
+3. Get a MapBox Access Token at https://www.mapbox.com/studio/account/tokens/
+4. Update `VIMEO_ACCESS_TOKEN` and `MAPBOX_ACCESS_TOKEN` with your own keys
 
 ---
 

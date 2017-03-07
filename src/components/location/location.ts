@@ -2,12 +2,12 @@ import { Component, Output, EventEmitter } from '@angular/core';
 import { Geolocation, GeolocationOptions, Geoposition } from 'ionic-native';
 import { FormGroup } from '@angular/forms';
 
+import { Static } from '../../maps/static';
+
 import { Value } from '../../models/value';
 import { Attribute } from '../../models/attribute';
 
 import { LoggerService } from '../../providers/logger-service';
-
-import { GOOGLE_API_KEY } from '../../constants/secrets';
 
 @Component({
   selector: 'field-location',
@@ -16,10 +16,10 @@ import { GOOGLE_API_KEY } from '../../constants/secrets';
 })
 export class LocationComponent {
 
-  key: string = GOOGLE_API_KEY;
   formGroup: FormGroup;
   attribute: Attribute = null;
   value: Value = null;
+  map:string = null;
   latitude: number = null;
   longitude: number = null;
   submitted: boolean = false;
@@ -69,18 +69,14 @@ export class LocationComponent {
         this.latitude = position.coords.latitude;
         this.longitude = position.coords.longitude;
         this.error = false;
+        this.loadMapSrc(this.latitude, this.longitude);
       },
       (error) => {
         this.logger.error(this, "detectLocation", "Error", error);
         this.latitude = null;
         this.longitude = null;
         this.error = true;
-      }).catch(
-        (error) => {
-          this.logger.error(this, "detectLocation", "Error", error);
-          this.latitude = null;
-          this.longitude = null;
-          this.error = true;
+        this.loadMapSrc(null, null);
       });
   }
 
@@ -89,5 +85,14 @@ export class LocationComponent {
     this.changeLocation.emit({
       latitude: this.latitude,
       longitude: this.longitude});
+  }
+
+  loadMapSrc(latitude, longitude) {
+    if (latitude && longitude) {
+      this.map = new Static(latitude, longitude).getUrl();
+    }
+    else {
+      this.map = null;
+    }
   }
 }

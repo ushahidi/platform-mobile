@@ -3,8 +3,6 @@ import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Storage } from '@ionic/storage';
 
-import { AgmCoreModule } from 'angular2-google-maps/core';
-
 import { LazyLoadImageModule } from 'ng2-lazyload-image';
 
 import { MyApp } from './app.component';
@@ -49,8 +47,6 @@ import { ApiService } from '../providers/api-service';
 import { DatabaseService } from '../providers/database-service';
 import { VimeoService } from '../providers/vimeo-service';
 
-import { GOOGLE_API_KEY } from '../constants/secrets';
-
 export function provideStorage() {
   return new Storage(['sqlite', 'websql', 'indexeddb'], { name: 'ushahidi' });
 }
@@ -93,10 +89,7 @@ export function provideStorage() {
     IonicModule.forRoot(MyApp),
     FormsModule,
     ReactiveFormsModule,
-    LazyLoadImageModule,
-    AgmCoreModule.forRoot({
-      apiKey: GOOGLE_API_KEY
-    })
+    LazyLoadImageModule
   ],
   bootstrap: [ IonicApp ],
   entryComponents: [
