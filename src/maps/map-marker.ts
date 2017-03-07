@@ -1,6 +1,6 @@
 import { MAPBOX_ACCESS_TOKEN } from '../constants/secrets';
 
-export class Marker {
+export class MapMarker {
 
   pin:string = "pin-m";
   color:string = "207AC9";
@@ -11,8 +11,6 @@ export class Marker {
   }
 
   getUrl() {
-    let url = `https://api.mapbox.com/v4/marker/${this.pin}+${this.color}.png?access_token=${MAPBOX_ACCESS_TOKEN}`;
-    console.log(url);
-    return url;
+    return `https://api.mapbox.com/v4/marker/${this.pin}+${this.color}.png?access_token=${MAPBOX_ACCESS_TOKEN}`;
   }
 }

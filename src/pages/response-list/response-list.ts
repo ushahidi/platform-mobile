@@ -23,8 +23,8 @@ import { ResponseSearchPage } from '../response-search/response-search';
 import { POST_UPDATED, POST_DELETED } from '../../constants/events';
 import { PLACEHOLDER_LATITUDE, PLACEHOLDER_LONGITUDE } from '../../constants/placeholders';
 
-import { Layer } from '../../maps/layer';
-import { Marker } from '../../maps/marker';
+import { TileLayer } from '../../maps/tile-layer';
+import { MapMarker } from '../../maps/map-marker';
 
 export declare var google: any;
 
@@ -683,7 +683,7 @@ export class ResponseListPage extends BasePage {
     return new Promise((resolve, reject) => {
       this.logger.info(this, "loadMap");
       this.map = L.map('map').setView([this.latitude, this.longitude], 8);
-      L.tileLayer(new Layer().getUrl(), {
+      L.tileLayer(new TileLayer().getUrl(), {
         maxZoom: 18
       }).addTo(this.map);
       resolve(this.map);
@@ -741,7 +741,7 @@ export class ResponseListPage extends BasePage {
   loadMarker(post:Post):L.Marker {
     this.logger.info(this, "loadMarker", post.title, post.latitude, post.longitude);
     let icon = L.icon({
-      iconUrl: new Marker(post.color).getUrl(),
+      iconUrl: new MapMarker(post.color).getUrl(),
       iconSize: [30, 70],
       popupAnchor: [0, -26]
     });

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { SafeResourceUrl, DomSanitizer } from '@angular/platform-browser';
 
-import { Static } from '../../maps/static';
+import { StaticMap } from '../../maps/static-map';
 
 import { LoggerService } from '../../providers/logger-service';
 
@@ -52,7 +52,7 @@ export class ValueComponent {
       if (components && components.length > 1) {
         let latitude = Number(components[0]);
         let longitude = Number(components[1]);
-        this.map = new Static(latitude, longitude).getUrl();
+        this.map = new StaticMap(latitude, longitude).getUrl();
       }
       else {
         this.map = null;

@@ -2,8 +2,8 @@ import { Component, NgZone, ViewChild } from '@angular/core';
 import { Platform, NavParams, Content,
   NavController, ViewController, LoadingController, ToastController, AlertController, ModalController, ActionSheetController  } from 'ionic-angular';
 
-import { Layer } from '../../maps/layer';
-import { Marker } from '../../maps/marker';
+import { TileLayer } from '../../maps/tile-layer';
+import { MapMarker } from '../../maps/map-marker';
 
 import { BasePage } from '../../pages/base-page/base-page';
 
@@ -16,15 +16,10 @@ import { LoggerService } from '../../providers/logger-service';
 })
 export class ResponseMapPage extends BasePage {
 
-  latitude: number;
-  longitude: number;
-  mapZoom : number = 16;
-  mapDraggable: boolean = true;
-  markerDraggable: boolean = true;
-  zoomControl : boolean = false;
-  disableDefaultUI : boolean = true;
-
-  map:any=null;
+  map:any = null;
+  zoom:number = 16;
+  latitude:number = null;
+  longitude:number = null;
 
   @ViewChild(Content)
   content: Content;
@@ -57,6 +52,11 @@ export class ResponseMapPage extends BasePage {
     });
   }
 
+  ionViewDidEnter() {
+    super.ionViewDidEnter();
+    this.showToast("Drag the map marker to change the location");
+  }
+
   onCancel(event:any) {
     this.logger.info(this, 'onCancel');
     this.hideModal();
@@ -72,8 +72,8 @@ export class ResponseMapPage extends BasePage {
   loadMap(latitude:number, longitude:number):Promise<any> {
     return new Promise((resolve, reject) => {
       this.logger.info(this, "loadMap");
-      this.map = L.map('map').setView([latitude, longitude], 12);
-      L.tileLayer(new Layer().getUrl(), {
+      this.map = L.map('map').setView([latitude, longitude], this.zoom);
+      L.tileLayer(new TileLayer().getUrl(), {
         maxZoom: 18
       }).addTo(this.map);
       resolve(this.map);
@@ -83,7 +83,7 @@ export class ResponseMapPage extends BasePage {
   loadMarker(latitude:number, longitude:number):L.Marker {
     this.logger.info(this, "loadMarker", latitude, longitude);
     let icon = L.icon({
-      iconUrl: new Marker().getUrl(),
+      iconUrl: new MapMarker().getUrl(),
       iconSize: [30, 70],
       popupAnchor: [0, -26]
     });

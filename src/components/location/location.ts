@@ -2,7 +2,7 @@ import { Component, Output, EventEmitter } from '@angular/core';
 import { Geolocation, GeolocationOptions, Geoposition } from 'ionic-native';
 import { FormGroup } from '@angular/forms';
 
-import { Static } from '../../maps/static';
+import { StaticMap } from '../../maps/static-map';
 
 import { Value } from '../../models/value';
 import { Attribute } from '../../models/attribute';
@@ -49,11 +49,10 @@ export class LocationComponent {
       let location:any = this.value.value.split(",");
       let latitude = Number(location[0]);
       let longitude = Number(location[1]);
-      if (this.latitude != latitude) {
+      if (this.latitude != latitude || this.longitude != longitude) {
         this.latitude = latitude;
-      }
-      if (this.longitude != longitude) {
         this.longitude = longitude;
+        this.loadMapSrc(latitude, longitude);
       }
     }
   }
@@ -89,7 +88,7 @@ export class LocationComponent {
 
   loadMapSrc(latitude, longitude) {
     if (latitude && longitude) {
-      this.map = new Static(latitude, longitude).getUrl();
+      this.map = new StaticMap(latitude, longitude).getUrl();
     }
     else {
       this.map = null;
