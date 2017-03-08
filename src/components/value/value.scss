@@ -35,7 +35,9 @@
       width: 100%;
     }
   }
-  .value-text {
+  .value-text,
+  .value-varchar,
+  .value-textarea {
     a {
       color: #777;
     }
