@@ -206,7 +206,7 @@
 		</data>
 		<key>CDVLaunchScreen.storyboardc/01J-lp-oVM-view-Ze5-6b-2t3.nib</key>
 		<data>
-		jMwImAP787e77pDPCk3uLKAapL0=
+		CkfuwQwuFcgyFcxvqeityY+SfEc=
 		</data>
 		<key>CDVLaunchScreen.storyboardc/Info.plist</key>
 		<data>
@@ -214,11 +214,11 @@
 		</data>
 		<key>CDVLaunchScreen.storyboardc/UIViewController-01J-lp-oVM.nib</key>
 		<data>
-		97iCkGf9X5+P+DbYFXmfeW9w13Q=
+		TSZdhZmWMD9tWgTxcz6B7OdL42w=
 		</data>
 		<key>Info.plist</key>
 		<data>
-		cO+d/aCqq5sEOpU7asGE8D/np7o=
+		BHC8HlrKrfylntZbAxlQsxyALHk=
 		</data>
 		<key>LaunchImage-568h@2x.png</key>
 		<data>
@@ -278,7 +278,7 @@
 		</data>
 		<key>MainViewController.nib</key>
 		<data>
-		1VMIQ/QAQaaJJqNgGjJj+83GiBs=
+		4i+JTnRPP7eO3/XnaFXO3TQFdsI=
 		</data>
 		<key>PkgInfo</key>
 		<data>
@@ -303,11 +303,11 @@
 		</data>
 		<key>config.xml</key>
 		<data>
-		R0QF+vYKYMAvRBFYT0w1vjhDjZE=
+		wFcf1hHwK46PFPAqstzfRS8Jhrs=
 		</data>
 		<key>embedded.mobileprovision</key>
 		<data>
-		qLbxndhgR1Fg6G37aTr++X4j7io=
+		FivJFWFNnDh9mqXSYKsFbCg6er8=
 		</data>
 		<key>www/assets/fonts/ionicons.eot</key>
 		<data>
@@ -337,13 +337,21 @@
 		<data>
 		VjvZgsz1sFxiNMQKV1jdovGRYPs=
 		</data>
+		<key>www/assets/fonts/noto-sans-bold.woff</key>
+		<data>
+		Ize8i9CbRr1ngscDVtBHRabDlKc=
+		</data>
 		<key>www/assets/fonts/noto-sans-regular.ttf</key>
 		<data>
 		gwlTxnjmpQaXEIqch9IpzvEwl1o=
 		</data>
+		<key>www/assets/fonts/noto-sans-regular.woff</key>
+		<data>
+		q+qHOMXsbtOmlCzvXEiKE9MOx+E=
+		</data>
 		<key>www/assets/fonts/noto-sans.scss</key>
 		<data>
-		m9cBcBWwqzJYv01VtS2AazzYbuw=
+		EploxEmrzS6JjXiek25ICv5xzQE=
 		</data>
 		<key>www/assets/fonts/roboto-bold.ttf</key>
 		<data>
@@ -353,6 +361,10 @@
 		<data>
 		YieZSJ6X5BjIlny/HgEdzoNOFPo=
 		</data>
+		<key>www/assets/fonts/roboto-bold.woff2</key>
+		<data>
+		lAbeJkaiUq8VPjx+CAcdpT2opZE=
+		</data>
 		<key>www/assets/fonts/roboto-light.ttf</key>
 		<data>
 		8joEE/3XARd1LPc2edLFhnCV6qw=
@@ -360,6 +372,10 @@
 		<key>www/assets/fonts/roboto-light.woff</key>
 		<data>
 		mHcxYm/u/BQM8X//Qb0yEzEtb5k=
+		</data>
+		<key>www/assets/fonts/roboto-light.woff2</key>
+		<data>
+		DB3NYdb13cdoFc6cDxLbTrimoBQ=
 		</data>
 		<key>www/assets/fonts/roboto-medium.ttf</key>
 		<data>
@@ -369,6 +385,10 @@
 		<data>
 		MIeyABWSUXDmXPK2wf2/DNTsOzs=
 		</data>
+		<key>www/assets/fonts/roboto-medium.woff2</key>
+		<data>
+		ODo5Z9q460GSWdFMdVeS2alYY0Y=
+		</data>
 		<key>www/assets/fonts/roboto-regular.ttf</key>
 		<data>
 		iee/JxkNYse1CNySxwEsEYBFj04=
@@ -377,9 +397,13 @@
 		<data>
 		STKhtVvU86PcyV2zPsB7pynobGE=
 		</data>
+		<key>www/assets/fonts/roboto-regular.woff2</key>
+		<data>
+		xdU+YqR2Fpus2XRZ+BcsB3aYjYw=
+		</data>
 		<key>www/assets/fonts/roboto.scss</key>
 		<data>
-		syyM+ZverpEFGsYs9TmvuNz8FSA=
+		mVn8X55jqWJGRnt+TQeFdxp1qk4=
 		</data>
 		<key>www/assets/icon/favicon.ico</key>
 		<data>
@@ -388,6 +412,26 @@
 		<key>www/assets/images/background.png</key>
 		<data>
 		b+qZIQXoLM8gwSFgicfm/aQ07gY=
+		</data>
+		<key>www/assets/images/layers-2x.png</key>
+		<data>
+		FSoWIzPkbST52J9WYxL8DGQBHe4=
+		</data>
+		<key>www/assets/images/layers.png</key>
+		<data>
+		yedSjkkaOSMrokonBsbHOdb7DwY=
+		</data>
+		<key>www/assets/images/marker-icon-2x.png</key>
+		<data>
+		laRLnKcf4D/fZd3Y7qEvGRDzjeI=
+		</data>
+		<key>www/assets/images/marker-icon.png</key>
+		<data>
+		YKkLy7K0K33bRVbblOt8EISw5do=
+		</data>
+		<key>www/assets/images/marker-shadow.png</key>
+		<data>
+		e2qN9jkwOB6WYE5wUWjQUn1rgrw=
 		</data>
 		<key>www/assets/images/placeholder-blank.png</key>
 		<data>
@@ -399,7 +443,7 @@
 		</data>
 		<key>www/assets/images/placeholder-photo.jpg</key>
 		<data>
-		Ix1grXfqrug7B5awNBttDZf01YE=
+		wtQ0nzHHP2aIrU3Ai3euodAUjOo=
 		</data>
 		<key>www/assets/images/placeholder-user.jpg</key>
 		<data>
@@ -409,13 +453,25 @@
 		<data>
 		hwfx836zNWCTPep7V+9eY4Gae80=
 		</data>
+		<key>www/assets/javascripts/leaflet.js</key>
+		<data>
+		2nrH2OBC3z/sQqf7zEE73epJK04=
+		</data>
+		<key>www/assets/javascripts/leaflet.markers.js</key>
+		<data>
+		B4v5Cqlf01NDJOHh6maUqaFfKyM=
+		</data>
+		<key>www/assets/stylesheets/leaflet.css</key>
+		<data>
+		EvKkBOCF6QsLT0JWK1bOyay958M=
+		</data>
 		<key>www/assets/ushahidi-logo-gold.png</key>
 		<data>
 		BCg9nWF51BkN4QLgfG2qrsTEVZU=
 		</data>
 		<key>www/build/main.css</key>
 		<data>
-		d21nX7oDbv2FOyFKlzNWwDottQQ=
+		SX1QPGL4S5pyD/aqggqksVu7oKY=
 		</data>
 		<key>www/build/main.css.map</key>
 		<data>
@@ -423,11 +479,11 @@
 		</data>
 		<key>www/build/main.js</key>
 		<data>
-		C0wFJInj7GhnJsXoUhx1YdIRWmM=
+		szUtLGo7gnfXmqqyrfptS3Mwr2A=
 		</data>
 		<key>www/build/main.js.map</key>
 		<data>
-		PW7wYMazX0kMmpbsNRiPT0S0Kcg=
+		vwcDQfVRMcXeVNcmmwPEO92cPcQ=
 		</data>
 		<key>www/build/polyfills.js</key>
 		<data>
@@ -451,11 +507,11 @@
 		</data>
 		<key>www/cordova_plugins.js</key>
 		<data>
-		BfR9yEZQWeNIG5bGwk1s2wYC510=
+		eq4874QBIdoS4I141zawEp3pW1g=
 		</data>
 		<key>www/index.html</key>
 		<data>
-		wnQCjRNu5H8qUKMJjV042bVpxCI=
+		Cf67uaGgXEvH/JGEVFrlIkZcZ6o=
 		</data>
 		<key>www/manifest.json</key>
 		<data>
@@ -1215,11 +1271,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			jMwImAP787e77pDPCk3uLKAapL0=
+			CkfuwQwuFcgyFcxvqeityY+SfEc=
 			</data>
 			<key>hash2</key>
 			<data>
-			ScTALQZ/9qzIYueIrg7GaUs+zv91fJZ4BHKdgO9FMUc=
+			Ule0b6XDA4I11VsEjiKiHMdDxGOjKxS3pHcSiCxpsqY=
 			</data>
 		</dict>
 		<key>CDVLaunchScreen.storyboardc/Info.plist</key>
@@ -1237,11 +1293,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			97iCkGf9X5+P+DbYFXmfeW9w13Q=
+			TSZdhZmWMD9tWgTxcz6B7OdL42w=
 			</data>
 			<key>hash2</key>
 			<data>
-			tECw71O7//g8O1ff0cCOGgvOWK/FfwOOFefN5vDW71Q=
+			9UFeK9lzBlDtqTxsCSbceHhF4K8n7wkexq0/gpZCinI=
 			</data>
 		</dict>
 		<key>LaunchImage-568h@2x.png</key>
@@ -1402,11 +1458,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			1VMIQ/QAQaaJJqNgGjJj+83GiBs=
+			4i+JTnRPP7eO3/XnaFXO3TQFdsI=
 			</data>
 			<key>hash2</key>
 			<data>
-			02nZSmEMzI1EJTp44sLkD1gKIqUtraFITtfcrs9rjbQ=
+			CvjKlau1mwzCxTLPwZUh0wY9561f5Hn1oWUD3DF0Gdc=
 			</data>
 		</dict>
 		<key>SAMKeychain.bundle/en.lproj/SAMKeychain.strings</key>
@@ -1448,22 +1504,22 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			R0QF+vYKYMAvRBFYT0w1vjhDjZE=
+			wFcf1hHwK46PFPAqstzfRS8Jhrs=
 			</data>
 			<key>hash2</key>
 			<data>
-			jIDAtbp9/aJVDnyWIJ3efwe+nDOLw/vEIbvVDwQX+Eo=
+			zCRsrMUXySo/tfstvNlFOz2u44VXO2bHUVbJUYOLOHI=
 			</data>
 		</dict>
 		<key>embedded.mobileprovision</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			qLbxndhgR1Fg6G37aTr++X4j7io=
+			FivJFWFNnDh9mqXSYKsFbCg6er8=
 			</data>
 			<key>hash2</key>
 			<data>
-			6UCQuIBMrkOsSbH+LoyU9lLGymHHcYpPhasA4mwcCJg=
+			YUWB8UyM+5XEIkx3ji0tE9pqi4XFi4CH8xbrvcc+aEI=
 			</data>
 		</dict>
 		<key>www/assets/fonts/ionicons.eot</key>
@@ -1543,6 +1599,17 @@
 			aL3Veh4eYmY6CzcsciQgS4KomCC5zzA5Ezf2HwxecSM=
 			</data>
 		</dict>
+		<key>www/assets/fonts/noto-sans-bold.woff</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			Ize8i9CbRr1ngscDVtBHRabDlKc=
+			</data>
+			<key>hash2</key>
+			<data>
+			5dq+38Nh7sZF94nlpI8UIPJ0Z6z/9iBiaPliewE5k6s=
+			</data>
+		</dict>
 		<key>www/assets/fonts/noto-sans-regular.ttf</key>
 		<dict>
 			<key>hash</key>
@@ -1554,15 +1621,26 @@
 			nptMU70lytnATTcPEzpeMtFm0NVOKprWy6SjH804LVs=
 			</data>
 		</dict>
+		<key>www/assets/fonts/noto-sans-regular.woff</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			q+qHOMXsbtOmlCzvXEiKE9MOx+E=
+			</data>
+			<key>hash2</key>
+			<data>
+			7tvqsAYr2IYlLLLC0Ma9ubVDnK5XSV6KXc0yemIBtDo=
+			</data>
+		</dict>
 		<key>www/assets/fonts/noto-sans.scss</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			m9cBcBWwqzJYv01VtS2AazzYbuw=
+			EploxEmrzS6JjXiek25ICv5xzQE=
 			</data>
 			<key>hash2</key>
 			<data>
-			c02a5WK1xaHY8aiSCBkjlKU65UXdy7II2JvEo/jtFwg=
+			xARtZsjVXR2dqKai+q9tNa4zR1+3MvUqY3d9Oa/U+cg=
 			</data>
 		</dict>
 		<key>www/assets/fonts/roboto-bold.ttf</key>
@@ -1587,6 +1665,17 @@
 			VSk/KNoJlrr6GsOHcdUY1kh552xo+ZE+lfBysaPc/Rk=
 			</data>
 		</dict>
+		<key>www/assets/fonts/roboto-bold.woff2</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			lAbeJkaiUq8VPjx+CAcdpT2opZE=
+			</data>
+			<key>hash2</key>
+			<data>
+			N+AXlcHfnN1YN/V7/HVPr/JQuQnJGKD92NcaJuVTGZw=
+			</data>
+		</dict>
 		<key>www/assets/fonts/roboto-light.ttf</key>
 		<dict>
 			<key>hash</key>
@@ -1607,6 +1696,17 @@
 			<key>hash2</key>
 			<data>
 			T+lFQzetapjXsOAFi/txfUIR9/YlPVjMaDkB4DSXUXQ=
+			</data>
+		</dict>
+		<key>www/assets/fonts/roboto-light.woff2</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			DB3NYdb13cdoFc6cDxLbTrimoBQ=
+			</data>
+			<key>hash2</key>
+			<data>
+			ViaMUoz5MCSdUZyHaz6kaL5XqCaRDf3ug+JNPg7X0bs=
 			</data>
 		</dict>
 		<key>www/assets/fonts/roboto-medium.ttf</key>
@@ -1631,6 +1731,17 @@
 			oIm8Bb68pCpKmYVEb2FMGAF3FxLiWVsfvCsllPVp3I4=
 			</data>
 		</dict>
+		<key>www/assets/fonts/roboto-medium.woff2</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			ODo5Z9q460GSWdFMdVeS2alYY0Y=
+			</data>
+			<key>hash2</key>
+			<data>
+			ouVf1b+k7P9cvqnXVEAdE0+40/qI4M//YdwXdB2SgoE=
+			</data>
+		</dict>
 		<key>www/assets/fonts/roboto-regular.ttf</key>
 		<dict>
 			<key>hash</key>
@@ -1653,15 +1764,26 @@
 			rp/vNZDjcpGEIqYS3PmVZdDHynFCD1bdQ0qedZgI1rg=
 			</data>
 		</dict>
+		<key>www/assets/fonts/roboto-regular.woff2</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			xdU+YqR2Fpus2XRZ+BcsB3aYjYw=
+			</data>
+			<key>hash2</key>
+			<data>
+			Me2rktSt4perkm0j7SZm0cXyQmdd58DBoLtEcCSsVU0=
+			</data>
+		</dict>
 		<key>www/assets/fonts/roboto.scss</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			syyM+ZverpEFGsYs9TmvuNz8FSA=
+			mVn8X55jqWJGRnt+TQeFdxp1qk4=
 			</data>
 			<key>hash2</key>
 			<data>
-			RL7NGMZPrn/Qb1R5+XbbMTH4aT6dKzEn+r9zffXQNBA=
+			UBvbGTbplF5f4KDXxnAW+kAiyeMyV70VfK5eF+6UPHI=
 			</data>
 		</dict>
 		<key>www/assets/icon/favicon.ico</key>
@@ -1684,6 +1806,61 @@
 			<key>hash2</key>
 			<data>
 			Q4LTMJn7nex1Jz0NAcymJxGNTS/MVNWG6EAnU16F6Xs=
+			</data>
+		</dict>
+		<key>www/assets/images/layers-2x.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			FSoWIzPkbST52J9WYxL8DGQBHe4=
+			</data>
+			<key>hash2</key>
+			<data>
+			Bm2sqFDY/77wB68AsG6sABVyje4nnFHzy2xxbffELt8=
+			</data>
+		</dict>
+		<key>www/assets/images/layers.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			yedSjkkaOSMrokonBsbHOdb7DwY=
+			</data>
+			<key>hash2</key>
+			<data>
+			Hbvp0CjikvNvy6j4s6KNXokydU/CIVuaxp5M3s9RB8Y=
+			</data>
+		</dict>
+		<key>www/assets/images/marker-icon-2x.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			laRLnKcf4D/fZd3Y7qEvGRDzjeI=
+			</data>
+			<key>hash2</key>
+			<data>
+			LXei5MLwi7rEGAgyTvlGuaL+YbYVBIDQEbcrN5w7I40=
+			</data>
+		</dict>
+		<key>www/assets/images/marker-icon.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			YKkLy7K0K33bRVbblOt8EISw5do=
+			</data>
+			<key>hash2</key>
+			<data>
+			V0w6XMqF9BFAhbaEFZbWLwDXyJLHsD8oy/owHesdxDc=
+			</data>
+		</dict>
+		<key>www/assets/images/marker-shadow.png</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			e2qN9jkwOB6WYE5wUWjQUn1rgrw=
+			</data>
+			<key>hash2</key>
+			<data>
+			Jk9cZAM58ELdcpBiz8BMF/jqDymIK1OOOEjtjxDttNo=
 			</data>
 		</dict>
 		<key>www/assets/images/placeholder-blank.png</key>
@@ -1712,11 +1889,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			Ix1grXfqrug7B5awNBttDZf01YE=
+			wtQ0nzHHP2aIrU3Ai3euodAUjOo=
 			</data>
 			<key>hash2</key>
 			<data>
-			4CtMpyJLJMNfmHjN+vCkOSKnswjtO56F8Cf1OAFLDa8=
+			YUBeB1h3fx6mKvvd4ZsdiTzwpxEXD5c9zTlzM+nUNSw=
 			</data>
 		</dict>
 		<key>www/assets/images/placeholder-user.jpg</key>
@@ -1741,6 +1918,39 @@
 			3EoVzRrzGMcgcfLbaMH8jWRbr0VIyrGs1q2Ue0aE/gk=
 			</data>
 		</dict>
+		<key>www/assets/javascripts/leaflet.js</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			2nrH2OBC3z/sQqf7zEE73epJK04=
+			</data>
+			<key>hash2</key>
+			<data>
+			GXUdrV9FHGDyzoSGD3O+jR3eYZaZZsjbsMvFhK3C0qg=
+			</data>
+		</dict>
+		<key>www/assets/javascripts/leaflet.markers.js</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			B4v5Cqlf01NDJOHh6maUqaFfKyM=
+			</data>
+			<key>hash2</key>
+			<data>
+			lzFkOurT7sE2ACtXArNtwD2p7zE8ionAUTZX0NS3IsA=
+			</data>
+		</dict>
+		<key>www/assets/stylesheets/leaflet.css</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			EvKkBOCF6QsLT0JWK1bOyay958M=
+			</data>
+			<key>hash2</key>
+			<data>
+			TKYF7UCegPRIRoaV8LQDD/H/ubwjI1YJXeYQ0GDzAj0=
+			</data>
+		</dict>
 		<key>www/assets/ushahidi-logo-gold.png</key>
 		<dict>
 			<key>hash</key>
@@ -1756,11 +1966,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			d21nX7oDbv2FOyFKlzNWwDottQQ=
+			SX1QPGL4S5pyD/aqggqksVu7oKY=
 			</data>
 			<key>hash2</key>
 			<data>
-			iB4CdKLAwYw2qgKEHpMQLx3xhXSJeyfdSX0erTMd9wc=
+			J41w/lSZFatQJR5bWKcn5fKFaM0of3hWkY+oRbpVV4c=
 			</data>
 		</dict>
 		<key>www/build/main.css.map</key>
@@ -1778,22 +1988,22 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			C0wFJInj7GhnJsXoUhx1YdIRWmM=
+			szUtLGo7gnfXmqqyrfptS3Mwr2A=
 			</data>
 			<key>hash2</key>
 			<data>
-			ColirnN3PzrpdczmMxa8BAw6hO9iQcmNpWDgA2em4+M=
+			PKZStfS1P6/dwoqNpZpomCrTQqtvwTXkfrQJ885x3jk=
 			</data>
 		</dict>
 		<key>www/build/main.js.map</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			PW7wYMazX0kMmpbsNRiPT0S0Kcg=
+			vwcDQfVRMcXeVNcmmwPEO92cPcQ=
 			</data>
 			<key>hash2</key>
 			<data>
-			T55GEj8O5CjUVgD9LJ1Kaa8Pa2gfJtfdDKa8nL0AMvg=
+			uGwDvfNt64uJLRyX2ALNFfD4nRH9QpMQuVsMr5qlmV0=
 			</data>
 		</dict>
 		<key>www/build/polyfills.js</key>
@@ -1855,22 +2065,22 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			BfR9yEZQWeNIG5bGwk1s2wYC510=
+			eq4874QBIdoS4I141zawEp3pW1g=
 			</data>
 			<key>hash2</key>
 			<data>
-			okaWXWH18Q47+K/rM11zph3vfTuqHok+mRwf2Bj4aPM=
+			1IY6kgej7koMTqmx4FwmNhlOmtPHTGn9+9SRqX/wGzc=
 			</data>
 		</dict>
 		<key>www/index.html</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			wnQCjRNu5H8qUKMJjV042bVpxCI=
+			Cf67uaGgXEvH/JGEVFrlIkZcZ6o=
 			</data>
 			<key>hash2</key>
 			<data>
-			h+nRQ23TppOE0I8pIrsQFSMd9cTg7XYIJDPuavg9vI4=
+			mMpRXhSMhRfH1kIdLf9aEYnbLLWZQ3LFfrRBq3c9bPU=
 			</data>
 		</dict>
 		<key>www/manifest.json</key>

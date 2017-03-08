@@ -23,14 +23,22 @@
        event = event || window.event;
        let element = event.target || event.srcElement;
        if (element.tagName == 'A') {
-        let options = {
-          toolbar: "yes",
-          location: "no",
-          toolbarposition: "top",
-          presentationstyle: "pagesheet",
-          allowInlineMediaPlayback: "yes" }
-        window.open(element.href, element.target, Object.keys(options).map((key) => key+'='+options[key]).join(','));
-        return false;
+         console.log(element.href);
+         console.log(element.target);
+         if (element.target == '_blank') {
+           let options = {
+             toolbar: "yes",
+             location: "no",
+             toolbarposition: "top",
+             presentationstyle: "pagesheet",
+             allowInlineMediaPlayback: "yes" }
+           window.open(element.href, "_blank", Object.keys(options).map((key) => key+'='+options[key]).join(','));
+           return false;
+         }
+         else {
+           window.open(element.href, "_system");
+           return false;
+         }
        }
      };
    </script>

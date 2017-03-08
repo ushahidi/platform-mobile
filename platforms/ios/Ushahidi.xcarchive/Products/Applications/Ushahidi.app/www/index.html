@@ -10,19 +10,37 @@
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#4e8ef7">
   <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
-  <!-- un-comment this code to enable service worker
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('service-worker.js')
-        .then(() => console.log('service worker installed'))
-        .catch(err => console.log('Error', err));
-    }
-  </script>-->
   <link href="build/main.css" rel="stylesheet">
+  <link href="assets/stylesheets/leaflet.css" rel="stylesheet">
 </head>
 <body>
   <ion-app></ion-app>
   <script src="build/polyfills.js"></script>
   <script src="build/main.js"></script>
+  <script src="assets/javascripts/leaflet.js"></script>
+  <script>
+     document.onclick = function (event) {
+       event = event || window.event;
+       let element = event.target || event.srcElement;
+       if (element.tagName == 'A') {
+         console.log(element.href);
+         console.log(element.target);
+         if (element.target == '_blank') {
+           let options = {
+             toolbar: "yes",
+             location: "no",
+             toolbarposition: "top",
+             presentationstyle: "pagesheet",
+             allowInlineMediaPlayback: "yes" }
+           window.open(element.href, "_blank", Object.keys(options).map((key) => key+'='+options[key]).join(','));
+           return false;
+         }
+         else {
+           window.open(element.href, "_system");
+           return false;
+         }
+       }
+     };
+   </script>
 </body>
 </html>

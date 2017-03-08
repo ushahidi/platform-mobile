@@ -13,7 +13,7 @@ export class HtmlParserPipe {
     html = html.replace(regex2, '$1<a href="http://$2" target="_blank">$2</a>');
 
     let regex3 = /(([a-zA-Z0-9\-\_\.])+@[a-zA-Z\_]+?(\.[a-zA-Z]{2,6})+)/gim;
-    html = html.replace(regex3, '<a href="mailto:$1" target="_blank">$1</a>');
+    html = html.replace(regex3, '<a href="mailto:$1" target="_system">$1</a>');
     return html;
   }
 }
