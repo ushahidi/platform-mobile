@@ -42,6 +42,7 @@ import { TimeAgoPipe } from '../pipes/time-ago';
 import { TitleizePipe } from '../pipes/titleize';
 import { CapitalizePipe } from '../pipes/capitalize';
 import { TruncatePipe } from '../pipes/truncate';
+import { HtmlParserPipe } from '../pipes/html-parser';
 
 import { LoggerService } from '../providers/logger-service';
 import { ApiService } from '../providers/api-service';
@@ -85,7 +86,8 @@ export function provideStorage() {
     TimeAgoPipe,
     TitleizePipe,
     CapitalizePipe,
-    TruncatePipe
+    TruncatePipe,
+    HtmlParserPipe
   ],
   imports: [
     IonicModule.forRoot(MyApp),

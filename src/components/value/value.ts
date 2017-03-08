@@ -53,11 +53,11 @@ export class ValueComponent {
   }
 
   loadMapSrc(coordinates:string) {
-    if (coordinates && coordinates.length > 1) {
-      let components = coordinates.split(",");
-      if (components && components.length > 1) {
-        let latitude = Number(components[0]);
-        let longitude = Number(components[1]);
+    if (coordinates && coordinates.length > 0) {
+      let location = coordinates.split(",");
+      if (location && location.length > 1) {
+        let latitude = Number(location[0]);
+        let longitude = Number(location[1]);
         this.map = new StaticMap(latitude, longitude).getUrl();
       }
       else {

@@ -33,11 +33,11 @@
     </ion-item>
     <ion-item no-lines text-wrap class="value" *ngIf="post.title">
       <div class="value-label">Title</div>
-      <div class="value-text">{{post.title}}</div>
+      <div class="value-text" [innerHTML]="post.title | htmlParser"></div>
     </ion-item>
     <ion-item no-lines text-wrap class="value" *ngIf="post.description">
       <div class="value-label">Description</div>
-      <div class="value-text">{{post.description}}</div>
+      <div class="value-text" [innerHTML]="post.description | htmlParser"></div>
     </ion-item>
     <div *ngFor="let value of post.values">
       <value-text [value]="value" (showImage)="showImage(value.label,value.image)" (showLocation)="showLocation(value.label,value.value)"></value-text>

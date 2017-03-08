@@ -78,7 +78,7 @@ export class ResponseMapPage extends BasePage {
   loadMap(latitude:number, longitude:number):Promise<any> {
     return new Promise((resolve, reject) => {
       this.logger.info(this, "loadMap");
-      this.map = L.map('map').setView([latitude, longitude], this.mapZoom);
+      this.map = L.map("mapOne").setView([latitude, longitude], this.mapZoom);
       this.mapLayer = L.tileLayer(new TileLayer(this.mapStyle).getUrl(), { maxZoom: 20 });
       this.mapLayer.addTo(this.map);
       resolve(this.map);

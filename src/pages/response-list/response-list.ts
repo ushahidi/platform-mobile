@@ -626,7 +626,7 @@ export class ResponseListPage extends BasePage {
   showMap(event:any, attempts:number=0) {
     this.logger.info(this, "showMap", attempts);
     this.view = 'map';
-    let element: HTMLElement = document.getElementById('map');
+    let element: HTMLElement = document.getElementById('mapMany');
     if (element) {
       this.detectLocation().then(
         () => {
@@ -686,7 +686,7 @@ export class ResponseListPage extends BasePage {
   loadMap():Promise<any> {
     return new Promise((resolve, reject) => {
       this.logger.info(this, "loadMap");
-      this.map = L.map('map').setView([this.latitude, this.longitude], this.mapZoom);
+      this.map = L.map("mapMany").setView([this.latitude, this.longitude], this.mapZoom);
       this.mapLayer = L.tileLayer(new TileLayer(this.mapStyle).getUrl(), { maxZoom: 20 });
       this.mapLayer.addTo(this.map);
       resolve(this.map);

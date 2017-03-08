@@ -236,13 +236,16 @@ export class ResponseDetailsPage extends BasePage {
 
   showLocation(title:string, coordinates:string) {
     this.logger.info(this, "showLocation", title, coordinates);
-    this.showPage(ResponseMapPage, {
-      modal: false,
-      draggable: false,
-      title: title,
-      latitude: this.post.latitude,
-      longitude: this.post.longitude
-    });
+    if (coordinates && coordinates.length > 0) {
+      let location = coordinates.split(",");
+      this.showPage(ResponseMapPage, {
+        modal: false,
+        draggable: false,
+        title: title,
+        latitude: location[0],
+        longitude: location[1]
+      });  
+    }
   }
 
   addToCollection(post:Post, collection:Collection=null) {
