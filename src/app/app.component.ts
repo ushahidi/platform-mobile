@@ -20,6 +20,8 @@ import { HomePage } from '../pages/home/home';
 import { DeploymentAddPage } from '../pages/deployment-add/deployment-add';
 import { DeploymentDetailsPage } from '../pages/deployment-details/deployment-details';
 
+declare var window: any;
+
 @Component({
   templateUrl: 'app.html',
   entryComponents:[ HomePage, DeploymentAddPage, DeploymentDetailsPage ]

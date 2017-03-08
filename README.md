@@ -371,3 +371,30 @@ Update all dependencies to latest Ionic2
 ```
 npm install ionic-angular@latest --save --save-exact
 ```
+
+## InAppBrowser
+#### Customize the color of the InAppBrowser plugin
+
+In Xcode, open the class `Plugins/CDVInAppBrowser.m`.
+
+Paste the following code at the bottom of the `createViews` method.
+
+```
+self.closeButton.tintColor = [UIColor whiteColor];
+self.backButton.tintColor = [UIColor whiteColor];
+self.forwardButton.tintColor = [UIColor whiteColor];
+self.toolbar.translucent = NO;
+self.toolbar.barTintColor = [UIColor colorWithRed:0.25 green:0.28 blue:0.32 alpha:1.0];
+```
+
+On line 794, change the preferredStatusBarStyle to `UIStatusBarStyleLightContent`.
+```
+return UIStatusBarStyleLightContent;
+```
+
+On line 1060, add the line inside the `viewDidLoad` method.
+```
+bgToolbar.translucent = NO;
+bgToolbar.barStyle = UIBarStyleBlack;
+bgToolbar.barTintColor = [UIColor colorWithRed:0.25 green:0.28 blue:0.32 alpha:1.0];
+```

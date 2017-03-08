@@ -504,6 +504,10 @@
 
 @synthesize currentURL;
 
+- (BOOL)prefersStatusBarHidden {
+    return NO;
+}
+
 - (id)initWithUserAgent:(NSString*)userAgent prevUserAgent:(NSString*)prevUserAgent browserOptions: (CDVInAppBrowserOptions*) browserOptions
 {
     self = [super init];
@@ -516,10 +520,9 @@
 #else
         _webViewDelegate = [[CDVWebViewDelegate alloc] initWithDelegate:self];
 #endif
-        
         [self createViews];
     }
-
+    
     return self;
 }
 
@@ -636,7 +639,12 @@
 
     [self.toolbar setItems:@[self.closeButton, flexibleSpaceButton, self.backButton, fixedSpaceButton, self.forwardButton]];
 
-    self.view.backgroundColor = [UIColor grayColor];
+    self.closeButton.tintColor = [UIColor whiteColor];
+    self.backButton.tintColor = [UIColor whiteColor];
+    self.forwardButton.tintColor = [UIColor whiteColor];
+    self.toolbar.translucent = NO;
+    self.toolbar.barTintColor = [UIColor colorWithRed:0.25 green:0.28 blue:0.32 alpha:1.0];
+    
     [self.view addSubview:self.toolbar];
     [self.view addSubview:self.addressLabel];
     [self.view addSubview:self.spinner];
@@ -787,11 +795,7 @@
 
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
-    return UIStatusBarStyleDefault;
-}
-
-- (BOOL)prefersStatusBarHidden {
-    return NO;
+    return UIStatusBarStyleLightContent;
 }
 
 - (void)close
@@ -1046,10 +1050,12 @@
     // simplified from: http://stackoverflow.com/a/25669695/219684
 
     UIToolbar* bgToolbar = [[UIToolbar alloc] initWithFrame:[self invertFrameIfNeeded:frame]];
-    bgToolbar.barStyle = UIBarStyleDefault;
+    bgToolbar.translucent = NO;
+    bgToolbar.barStyle = UIBarStyleBlack;
+    bgToolbar.barTintColor = [UIColor colorWithRed:0.25 green:0.28 blue:0.32 alpha:1.0];
     [bgToolbar setAutoresizingMask:UIViewAutoresizingFlexibleWidth];
     [self.view addSubview:bgToolbar];
-
+    
     [super viewDidLoad];
 }
 

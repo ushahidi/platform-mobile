@@ -7,7 +7,7 @@ import {
   Loading, LoadingController,
   ActionSheet, ActionSheetController,
   NavController, ViewController } from 'ionic-angular';
-import { SocialSharing, Network, IsDebug } from 'ionic-native';
+import { InAppBrowser, SocialSharing, Network, IsDebug } from 'ionic-native';
 
 import { LoggerService } from '../../providers/logger-service';
 
@@ -173,6 +173,17 @@ export class BasePage {
     return SocialSharing.share(message, subject, file, url);
   }
 
+  showUrl(url:string, target:string="_system"):InAppBrowser {
+    this.logger.info(this, "showUrl", url, target);
+    let browser = new InAppBrowser(url, target);
+    browser.show();
+    return browser;
+  }
+
+  showOfflineAlert() {
+    this.showAlert("Internet Offline", "There currently is no internet connection available.")
+  }
+
   resizeContent(delay:number=100) {
     setTimeout(() => {
       if (this.content) {
@@ -183,10 +194,6 @@ export class BasePage {
         this.logger.error(this, "resizeContent", "NULL");
       }
     }, delay);
-  }
-
-  showOfflineAlert() {
-    this.showAlert("Internet Offline", "There currently is no internet connection available.")
   }
 
   runSequentially(tasks):Promise<any> {
