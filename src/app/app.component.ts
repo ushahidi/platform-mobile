@@ -1,7 +1,8 @@
 import { Component, ViewChild, NgZone } from '@angular/core';
-import { Events, Nav, Platform, ModalController, LoadingController, ToastController, AlertController, MenuController } from 'ionic-angular';
+import { Alert, Toast, Loading, Events, Nav, Platform, ModalController, LoadingController, ToastController, AlertController, MenuController } from 'ionic-angular';
 import { StatusBar, Splashscreen } from 'ionic-native';
 
+import { Model } from '../models/model';
 import { Deployment } from '../models/deployment';
 import { User } from '../models/user';
 import { Form } from '../models/form';
@@ -49,71 +50,125 @@ export class MyApp {
     public alertController: AlertController,
     public menuController: MenuController) {
     this.zone = zone;
-    platform.ready().then(() => {
+    let models = [
+      new Deployment(),
+      new User(),
+      new Form(),
+      new Attribute(),
+      new Post(),
+      new Value(),
+      new Image(),
+      new Collection(),
+      new Filter()];
+    this.platform.ready().then(() => {
       this.logger.info(this, "Platform Ready", this.platform.platforms());
       StatusBar.styleDefault();
-      let tables = [
-        new Deployment(),
-        new User(),
-        new Form(),
-        new Attribute(),
-        new Post(),
-        new Value(),
-        new Image(),
-        new Collection(),
-        new Filter()];
-      this.database.createTables(tables).then(
-        (created:any) => {
-          this.logger.info(this, "Database Ready");
-          this.database.getDeployments().then(
-            (deployments:Deployment[]) => {
-              this.logger.info(this, "Deployments", deployments);
-              if (deployments && deployments.length > 0) {
-                this.deployments = deployments;
-                let deployment = this.deployments[0];
-                this.logger.info(this, "Deployment", deployment);
-                this.loginDeployment(deployment).then((ready) => {
-                  Splashscreen.hide();
-                });
-              }
-              else {
-                this.deployments = [];
-                this.rootPage = HomePage;
-                Splashscreen.hide();
-              }
+      this.loadDatabase(models).then(
+        (loaded) => {
+          this.loadDeployments().then(
+            (deployments) => {
+              this.showRootPage(deployments);
             },
-            (error:any) => {
-              this.logger.error(this, "Deployments Error", error);
-              this.rootPage = HomePage;
-              Splashscreen.hide();
+            (error) => {
+              this.showRootPage();
+            });
+        },
+        (error) => {
+          Splashscreen.hide();
+          this.showAlert("Database Schema Changed", "The database schema has changed, your local database will need to be reset.", [{
+            text: 'Reset Database',
+            handler: (clicked) => {
+              let loading = this.showLoading("Resetting...");
+              this.resetDatabase().then(
+                (reset) => {
+                  this.loadDatabase(models).then(
+                    (created) => {
+                      loading.dismiss();
+                      this.showRootPage();
+                    },
+                    (error) => {
+                      loading.dismiss();
+                      this.showAlert("Problem Creating Database", "There was a problem creating the database.");
+                    }
+                  );
+                },
+                (error) => {
+                  loading.dismiss();
+                  this.showAlert("Problem Resetting Database", "There was a problem resetting the database.");
+              });
+            }
+          }]);
+      });
+    });
+  }
+
+  resetDatabase():Promise<any> {
+    this.logger.info(this, "resetDatabase");
+    return this.database.deleteDatabase();
+  }
+
+  loadDatabase(models:Model[]):Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.logger.info(this, "loadDatabase");
+      this.database.createTables(models).then(
+        (created:any) => {
+          this.logger.info(this, "loadDatabase", "Created");
+          let tests = [];
+          for (let model of models) {
+            tests.push(this.database.testModel(model));
+          }
+          Promise.all(tests).then(
+            (passed) => {
+              this.logger.info(this, "loadDatabase", "Tested");
+              resolve();
+            },
+            (error) => {
+              this.logger.error(this, "loadDatabase", "Failed", error);
+              reject(error);
             });
         },
         (error:any) => {
-          this.logger.error(this, "Database Error", error);
-          this.rootPage = HomePage;
-          Splashscreen.hide();
+          this.logger.error(this, "loadDatabase", "Failed", error);
+          reject(error);
         });
     });
   }
 
-  loadDeployments(event:any=null) {
-    this.logger.info(this, "loadDeployments");
-    this.database.getDeployments().then(
-      (deployments:Deployment[]) => {
-        this.logger.info(this, "loadDeployments", deployments);
-        this.zone.run(() => {
-          this.deployments = deployments;
-          if (this.deployments.length > 0 && this.deployment == null) {
-            this.deployment = this.deployments[0];
-          }
-          if (event != null) {
-            event.complete();
-          }
+  loadDeployments(event:any=null):Promise<Deployment[]> {
+    return new Promise((resolve, reject) => {
+      this.logger.info(this, "loadDeployments");
+      this.database.getDeployments().then(
+        (deployments:Deployment[]) => {
+          this.logger.info(this, "loadDeployments", deployments);
+          this.zone.run(() => {
+            this.deployments = deployments;
+            if (this.deployments.length > 0 && this.deployment == null) {
+              this.deployment = this.deployments[0];
+            }
+            if (event != null) {
+              event.complete();
+            }
+            resolve(deployments);
+          });
+        },
+        (error:any) => {
+          this.logger.error(this, "loadDeployments", error);
+          reject(error);
         });
-      },
-      (error:any) => {
-        this.logger.error(this, "loadDeployments", error);
+    });
+  }
+
+  showRootPage(deployments:Deployment[]=null) {
+    this.logger.info(this, "showRootPage");
+    if (deployments && deployments.length > 0) {
+      this.loginDeployment(this.deployment).then((ready) => {
+        Splashscreen.hide();
       });
+    }
+    else {
+      this.rootPage = HomePage;
+      Splashscreen.hide();
+    }
   }
 
   addDeployment(event:any) {
@@ -235,7 +290,7 @@ export class MyApp {
       });
   }
 
-  showLoading(message:string) {
+  showLoading(message:string):Loading {
     let loading = this.loadingController.create({
       content: message
     });
@@ -243,17 +298,17 @@ export class MyApp {
     return loading;
   }
 
-  showAlert(title:string, subTitle:string) {
+  showAlert(title:string, subTitle:string, buttons:any=['OK']):Alert {
     let alert = this.alertController.create({
       title: title,
       subTitle: subTitle,
-      buttons: ['OK']
+      buttons: buttons
     });
     alert.present();
     return alert;
   }
 
-  showToast(message:string, duration:number=1500) {
+  showToast(message:string, duration:number=1500):Toast {
     let toast = this.toastController.create({
       message: message,
       duration: duration

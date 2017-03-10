@@ -31,9 +31,9 @@ export class DatabaseService {
     return this.platform.platforms().indexOf('cordova') >= 0;
   }
 
-  openDatabase() {
-    this.logger.info(this, "openDatabase");
+  openDatabase():Promise<any> {
     return new Promise((resolve, reject) => {
+      this.logger.info(this, "openDatabase");
       if (this.database) {
         this.logger.info(this, "openDatabase", "Cached", this.database);
         resolve(this.database);
@@ -61,15 +61,33 @@ export class DatabaseService {
     });
   }
 
-  createTables(models:Model[]) {
-    let promises = [];
-    for (let model of models) {
-      promises.push(this.createTable(model));
-    }
-    return Promise.all(promises);
+  deleteDatabase() {
+    this.logger.info(this, "deleteDatabase");
+    return new Promise((resolve, reject) => {
+      SQLite.deleteDatabase({
+        name: this.name,
+        location: this.location }).then(
+          (deleted) => {
+            this.database = null;
+            this.logger.info(this, "deleteDatabase", "Deleted");
+            resolve();
+          },
+          (error) => {
+            this.logger.error(this, "deleteDatabase", "Failed", error);
+            reject(error);
+      });
+    });
   }
 
-  createTable<M extends Model>(model:M) {
+  createTables(models:Model[]):Promise<any> {
+    let creates = [];
+    for (let model of models) {
+      creates.push(this.createTable(model));
+    }
+    return Promise.all(creates);
+  }
+
+  createTable<M extends Model>(model:M):Promise<any> {
     return new Promise((resolve, reject) => {
       this.openDatabase().then(
         (database:SQLite) => {
@@ -117,6 +135,29 @@ export class DatabaseService {
         else {
           reject("No Results");
         }
+      });
+    });
+  }
+
+  executeTest(table:string, columns:any):Promise<any[]> {
+    return new Promise((resolve, reject) => {
+      this.openDatabase().then((database:SQLite) => {
+        let statement = this.testStatement(table, columns);
+        let parameters = [];
+        this.logger.info(this, "executeTest", "Testing", statement);
+        database.executeSql(statement, parameters).then(
+          (data) => {
+            this.logger.info(this, "executeTest", "Tested", statement);
+            resolve(true);
+          },
+          (error) => {
+            this.logger.error(this, "executeTest", "Failed", statement, error);
+            reject(JSON.stringify(error));
+          });
+      },
+      (error) => {
+        this.logger.error(this, "executeSelect", "Failed", error);
+        reject(error);
       });
     });
   }
@@ -220,6 +261,18 @@ export class DatabaseService {
     });
   }
 
+  testStatement(table:string, columns:any[]):string {
+    let query = [`SELECT`];
+    let names = [];
+    for (let column of columns) {
+      names.push(column.name);
+    }
+    query.push(names.join(", "));
+    query.push(`FROM ${table}`);
+    query.push(`LIMIT 0`);
+    return query.join(" ");
+  }
+
   selectStatement(table:string, where:{}=null, order:{}=null, limit:number=null, offset:number=null) {
     let query = [`SELECT * FROM ${table}`];
     if (where != null && Object.keys(where).length > 0) {
@@ -314,6 +367,18 @@ export class DatabaseService {
       clause.push(`${column} = '${where[column]}'`);
     }
     return `DELETE FROM ${table} WHERE ${clause.join(' AND ')}`;
+  }
+
+  testModel<M extends Model>(type:M):Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      this.executeTest(type.getTable(), type.getColumns()).then(
+        (rows) => {
+          resolve(true);
+        },
+        (error) => {
+          reject(error);
+        });
+    });
   }
 
   getModels<M extends Model>(type:M, where:{}=null, order:{}=null, limit:number=null, offset:number=null) : Promise<M[]> {
