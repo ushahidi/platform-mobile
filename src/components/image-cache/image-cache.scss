@@ -1,0 +1,9 @@
+.image-cache {
+  transition: opacity 1s;
+  &.lazy-loading {
+    opacity: 0;
+  }
+  &.lazy-loaded {
+    opacity: 1 !important;
+  }
+}

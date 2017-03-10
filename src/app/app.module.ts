@@ -3,8 +3,6 @@ import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Storage } from '@ionic/storage';
 
-import { LazyLoadImageModule } from 'ng2-lazyload-image';
-
 import { MyApp } from './app.component';
 import { BasePage } from '../pages/base-page/base-page';
 import { HomePage } from '../pages/home/home';
@@ -33,6 +31,7 @@ import { SelectComponent } from '../components/select/select';
 import { TextComponent } from '../components/text/text';
 import { TextAreaComponent } from '../components/textarea/textarea';
 import { VideoComponent } from '../components/video/video';
+import { ImageCacheComponent } from '../components/image-cache/image-cache';
 
 import { CardComponent } from '../components/card/card';
 import { ValueComponent } from '../components/value/value';
@@ -82,6 +81,7 @@ export function provideStorage() {
     VideoComponent,
     CardComponent,
     ValueComponent,
+    ImageCacheComponent,
     DateTimePipe,
     TimeAgoPipe,
     TitleizePipe,
@@ -92,8 +92,7 @@ export function provideStorage() {
   imports: [
     IonicModule.forRoot(MyApp),
     FormsModule,
-    ReactiveFormsModule,
-    LazyLoadImageModule
+    ReactiveFormsModule
   ],
   bootstrap: [ IonicApp ],
   entryComponents: [

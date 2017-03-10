@@ -12,7 +12,7 @@
             <ion-icon ios="ios-archive" md="md-archive" *ngIf="post.status=='archived'"></ion-icon>
           </ion-col>
           <ion-col width-10 class="profile">
-            <img class="lazy" [src]="userPlaceholder" [lazyLoad]="post.user_image" [errorImage]="userPlaceholder">
+            <image-cache [src]="post.user_image" [placeholder]="userPlaceholder" *ngIf="userPlaceholder"></image-cache>
           </ion-col>
           <ion-col class="name">
             <p class="truncate">{{post.user_name || userName}} {{post.created | timeAgo}}</p>
@@ -33,7 +33,7 @@
     <p class="line-clamp-5">{{post.description | truncate:25}}</p>
   </ion-card-content>
   <ion-card-content class="image" *ngIf="post.image_url" tappable (click)="onCardSelected($event)">
-    <img class="lazy" [src]="photoPlaceholder" [lazyLoad]="post.image_url" offset="1000" (error)="this.display='none'">
+    <image-cache [src]="post.image_url"></image-cache>
   </ion-card-content>
   <ion-card-content class="fields" *ngIf="post.values && post.values.length > 0" tappable (click)="onCardSelected($event)">
     <p>{{post.values.length}} more fields...</p>

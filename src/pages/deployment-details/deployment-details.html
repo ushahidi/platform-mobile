@@ -22,7 +22,7 @@
       <h3 text-left padding-left padding-top padding-bottom>{{deployment.name}}</h3>
     </div>
     <div class="image" *ngIf="deployment.image">
-      <img class="lazy" padding [src]="placeholder" [lazyLoad]="deployment.image" (error)="this.display='none'" offset="1000">
+      <image-cache padding [src]="deployment.image"></image-cache>
     </div>
     <p padding-left padding-right class="description" [innerHTML]="deployment.description | htmlParser" *ngIf="deployment.description"></p>
     <div padding-top padding-left padding-right padding-bottom margin-bottom>

@@ -2,6 +2,8 @@ import { Component, ViewChild, NgZone } from '@angular/core';
 import { Alert, Toast, Loading, Events, Nav, Platform, ModalController, LoadingController, ToastController, AlertController, MenuController } from 'ionic-angular';
 import { StatusBar, Splashscreen } from 'ionic-native';
 
+import ImgCache from 'imgcache.js';
+
 import { Model } from '../models/model';
 import { Deployment } from '../models/deployment';
 import { User } from '../models/user';
@@ -22,6 +24,7 @@ import { DeploymentAddPage } from '../pages/deployment-add/deployment-add';
 import { DeploymentDetailsPage } from '../pages/deployment-details/deployment-details';
 
 declare var window: any;
+declare var cordova:any;
 
 @Component({
   templateUrl: 'app.html',
@@ -63,6 +66,7 @@ export class MyApp {
     this.platform.ready().then(() => {
       this.logger.info(this, "Platform Ready", this.platform.platforms());
       StatusBar.styleDefault();
+      this.loadImageCache();
       this.loadDatabase(models).then(
         (loaded) => {
           this.loadDeployments().then(
@@ -100,6 +104,24 @@ export class MyApp {
           }]);
       });
     });
+  }
+
+  loadImageCache() {
+    this.logger.info(this, "loadImageCache");
+    if (this.platform.is('ios')) {
+      ImgCache.options.cordovaFilesystemRoot = cordova.file.documentsDirectory;
+    }
+    else {
+      ImgCache.options.cordovaFilesystemRoot = cordova.file.dataDirectory;
+    }
+    ImgCache.init(
+      ()=>{
+        this.logger.info(this, "loadImageCache", "ImgCache Loaded");
+      },
+      ()=>{
+        this.logger.error(this, "loadImageCache", "ImgCache Failed");
+      }
+    );
   }
 
   resetDatabase():Promise<any> {

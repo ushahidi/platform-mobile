@@ -6,8 +6,7 @@
     <div class="value-date" *ngIf="value.input == 'date'">{{value.value | dateTime:'MMMM D, YYYY'}}</div>
     <div class="value-datetime" *ngIf="value.input == 'datetime'">{{value.value | dateTime:'h:mm A, MMMM D, YYYY'}}</div>
     <div class="value-location" *ngIf="value.input == 'location'">
-      <img full class="lazy" [src]="map" [lazyLoad]="map" [errorImage]="mapPaceholder"
-          *ngIf="map" tappable (click)="locationClicked(value.value)" />
+      <image-cache [src]="map" [placeholder]="mapPaceholder" *ngIf="map" tappable (click)="locationClicked(value.value)"></image-cache>
     </div>
     <div class="value-number" *ngIf="value.input == 'number'">{{value.value}}</div>
     <div class="value-radio" *ngIf="value.input == 'radio'">{{value.value}}</div>
@@ -15,8 +14,7 @@
     <div class="value-text" *ngIf="value.input == 'text'" [innerHTML]="value.value | htmlParser"></div>
     <div class="value-textarea" *ngIf="value.input == 'textarea'" [innerHTML]="value.value | htmlParser"></div>
     <div class="value-upload" *ngIf="value.input == 'upload'">
-      <img full class="lazy" [src]="value.image" [lazyLoad]="value.image" [errorImage]="photoPaceholder"
-          *ngIf="value.image" tappable (click)="imageClicked(value.value)" />
+      <image-cache [src]="value.image" [placeholder]="photoPaceholder" *ngIf="value.image" tappable (click)="imageClicked(value.value)"></image-cache>
     </div>
     <div class="value-varchar" *ngIf="value.input == 'varchar'" [innerHTML]="value.value | htmlParser"></div>
     <div class="value-video" *ngIf="value.input == 'video'">
