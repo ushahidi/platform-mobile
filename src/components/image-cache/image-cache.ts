@@ -1,12 +1,14 @@
 import { Component, ElementRef, Input } from '@angular/core';
-
-import ImgCache from 'imgcache.js';
+import { SafeResourceUrl, DomSanitizer } from '@angular/platform-browser';
+import { Transfer, File, Entry, FileEntry, FileError } from 'ionic-native';
 
 import { LoggerService } from '../../providers/logger-service';
 
+declare var cordova:any;
+
 @Component({
   selector: 'image-cache',
-  template: `<img class="image-cache" [src]="src" />`
+  template: `<img class="image-cache" [src]="cache" />`
 })
 export class ImageCacheComponent {
 
@@ -16,62 +18,157 @@ export class ImageCacheComponent {
   @Input('placeholder')
   placeholder:string;
 
-  img:HTMLImageElement;
+  cache:SafeResourceUrl = null;
+  image:HTMLImageElement = null;
 
-  constructor(private element:ElementRef, private logger:LoggerService) {
+  constructor(private element:ElementRef, public sanitizer:DomSanitizer, private logger:LoggerService) {
   }
 
   ngOnInit() {
-    this.img = this.element.nativeElement.querySelector('img');
-    this.img.crossOrigin = 'Anonymous';
+    this.image = this.element.nativeElement.querySelector('img');
+    this.image.crossOrigin = 'Anonymous';
     if (this.src && this.src.length > 0) {
-      this.logger.info(this, "Image", this.src, this.img.src);
-      ImgCache.isCached(this.src, (path:string, success:boolean) => {
-        if (success) {
-          this.img.classList.add("lazy-loading");
-          ImgCache.useCachedFile(this.img,
-            () => {
-              this.logger.info(this, "Use Cache", this.src, path);
-              this.img.classList.add("lazy-loaded");
+      let cache = this.getCacheFile(this.src);
+      let directory = this.getCacheDirectory();
+      this.onCacheStarted();
+      this.hasCacheImage(directory, cache).then(
+        (exists) => {
+          this.useCacheImage(directory, cache).then((url) => {
+            this.onCacheFinished();
+          });
+        },
+        (missing) => {
+          this.downloadCacheImage(this.src, directory, cache).then(
+            (url) => {
+              this.useCacheImage(directory, cache).then((url) => {
+                this.onCacheFinished();
+              });
             },
             (error) => {
-              this.logger.error(this, "Use Cache Error", this.src, error)
-            });
-        }
-        else {
-          if (this.placeholder && this.placeholder.length > 0) {
-            this.src = this.placeholder;
-          }
-          else {
-            this.img.classList.add("lazy-loading");
-          }
-          ImgCache.cacheFile(this.src,
-            (cached) => {
-              this.logger.info(this, "Add Cache", this.src, cached);
-              this.src = cached;
-              this.img.classList.add("lazy-loaded");
-            },
-            (error) => {
-              this.logger.error(this, "Add Cache Error", this.src, error);
-              if (this.placeholder && this.placeholder.length > 0) {
-                this.src = this.placeholder;
-                this.img.classList.add("lazy-loaded");
-              }
-              else {
-                this.img.style.display = 'none';
-              }
-            });
-        }
-      });
+              this.onCacheFailed();
+          });
+        });
     }
     else if (this.placeholder && this.placeholder.length > 0) {
       this.logger.info(this, "Placeholder", this.placeholder);
-      this.src = this.placeholder;
+      this.cache = this.placeholder;
     }
     else {
       this.logger.info(this, "Hide");
-      this.img.style.display = 'none';
+      this.image.style.display = 'none';
     }
+  }
+
+  hasCacheImage(directory:string, cache:string):Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      File.checkFile(directory, cache).then(
+        (exists:boolean) => {
+          if (exists) {
+            this.logger.info(this, "hasCacheImage", "Cache", cache);
+            resolve(true);
+          }
+          else {
+            this.logger.info(this, "hasCacheImage", "No Cache", cache);
+            reject(false);
+          }
+        },
+        (error:FileError) => {
+          this.logger.info(this, "hasCacheImage", "No Cache", cache);
+          reject(false);
+      });
+    });
+  }
+
+  downloadCacheImage(image:string, directory:string, cache:string):Promise<string> {
+    return new Promise((resolve, reject) => {
+      let fileTransfer = new Transfer();
+      let url = directory + cache;
+      fileTransfer.download(image, url, true).then(
+        (entry:Entry)=> {
+          this.logger.info(this, "downloadCacheImage", "Downloaded", image, entry.toURL());
+          resolve(entry.toURL());
+        },
+        (error:any) => {
+          this.logger.error(this, "downloadCacheImage", "Failed", image, error);
+          reject();
+      });
+    });
+  }
+
+  useCacheImage(directory:string, cache:string):Promise<string> {
+    return new Promise((resolve, reject) => {
+      let url = directory + cache;
+      File.resolveLocalFilesystemUrl(url).then(
+        (entry:Entry) => {
+          this.logger.info(this, "useCacheImage", entry.toInternalURL());
+          this.cache = this.sanitizer.bypassSecurityTrustResourceUrl(entry.toInternalURL());
+          resolve(entry.toInternalURL());
+      });
+    });
+  }
+
+  getCacheFile(url:string):string {
+    // let hash = 0;
+    // if (url && url.length > 0) {
+    //   let char;
+    //   for (let i = 0; i < url.length; i++) {
+    //     char = url.charCodeAt(i);
+    //     hash = ((hash << 5) - hash) + char;
+    //     hash = hash & hash;
+    //   }
+    // }
+    // if (url.indexOf(".jpg") != -1) {
+    //   return hash.toString() + ".jpg";
+    // }
+    // else if (url.indexOf(".png") != -1) {
+    //   return hash.toString() + ".png";
+    // }
+    // return hash.toString() + ".jpg";
+    if (url && url.length > 0) {
+      let fileName = url.toLowerCase()
+        .replace('jpg','')
+        .replace('png','')
+        .replace(/[\.]/g,'-')
+        .replace(/[^\w\s-]/g,'-')
+        .replace(/[\s_-]+/g,'-')
+        .replace(/\-\-+/g,'-')
+        .replace(/^-+|-+$/g,'');
+      if (url.indexOf(".jpg") != -1) {
+        return fileName + ".jpg";
+      }
+      else if (url.indexOf(".png") != -1) {
+        return fileName + ".png";
+      }
+      return fileName + ".jpg";
+    }
+    return null;
+  }
+
+  getCacheDirectory():string {
+    return cordova.file.cacheDirectory;
+  }
+
+  onCacheStarted() {
+    if (this.placeholder && this.placeholder.length > 0) {
+      this.cache = this.placeholder;
+    }
+    else {
+      this.image.classList.add("cache-loading");
+    }
+  }
+
+  onCacheFinished() {
+    this.image.classList.add("cache-loaded");
+  }
+
+  onCacheFailed() {
+    if (this.placeholder && this.placeholder.length > 0) {
+      this.cache = this.placeholder;
+    }
+    else {
+      this.image.style.display = 'none';
+    }
+    this.image.classList.add("cache-loaded");
   }
 
 }
