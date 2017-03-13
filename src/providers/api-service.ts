@@ -47,10 +47,12 @@ export class ApiService extends HttpService {
           let deployments = [];
           for (let item of items) {
             let deployment:Deployment = new Deployment();
-            deployment.name = item['deployment_name'];
-            deployment.domain = item['domain'];
-            deployment.subdomain = item['subdomain'];
-            deployment.url = `https://${item['subdomain']}.${item['domain']}`;
+            deployment.tier = item.tier;
+            deployment.status = item.status;
+            deployment.name = item.deployment_name;
+            deployment.domain = `${item.subdomain}.ushahidi.io`;
+            deployment.website = `https://${item.subdomain}.ushahidi.io`;
+            deployment.api = `https://${item.subdomain}.${item.domain}`;
             deployments.push(deployment);
           }
           resolve(deployments);
@@ -63,8 +65,7 @@ export class ApiService extends HttpService {
 
   clientLogin(deployment:Deployment):Promise<any> {
     return new Promise((resolve, reject) => {
-      let api = "/oauth/token";
-      let url = deployment.url + api;
+      let url = deployment.api + "/oauth/token";
       let params = {
         grant_type: "client_credentials",
         scope: this.scope,
@@ -84,8 +85,7 @@ export class ApiService extends HttpService {
 
   authLogin(deployment:Deployment, username:string, password:string):Promise<any> {
     return new Promise((resolve, reject) => {
-      let api = "/oauth/token";
-      let url = deployment.url + api;
+      let url = deployment.api + "/oauth/token";
       let params = {
         grant_type: "password",
         scope: this.scope,
@@ -110,8 +110,7 @@ export class ApiService extends HttpService {
 
   authRefresh(deployment:Deployment, refreshToken:string):Promise<any> {
     return new Promise((resolve, reject) => {
-      let api = "/oauth/token";
-      let url = deployment.url + api;
+      let url = deployment.api + "/oauth/token";
       let params = {
         grant_type: "refresh_token",
         scope: this.scope,
@@ -157,8 +156,7 @@ export class ApiService extends HttpService {
           });
       }
       else {
-        let api = `/api/v3/users`;
-        let url = deployment.url + api;
+        let url = deployment.api + "/api/v3/users";
         this.httpGet(url, deployment.access_token).then(
           (data:any) => {
             let saves = [];
@@ -194,8 +192,7 @@ export class ApiService extends HttpService {
 
   getUser(deployment:Deployment, user:any="me", cache:boolean=false, offline:boolean=false): Promise<User>  {
     return new Promise((resolve, reject) => {
-      let api = `/api/v3/users/${user}`;
-      let url = deployment.url + api;
+      let url = deployment.api + `/api/v3/users/${user}`;
       this.httpGet(url, deployment.access_token).then(
         (data:any) => {
           let user:User = new User();
@@ -238,15 +235,16 @@ export class ApiService extends HttpService {
           });
       }
       else {
-        let api = `/api/v3/config/site`;
-        let url = deployment.url + api;
+        let url = deployment.api + "/api/v3/config/site";
         this.httpGet(url, deployment.access_token).then(
           (data:any) => {
             let deployment:Deployment = new Deployment();
             deployment.name = data.name;
             deployment.email = data.email;
-            deployment.image = data.image_header;
             deployment.description = data.description;
+            if (data.image_header) {
+              deployment.image = encodeURI(data.image_header);
+            }
             if (data.allowed_privileges) {
               deployment.can_read = data.allowed_privileges.indexOf("read") > -1;
               deployment.can_create = data.allowed_privileges.indexOf("create") > -1;
@@ -270,8 +268,7 @@ export class ApiService extends HttpService {
 
   updateDeployment(deployment:Deployment, changes:{}=null) {
     return new Promise((resolve, reject) => {
-      let api = `/api/v3/config/site`;
-      let url = deployment.url + api;
+      let url = deployment.api + "/api/v3/config/site";
       if (changes == null) {
         changes = {
           name: deployment.name,
@@ -314,8 +311,7 @@ export class ApiService extends HttpService {
           });
       }
       else {
-        let api = `/api/v3/posts/`;
-        let url = deployment.url + api;
+        let url = deployment.api + "/api/v3/posts/";
         let params = {
           limit: limit,
           offset: offset };
@@ -328,7 +324,7 @@ export class ApiService extends HttpService {
               let post:Post = new Post();
               post.deployment_id = deployment.id;
               post.id = item.id;
-              post.url = `${deployment.url}/posts/${item.id}`;
+              post.url = `${deployment.website}/posts/${item.id}`;
               post.slug = item.slug;
               post.title = item.title;
               post.description = item.content;
@@ -395,8 +391,7 @@ export class ApiService extends HttpService {
 
   createPost(deployment:Deployment, post:Post): Promise<any> {
     return new Promise((resolve, reject) => {
-      let api = "/api/v3/posts/";
-      let url = deployment.url + api;
+      let url = deployment.api + "/api/v3/posts/";
       let values = {}
       for (let value of post.values) {
         if (value.value == null || value.value.length == 0) {
@@ -468,8 +463,7 @@ export class ApiService extends HttpService {
 
   updatePost(deployment:Deployment, post:Post, changes:{}=null) {
     return new Promise((resolve, reject) => {
-      let api = `/api/v3/posts/${post.id}`;
-      let url = deployment.url + api;
+      let url = deployment.api + `/api/v3/posts/${post.id}`;
       if (changes == null) {
         let values = {}
         for (let value of post.values) {
@@ -540,8 +534,7 @@ export class ApiService extends HttpService {
 
   deletePost(deployment:Deployment, post:Post):Promise<any> {
     return new Promise((resolve, reject) => {
-      let api = `/api/v3/posts/${post.id}`;
-      let url = deployment.url + api;
+      let url = deployment.api + `/api/v3/posts/${post.id}`;
       let params = {};
       this.httpDelete(url, deployment.access_token, params).then(
         (data:any) => {
@@ -609,8 +602,7 @@ export class ApiService extends HttpService {
           });
       }
       else {
-        let api = `/api/v3/media`;
-        let url = deployment.url + api;
+        let url = deployment.api + "/api/v3/media";
         let params = {
           order: "desc",
           limit: limit,
@@ -625,7 +617,9 @@ export class ApiService extends HttpService {
               let image:Image = new Image();
               image.deployment_id = deployment.id;
               image.id = item.id;
-              image.url = item.original_file_url;
+              if (item.original_file_url) {
+                image.url = encodeURI(item.original_file_url);
+              }
               image.mime = item.mime;
               image.caption = item.caption;
               image.width = item.original_width;
@@ -665,8 +659,7 @@ export class ApiService extends HttpService {
 
   uploadImage(deployment:Deployment, post:Post, file:string): Promise<Image> {
     return new Promise((resolve, reject) => {
-      let api = `/api/v3/media`;
-      let url = deployment.url + api;
+      let url = deployment.api + "/api/v3/media";
       let mimeType = this.mimeType(file);
       this.fileUpload(url, deployment.access_token, file, "POST", mimeType).then(
         (data:any) => {
@@ -746,8 +739,7 @@ export class ApiService extends HttpService {
           });
       }
       else {
-        let api = `/api/v3/forms`;
-        let url = deployment.url + api;
+        let url = deployment.api + "/api/v3/forms";
         this.httpGet(url, deployment.access_token).then(
           (data:any) => {
             let forms = [];
@@ -821,8 +813,7 @@ export class ApiService extends HttpService {
           });
       }
       else {
-        let api = '/api/v3/forms/attributes';
-        let url = deployment.url + api;
+        let url = deployment.api + "/api/v3/forms/attributes";
         this.httpGet(url, deployment.access_token).then(
           (data:any) => {
             let saves = [];
@@ -897,8 +888,7 @@ export class ApiService extends HttpService {
           });
       }
       else {
-        let api = '/api/v3/collections';
-        let url = deployment.url + api;
+        let url = deployment.api + "/api/v3/collections";
         this.httpGet(url, deployment.access_token).then(
           (data:any) => {
             let saves = [];
@@ -948,8 +938,7 @@ export class ApiService extends HttpService {
 
   addPostToCollection(deployment:Deployment, post:Post, collection:Collection) {
     return new Promise((resolve, reject) => {
-      let api = `/api/v3/collections/${collection.id}/posts`;
-      let url = deployment.url + api;
+      let url = deployment.api + `/api/v3/collections/${collection.id}/posts`;
       let params = {
         id: post.id };
       this.httpPost(url, deployment.access_token, params).then(
@@ -964,8 +953,7 @@ export class ApiService extends HttpService {
 
   removePostToCollection(deployment:Deployment, post:Post, collection:Collection) {
     return new Promise((resolve, reject) => {
-      let api = `/api/v3/collections/${collection.id}/posts/${post.id}`;
-      let url = deployment.url + api;
+      let url = deployment.api + `/api/v3/collections/${collection.id}/posts/${post.id}`;
       let params = { };
       this.httpDelete(url, deployment.access_token, params).then(
         (data:any) => {

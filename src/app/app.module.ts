@@ -7,7 +7,7 @@ import { MyApp } from './app.component';
 import { BasePage } from '../pages/base-page/base-page';
 import { HomePage } from '../pages/home/home';
 
-import { DeploymentAddPage } from '../pages/deployment-add/deployment-add';
+import { DeploymentSearchPage } from '../pages/deployment-search/deployment-search';
 import { DeploymentDetailsPage } from '../pages/deployment-details/deployment-details';
 import { DeploymentLoginPage } from '../pages/deployment-login/deployment-login';
 import { DeploymentSettingsPage } from '../pages/deployment-settings/deployment-settings';
@@ -56,7 +56,7 @@ export function provideStorage() {
     MyApp,
     BasePage,
     HomePage,
-    DeploymentAddPage,
+    DeploymentSearchPage,
     DeploymentDetailsPage,
     DeploymentSettingsPage,
     DeploymentLoginPage,
@@ -97,7 +97,7 @@ export function provideStorage() {
   entryComponents: [
     MyApp,
     HomePage,
-    DeploymentAddPage,
+    DeploymentSearchPage,
     DeploymentLoginPage,
     DeploymentDetailsPage,
     DeploymentSettingsPage,

@@ -8,7 +8,7 @@
     <ion-title>Add Deployment</ion-title>
   </ion-navbar>
 </ion-header>
-<ion-content class="deployment-add-page">
+<ion-content class="deployment-search-page">
   <ion-searchbar #searchbar color="light" type="search" debounce="500" placeholder="Find deployment by name"
                  autocomplete="false" autocorrect="false" spellcheck="false" (ionInput)="onSearch($event)"></ion-searchbar>
   <div class="loading" text-center *ngIf="deployments.length == 0 && loading == true">
@@ -17,7 +17,7 @@
   <ion-list>
     <ion-item (click)="addDeployment($event, deployment)" *ngFor="let deployment of deployments">
       <h2>{{deployment.name}}</h2>
-      <p>{{deployment.subdomain}}.{{deployment.domain}}</p>
+      <p>{{deployment.domain}}</p>
     </ion-item>
   </ion-list>
 </ion-content>

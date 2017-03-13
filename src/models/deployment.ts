@@ -26,20 +26,23 @@ export class Deployment extends Model {
   @Column("id", INTEGER, PRIMARY_KEY)
   public id: number = null;
 
-  @Column("url", TEXT)
-  public url: string = null;
-
   @Column("name", TEXT)
   public name: string = null;
+
+  @Column("api", TEXT)
+  public api: string = null;
+
+  @Column("website", TEXT)
+  public website: string = null;
 
   @Column("domain", TEXT)
   public domain: string = null;
 
-  @Column("subdomain", TEXT)
-  public subdomain: string = null;
-
   @Column("status", TEXT)
   public status: string = null;
+
+  @Column("tier", TEXT)
+  public tier: string = null;
 
   @Column("description", TEXT)
   public description: string = null;

@@ -2,7 +2,7 @@ import { Component, Output, EventEmitter } from '@angular/core';
 
 import { LoggerService } from '../../providers/logger-service';
 
-import { PLACEHOLDER_USER, PLACEHOLDER_PHOTO, PLACEHOLDER_NAME } from '../../constants/placeholders';
+import { PLACEHOLDER_USER, PLACEHOLDER_NAME } from '../../constants/placeholders';
 
 @Component({
   selector: 'post-card',
@@ -21,7 +21,6 @@ export class PostCardComponent {
 
   userName:string = PLACEHOLDER_NAME;
   userPlaceholder:string = PLACEHOLDER_USER;
-  photoPlaceholder:string = PLACEHOLDER_PHOTO;
 
   constructor(public logger:LoggerService) {
   }

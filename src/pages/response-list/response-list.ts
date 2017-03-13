@@ -28,8 +28,6 @@ import { ResponseSearchPage } from '../response-search/response-search';
 import { POST_UPDATED, POST_DELETED } from '../../constants/events';
 import { PLACEHOLDER_LATITUDE, PLACEHOLDER_LONGITUDE } from '../../constants/placeholders';
 
-export declare var google: any;
-
 @Component({
   selector: 'response-list-page',
   templateUrl: 'response-list.html',
@@ -358,7 +356,7 @@ export class ResponseListPage extends BasePage {
     let subject = this.deployment.name;
     let message = this.deployment.description
     let file = this.deployment.image;
-    let url = this.deployment.url;
+    let url = this.deployment.website;
     this.logger.info(this, "shareResponses", "Subject", subject, "Message", message, "File", file, "URL", url);
     this.showShare(subject, message, file, url).then(
       (shared:boolean) => {

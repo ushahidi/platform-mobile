@@ -12,11 +12,11 @@ import { DatabaseService } from '../../providers/database-service';
 import { BasePage } from '../../pages/base-page/base-page';
 
 @Component({
-  selector: 'deployment-add-page',
-  templateUrl: 'deployment-add.html',
+  selector: 'deployment-search-page',
+  templateUrl: 'deployment-search.html',
   providers: [ ApiService, DatabaseService, LoggerService ]
 })
-export class DeploymentAddPage extends BasePage {
+export class DeploymentSearchPage extends BasePage {
 
   loading: boolean = false;
   deployments: Deployment[] = [];
@@ -79,7 +79,7 @@ export class DeploymentAddPage extends BasePage {
 
   addDeployment(event:any, deployment:Deployment) {
     this.logger.info(this, "addDeployment");
-    let where = { subdomain: deployment.subdomain };
+    let where = { domain: deployment.domain };
     return this.database.getDeployments(where).then(
       (deployments:Deployment[]) => {
         if (deployments && deployments.length > 0) {

@@ -13,23 +13,14 @@
       margin-top: 0;
       padding-top: 0;
     }
-    &.image {
-      img {
-        transition: opacity 1s;
-        &.lazy {
-          opacity: 0;
-        }
-        &.ng2-lazyloaded {
-          opacity: 1;
-        }
-      }
-    }
     &.fields {
       p {
         color: #888;
         font-size: 13px;
         font-weight: 500;
         text-transform: uppercase;
+        margin-top: 10px;
+        margin-bottom: 10px;
       }
     }
   }

@@ -14,10 +14,10 @@
     </ion-refresher>
     <ion-list *ngIf="deployments && deployments.length > 0">
       <ion-item-sliding *ngFor="let _deployment of deployments">
-        <ion-item [class.selected]="deployment != null && deployment.url === _deployment.url"
+        <ion-item [class.selected]="deployment != null && deployment.api === _deployment.api"
                   (click)="changeDeployment(_deployment)">
           <div class="name">{{_deployment.name}}</div>
-          <div class="domain">{{_deployment.subdomain}}.{{_deployment.domain}}</div>
+          <div class="domain">{{_deployment.domain}}</div>
         </ion-item>
         <ion-item-options side="right">
           <button ion-button color="danger" (click)="removeDeployment($event, deployment)">

@@ -54,10 +54,15 @@ export class BasePage {
   ionViewWillEnter() {
     this.logger.info(this, "ionViewWillEnter", "Network", Network.type);
     if (Network.type == 'none') {
-      this.offline = true;
+      this.zone.run(() => {
+        this.offline = true;
+        this.resizeContent();
+      });
     }
     else {
-      this.offline = false;
+      this.zone.run(() => {
+        this.offline = false;
+      });
     }
     this.connection = Network.onConnect().subscribe(() => {
       this.logger.info(this, "Network Connected", Network.type);

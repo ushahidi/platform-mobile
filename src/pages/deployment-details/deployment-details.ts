@@ -253,7 +253,7 @@ export class DeploymentDetailsPage extends BasePage {
       let subject = this.deployment.name;
       let message = this.deployment.description
       let file = this.deployment.image;
-      let url = this.deployment.url;
+      let url = this.deployment.website;
       this.logger.info(this, "shareDeployment", "Subject", subject, "Message", message, "File", file, "URL", url);
       this.showShare(subject, message, file, url).then(
         (shared) => {

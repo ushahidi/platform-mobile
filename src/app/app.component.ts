@@ -20,7 +20,7 @@ import { LoggerService } from '../providers/logger-service';
 import { DatabaseService } from '../providers/database-service';
 
 import { HomePage } from '../pages/home/home';
-import { DeploymentAddPage } from '../pages/deployment-add/deployment-add';
+import { DeploymentSearchPage } from '../pages/deployment-search/deployment-search';
 import { DeploymentDetailsPage } from '../pages/deployment-details/deployment-details';
 
 declare var window: any;
@@ -28,7 +28,7 @@ declare var cordova:any;
 
 @Component({
   templateUrl: 'app.html',
-  entryComponents:[ HomePage, DeploymentAddPage, DeploymentDetailsPage ]
+  entryComponents:[ HomePage, DeploymentSearchPage, DeploymentDetailsPage ]
 })
 export class MyApp {
 
@@ -196,7 +196,7 @@ export class MyApp {
   addDeployment(event:any) {
     this.logger.info(this, "addDeployment");
     let modal = this.modalController.create(
-      DeploymentAddPage,
+      DeploymentSearchPage,
       { });
     modal.present();
     modal.onDidDismiss((data:any) => {
