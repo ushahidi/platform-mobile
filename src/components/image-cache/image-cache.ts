@@ -1,6 +1,7 @@
 import { Component, ElementRef, Input } from '@angular/core';
 import { SafeUrl, DomSanitizer } from '@angular/platform-browser';
 import { Transfer, File, Entry, FileError } from 'ionic-native';
+import { Md5 } from 'ts-md5/dist/md5';
 
 import { LoggerService } from '../../providers/logger-service';
 
@@ -18,7 +19,7 @@ export class ImageCacheComponent {
   @Input('placeholder')
   placeholder:string;
 
-  url:string = null;
+  local:string = null;
   cache:SafeUrl = null;
   image:HTMLImageElement = null;
 
@@ -26,8 +27,6 @@ export class ImageCacheComponent {
   }
 
   ngOnInit() {
-    this.image = this.element.nativeElement.querySelector('img');
-    this.image.crossOrigin = 'Anonymous';
     this.loadCacheImage();
   }
 
@@ -36,6 +35,8 @@ export class ImageCacheComponent {
   }
 
   loadCacheImage() {
+    this.image = this.element.nativeElement.querySelector('img');
+    this.image.crossOrigin = 'Anonymous';
     if (this.src && this.src.length > 0) {
       this.logger.info(this, "loadCacheImage", "Image", this.src);
       let cache = this.getCacheFile(this.src);
@@ -70,9 +71,9 @@ export class ImageCacheComponent {
   }
 
   reloadCacheImage() {
-    if (this.url && this.url.length > 0) {
-      this.logger.info(this, "reloadCacheImage", this.url);
-      this.cache = this.sanitizer.bypassSecurityTrustUrl(this.url);
+    if (this.local && this.local.length > 0) {
+      this.logger.info(this, "reloadCacheImage", this.local);
+      this.cache = this.sanitizer.bypassSecurityTrustUrl(this.local);
     }
   }
 
@@ -101,8 +102,8 @@ export class ImageCacheComponent {
       let url = directory + cache;
       let fileTransfer = new Transfer();
       fileTransfer.download(image, url, true).then(
-        (entry:Entry)=> {
-          this.logger.info(this, "downloadCacheImage", "Downloaded", image, entry.toURL());
+        (entry:Entry) => {
+          this.logger.info(this, "downloadCacheImage", "Downloaded", image, entry);
           resolve(entry.toURL());
         },
         (error:any) => {
@@ -118,48 +119,22 @@ export class ImageCacheComponent {
       File.resolveLocalFilesystemUrl(url).then(
         (entry:Entry) => {
           this.logger.info(this, "useCacheImage", entry.toInternalURL());
+          this.local = entry.toInternalURL();
           this.cache = this.sanitizer.bypassSecurityTrustUrl(entry.toInternalURL());
-          this.url = entry.toInternalURL();
           resolve(entry.toInternalURL());
       });
     });
   }
 
   getCacheFile(url:string):string {
-    // let hash = 0;
-    // if (url && url.length > 0) {
-    //   let char;
-    //   for (let i = 0; i < url.length; i++) {
-    //     char = url.charCodeAt(i);
-    //     hash = ((hash << 5) - hash) + char;
-    //     hash = hash & hash;
-    //   }
-    // }
-    // if (url.indexOf(".jpg") != -1) {
-    //   return hash.toString() + ".jpg";
-    // }
-    // else if (url.indexOf(".png") != -1) {
-    //   return hash.toString() + ".png";
-    // }
-    // return hash.toString() + ".jpg";
-    if (url && url.length > 0) {
-      let fileName = url.toLowerCase()
-        .replace('jpg','')
-        .replace('png','')
-        .replace(/[\.]/g,'-')
-        .replace(/[^\w\s-]/g,'-')
-        .replace(/[\s_-]+/g,'-')
-        .replace(/\-\-+/g,'-')
-        .replace(/^-+|-+$/g,'');
-      if (url.indexOf(".jpg") != -1) {
-        return fileName + ".jpg";
-      }
-      else if (url.indexOf(".png") != -1) {
-        return fileName + ".png";
-      }
-      return fileName + ".jpg";
+    let hash = Md5.hashStr(url);
+    if (url.indexOf(".jpg") != -1) {
+      return hash.toString() + ".jpg";
     }
-    return null;
+    else if (url.indexOf(".png") != -1) {
+      return hash.toString() + ".png";
+    }
+    return hash.toString() + ".jpg";
   }
 
   getCacheDirectory():string {
