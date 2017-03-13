@@ -145,9 +145,7 @@ export class ImageCacheComponent {
     if (this.placeholder && this.placeholder.length > 0) {
       this.cache = this.placeholder;
     }
-    else {
-      this.image.classList.add("cache-loading");
-    }
+    this.image.classList.add("cache-loading");
   }
 
   onCacheFinished() {
