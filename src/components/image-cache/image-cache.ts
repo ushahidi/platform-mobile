@@ -1,6 +1,6 @@
 import { Component, ElementRef, Input } from '@angular/core';
-import { SafeResourceUrl, DomSanitizer } from '@angular/platform-browser';
-import { Transfer, File, Entry, FileEntry, FileError } from 'ionic-native';
+import { SafeUrl, DomSanitizer } from '@angular/platform-browser';
+import { Transfer, File, Entry, FileError } from 'ionic-native';
 
 import { LoggerService } from '../../providers/logger-service';
 
@@ -18,7 +18,8 @@ export class ImageCacheComponent {
   @Input('placeholder')
   placeholder:string;
 
-  cache:SafeResourceUrl = null;
+  url:string = null;
+  cache:SafeUrl = null;
   image:HTMLImageElement = null;
 
   constructor(private element:ElementRef, public sanitizer:DomSanitizer, private logger:LoggerService) {
@@ -27,7 +28,16 @@ export class ImageCacheComponent {
   ngOnInit() {
     this.image = this.element.nativeElement.querySelector('img');
     this.image.crossOrigin = 'Anonymous';
+    this.loadCacheImage();
+  }
+
+  ngAfterContentChecked() {
+    this.reloadCacheImage();
+  }
+
+  loadCacheImage() {
     if (this.src && this.src.length > 0) {
+      this.logger.info(this, "loadCacheImage", "Image", this.src);
       let cache = this.getCacheFile(this.src);
       let directory = this.getCacheDirectory();
       this.onCacheStarted();
@@ -50,12 +60,19 @@ export class ImageCacheComponent {
         });
     }
     else if (this.placeholder && this.placeholder.length > 0) {
-      this.logger.info(this, "Placeholder", this.placeholder);
+      this.logger.info(this, "loadCacheImage", "Placeholder", this.placeholder);
       this.cache = this.placeholder;
     }
     else {
-      this.logger.info(this, "Hide");
+      this.logger.info(this, "loadCacheImage", "Hide");
       this.image.style.display = 'none';
+    }
+  }
+
+  reloadCacheImage() {
+    if (this.url && this.url.length > 0) {
+      this.logger.info(this, "reloadCacheImage", this.url);
+      this.cache = this.sanitizer.bypassSecurityTrustUrl(this.url);
     }
   }
 
@@ -81,8 +98,8 @@ export class ImageCacheComponent {
 
   downloadCacheImage(image:string, directory:string, cache:string):Promise<string> {
     return new Promise((resolve, reject) => {
-      let fileTransfer = new Transfer();
       let url = directory + cache;
+      let fileTransfer = new Transfer();
       fileTransfer.download(image, url, true).then(
         (entry:Entry)=> {
           this.logger.info(this, "downloadCacheImage", "Downloaded", image, entry.toURL());
@@ -101,7 +118,8 @@ export class ImageCacheComponent {
       File.resolveLocalFilesystemUrl(url).then(
         (entry:Entry) => {
           this.logger.info(this, "useCacheImage", entry.toInternalURL());
-          this.cache = this.sanitizer.bypassSecurityTrustResourceUrl(entry.toInternalURL());
+          this.cache = this.sanitizer.bypassSecurityTrustUrl(entry.toInternalURL());
+          this.url = entry.toInternalURL();
           resolve(entry.toInternalURL());
       });
     });
