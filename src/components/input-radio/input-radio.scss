@@ -1,0 +1,20 @@
+.input-radio {
+  .input-label {
+    color: #555;
+    font-size: 14px;
+    margin-bottom: 0;
+  }
+  .input-error {
+    color: #dd0000;
+  }
+  ion-list {
+    border: none;
+    margin-top: 0;
+    margin-bottom: 0;
+    ion-item {
+      .item-inner {
+        border-bottom: 1px solid #cccccc !important;
+      }
+    }
+  }
+}

@@ -1,0 +1,22 @@
+<div class="input-image" [class.invalid]="attribute.required == true && imagePath == null && submitted == true">
+  <ion-item no-lines [formGroup]="formGroup">
+    <ion-label class="input-label">
+      {{attribute.label}}
+      <span ion-text color="danger" *ngIf="attribute.required == true">*</span>
+    </ion-label>
+    <ion-input type="text" hidden [(ngModel)]="imagePath" [formControlName]="attribute.key"></ion-input>
+  </ion-item>
+  <ion-card margin-left margin-right *ngIf="imageThumbnail != null">
+    <img full [src]="imageThumbnail" />
+  </ion-card>
+  <button ion-button margin-left icon-left text-uppercase small color="light" *ngIf="imagePath == null" (click)="showOptions()">
+    <ion-icon name="camera"></ion-icon> Add Photo
+  </button>
+  <button ion-button margin-left icon-left text-uppercase small color="light" *ngIf="imagePath != null" (click)="showOptions()">
+    <ion-icon name="camera"></ion-icon> Replace Photo
+  </button>
+  <button ion-button text-uppercase icon-left small color="red" *ngIf="imagePath != null" (click)="deletePhoto()">
+    <ion-icon name="trash"></ion-icon> Delete Photo
+  </button>
+  <p class="input-error" padding-left *ngIf="attribute.required == true && imagePath == null && submitted == true">Image required</p>
+</div>

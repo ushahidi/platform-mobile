@@ -19,22 +19,21 @@ import { ResponseMapPage } from '../pages/response-map/response-map';
 import { ResponseSearchPage } from '../pages/response-search/response-search';
 import { ResponseImagePage } from '../pages/response-image/response-image';
 
-import { CheckboxComponent } from '../components/checkbox/checkbox';
-import { CheckboxesComponent } from '../components/checkboxes/checkboxes';
-import { DateComponent } from '../components/date/date';
-import { DateTimeComponent } from '../components/datetime/datetime';
-import { ImageComponent } from '../components/image/image';
-import { LocationComponent } from '../components/location/location';
-import { NumberComponent } from '../components/number/number';
-import { RadioComponent } from '../components/radio/radio';
-import { SelectComponent } from '../components/select/select';
-import { TextComponent } from '../components/text/text';
-import { TextAreaComponent } from '../components/textarea/textarea';
-import { VideoComponent } from '../components/video/video';
+import { InputCheckboxComponent } from '../components/input-checkbox/input-checkbox';
+import { InputCheckboxesComponent } from '../components/input-checkboxes/input-checkboxes';
+import { InputDateComponent } from '../components/input-date/input-date';
+import { InputDateTimeComponent } from '../components/input-datetime/input-datetime';
+import { InputImageComponent } from '../components/input-image/input-image';
+import { InputLocationComponent } from '../components/input-location/input-location';
+import { InputNumberComponent } from '../components/input-number/input-number';
+import { InputRadioComponent } from '../components/input-radio/input-radio';
+import { InputSelectComponent } from '../components/input-select/input-select';
+import { InputTextComponent } from '../components/input-text/input-text';
+import { InputTextAreaComponent } from '../components/input-textarea/input-textarea';
+import { InputVideoComponent } from '../components/input-video/input-video';
 import { ImageCacheComponent } from '../components/image-cache/image-cache';
-
-import { CardComponent } from '../components/card/card';
-import { ValueComponent } from '../components/value/value';
+import { PostCardComponent } from '../components/post-card/post-card';
+import { PostValueComponent } from '../components/post-value/post-value';
 
 import { DateTimePipe } from '../pipes/date-time';
 import { TimeAgoPipe } from '../pipes/time-ago';
@@ -67,20 +66,20 @@ export function provideStorage() {
     ResponseMapPage,
     ResponseImagePage,
     ResponseSearchPage,
-    CheckboxComponent,
-    CheckboxesComponent,
-    DateComponent,
-    DateTimeComponent,
-    ImageComponent,
-    LocationComponent,
-    NumberComponent,
-    RadioComponent,
-    SelectComponent,
-    TextComponent,
-    TextAreaComponent,
-    VideoComponent,
-    CardComponent,
-    ValueComponent,
+    InputCheckboxComponent,
+    InputCheckboxesComponent,
+    InputDateComponent,
+    InputDateTimeComponent,
+    InputImageComponent,
+    InputLocationComponent,
+    InputNumberComponent,
+    InputRadioComponent,
+    InputSelectComponent,
+    InputTextComponent,
+    InputTextAreaComponent,
+    InputVideoComponent,
+    PostCardComponent,
+    PostValueComponent,
     ImageCacheComponent,
     DateTimePipe,
     TimeAgoPipe,

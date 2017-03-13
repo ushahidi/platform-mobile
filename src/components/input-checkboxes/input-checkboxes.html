@@ -1,0 +1,17 @@
+<div class="input-checkboxes" [class.invalid]="attribute.required == true && hasValue() == false && submitted == true">
+  <ion-item no-lines>
+    <ion-label class="input-label">
+      {{attribute.label}}
+      <span ion-text color="danger" *ngIf="attribute.required == true">*</span>
+    </ion-label>
+  </ion-item>
+  <div [formGroup]="formGroup" *ngIf="formGroup">
+    <div [formGroupName]="attribute.key">
+      <ion-item *ngFor="let option of options">
+        <ion-label>{{option}}</ion-label>
+        <ion-checkbox color="blue" [(ngModel)]="values[option]" formControlName="{{option}}"></ion-checkbox>
+      </ion-item>
+    </div>
+  </div>
+  <p class="input-error" padding-left *ngIf="attribute.required == true && hasValue() == false && submitted == true">Selection required</p>
+</div>

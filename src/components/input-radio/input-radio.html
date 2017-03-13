@@ -1,0 +1,17 @@
+<div class="input-radio" [class.invalid]="attribute.required == true && text.length == 0 && submitted == true">
+  <ion-item no-lines>
+    <ion-label class="input-label">
+      {{attribute.label}}
+      <span ion-text color="danger" *ngIf="attribute.required == true">*</span>
+    </ion-label>
+  </ion-item>
+  <div [formGroup]="formGroup">
+    <ion-list #radioGroup no-lines radio-group [formControlName]="attribute.key" *ngIf="options">
+      <ion-item *ngFor="let option of options">
+        <ion-label>{{option}}</ion-label>
+        <ion-radio color="blue" [value]="option" (ionSelect)="radioChanged($event)"></ion-radio>
+      </ion-item>
+    </ion-list>
+  </div>
+  <p class="input-error" padding-left *ngIf="attribute.required == true && text.length == 0 && submitted == true">Selection required</p>
+</div>
