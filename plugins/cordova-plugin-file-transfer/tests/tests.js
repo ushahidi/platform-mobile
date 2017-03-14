@@ -32,7 +32,6 @@ exports.defineAutoTests = function () {
     var GRACE_TIME_DELTA = 600; // in milliseconds
     var DEFAULT_FILESYSTEM_SIZE = 1024 * 50; // filesystem size in bytes
     var UNKNOWN_HOST = "http://foobar.apache.org";
-    var HEADERS_ECHO = "http://whatheaders.com"; // NOTE: this site is very useful!
     var DOWNLOAD_TIMEOUT = 7 * ONE_SECOND;
     var WINDOWS_UNKNOWN_HOST_TIMEOUT = 35 * ONE_SECOND;
     var UPLOAD_TIMEOUT = 7 * ONE_SECOND;
@@ -41,6 +40,8 @@ exports.defineAutoTests = function () {
     var DATA_URI_PREFIX = "data:image/png;base64,";
     var DATA_URI_CONTENT = "iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAHElEQVQI12P4//8/w38GIAXDIBKE0DHxgljNBAAO9TXL0Y4OHwAAAABJRU5ErkJggg==";
     var DATA_URI_CONTENT_LENGTH = 85; // bytes. (This is the raw file size: used https://en.wikipedia.org/wiki/File:Red-dot-5px.png from https://en.wikipedia.org/wiki/Data_URI_scheme)
+    var RETRY_COUNT = 100; // retry some flaky tests (yes, THIS many times, due to Heroku server instability)
+    var RETRY_INTERVAL = 100;
 
     // upload test server address
     // NOTE:
@@ -361,7 +362,6 @@ exports.defineAutoTests = function () {
                 });
 
                 it("filetransfer.spec.4 should download a file", function (done) {
-
                     var fileURL = SERVER + "/robots.txt";
                     var specContext = this;
 
@@ -396,10 +396,9 @@ exports.defineAutoTests = function () {
                     };
 
                     specContext.transfer.download(fileURL, specContext.localFilePath, downloadWin, downloadFail);
-                }, DOWNLOAD_TIMEOUT);
+                }, DOWNLOAD_TIMEOUT * 10); // to give Heroku server some time to wake up
 
                 it("filetransfer.spec.5 should download a file using http basic auth", function (done) {
-
                     var fileURL = SERVER_WITH_CREDENTIALS + "/download_basic_auth";
                     var specContext = this;
 
@@ -417,7 +416,6 @@ exports.defineAutoTests = function () {
                 }, DOWNLOAD_TIMEOUT);
 
                 it("filetransfer.spec.6 should get 401 status on http basic auth failure", function (done) {
-
                     // NOTE:
                     //      using server without credentials
                     var fileURL = SERVER + "/download_basic_auth";
@@ -442,7 +440,6 @@ exports.defineAutoTests = function () {
                 }, DOWNLOAD_TIMEOUT);
 
                 it("filetransfer.spec.7 should download a file using file:// (when hosted from file://)", function (done) {
-
                     // for Windows platform it's ms-appdata:/// by default, not file://
                     if (isWindows) {
                         pending();
@@ -474,7 +471,6 @@ exports.defineAutoTests = function () {
                 }, DOWNLOAD_TIMEOUT);
 
                 it("filetransfer.spec.8 should download a file using https://", function (done) {
-
                     var fileURL = "https://www.apache.org/licenses/";
                     var specContext = this;
 
@@ -515,7 +511,6 @@ exports.defineAutoTests = function () {
                 }, DOWNLOAD_TIMEOUT);
 
                 it("filetransfer.spec.11 should call the error callback on abort()", function (done) {
-
                     var fileURL = "http://cordova.apache.org/downloads/BlueZedEx.mp3";
                     fileURL = fileURL + "?q=" + (new Date()).getTime();
                     var specContext = this;
@@ -532,7 +527,6 @@ exports.defineAutoTests = function () {
                 }, DOWNLOAD_TIMEOUT);
 
                 it("filetransfer.spec.9 should not leave partial file due to abort", function (done) {
-
                     var fileURL = "http://cordova.apache.org/downloads/logos_2.zip";
                     var specContext = this;
 
@@ -571,7 +565,6 @@ exports.defineAutoTests = function () {
                 }, DOWNLOAD_TIMEOUT);
 
                 it("filetransfer.spec.10 should be stopped by abort()", function (done) {
-
                     var fileURL = "http://cordova.apache.org/downloads/BlueZedEx.mp3";
                     fileURL = fileURL + "?q=" + (new Date()).getTime();
                     var specContext = this;
@@ -603,7 +596,6 @@ exports.defineAutoTests = function () {
                 }, DOWNLOAD_TIMEOUT);
 
                 it("filetransfer.spec.12 should get http status on failure", function (done) {
-
                     var fileURL = SERVER + "/404";
 
                     var downloadFail = function (error) {
@@ -630,7 +622,6 @@ exports.defineAutoTests = function () {
                 }, DOWNLOAD_TIMEOUT);
 
                 it("filetransfer.spec.13 should get http body on failure", function (done) {
-
                     var fileURL = SERVER + "/404";
 
                     var downloadFail = function (error) {
@@ -653,7 +644,6 @@ exports.defineAutoTests = function () {
                 }, DOWNLOAD_TIMEOUT);
 
                 it("filetransfer.spec.14 should handle malformed urls", function (done) {
-
                     var fileURL = getMalformedUrl();
 
                     var downloadFail = function (error) {
@@ -730,7 +720,6 @@ exports.defineAutoTests = function () {
                 }, DOWNLOAD_TIMEOUT);
 
                 it("filetransfer.spec.30 downloaded file entries should have a toNativeURL method", function (done) {
-
                     if (cordova.platformId === "browser") {
                         pending();
                         return;
@@ -768,7 +757,6 @@ exports.defineAutoTests = function () {
                 }, DOWNLOAD_TIMEOUT);
 
                 it("filetransfer.spec.28 (compatibility) should be able to download a file using local paths", function (done) {
-
                     var fileURL = SERVER + "/robots.txt";
                     var specContext = this;
 
@@ -804,7 +792,6 @@ exports.defineAutoTests = function () {
                 });
 
                 it("filetransfer.spec.33 should properly handle 304", function (done) {
-
                     if (isWP8) {
                         pending();
                         return;
@@ -825,7 +812,6 @@ exports.defineAutoTests = function () {
                 }, DOWNLOAD_TIMEOUT);
 
                 it("filetransfer.spec.35 304 should not result in the deletion of a cached file", function (done) {
-
                     if (isWP8) {
                         pending();
                         return;
@@ -886,7 +872,6 @@ exports.defineAutoTests = function () {
                 }, DOWNLOAD_TIMEOUT);
 
                 it("filetransfer.spec.36 should handle non-UTF8 encoded download response", function (done) {
-
                     // Only iOS is supported: https://issues.apache.org/jira/browse/CB-9840
                     if (!isIos) {
                         pending();
@@ -1001,7 +986,6 @@ exports.defineAutoTests = function () {
                 });
 
                 it("filetransfer.spec.18 should be able to upload a file", function (done) {
-
                     var fileURL = SERVER + "/upload";
                     var specContext = this;
 
@@ -1027,7 +1011,6 @@ exports.defineAutoTests = function () {
                 }, UPLOAD_TIMEOUT);
 
                 it("filetransfer.spec.19 should be able to upload a file with http basic auth", function (done) {
-
                     var fileURL = SERVER_WITH_CREDENTIALS + "/upload_basic_auth";
                     var specContext = this;
 
@@ -1046,7 +1029,6 @@ exports.defineAutoTests = function () {
                 }, UPLOAD_TIMEOUT);
 
                 it("filetransfer.spec.21 should be stopped by abort()", function (done) {
-
                     var fileURL = SERVER + "/upload";
                     var specContext = this;
 
@@ -1084,25 +1066,33 @@ exports.defineAutoTests = function () {
                 }, UPLOAD_TIMEOUT);
 
                 it("filetransfer.spec.22 should get http status and body on failure", function (done) {
-
                     var fileURL = SERVER + "/403";
-
-                    var uploadFail = function (error) {
-                        expect(error.http_status).toBe(403);
-                        expect(error.http_status).not.toBe(401, "Ensure " + fileURL + " is in the white list");
-                        done();
-                    };
+                    var retryCount = 0;
+                    var self = this;
 
                     var uploadWin = function() {
                         unexpectedCallbacks.httpWin();
                         done();
                     };
 
-                    this.transfer.upload(this.localFilePath, fileURL, uploadWin, uploadFail, this.uploadOptions);
-                }, UPLOAD_TIMEOUT);
+                    var uploadFail = function (error) {
+                        if (error.http_status === 503 && ++retryCount <= RETRY_COUNT) {
+                            // Heroku often gives this error, retry in 1 second
+                            console.log('retrying... ' + retryCount);
+                            setTimeout(function () {
+                                self.transfer.upload(self.localFilePath, fileURL, uploadWin, uploadFail, self.uploadOptions);
+                            }, RETRY_INTERVAL);
+                        } else {
+                            expect(error.http_status).toBe(403);
+                            expect(error.http_status).not.toBe(401, "Ensure " + fileURL + " is in the white list");
+                            done();
+                        }
+                    };
+
+                    self.transfer.upload(this.localFilePath, fileURL, uploadWin, uploadFail, this.uploadOptions);
+                }, UPLOAD_TIMEOUT * 11);
 
                 it("filetransfer.spec.24 should handle malformed urls", function (done) {
-
                     var fileURL = getMalformedUrl();
 
                     var uploadFail = function (error) {
@@ -1120,7 +1110,6 @@ exports.defineAutoTests = function () {
                 });
 
                 it("filetransfer.spec.25 should handle unknown host", function (done) {
-
                     var fileURL = UNKNOWN_HOST;
 
                     var uploadFail = function (error) {
@@ -1138,7 +1127,6 @@ exports.defineAutoTests = function () {
                 }, UPLOAD_TIMEOUT);
 
                 it("filetransfer.spec.25 should handle missing file", function (done) {
-
                     var fileURL = SERVER + "/upload";
 
                     var uploadFail = function (error) {
@@ -1156,7 +1144,6 @@ exports.defineAutoTests = function () {
                 }, UPLOAD_TIMEOUT);
 
                 it("filetransfer.spec.26 should handle bad file path", function (done) {
-
                     var fileURL = SERVER + "/upload";
 
                     var uploadFail = function (error) {
@@ -1173,8 +1160,9 @@ exports.defineAutoTests = function () {
                 });
 
                 it("filetransfer.spec.27 should be able to set custom headers", function (done) {
-
-                    var fileURL = HEADERS_ECHO;
+                    var fileURL = SERVER + '/upload_echo_headers';
+                    var retryCount = 0;
+                    var self = this;
 
                     var uploadWin = function (uploadResult) {
 
@@ -1191,8 +1179,16 @@ exports.defineAutoTests = function () {
                     };
 
                     var uploadFail = function() {
-                        unexpectedCallbacks.httpFail();
-                        done();
+                        if (++retryCount >= RETRY_COUNT) {
+                            unexpectedCallbacks.httpFail();
+                            done();
+                        } else {
+                            console.log('retrying... ' + retryCount);
+                            setTimeout(function () {
+                                // NOTE: removing uploadOptions will cause Android to timeout
+                                self.transfer.upload(self.localFilePath, fileURL, uploadWin, uploadFail, self.uploadOptions);
+                            }, RETRY_INTERVAL);
+                        }
                     };
 
                     this.uploadOptions.headers = {
@@ -1205,10 +1201,9 @@ exports.defineAutoTests = function () {
 
                     // NOTE: removing uploadOptions cause Android to timeout
                     this.transfer.upload(this.localFilePath, fileURL, uploadWin, uploadFail, this.uploadOptions);
-                }, UPLOAD_TIMEOUT);
+                }, UPLOAD_TIMEOUT * 11);
 
                 it("filetransfer.spec.29 (compatibility) should be able to upload a file using local paths", function (done) {
-
                     var fileURL = SERVER + "/upload";
                     var specContext = this;
 
@@ -1244,7 +1239,6 @@ exports.defineAutoTests = function () {
                 }, UPLOAD_TIMEOUT);
 
                 it("filetransfer.spec.31 should be able to upload a file using PUT method", function (done) {
-
                     var fileURL = SERVER + "/upload";
                     var specContext = this;
 
@@ -1272,7 +1266,6 @@ exports.defineAutoTests = function () {
                 }, UPLOAD_TIMEOUT);
 
                 it("filetransfer.spec.32 should be able to upload a file (non-multipart)", function (done) {
-
                     var fileURL = SERVER + "/upload";
                     var specContext = this;
 
@@ -1351,7 +1344,6 @@ exports.defineAutoTests = function () {
                 }, UPLOAD_TIMEOUT);
 
                 it("filetransfer.spec.37 should handle non-UTF8 encoded upload response", function (done) {
-
                     // Only iOS is supported: https://issues.apache.org/jira/browse/CB-9840
                     if (!isIos) {
                         pending();
@@ -1390,7 +1382,6 @@ exports.defineAutoTests = function () {
                 }, UPLOAD_TIMEOUT);
 
                 it("filetransfer.spec.38 should be able to upload a file using data: source uri", function (done) {
-
                     var fileURL = SERVER + "/upload";
                     var specContext = this;
 
@@ -1424,7 +1415,6 @@ exports.defineAutoTests = function () {
                 }, UPLOAD_TIMEOUT);
 
                 it("filetransfer.spec.39 should be able to upload a file using data: source uri (non-multipart)", function (done) {
-
                     var fileURL = SERVER + "/upload";
 
                     var uploadWin = function (uploadResult) {
@@ -1456,7 +1446,6 @@ exports.defineAutoTests = function () {
                 }, UPLOAD_TIMEOUT);
 
                 it("filetransfer.spec.40 should not fail to upload a file using data: source uri when the data is empty", function (done) {
-
                     var fileURL = SERVER + "/upload";
 
                     var dataUri = DATA_URI_PREFIX;
@@ -1471,7 +1460,6 @@ exports.defineAutoTests = function () {
                 }, UPLOAD_TIMEOUT);
 
                 it("filetransfer.spec.41 should not fail to upload a file using data: source uri when the data is empty (non-multipart)", function (done) {
-
                     if (isIos) {
                         // iOS does not support uploads of an empty file with __chunkedMode=true__ and `multipartMode=false`:
                         // request body will be empty in this case instead of 0\n\n.
@@ -1526,6 +1514,7 @@ exports.defineAutoTests = function () {
                     };
 
                     var testChunkedModeBase = function(chunkedMode, multipart, done) {
+                        var retryCount = 0;
                         var fileURL = SERVER + "/upload_echo_headers";
                         var specContext = this;
 
@@ -1538,8 +1527,19 @@ exports.defineAutoTests = function () {
                         }
 
                         var uploadFail = function() {
-                            unexpectedCallbacks.httpFail();
-                            done();
+                            if (++retryCount >= RETRY_COUNT) {
+                                unexpectedCallbacks.httpFail();
+                                done();
+                            } else {
+                                console.log('retrying... ' + retryCount);
+                                setTimeout(function () {
+                                    // NOTE: removing uploadOptions will cause Android to timeout
+                                    specContext.transfer.upload(specContext.localFilePath, fileURL, function (uploadResult) {
+                                        testChunkedModeWin(uploadResult, specContext);
+                                        done();
+                                    }, uploadFail, specContext.uploadOptions);
+                                }, RETRY_INTERVAL);
+                            }
                         };
 
                         // turn off the onprogress handler
@@ -1555,7 +1555,7 @@ exports.defineAutoTests = function () {
                     it("filetransfer.spec.42 chunkedMode=false, multipart=false", function (done) {
 
                         testChunkedModeBase.call(this, false, false, done);
-                    }, UPLOAD_TIMEOUT);
+                    }, UPLOAD_TIMEOUT * 11);
 
                     it("filetransfer.spec.43 chunkedMode=true, multipart=false", function (done) {
 
@@ -1563,12 +1563,12 @@ exports.defineAutoTests = function () {
                             pending();
                         }
                         testChunkedModeBase.call(this, true, false, done);
-                    }, UPLOAD_TIMEOUT);
+                    }, UPLOAD_TIMEOUT * 11);
 
                     it("filetransfer.spec.44 chunkedMode=false, multipart=true", function (done) {
 
                         testChunkedModeBase.call(this, false, true, done);
-                    }, UPLOAD_TIMEOUT);
+                    }, UPLOAD_TIMEOUT * 11);
 
                     it("filetransfer.spec.45 chunkedMode=true, multipart=true", function (done) {
 
@@ -1576,7 +1576,7 @@ exports.defineAutoTests = function () {
                             pending();
                         }
                         testChunkedModeBase.call(this, true, true, done);
-                    }, UPLOAD_TIMEOUT);
+                    }, UPLOAD_TIMEOUT * 11);
                 });
             });
         });

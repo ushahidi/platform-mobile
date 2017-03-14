@@ -2,8 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
   <dict>
-    <key>UIViewControllerBasedStatusBarAppearance</key>
-    <true/>
     <key>CFBundleDevelopmentRegion</key>
     <string>English</string>
     <key>CFBundleDisplayName</key>
@@ -37,6 +35,8 @@
     </array>
     <key>CFBundleVersion</key>
     <string>0.2.4</string>
+    <key>ITSAppUsesNonExemptEncryption</key>
+    <false/>
     <key>LSApplicationQueriesSchemes</key>
     <array>
       <string>mailto</string>
@@ -81,9 +81,9 @@
       </dict>
     </dict>
     <key>NSCameraUsageDescription</key>
-    <string>Ushahidi would like to access your camera to let you take a new profile picture.</string>
-    <key>NSLocationWhenInUseUsageDescription</key>
     <string/>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>Ushahidi would like to access your location for survey responses.</string>
     <key>NSMainNibFile</key>
     <string/>
     <key>NSMainNibFile~ipad</key>
@@ -91,7 +91,11 @@
     <key>NSMicrophoneUsageDescription</key>
     <string/>
     <key>NSPhotoLibraryUsageDescription</key>
-    <string>Ushahidi would like to access your photo library to let you select a profile picture.</string>
+    <string/>
+    <key>UIBackgroundModes</key>
+    <array>
+      <string>remote-notification</string>
+    </array>
     <key>UIInterfaceOrientation</key>
     <array>
       <string>UIInterfaceOrientationPortrait</string>
@@ -108,11 +112,5 @@
       <string>UIInterfaceOrientationPortrait</string>
       <string>UIInterfaceOrientationPortraitUpsideDown</string>
     </array>
-    <key>UIBackgroundModes</key>
-    <array>
-      <string>remote-notification</string>
-    </array>
-    <key>ITSAppUsesNonExemptEncryption</key>
-    <false/>
   </dict>
 </plist>

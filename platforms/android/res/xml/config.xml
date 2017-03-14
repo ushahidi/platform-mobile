@@ -1,7 +1,68 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="203" id="com.ushahidi.mobile" ios-CFBundleVersion="0.2.3" version="0.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-versionCode="204" id="com.ushahidi.mobile" ios-CFBundleVersion="0.2.4" version="0.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>Ushahidi</name>
+    <description>Ushahidi Mobile</description>
+    <author email="support@ushahidi.com" href="https://www.ushahidi.com/">Ushahidi</author>
+    <content src="index.html" />
+    <access origin="*" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    <allow-intent href="tel:*" />
+    <allow-intent href="sms:*" />
+    <allow-intent href="mailto:*" />
+    <allow-intent href="geo:*" />
+    <allow-navigation href="*" />
+    <allow-navigation href="http://*/*" />
+    <allow-navigation href="https://*/*" />
+    <allow-navigation href="*://*.youtube.com/*" />
+    <allow-navigation href="*youtube*" />
+    <allow-navigation href="*ytimg*" />
+    <allow-navigation href="*://*.googleapis.com/*" />
+    <allow-navigation href="http://ionic.local/*" />
+    <allow-navigation href="http://localhost:3000" />
+    <allow-navigation href="http://localhost:3001" />
+    <allow-navigation href="http://192.168.0.18:8100" />
+    <icon src="resources/android/icon/drawable-xhdpi-icon.png" />
+    <allow-intent href="market:*" />
+    <splash density="port-ldpi" src="resources/android/splash/drawable-port-ldpi-screen.png" />
+    <splash density="port-mdpi" src="resources/android/splash/drawable-port-mdpi-screen.png" />
+    <splash density="port-hdpi" src="resources/android/splash/drawable-port-hdpi-screen.png" />
+    <splash density="port-xhdpi" src="resources/android/splash/drawable-port-xhdpi-screen.png" />
+    <splash density="port-xxhdpi" src="resources/android/splash/drawable-port-xxhdpi-screen.png" />
+    <splash density="port-xxxhdpi" src="resources/android/splash/drawable-port-xxxhdpi-screen.png" />
+    <icon density="ldpi" src="resources/android/icon/drawable-ldpi-icon.png" />
+    <icon density="mdpi" src="resources/android/icon/drawable-mdpi-icon.png" />
+    <icon density="hdpi" src="resources/android/icon/drawable-hdpi-icon.png" />
+    <icon density="xhdpi" src="resources/android/icon/drawable-xhdpi-icon.png" />
+    <icon density="xxhdpi" src="resources/android/icon/drawable-xxhdpi-icon.png" />
+    <icon density="xxxhdpi" src="resources/android/icon/drawable-xxxhdpi-icon.png" />
+    <preference name="loglevel" value="DEBUG" />
+    <preference name="orientation" value="portrait" />
+    <preference name="webviewbounce" value="false" />
+    <preference name="UIWebViewBounce" value="false" />
+    <preference name="DisallowOverscroll" value="true" />
+    <preference name="BackupWebStorage" value="local" />
+    <preference name="AutoHideSplashScreen" value="false" />
+    <preference name="SplashScreen" value="screen" />
+    <preference name="SplashScreenDelay" value="1000" />
+    <preference name="SplashShowOnlyFirstTime" value="false" />
+    <preference name="FadeSplashScreenDuration" value="1000" />
+    <preference name="StatusBarStyle" value="default" />
+    <preference name="StatusBarOverlaysWebView" value="true" />
+    <preference name="StatusBarBackgroundColor" value="#3f4751" />
+    <preference name="ShowSplashScreenSpinner" value="true" />
+    <preference name="android-build-tool" value="gradle" />
+    <preference name="android-targetSdkVersion" value="24" />
+    <preference name="android-minSdkVersion" value="19" />
+    <preference name="LoadUrlTimeoutValue" value="50000" />
+    <preference name="KeyboardDisplayRequiresUserAction" value="false" />
+    <preference name="AllowInlineMediaPlayback" value="true" />
+    <preference name="MediaPlaybackRequiresUserAction" value="false" />
     <feature name="AppVersion">
         <param name="android-package" value="uk.co.whiteoctober.cordova.AppVersion" />
+    </feature>
+    <feature name="Camera">
+        <param name="android-package" value="org.apache.cordova.camera.CameraLauncher" />
     </feature>
     <feature name="Device">
         <param name="android-package" value="org.apache.cordova.device.Device" />
@@ -14,12 +75,12 @@
         <param name="onload" value="true" />
     </feature>
     <allow-navigation href="cdvfile:*" />
-    <feature name="FileTransfer">
-        <param name="android-package" value="org.apache.cordova.filetransfer.FileTransfer" />
-    </feature>
     <feature name="FilePath">
         <param name="android-package" value="com.hiddentao.cordova.filepath.FilePath" />
         <param name="onload" value="true" />
+    </feature>
+    <feature name="FileTransfer">
+        <param name="android-package" value="org.apache.cordova.filetransfer.FileTransfer" />
     </feature>
     <feature name="Geolocation">
         <param name="android-package" value="org.apache.cordova.geolocation.Geolocation" />
@@ -71,65 +132,4 @@
         <param name="android-package" value="io.ionic.keyboard.IonicKeyboard" />
         <param name="onload" value="true" />
     </feature>
-    <feature name="Camera">
-        <param name="android-package" value="org.apache.cordova.camera.CameraLauncher" />
-    </feature>
-    <name>Ushahidi</name>
-    <description>Ushahidi Mobile</description>
-    <author email="support@ushahidi.com" href="https://www.ushahidi.com/">Ushahidi</author>
-    <content src="index.html" />
-    <access origin="*" />
-    <allow-intent href="http://*/*" />
-    <allow-intent href="https://*/*" />
-    <allow-intent href="tel:*" />
-    <allow-intent href="sms:*" />
-    <allow-intent href="mailto:*" />
-    <allow-intent href="geo:*" />
-    <allow-navigation href="*" />
-    <allow-navigation href="http://*/*" />
-    <allow-navigation href="https://*/*" />
-    <allow-navigation href="*://*.youtube.com/*" />
-    <allow-navigation href="*youtube*" />
-    <allow-navigation href="*ytimg*" />
-    <allow-navigation href="*://*.googleapis.com/*" />
-    <allow-navigation href="http://ionic.local/*" />
-    <allow-navigation href="http://localhost:3000" />
-    <allow-navigation href="http://localhost:3001" />
-    <allow-navigation href="http://192.168.0.18:8100" />
-    <icon src="resources/android/icon/drawable-xhdpi-icon.png" />
-    <allow-intent href="market:*" />
-    <splash density="port-ldpi" src="resources/android/splash/drawable-port-ldpi-screen.png" />
-    <splash density="port-mdpi" src="resources/android/splash/drawable-port-mdpi-screen.png" />
-    <splash density="port-hdpi" src="resources/android/splash/drawable-port-hdpi-screen.png" />
-    <splash density="port-xhdpi" src="resources/android/splash/drawable-port-xhdpi-screen.png" />
-    <splash density="port-xxhdpi" src="resources/android/splash/drawable-port-xxhdpi-screen.png" />
-    <splash density="port-xxxhdpi" src="resources/android/splash/drawable-port-xxxhdpi-screen.png" />
-    <icon density="ldpi" src="resources/android/icon/drawable-ldpi-icon.png" />
-    <icon density="mdpi" src="resources/android/icon/drawable-mdpi-icon.png" />
-    <icon density="hdpi" src="resources/android/icon/drawable-hdpi-icon.png" />
-    <icon density="xhdpi" src="resources/android/icon/drawable-xhdpi-icon.png" />
-    <icon density="xxhdpi" src="resources/android/icon/drawable-xxhdpi-icon.png" />
-    <icon density="xxxhdpi" src="resources/android/icon/drawable-xxxhdpi-icon.png" />
-    <preference name="loglevel" value="DEBUG" />
-    <preference name="orientation" value="portrait" />
-    <preference name="webviewbounce" value="false" />
-    <preference name="UIWebViewBounce" value="false" />
-    <preference name="DisallowOverscroll" value="true" />
-    <preference name="BackupWebStorage" value="none" />
-    <preference name="AutoHideSplashScreen" value="true" />
-    <preference name="SplashScreen" value="screen" />
-    <preference name="SplashScreenDelay" value="1000" />
-    <preference name="SplashShowOnlyFirstTime" value="false" />
-    <preference name="FadeSplashScreenDuration" value="1000" />
-    <preference name="StatusBarStyle" value="default" />
-    <preference name="StatusBarOverlaysWebView" value="true" />
-    <preference name="StatusBarBackgroundColor" value="#3f4751" />
-    <preference name="ShowSplashScreenSpinner" value="true" />
-    <preference name="android-build-tool" value="gradle" />
-    <preference name="android-targetSdkVersion" value="24" />
-    <preference name="android-minSdkVersion" value="19" />
-    <preference name="LoadUrlTimeoutValue" value="50000" />
-    <preference name="KeyboardDisplayRequiresUserAction" value="false" />
-    <preference name="AllowInlineMediaPlayback" value="true" />
-    <preference name="MediaPlaybackRequiresUserAction" value="false" />
 </widget>

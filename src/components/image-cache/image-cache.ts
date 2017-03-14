@@ -1,6 +1,6 @@
-import { Component, ElementRef, Input } from '@angular/core';
+import { Component, ElementRef, Input, NgZone, OnInit, AfterContentChecked } from '@angular/core';
+import { Transfer, File, Entry, FileEntry, FileError, FileReader, Metadata } from 'ionic-native';
 import { SafeUrl, DomSanitizer } from '@angular/platform-browser';
-import { Transfer, File, Entry, FileError } from 'ionic-native';
 import { Md5 } from 'ts-md5/dist/md5';
 
 import { LoggerService } from '../../providers/logger-service';
@@ -9,9 +9,11 @@ declare var cordova:any;
 
 @Component({
   selector: 'image-cache',
-  template: `<img class="image-cache" [src]="cache" />`
+  template: `<img class="image-cache" [src]="safeUrl" />`
 })
-export class ImageCacheComponent {
+export class ImageCacheComponent implements OnInit, AfterContentChecked {
+
+  zone: NgZone = null;
 
   @Input('src')
   src:string;
@@ -19,11 +21,18 @@ export class ImageCacheComponent {
   @Input('placeholder')
   placeholder:string;
 
-  local:string = null;
-  cache:SafeUrl = null;
+  localUrl:string = null;
+
+  safeUrl:SafeUrl = null;
+
   image:HTMLImageElement = null;
 
-  constructor(private element:ElementRef, public sanitizer:DomSanitizer, private logger:LoggerService) {
+  constructor(
+    _zone: NgZone,
+    private element:ElementRef,
+    private sanitizer:DomSanitizer,
+    private logger:LoggerService) {
+    this.zone = _zone;
   }
 
   ngOnInit() {
@@ -43,33 +52,33 @@ export class ImageCacheComponent {
       let directory = this.getCacheDirectory();
       this.onCacheStarted();
       this.hasCacheImage(directory, cache).then(
-        (exists) => {
+        (exists:boolean) => {
           this.useCacheImage(directory, cache).then(
-            (url) => {
+            (data:any) => {
               this.onCacheFinished();
             },
-            (error) => {
+            (error:any) => {
               this.onCacheFailed();
           });
         },
-        (missing) => {
+        (missing:boolean) => {
           this.downloadCacheImage(this.src, directory, cache).then(
-            (url) => {
+            (url:string) => {
               this.useCacheImage(directory, cache).then(
-                (url) => {
+                (data:any) => {
                   this.onCacheFinished();
                 },
-                (error) => {
+                (error:any) => {
                   this.onCacheFailed();
               });
             },
-            (error) => {
+            (error:any) => {
               this.onCacheFailed();
           });
         });
     }
     else if (this.placeholder && this.placeholder.length > 0) {
-      this.cache = this.placeholder;
+      this.safeUrl = this.placeholder;
     }
     else {
       this.image.style.display = 'none';
@@ -77,19 +86,34 @@ export class ImageCacheComponent {
   }
 
   reloadCacheImage() {
-    if (this.local && this.local.length > 0) {
-      this.logger.info(this, "reloadCacheImage", this.src, this.local);
-      this.cache = this.sanitizer.bypassSecurityTrustUrl(this.local);
+    if (this.localUrl && this.localUrl.length > 0) {
+      this.logger.info(this, "reloadCacheImage", this.localUrl);
+      this.safeUrl = this.sanitizer.bypassSecurityTrustUrl(this.localUrl);
     }
   }
 
   hasCacheImage(directory:string, cache:string):Promise<boolean> {
     return new Promise((resolve, reject) => {
+      let url = directory + cache;
       File.checkFile(directory, cache).then(
         (exists:boolean) => {
           if (exists) {
-            this.logger.info(this, "hasCacheImage", "Yes", cache);
-            resolve(true);
+            File.resolveLocalFilesystemUrl(url).then(
+              (entry:FileEntry) => {
+                entry.getMetadata((metadata:Metadata) => {
+                  this.logger.info(this, "hasCacheImage", "Yes", cache, metadata);
+                  if (metadata.size > 0) {
+                    resolve(true);
+                  }
+                  else {
+                    reject(false);
+                  }
+                });
+              },
+              (error:FileError) => {
+                this.logger.error(this, "hasCacheImage", "Yes", cache, error);
+                reject(false);
+            });
           }
           else {
             this.logger.info(this, "hasCacheImage", "No", cache);
@@ -109,30 +133,48 @@ export class ImageCacheComponent {
       let fileTransfer = new Transfer();
       fileTransfer.download(image, url, true).then(
         (entry:Entry) => {
-          this.logger.info(this, "downloadCacheImage", image, entry);
+          this.logger.info(this, "downloadCacheImage", image, url, entry);
           resolve(entry.toURL());
         },
         (error:any) => {
-          this.logger.error(this, "downloadCacheImage", image, error);
-          reject();
+          this.logger.error(this, "downloadCacheImage", image, url, error);
+          reject(error);
       });
     });
   }
 
-  useCacheImage(directory:string, cache:string):Promise<string> {
+  useCacheImage(directory:string, cache:string):Promise<any> {
     return new Promise((resolve, reject) => {
       let url = directory + cache;
       File.resolveLocalFilesystemUrl(url).then(
-        (entry:Entry) => {
-          this.logger.info(this, "useCacheImage", entry);
-          this.local = entry.toInternalURL();
-          this.cache = this.sanitizer.bypassSecurityTrustUrl(entry.toInternalURL());
+        (entry:FileEntry) => {
+          this.logger.info(this, "useCacheImage", url, entry);
+          this.localUrl = entry.toInternalURL();
+          this.safeUrl = this.sanitizer.bypassSecurityTrustUrl(entry.toInternalURL());
           resolve(entry.toInternalURL());
         },
         (error:any) => {
-          this.logger.error(this, "useCacheImage", error);
+          this.logger.error(this, "useCacheImage", url, error);
           reject(error);
       });
+    });
+  }
+
+  loadFileEntry(entry:FileEntry) {
+    return new Promise((resolve, reject) => {
+      entry.file(
+        (data:any) => {
+          let reader = new FileReader();
+          reader.onloadend = () => {
+            this.logger.info(this, "loadFileEntry", entry);
+            resolve(reader.result);
+          };
+          reader.readAsDataURL(data);
+        },
+        (error:any) => {
+          this.logger.error(this, "loadFileEntry", error);
+          reject(error);
+        });
     });
   }
 
@@ -159,7 +201,7 @@ export class ImageCacheComponent {
 
   onCacheStarted() {
     if (this.placeholder && this.placeholder.length > 0) {
-      this.cache = this.placeholder;
+      this.safeUrl = this.placeholder;
     }
     this.image.classList.add("cache-loading");
   }
@@ -170,7 +212,7 @@ export class ImageCacheComponent {
 
   onCacheFailed() {
     if (this.placeholder && this.placeholder.length > 0) {
-      this.cache = this.placeholder;
+      this.safeUrl = this.placeholder;
     }
     else {
       this.image.style.display = 'none';

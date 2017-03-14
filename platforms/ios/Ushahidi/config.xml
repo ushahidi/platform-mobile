@@ -18,6 +18,9 @@
     <feature name="AppVersion">
         <param name="ios-package" value="AppVersion" />
     </feature>
+    <feature name="Camera">
+        <param name="ios-package" value="CDVCamera" />
+    </feature>
     <feature name="Console">
         <param name="ios-package" value="CDVLogger" />
     </feature>
@@ -53,11 +56,11 @@
     <feature name="Capture">
         <param name="ios-package" value="CDVCapture" />
     </feature>
-    <feature name="NetworkActivityIndicator">
-        <param name="ios-package" value="NetworkActivityIndicator" />
-    </feature>
     <feature name="NetworkStatus">
         <param name="ios-package" value="CDVConnection" />
+    </feature>
+    <feature name="NetworkActivityIndicator">
+        <param name="ios-package" value="NetworkActivityIndicator" />
     </feature>
     <feature name="SecureStorage">
         <param name="ios-package" value="SecureStorage" />
@@ -85,9 +88,6 @@
     </feature>
     <feature name="Keyboard">
         <param name="ios-package" onload="true" value="IonicKeyboard" />
-    </feature>
-    <feature name="Camera">
-        <param name="ios-package" value="CDVCamera" />
     </feature>
     <name>Ushahidi</name>
     <description>Ushahidi Mobile</description>
@@ -151,8 +151,8 @@
     <preference name="PageLength" value="0" />
     <preference name="PaginationBreakingMode" value="page" />
     <preference name="PaginationMode" value="unpaginated" />
-    <preference name="StatusBarStyle" value="default" />
     <preference name="CameraUsesGeolocation" value="false" />
+    <preference name="StatusBarStyle" value="default" />
     <preference name="orientation" value="portrait" />
     <preference name="webviewbounce" value="false" />
     <preference name="UIWebViewBounce" value="false" />

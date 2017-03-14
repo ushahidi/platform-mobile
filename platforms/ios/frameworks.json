@@ -1,5 +1,8 @@
 {
+    "ImageIO.framework": 1,
     "CoreLocation.framework": 2,
+    "AVFoundation.framework": 1,
+    "libz.tbd": 1,
     "MessageUI.framework": 2,
     "SystemConfiguration.framework": 2,
     "CoreData.framework": 1,
@@ -8,7 +11,5 @@
     "libsqlite3.dylib": 1,
     "CoreTelephony.framework": 1,
     "Security.framework": 1,
-    "Social.framework": 1,
-    "ImageIO.framework": 1,
-    "AVFoundation.framework": 1
+    "Social.framework": 1
 }
