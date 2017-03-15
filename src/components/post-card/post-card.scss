@@ -1,4 +1,5 @@
 .post-card {
+  background-color: white;
   border-left: thick solid #cccccc;
   ion-card-content {
     padding-top: 5px;
@@ -91,6 +92,7 @@
       button {
         margin:0;
         padding:0;
+        background-color: white;
         ion-icon {
           font-size: 20px;
           font-weight: bold;

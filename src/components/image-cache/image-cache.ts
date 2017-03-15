@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, NgZone, OnInit, AfterContentChecked } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, AfterContentChecked } from '@angular/core';
 import { Transfer, File, Entry, FileEntry, FileError, FileReader, Metadata } from 'ionic-native';
 import { SafeUrl, DomSanitizer } from '@angular/platform-browser';
 import { Md5 } from 'ts-md5/dist/md5';
@@ -13,26 +13,22 @@ declare var cordova:any;
 })
 export class ImageCacheComponent implements OnInit, AfterContentChecked {
 
-  zone: NgZone = null;
-
   @Input('src')
   src:string;
 
   @Input('placeholder')
   placeholder:string;
 
-  localUrl:string = null;
+  cacheUrl:string = null;
 
   safeUrl:SafeUrl = null;
 
   image:HTMLImageElement = null;
 
   constructor(
-    _zone: NgZone,
     private element:ElementRef,
     private sanitizer:DomSanitizer,
     private logger:LoggerService) {
-    this.zone = _zone;
   }
 
   ngOnInit() {
@@ -47,7 +43,7 @@ export class ImageCacheComponent implements OnInit, AfterContentChecked {
     this.image = this.element.nativeElement.querySelector('img');
     this.image.crossOrigin = 'Anonymous';
     if (this.src && this.src.length > 0) {
-      this.logger.info(this, "loadCacheImage", this.src);
+      this.logger.info(this, "loadCacheImage", "Src", this.src);
       let cache = this.getCacheFile(this.src);
       let directory = this.getCacheDirectory();
       this.onCacheStarted();
@@ -78,7 +74,7 @@ export class ImageCacheComponent implements OnInit, AfterContentChecked {
         });
     }
     else if (this.placeholder && this.placeholder.length > 0) {
-      this.safeUrl = this.placeholder;
+      this.safeUrl = this.sanitizer.bypassSecurityTrustUrl(this.placeholder);
     }
     else {
       this.image.style.display = 'none';
@@ -86,9 +82,9 @@ export class ImageCacheComponent implements OnInit, AfterContentChecked {
   }
 
   reloadCacheImage() {
-    if (this.localUrl && this.localUrl.length > 0) {
-      this.logger.info(this, "reloadCacheImage", this.localUrl);
-      this.safeUrl = this.sanitizer.bypassSecurityTrustUrl(this.localUrl);
+    if (this.cacheUrl && this.cacheUrl.length > 0) {
+      //this.logger.info(this, "reloadCacheImage", this.cacheUrl);
+      this.safeUrl = this.sanitizer.bypassSecurityTrustUrl(this.cacheUrl);
     }
   }
 
@@ -149,7 +145,7 @@ export class ImageCacheComponent implements OnInit, AfterContentChecked {
       File.resolveLocalFilesystemUrl(url).then(
         (entry:FileEntry) => {
           this.logger.info(this, "useCacheImage", url, entry);
-          this.localUrl = entry.toInternalURL();
+          this.cacheUrl = entry.toInternalURL();
           this.safeUrl = this.sanitizer.bypassSecurityTrustUrl(entry.toInternalURL());
           resolve(entry.toInternalURL());
         },
@@ -160,21 +156,21 @@ export class ImageCacheComponent implements OnInit, AfterContentChecked {
     });
   }
 
-  loadFileEntry(entry:FileEntry) {
+  loadFileEntry(entry:FileEntry):Promise<any> {
     return new Promise((resolve, reject) => {
-      entry.file(
-        (data:any) => {
-          let reader = new FileReader();
-          reader.onloadend = () => {
-            this.logger.info(this, "loadFileEntry", entry);
-            resolve(reader.result);
-          };
-          reader.readAsDataURL(data);
-        },
-        (error:any) => {
-          this.logger.error(this, "loadFileEntry", error);
-          reject(error);
-        });
+      entry.file((data:any) => {
+        this.logger.info(this, "loadFileEntry", entry.toURL());
+        let reader = new FileReader();
+        reader.onloadend = () => {
+          this.logger.info(this, "loadFileEntry", entry.toURL(), "Loaded");
+          resolve(reader.result);
+        };
+        reader.onerror = () => {
+          this.logger.error(this, "useCacheImage", entry.toURL(), "Failed");
+          reject();
+        };
+        reader.readAsDataURL(data);
+      });
     });
   }
 
@@ -201,9 +197,11 @@ export class ImageCacheComponent implements OnInit, AfterContentChecked {
 
   onCacheStarted() {
     if (this.placeholder && this.placeholder.length > 0) {
-      this.safeUrl = this.placeholder;
+      this.safeUrl = this.sanitizer.bypassSecurityTrustUrl(this.placeholder);
     }
-    this.image.classList.add("cache-loading");
+    else {
+      this.image.classList.add("cache-loading");
+    }
   }
 
   onCacheFinished() {
@@ -212,7 +210,7 @@ export class ImageCacheComponent implements OnInit, AfterContentChecked {
 
   onCacheFailed() {
     if (this.placeholder && this.placeholder.length > 0) {
-      this.safeUrl = this.placeholder;
+      this.safeUrl = this.sanitizer.bypassSecurityTrustUrl(this.placeholder);
     }
     else {
       this.image.style.display = 'none';

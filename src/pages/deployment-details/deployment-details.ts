@@ -60,7 +60,9 @@ export class DeploymentDetailsPage extends BasePage {
         StatusBar.styleLightContent();
         StatusBar.backgroundColorByHexString('#3f4751');
       });
-      this.deployment = this.getParameter<Deployment>("deployment");
+      if (this.deployment == null) {
+        this.deployment = this.getParameter<Deployment>("deployment");
+      }
       this.loadUpdates(null, true);
     }
 

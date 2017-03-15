@@ -81,7 +81,7 @@
         },
         "is_top_level": true,
         "variables": {
-            "GEOLOCATION_USAGE_DESCRIPTION": "Ushahidi would like to access your location for survey responses."
+            "GEOLOCATION_USAGE_DESCRIPTION": "Ushahidi would like to access your location."
         }
     },
     "cordova-plugin-google-analytics": {
@@ -131,7 +131,11 @@
             "id": "cordova-plugin-media-capture@~1.4.2"
         },
         "is_top_level": true,
-        "variables": {}
+        "variables": {
+            "CAMERA_USAGE_DESCRIPTION": "Ushahidi would like to access the camera.",
+            "MICROPHONE_USAGE_DESCRIPTION": "Ushahidi would like to access the microphone.",
+            "PHOTOLIBRARY_USAGE_DESCRIPTION": "Ushahidi would like to access the photo library."
+        }
     },
     "cordova-plugin-networkactivityindicator": {
         "source": {
@@ -214,20 +218,7 @@
         "variables": {
             "URL_SCHEME": "ushahidi",
             "DEEPLINK_SCHEME": "https",
-            "DEEPLINK_HOST": "ushahidi.com",
-            "ANDROID_PATH_PREFIX": "/",
-            "ANDROID_2_PATH_PREFIX": "/",
-            "ANDROID_3_PATH_PREFIX": "/",
-            "ANDROID_4_PATH_PREFIX": "/",
-            "ANDROID_5_PATH_PREFIX": "/",
-            "DEEPLINK_2_SCHEME": " ",
-            "DEEPLINK_2_HOST": " ",
-            "DEEPLINK_3_SCHEME": " ",
-            "DEEPLINK_3_HOST": " ",
-            "DEEPLINK_4_SCHEME": " ",
-            "DEEPLINK_4_HOST": " ",
-            "DEEPLINK_5_SCHEME": " ",
-            "DEEPLINK_5_HOST": " "
+            "DEEPLINK_HOST": "ushahidi.com"
         }
     },
     "ionic-plugin-keyboard": {

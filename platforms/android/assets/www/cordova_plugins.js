@@ -231,14 +231,6 @@ module.exports = [
         "runs": true
     },
     {
-        "id": "cordova-plugin-filepath.FilePath",
-        "file": "plugins/cordova-plugin-filepath/www/FilePath.js",
-        "pluginId": "cordova-plugin-filepath",
-        "clobbers": [
-            "window.FilePath"
-        ]
-    },
-    {
         "id": "cordova-plugin-file-transfer.FileTransferError",
         "file": "plugins/cordova-plugin-file-transfer/www/FileTransferError.js",
         "pluginId": "cordova-plugin-file-transfer",
@@ -252,6 +244,14 @@ module.exports = [
         "pluginId": "cordova-plugin-file-transfer",
         "clobbers": [
             "window.FileTransfer"
+        ]
+    },
+    {
+        "id": "cordova-plugin-filepath.FilePath",
+        "file": "plugins/cordova-plugin-filepath/www/FilePath.js",
+        "pluginId": "cordova-plugin-filepath",
+        "clobbers": [
+            "window.FilePath"
         ]
     },
     {
@@ -363,14 +363,6 @@ module.exports = [
         "runs": true
     },
     {
-        "id": "cordova-plugin-networkactivityindicator.NetworkActivityIndicator",
-        "file": "plugins/cordova-plugin-networkactivityindicator/www/NetworkActivityIndicator.js",
-        "pluginId": "cordova-plugin-networkactivityindicator",
-        "clobbers": [
-            "NetworkActivityIndicator"
-        ]
-    },
-    {
         "id": "cordova-plugin-network-information.network",
         "file": "plugins/cordova-plugin-network-information/www/network.js",
         "pluginId": "cordova-plugin-network-information",
@@ -385,6 +377,14 @@ module.exports = [
         "pluginId": "cordova-plugin-network-information",
         "clobbers": [
             "Connection"
+        ]
+    },
+    {
+        "id": "cordova-plugin-networkactivityindicator.NetworkActivityIndicator",
+        "file": "plugins/cordova-plugin-networkactivityindicator/www/NetworkActivityIndicator.js",
+        "pluginId": "cordova-plugin-networkactivityindicator",
+        "clobbers": [
+            "NetworkActivityIndicator"
         ]
     },
     {
@@ -470,8 +470,8 @@ module.exports.metadata =
     "cordova-plugin-device": "1.1.5",
     "cordova-plugin-email": "1.2.6",
     "cordova-plugin-file": "4.3.2",
-    "cordova-plugin-filepath": "1.0.2",
     "cordova-plugin-file-transfer": "1.6.2",
+    "cordova-plugin-filepath": "1.0.2",
     "cordova-plugin-geolocation": "2.4.2",
     "cordova-plugin-google-analytics": "1.7.5",
     "cordova-plugin-inappbrowser": "1.7.0",
@@ -479,8 +479,8 @@ module.exports.metadata =
     "cordova-plugin-ios-no-export-compliance": "0.0.1",
     "cordova-plugin-is-debug": "1.0.0",
     "cordova-plugin-media-capture": "1.4.2",
-    "cordova-plugin-networkactivityindicator": "0.1.1",
     "cordova-plugin-network-information": "1.3.2",
+    "cordova-plugin-networkactivityindicator": "0.1.1",
     "cordova-plugin-secure-storage": "2.6.3",
     "cordova-plugin-spinner-dialog": "1.3.1",
     "cordova-plugin-splashscreen": "4.0.2",

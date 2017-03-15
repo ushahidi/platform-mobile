@@ -61,9 +61,13 @@ export class ResponseDetailsPage extends BasePage {
 
   ionViewWillEnter() {
     super.ionViewWillEnter();
-    this.deployment = this.getParameter<Deployment>("deployment");
-    this.post = this.getParameter<Post>("post");
-    this.color = this.post.color;
+    if (this.deployment == null) {
+      this.deployment = this.getParameter<Deployment>("deployment");
+    }
+    if (this.post == null) {
+      this.post = this.getParameter<Post>("post");
+      this.color = this.post.color;
+    }
     this.loadUpdates();
   }
 
@@ -244,7 +248,7 @@ export class ResponseDetailsPage extends BasePage {
         title: title,
         latitude: location[0],
         longitude: location[1]
-      });  
+      });
     }
   }
 

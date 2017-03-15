@@ -27,14 +27,14 @@
         "cordova-plugin-file": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
-        "cordova-plugin-file-transfer": {
-            "PACKAGE_NAME": "com.ushahidi.mobile"
-        },
         "cordova-plugin-filepath": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
+        "cordova-plugin-file-transfer": {
+            "PACKAGE_NAME": "com.ushahidi.mobile"
+        },
         "cordova-plugin-geolocation": {
-            "GEOLOCATION_USAGE_DESCRIPTION": "Ushahidi would like to access your location for survey responses.",
+            "GEOLOCATION_USAGE_DESCRIPTION": "Ushahidi would like to access your location.",
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
         "cordova-plugin-google-analytics": {
@@ -53,15 +53,15 @@
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
         "cordova-plugin-media-capture": {
-            "CAMERA_USAGE_DESCRIPTION": " ",
-            "MICROPHONE_USAGE_DESCRIPTION": " ",
-            "PHOTOLIBRARY_USAGE_DESCRIPTION": " ",
-            "PACKAGE_NAME": "com.ushahidi.mobile"
-        },
-        "cordova-plugin-network-information": {
+            "CAMERA_USAGE_DESCRIPTION": "Ushahidi would like to access the camera.",
+            "MICROPHONE_USAGE_DESCRIPTION": "Ushahidi would like to access the microphone.",
+            "PHOTOLIBRARY_USAGE_DESCRIPTION": "Ushahidi would like to access the photo library.",
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
         "cordova-plugin-networkactivityindicator": {
+            "PACKAGE_NAME": "com.ushahidi.mobile"
+        },
+        "cordova-plugin-network-information": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
         "cordova-plugin-secure-storage": {

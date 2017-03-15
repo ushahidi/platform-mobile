@@ -387,6 +387,11 @@ self.toolbar.translucent = NO;
 self.toolbar.barTintColor = [UIColor colorWithRed:0.25 green:0.28 blue:0.32 alpha:1.0];
 ```
 
+On line 671, in the `setCloseButtonTitle` method change.
+```
+self.closeButton.tintColor = [UIColor whiteColor];
+```
+
 On line 794, change the preferredStatusBarStyle to `UIStatusBarStyleLightContent`.
 ```
 return UIStatusBarStyleLightContent;

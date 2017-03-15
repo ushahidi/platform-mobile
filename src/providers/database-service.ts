@@ -34,7 +34,6 @@ export class DatabaseService {
   openDatabase():Promise<any> {
     return new Promise((resolve, reject) => {
       if (this.database) {
-        this.logger.info(this, "openDatabase", "Cached", this.database);
         resolve(this.database);
       }
       else if (this.testDatabase()) {

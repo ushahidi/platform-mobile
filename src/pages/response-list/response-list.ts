@@ -42,7 +42,6 @@ export class ResponseListPage extends BasePage {
   pending:Post[] = null;
   filter:Filter = null;
   view:string = 'list';
-  //mapLoaded:boolean = false;
   mapCenter:string = `${PLACEHOLDER_LATITUDE},${PLACEHOLDER_LONGITUDE}`;
   mapZoom:number = 8;
   mapOptions:string= null;
@@ -95,8 +94,10 @@ export class ResponseListPage extends BasePage {
 
   ionViewWillEnter() {
     super.ionViewWillEnter();
-    this.deployment = this.getParameter<Deployment>("deployment");
-    this.loadUpdates(null, true);
+    if (this.deployment == null) {
+      this.deployment = this.getParameter<Deployment>("deployment");
+    }
+    this.loadUpdates(null, true);  
   }
 
   loadUpdates(event:any=null, cache:boolean=false) {

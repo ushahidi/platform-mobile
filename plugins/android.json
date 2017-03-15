@@ -25,10 +25,10 @@
         "cordova-plugin-file": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
-        "cordova-plugin-filepath": {
+        "cordova-plugin-file-transfer": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
-        "cordova-plugin-file-transfer": {
+        "cordova-plugin-filepath": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
         "cordova-plugin-geolocation": {
@@ -52,10 +52,10 @@
         "cordova-plugin-media-capture": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
-        "cordova-plugin-networkactivityindicator": {
+        "cordova-plugin-network-information": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
-        "cordova-plugin-network-information": {
+        "cordova-plugin-networkactivityindicator": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
         "cordova-plugin-secure-storage": {
