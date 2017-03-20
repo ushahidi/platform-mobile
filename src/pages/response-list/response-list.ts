@@ -42,16 +42,15 @@ export class ResponseListPage extends BasePage {
   pending:Post[] = null;
   filter:Filter = null;
   view:string = 'list';
-  mapCenter:string = `${PLACEHOLDER_LATITUDE},${PLACEHOLDER_LONGITUDE}`;
   mapZoom:number = 8;
   mapOptions:string= null;
   mapStyle:string = "streets";
   mapLayer:any = null;
+  mapLatitude:number = PLACEHOLDER_LATITUDE;
+  mapLongitude:number = PLACEHOLDER_LONGITUDE;
   limit:number = 5;
   offset:number = 0;
   spinner:boolean = false;
-  latitude:number = PLACEHOLDER_LATITUDE;
-  longitude:number = PLACEHOLDER_LONGITUDE;
   interrupted:string = "Interrupted";
   map:any=null;
 
@@ -97,7 +96,7 @@ export class ResponseListPage extends BasePage {
     if (this.deployment == null) {
       this.deployment = this.getParameter<Deployment>("deployment");
     }
-    this.loadUpdates(null, true);  
+    this.loadUpdates(null, true);
   }
 
   loadUpdates(event:any=null, cache:boolean=false) {
@@ -627,7 +626,7 @@ export class ResponseListPage extends BasePage {
     this.view = 'map';
     let element: HTMLElement = document.getElementById('mapMany');
     if (element) {
-      this.detectLocation().then(
+      this.loadCenter().then(
         () => {
           this.loadMap().then(
             (map)=> {
@@ -647,11 +646,7 @@ export class ResponseListPage extends BasePage {
               this.logger.error(this, "showMap", "loadMarkers", error);
               this.showToast("Problem loading the map");
             });
-        },
-        (error) => {
-          this.logger.error(this, "showMap", "detectLocation", error);
-          this.showToast("Problem detecting your location");
-        });
+      });
     }
     else {
       setTimeout((attempts) => {
@@ -660,32 +655,42 @@ export class ResponseListPage extends BasePage {
     }
   }
 
-  detectLocation():Promise<any> {
-    this.logger.info(this, "detectLocation");
+  loadCenter():Promise<any> {
+    this.logger.info(this, "loadCenter");
     return new Promise((resolve, reject) => {
-      let options:GeolocationOptions = {
-        timeout: 6000,
-        enableHighAccuracy: true };
-      Geolocation.getCurrentPosition(options).then(
-        (position:Geoposition) => {
-          this.logger.info(this, "detectLocation", position);
-          this.latitude = position.coords.latitude;
-          this.longitude = position.coords.longitude;
-          resolve();
-        },
-        (error) => {
-          this.logger.error(this, "detectLocation", error);
-          this.latitude = PLACEHOLDER_LATITUDE;
-          this.longitude = PLACEHOLDER_LONGITUDE;
-          reject(error);
-        });
+      if (this.deployment.map_latitude && this.deployment.map_longitude) {
+        if (this.deployment.map_zoom) {
+          this.mapZoom = this.deployment.map_zoom;
+        }
+        this.mapLatitude = this.deployment.map_latitude;
+        this.mapLongitude = this.deployment.map_longitude;
+        resolve();
+      }
+      else {
+        let options:GeolocationOptions = {
+          timeout: 6000,
+          enableHighAccuracy: true };
+        Geolocation.getCurrentPosition(options).then(
+          (position:Geoposition) => {
+            this.logger.info(this, "loadCenter", "getCurrentPosition", position);
+            this.mapLatitude = position.coords.latitude;
+            this.mapLongitude = position.coords.longitude;
+            resolve();
+          },
+          (error) => {
+            this.logger.error(this, "loadCenter", "getCurrentPosition", error);
+            this.mapLatitude = PLACEHOLDER_LATITUDE;
+            this.mapLongitude = PLACEHOLDER_LONGITUDE;
+            reject(error);
+          });
+      }
     });
   }
 
   loadMap():Promise<any> {
     return new Promise((resolve, reject) => {
       this.logger.info(this, "loadMap");
-      this.map = L.map("mapMany").setView([this.latitude, this.longitude], this.mapZoom);
+      this.map = L.map("mapMany").setView([this.mapLatitude, this.mapLongitude], this.mapZoom);
       this.mapLayer = L.tileLayer(new TileLayer(this.mapStyle).getUrl(), { maxZoom: 20 });
       this.mapLayer.addTo(this.map);
       resolve(this.map);

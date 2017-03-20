@@ -4,6 +4,7 @@ import { Http } from '@angular/http';
 import { Deployment } from '../models/deployment';
 import { User } from '../models/user';
 import { Form } from '../models/form';
+import { Stage } from '../models/stage';
 import { Attribute } from '../models/attribute';
 import { Post } from '../models/post';
 import { Value } from '../models/value';
@@ -235,27 +236,40 @@ export class ApiService extends HttpService {
           });
       }
       else {
-        let url = deployment.api + "/api/v3/config/site";
+        let url = deployment.api + "/api/v3/config";
         this.httpGet(url, deployment.access_token).then(
           (data:any) => {
             let deployment:Deployment = new Deployment();
-            deployment.name = data.name;
-            deployment.email = data.email;
-            deployment.description = data.description;
-            if (data.image_header) {
-              deployment.image = encodeURI(data.image_header);
-            }
-            if (data.allowed_privileges) {
-              deployment.can_read = data.allowed_privileges.indexOf("read") > -1;
-              deployment.can_create = data.allowed_privileges.indexOf("create") > -1;
-              deployment.can_update = data.allowed_privileges.indexOf("update") > -1;
-              deployment.can_delete = data.allowed_privileges.indexOf("delete") > -1;
-            }
-            else {
-              deployment.can_read = false;
-              deployment.can_create = false;
-              deployment.can_update = false;
-              deployment.can_delete = false;
+            this.logger.info(this, "getDeployment", deployment);
+            for (let result of data.results) {
+              if (result.id == 'map') {
+                if (result.default_view) {
+                  deployment.map_zoom = result.default_view.zoom;
+                  deployment.map_style = result.default_view.baselayer;
+                  deployment.map_latitude = result.default_view.lat;
+                  deployment.map_longitude = result.default_view.lon;
+                }
+              }
+              else if (result.id == 'site') {
+                deployment.name = result.name;
+                deployment.email = result.email;
+                deployment.description = result.description;
+                if (result.image_header) {
+                  deployment.image = encodeURI(result.image_header);
+                }
+                if (result.allowed_privileges) {
+                  deployment.can_read = result.allowed_privileges.indexOf("read") > -1;
+                  deployment.can_create = result.allowed_privileges.indexOf("create") > -1;
+                  deployment.can_update = result.allowed_privileges.indexOf("update") > -1;
+                  deployment.can_delete = result.allowed_privileges.indexOf("delete") > -1;
+                }
+                else {
+                  deployment.can_read = false;
+                  deployment.can_create = false;
+                  deployment.can_update = false;
+                  deployment.can_delete = false;
+                }
+              }
             }
             resolve(deployment);
           },
@@ -786,6 +800,80 @@ export class ApiService extends HttpService {
     });
   }
 
+  getStages(deployment:Deployment, cache:boolean=false, offline:boolean=false): Promise<Stage[]> {
+    return new Promise((resolve, reject) => {
+      if (cache || offline) {
+        this.database.getStages(deployment).then(
+          (stages:Stage[]) => {
+            if (stages && stages.length > 0) {
+              resolve(stages);
+            }
+            else if (offline) {
+              resolve([]);
+            }
+            else {
+              this.getStages(deployment, false, offline).then(
+                (stages:Stage[]) => {
+                  resolve(stages);
+                },
+                (error:any) => {
+                  reject(error);
+                }
+              );
+            }
+          },
+          (error:any) => {
+            reject(error);
+          });
+      }
+      else {
+        let url = deployment.api + "/api/v3/forms/stages";
+        this.httpGet(url, deployment.access_token).then(
+          (data:any) => {
+            let saves = [];
+            let stages = [];
+            for (let item of data.results) {
+              this.logger.info(this, "getStages", item);
+              let stage:Stage = new Stage();
+              stage.deployment_id = deployment.id;
+              stage.id = item.id;
+              stage.form_id = item.form_id;
+              stage.label = item.label;
+              stage.description = item.description;
+              stage.priority = item.priority;
+              stage.task = item.task;
+              stage.icon = item.icon;
+              stage.required = item.required;
+              if (item.allowed_privileges) {
+                stage.can_read = item.allowed_privileges.indexOf("read") > -1;
+                stage.can_create = item.allowed_privileges.indexOf("create") > -1;
+                stage.can_update = item.allowed_privileges.indexOf("update") > -1;
+                stage.can_delete = item.allowed_privileges.indexOf("delete") > -1;
+              }
+              else {
+                stage.can_read = false;
+                stage.can_create = false;
+                stage.can_update = false;
+                stage.can_delete = false;
+              }
+              stages.push(stage);
+              saves.push(this.database.saveStage(deployment, stage));
+            }
+            Promise.all(saves).then(
+              (saved:any) => {
+                resolve(stages);
+              },
+              (error:any) => {
+                reject(error);
+              });
+          },
+          (error:any) => {
+            reject(error);
+          });
+      }
+    });
+  }
+
   getAttributes(deployment:Deployment, cache:boolean=false, offline:boolean=false): Promise<Attribute[]> {
     return new Promise((resolve, reject) => {
       if (cache || offline) {
@@ -819,10 +907,11 @@ export class ApiService extends HttpService {
             let saves = [];
             let attributes = [];
             for (let item of data.results) {
+              this.logger.info(this, "getAttributes", item);
               let attribute:Attribute = new Attribute();
               attribute.deployment_id = deployment.id;
               attribute.id = item.id;
-              attribute.form_id = item.form_stage_id;
+              attribute.form_stage_id = item.form_stage_id;
               attribute.key = item.key;
               attribute.label = item.label;
               attribute.instructions = item.instructions;
@@ -832,6 +921,9 @@ export class ApiService extends HttpService {
               attribute.priority = item.priority;
               attribute.options = item.options;
               attribute.cardinality = item.cardinality;
+              if (item.form_id) {
+                attribute.form_id = item.form_id;
+              }
               if (item.allowed_privileges) {
                 attribute.can_read = item.allowed_privileges.indexOf("read") > -1;
                 attribute.can_create = item.allowed_privileges.indexOf("create") > -1;
@@ -969,14 +1061,34 @@ export class ApiService extends HttpService {
     this.logger.info(this, "getFormsWithAttributes", cache);
     return Promise.all([
       this.getForms(deployment, cache, offline),
+      this.getStages(deployment, cache, offline),
       this.getAttributes(deployment, cache, offline)]).then(
         (results:any[]) => {
+          let saves = [];
           let forms = <Form[]>results[0];
-          let attributes = <Attribute[]>results[1];
-          for (let form of forms) {
-            form.loadAttributes(attributes);
+          let stages = <Stage[]>results[1];
+          let attributes = <Attribute[]>results[2];
+          this.logger.info(this, "getFormsWithAttributes", "Forms", forms.length, "Stages", stages.length, "Attributes", attributes.length);
+          for (let stage of stages) {
+            stage.loadAttributes(attributes);
+            for (let attribute of attributes) {
+              if (attribute.form_stage_id == stage.id) {
+                if (attribute.form_id == null) {
+                  attribute.form_id = stage.form_id;
+                  saves.push(this.database.saveAttribute(deployment, attribute));
+                }
+              }
+            }
           }
-          return forms;
+          for (let form of forms) {
+            form.loadStages(stages);
+            form.loadAttributes(attributes);
+            this.logger.info(this, "getFormsWithAttributes", "Form", form.name, "Stages", form.stages.length, "Attributes", form.attributes.length);
+          }
+          return Promise.all(saves).then((saved) => {
+            this.logger.info(this, "getFormsWithAttributes", "Saves", saves.length, "Saved");
+            return forms;
+          });
         },
         (error:any) => {
           this.logger.error(this, "getFormsWithAttributes", error);

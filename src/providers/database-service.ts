@@ -6,6 +6,7 @@ import { Model, TEXT, INTEGER, DOUBLE, BOOLEAN } from '../models/model';
 import { Deployment } from '../models/deployment';
 import { User } from '../models/user';
 import { Form } from '../models/form';
+import { Stage } from '../models/stage';
 import { Attribute } from '../models/attribute';
 import { Post } from '../models/post';
 import { Value } from '../models/value';
@@ -652,7 +653,7 @@ export class DatabaseService {
     if (form_id != null) {
       where['form_id'] = form_id;
     }
-    let order = { cardinality: "ASC" };
+    let order = { priority: "ASC" };
     return this.getModels<Attribute>(new Attribute(), where, order);
   }
 
@@ -669,11 +670,16 @@ export class DatabaseService {
   getFormsWithAttributes(deployment:Deployment): Promise<Form[]> {
     return Promise.all([
       this.getForms(deployment),
+      this.getStages(deployment),
       this.getAttributes(deployment)]).
       then((results:any[]) => {
         let forms:Form[] = <Form[]>results[0];
-        let attributes:Attribute[] = <Attribute[]>results[1];
-        for (let form of forms){
+        let stages:Stage[] = <Stage[]>results[1];
+        let attributes:Attribute[] = <Attribute[]>results[2];
+        for (let form of forms) {
+          for (let stage of stages) {
+            stage.loadAttributes(attributes);
+          }
           form.loadAttributes(attributes);
         }
         return forms;
@@ -690,6 +696,25 @@ export class DatabaseService {
         form.loadAttributes(attributes);
         return form;
       });
+  }
+
+  getStages(deployment:Deployment, form_id:number=null): Promise<Stage[]> {
+    let where = { deployment_id: deployment.id };
+    if (form_id != null) {
+      where['form_id'] = form_id;
+    }
+    let order = { priority: "ASC" };
+    return this.getModels<Stage>(new Stage(), where, order);
+  }
+
+  saveStage(deployment:Deployment, stage:Stage) {
+    stage.deployment_id = deployment.id;
+    return this.saveModel(stage);
+  }
+
+  removeStages(deployment:Deployment) {
+    let where = { deployment_id: deployment.id };
+    return this.removeModel<Stage>(new Stage(), where);
   }
 
   getValues(deployment:Deployment, post:Post=null) : Promise<Value[]> {

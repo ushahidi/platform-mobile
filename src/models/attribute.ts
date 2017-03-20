@@ -27,6 +27,9 @@ export class Attribute extends Model {
   @Column("form_id", INTEGER)
   public form_id: number = null;
 
+  @Column("form_stage_id", INTEGER)
+  public form_stage_id: number = null;
+
   @Column("key", TEXT)
   public key: string = null;
 
@@ -80,4 +83,5 @@ export class Attribute extends Model {
       return this.options.split(',');
     }
   }
+
 }

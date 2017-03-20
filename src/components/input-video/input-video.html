@@ -1,5 +1,5 @@
 <div class="input-video" [class.invalid]="attribute.required == true && videoPath == null && submitted == true">
-  <ion-item no-lines [formGroup]="formGroup" *ngIf="formGroup">
+  <ion-item no-lines text-wrap [formGroup]="formGroup" *ngIf="formGroup">
     <ion-label class="input-label">
       {{attribute.label}}
       <span ion-text color="danger" *ngIf="attribute.required == true">*</span>

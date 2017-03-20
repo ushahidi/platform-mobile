@@ -13,6 +13,7 @@ import { Post } from '../models/post';
 import { Value } from '../models/value';
 import { Image } from '../models/image';
 import { Filter } from '../models/filter';
+import { Stage } from '../models/stage';
 import { Collection } from '../models/collection';
 
 import { ApiService } from '../providers/api-service';
@@ -57,6 +58,7 @@ export class MyApp {
       new Deployment(),
       new User(),
       new Form(),
+      new Stage(),
       new Attribute(),
       new Post(),
       new Value(),
@@ -282,6 +284,7 @@ export class MyApp {
     let promises = [
       this.database.removeUsers(deployment),
       this.database.removeAttributes(deployment),
+      this.database.removeStages(deployment),
       this.database.removeForms(deployment),
       this.database.removeValues(deployment),
       this.database.removeImages(deployment),

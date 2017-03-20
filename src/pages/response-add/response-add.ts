@@ -63,6 +63,7 @@ export class ResponseAddPage extends BasePage {
     if (this.form) {
       this.color = this.form.color;
     }
+    this.logger.info(this, "Form", this.form);
     this.loadUpdates();
   }
 

@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Table } from '../decorators/table';
 import { Column } from '../decorators/column';
 
-import { Model, TEXT, INTEGER, BOOLEAN, PRIMARY_KEY } from '../models/model';
+import { Model, TEXT, INTEGER, BOOLEAN, DOUBLE, PRIMARY_KEY } from '../models/model';
 
 import { User } from '../models/user';
 import { Form } from '../models/form';
@@ -82,6 +82,18 @@ export class Deployment extends Model {
 
   @Column("images_count", INTEGER)
   public images_count: number = null;
+
+  @Column("map_zoom", INTEGER)
+  public map_zoom: number = null;
+
+  @Column("map_style", TEXT)
+  public map_style: string = null;
+
+  @Column("map_latitude", DOUBLE)
+  public map_latitude: number = null;
+
+  @Column("map_longitude", DOUBLE)
+  public map_longitude: number = null;
 
   @Column("saved", TEXT)
   public saved: Date = null;

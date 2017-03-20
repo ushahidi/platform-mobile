@@ -1,5 +1,5 @@
 <div class="input-textarea" [class.focused]="focused" [class.invalid]="attribute.required == true && (text == null || text.length == 0) && focused == false && submitted == true">
-  <ion-item [formGroup]="formGroup">
+  <ion-item text-wrap [formGroup]="formGroup">
     <ion-label floating class="input-label">
       {{attribute.label}}
       <span ion-text color="danger" *ngIf="attribute.required == true">*</span>
