@@ -63,7 +63,7 @@ export class ResponseAddPage extends BasePage {
     if (this.form) {
       this.color = this.form.color;
     }
-    this.logger.info(this, "Form", this.form);
+    this.logger.info(this, "Form Attributes", this.form.attributes);
     this.loadUpdates();
   }
 
@@ -313,33 +313,35 @@ export class ResponseAddPage extends BasePage {
     this.logger.info(this, "loadFormGroup", "Form", this.form.name);
     this.formGroup = new FormGroup({});
     if (this.form && this.form.attributes) {
-      for (let attribute of this.form.attributes) {
-        let value:Value = this.values[attribute.key];
-        let text:string = (value != null) ? value.value : '';
-        let validator = (attribute.required == true) ? Validators.required : null;
-        this.logger.info(this, "loadFormGroup", "Form", this.form.name, "Attribute", attribute.input, "Value", text);
-        if (attribute.input == 'location') {
-          let coordinates = (text) ? text.split(',') : [];
-          let latitude = (coordinates.length > 1) ? coordinates[0] : '';
-          let longitude = (coordinates.length > 1) ? coordinates[1] : '';
-          let formGroup = new FormGroup({
-            lat: new FormControl(latitude),
-            lon: new FormControl(longitude)}, validator);
-          this.formGroup.addControl(attribute.key, formGroup);
-        }
-        else if (attribute.input == 'checkbox' || attribute.input == 'checkboxes') {
-          let formGroup = new FormGroup({}, validator);
-          let options = attribute.getOptions();
-          for (let option of options) {
-            formGroup.addControl(option, new FormControl(''));
+      for (let stage of this.form.stages) {
+        for (let attribute of stage.attributes) {
+          let value:Value = this.values[attribute.key];
+          let text:string = (value != null) ? value.value : '';
+          let validator = (attribute.required == true) ? Validators.required : null;
+          this.logger.info(this, "loadFormGroup", "Form", this.form.name, "Attribute", attribute.input, "Value", text);
+          if (attribute.input == 'location') {
+            let coordinates = (text) ? text.split(',') : [];
+            let latitude = (coordinates.length > 1) ? coordinates[0] : '';
+            let longitude = (coordinates.length > 1) ? coordinates[1] : '';
+            let formGroup = new FormGroup({
+              lat: new FormControl(latitude),
+              lon: new FormControl(longitude)}, validator);
+            this.formGroup.addControl(attribute.key, formGroup);
           }
-          this.formGroup.addControl(attribute.key, formGroup);
-        }
-        else if (attribute.input == 'radio') {
-          this.formGroup.addControl(attribute.key, new FormControl(text, validator));
-        }
-        else {
-          this.formGroup.addControl(attribute.key, new FormControl(text, validator));
+          else if (attribute.input == 'checkbox' || attribute.input == 'checkboxes') {
+            let formGroup = new FormGroup({}, validator);
+            let options = attribute.getOptions();
+            for (let option of options) {
+              formGroup.addControl(option, new FormControl(''));
+            }
+            this.formGroup.addControl(attribute.key, formGroup);
+          }
+          else if (attribute.input == 'radio') {
+            this.formGroup.addControl(attribute.key, new FormControl(text, validator));
+          }
+          else {
+            this.formGroup.addControl(attribute.key, new FormControl(text, validator));
+          }
         }
       }
     }
@@ -348,18 +350,20 @@ export class ResponseAddPage extends BasePage {
   loadFormValues() {
     let formValues = this.formGroup.value;
     this.logger.info(this, "loadFormValues", formValues);
-    for (let attribute of this.form.attributes) {
-      let value = formValues[attribute.key];
-      if (attribute.type == 'title') {
-        this.post.title = value;
-      }
-      else if (attribute.type == 'description') {
-        this.post.description = value;
-      }
-      else if (attribute.type == 'location') {
-        if (value) {
-          this.post.latitude = value.lat;
-          this.post.longitude = value.lon;
+    for (let stage of this.form.stages) {
+      for (let attribute of stage.attributes) {
+        let value = formValues[attribute.key];
+        if (attribute.type == 'title') {
+          this.post.title = value;
+        }
+        else if (attribute.type == 'description') {
+          this.post.description = value;
+        }
+        else if (attribute.type == 'location') {
+          if (value) {
+            this.post.latitude = value.lat;
+            this.post.longitude = value.lon;
+          }
         }
       }
     }

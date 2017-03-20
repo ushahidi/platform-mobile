@@ -689,10 +689,15 @@ export class DatabaseService {
   getFormWithAttributes(deployment:Deployment, id:number): Promise<Form> {
     return Promise.all([
       this.getForm(deployment, id),
+      this.getStages(deployment, id),
       this.getAttributes(deployment, id)]).
       then((results:any[]) => {
         let form:Form = <Form>results[0];
-        let attributes:Attribute[] = <Attribute[]>results[1];
+        let stages:Stage[] = <Stage[]>results[1];
+        let attributes:Attribute[] = <Attribute[]>results[2];
+        for (let stage of stages) {
+          stage.loadAttributes(attributes);
+        }
         form.loadAttributes(attributes);
         return form;
       });

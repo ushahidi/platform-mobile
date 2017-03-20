@@ -841,7 +841,7 @@ export class ApiService extends HttpService {
               stage.label = item.label;
               stage.description = item.description;
               stage.priority = item.priority;
-              stage.task = item.task;
+              stage.type = item.type;
               stage.icon = item.icon;
               stage.required = item.required;
               if (item.allowed_privileges) {
@@ -1070,7 +1070,6 @@ export class ApiService extends HttpService {
           let attributes = <Attribute[]>results[2];
           this.logger.info(this, "getFormsWithAttributes", "Forms", forms.length, "Stages", stages.length, "Attributes", attributes.length);
           for (let stage of stages) {
-            stage.loadAttributes(attributes);
             for (let attribute of attributes) {
               if (attribute.form_stage_id == stage.id) {
                 if (attribute.form_id == null) {
@@ -1082,6 +1081,9 @@ export class ApiService extends HttpService {
           }
           for (let form of forms) {
             form.loadStages(stages);
+            for (let stage of stages) {
+              stage.loadAttributes(attributes);
+            }
             form.loadAttributes(attributes);
             this.logger.info(this, "getFormsWithAttributes", "Form", form.name, "Stages", form.stages.length, "Attributes", form.attributes.length);
           }

@@ -175,7 +175,7 @@ export class DeploymentDetailsPage extends BasePage {
               this.deployment.forms = forms;
               resolve();
             },
-            (error) => {
+            (error:any) => {
               this.logger.error(this, "loadForms", "Failed", error);
               reject(error);
             });

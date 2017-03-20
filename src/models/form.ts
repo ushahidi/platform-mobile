@@ -67,32 +67,38 @@ export class Form extends Model {
   public attributes: Attribute[] = [];
 
   loadStages(stages:Stage[]) {
-    this.stages = [];
+    let unsorted = [];
     if (stages) {
       for (var i = 0; i < stages.length; i++) {
         let stage:Stage = stages[i];
         if (stage.form_id == this.id) {
-          this.stages.push(stage);
+          unsorted.push(stage);
         }
       }
-      this.stages = this.stages.sort((a, b) => {
+      this.stages = unsorted.sort(function(a, b) {
         return a.priority - b.priority;
       });
+    }
+    else {
+      this.stages = [];
     }
   }
 
   loadAttributes(attributes:Attribute[]) {
-    this.attributes = [];
     if (attributes) {
+      let unsorted = [];
       for (var i = 0; i < attributes.length; i++) {
         let attribute:Attribute = attributes[i];
         if (attribute.form_id == this.id) {
-          this.attributes.push(attribute);
+          unsorted.push(attribute);
         }
       }
-      this.attributes = this.attributes.sort((a, b) => {
+      this.attributes = unsorted.sort(function(a, b) {
         return a.priority - b.priority;
       });
+    }
+    else {
+      this.attributes = [];
     }
   }
 

@@ -37,8 +37,8 @@ export class Stage extends Model {
   @Column("priority", INTEGER)
   public priority: number = null;
 
-  @Column("task", TEXT)
-  public task: string = null;
+  @Column("type", TEXT)
+  public type: string = null;
 
   @Column("icon", TEXT)
   public icon: string = null;
@@ -64,18 +64,20 @@ export class Stage extends Model {
   public attributes: Attribute[] = [];
 
   loadAttributes(attributes:Attribute[]) {
-    this.attributes = [];
     if (attributes) {
+      let unsorted = [];
       for (var i = 0; i < attributes.length; i++) {
         let attribute:Attribute = attributes[i];
-        if (attribute.form_stage_id == this.id) {
-          attribute.form_stage_id = this.id;
-          this.attributes.push(attribute);
+        if (attribute.form_id == this.form_id && attribute.form_stage_id == this.id) {
+          unsorted.push(attribute);
         }
       }
-      this.attributes = this.attributes.sort((a, b) => {
+      this.attributes = unsorted.sort(function(a, b) {
         return a.priority - b.priority;
       });
+    }
+    else {
+      this.attributes = [];
     }
   }
 
