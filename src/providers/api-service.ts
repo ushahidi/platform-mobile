@@ -43,18 +43,19 @@ export class ApiService extends HttpService {
         q: search
       };
       this.httpGet(url, null, params).then(
-        (data) => {
-          let items = <any[]>data;
+        (results:any[]) => {
           let deployments = [];
-          for (let item of items) {
-            let deployment:Deployment = new Deployment();
-            deployment.tier = item.tier;
-            deployment.status = item.status;
-            deployment.name = item.deployment_name;
-            deployment.domain = `${item.subdomain}.ushahidi.io`;
-            deployment.website = `https://${item.subdomain}.ushahidi.io`;
-            deployment.api = `https://${item.subdomain}.${item.domain}`;
-            deployments.push(deployment);
+          for (let item of results) {
+            if (item.status == 'deployed') {
+              let deployment:Deployment = new Deployment();
+              deployment.tier = item.tier;
+              deployment.status = item.status;
+              deployment.name = item.deployment_name;
+              deployment.domain = `${item.subdomain}.ushahidi.io`;
+              deployment.website = `https://${item.subdomain}.ushahidi.io`;
+              deployment.api = `https://${item.subdomain}.${item.domain}`;
+              deployments.push(deployment);
+            }
           }
           resolve(deployments);
         },
