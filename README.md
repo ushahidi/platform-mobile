@@ -359,6 +359,13 @@ git commit -m "message about the changes"
 git push
 ```
 
+Create a tag
+
+```
+git tag 1.0
+git push origin --tags
+```
+
 ## NPM
 #### Some handy NPM commands
 
