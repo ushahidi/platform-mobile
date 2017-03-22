@@ -128,7 +128,7 @@ export class ResponseListPage extends BasePage {
           this.showToast("Internet connection not available");
         }
         else {
-          this.showToast("Problem downloading responses");
+          this.showToast("Problem downloading survey responses");
         }
       });
   }
