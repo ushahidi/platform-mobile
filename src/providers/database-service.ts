@@ -629,23 +629,28 @@ export class DatabaseService {
   }
 
   getPostsWithValues(deployment:Deployment): Promise<Post[]> {
-    return Promise.all([
-      this.getPosts(deployment),
-      this.getValues(deployment),
-      this.getUsers(deployment),
-      this.getForms(deployment)]).
-      then((results:any[]) => {
-        let posts = <Post[]>results[0];
-        let values = <Value[]>results[1];
-        let users = <User[]>results[2];
-        let forms = <Form[]>results[3];
-        for (let post of posts) {
-          post.loadUser(users);
-          post.loadForm(forms);
-          post.loadValues(values);
-        }
-        return posts;
-      });
+    return new Promise((resolve, reject) => {
+      Promise.all([
+        this.getPosts(deployment),
+        this.getValues(deployment),
+        this.getUsers(deployment),
+        this.getForms(deployment)]).then(
+          (results:any[]) => {
+            let posts = <Post[]>results[0];
+            let values = <Value[]>results[1];
+            let users = <User[]>results[2];
+            let forms = <Form[]>results[3];
+            for (let post of posts) {
+              post.loadUser(users);
+              post.loadForm(forms);
+              post.loadValues(values);
+            }
+            resolve(posts);
+          },
+          (error:any) => {
+            reject(error);
+          });
+    });
   }
 
   getAttributes(deployment:Deployment, form_id:number=null): Promise<Attribute[]> {
@@ -668,39 +673,49 @@ export class DatabaseService {
   }
 
   getFormsWithAttributes(deployment:Deployment): Promise<Form[]> {
-    return Promise.all([
-      this.getForms(deployment),
-      this.getStages(deployment),
-      this.getAttributes(deployment)]).
-      then((results:any[]) => {
-        let forms:Form[] = <Form[]>results[0];
-        let stages:Stage[] = <Stage[]>results[1];
-        let attributes:Attribute[] = <Attribute[]>results[2];
-        for (let form of forms) {
-          for (let stage of stages) {
-            stage.loadAttributes(attributes);
-          }
-          form.loadAttributes(attributes);
-        }
-        return forms;
-      });
+    return new Promise((resolve, reject) => {
+      Promise.all([
+        this.getForms(deployment),
+        this.getStages(deployment),
+        this.getAttributes(deployment)]).then(
+          (results:any[]) => {
+            let forms:Form[] = <Form[]>results[0];
+            let stages:Stage[] = <Stage[]>results[1];
+            let attributes:Attribute[] = <Attribute[]>results[2];
+            for (let form of forms) {
+              for (let stage of stages) {
+                stage.loadAttributes(attributes);
+              }
+              form.loadAttributes(attributes);
+            }
+             resolve(forms);
+          },
+          (error) => {
+            reject(error);
+          });
+    });
   }
 
   getFormWithAttributes(deployment:Deployment, id:number): Promise<Form> {
-    return Promise.all([
-      this.getForm(deployment, id),
-      this.getStages(deployment, id),
-      this.getAttributes(deployment, id)]).
-      then((results:any[]) => {
-        let form:Form = <Form>results[0];
-        let stages:Stage[] = <Stage[]>results[1];
-        let attributes:Attribute[] = <Attribute[]>results[2];
-        for (let stage of stages) {
-          stage.loadAttributes(attributes);
-        }
-        form.loadAttributes(attributes);
-        return form;
-      });
+    return new Promise((resolve, reject) => {
+      Promise.all([
+        this.getForm(deployment, id),
+        this.getStages(deployment, id),
+        this.getAttributes(deployment, id)]).then(
+          (results:any[]) => {
+            let form:Form = <Form>results[0];
+            let stages:Stage[] = <Stage[]>results[1];
+            let attributes:Attribute[] = <Attribute[]>results[2];
+            for (let stage of stages) {
+              stage.loadAttributes(attributes);
+            }
+            form.loadAttributes(attributes);
+            resolve(form);
+          },
+          (error:any) => {
+            reject(error);
+          });
+    });
   }
 
   getStages(deployment:Deployment, form_id:number=null): Promise<Stage[]> {

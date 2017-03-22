@@ -77,7 +77,7 @@
     <name>Ushahidi</name>
     <description>Ushahidi Mobile</description>
     <author email="support@ushahidi.com" href="https://www.ushahidi.com/">Ushahidi</author>
-    <content src="index.html" />
+    <content original-src="index.html" src="http://192.168.0.18:8100" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -94,6 +94,7 @@
     <allow-navigation href="http://ionic.local/*" />
     <allow-navigation href="http://localhost:3000" />
     <allow-navigation href="http://localhost:3001" />
+    <allow-navigation href="http://192.168.0.18:8100" />
     <icon src="resources/android/icon/drawable-xhdpi-icon.png" />
     <allow-intent href="market:*" />
     <splash density="port-ldpi" src="resources/android/splash/drawable-port-ldpi-screen.png" />
@@ -126,7 +127,7 @@
     <preference name="android-build-tool" value="gradle" />
     <preference name="android-targetSdkVersion" value="24" />
     <preference name="android-minSdkVersion" value="19" />
-    <preference name="LoadUrlTimeoutValue" value="60000" />
+    <preference name="LoadUrlTimeoutValue" value="90000" />
     <preference name="KeyboardDisplayRequiresUserAction" value="false" />
     <preference name="AllowInlineMediaPlayback" value="true" />
     <preference name="MediaPlaybackRequiresUserAction" value="false" />

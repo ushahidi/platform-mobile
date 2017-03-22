@@ -109,6 +109,7 @@
     <allow-navigation href="http://ionic.local/*" />
     <allow-navigation href="http://localhost:3000" />
     <allow-navigation href="http://localhost:3001" />
+    <allow-navigation href="http://192.168.0.18:8100" />
     <icon src="resources/android/icon/drawable-xhdpi-icon.png" />
     <allow-intent href="itms:*" />
     <allow-intent href="itms-apps:*" />
@@ -165,7 +166,7 @@
     <preference name="android-build-tool" value="gradle" />
     <preference name="android-targetSdkVersion" value="24" />
     <preference name="android-minSdkVersion" value="19" />
-    <preference name="LoadUrlTimeoutValue" value="60000" />
+    <preference name="LoadUrlTimeoutValue" value="90000" />
     <preference name="MediaPlaybackRequiresUserAction" value="false" />
     <preference name="KeychainAccessibility" value="WhenUnlocked" />
 </widget>

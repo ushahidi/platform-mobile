@@ -1,4 +1,9 @@
 .page-home {
+  background-repeat: no-repeat;
+  background-size: center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  background-size: cover;
   background-image: url('/assets/images/background.png');
   h4 {
     padding-top: 120px;

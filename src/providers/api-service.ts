@@ -1059,83 +1059,88 @@ export class ApiService extends HttpService {
   }
 
   getFormsWithAttributes(deployment:Deployment, cache:boolean=false, offline:boolean=false): Promise<Form[]> {
-    this.logger.info(this, "getFormsWithAttributes", cache);
-    return Promise.all([
-      this.getForms(deployment, cache, offline),
-      this.getStages(deployment, cache, offline),
-      this.getAttributes(deployment, cache, offline)]).then(
-        (results:any[]) => {
-          let saves = [];
-          let forms = <Form[]>results[0];
-          let stages = <Stage[]>results[1];
-          let attributes = <Attribute[]>results[2];
-          this.logger.info(this, "getFormsWithAttributes", "Forms", forms.length, "Stages", stages.length, "Attributes", attributes.length);
-          for (let stage of stages) {
-            for (let attribute of attributes) {
-              if (attribute.form_stage_id == stage.id) {
-                if (attribute.form_id == null) {
-                  attribute.form_id = stage.form_id;
-                  saves.push(this.database.saveAttribute(deployment, attribute));
+    return new Promise((resolve, reject) => {
+      this.logger.info(this, "getFormsWithAttributes", cache);
+      Promise.all([
+        this.getForms(deployment, cache, offline),
+        this.getStages(deployment, cache, offline),
+        this.getAttributes(deployment, cache, offline)]).then(
+          (results:any[]) => {
+            let saves = [];
+            let forms = <Form[]>results[0];
+            let stages = <Stage[]>results[1];
+            let attributes = <Attribute[]>results[2];
+            this.logger.info(this, "getFormsWithAttributes", "Forms", forms.length, "Stages", stages.length, "Attributes", attributes.length);
+            for (let stage of stages) {
+              for (let attribute of attributes) {
+                if (attribute.form_stage_id == stage.id) {
+                  if (attribute.form_id == null) {
+                    attribute.form_id = stage.form_id;
+                    saves.push(this.database.saveAttribute(deployment, attribute));
+                  }
                 }
               }
             }
-          }
-          for (let form of forms) {
-            form.loadStages(stages);
-            for (let stage of stages) {
-              stage.loadAttributes(attributes);
+            for (let form of forms) {
+              form.loadStages(stages);
+              for (let stage of stages) {
+                stage.loadAttributes(attributes);
+              }
+              form.loadAttributes(attributes);
+              this.logger.info(this, "getFormsWithAttributes", "Form", form.name, "Stages", form.stages.length, "Attributes", form.attributes.length);
             }
-            form.loadAttributes(attributes);
-            this.logger.info(this, "getFormsWithAttributes", "Form", form.name, "Stages", form.stages.length, "Attributes", form.attributes.length);
-          }
-          return Promise.all(saves).then((saved) => {
-            this.logger.info(this, "getFormsWithAttributes", "Saves", saves.length, "Saved");
-            return forms;
+            return Promise.all(saves).then((saved) => {
+              this.logger.info(this, "getFormsWithAttributes", "Saves", saves.length, "Saved");
+              resolve(forms);
+            });
+          },
+          (error:any) => {
+            this.logger.error(this, "getFormsWithAttributes", error);
+            reject(error);
           });
-        },
-        (error:any) => {
-          this.logger.error(this, "getFormsWithAttributes", error);
-        });
+    });
   }
 
   getPostsWithValues(deployment:Deployment, cache:boolean=false, offline:boolean=false, limit:number=10, offset:number=0):Promise<Post[]> {
-    this.logger.info(this, "getPostsWithValues", "Cache", cache, "Offline", offline, "Limit", limit, "Offset", offset);
-    return Promise.all([
-      this.getPosts(deployment, cache, offline, limit, offset),
-      this.getImages(deployment, true, offline),
-      this.getForms(deployment, true, offline),
-      this.getUsers(deployment, true, offline),
-      this.getAttributes(deployment, true, offline)]).
-      then(
-        (results:any[]) => {
-          this.logger.info(this, "getPostsWithValues", "Cache", cache, "Offline", offline, "Limit", limit, "Offset", offset);
-          let posts = <Post[]>results[0];
-          let images = <Image[]>results[1];
-          let forms = <Form[]>results[2];
-          let users = <User[]>results[3];
-          let attributes = <Attribute[]>results[4];
-          let saves = [];
-          for (let post of posts) {
-            post.loadUser(users);
-            post.loadForm(forms);
-            for (let value of post.values) {
-              value.loadAttribute(attributes);
-              if (value.input == 'upload') {
-                value.loadImage(images);
-                post.loadImage(images, value.value);
+    return new Promise((resolve, reject) => {
+      this.logger.info(this, "getPostsWithValues", "Cache", cache, "Offline", offline, "Limit", limit, "Offset", offset);
+      Promise.all([
+        this.getPosts(deployment, cache, offline, limit, offset),
+        this.getImages(deployment, true, offline),
+        this.getForms(deployment, true, offline),
+        this.getUsers(deployment, true, offline),
+        this.getAttributes(deployment, true, offline)]).then(
+          (results:any[]) => {
+            this.logger.info(this, "getPostsWithValues", "Cache", cache, "Offline", offline, "Limit", limit, "Offset", offset);
+            let posts = <Post[]>results[0];
+            let images = <Image[]>results[1];
+            let forms = <Form[]>results[2];
+            let users = <User[]>results[3];
+            let attributes = <Attribute[]>results[4];
+            let saves = [];
+            for (let post of posts) {
+              post.loadUser(users);
+              post.loadForm(forms);
+              for (let value of post.values) {
+                value.loadAttribute(attributes);
+                if (value.input == 'upload') {
+                  value.loadImage(images);
+                  post.loadImage(images, value.value);
+                }
+                saves.push(this.database.saveValue(deployment, value));
               }
-              saves.push(this.database.saveValue(deployment, value));
+              saves.push(this.database.savePost(deployment, post));
             }
-            saves.push(this.database.savePost(deployment, post));
-          }
-          return Promise.all(saves).then((saved) => {
-            this.logger.info(this, "getPostsWithValues", "Cache", cache, "Offline", offline, "Limit", limit, "Offset", offset, "Posts", posts.length);
-            return posts;
+            return Promise.all(saves).then((saved) => {
+              this.logger.info(this, "getPostsWithValues", "Cache", cache, "Offline", offline, "Limit", limit, "Offset", offset, "Posts", posts.length);
+              resolve(posts);
+            });
+          },
+          (error:any) => {
+            this.logger.error(this, "getPostsWithValues", "Failed", error);
+            reject(error);
           });
-        },
-        (error:any) => {
-          this.logger.error(this, "getPostsWithValues", "Failed", error);
-        });
+    });
   }
 
 }

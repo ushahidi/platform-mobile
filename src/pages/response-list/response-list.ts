@@ -50,7 +50,8 @@ export class ResponseListPage extends BasePage {
   mapLongitude:number = PLACEHOLDER_LONGITUDE;
   limit:number = 5;
   offset:number = 0;
-  spinner:boolean = false;
+  loading:boolean = false;
+  refreshing:boolean = false;
   interrupted:string = "Interrupted";
   map:any=null;
 
@@ -101,22 +102,34 @@ export class ResponseListPage extends BasePage {
 
   loadUpdates(event:any=null, cache:boolean=false) {
     this.logger.info(this, "loadUpdates", cache);
+    this.loading = true;
+    this.refreshing = event != null;
     let updates = [
       this.loadFilters(cache),
       this.loadPosts(cache),
       this.uploadPending(cache)];
     return Promise.all(updates).then(
       (updated) => {
+        this.logger.info(this, "loadUpdates", "Updated");
         if (event != null) {
           event.complete();
         }
-        this.logger.info(this, "loadUpdates", "Updated");
+        this.loading = false;
+        this.refreshing = false;
       },
       (error) => {
+        this.logger.error(this, "loadUpdates", "Failed", error);
         if (event != null) {
           event.complete();
         }
-        this.logger.error(this, "loadUpdates", "Failed", error);
+        this.loading = false;
+        this.refreshing = false;
+        if (this.offline) {
+          this.showToast("Internet connection not available");
+        }
+        else {
+          this.showToast("Problem downloading responses");
+        }
       });
   }
 
@@ -699,7 +712,7 @@ export class ResponseListPage extends BasePage {
 
   loadMarkers(cache:boolean=true):Promise<any> {
     return new Promise((resolve, reject) => {
-      this.spinner = true;
+      this.loading = true;
       let limit = 10;
       let promise = Promise.resolve();
       for (let offset = 0; offset < this.deployment.posts_count; offset += limit) {
@@ -726,12 +739,12 @@ export class ResponseListPage extends BasePage {
       promise.then(
         () => {
           this.logger.info(this, "loadMarkers", "Finished");
-          this.spinner = false;
+          this.loading = false;
           resolve();
         },
         (error) => {
           this.logger.error(this, "loadMarkers", "Rejected");
-          this.spinner = false;
+          this.loading = false;
           reject(error);
         });
     });

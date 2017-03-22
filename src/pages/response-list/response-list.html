@@ -21,7 +21,7 @@
   <ion-refresher *ngIf="view == 'list'" (ionRefresh)="loadUpdates($event, false)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  <ion-fab bottom right *ngIf="posts && posts.length > 0">
+  <ion-fab bottom right *ngIf="(posts && posts.length > 0) || (markers && markers.length > 0)">
     <button ion-fab color="primary" (click)="addResponse($event)">
       <ion-icon ios="md-add" md="md-add"></ion-icon>
     </button>
@@ -31,19 +31,27 @@
       <ion-icon ios="ios-map" md="md-map"></ion-icon>
     </button>
   </ion-fab>
-  <div class="mapSpinner" *ngIf="view == 'map' && spinner == true">
+  <div class="mapSpinner" *ngIf="view == 'map' && loading == true">
     <ion-spinner name="ios" color="grey"></ion-spinner>
   </div>
   <div class="list" *ngIf="view == 'list'">
-    <div class="listSpinner" text-center margin-top-lg margin-bottom-lg *ngIf="posts == null">
+    <div *ngIf="refresher">{{refresher.state}}</div>
+    <div class="listSpinner" text-center margin-top-lg *ngIf="posts == null && loading == true && refreshing == false">
       <ion-spinner name="ios"></ion-spinner>
     </div>
-    <div padding-left padding-right *ngIf="posts && filtered">
-      <h6 text-center class="no-responses" *ngIf="posts && posts.length == 0">
-        This deployment doesn't have any<br>
-        survey responses, yet.
+    <div padding-left padding-right *ngIf="posts == null && loading == false">
+      <h6 text-center class="no-responses" *ngIf="offline == false">
+        There was a problem downloading survey responses. Please try again later.
       </h6>
-      <h6 text-center class="no-responses" *ngIf="posts && posts.length > 0 && filtered && filtered.length == 0">
+      <h6 text-center class="no-responses" *ngIf="offline == true">
+        Please verify you have an internet connection, and then try downloading survey responses again.
+      </h6>
+    </div>
+    <div padding-left padding-right *ngIf="posts && filtered">
+      <h6 text-center padding-bottom margin-bottom class="no-responses" *ngIf="posts && posts.length == 0">
+        This deployment doesn't have any<br> survey responses, yet.
+      </h6>
+      <h6 text-center padding-bottom margin-bottom class="no-responses" *ngIf="posts && posts.length > 0 && filtered && filtered.length == 0">
         There are no responses<br> for the current filter.
       </h6>
       <button ion-button block margin-top text-uppercase color="primary"
