@@ -41,7 +41,6 @@ export class ImageCacheComponent implements OnInit, AfterContentChecked {
 
   loadCacheImage() {
     this.image = this.element.nativeElement.querySelector('img');
-    this.image.crossOrigin = 'Anonymous';
     if (this.src && this.src.length > 0) {
       this.logger.info(this, "loadCacheImage", "Src", this.src);
       let cache = this.getCacheFile(this.src);
