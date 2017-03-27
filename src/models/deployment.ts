@@ -130,6 +130,18 @@ export class Deployment extends Model {
     return this.access_token != null && this.access_token.length > 0;
   }
 
+  public hasPosts():boolean {
+    return this.posts != null && this.posts.length > 0;
+  }
+
+  public hasForms():boolean {
+    return this.forms != null && this.forms.length > 0;
+  }
+
+  public hasCollections():boolean {
+    return this.collections != null && this.collections.length > 0;
+  }
+
   public canRead():boolean {
     return this.can_read != null && this.can_read == true;
   }

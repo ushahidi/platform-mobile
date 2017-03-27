@@ -1,4 +1,4 @@
-import { Component, NgZone, ViewChild } from '@angular/core';
+import { Component, NgZone, ViewChild, state, style, animate, transition, trigger } from '@angular/core';
 import { Platform, NavParams, Content,
   NavController, ViewController, LoadingController, ToastController, AlertController, ModalController, ActionSheetController } from 'ionic-angular';
 import { StatusBar } from 'ionic-native';
@@ -26,7 +26,15 @@ import { ResponseListPage } from '../../pages/response-list/response-list';
   selector: 'deployment-details-page',
   templateUrl: 'deployment-details.html',
   providers: [ ApiService, DatabaseService, LoggerService ],
-  entryComponents:[ DeploymentLoginPage, DeploymentSettingsPage, ResponseAddPage, ResponseListPage ]
+  entryComponents:[ DeploymentLoginPage, DeploymentSettingsPage, ResponseAddPage, ResponseListPage ],
+  animations: [
+    trigger('fadeInOut', [
+      state('false', style({ opacity: 0 })),
+      state('true', style({ opacity: 1 })),
+      transition('0 => 1', animate('900ms')),
+      transition('1 => 0', animate('900ms'))
+    ])
+  ]
 })
 export class DeploymentDetailsPage extends BasePage {
 

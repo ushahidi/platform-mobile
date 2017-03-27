@@ -25,14 +25,15 @@
       <image-cache padding [src]="deployment.image"></image-cache>
     </div>
     <p padding-left padding-right class="description" [innerHTML]="deployment.description | htmlParser" *ngIf="deployment.description"></p>
-    <div padding-top padding-left padding-right padding-bottom margin-bottom>
-      <button ion-button block text-uppercase color="primary" (click)="addResponse($event)">Submit A Survey Response</button>
+    <div class="submit" padding-left padding-right [@fadeInOut]="deployment.forms && deployment.forms.length > 0">
+      <button ion-button block text-uppercase margin-top margin-bottom color="primary"
+              *ngIf="deployment.forms && deployment.forms.length > 0" (click)="addResponse($event)">Submit Survey Response</button>
     </div>
     <ion-list>
-      <ion-item detail-push (click)="showResponses($event)">
+      <ion-item detail-push *ngIf="deployment.forms && deployment.forms.length > 0" (click)="showResponses($event)">
         Responses
       </ion-item>
-      <!-- <ion-item detail-push (click)="showCollections($event)">
+      <!-- <ion-item detail-push *ngIf="deployment.collections && deployment.collections.length > 0" (click)="showCollections($event)">
         Collections
       </ion-item> -->
       <ion-item detail-push *ngIf="deployment.hasUsername() && deployment.canUpdate()" (click)="showSettings($event)">
