@@ -1,5 +1,5 @@
 import { Component, ElementRef, Input, OnInit, AfterContentChecked } from '@angular/core';
-import { Transfer, File, Entry, FileEntry, FileError, FileReader, Metadata } from 'ionic-native';
+import { Transfer, File, Entry, FileEntry, FileError, Metadata } from 'ionic-native';
 import { SafeUrl, DomSanitizer } from '@angular/platform-browser';
 import { Md5 } from 'ts-md5/dist/md5';
 
@@ -9,21 +9,19 @@ declare var cordova:any;
 
 @Component({
   selector: 'image-cache',
-  template: `<img class="image-cache" [src]="safeUrl" />`
+  template: `<div class="image-cache"><img [src]="placeholder" *ngIf="placeholder"><img class="fadein" [src]="safeUrl" *ngIf="safeUrl" /></div>`
 })
 export class ImageCacheComponent implements OnInit, AfterContentChecked {
 
   @Input('src')
-  src:string;
+  src:string = null;
 
   @Input('placeholder')
-  placeholder:string;
+  placeholder:string = null;
 
   cacheUrl:string = null;
 
   safeUrl:SafeUrl = null;
-
-  image:HTMLImageElement = null;
 
   constructor(
     private element:ElementRef,
@@ -40,49 +38,40 @@ export class ImageCacheComponent implements OnInit, AfterContentChecked {
   }
 
   loadCacheImage() {
-    this.image = this.element.nativeElement.querySelector('img');
     if (this.src && this.src.length > 0) {
-      this.logger.info(this, "loadCacheImage", "Src", this.src);
+      this.logger.info(this, "loadCacheImage", this.src);
       let cache = this.getCacheFile(this.src);
       let directory = this.getCacheDirectory();
-      this.onCacheStarted();
       this.hasCacheImage(directory, cache).then(
         (exists:boolean) => {
           this.useCacheImage(directory, cache).then(
-            (data:any) => {
-              this.onCacheFinished();
+            (file:any) => {
+              this.logger.info(this, "loadCacheImage", this.src, file);
             },
             (error:any) => {
-              this.onCacheFailed();
+              this.logger.error(this, "loadCacheImage", this.src, error);
           });
         },
         (missing:boolean) => {
           this.downloadCacheImage(this.src, directory, cache).then(
             (url:string) => {
               this.useCacheImage(directory, cache).then(
-                (data:any) => {
-                  this.onCacheFinished();
+                (file:any) => {
+                  this.logger.info(this, "loadCacheImage", this.src, file);
                 },
                 (error:any) => {
-                  this.onCacheFailed();
+                  this.logger.error(this, "loadCacheImage", this.src, error);
               });
             },
             (error:any) => {
-              this.onCacheFailed();
+              this.logger.error(this, "loadCacheImage", this.src, error);
           });
         });
-    }
-    else if (this.placeholder && this.placeholder.length > 0) {
-      this.safeUrl = this.sanitizer.bypassSecurityTrustUrl(this.placeholder);
-    }
-    else {
-      this.image.style.display = 'none';
     }
   }
 
   reloadCacheImage() {
     if (this.cacheUrl && this.cacheUrl.length > 0) {
-      //this.logger.info(this, "reloadCacheImage", this.cacheUrl);
       this.safeUrl = this.sanitizer.bypassSecurityTrustUrl(this.cacheUrl);
     }
   }
@@ -155,24 +144,6 @@ export class ImageCacheComponent implements OnInit, AfterContentChecked {
     });
   }
 
-  loadFileEntry(entry:FileEntry):Promise<any> {
-    return new Promise((resolve, reject) => {
-      entry.file((data:any) => {
-        this.logger.info(this, "loadFileEntry", entry.toURL());
-        let reader = new FileReader();
-        reader.onloadend = () => {
-          this.logger.info(this, "loadFileEntry", entry.toURL(), "Loaded");
-          resolve(reader.result);
-        };
-        reader.onerror = () => {
-          this.logger.error(this, "useCacheImage", entry.toURL(), "Failed");
-          reject();
-        };
-        reader.readAsDataURL(data);
-      });
-    });
-  }
-
   getCacheFile(url:string):string {
     let hash = Md5.hashStr(url);
     if (url.indexOf(".jpg") != -1) {
@@ -192,29 +163,6 @@ export class ImageCacheComponent implements OnInit, AfterContentChecked {
 
   getCacheDirectory():string {
     return cordova.file.cacheDirectory;
-  }
-
-  onCacheStarted() {
-    if (this.placeholder && this.placeholder.length > 0) {
-      this.safeUrl = this.sanitizer.bypassSecurityTrustUrl(this.placeholder);
-    }
-    else {
-      this.image.classList.add("cache-loading");
-    }
-  }
-
-  onCacheFinished() {
-    this.image.classList.add("cache-loaded");
-  }
-
-  onCacheFailed() {
-    if (this.placeholder && this.placeholder.length > 0) {
-      this.safeUrl = this.sanitizer.bypassSecurityTrustUrl(this.placeholder);
-    }
-    else {
-      this.image.style.display = 'none';
-    }
-    this.image.classList.add("cache-loaded");
   }
 
 }
