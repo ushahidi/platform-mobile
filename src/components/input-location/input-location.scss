@@ -7,17 +7,40 @@
   .input-error {
     color: #dd0000;
   }
+  .latitude {
+    margin: 0;
+    padding: 0;
+    padding-right: 10px;
+  }
+  .longitude {
+    margin: 0;
+    padding: 0;
+  }
+  ion-input {
+    position: relative;
+    border-bottom: 1px solid #cccccc;
+    input {
+      margin: 0;
+      padding: 0;
+      padding-bottom: 5px;
+    }
+    &::after {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      content: '';
+      width: 30px;
+      height: 20px;
+      display: block;
+      background-image: linear-gradient(to right, rgba(255,255,255,0) 0, #fff 100%);
+    }
+  }
   ion-card {
     max-width: 90%;
     img {
       width: 100%;
       transition: opacity 1s;
-      &.lazy {
-        opacity: 0;
-      }
-      &.ng2-lazyloaded {
-        opacity: 1 !important;
-      }
     }
   }
 }

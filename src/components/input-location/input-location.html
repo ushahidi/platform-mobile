@@ -5,13 +5,21 @@
       <span ion-text color="danger" *ngIf="attribute.required == true">*</span>
     </ion-label>
     <div [formGroupName]="attribute.key">
-      <ion-input type="text" hidden formControlName="lat" [(ngModel)]="latitude"></ion-input>
-      <ion-input type="text" hidden formControlName="lon" [(ngModel)]="longitude"></ion-input>
+      <ion-input hidden type="text" formControlName="lat" [(ngModel)]="latitude"></ion-input>
+      <ion-input hidden type="text" formControlName="lon" [(ngModel)]="longitude"></ion-input>
     </div>
   </ion-item>
   <ion-card margin-left margin-right *ngIf="latitude && longitude && map">
-    <img full [src]="map" (error)="this.display='none'" />
+    <image-cache full [src]="map"></image-cache>
   </ion-card>
+  <ion-row margin-left margin-right margin-top margin-bottom>
+    <ion-col width-50 class="latitude">
+      <ion-input type="text" readonly="true" disabled="true" placeholder="Latitude" [(ngModel)]="latitude"></ion-input>
+    </ion-col>
+    <ion-col width-50 class="longitude">
+      <ion-input type="text" readonly="true" disabled="true" placeholder="Longitude" [(ngModel)]="longitude"></ion-input>
+    </ion-col>
+  </ion-row>
   <button ion-button margin-left icon-left text-uppercase small color="light" *ngIf="latitude && longitude" (click)="updateLocation($event)">
     <ion-icon name="pin"></ion-icon> Change Location
   </button>
