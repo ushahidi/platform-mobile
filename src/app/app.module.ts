@@ -45,6 +45,7 @@ import { HtmlParserPipe } from '../pipes/html-parser';
 import { LoggerService } from '../providers/logger-service';
 import { ApiService } from '../providers/api-service';
 import { DatabaseService } from '../providers/database-service';
+import { CacheService } from '../providers/cache-service';
 import { VimeoService } from '../providers/vimeo-service';
 
 export function provideStorage() {
@@ -112,6 +113,7 @@ export function provideStorage() {
     { provide: ApiService, useClass: ApiService },
     { provide: Storage, useFactory: provideStorage },
     { provide: VimeoService, useClass: VimeoService },
+    { provide: CacheService, useClass: CacheService },
     { provide: LoggerService, useClass: LoggerService },
     { provide: DatabaseService, useClass: DatabaseService },
     { provide: ErrorHandler, useClass: IonicErrorHandler } ]

@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, AfterContentChecked } from '@angular/core';
+import { Component, Input, OnInit, AfterContentChecked } from '@angular/core';
 import { Transfer, File, Entry, FileEntry, FileError, Metadata } from 'ionic-native';
 import { SafeUrl, DomSanitizer } from '@angular/platform-browser';
 import { Md5 } from 'ts-md5/dist/md5';
@@ -24,89 +24,97 @@ export class ImageCacheComponent implements OnInit, AfterContentChecked {
   safeUrl:SafeUrl = null;
 
   constructor(
-    private element:ElementRef,
     private sanitizer:DomSanitizer,
     private logger:LoggerService) {
   }
 
   ngOnInit() {
-    this.loadCacheImage();
+    this.loadCacheImage(this.src);
   }
 
   ngAfterContentChecked() {
-    this.reloadCacheImage();
+    this.reloadCacheImage(this.src);
   }
 
-  loadCacheImage() {
-    if (this.src && this.src.length > 0) {
-      this.logger.info(this, "loadCacheImage", this.src);
-      let cache = this.getCacheFile(this.src);
-      let directory = this.getCacheDirectory();
-      this.hasCacheImage(directory, cache).then(
-        (exists:boolean) => {
-          this.useCacheImage(directory, cache).then(
+  loadCacheImage(url:string) {
+    if (url && url.length > 0) {
+      this.logger.info(this, "loadCacheImage", url);
+      this.fetchCacheImage(url).then(
+        (cache:string) => {
+          this.useCacheImage(cache).then(
             (file:any) => {
-              this.logger.info(this, "loadCacheImage", this.src, file);
+              this.logger.info(this, "loadCacheImage", url, file);
             },
             (error:any) => {
-              this.logger.error(this, "loadCacheImage", this.src, error);
+              this.logger.error(this, "loadCacheImage", url, error);
           });
         },
-        (missing:boolean) => {
-          this.downloadCacheImage(this.src, directory, cache).then(
-            (url:string) => {
-              this.useCacheImage(directory, cache).then(
-                (file:any) => {
-                  this.logger.info(this, "loadCacheImage", this.src, file);
-                },
-                (error:any) => {
-                  this.logger.error(this, "loadCacheImage", this.src, error);
-              });
-            },
-            (error:any) => {
-              this.logger.error(this, "loadCacheImage", this.src, error);
-          });
+        (error:any) => {
+          this.logger.error(this, "loadCacheImage", url, error);
         });
     }
   }
 
-  reloadCacheImage() {
+  reloadCacheImage(url:string) {
     if (this.cacheUrl && this.cacheUrl.length > 0) {
       this.safeUrl = this.sanitizer.bypassSecurityTrustUrl(this.cacheUrl);
     }
   }
 
-  hasCacheImage(directory:string, cache:string):Promise<boolean> {
+  fetchCacheImage(url:string) {
     return new Promise((resolve, reject) => {
-      let url = directory + cache;
+      let file = this.getCacheFile(url);
+      let directory = this.getCacheDirectory();
+      this.hasCacheImage(directory, file).then(
+        (cache:string) => {
+          this.logger.info(this, "fetchCacheImage", url, cache);
+          resolve(cache);
+        },
+        (none:any) => {
+          this.downloadCacheImage(url, directory, file).then(
+            (cache:string) => {
+              this.logger.info(this, "fetchCacheImage", url, cache);
+              resolve(cache);
+            },
+            (error:any) => {
+              this.logger.error(this, "fetchCacheImage", url, error);
+              reject(error);
+          });
+        });
+    });
+  }
+
+  hasCacheImage(directory:string, cache:string):Promise<string> {
+    return new Promise((resolve, reject) => {
       File.checkFile(directory, cache).then(
         (exists:boolean) => {
           if (exists) {
+            let url = directory + cache;
             File.resolveLocalFilesystemUrl(url).then(
               (entry:FileEntry) => {
                 entry.getMetadata((metadata:Metadata) => {
-                  this.logger.info(this, "hasCacheImage", "Yes", cache, metadata);
+                  this.logger.info(this, "hasCacheImage", "Yes", cache);
                   if (metadata.size > 0) {
-                    resolve(true);
+                    resolve(entry.toURL());
                   }
                   else {
-                    reject(false);
+                    reject("Cache Empty");
                   }
                 });
               },
               (error:FileError) => {
                 this.logger.error(this, "hasCacheImage", "Yes", cache, error);
-                reject(false);
+                reject(error);
             });
           }
           else {
             this.logger.info(this, "hasCacheImage", "No", cache);
-            reject(false);
+            reject("No Cache");
           }
         },
         (error:FileError) => {
           this.logger.info(this, "hasCacheImage", "No", cache);
-          reject(false);
+          reject(error);
       });
     });
   }
@@ -117,7 +125,7 @@ export class ImageCacheComponent implements OnInit, AfterContentChecked {
       let fileTransfer = new Transfer();
       fileTransfer.download(image, url, true).then(
         (entry:Entry) => {
-          this.logger.info(this, "downloadCacheImage", image, url, entry);
+          this.logger.info(this, "downloadCacheImage", image, url, entry.toURL());
           resolve(entry.toURL());
         },
         (error:any) => {
@@ -127,12 +135,11 @@ export class ImageCacheComponent implements OnInit, AfterContentChecked {
     });
   }
 
-  useCacheImage(directory:string, cache:string):Promise<any> {
+  useCacheImage(url:string):Promise<string> {
     return new Promise((resolve, reject) => {
-      let url = directory + cache;
       File.resolveLocalFilesystemUrl(url).then(
         (entry:FileEntry) => {
-          this.logger.info(this, "useCacheImage", url, entry);
+          this.logger.info(this, "useCacheImage", url, entry.toInternalURL());
           this.cacheUrl = entry.toInternalURL();
           this.safeUrl = this.sanitizer.bypassSecurityTrustUrl(entry.toInternalURL());
           resolve(entry.toInternalURL());

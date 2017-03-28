@@ -17,6 +17,7 @@ import { Filter } from '../../models/filter';
 import { Collection } from '../../models/collection';
 
 import { ApiService } from '../../providers/api-service';
+import { CacheService } from '../../providers/cache-service';
 import { LoggerService } from '../../providers/logger-service';
 import { DatabaseService } from '../../providers/database-service';
 
@@ -31,7 +32,7 @@ import { PLACEHOLDER_LATITUDE, PLACEHOLDER_LONGITUDE } from '../../constants/pla
 @Component({
   selector: 'response-list-page',
   templateUrl: 'response-list.html',
-  providers: [ ApiService, DatabaseService, LoggerService ],
+  providers: [ ApiService, DatabaseService, CacheService, LoggerService ],
   entryComponents:[ ResponseAddPage, ResponseDetailsPage, ResponseSearchPage ]
 })
 export class ResponseListPage extends BasePage {
@@ -60,6 +61,7 @@ export class ResponseListPage extends BasePage {
 
   constructor(
     public api:ApiService,
+    public cache:CacheService,
     public logger:LoggerService,
     public database:DatabaseService,
     public events:Events,
@@ -168,6 +170,10 @@ export class ResponseListPage extends BasePage {
         this.offset = 0;
         this.api.getPostsWithValues(this.deployment, cache, this.offline, this.limit, this.offset).then(
           (posts:Post[]) => {
+            for (let post of posts) {
+              this.cache.fetchImage(post.image_url);
+              this.cache.fetchMap(post.latitude, post.longitude);
+            }
             this.logger.info(this, "loadPosts", "Posts", posts.length);
             this.posts = posts;
             this.filtered = this.getFiltered(posts, this.filter);
@@ -189,6 +195,10 @@ export class ResponseListPage extends BasePage {
     this.logger.info(this, "loadMore", "Limit", this.limit, "Offset", this.offset);
     this.api.getPostsWithValues(this.deployment, cache, this.offline, this.limit, this.offset).then(
       (posts:Post[]) => {
+        for (let post of posts) {
+          this.cache.fetchImage(post.image_url);
+          this.cache.fetchMap(post.latitude, post.longitude);
+        }
         this.posts = this.posts.concat(posts);
         this.logger.info(this, "loadMore", "Limit", this.limit, "Offset", this.offset, "Posts", this.posts.length);
         this.filtered = this.getFiltered(this.posts, this.filter);
