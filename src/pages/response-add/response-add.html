@@ -29,7 +29,7 @@
             <input-checkboxes [submitted]="submitted" [value]="values[attribute.key]" [attribute]="attribute" [formGroup]="formGroup" *ngIf="attribute.input == 'checkboxes'"></input-checkboxes>
             <input-date [submitted]="submitted" [value]="values[attribute.key]" [attribute]="attribute" [formGroup]="formGroup" *ngIf="attribute.input == 'date'"></input-date>
             <input-datetime [submitted]="submitted" [value]="values[attribute.key]" [attribute]="attribute" [formGroup]="formGroup" *ngIf="attribute.input == 'datetime'"></input-datetime>
-            <input-location [submitted]="submitted" [value]="values[attribute.key]" [attribute]="attribute" [formGroup]="formGroup" *ngIf="attribute.input == 'location'" (changeLocation)="changeLocation($event, attribute.key)"></input-location>
+            <input-location [submitted]="submitted" [value]="values[attribute.key]" [attribute]="attribute" [formGroup]="formGroup" [offline]="offline" *ngIf="attribute.input == 'location'" (changeLocation)="changeLocation($event, attribute.key)"></input-location>
             <input-number [submitted]="submitted" [value]="values[attribute.key]" [attribute]="attribute" [formGroup]="formGroup" *ngIf="attribute.input == 'number'"></input-number>
             <input-radio [submitted]="submitted" [value]="values[attribute.key]" [attribute]="attribute" [formGroup]="formGroup" *ngIf="attribute.input == 'radio'"></input-radio>
             <input-select [submitted]="submitted" [value]="values[attribute.key]" [attribute]="attribute" [formGroup]="formGroup" *ngIf="attribute.input == 'select'"></input-select>

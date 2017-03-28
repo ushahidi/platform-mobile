@@ -12,7 +12,7 @@ import { LoggerService } from '../../providers/logger-service';
 @Component({
   selector: 'input-location',
   templateUrl: 'input-location.html',
-  inputs: ['value', 'attribute', 'formGroup', 'submitted']
+  inputs: ['value', 'attribute', 'formGroup', 'submitted', 'offline']
 })
 export class InputLocationComponent {
 
@@ -24,6 +24,7 @@ export class InputLocationComponent {
   longitude: number = null;
   submitted: boolean = false;
   error: boolean = false;
+  offline: boolean = false;
 
   @Output()
   changeLocation = new EventEmitter();
