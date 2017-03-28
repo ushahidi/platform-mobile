@@ -5,7 +5,7 @@
       <button ion-button icon-only (click)="searchResponses($event)">
         <ion-icon ios="ios-search" md="md-search"></ion-icon>
       </button>
-      <button ion-button icon-only (click)="showMap($event)" *ngIf="view == 'list'">
+      <button ion-button icon-only [disabled]="offline" (click)="showMap($event)" *ngIf="view == 'list'">
         <ion-icon ios="ios-map-outline" md="md-map"></ion-icon>
       </button>
       <button ion-button icon-only (click)="showList($event)" *ngIf="view == 'map'">
