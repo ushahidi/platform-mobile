@@ -170,11 +170,8 @@ export class ResponseListPage extends BasePage {
         this.offset = 0;
         this.api.getPostsWithValues(this.deployment, cache, this.offline, this.limit, this.offset).then(
           (posts:Post[]) => {
-            for (let post of posts) {
-              this.cache.fetchImage(post.image_url);
-              this.cache.fetchMap(post.latitude, post.longitude);
-            }
             this.logger.info(this, "loadPosts", "Posts", posts.length);
+            this.loadCache(posts);
             this.posts = posts;
             this.filtered = this.getFiltered(posts, this.filter);
             this.pending = this.getPending(posts);
@@ -195,10 +192,7 @@ export class ResponseListPage extends BasePage {
     this.logger.info(this, "loadMore", "Limit", this.limit, "Offset", this.offset);
     this.api.getPostsWithValues(this.deployment, cache, this.offline, this.limit, this.offset).then(
       (posts:Post[]) => {
-        for (let post of posts) {
-          this.cache.fetchImage(post.image_url);
-          this.cache.fetchMap(post.latitude, post.longitude);
-        }
+        this.loadCache(posts);
         this.posts = this.posts.concat(posts);
         this.logger.info(this, "loadMore", "Limit", this.limit, "Offset", this.offset, "Posts", this.posts.length);
         this.filtered = this.getFiltered(this.posts, this.filter);
@@ -215,6 +209,16 @@ export class ResponseListPage extends BasePage {
         }
         this.showToast(error);
       });
+  }
+
+  loadCache(posts:Post[]) {
+    if (posts != null && this.offline == false) {
+      this.logger.info(this, "loadCache", posts.length);
+      for (let post of posts) {
+        this.cache.fetchImage(post.image_url);
+        this.cache.fetchMap(post.latitude, post.longitude);
+      }
+    }
   }
 
   uploadPending(cache:boolean=true):Promise<any> {

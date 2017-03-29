@@ -16,6 +16,9 @@ export class ImageCacheComponent implements OnInit, AfterContentChecked {
   @Input('src')
   src:string = null;
 
+  @Input('fallback')
+  fallback:string = null;
+
   @Input('placeholder')
   placeholder:string = null;
 
@@ -47,10 +50,12 @@ export class ImageCacheComponent implements OnInit, AfterContentChecked {
             },
             (error:any) => {
               this.logger.error(this, "loadCacheImage", url, error);
+              this.useFallback();
           });
         },
         (error:any) => {
           this.logger.error(this, "loadCacheImage", url, error);
+          this.useFallback();
         });
     }
   }
@@ -149,6 +154,14 @@ export class ImageCacheComponent implements OnInit, AfterContentChecked {
           reject(error);
       });
     });
+  }
+
+  useFallback() {
+    if (this.fallback && this.fallback.length > 0) {
+      this.logger.info(this, "useFallback", this.fallback);
+      this.cacheUrl = this.fallback;
+      this.safeUrl = this.sanitizer.bypassSecurityTrustUrl(this.fallback);
+    }
   }
 
   getCacheFile(url:string):string {
