@@ -61,14 +61,8 @@ export class DeploymentLoginPage extends BasePage {
       if (this.deployment.username) {
         this.username.value = this.deployment.username;
       }
-      else if (this.deployment.domain == 'dale.ushahidi.io') {
-        this.username.value = "dalezak@gmail.com";
-      }
       if (this.deployment.password) {
         this.password.value = this.deployment.password;
-      }
-      else if (this.deployment.domain == 'dale.ushahidi.io') {
-        this.password.value = "P4NpCNUqLTCnvJAQBBMX";
       }
     }
 
