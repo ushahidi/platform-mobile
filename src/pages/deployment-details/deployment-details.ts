@@ -30,10 +30,10 @@ import { ResponseListPage } from '../../pages/response-list/response-list';
   entryComponents:[ DeploymentLoginPage, DeploymentSettingsPage, ResponseAddPage, ResponseListPage ],
   animations: [
     trigger('fadeInOut', [
-      state('false', style({ opacity: 0 })),
-      state('true', style({ opacity: 1 })),
+      state('true', style({ opacity: 0 })),
+      state('false', style({ opacity: 1 })),
       transition('0 => 1', animate('900ms')),
-      transition('1 => 0', animate('600ms'))
+      transition('1 => 0', animate('300ms'))
     ])
   ]
 })
@@ -42,6 +42,7 @@ export class DeploymentDetailsPage extends BasePage {
   user: User = null;
   deployment: Deployment = null;
   placeholder: string = PLACEHOLDER_BLANK;
+  refreshing:boolean = false;
 
   @ViewChild(Content)
   content: Content;
@@ -69,13 +70,15 @@ export class DeploymentDetailsPage extends BasePage {
         StatusBar.styleLightContent();
         StatusBar.backgroundColorByHexString('#3f4751');
       });
-      this.deployment = this.getParameter<Deployment>("deployment");
-      this.logger.info(this, "ionViewWillEnter", "Deployment", this.deployment);
+      if (this.deployment == null) {
+        this.deployment = this.getParameter<Deployment>("deployment");
+      }
       this.loadUpdates(null, true);
     }
 
     loadUpdates(event:any=null, cache:boolean=false) {
       this.logger.info(this, "loadUpdates", cache);
+      this.refreshing = true;
       return Promise.resolve()
         .then(() => { return this.loadDeployment(cache); })
         .then(() => { return this.loadUser(cache); })
@@ -86,18 +89,20 @@ export class DeploymentDetailsPage extends BasePage {
           if (event) {
             event.complete();
           }
+          this.refreshing = false;
         })
         .catch((error) => {
           this.logger.error(this, "loadUpdates", "Failed", error);
           if (event) {
             event.complete();
           }
+          this.refreshing = false;
         });
     }
 
     loadDeployment(cache:boolean=true):Promise<any> {
       this.logger.info(this, "loadDeployment", cache);
-      if (cache && this.deployment.image && this.deployment.description) {
+      if (cache && (this.deployment.image || this.deployment.description)) {
         this.logger.info(this, "loadDeployment", "Cached");
         return Promise.resolve();
       }
@@ -294,24 +299,24 @@ export class DeploymentDetailsPage extends BasePage {
     userLogout(event:any) {
       this.logger.info(this, "userLogout");
       let loading = this.showLoading("Logging out...");
-      return Promise.resolve()
-        .then(() => { return this.updateDeployment(); })
-        .then(() => { return this.updatePosts(); })
-        .then(() => { return this.updateForms(); })
-        .then(() => { return this.updateStages(); })
-        .then(() => { return this.updateAttributes(); })
-        .then(() => { return this.updateCollections(); })
-        .then(() => {
-          loading.dismiss();
-          this.showToast('Logout Successful');
-        })
-        .catch((error:any) => {
-          loading.dismiss();
-          this.showAlert('Problem Logging Out', error);
-        });
+      return Promise.all([
+        this.demoteDeployment(),
+        this.demotePosts(),
+        this.demoteForms(),
+        this.demoteStages(),
+        this.demoteAttributes(),
+        this.demoteCollections()]).then(
+          (done:any) => {
+            loading.dismiss();
+            this.showToast('Logout Successful');
+          },
+          (error:any) => {
+            loading.dismiss();
+            this.showAlert('Problem Logging Out', error);
+          });
     }
 
-    updateDeployment() {
+    demoteDeployment() {
       this.deployment.username = "";
       this.deployment.password = "";
       this.deployment.access_token = "";
@@ -322,7 +327,7 @@ export class DeploymentDetailsPage extends BasePage {
       return this.database.saveDeployment(this.deployment);
     }
 
-    updatePosts() {
+    demotePosts() {
       return new Promise((resolve, reject) => {
         this.database.getPosts(this.deployment).then((posts:Post[]) => {
           let updates = [];
@@ -343,7 +348,7 @@ export class DeploymentDetailsPage extends BasePage {
       });
     }
 
-    updateForms() {
+    demoteForms() {
       return new Promise((resolve, reject) => {
         this.database.getForms(this.deployment).then((forms:Form[]) => {
           let updates = [];
@@ -364,7 +369,7 @@ export class DeploymentDetailsPage extends BasePage {
       });
     }
 
-    updateStages() {
+    demoteStages() {
       return new Promise((resolve, reject) => {
         this.database.getStages(this.deployment).then((stages:Stage[]) => {
           let updates = [];
@@ -385,7 +390,7 @@ export class DeploymentDetailsPage extends BasePage {
       });
     }
 
-    updateAttributes() {
+    demoteAttributes() {
       return new Promise((resolve, reject) => {
         this.database.getAttributes(this.deployment).then((attributes:Attribute[]) => {
           let updates = [];
@@ -406,7 +411,7 @@ export class DeploymentDetailsPage extends BasePage {
       });
     }
 
-    updateCollections() {
+    demoteCollections() {
       return new Promise((resolve, reject) => {
         this.database.getCollections(this.deployment).then((collections:Collection[]) => {
           let updates = [];
