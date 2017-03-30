@@ -69,17 +69,16 @@ export class ResponseAddPage extends BasePage {
 
   loadUpdates(event:any=null) {
     this.logger.info(this, "loadUpdates");
-    let updates = [
-      this.loadPostValues(),
-      this.loadFormGroup()];
-    Promise.all(updates).then(
-      (done) => {
+    return Promise.resolve()
+      .then(() => { return this.loadPostValues(); })
+      .then(() => { return this.loadFormGroup(); })
+      .then(() => {
         this.logger.info(this, "loadUpdates", "Done");
         if (event) {
           event.complete();
         }
-      },
-      (error) => {
+      })
+      .catch((error:any) => {
         this.logger.error(this, "loadUpdates", error);
         if (event) {
           event.complete();

@@ -106,20 +106,19 @@ export class ResponseListPage extends BasePage {
     this.logger.info(this, "loadUpdates", cache);
     this.loading = true;
     this.refreshing = event != null;
-    let updates = [
-      this.loadFilters(cache),
-      this.loadPosts(cache),
-      this.uploadPending(cache)];
-    return Promise.all(updates).then(
-      (updated) => {
+    return Promise.resolve()
+      .then(() => { return this.loadFilters(cache); })
+      .then(() => { return this.loadPosts(cache); })
+      .then(() => { return this.uploadPending(cache); })
+      .then(() => {
         this.logger.info(this, "loadUpdates", "Updated");
         if (event != null) {
           event.complete();
         }
         this.loading = false;
         this.refreshing = false;
-      },
-      (error) => {
+      })
+      .catch((error:any) => {
         this.logger.error(this, "loadUpdates", "Failed", error);
         if (event != null) {
           event.complete();
