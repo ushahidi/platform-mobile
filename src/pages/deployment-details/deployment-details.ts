@@ -8,6 +8,7 @@ import { PLACEHOLDER_BLANK } from '../../constants/placeholders';
 import { Deployment } from '../../models/deployment';
 import { User } from '../../models/user';
 import { Form } from '../../models/form';
+import { Stage } from '../../models/stage';
 import { Attribute } from '../../models/attribute';
 import { Collection } from '../../models/collection';
 import { Post } from '../../models/post';
@@ -32,14 +33,14 @@ import { ResponseListPage } from '../../pages/response-list/response-list';
       state('false', style({ opacity: 0 })),
       state('true', style({ opacity: 1 })),
       transition('0 => 1', animate('900ms')),
-      transition('1 => 0', animate('900ms'))
+      transition('1 => 0', animate('600ms'))
     ])
   ]
 })
 export class DeploymentDetailsPage extends BasePage {
 
-  deployment: Deployment = null;
   user: User = null;
+  deployment: Deployment = null;
   placeholder: string = PLACEHOLDER_BLANK;
 
   @ViewChild(Content)
@@ -68,27 +69,25 @@ export class DeploymentDetailsPage extends BasePage {
         StatusBar.styleLightContent();
         StatusBar.backgroundColorByHexString('#3f4751');
       });
-      if (this.deployment == null) {
-        this.deployment = this.getParameter<Deployment>("deployment");
-      }
+      this.deployment = this.getParameter<Deployment>("deployment");
+      this.logger.info(this, "ionViewWillEnter", "Deployment", this.deployment);
       this.loadUpdates(null, true);
     }
 
     loadUpdates(event:any=null, cache:boolean=false) {
-      this.logger.info(this, "loadUpdates");
-      let updates = [
-        this.loadDeployment(cache),
-        this.loadUser(cache),
-        this.loadForms(cache),
-        this.loadCollections(cache)];
-      Promise.all(updates).then(
-        (updated) => {
+      this.logger.info(this, "loadUpdates", cache);
+      return Promise.resolve()
+        .then(() => { return this.loadDeployment(cache); })
+        .then(() => { return this.loadUser(cache); })
+        .then(() => { return this.loadForms(cache); })
+        .then(() => { return this.loadCollections(cache); })
+        .then(() => {
           this.logger.info(this, "loadUpdates", "Finished");
           if (event) {
             event.complete();
           }
-        },
-        (error) => {
+        })
+        .catch((error) => {
           this.logger.error(this, "loadUpdates", "Failed", error);
           if (event) {
             event.complete();
@@ -171,7 +170,7 @@ export class DeploymentDetailsPage extends BasePage {
 
     loadForms(cache:boolean=true):Promise<any> {
       this.logger.info(this, "loadForms", cache);
-      if (cache && this.deployment.forms != null && this.deployment.forms.length > 0) {
+      if (cache && this.deployment.hasForms()) {
         this.logger.info(this, "loadForms", "Cached");
         return Promise.resolve();
       }
@@ -179,7 +178,12 @@ export class DeploymentDetailsPage extends BasePage {
         return new Promise((resolve, reject) => {
           this.api.getFormsWithAttributes(this.deployment, cache, this.offline).then(
             (forms:Form[]) => {
-              this.logger.info(this, "loadForms", "Loaded", forms);
+              if (forms) {
+                this.logger.info(this, "loadForms", "Loaded", forms.length);
+              }
+              else {
+                this.logger.info(this, "loadForms", "Loaded", 0);
+              }
               this.deployment.forms = forms;
               resolve();
             },
@@ -193,7 +197,7 @@ export class DeploymentDetailsPage extends BasePage {
 
     loadCollections(cache:boolean=true):Promise<any> {
       this.logger.info(this, "loadCollections", cache);
-      if (cache && this.deployment.collections != null && this.deployment.collections.length > 0) {
+      if (cache && this.deployment.hasCollections()) {
         this.logger.info(this, "loadCollections", "Cached");
         return Promise.resolve();
       }
@@ -201,7 +205,12 @@ export class DeploymentDetailsPage extends BasePage {
         return new Promise((resolve, reject) => {
           this.api.getCollections(this.deployment, cache, this.offline).then(
             (collections:Collection[]) => {
-              this.logger.info(this, "loadCollections", "Loaded", collections);
+              if (collections) {
+                this.logger.info(this, "loadCollections", "Loaded", collections.length);
+              }
+              else {
+                this.logger.info(this, "loadCollections", "Loaded", 0);
+              }
               this.deployment.collections = collections;
               resolve();
             },
@@ -285,22 +294,21 @@ export class DeploymentDetailsPage extends BasePage {
     userLogout(event:any) {
       this.logger.info(this, "userLogout");
       let loading = this.showLoading("Logging out...");
-      let updates = [
-        this.updateDeployment(),
-        this.updatePosts(),
-        this.updateForms(),
-        this.updateAttributes(),
-        this.updateCollections()
-      ];
-      Promise.all(updates).then(
-        (updated) => {
+      return Promise.resolve()
+        .then(() => { return this.updateDeployment(); })
+        .then(() => { return this.updatePosts(); })
+        .then(() => { return this.updateForms(); })
+        .then(() => { return this.updateStages(); })
+        .then(() => { return this.updateAttributes(); })
+        .then(() => { return this.updateCollections(); })
+        .then(() => {
           loading.dismiss();
           this.showToast('Logout Successful');
-        },
-        (error) => {
+        })
+        .catch((error:any) => {
           loading.dismiss();
           this.showAlert('Problem Logging Out', error);
-      });
+        });
     }
 
     updateDeployment() {
@@ -344,6 +352,27 @@ export class DeploymentDetailsPage extends BasePage {
             form.can_update = false;
             form.can_delete = false;
             updates.push(this.database.saveForm(this.deployment, form));
+          }
+          Promise.all(updates).then(
+            (updated) => {
+              resolve(updated);
+            },
+            (error) => {
+              reject(error);
+            });
+        });
+      });
+    }
+
+    updateStages() {
+      return new Promise((resolve, reject) => {
+        this.database.getStages(this.deployment).then((stages:Stage[]) => {
+          let updates = [];
+          for (let stage of stages) {
+            stage.can_create = false;
+            stage.can_update = false;
+            stage.can_delete = false;
+            updates.push(this.database.saveStage(this.deployment, stage));
           }
           Promise.all(updates).then(
             (updated) => {

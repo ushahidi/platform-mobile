@@ -66,8 +66,7 @@ export class Stage extends Model {
   loadAttributes(attributes:Attribute[]) {
     if (attributes) {
       let unsorted = [];
-      for (var i = 0; i < attributes.length; i++) {
-        let attribute:Attribute = attributes[i];
+      for (let attribute of attributes) {
         if (attribute.form_id == this.form_id && attribute.form_stage_id == this.id) {
           unsorted.push(attribute);
         }

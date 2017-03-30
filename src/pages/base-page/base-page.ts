@@ -158,20 +158,20 @@ export class BasePage {
     return modal;
   }
 
-  hideModal(data:any=null) {
-    this.viewController.dismiss(data);
+  hideModal(data:any=null, options:any={}) {
+    return this.viewController.dismiss(data, options);
   }
 
   showPage(page:any, params:any={}, options:any={}) {
-    this.navController.push(page, params, options);
+    return this.navController.push(page, params, options);
   }
 
   showRootPage(page:any, params:any={}, options:any={}) {
-    this.navController.setRoot(page, params, options);
+    return this.navController.setRoot(page, params, options);
   }
 
-  closePage(data:any=null) {
-    this.viewController.dismiss(data);
+  closePage(data:any=null, options:any={}) {
+    return this.viewController.dismiss(data, options);
   }
 
   showShare(subject:string, message:string=null, file:string=null, url:string=null) {

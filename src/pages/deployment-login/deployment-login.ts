@@ -57,14 +57,18 @@ export class DeploymentLoginPage extends BasePage {
         StatusBar.styleLightContent();
         StatusBar.backgroundColorByHexString('#3f4751');
       });
-      if (this.deployment == null) {
-        this.deployment = this.getParameter<Deployment>("deployment");  
-      }
+      this.deployment = this.getParameter<Deployment>("deployment");
       if (this.deployment.username) {
         this.username.value = this.deployment.username;
       }
+      else if (this.deployment.domain == 'dale.ushahidi.io') {
+        this.username.value = "dalezak@gmail.com";
+      }
       if (this.deployment.password) {
         this.password.value = this.deployment.password;
+      }
+      else if (this.deployment.domain == 'dale.ushahidi.io') {
+        this.password.value = "P4NpCNUqLTCnvJAQBBMX";
       }
     }
 
@@ -79,19 +83,18 @@ export class DeploymentLoginPage extends BasePage {
             this.logger.info(this, "userLogin", "Tokens", tokens);
             if (tokens != null) {
               this.deployment.copyInto(tokens);
-              let updates = [
-                this.loadDeployment(),
-                this.loadForms(),
-                this.loadCollections(),
-                this.removePosts()];
-              Promise.all(updates).then(
-                (updated) => {
+              return Promise.resolve()
+                .then(() => { return this.loadDeployment(); })
+                .then(() => { return this.loadForms(); })
+                .then(() => { return this.loadCollections(); })
+                .then(() => { return this.removePosts(); })
+                .then(() => {
                   loading.dismiss();
                   this.events.publish(DEPLOYMENT_UPDATED, this.deployment.id);
                   this.showToast('Login Successful');
                   this.showDeployment(this.deployment);
-                },
-                (error:any) => {
+                })
+                .catch((error:any) => {
                   loading.dismiss();
                   this.showAlert('Problem Updating Deployment', error);
                 });
@@ -110,8 +113,12 @@ export class DeploymentLoginPage extends BasePage {
 
     showDeployment(deployment:Deployment) {
       this.closePage({
-        deployment:deployment
-      });
+        deployment: deployment });
+    }
+
+    onCancel(event:any=null) {
+      this.logger.info(this, "onCancel");
+      this.viewController.dismiss();
     }
 
     loadDeployment():Promise<any> {

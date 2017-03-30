@@ -683,14 +683,15 @@ export class DatabaseService {
             let stages:Stage[] = <Stage[]>results[1];
             let attributes:Attribute[] = <Attribute[]>results[2];
             for (let form of forms) {
+              form.loadStages(stages);
               for (let stage of stages) {
                 stage.loadAttributes(attributes);
               }
               form.loadAttributes(attributes);
             }
-             resolve(forms);
+            resolve(forms);
           },
-          (error) => {
+          (error:any) => {
             reject(error);
           });
     });
@@ -706,6 +707,7 @@ export class DatabaseService {
             let form:Form = <Form>results[0];
             let stages:Stage[] = <Stage[]>results[1];
             let attributes:Attribute[] = <Attribute[]>results[2];
+            form.loadStages(stages);
             for (let stage of stages) {
               stage.loadAttributes(attributes);
             }

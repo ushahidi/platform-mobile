@@ -73,18 +73,17 @@ export class ResponseDetailsPage extends BasePage {
 
   loadUpdates(event:any=null, cache:boolean=true) {
     this.logger.info(this, "loadUpdates");
-    let updates = [
-      this.loadForm(cache),
-      this.loadValues(cache)];
-    Promise.all(updates).then(
-      (done) => {
-        this.logger.info(this, "loadUpdates", "Done");
+    return Promise.resolve()
+      .then(() => { return this.loadForm(cache); })
+      .then(() => { return this.loadValues(cache); })
+      .then(() => {
+        this.logger.info(this, "loadUpdates", "Finished");
         if (event) {
           event.complete();
         }
-      },
-      (error) => {
-        this.logger.error(this, "loadUpdates", error);
+      })
+      .catch((error) => {
+        this.logger.error(this, "loadUpdates", "Failed", error);
         if (event) {
           event.complete();
         }
@@ -115,7 +114,7 @@ export class ResponseDetailsPage extends BasePage {
   loadValues(cache:boolean=true):Promise<any> {
     this.logger.info(this, "loadValues", "Cache", cache);
     if (cache && this.post.hasValues()) {
-      this.logger.info(this, "loadValues", "Cached", this.post.values);
+      this.logger.info(this, "loadValues", "Cached");
       return Promise.resolve();
     }
     else {

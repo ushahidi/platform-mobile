@@ -9,7 +9,7 @@
     "watch": "ionic-app-scripts watch",
     "serve": "ionic-app-scripts serve",
     "ionic:build": "ionic-app-scripts build",
-    "ionic:serve": "ionic-app-scripts serve",
+    "ionic:watch": "ionic-app-scripts watch",
     "run:before": "watch"
   },
   "dependencies": {

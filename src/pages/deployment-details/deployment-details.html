@@ -36,13 +36,13 @@
       <!-- <ion-item detail-push *ngIf="deployment.collections && deployment.collections.length > 0" (click)="showCollections($event)">
         Collections
       </ion-item> -->
-      <ion-item detail-push *ngIf="deployment.hasUsername() && deployment.canUpdate()" (click)="showSettings($event)">
+      <ion-item detail-push *ngIf="deployment.username != null && deployment.can_update == true" (click)="showSettings($event)">
         Settings
       </ion-item>
-      <ion-item detail-push *ngIf="deployment.hasUsername() == false" (click)="userLogin($event)">
+      <ion-item detail-push *ngIf="deployment.username == null || deployment.username == ''" (click)="userLogin($event)">
         Login
       </ion-item>
-      <ion-item detail-push *ngIf="deployment.hasUsername() == true" (click)="userLogout($event)">
+      <ion-item detail-push *ngIf="deployment.username != null && deployment.username.length > 0" (click)="userLogout($event)">
         Logout
       </ion-item>
     </ion-list>

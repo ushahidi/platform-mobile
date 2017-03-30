@@ -67,10 +67,9 @@ export class Form extends Model {
   public attributes: Attribute[] = [];
 
   loadStages(stages:Stage[]) {
-    let unsorted = [];
     if (stages) {
-      for (var i = 0; i < stages.length; i++) {
-        let stage:Stage = stages[i];
+      let unsorted = [];
+      for (let stage of stages) {
         if (stage.form_id == this.id) {
           unsorted.push(stage);
         }
@@ -87,8 +86,7 @@ export class Form extends Model {
   loadAttributes(attributes:Attribute[]) {
     if (attributes) {
       let unsorted = [];
-      for (var i = 0; i < attributes.length; i++) {
-        let attribute:Attribute = attributes[i];
+      for (let attribute of attributes) {
         if (attribute.form_id == this.id) {
           unsorted.push(attribute);
         }
