@@ -1,17 +1,23 @@
 import { Injectable } from '@angular/core';
 import { Platform } from 'ionic-angular';
-import { IsDebug } from 'ionic-native';
+import { IsDebug } from '@ionic-native/is-debug';
 
 @Injectable()
 export class LoggerService {
 
   private enabled:boolean = true;
 
-  constructor(public platform: Platform) {
+  constructor(
+    private isDebug:IsDebug,
+    private platform:Platform) {
     platform.ready().then(() => {
-      IsDebug.getIsDebug().then((isDebug:boolean) => {
-        this.enabled = isDebug;
-      });
+      this.isDebug.getIsDebug().then(
+        (isDebug:boolean) => {
+          this.enabled = isDebug;
+        },
+        (error:any) => {
+          this.enabled = false;
+        });
     });
   }
 

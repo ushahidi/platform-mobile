@@ -7,7 +7,9 @@ import {
   Loading, LoadingController,
   ActionSheet, ActionSheetController,
   NavController, ViewController } from 'ionic-angular';
-import { InAppBrowser, SocialSharing, Network, IsDebug } from 'ionic-native';
+import { InAppBrowser, InAppBrowserObject } from '@ionic-native/in-app-browser';
+import { Network } from '@ionic-native/network';
+import { SocialSharing } from '@ionic-native/social-sharing';
 
 import { LoggerService } from '../../providers/logger-service';
 
@@ -19,10 +21,12 @@ import { LoggerService } from '../../providers/logger-service';
 export class BasePage {
 
   zone: NgZone = null;
-  debug: boolean = true;
   offline: boolean = false;
   connection: any = null;
   disconnection: any = null;
+  network:Network;
+  sharing:SocialSharing;
+  browser:InAppBrowser;
 
   @ViewChild(Content)
   content: Content;
@@ -40,20 +44,18 @@ export class BasePage {
     protected loadingController:LoadingController,
     protected actionController:ActionSheetController) {
     this.zone = zone;
+    this.network = new Network();
+    this.sharing = new SocialSharing();
+    this.browser = new InAppBrowser();
   }
 
   ionViewDidLoad() {
     this.logger.info(this, "ionViewDidLoad");
-    this.platform.ready().then(() => {
-      IsDebug.getIsDebug().then((isDebug:boolean) => {
-        this.debug = isDebug;
-      });
-    });
   }
 
   ionViewWillEnter() {
-    this.logger.info(this, "ionViewWillEnter", "Network", Network.type);
-    if (Network.type == 'none') {
+    this.logger.info(this, "ionViewWillEnter", "Network", this.network.type);
+    if (this.network.type == 'none') {
       this.zone.run(() => {
         this.offline = true;
         this.resizeContent();
@@ -64,15 +66,15 @@ export class BasePage {
         this.offline = false;
       });
     }
-    this.connection = Network.onConnect().subscribe(() => {
-      this.logger.info(this, "Network Connected", Network.type);
+    this.connection = this.network.onConnect().subscribe(() => {
+      this.logger.info(this, "Network Connected", this.network.type);
       this.zone.run(() => {
         this.offline = false;
         this.resizeContent();
       });
     });
-    this.disconnection = Network.onDisconnect().subscribe(() => {
-      this.logger.info(this, "Network Disconnected", Network.type);
+    this.disconnection = this.network.onDisconnect().subscribe(() => {
+      this.logger.info(this, "Network Disconnected", this.network.type);
       this.zone.run(() => {
         this.offline = true;
         this.resizeContent();
@@ -88,9 +90,11 @@ export class BasePage {
     this.logger.info(this, "ionViewWillLeave");
     if (this.connection) {
       this.connection.unsubscribe();
+      this.connection = null;
     }
     if (this.disconnection) {
       this.disconnection.unsubscribe();
+      this.disconnection = null;
     }
   }
 
@@ -175,12 +179,12 @@ export class BasePage {
   }
 
   showShare(subject:string, message:string=null, file:string=null, url:string=null) {
-    return SocialSharing.share(message, subject, file, url);
+    return this.sharing.share(message, subject, file, url);
   }
 
-  showUrl(url:string, target:string="_system"):InAppBrowser {
+  showUrl(url:string, target:string="_system"):InAppBrowserObject {
     this.logger.info(this, "showUrl", url, target);
-    let browser = new InAppBrowser(url, target);
+    let browser = this.browser.create(url, target);
     browser.show();
     return browser;
   }

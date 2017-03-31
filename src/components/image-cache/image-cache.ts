@@ -1,5 +1,6 @@
 import { Component, Input, OnInit, AfterContentChecked } from '@angular/core';
-import { Transfer, File, Entry, FileEntry, FileError, Metadata } from 'ionic-native';
+import { Transfer, TransferObject } from '@ionic-native/transfer';
+import { File, Entry, FileEntry, FileError, Metadata } from '@ionic-native/file';
 import { SafeUrl, DomSanitizer } from '@angular/platform-browser';
 import { Md5 } from 'ts-md5/dist/md5';
 
@@ -27,6 +28,8 @@ export class ImageCacheComponent implements OnInit, AfterContentChecked {
   safeUrl:SafeUrl = null;
 
   constructor(
+    private file:File,
+    private transfer:Transfer,
     private sanitizer:DomSanitizer,
     private logger:LoggerService) {
   }
@@ -91,11 +94,11 @@ export class ImageCacheComponent implements OnInit, AfterContentChecked {
 
   hasCacheImage(directory:string, cache:string):Promise<string> {
     return new Promise((resolve, reject) => {
-      File.checkFile(directory, cache).then(
+      this.file.checkFile(directory, cache).then(
         (exists:boolean) => {
           if (exists) {
             let url = directory + cache;
-            File.resolveLocalFilesystemUrl(url).then(
+            this.file.resolveLocalFilesystemUrl(url).then(
               (entry:FileEntry) => {
                 entry.getMetadata((metadata:Metadata) => {
                   this.logger.info(this, "hasCacheImage", "Yes", cache);
@@ -127,7 +130,7 @@ export class ImageCacheComponent implements OnInit, AfterContentChecked {
   downloadCacheImage(image:string, directory:string, cache:string):Promise<string> {
     return new Promise((resolve, reject) => {
       let url = directory + cache;
-      let fileTransfer = new Transfer();
+      let fileTransfer:TransferObject = this.transfer.create();
       fileTransfer.download(image, url, true).then(
         (entry:Entry) => {
           this.logger.info(this, "downloadCacheImage", image, url, entry.toURL());
@@ -142,7 +145,7 @@ export class ImageCacheComponent implements OnInit, AfterContentChecked {
 
   useCacheImage(url:string):Promise<string> {
     return new Promise((resolve, reject) => {
-      File.resolveLocalFilesystemUrl(url).then(
+      this.file.resolveLocalFilesystemUrl(url).then(
         (entry:FileEntry) => {
           this.logger.info(this, "useCacheImage", url, entry.toInternalURL());
           this.cacheUrl = entry.toInternalURL();

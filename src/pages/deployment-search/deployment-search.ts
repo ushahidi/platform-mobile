@@ -1,7 +1,7 @@
 import { Component, ViewChild, NgZone } from '@angular/core';
 import { Platform, NavParams, Searchbar, Content,
   NavController, ViewController, ModalController, LoadingController, ToastController, AlertController, ActionSheetController } from 'ionic-angular';
-import { StatusBar } from 'ionic-native';
+import { StatusBar } from '@ionic-native/status-bar';
 
 import { Deployment } from '../../models/deployment';
 
@@ -28,6 +28,7 @@ export class DeploymentSearchPage extends BasePage {
   searchbar: Searchbar;
 
   constructor(
+    public statusBar:StatusBar,
     public api:ApiService,
     public logger:LoggerService,
     public database:DatabaseService,
@@ -47,8 +48,8 @@ export class DeploymentSearchPage extends BasePage {
   ionViewWillEnter() {
     super.ionViewWillEnter();
     this.platform.ready().then(() => {
-      StatusBar.styleLightContent();
-      StatusBar.backgroundColorByHexString('#3f4751');
+      this.statusBar.styleLightContent();
+      this.statusBar.backgroundColorByHexString('#3f4751');
     });
   }
 

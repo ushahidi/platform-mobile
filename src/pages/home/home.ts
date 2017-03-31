@@ -1,7 +1,7 @@
 import { Component, NgZone, ViewChild } from '@angular/core';
 import { Platform, NavParams, Content,
   NavController, ViewController, ModalController, LoadingController, ToastController, AlertController, ActionSheetController } from 'ionic-angular';
-import { StatusBar } from 'ionic-native';
+import { StatusBar } from '@ionic-native/status-bar';
 
 import { Deployment } from '../../models/deployment';
 
@@ -22,6 +22,7 @@ import { DeploymentDetailsPage } from '../../pages/deployment-details/deployment
 export class HomePage extends BasePage {
 
   constructor(
+    public statusBar:StatusBar,
     public api:ApiService,
     public logger:LoggerService,
     public database:DatabaseService,
@@ -44,8 +45,8 @@ export class HomePage extends BasePage {
   ionViewWillEnter() {
     super.ionViewWillEnter();
     this.platform.ready().then(() => {
-      StatusBar.styleDefault();
-      StatusBar.backgroundColorByHexString('#f9f9f8');
+      this.statusBar.styleDefault();
+      this.statusBar.backgroundColorByHexString('#f9f9f8');
     });
   }
 
@@ -107,8 +108,8 @@ export class HomePage extends BasePage {
     this.logger.info(this, "showSearch");
     let modal = this.showModal(DeploymentSearchPage, {});
     modal.onDidDismiss((data:any) => {
-      StatusBar.styleDefault();
-      StatusBar.backgroundColorByHexString('#f9f9f8');
+      this.statusBar.styleDefault();
+      this.statusBar.backgroundColorByHexString('#f9f9f8');
       if (data) {
         this.logger.info(this, "showSearch", data);
         let deployment:Deployment = data.deployment;

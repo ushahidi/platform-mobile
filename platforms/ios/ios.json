@@ -119,22 +119,14 @@
                 "parents": {
                     "NSCameraUsageDescription": [
                         {
-                            "xml": "<string>Ushahidi would like to access your camera to let you take photos for survey responses.</string>",
-                            "count": 1
-                        },
-                        {
                             "xml": "<string>Ushahidi would like to access the camera.</string>",
-                            "count": 1
+                            "count": 2
                         }
                     ],
                     "NSPhotoLibraryUsageDescription": [
                         {
-                            "xml": "<string>Ushahidi would like to access your photo library to let you select photos for survey responses.</string>",
-                            "count": 1
-                        },
-                        {
                             "xml": "<string>Ushahidi would like to access the photo library.</string>",
-                            "count": 1
+                            "count": 2
                         }
                     ],
                     "NSLocationWhenInUseUsageDescription": [
@@ -189,8 +181,8 @@
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
         "cordova-plugin-camera": {
-            "CAMERA_USAGE_DESCRIPTION": "Ushahidi would like to access your camera to let you take photos for survey responses.",
-            "PHOTOLIBRARY_USAGE_DESCRIPTION": "Ushahidi would like to access your photo library to let you select photos for survey responses.",
+            "CAMERA_USAGE_DESCRIPTION": "Ushahidi would like to access the camera.",
+            "PHOTOLIBRARY_USAGE_DESCRIPTION": "Ushahidi would like to access the photo library.",
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
         "cordova-plugin-console": {
@@ -758,7 +750,7 @@
     "plugin_metadata": {
         "cordova-plugin-app-version": "0.1.9",
         "cordova-plugin-compat": "1.1.0",
-        "cordova-plugin-camera": "2.3.1",
+        "cordova-plugin-camera": "2.4.0",
         "cordova-plugin-console": "1.0.6",
         "cordova-plugin-device": "1.1.5",
         "cordova-plugin-email": "1.2.6",
@@ -779,7 +771,7 @@
         "cordova-plugin-splashscreen": "4.0.2",
         "cordova-plugin-statusbar": "2.2.2",
         "cordova-plugin-whitelist": "1.3.2",
-        "cordova-plugin-x-socialsharing": "5.1.6",
+        "cordova-plugin-x-socialsharing": "5.1.7",
         "cordova-sqlite-storage": "1.5.3",
         "ionic-plugin-deeplinks": "1.0.14",
         "ionic-plugin-keyboard": "2.2.1"

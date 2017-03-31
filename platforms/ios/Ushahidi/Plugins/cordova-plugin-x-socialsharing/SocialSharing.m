@@ -1,5 +1,5 @@
 #import "SocialSharing.h"
-#import "NSString+URLEncoding.h"
+#import "NSString+SSURLEncoding.h"
 #import <Cordova/CDV.h>
 #import <Social/Social.h>
 #import <Foundation/NSException.h>
@@ -137,7 +137,7 @@ static NSString *const kShareOptionUrl = @"url";
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
         [activityVC setCompletionHandler:^(NSString *activityType, BOOL completed) {
           [self cleanupStoredFiles];
-          NSDictionary * result = @{@"completed":@(completed), @"app":activityType};
+          NSDictionary * result = @{@"completed":@(completed), @"app":activityType == nil ? @"" : activityType};
           CDVPluginResult * pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:result];
           [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
         }];

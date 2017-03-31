@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Platform, ActionSheetController, AlertController } from 'ionic-angular';
-import { Camera, File, Entry, FileError } from 'ionic-native';
+import { Camera, CameraOptions } from '@ionic-native/camera';
+import { File, Entry, FileError } from '@ionic-native/file';
 import { SafeResourceUrl, DomSanitizer } from '@angular/platform-browser';
 import { FormGroup } from '@angular/forms';
 
@@ -26,11 +27,13 @@ export class InputImageComponent {
   submitted: boolean = false;
 
   constructor(
-    public platform:Platform,
-    public sanitizer:DomSanitizer,
-    public logger:LoggerService,
-    public alertController:AlertController,
-    public actionController:ActionSheetController) {
+    private file:File,
+    private camera:Camera,
+    private platform:Platform,
+    private sanitizer:DomSanitizer,
+    private logger:LoggerService,
+    private alertController:AlertController,
+    private actionController:ActionSheetController) {
   }
 
   ngOnInit() {
@@ -63,14 +66,14 @@ export class InputImageComponent {
 
   takePhoto() {
     this.logger.info(this, "takePhoto");
-    let options = {
+    let options:CameraOptions = {
       targetWidth: 800,
       targetHeight: 600,
-      encodingType: Camera.EncodingType.JPEG,
-      sourceType: Camera.PictureSourceType.CAMERA,
-      destinationType: Camera.DestinationType.FILE_URI
+      encodingType: this.camera.EncodingType.JPEG,
+      sourceType: this.camera.PictureSourceType.CAMERA,
+      destinationType: this.camera.DestinationType.FILE_URI
     };
-    Camera.getPicture(options).then(
+    this.camera.getPicture(options).then(
       (data:string) => {
         this.logger.info(this, "choosePhoto", data);
         this.copyFile(data).then(
@@ -100,14 +103,14 @@ export class InputImageComponent {
 
   choosePhoto() {
     this.logger.info(this, "choosePhoto");
-    let options = {
+    let options:CameraOptions = {
       targetWidth: 800,
       targetHeight: 600,
-      encodingType: Camera.EncodingType.JPEG,
-      sourceType: Camera.PictureSourceType.PHOTOLIBRARY,
-      destinationType: Camera.DestinationType.FILE_URI,
+      encodingType: this.camera.EncodingType.JPEG,
+      sourceType: this.camera.PictureSourceType.PHOTOLIBRARY,
+      destinationType: this.camera.DestinationType.FILE_URI,
     };
-    Camera.getPicture(options).then(
+    this.camera.getPicture(options).then(
       (data:string) => {
         this.logger.info(this, "choosePhoto", data);
         this.copyFile(data).then(
@@ -148,14 +151,14 @@ export class InputImageComponent {
       let storeDirectory = this.platform.is('ios') ? cordova.file.documentsDirectory : cordova.file.dataDirectory;
       let storePath = `${storeDirectory}${fileName}`;
       this.logger.info(this, "copyFile", fileDirectory, fileName, storeDirectory);
-      File.checkFile(storeDirectory, fileName).then(
+      this.file.checkFile(storeDirectory, fileName).then(
         (exists) => {
           if (exists == true) {
             this.logger.info(this, "copyFile", "Exists", storePath);
             resolve(storePath);
           }
           else {
-            File.copyFile(fileDirectory, fileName, storeDirectory, fileName).then(
+            this.file.copyFile(fileDirectory, fileName, storeDirectory, fileName).then(
               (entry:Entry) => {
                 this.logger.info(this, "copyFile", entry.fullPath, storePath);
                 resolve(storePath);
@@ -167,7 +170,7 @@ export class InputImageComponent {
         },
         (error:FileError) => {
           this.logger.info(this, "checkFile", "checkFile", error);
-          File.copyFile(fileDirectory, fileName, storeDirectory, fileName).then(
+          this.file.copyFile(fileDirectory, fileName, storeDirectory, fileName).then(
             (entry:Entry) => {
               this.logger.info(this, "copyFile", entry.fullPath, storePath);
               resolve(storePath);

@@ -1,7 +1,17 @@
 import { NgModule, ErrorHandler } from '@angular/core';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { Storage } from '@ionic/storage';
+
+import { IsDebug } from '@ionic-native/is-debug';
+import { StatusBar } from '@ionic-native/status-bar';
+import { Transfer } from '@ionic-native/transfer';
+import { File } from '@ionic-native/file';
+import { Camera } from '@ionic-native/camera';
+import { MediaCapture } from '@ionic-native/media-capture';
+import { SocialSharing } from '@ionic-native/social-sharing';
+import { Network } from '@ionic-native/network';
+import { InAppBrowser } from '@ionic-native/in-app-browser';
+import { Geolocation } from '@ionic-native/geolocation';
 
 import { MyApp } from './app.component';
 import { BasePage } from '../pages/base-page/base-page';
@@ -47,10 +57,6 @@ import { ApiService } from '../providers/api-service';
 import { DatabaseService } from '../providers/database-service';
 import { CacheService } from '../providers/cache-service';
 import { VimeoService } from '../providers/vimeo-service';
-
-export function provideStorage() {
-  return new Storage(['sqlite', 'websql', 'indexeddb'], { name: 'ushahidi' });
-}
 
 @NgModule({
   declarations: [
@@ -110,8 +116,17 @@ export function provideStorage() {
     ResponseSearchPage
   ],
   providers: [
+    { provide: File, useClass: File },
+    { provide: Camera, useClass: Camera },
+    { provide: IsDebug, useClass: IsDebug },
+    { provide: Network, useClass: Network },
+    { provide: Transfer, useClass: Transfer },
+    { provide: StatusBar, useClass: StatusBar },
+    { provide: Geolocation, useClass: Geolocation },
+    { provide: InAppBrowser, useClass: InAppBrowser },
+    { provide: MediaCapture, useClass: MediaCapture },
+    { provide: SocialSharing, useClass: SocialSharing },
     { provide: ApiService, useClass: ApiService },
-    { provide: Storage, useFactory: provideStorage },
     { provide: VimeoService, useClass: VimeoService },
     { provide: CacheService, useClass: CacheService },
     { provide: LoggerService, useClass: LoggerService },

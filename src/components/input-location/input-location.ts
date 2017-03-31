@@ -1,6 +1,6 @@
 import { Component, Output, EventEmitter } from '@angular/core';
-import { Geolocation, GeolocationOptions, Geoposition } from 'ionic-native';
 import { FormGroup } from '@angular/forms';
+import { Geolocation, GeolocationOptions, Geoposition } from '@ionic-native/geolocation';
 
 import { StaticMap } from '../../maps/static-map';
 
@@ -29,7 +29,9 @@ export class InputLocationComponent {
   @Output()
   changeLocation = new EventEmitter();
 
-  constructor(public logger:LoggerService) {
+  constructor(
+    private geolocation:Geolocation,
+    private logger:LoggerService) {
 
   }
 
@@ -59,11 +61,11 @@ export class InputLocationComponent {
   }
 
   detectLocation() {
-    this.logger.info(this, "detectLocation");
     let options:GeolocationOptions = {
-      timeout: 6000,
+      timeout: 12000,
       enableHighAccuracy: true };
-    Geolocation.getCurrentPosition(options).then(
+      this.logger.info(this, "detectLocation", options);
+    this.geolocation.getCurrentPosition(options).then(
       (position:Geoposition) => {
         this.logger.info(this, "detectLocation", "Position", position);
         this.latitude = position.coords.latitude;
@@ -71,7 +73,7 @@ export class InputLocationComponent {
         this.error = false;
         this.loadMapSrc(this.latitude, this.longitude);
       },
-      (error) => {
+      (error:any) => {
         this.logger.error(this, "detectLocation", "Error", error);
         this.latitude = null;
         this.longitude = null;

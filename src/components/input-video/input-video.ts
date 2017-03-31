@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Platform, ActionSheetController, AlertController } from 'ionic-angular';
-import { MediaCapture, MediaFile, CaptureError, CaptureImageOptions, File, Entry, FileError } from 'ionic-native';
+import { MediaCapture, MediaFile, CaptureError, CaptureImageOptions } from '@ionic-native/media-capture';
+import { File, Entry, FileError } from '@ionic-native/file';
 import { FormGroup } from '@angular/forms';
 import { SafeResourceUrl, DomSanitizer } from '@angular/platform-browser';
 
@@ -26,16 +27,18 @@ export class InputVideoComponent {
   submitted: boolean = false;
 
   constructor(
-    public platform:Platform,
-    public sanitizer:DomSanitizer,
-    public logger:LoggerService,
-    public alertController:AlertController,
-    public actionController:ActionSheetController) {
+    private file:File,
+    private mediaCapture:MediaCapture,
+    private platform:Platform,
+    private sanitizer:DomSanitizer,
+    private logger:LoggerService,
+    private alertController:AlertController,
+    private actionController:ActionSheetController) {
   }
 
   ngOnInit() {
     this.logger.info(this, "Attribute", this.attribute, "Value", this.value);
-    this.logger.info(this, "SupportedVideoModes", MediaCapture.supportedVideoModes);
+    this.logger.info(this, "SupportedVideoModes", this.mediaCapture.supportedVideoModes);
   }
 
   captureVideo() {
@@ -43,7 +46,7 @@ export class InputVideoComponent {
     let options:CaptureImageOptions = {
       limit: 3
     };
-    MediaCapture.captureVideo(options).then(
+    this.mediaCapture.captureVideo(options).then(
       (data:MediaFile[]) => {
         let mediaFile = data[0];
         this.logger.info(this, "captureVideo", data);
@@ -86,7 +89,7 @@ export class InputVideoComponent {
       let storeDirectory = this.platform.is('ios') ? cordova.file.documentsDirectory : cordova.file.dataDirectory;
       let storePath = `${storeDirectory}${fileName}`;
       this.logger.info(this, "copyFile", fileDirectory, fileName, storeDirectory);
-      File.copyFile(fileDirectory, fileName, storeDirectory, fileName).then(
+      this.file.copyFile(fileDirectory, fileName, storeDirectory, fileName).then(
         (entry:Entry) => {
           this.logger.info(this, "copyFile", entry.fullPath, storePath);
           resolve(storePath);

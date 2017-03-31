@@ -13,4 +13,3 @@
 */
 declare module '*';
 declare module 'leaflet';
-declare module 'imgcache.js';

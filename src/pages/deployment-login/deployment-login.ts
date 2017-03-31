@@ -1,7 +1,7 @@
 import { Component, ViewChild, NgZone } from '@angular/core';
 import { Platform, TextInput, Button, NavParams, Events,
   NavController, ViewController, ModalController, LoadingController, ToastController, AlertController, ActionSheetController } from 'ionic-angular';
-import { StatusBar } from 'ionic-native';
+import { StatusBar } from '@ionic-native/status-bar';
 
 import { Deployment } from '../../models/deployment';
 import { Collection } from '../../models/collection';
@@ -34,6 +34,7 @@ export class DeploymentLoginPage extends BasePage {
   password: TextInput;
 
   constructor(
+    public statusBar:StatusBar,
     public events:Events,
     public api:ApiService,
     public logger:LoggerService,
@@ -54,8 +55,8 @@ export class DeploymentLoginPage extends BasePage {
     ionViewWillEnter() {
       super.ionViewWillEnter();
       this.platform.ready().then(() => {
-        StatusBar.styleLightContent();
-        StatusBar.backgroundColorByHexString('#3f4751');
+        this.statusBar.styleLightContent();
+        this.statusBar.backgroundColorByHexString('#3f4751');
       });
       this.deployment = this.getParameter<Deployment>("deployment");
       if (this.deployment.username) {

@@ -1,7 +1,7 @@
 import { Component, NgZone, ViewChild, state, style, animate, transition, trigger } from '@angular/core';
 import { Platform, NavParams, Content,
   NavController, ViewController, LoadingController, ToastController, AlertController, ModalController, ActionSheetController } from 'ionic-angular';
-import { StatusBar } from 'ionic-native';
+import { StatusBar } from '@ionic-native/status-bar';
 
 import { PLACEHOLDER_BLANK } from '../../constants/placeholders';
 
@@ -48,10 +48,11 @@ export class DeploymentDetailsPage extends BasePage {
   content: Content;
 
   constructor(
+    public statusBar:StatusBar,
     public api:ApiService,
     public logger:LoggerService,
     public database:DatabaseService,
-    public navParams: NavParams,
+    public navParams:NavParams,
     public zone: NgZone,
     public platform:Platform,
     public navController:NavController,
@@ -67,8 +68,8 @@ export class DeploymentDetailsPage extends BasePage {
     ionViewWillEnter() {
       super.ionViewWillEnter();
       this.platform.ready().then(() => {
-        StatusBar.styleLightContent();
-        StatusBar.backgroundColorByHexString('#3f4751');
+        this.statusBar.styleLightContent();
+        this.statusBar.backgroundColorByHexString('#3f4751');
       });
       if (this.deployment == null) {
         this.deployment = this.getParameter<Deployment>("deployment");

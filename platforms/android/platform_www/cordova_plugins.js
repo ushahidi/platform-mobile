@@ -465,7 +465,7 @@ module.exports.metadata =
 {
     "cordova-plugin-app-version": "0.1.9",
     "cordova-plugin-compat": "1.1.0",
-    "cordova-plugin-camera": "2.3.1",
+    "cordova-plugin-camera": "2.4.0",
     "cordova-plugin-console": "1.0.6",
     "cordova-plugin-device": "1.1.5",
     "cordova-plugin-email": "1.2.6",
@@ -486,7 +486,7 @@ module.exports.metadata =
     "cordova-plugin-splashscreen": "4.0.2",
     "cordova-plugin-statusbar": "2.2.2",
     "cordova-plugin-whitelist": "1.3.2",
-    "cordova-plugin-x-socialsharing": "5.1.6",
+    "cordova-plugin-x-socialsharing": "5.1.7",
     "cordova-sqlite-storage": "1.5.3",
     "ionic-plugin-deeplinks": "1.0.14",
     "ionic-plugin-keyboard": "2.2.1"

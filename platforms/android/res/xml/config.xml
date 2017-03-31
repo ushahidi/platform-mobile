@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="10101" id="com.ushahidi.mobile" ios-CFBundleVersion="1.1.1" version="1.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-versionCode="10200" id="com.ushahidi.mobile" ios-CFBundleVersion="1.2.0" version="1.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <feature name="AppVersion">
         <param name="android-package" value="uk.co.whiteoctober.cordova.AppVersion" />
     </feature>
@@ -77,7 +77,7 @@
     <name>Ushahidi</name>
     <description>Ushahidi Mobile</description>
     <author email="support@ushahidi.com" href="https://www.ushahidi.com/">Ushahidi</author>
-    <content original-src="index.html" src="http://192.168.0.18:8100" />
+    <content src="index.html" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -95,6 +95,7 @@
     <allow-navigation href="http://localhost:3000" />
     <allow-navigation href="http://localhost:3001" />
     <allow-navigation href="http://192.168.0.18:8100" />
+    <allow-navigation href="http://192.168.0.12:8100" />
     <icon src="resources/android/icon/drawable-xhdpi-icon.png" />
     <allow-intent href="market:*" />
     <splash density="port-ldpi" src="resources/android/splash/drawable-port-ldpi-screen.png" />
