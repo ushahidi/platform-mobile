@@ -20,7 +20,7 @@ such as usernames, passwords, tokens, certificates or other sensitive informatio
 - [Plugin API](#plugin-api)
 - [LICENSE](#license)
 
-##<a name="installation"></a>Installation
+## <a name="installation"></a>Installation
 
 Below are the methods for installing this plugin automatically using command line tools. For additional info, take a look at the [Plugman Documentation](https://cordova.apache.org/docs/en/latest/plugin_ref/plugman.html), [`cordova plugin` command](https://cordova.apache.org/docs/en/latest/reference/cordova-cli/index.html#cordova-plugin-command) and [Cordova Plugin Specification](https://cordova.apache.org/docs/en/latest/plugin_ref/spec.html).
 
@@ -41,7 +41,7 @@ or if you want to be running the development version,
 cordova plugin add https://github.com/crypho/cordova-plugin-secure-storage.git
 ```
 
-##<a name="plugin_api"></a> Plugin API
+## <a name="plugin_api"></a> Plugin API
 
 #### Create a namespaced storage.
 
@@ -112,7 +112,7 @@ On iOS it is possible to configure the accessibility of the keychain by setting 
  * AlwaysThisDeviceOnly
  * WhenPasscodeSetThisDeviceOnly (this option is available only on iOS8 and later)
 
-For reference what these settings mean, see [Keychain Item Accessibility Constants](https://developer.apple.com/library/ios/documentation/Security/Reference/keychainservices/#//apple_ref/doc/constant_group/Keychain_Item_Accessibility_Constants).
+For reference what these settings mean, see [Keychain Item Accessibility Constants](https://developer.apple.com/reference/security/keychain_services/keychain_item_accessibility_constants).
 
 For example, include in your ``config.xml`` the following:
 
@@ -143,7 +143,7 @@ On Android there does not exist an equivalent of the iOS KeyChain. The ``SecureS
 
 The inverse process is followed on ``get``.
 
-Native AES is used when available, otherwise encryption is provided by the [sjcl](https://github.com/bitwiseshiftleft/sjcl) library. API level 19 is required on Android.
+Native AES is used when available, otherwise encryption is provided by the [sjcl](https://github.com/bitwiseshiftleft/sjcl) library. API level 19 (Android 4.4 KitKat) is required on Android.
 
 ##### Users must have a secure screen-lock set.
 
@@ -233,7 +233,7 @@ cordova plugin add PATH_TO_SECURE_STORAGE_PLUGIN/tests
 Just run the app for all platforms. Remember, if you have changes to test you will need to remove the secure storage plugin and add it again for the changes to be seen by the app.
 
 
-##<a name="license"></a> LICENSE
+## <a name="license"></a> LICENSE
 
     The MIT License
 
@@ -256,5 +256,3 @@ Just run the app for all platforms. Remember, if you have changes to test you wi
     LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
     OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
     THE SOFTWARE.
-
-    libscrypt is Copyright (c) 2013, Joshua Small under the BSD license. See src/libscrypt/LICENSE

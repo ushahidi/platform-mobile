@@ -30,8 +30,8 @@ export class InputLocationComponent {
   changeLocation = new EventEmitter();
 
   constructor(
-    private geolocation:Geolocation,
-    private logger:LoggerService) {
+    private logger:LoggerService,
+    private geolocation:Geolocation) {
 
   }
 
@@ -39,8 +39,13 @@ export class InputLocationComponent {
     this.logger.info(this, "Attribute", this.attribute, "Value", this.value);
     if (this.value && this.value.value) {
       let location:any = this.value.value.split(",");
-      this.latitude = Number(location[0]);
-      this.longitude = Number(location[1]);
+      if (location && location.length > 0) {
+        this.latitude = Number(location[0]);
+        this.longitude = Number(location[1]);
+      }
+      else {
+        this.detectLocation();
+      }
     }
     else {
       this.detectLocation();
@@ -50,12 +55,14 @@ export class InputLocationComponent {
   ngAfterContentChecked() {
     if (this.value && this.value.value && this.value.value.length > 0) {
       let location:any = this.value.value.split(",");
-      let latitude = Number(location[0]);
-      let longitude = Number(location[1]);
-      if (this.latitude != latitude || this.longitude != longitude) {
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.loadMapSrc(latitude, longitude);
+      if (location && location.length > 0) {
+        let latitude = Number(location[0]);
+        let longitude = Number(location[1]);
+        if (this.latitude != latitude || this.longitude != longitude) {
+          this.latitude = latitude;
+          this.longitude = longitude;
+          this.loadMapSrc(latitude, longitude);
+        }
       }
     }
   }
@@ -64,7 +71,7 @@ export class InputLocationComponent {
     let options:GeolocationOptions = {
       timeout: 12000,
       enableHighAccuracy: true };
-      this.logger.info(this, "detectLocation", options);
+    this.logger.info(this, "detectLocation", options);
     this.geolocation.getCurrentPosition(options).then(
       (position:Geoposition) => {
         this.logger.info(this, "detectLocation", "Position", position);

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, AfterContentChecked } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, AfterContentChecked } from '@angular/core';
 import { Transfer, TransferObject } from '@ionic-native/transfer';
 import { File, Entry, FileEntry, FileError, Metadata } from '@ionic-native/file';
 import { SafeUrl, DomSanitizer } from '@angular/platform-browser';
@@ -12,7 +12,7 @@ declare var cordova:any;
   selector: 'image-cache',
   template: `<div class="image-cache"><img [src]="placeholder" *ngIf="placeholder"><img class="fadein" [src]="safeUrl" *ngIf="safeUrl" /></div>`
 })
-export class ImageCacheComponent implements OnInit, AfterContentChecked {
+export class ImageCacheComponent implements OnInit, OnChanges, AfterContentChecked {
 
   @Input('src')
   src:string = null;
@@ -35,6 +35,10 @@ export class ImageCacheComponent implements OnInit, AfterContentChecked {
   }
 
   ngOnInit() {
+    this.loadCacheImage(this.src);
+  }
+
+  ngOnChanges() {
     this.loadCacheImage(this.src);
   }
 

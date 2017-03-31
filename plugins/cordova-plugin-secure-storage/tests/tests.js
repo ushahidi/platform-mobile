@@ -3,6 +3,33 @@ var SERVICE = 'testing';
 exports.defineAutoTests = function() {
     var ss, handlers;
 
+    if(cordova.platformId === 'android' && parseFloat(device.version) <= 4.3){
+        describe('cordova-plugin-secure-storage-android-unsupported', function () {
+            beforeEach(function () {
+                handlers = {
+                    successHandler: function () {},
+                    errorHandler: function () {}
+                };
+            });
+
+            it('should call the error handler when attempting to use the plugin on Android 4.3 or below', function (done) {
+                spyOn(handlers, 'errorHandler').and.callFake(function (res) {
+                    expect(res).toEqual(jasmine.any(Error));
+                    expect(handlers.successHandler).not.toHaveBeenCalled();
+                    done();
+                });
+                spyOn(handlers, 'successHandler');
+
+                ss = new cordova.plugins.SecureStorage(function () {
+                    ss.set(function () {
+                        ss.get(handlers.successHandler, handlers.errorHandler, 'foo');
+                    }, function () {}, 'foo', 'foo');
+                }, handlers.errorHandler, SERVICE);
+            });
+        });
+        return; // skip all other tests
+    }
+
     describe('cordova-plugin-secure-storage', function () {
 
         beforeEach(function () {
@@ -80,7 +107,8 @@ exports.defineAutoTests = function() {
         });
 
         it('should call the error handler when getting a key that does not exist', function (done) {
-            spyOn(handlers, 'errorHandler').and.callFake(function () {
+            spyOn(handlers, 'errorHandler').and.callFake(function (res) {
+                expect(res).toEqual(jasmine.any(Error));
                 expect(handlers.successHandler).not.toHaveBeenCalled();
                 done();
             });
@@ -92,7 +120,8 @@ exports.defineAutoTests = function() {
         });
 
         it('should call the error handler when getting a key that existed but got deleted', function (done) {
-            spyOn(handlers, 'errorHandler').and.callFake(function () {
+            spyOn(handlers, 'errorHandler').and.callFake(function (res) {
+                expect(res).toEqual(jasmine.any(Error));
                 expect(handlers.successHandler).not.toHaveBeenCalled();
                 done();
             });
@@ -110,7 +139,8 @@ exports.defineAutoTests = function() {
         });
 
         it('should call the error handler when setting a value that is not a string', function (done) {
-            spyOn(handlers, 'errorHandler').and.callFake(function () {
+            spyOn(handlers, 'errorHandler').and.callFake(function (res) {
+                expect(res).toEqual(jasmine.any(Error));
                 expect(handlers.successHandler).not.toHaveBeenCalled();
                 done();
             });

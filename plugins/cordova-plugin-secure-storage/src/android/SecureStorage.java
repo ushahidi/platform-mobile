@@ -20,20 +20,24 @@ import javax.crypto.Cipher;
 public class SecureStorage extends CordovaPlugin {
     private static final String TAG = "SecureStorage";
 
+    private static final boolean SUPPORTS_NATIVE_AES = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
+    private static final boolean SUPPORTED = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
+
+    private static final String MSG_NOT_SUPPORTED = "API 19 (Android 4.4 KitKat) is required. This device is running API " + Build.VERSION.SDK_INT;
+    private static final String MSG_DEVICE_NOT_SECURE = "Device is not secure";
+
     private SharedPreferencesHandler PREFS;
     private String ALIAS;
-    private int SUPPORTS_NATIVE_AES;
     private volatile CallbackContext initContext, secureDeviceContext;
     private volatile boolean initContextRunning = false;
 
     @Override
     public void onResume(boolean multitasking) {
-
         if (secureDeviceContext != null) {
             if (isDeviceSecure()) {
                 secureDeviceContext.success();
             } else {
-                secureDeviceContext.error("Device is not secure");
+                secureDeviceContext.error(MSG_DEVICE_NOT_SECURE);
             }
             secureDeviceContext = null;
         }
@@ -46,7 +50,7 @@ public class SecureStorage extends CordovaPlugin {
                         if (!RSA.isEntryAvailable(ALIAS)) {
                             RSA.createKeyPair(getContext(), ALIAS);
                         }
-                        initContext.success(SUPPORTS_NATIVE_AES);
+                        initSuccess(initContext);
                     } catch (Exception e) {
                         Log.e(TAG, "Init failed :", e);
                         initContext.error(e.getMessage());
@@ -72,21 +76,23 @@ public class SecureStorage extends CordovaPlugin {
 
     @Override
     public boolean execute(String action, CordovaArgs args, final CallbackContext callbackContext) throws JSONException {
+        if(!SUPPORTED){
+            Log.w(TAG, MSG_NOT_SUPPORTED);
+            callbackContext.error(MSG_NOT_SUPPORTED);
+            return false;
+        }
         if ("init".equals(action)) {
-            // 0 is falsy in js while 1 is truthy
-            SUPPORTS_NATIVE_AES = Build.VERSION.SDK_INT >= 21 ? 1 : 0;
             ALIAS = getContext().getPackageName() + "." + args.getString(0);
             PREFS = new SharedPreferencesHandler(ALIAS + "_SS", getContext());
 
             if (!isDeviceSecure()) {
-                String message = "Device is not secure";
-                Log.e(TAG, message);
-                callbackContext.error(message);
+                Log.e(TAG, MSG_DEVICE_NOT_SECURE);
+                callbackContext.error(MSG_DEVICE_NOT_SECURE);
             } else if (!RSA.isEntryAvailable(ALIAS)) {
                 initContext = callbackContext;
                 unlockCredentials();
             } else {
-                callbackContext.success(SUPPORTS_NATIVE_AES);
+                initSuccess(callbackContext);
             }
             return true;
         }
@@ -213,6 +219,11 @@ public class SecureStorage extends CordovaPlugin {
 
     }
 
+    private void initSuccess(CallbackContext context) {
+        // 0 is falsy in js while 1 is truthy
+        context.success(SUPPORTS_NATIVE_AES ? 1 : 0);
+    }
+
     private void unlockCredentials() {
         cordova.getActivity().runOnUiThread(new Runnable() {
             public void run() {
@@ -222,11 +233,12 @@ public class SecureStorage extends CordovaPlugin {
         });
     }
 
-    private Context getContext(){
+    private Context getContext() {
         return cordova.getActivity().getApplicationContext();
     }
 
-    private void startActivity(Intent intent){
+    private void startActivity(Intent intent) {
         cordova.getActivity().startActivity(intent);
     }
+
 }
