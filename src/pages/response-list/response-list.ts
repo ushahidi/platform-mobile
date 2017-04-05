@@ -187,25 +187,21 @@ export class ResponseListPage extends BasePage {
 
   loadMore(event, cache:boolean=true) {
     this.logger.info(this, "loadMore", cache);
+    this.loading = true;
     this.offset = this.offset + this.limit;
     this.logger.info(this, "loadMore", "Limit", this.limit, "Offset", this.offset);
     this.api.getPostsWithValues(this.deployment, cache, this.offline, this.limit, this.offset).then(
       (posts:Post[]) => {
         this.loadCache(posts);
         this.posts = this.posts.concat(posts);
-        this.logger.info(this, "loadMore", "Limit", this.limit, "Offset", this.offset, "Posts", this.posts.length);
         this.filtered = this.getFiltered(this.posts, this.filter);
         this.pending = this.getPending(this.posts);
         this.logger.info(this, "loadMore", "Limit", this.limit, "Offset", this.offset, "Filtered", this.filtered.length, "Pending", this.pending.length);
-        if (event) {
-          event.complete();
-        }
+        this.loading = false;
       },
       (error:any) => {
         this.logger.error(this, "loadMore", "Failed", error);
-        if (event) {
-          event.complete();
-        }
+        this.loading = false;
         this.showToast(error);
       });
   }

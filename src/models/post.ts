@@ -161,9 +161,7 @@ export class Post extends Model {
       }
       return true;
     }
-    else {
-      return false;
-    }
+    return false;
   }
 
 }

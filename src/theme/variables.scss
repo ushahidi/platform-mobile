@@ -12,7 +12,7 @@
 
 $text-color:        #000;
 $background-color:  #fff;
-//$refresher-border-color: #3f4751;
+$refresher-border-color: #cccccc;
 $text-input-highlight-color-valid: #2274b4;
 $text-input-highlight-color-invalid: #dd0000;
 
@@ -37,7 +37,8 @@ $colors: (
   blue:       #2274b4,
   yellow:     #fdc245,
   red:        #dd0000,
-  black:      #000000
+  black:      #000000,
+  more:       #d4d8dd
 );
 
 

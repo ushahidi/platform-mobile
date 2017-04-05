@@ -113,7 +113,7 @@ export class DeploymentLoginPage extends BasePage {
 
     onCancel(event:any=null) {
       this.logger.info(this, "onCancel");
-      this.viewController.dismiss();
+      this.closePage();
     }
 
     loadDeployment():Promise<any> {

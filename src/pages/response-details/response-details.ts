@@ -30,16 +30,16 @@ import { PLACEHOLDER_USER, PLACEHOLDER_NAME } from '../../constants/placeholders
 })
 export class ResponseDetailsPage extends BasePage {
 
-  color: string = "#cccccc";
-  deployment: Deployment = null;
-  post: Post = null;
-  form: Form = null;
+  color:string = "#cccccc";
+  deployment:Deployment = null;
+  post:Post = null;
+  form:Form = null;
   userName:string = PLACEHOLDER_NAME;
   userImage:string = PLACEHOLDER_USER;
   userPlaceholder:string = PLACEHOLDER_USER;
 
   @ViewChild(Content)
-  content: Content;
+  content:Content;
 
   constructor(
     public api:ApiService,
@@ -61,13 +61,9 @@ export class ResponseDetailsPage extends BasePage {
 
   ionViewWillEnter() {
     super.ionViewWillEnter();
-    if (this.deployment == null) {
-      this.deployment = this.getParameter<Deployment>("deployment");
-    }
-    if (this.post == null) {
-      this.post = this.getParameter<Post>("post");
-      this.color = this.post.color;
-    }
+    this.deployment = this.getParameter<Deployment>("deployment");
+    this.post = this.getParameter<Post>("post");
+    this.color = this.post.color;
     this.loadUpdates();
   }
 
@@ -241,13 +237,15 @@ export class ResponseDetailsPage extends BasePage {
     this.logger.info(this, "showLocation", title, coordinates);
     if (coordinates && coordinates.length > 0) {
       let location = coordinates.split(",");
-      this.showPage(ResponseMapPage, {
-        modal: false,
-        draggable: false,
-        title: title,
-        latitude: location[0],
-        longitude: location[1]
-      });
+      if (location && location.length > 0) {
+        this.showPage(ResponseMapPage, {
+          modal: false,
+          draggable: false,
+          title: title,
+          latitude: location[0],
+          longitude: location[1]
+        });
+      }
     }
   }
 

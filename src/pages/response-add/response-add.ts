@@ -89,7 +89,7 @@ export class ResponseAddPage extends BasePage {
   onCancel(event:any=null) {
     this.logger.info(this, "onCancel");
     this.post = null;
-    this.viewController.dismiss();
+    this.hideModal();
   }
 
   onSubmit(event:any=null) {
@@ -107,7 +107,7 @@ export class ResponseAddPage extends BasePage {
               text: 'Ok',
               role: 'cancel',
               handler: () => {
-                this.viewController.dismiss();
+                this.hideModal();
               }
             }];
             this.showAlert('Response Saved', 'Your response has been saved!', buttons);
@@ -127,7 +127,7 @@ export class ResponseAddPage extends BasePage {
               text: 'Ok',
               role: 'cancel',
               handler: () => {
-                this.viewController.dismiss();
+                this.hideModal();
               }
             }];
             this.showAlert('Response Updated', 'Your response has been updated!', buttons);
@@ -147,7 +147,7 @@ export class ResponseAddPage extends BasePage {
               text: 'Ok',
               role: 'cancel',
               handler: () => {
-                this.viewController.dismiss();
+                this.hideModal();
               }
             }];
             this.showAlert('Response Posted', 'Your response has been posted!', buttons);

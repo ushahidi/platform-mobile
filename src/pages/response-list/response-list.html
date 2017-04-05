@@ -18,7 +18,7 @@
   </ion-navbar>
 </ion-header>
 <ion-content class="page-response-list" [class.has-footer]="filter">
-  <ion-refresher *ngIf="view == 'list'" (ionRefresh)="loadUpdates($event, false)">
+  <ion-refresher [enabled]="view == 'list'" (ionRefresh)="loadUpdates($event, false)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   <ion-fab bottom right *ngIf="(posts && posts.length > 0) || (markers && markers.length > 0)">
@@ -31,15 +31,17 @@
       <ion-icon ios="ios-map" md="md-map"></ion-icon>
     </button>
   </ion-fab>
-  <div class="mapSpinner" *ngIf="view == 'map' && loading == true">
-    <ion-spinner name="ios" color="grey"></ion-spinner>
+  <div class="map" *ngIf="view == 'map'">
+    <div class="spinner" *ngIf="view == 'map' && loading == true">
+      <ion-spinner name="ios" color="grey"></ion-spinner>
+    </div>
+    <div #mapMany id="mapMany"></div>
   </div>
   <div class="list" *ngIf="view == 'list'">
-    <div *ngIf="refresher">{{refresher.state}}</div>
-    <div class="listSpinner" text-center margin-top-lg *ngIf="posts == null && loading == true && refreshing == false">
+    <div class="spinner" text-center margin-top-lg *ngIf="posts == null && loading == true && refreshing == false">
       <ion-spinner name="ios"></ion-spinner>
     </div>
-    <div padding-left padding-right *ngIf="posts == null && loading == false">
+    <div padding-left padding-right *ngIf="posts == null && loading == false && refreshing == false">
       <h6 text-center class="no-responses" *ngIf="offline == false">
         There was a problem downloading survey responses. Please try again later.
       </h6>
@@ -47,7 +49,7 @@
         Please verify you have an internet connection, then try downloading survey responses again.
       </h6>
     </div>
-    <div padding-left padding-right *ngIf="posts && filtered">
+    <div padding-left padding-right *ngIf="posts && filtered && loading == false && refreshing == false">
       <h6 text-center padding-bottom margin-bottom class="no-responses" *ngIf="posts && posts.length == 0">
         This deployment doesn't have any<br> survey responses, yet.
       </h6>
@@ -61,12 +63,15 @@
       <post-card [post]="post" (cardSelected)="showResponse(post)" (menuSelected)="showOptions(post)"
                  *ngFor="let post of filtered"></post-card>
     </ion-list>
-    <ion-infinite-scroll (ionInfinite)="loadMore($event)">
+    <div class="more" padding-left padding-right padding-bottom *ngIf="refreshing == false && filtered && filtered.length > 0">
+      <button ion-button block color="more" (click)="loadMore($event)">
+        <span *ngIf="loading == true">Loading...</span>
+        <span *ngIf="loading == false">Load More</span>
+      </button>
+    </div>
+    <!-- <ion-infinite-scroll [enabled]="loading == false && refreshing == false" (ionInfinite)="loadMore($event)">
       <ion-infinite-scroll-content></ion-infinite-scroll-content>
-    </ion-infinite-scroll>
-  </div>
-  <div class="map" *ngIf="view == 'map'">
-    <div #mapMany id="mapMany"></div>
+    </ion-infinite-scroll> -->
   </div>
 </ion-content>
 <ion-footer>

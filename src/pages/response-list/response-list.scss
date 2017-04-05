@@ -1,8 +1,20 @@
 .page-response-list {
-  $refresher-border-color: #3f4751;
   background-color: #e7e9ec;
-  &.has-refresher > .scroll-content {
-    border-top: 1px solid #ccc;
+  position: relative;
+  .list {
+    .spinner {
+      margin-top: 100px;
+    }
+    .no-responses {
+      margin-top: 120px;
+      color: #888;
+    }
+    .more {
+      text-align: center;
+      button {
+        color: #888;
+      }
+    }
   }
   .map {
     position: absolute;
@@ -25,33 +37,13 @@
         font-size: 14px;
       }
     }
-  }
-  ion-segment {
-    z-index: 100;
-    ion-segment-button {
-      z-index: 101;
-      background-color: white;
+    .spinner {
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      right: 20px;
+      top: 25px;
+      z-index: 1000;
     }
-  }
-  ion-refresher {
-    border:none;
-    ion-refresher-content {
-      border:none;
-    }
-  }
-  .no-responses {
-    margin-top: 120px;
-    color: #888;
-  }
-  .listSpinner {
-    margin-top: 100px;
-  }
-  .mapSpinner {
-    position: absolute;
-    width: 30px;
-    height: 30px;
-    right: 20px;
-    top: 25px;
-    z-index: 1000;
   }
 }

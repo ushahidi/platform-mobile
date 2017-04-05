@@ -1106,7 +1106,7 @@ export class ApiService extends HttpService {
       this.logger.info(this, "getPostsWithValues", "Cache", cache, "Offline", offline, "Limit", limit, "Offset", offset);
       Promise.all([
         this.getPosts(deployment, cache, offline, limit, offset),
-        this.getImages(deployment, true, offline),
+        this.getImages(deployment, cache, offline),
         this.getForms(deployment, true, offline),
         this.getUsers(deployment, true, offline),
         this.getAttributes(deployment, true, offline)]).then(

@@ -1,22 +1,42 @@
 <div class="post-value" *ngIf="value">
-  <ion-item no-lines text-wrap>
+  <ion-item text-wrap>
     <div class="value-label">{{value.label}}</div>
-    <div class="value-checkbox" *ngIf="value.input == 'checkbox'">{{value.value}}</div>
-    <div class="value-checkboxes" *ngIf="value.input == 'checkboxes'">{{value.value}}</div>
-    <div class="value-date" *ngIf="value.input == 'date'">{{value.value | dateTime:'MMMM D, YYYY'}}</div>
-    <div class="value-datetime" *ngIf="value.input == 'datetime'">{{value.value | dateTime:'h:mm A, MMMM D, YYYY'}}</div>
+    <div class="value-checkbox" *ngIf="value.input == 'checkbox'">
+      <span *ngIf="value.value">{{value.value}}</span>
+    </div>
+    <div class="value-checkboxes" *ngIf="value.input == 'checkboxes'">
+      <span *ngIf="value.value">{{value.value}}</span>
+    </div>
+    <div class="value-date" *ngIf="value.input == 'date'">
+      <span *ngIf="value.value">{{value.value | dateTime:'MMMM D, YYYY'}}</span>
+    </div>
+    <div class="value-datetime" *ngIf="value.input == 'datetime'">
+      <span *ngIf="value.value">{{value.value | dateTime:'h:mm A, MMMM D, YYYY'}}</span>
+    </div>
     <div class="value-location" *ngIf="value.input == 'location'">
-      <image-cache [src]="map" [fallback]="mapPaceholder" *ngIf="map" tappable (click)="locationClicked(value.value)"></image-cache>
+      <image-cache *ngIf="map" [src]="map" [fallback]="mapPaceholder" tappable (click)="locationClicked(value.value)"></image-cache>
     </div>
-    <div class="value-number" *ngIf="value.input == 'number'">{{value.value}}</div>
-    <div class="value-radio" *ngIf="value.input == 'radio'">{{value.value}}</div>
-    <div class="value-select" *ngIf="value.input == 'select'">{{value.value}}</div>
-    <div class="value-text" *ngIf="value.input == 'text'" [innerHTML]="value.value | htmlParser"></div>
-    <div class="value-textarea" *ngIf="value.input == 'textarea'" [innerHTML]="value.value | htmlParser"></div>
+    <div class="value-number" *ngIf="value.input == 'number'">
+      <span *ngIf="value.value">{{value.value}}</span>
+    </div>
+    <div class="value-radio" *ngIf="value.input == 'radio'">
+      <span *ngIf="value.value">{{value.value}}</span>
+    </div>
+    <div class="value-select" *ngIf="value.input == 'select'">
+      <span *ngIf="value.value">{{value.value}}</span>
+    </div>
+    <div class="value-text" *ngIf="value.input == 'text'">
+      <div *ngIf="value.value" [innerHTML]="value.value | htmlParser"></div>
+    </div>
+    <div class="value-textarea" *ngIf="value.input == 'textarea'">
+      <div *ngIf="value.value" [innerHTML]="value.value | htmlParser"></div>
+    </div>
     <div class="value-upload" *ngIf="value.input == 'upload'">
-      <image-cache [src]="value.image" [fallback]="photoPaceholder" *ngIf="value.image" tappable (click)="imageClicked(value.value)"></image-cache>
+      <image-cache *ngIf="value.image" [src]="value.image" [fallback]="photoPaceholder" tappable (click)="imageClicked(value.value)"></image-cache>
     </div>
-    <div class="value-varchar" *ngIf="value.input == 'varchar'" [innerHTML]="value.value | htmlParser"></div>
+    <div class="value-varchar" *ngIf="value.input == 'varchar'">
+      <div *ngIf="value.value" [innerHTML]="value.value | htmlParser"></div>
+    </div>
     <div class="value-video" *ngIf="value.input == 'video'">
       <div class="video" *ngIf="video">
         <iframe width="560" height="349" [src]="video" frameborder="0" allowfullscreen></iframe>

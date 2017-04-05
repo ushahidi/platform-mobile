@@ -44,10 +44,10 @@ export class PostValueComponent {
   }
 
   ngAfterContentChecked() {
-    if (this.value && this.value.input == 'location' && this.map == null) {
+    if (this.value && this.value.value && this.value.input == 'location' && this.map == null) {
       this.loadMapSrc(this.value.value);
     }
-    else if (this.value && this.value.input == 'video' && this.video == null) {
+    else if (this.value && this.value.value && this.value.input == 'video' && this.video == null) {
       this.loadVideoSrc(this.value.value);
     }
   }
@@ -70,7 +70,13 @@ export class PostValueComponent {
   }
 
   loadVideoSrc(url:string) {
-    this.video = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+    this.logger.info(this, "loadVideoSrc", url);
+    if (url && url.length > 0) {
+      this.video = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+    }
+    else {
+      this.video = null;
+    }
   }
 
   locationClicked(coordinates:string) {

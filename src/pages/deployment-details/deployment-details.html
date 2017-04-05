@@ -14,7 +14,7 @@
   </ion-navbar>
 </ion-header>
 <ion-content class="deployment-details-page">
-  <ion-refresher (ionRefresh)="loadUpdates($event)">
+  <ion-refresher [enabled]="deployment != null" (ionRefresh)="loadUpdates($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   <div *ngIf="deployment">
