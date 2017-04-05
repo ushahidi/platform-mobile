@@ -4,7 +4,9 @@
   <description>Ushahidi Mobile</description>
   <author email="support@ushahidi.com" href="https://www.ushahidi.com/">Ushahidi</author>
   <content src="index.html"/>
-  <access origin="*"/>
+  <access origin="*" subdomains="true"/>
+  <access origin="cdvfile://*"/>
+  <allow-intent href="cdvfile://*"/>
   <allow-intent href="http://*/*"/>
   <allow-intent href="https://*/*"/>
   <allow-intent href="tel:*"/>
@@ -12,6 +14,8 @@
   <allow-intent href="mailto:*"/>
   <allow-intent href="geo:*"/>
   <allow-navigation href="*"/>
+  <allow-navigation href="file://*"/>
+  <allow-navigation href="cdvfile://*"/>
   <allow-navigation href="http://*/*"/>
   <allow-navigation href="https://*/*"/>
   <allow-navigation href="*://*.youtube.com/*"/>
@@ -90,6 +94,8 @@
   <preference name="KeyboardDisplayRequiresUserAction" value="false"/>
   <preference name="AllowInlineMediaPlayback" value="true"/>
   <preference name="MediaPlaybackRequiresUserAction" value="false"/>
+  <preference name="iosPersistentFileLocation" value="Compatibility"/>
+  <preference name="iosExtraFilesystems" value="library,library-nosync,documents,documents-nosync,cache,bundle,root"/>
   <feature name="Device">
     <param name="ios-package" value="CDVDevice"/>
   </feature>

@@ -1,6 +1,8 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { AlertController } from 'ionic-angular';
 import { Geolocation, GeolocationOptions, Geoposition } from '@ionic-native/geolocation';
+import { Diagnostic } from '@ionic-native/diagnostic';
 
 import { StaticMap } from '../../maps/static-map';
 
@@ -16,6 +18,11 @@ import { LoggerService } from '../../providers/logger-service';
 })
 export class InputLocationComponent {
 
+  PERMISSION_WHEN_IN_USE:string = "when_in_use";
+  PERMISSION_GRANTED_ALWAYS:string = "granted_always";
+  PERMISSION_GRANTED_WHEN_IN_USE:string = "granted_when_in_use";
+  PERMISSION_AUTHORIZED_ALWAYS:string = "authorized_always";
+  PERMISSION_AUTHORIZED_WHEN_IN_USE:string = "authorized_when_in_use";
   formGroup: FormGroup;
   attribute: Attribute = null;
   value: Value = null;
@@ -25,13 +32,16 @@ export class InputLocationComponent {
   submitted: boolean = false;
   error: boolean = false;
   offline: boolean = false;
+  shouldTimeout: boolean = false;
 
   @Output()
   changeLocation = new EventEmitter();
 
   constructor(
     private logger:LoggerService,
-    private geolocation:Geolocation) {
+    private diagnostic:Diagnostic,
+    private geolocation:Geolocation,
+    private alertController:AlertController) {
 
   }
 
@@ -44,11 +54,23 @@ export class InputLocationComponent {
         this.longitude = Number(location[1]);
       }
       else {
-        this.detectLocation();
+        this.authorizeLocation().then(
+          (authorized:boolean) => {
+            this.detectLocation();
+          },
+          (error:any) => {
+            this.showLocationError();
+          });
       }
     }
     else {
-      this.detectLocation();
+      this.authorizeLocation().then(
+        (authorized:boolean) => {
+          this.detectLocation();
+        },
+        (error:any) => {
+          this.showLocationError();
+        });
     }
   }
 
@@ -67,11 +89,71 @@ export class InputLocationComponent {
     }
   }
 
+  authorizeLocation():Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      this.logger.info(this, "authorizeLocation");
+      this.diagnostic.isLocationAuthorized().then(
+        (authorized:boolean) => {
+          this.logger.info(this, "authorizeLocation", "isLocationAuthorized", authorized);
+          if (authorized) {
+            this.error = false;
+            resolve(true);
+          }
+          else {
+            this.shouldTimeout = true;
+            setTimeout(() => {
+              if (this.shouldTimeout) {
+                this.logger.error(this, "authorizeLocation", "requestLocationAuthorization", "Timeout");
+                this.error = true;
+                reject();
+              }
+            }, 9000);
+            this.diagnostic.requestLocationAuthorization(this.PERMISSION_WHEN_IN_USE).then(
+              (status:string) => {
+                this.logger.info(this, "authorizeLocation", "requestLocationAuthorization", status);
+                this.shouldTimeout = false;
+                if (status == this.PERMISSION_AUTHORIZED_ALWAYS) {
+                  this.error = false;
+                  resolve(true);
+                }
+                else if (status == this.PERMISSION_AUTHORIZED_WHEN_IN_USE) {
+                  this.error = false;
+                  resolve(true);
+                }
+                if (status == this.PERMISSION_GRANTED_ALWAYS) {
+                  this.error = false;
+                  resolve(true);
+                }
+                else if (status == this.PERMISSION_GRANTED_WHEN_IN_USE) {
+                  this.error = false;
+                  resolve(true);
+                }
+                else {
+                  this.error = true;
+                  reject();
+                }
+              },
+              (error) => {
+                this.logger.error(this, "authorizeLocation", "requestLocationAuthorization", error);
+                this.shouldTimeout = false;
+                this.error = true;
+                reject(error);
+              });
+          }
+        },
+        (error:any) => {
+          this.logger.error(this, "authorizeLocation", "isLocationAuthorized", error);
+          this.error = true;
+          reject(error);
+        });
+    });
+  }
+
   detectLocation() {
+    this.logger.info(this, "detectLocation");
     let options:GeolocationOptions = {
       timeout: 12000,
       enableHighAccuracy: true };
-    this.logger.info(this, "detectLocation", options);
     this.geolocation.getCurrentPosition(options).then(
       (position:Geoposition) => {
         this.logger.info(this, "detectLocation", "Position", position);
@@ -87,6 +169,26 @@ export class InputLocationComponent {
         this.error = true;
         this.loadMapSrc(null, null);
       });
+  }
+
+  showLocationError() {
+    let alert = this.alertController.create({
+      title: 'Location Not Authorized',
+      subTitle: "Please check your Settings to ensure Location is authorized.",
+      buttons: [
+        {
+          text: 'Settings',
+          handler: () => {
+            this.diagnostic.switchToSettings();
+          }
+        },
+        {
+          text: 'OK',
+          role: 'cancel'
+        }
+      ]
+    });
+    alert.present();
   }
 
   updateLocation(event) {

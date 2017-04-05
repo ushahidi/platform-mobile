@@ -458,6 +458,14 @@ module.exports = [
             "cordova.plugins.Keyboard"
         ],
         "runs": true
+    },
+    {
+        "id": "cordova.plugins.diagnostic.Diagnostic",
+        "file": "plugins/cordova.plugins.diagnostic/www/android/diagnostic.js",
+        "pluginId": "cordova.plugins.diagnostic",
+        "clobbers": [
+            "cordova.plugins.diagnostic"
+        ]
     }
 ];
 module.exports.metadata = 
@@ -489,7 +497,8 @@ module.exports.metadata =
     "cordova-plugin-x-socialsharing": "5.1.7",
     "cordova-sqlite-storage": "1.5.3",
     "ionic-plugin-deeplinks": "1.0.14",
-    "ionic-plugin-keyboard": "2.2.1"
+    "ionic-plugin-keyboard": "2.2.1",
+    "cordova.plugins.diagnostic": "3.4.2"
 };
 // BOTTOM OF METADATA
 });

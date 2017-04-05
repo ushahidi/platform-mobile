@@ -6,8 +6,10 @@
     </ion-label>
     <ion-input type="text" hidden [(ngModel)]="videoPath" [formControlName]="attribute.key"></ion-input>
   </ion-item>
-  <ion-card margin-left margin-right *ngIf="videoPreview != null" (click)="captureVideo()">
-    <video controls="controls" autoplay="false" [src]="videoPreview"></video>
+  <ion-card margin-left margin-right *ngIf="videoPreview" (click)="captureVideo()">
+    <video controls="controls" autoplay="false" webkit-playsinline>
+      <source [src]="videoPreview" [type]="mimeType" />
+    </video>
   </ion-card>
   <button ion-button margin-left icon-left text-uppercase small color="light" *ngIf="videoPath == null" (click)="captureVideo()">
     <ion-icon name="videocam"></ion-icon> Take Video

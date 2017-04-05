@@ -12,6 +12,7 @@ import { SocialSharing } from '@ionic-native/social-sharing';
 import { Network } from '@ionic-native/network';
 import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { Geolocation } from '@ionic-native/geolocation';
+import { Diagnostic } from '@ionic-native/diagnostic';
 
 import { MyApp } from './app.component';
 import { BasePage } from '../pages/base-page/base-page';
@@ -123,6 +124,7 @@ import { VimeoService } from '../providers/vimeo-service';
     { provide: Transfer, useClass: Transfer },
     { provide: StatusBar, useClass: StatusBar },
     { provide: Geolocation, useClass: Geolocation },
+    { provide: Diagnostic, useClass: Diagnostic },
     { provide: InAppBrowser, useClass: InAppBrowser },
     { provide: MediaCapture, useClass: MediaCapture },
     { provide: SocialSharing, useClass: SocialSharing },

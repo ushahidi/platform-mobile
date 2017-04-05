@@ -111,6 +111,10 @@
                         {
                             "xml": "<feature name=\"Keyboard\"><param name=\"ios-package\" onload=\"true\" value=\"IonicKeyboard\" /></feature>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<feature name=\"Diagnostic\"><param name=\"ios-package\" value=\"Diagnostic\" /></feature>",
+                            "count": 1
                         }
                     ]
                 }
@@ -121,12 +125,20 @@
                         {
                             "xml": "<string>Ushahidi would like to access the camera.</string>",
                             "count": 2
+                        },
+                        {
+                            "xml": "<string>This app requires camera access to function properly.</string>",
+                            "count": 1
                         }
                     ],
                     "NSPhotoLibraryUsageDescription": [
                         {
                             "xml": "<string>Ushahidi would like to access the photo library.</string>",
                             "count": 2
+                        },
+                        {
+                            "xml": "<string>This app requires photo library access to function properly.</string>",
+                            "count": 1
                         }
                     ],
                     "NSLocationWhenInUseUsageDescription": [
@@ -136,6 +148,10 @@
                         },
                         {
                             "xml": "<string>Ushahidi would like to access your location.</string>",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<string>This app requires access to your location when the screen is on and the app is displayed.</string>",
                             "count": 1
                         }
                     ],
@@ -161,11 +177,51 @@
                         {
                             "xml": "<string>Ushahidi would like to access the microphone.</string>",
                             "count": 1
+                        },
+                        {
+                            "xml": "<string>This app requires microphone access to function properly.</string>",
+                            "count": 1
                         }
                     ],
                     "CFBundleURLTypes": [
                         {
                             "xml": "<array><dict><key>CFBundleURLSchemes</key><array><string>ushahidi</string></array></dict></array>",
+                            "count": 1
+                        }
+                    ],
+                    "NSLocationAlwaysUsageDescription": [
+                        {
+                            "xml": "<string>This app requires constant access to your location in order to track your position, even when the screen is off.</string>",
+                            "count": 1
+                        }
+                    ],
+                    "NSCalendarsUsageDescription": [
+                        {
+                            "xml": "<string>This app requires calendar access to function properly.</string>",
+                            "count": 1
+                        }
+                    ],
+                    "NSBluetoothPeripheralUsageDescription": [
+                        {
+                            "xml": "<string>This app requires bluetooth access to function properly.</string>",
+                            "count": 1
+                        }
+                    ],
+                    "NSMotionUsageDescription": [
+                        {
+                            "xml": "<string>This app requires motion detection access to function properly.</string>",
+                            "count": 1
+                        }
+                    ],
+                    "NSContactsUsageDescription": [
+                        {
+                            "xml": "<string>This app requires contacts access to function properly.</string>",
+                            "count": 1
+                        }
+                    ],
+                    "NSRemindersUsageDescription": [
+                        {
+                            "xml": "<string>This app requires reminders access to function properly.</string>",
                             "count": 1
                         }
                     ]
@@ -262,6 +318,9 @@
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
         "ionic-plugin-keyboard": {
+            "PACKAGE_NAME": "com.ushahidi.mobile"
+        },
+        "cordova.plugins.diagnostic": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         }
     },
@@ -745,6 +804,14 @@
                 "cordova.plugins.Keyboard"
             ],
             "runs": true
+        },
+        {
+            "id": "cordova.plugins.diagnostic.Diagnostic",
+            "file": "plugins/cordova.plugins.diagnostic/www/ios/diagnostic.js",
+            "pluginId": "cordova.plugins.diagnostic",
+            "clobbers": [
+                "cordova.plugins.diagnostic"
+            ]
         }
     ],
     "plugin_metadata": {
@@ -774,6 +841,7 @@
         "cordova-plugin-x-socialsharing": "5.1.7",
         "cordova-sqlite-storage": "1.5.3",
         "ionic-plugin-deeplinks": "1.0.14",
-        "ionic-plugin-keyboard": "2.2.1"
+        "ionic-plugin-keyboard": "2.2.1",
+        "cordova.plugins.diagnostic": "3.4.2"
     }
 }
