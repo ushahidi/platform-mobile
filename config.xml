@@ -77,7 +77,7 @@
   <preference name="webviewbounce" value="false"/>
   <preference name="UIWebViewBounce" value="false"/>
   <preference name="DisallowOverscroll" value="true"/>
-  <preference name="BackupWebStorage" value="local"/>
+  <preference name="BackupWebStorage" value="none"/>
   <preference name="AutoHideSplashScreen" value="false"/>
   <preference name="SplashScreen" value="screen"/>
   <preference name="SplashScreenDelay" value="1000"/>
@@ -93,9 +93,11 @@
   <preference name="LoadUrlTimeoutValue" value="90000"/>
   <preference name="KeyboardDisplayRequiresUserAction" value="false"/>
   <preference name="AllowInlineMediaPlayback" value="true"/>
-  <preference name="MediaPlaybackRequiresUserAction" value="false"/>
+  <preference name="MediaPlaybackRequiresUserAction" value="true"/>
   <preference name="iosPersistentFileLocation" value="Compatibility"/>
+  <preference name="AndroidPersistentFileLocation" value="Compatibility"/>
   <preference name="iosExtraFilesystems" value="library,library-nosync,documents,documents-nosync,cache,bundle,root"/>
+  <preference name="AndroidExtraFilesystems" value="files,files-external,documents,sdcard,cache,cache-external,assets,root"/>
   <feature name="Device">
     <param name="ios-package" value="CDVDevice"/>
   </feature>

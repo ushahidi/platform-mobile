@@ -6,8 +6,10 @@
     </ion-label>
     <ion-input type="text" hidden [(ngModel)]="videoPath" [formControlName]="attribute.key"></ion-input>
   </ion-item>
-  <ion-card margin-left margin-right *ngIf="videoPreview" (click)="captureVideo()">
-    <video controls="controls" autoplay="false" webkit-playsinline>
+  <ion-card margin-left margin-right *ngIf="videoPreview">
+    <!-- <iframe [src]="videoPreview" width="100%" frameborder="0" webkitallowfullscreen allowfullscreen webkit-playsinline></iframe> -->
+    <!-- <video #videoPlayer controls="controls" autoplay="false" width="100%" webkit-playsinline></video> -->
+    <video controls="controls" autoplay="false" width="100%" webkit-playsinline>
       <source [src]="videoPreview" [type]="mimeType" />
     </video>
   </ion-card>
