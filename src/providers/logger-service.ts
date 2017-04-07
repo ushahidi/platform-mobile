@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Platform } from 'ionic-angular';
 import { IsDebug } from '@ionic-native/is-debug';
 
 @Injectable()
@@ -6,14 +7,16 @@ export class LoggerService {
 
   private enabled:boolean = true;
 
-  constructor(private isDebug:IsDebug) {
-    this.isDebug.getIsDebug().then(
-      (isDebug:boolean) => {
-        this.enabled = isDebug;
-      },
-      (error:any) => {
-        this.enabled = false;
-      });
+  constructor(private isDebug:IsDebug, public platform: Platform) {
+    this.platform.ready().then(() => {
+      this.isDebug.getIsDebug().then(
+        (isDebug:boolean) => {
+          this.enabled = isDebug;
+        },
+        (error:any) => {
+          this.enabled = false;
+        });
+    });
   }
 
   log(instance:any, method:string, ...objects:any[]) {
