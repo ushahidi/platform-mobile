@@ -172,9 +172,13 @@ export class InputVideoComponent {
     return new Promise((resolve, reject) => {
       let sourceName = filePath.substr(filePath.lastIndexOf('/') + 1).split('?').shift();
       let sourceExtension = sourceName.substr(sourceName.lastIndexOf('.')).toLowerCase();
-      let sourceDirectory = `file://${filePath.substr(0, filePath.lastIndexOf('/') + 1)}`;
+      let sourceDirectory = filePath.substr(0, filePath.lastIndexOf('/') + 1);
+      if (sourceDirectory.startsWith("file://") == false) {
+        sourceDirectory = "file://" + sourceDirectory;
+      }
       let targetName = new Date().toISOString().replace(/\D/g,'') + sourceExtension;
       let targetDirectory = this.platform.is('ios') ? cordova.file.documentsDirectory : cordova.file.dataDirectory;
+      this.logger.info(this, "copyFile", filePath, "sourceDirectory", sourceDirectory, "sourceName", sourceName, "targetDirectory", targetDirectory, "targetName", targetName);
       this.file.copyFile(sourceDirectory, sourceName, targetDirectory, targetName).then(
         (entry:Entry) => {
           this.logger.info(this, "copyFile", entry.nativeURL);

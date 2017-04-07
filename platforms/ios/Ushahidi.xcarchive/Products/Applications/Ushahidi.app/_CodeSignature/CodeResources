@@ -206,7 +206,7 @@
 		</data>
 		<key>CDVLaunchScreen.storyboardc/01J-lp-oVM-view-Ze5-6b-2t3.nib</key>
 		<data>
-		t6Pp4HlhRcIRcYw275dS/Kj/pB0=
+		vhBmJdi0FGTx59yNKcoGWy4ugRI=
 		</data>
 		<key>CDVLaunchScreen.storyboardc/Info.plist</key>
 		<data>
@@ -214,7 +214,7 @@
 		</data>
 		<key>CDVLaunchScreen.storyboardc/UIViewController-01J-lp-oVM.nib</key>
 		<data>
-		VYDcSiZxeSzrIisDfVbFiWx52Z0=
+		VjYcgw952nn+zUXzsScqk5AMRAs=
 		</data>
 		<key>Info.plist</key>
 		<data>
@@ -278,7 +278,7 @@
 		</data>
 		<key>MainViewController.nib</key>
 		<data>
-		4SX/mpRePdQxo+/H2LTjDrRNITk=
+		BYmyeio0IjUQOUbaZD7leix0DnY=
 		</data>
 		<key>PkgInfo</key>
 		<data>
@@ -307,7 +307,7 @@
 		</data>
 		<key>embedded.mobileprovision</key>
 		<data>
-		8fiqgLDNnxduPiqVfA714V12euU=
+		rLpuxn4hBxzDBbCmeOxI9hU+Jik=
 		</data>
 		<key>www/assets/fonts/ionicons.eot</key>
 		<data>
@@ -471,19 +471,11 @@
 		</data>
 		<key>www/build/main.css</key>
 		<data>
-		5g66MbRFeg/1ztEShQfThcUjOXA=
-		</data>
-		<key>www/build/main.css.map</key>
-		<data>
-		K+iMpCQsduglOsYkdIUQZQMtaDM=
+		teFajuizZZZ2vODsNBa7BC7xokA=
 		</data>
 		<key>www/build/main.js</key>
 		<data>
-		BhIdTvznl0eMpwrYmaVh0cGOq50=
-		</data>
-		<key>www/build/main.js.map</key>
-		<data>
-		TzZtpEsKuXVOg6G/AlTx7bHz6xs=
+		ZC1+uTcM7UvL0qe3Fwa8a5l3zLs=
 		</data>
 		<key>www/build/polyfills.js</key>
 		<data>
@@ -1275,11 +1267,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			t6Pp4HlhRcIRcYw275dS/Kj/pB0=
+			vhBmJdi0FGTx59yNKcoGWy4ugRI=
 			</data>
 			<key>hash2</key>
 			<data>
-			9a2TKntPefUZQ2FOvV+BLbecKwhy7pLPF/JT8bLLTMg=
+			r82/LdJ/U7dP1SZYcQh5/ku5sfLiz4JRrv2h1V6U1x8=
 			</data>
 		</dict>
 		<key>CDVLaunchScreen.storyboardc/Info.plist</key>
@@ -1297,11 +1289,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			VYDcSiZxeSzrIisDfVbFiWx52Z0=
+			VjYcgw952nn+zUXzsScqk5AMRAs=
 			</data>
 			<key>hash2</key>
 			<data>
-			isMc9sRKHdQxVkDBa6AMpNfGNoxPBgCvDEoHE4QxTF4=
+			hux2x+VCesHHf01uP1kJmkwfrOZTr2Pge5xEZbxG/qQ=
 			</data>
 		</dict>
 		<key>LaunchImage-568h@2x.png</key>
@@ -1462,11 +1454,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			4SX/mpRePdQxo+/H2LTjDrRNITk=
+			BYmyeio0IjUQOUbaZD7leix0DnY=
 			</data>
 			<key>hash2</key>
 			<data>
-			0ew4ZSNI/3zF9Pf5MtIH7DtGxig63JVFqvL0RnO+Ok4=
+			sAjocesNZVVmdWnkCHZka273W1cOURVRDK/27jcifmo=
 			</data>
 		</dict>
 		<key>SAMKeychain.bundle/en.lproj/SAMKeychain.strings</key>
@@ -1519,11 +1511,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			8fiqgLDNnxduPiqVfA714V12euU=
+			rLpuxn4hBxzDBbCmeOxI9hU+Jik=
 			</data>
 			<key>hash2</key>
 			<data>
-			cDpcVKQsaaikmDIJYgM3EDlNEphyXAd2Ax3Ejh1Jcpg=
+			aFn6PNU+Lep4nviPPlz5b4yUKVqqL7oYO5lRhYJ/Zvk=
 			</data>
 		</dict>
 		<key>www/assets/fonts/ionicons.eot</key>
@@ -1970,44 +1962,22 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			5g66MbRFeg/1ztEShQfThcUjOXA=
+			teFajuizZZZ2vODsNBa7BC7xokA=
 			</data>
 			<key>hash2</key>
 			<data>
-			Qh8xI6y3XEGApk0jAg4QTh7GfLoLLqZxcqOUazEz8X0=
-			</data>
-		</dict>
-		<key>www/build/main.css.map</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			K+iMpCQsduglOsYkdIUQZQMtaDM=
-			</data>
-			<key>hash2</key>
-			<data>
-			dCNOmK/nSY+12vHzasLXiswzlGT5UHA7jAGYkvmCuQs=
+			HI0M6i9mimk/c9Aw3ONQ2wf3cbdLSjIpy5e6P5rQHcQ=
 			</data>
 		</dict>
 		<key>www/build/main.js</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			BhIdTvznl0eMpwrYmaVh0cGOq50=
+			ZC1+uTcM7UvL0qe3Fwa8a5l3zLs=
 			</data>
 			<key>hash2</key>
 			<data>
-			9V4VW0eXITkhytjNuxv3YyRfsOy1UcZhEEpVoBhqGPM=
-			</data>
-		</dict>
-		<key>www/build/main.js.map</key>
-		<dict>
-			<key>hash</key>
-			<data>
-			TzZtpEsKuXVOg6G/AlTx7bHz6xs=
-			</data>
-			<key>hash2</key>
-			<data>
-			1pUCVfbtgn2kco/bmsJms7gYax9XOhLx3RppHwlurSE=
+			UIXrlx0HotFp9ParfVSOWoEjhGFpVC3XGI1agaCnUVA=
 			</data>
 		</dict>
 		<key>www/build/polyfills.js</key>

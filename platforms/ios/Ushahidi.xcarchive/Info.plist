@@ -13,12 +13,12 @@
 		<key>CFBundleVersion</key>
 		<string>1.2.0</string>
 		<key>SigningIdentity</key>
-		<string>iPhone Developer: Dale Zak (8QRQR3SCMG)</string>
+		<string>iPhone Distribution: Ushahidi Inc. (K4L62494Y2)</string>
 	</dict>
 	<key>ArchiveVersion</key>
 	<integer>2</integer>
 	<key>CreationDate</key>
-	<date>2017-04-07T19:37:59Z</date>
+	<date>2017-04-07T22:37:11Z</date>
 	<key>Name</key>
 	<string>Ushahidi</string>
 	<key>SchemeName</key>
