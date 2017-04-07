@@ -56,11 +56,11 @@
     <feature name="Capture">
         <param name="ios-package" value="CDVCapture" />
     </feature>
-    <feature name="NetworkActivityIndicator">
-        <param name="ios-package" value="NetworkActivityIndicator" />
-    </feature>
     <feature name="NetworkStatus">
         <param name="ios-package" value="CDVConnection" />
+    </feature>
+    <feature name="NetworkActivityIndicator">
+        <param name="ios-package" value="NetworkActivityIndicator" />
     </feature>
     <feature name="SecureStorage">
         <param name="ios-package" value="SecureStorage" />
@@ -83,22 +83,20 @@
     <feature name="SQLitePlugin">
         <param name="ios-package" value="SQLitePlugin" />
     </feature>
+    <feature name="Diagnostic">
+        <param name="ios-package" value="Diagnostic" />
+    </feature>
     <feature name="IonicDeeplinkPlugin">
         <param name="ios-package" onload="true" value="IonicDeeplinkPlugin" />
     </feature>
     <feature name="Keyboard">
         <param name="ios-package" onload="true" value="IonicKeyboard" />
     </feature>
-    <feature name="Diagnostic">
-        <param name="ios-package" value="Diagnostic" />
-    </feature>
     <name>Ushahidi</name>
     <description>Ushahidi Mobile</description>
     <author email="support@ushahidi.com" href="https://www.ushahidi.com/">Ushahidi</author>
-    <content original-src="index.html" src="http://192.168.0.12:8100" />
+    <content original-src="index.html" src="http://localhost:3000" />
     <access origin="*" subdomains="true" />
-    <access origin="cdvfile://*" />
-    <allow-intent href="cdvfile://*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <allow-intent href="tel:*" />

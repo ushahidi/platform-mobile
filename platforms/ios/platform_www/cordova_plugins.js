@@ -383,14 +383,6 @@ module.exports = [
         ]
     },
     {
-        "id": "cordova-plugin-networkactivityindicator.NetworkActivityIndicator",
-        "file": "plugins/cordova-plugin-networkactivityindicator/www/NetworkActivityIndicator.js",
-        "pluginId": "cordova-plugin-networkactivityindicator",
-        "clobbers": [
-            "NetworkActivityIndicator"
-        ]
-    },
-    {
         "id": "cordova-plugin-network-information.network",
         "file": "plugins/cordova-plugin-network-information/www/network.js",
         "pluginId": "cordova-plugin-network-information",
@@ -405,6 +397,14 @@ module.exports = [
         "pluginId": "cordova-plugin-network-information",
         "clobbers": [
             "Connection"
+        ]
+    },
+    {
+        "id": "cordova-plugin-networkactivityindicator.NetworkActivityIndicator",
+        "file": "plugins/cordova-plugin-networkactivityindicator/www/NetworkActivityIndicator.js",
+        "pluginId": "cordova-plugin-networkactivityindicator",
+        "clobbers": [
+            "NetworkActivityIndicator"
         ]
     },
     {
@@ -462,6 +462,14 @@ module.exports = [
         ]
     },
     {
+        "id": "cordova.plugins.diagnostic.Diagnostic",
+        "file": "plugins/cordova.plugins.diagnostic/www/ios/diagnostic.js",
+        "pluginId": "cordova.plugins.diagnostic",
+        "clobbers": [
+            "cordova.plugins.diagnostic"
+        ]
+    },
+    {
         "id": "ionic-plugin-deeplinks.deeplink",
         "file": "plugins/ionic-plugin-deeplinks/www/deeplink.js",
         "pluginId": "ionic-plugin-deeplinks",
@@ -478,14 +486,6 @@ module.exports = [
             "cordova.plugins.Keyboard"
         ],
         "runs": true
-    },
-    {
-        "id": "cordova.plugins.diagnostic.Diagnostic",
-        "file": "plugins/cordova.plugins.diagnostic/www/ios/diagnostic.js",
-        "pluginId": "cordova.plugins.diagnostic",
-        "clobbers": [
-            "cordova.plugins.diagnostic"
-        ]
     }
 ];
 module.exports.metadata = 
@@ -498,27 +498,27 @@ module.exports.metadata =
     "cordova-plugin-device": "1.1.5",
     "cordova-plugin-email": "1.2.6",
     "cordova-plugin-file": "4.3.2",
-    "cordova-plugin-filepath": "1.0.2",
     "cordova-plugin-file-transfer": "1.6.2",
+    "cordova-plugin-filepath": "1.0.2",
     "cordova-plugin-geolocation": "2.4.2",
-    "cordova-plugin-google-analytics": "1.7.5",
+    "cordova-plugin-google-analytics": "1.7.9",
     "cordova-plugin-inappbrowser": "1.7.0",
     "cordova-plugin-ios-longpress-fix": "1.1.0",
     "cordova-plugin-ios-no-export-compliance": "0.0.1",
     "cordova-plugin-is-debug": "1.0.0",
     "cordova-plugin-media-capture": "1.4.2",
-    "cordova-plugin-networkactivityindicator": "0.1.1",
     "cordova-plugin-network-information": "1.3.2",
+    "cordova-plugin-networkactivityindicator": "0.1.1",
     "cordova-plugin-secure-storage": "2.6.4",
     "cordova-plugin-spinner-dialog": "1.3.1",
     "cordova-plugin-splashscreen": "4.0.2",
     "cordova-plugin-statusbar": "2.2.2",
     "cordova-plugin-whitelist": "1.3.2",
     "cordova-plugin-x-socialsharing": "5.1.7",
-    "cordova-sqlite-storage": "1.5.3",
+    "cordova-sqlite-storage": "2.0.3",
+    "cordova.plugins.diagnostic": "3.4.2",
     "ionic-plugin-deeplinks": "1.0.14",
-    "ionic-plugin-keyboard": "2.2.1",
-    "cordova.plugins.diagnostic": "3.4.2"
+    "ionic-plugin-keyboard": "2.2.1"
 };
 // BOTTOM OF METADATA
 });

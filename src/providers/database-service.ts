@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Platform } from 'ionic-angular';
-import { SQLite } from 'ionic-native';
+import { SQLite, SQLiteObject } from '@ionic-native/sqlite';
 
 import { Model, TEXT, INTEGER, DOUBLE, BOOLEAN } from '../models/model';
 import { Deployment } from '../models/deployment';
@@ -19,11 +19,12 @@ import { LoggerService } from '../providers/logger-service';
 @Injectable()
 export class DatabaseService {
 
-  protected database : SQLite = null;
-  protected name: string = 'ushahidi.db';
-  protected location: string = 'default';
+  protected database:SQLiteObject = null;
+  protected name:string = 'ushahidi.db';
+  protected location:string = 'default';
 
   constructor(
+    public sqlite: SQLite,
     public platform:Platform,
     public logger:LoggerService) {
   }
@@ -32,18 +33,17 @@ export class DatabaseService {
     return this.platform.platforms().indexOf('cordova') >= 0;
   }
 
-  openDatabase():Promise<any> {
+  openDatabase():Promise<SQLiteObject> {
     return new Promise((resolve, reject) => {
       if (this.database) {
         resolve(this.database);
       }
       else if (this.testDatabase()) {
-        let database = new SQLite();
-        database.openDatabase({
+        this.sqlite.create({
           name: this.name,
           location: this.location
         }).then(
-          () => {
+          (database:SQLiteObject) => {
             this.logger.info(this, "openDatabase", "Opened", database);
             this.database = database;
             resolve(database);
@@ -63,7 +63,7 @@ export class DatabaseService {
   deleteDatabase() {
     this.logger.info(this, "deleteDatabase");
     return new Promise((resolve, reject) => {
-      SQLite.deleteDatabase({
+      this.sqlite.deleteDatabase({
         name: this.name,
         location: this.location }).then(
           (deleted) => {
@@ -89,7 +89,7 @@ export class DatabaseService {
   createTable<M extends Model>(model:M):Promise<any> {
     return new Promise((resolve, reject) => {
       this.openDatabase().then(
-        (database:SQLite) => {
+        (database:SQLiteObject) => {
           let table:string = model.getTable();
           let columns:any[] = model.getColumns();
           this.logger.info(this, "createTable", table, columns);
@@ -140,7 +140,7 @@ export class DatabaseService {
 
   executeTest(table:string, columns:any):Promise<any[]> {
     return new Promise((resolve, reject) => {
-      this.openDatabase().then((database:SQLite) => {
+      this.openDatabase().then((database:SQLiteObject) => {
         let statement = this.testStatement(table, columns);
         let parameters = [];
         this.logger.info(this, "executeTest", "Testing", statement);
@@ -163,7 +163,7 @@ export class DatabaseService {
 
   executeSelect(table:string, where:{}=null, order:{}=null, limit:number=null, offset:number=null) : Promise<any[]> {
     return new Promise((resolve, reject) => {
-      this.openDatabase().then((database:SQLite) => {
+      this.openDatabase().then((database:SQLiteObject) => {
         let statement = this.selectStatement(table, where, order, limit, offset);
         let parameters = this.selectParameters(table, where, order);
         this.logger.info(this, "executeSelect", "Selecting", statement, parameters);
@@ -194,7 +194,7 @@ export class DatabaseService {
 
   executeInsert(table:string, columns:any, values:{}) {
     return new Promise((resolve, reject) => {
-      this.openDatabase().then((database:SQLite) => {
+      this.openDatabase().then((database:SQLiteObject) => {
         let statement = this.insertStatement(table, columns, values);
         let parameters = this.insertParameters(table, columns, values);
         this.logger.info(this, "executeInsert", "Inserting", statement, parameters);
@@ -217,7 +217,7 @@ export class DatabaseService {
 
   executeUpdate(table:string, columns:any[], values:{}) {
     return new Promise((resolve, reject) => {
-      this.openDatabase().then((database:SQLite) => {
+      this.openDatabase().then((database:SQLiteObject) => {
         let statement = this.updateStatement(table, columns, values);
         let parameters = this.updateParameters(table, columns, values);
         this.logger.info(this, "executeUpdate", "Updating", statement, parameters);
@@ -240,7 +240,7 @@ export class DatabaseService {
 
   executeDelete(table:string, where:{}) {
     return new Promise((resolve, reject) => {
-      this.openDatabase().then((database:SQLite) => {
+      this.openDatabase().then((database:SQLiteObject) => {
         let statement = this.deleteStatement(table, where);
         this.logger.info(this, "executeDelete", "Deleting", statement);
         database.executeSql(statement, []).then(
@@ -485,7 +485,7 @@ export class DatabaseService {
 
   getMinium<M extends Model>(type:M, column:string) : Promise<number> {
     return new Promise((resolve, reject) => {
-      this.openDatabase().then((database:SQLite) => {
+      this.openDatabase().then((database:SQLiteObject) => {
         let statement = `SELECT MIN(${column}) as value FROM ${type.getTable()}`;
         database.executeSql(statement, []).then(
           (data) => {

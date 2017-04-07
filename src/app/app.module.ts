@@ -1,5 +1,7 @@
 import { NgModule, ErrorHandler } from '@angular/core';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
+import { HttpModule } from '@angular/http';
+import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { IsDebug } from '@ionic-native/is-debug';
@@ -13,6 +15,9 @@ import { Network } from '@ionic-native/network';
 import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { Geolocation } from '@ionic-native/geolocation';
 import { Diagnostic } from '@ionic-native/diagnostic';
+import { SplashScreen } from '@ionic-native/splash-screen';
+import { SQLite } from '@ionic-native/sqlite';
+import { Keyboard } from '@ionic-native/keyboard';
 
 import { MyApp } from './app.component';
 import { BasePage } from '../pages/base-page/base-page';
@@ -97,9 +102,11 @@ import { VimeoService } from '../providers/vimeo-service';
     HtmlParserPipe
   ],
   imports: [
-    IonicModule.forRoot(MyApp),
+    HttpModule,
+    BrowserModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    IonicModule.forRoot(MyApp)
   ],
   bootstrap: [ IonicApp ],
   entryComponents: [
@@ -118,13 +125,16 @@ import { VimeoService } from '../providers/vimeo-service';
   ],
   providers: [
     { provide: File, useClass: File },
+    { provide: SQLite, useClass: SQLite },
     { provide: Camera, useClass: Camera },
     { provide: IsDebug, useClass: IsDebug },
     { provide: Network, useClass: Network },
+    { provide: Keyboard, useClass: Keyboard },
     { provide: Transfer, useClass: Transfer },
     { provide: StatusBar, useClass: StatusBar },
-    { provide: Geolocation, useClass: Geolocation },
     { provide: Diagnostic, useClass: Diagnostic },
+    { provide: Geolocation, useClass: Geolocation },
+    { provide: SplashScreen, useClass: SplashScreen },
     { provide: InAppBrowser, useClass: InAppBrowser },
     { provide: MediaCapture, useClass: MediaCapture },
     { provide: SocialSharing, useClass: SocialSharing },

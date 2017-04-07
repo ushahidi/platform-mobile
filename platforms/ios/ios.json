@@ -65,11 +65,11 @@
                             "count": 1
                         },
                         {
-                            "xml": "<feature name=\"NetworkActivityIndicator\"><param name=\"ios-package\" value=\"NetworkActivityIndicator\" /></feature>",
+                            "xml": "<feature name=\"NetworkStatus\"><param name=\"ios-package\" value=\"CDVConnection\" /></feature>",
                             "count": 1
                         },
                         {
-                            "xml": "<feature name=\"NetworkStatus\"><param name=\"ios-package\" value=\"CDVConnection\" /></feature>",
+                            "xml": "<feature name=\"NetworkActivityIndicator\"><param name=\"ios-package\" value=\"NetworkActivityIndicator\" /></feature>",
                             "count": 1
                         },
                         {
@@ -105,15 +105,15 @@
                             "count": 1
                         },
                         {
+                            "xml": "<feature name=\"Diagnostic\"><param name=\"ios-package\" value=\"Diagnostic\" /></feature>",
+                            "count": 1
+                        },
+                        {
                             "xml": "<feature name=\"IonicDeeplinkPlugin\"><param name=\"ios-package\" onload=\"true\" value=\"IonicDeeplinkPlugin\" /></feature>",
                             "count": 1
                         },
                         {
                             "xml": "<feature name=\"Keyboard\"><param name=\"ios-package\" onload=\"true\" value=\"IonicKeyboard\" /></feature>",
-                            "count": 1
-                        },
-                        {
-                            "xml": "<feature name=\"Diagnostic\"><param name=\"ios-package\" value=\"Diagnostic\" /></feature>",
                             "count": 1
                         }
                     ]
@@ -183,12 +183,6 @@
                             "count": 1
                         }
                     ],
-                    "CFBundleURLTypes": [
-                        {
-                            "xml": "<array><dict><key>CFBundleURLSchemes</key><array><string>ushahidi</string></array></dict></array>",
-                            "count": 1
-                        }
-                    ],
                     "NSLocationAlwaysUsageDescription": [
                         {
                             "xml": "<string>This app requires constant access to your location in order to track your position, even when the screen is off.</string>",
@@ -224,6 +218,12 @@
                             "xml": "<string>This app requires reminders access to function properly.</string>",
                             "count": 1
                         }
+                    ],
+                    "CFBundleURLTypes": [
+                        {
+                            "xml": "<array><dict><key>CFBundleURLSchemes</key><array><string>ushahidi</string></array></dict></array>",
+                            "count": 1
+                        }
                     ]
                 }
             }
@@ -253,10 +253,10 @@
         "cordova-plugin-file": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
-        "cordova-plugin-filepath": {
+        "cordova-plugin-file-transfer": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
-        "cordova-plugin-file-transfer": {
+        "cordova-plugin-filepath": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
         "cordova-plugin-geolocation": {
@@ -284,10 +284,10 @@
             "PHOTOLIBRARY_USAGE_DESCRIPTION": "Ushahidi would like to access the photo library.",
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
-        "cordova-plugin-networkactivityindicator": {
+        "cordova-plugin-network-information": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
-        "cordova-plugin-network-information": {
+        "cordova-plugin-networkactivityindicator": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
         "cordova-plugin-secure-storage": {
@@ -311,6 +311,9 @@
         "cordova-sqlite-storage": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
+        "cordova.plugins.diagnostic": {
+            "PACKAGE_NAME": "com.ushahidi.mobile"
+        },
         "ionic-plugin-deeplinks": {
             "URL_SCHEME": "ushahidi",
             "DEEPLINK_SCHEME": "https",
@@ -318,9 +321,6 @@
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
         "ionic-plugin-keyboard": {
-            "PACKAGE_NAME": "com.ushahidi.mobile"
-        },
-        "cordova.plugins.diagnostic": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         }
     },
@@ -709,14 +709,6 @@
             ]
         },
         {
-            "id": "cordova-plugin-networkactivityindicator.NetworkActivityIndicator",
-            "file": "plugins/cordova-plugin-networkactivityindicator/www/NetworkActivityIndicator.js",
-            "pluginId": "cordova-plugin-networkactivityindicator",
-            "clobbers": [
-                "NetworkActivityIndicator"
-            ]
-        },
-        {
             "id": "cordova-plugin-network-information.network",
             "file": "plugins/cordova-plugin-network-information/www/network.js",
             "pluginId": "cordova-plugin-network-information",
@@ -731,6 +723,14 @@
             "pluginId": "cordova-plugin-network-information",
             "clobbers": [
                 "Connection"
+            ]
+        },
+        {
+            "id": "cordova-plugin-networkactivityindicator.NetworkActivityIndicator",
+            "file": "plugins/cordova-plugin-networkactivityindicator/www/NetworkActivityIndicator.js",
+            "pluginId": "cordova-plugin-networkactivityindicator",
+            "clobbers": [
+                "NetworkActivityIndicator"
             ]
         },
         {
@@ -788,6 +788,14 @@
             ]
         },
         {
+            "id": "cordova.plugins.diagnostic.Diagnostic",
+            "file": "plugins/cordova.plugins.diagnostic/www/ios/diagnostic.js",
+            "pluginId": "cordova.plugins.diagnostic",
+            "clobbers": [
+                "cordova.plugins.diagnostic"
+            ]
+        },
+        {
             "id": "ionic-plugin-deeplinks.deeplink",
             "file": "plugins/ionic-plugin-deeplinks/www/deeplink.js",
             "pluginId": "ionic-plugin-deeplinks",
@@ -804,14 +812,6 @@
                 "cordova.plugins.Keyboard"
             ],
             "runs": true
-        },
-        {
-            "id": "cordova.plugins.diagnostic.Diagnostic",
-            "file": "plugins/cordova.plugins.diagnostic/www/ios/diagnostic.js",
-            "pluginId": "cordova.plugins.diagnostic",
-            "clobbers": [
-                "cordova.plugins.diagnostic"
-            ]
         }
     ],
     "plugin_metadata": {
@@ -822,26 +822,26 @@
         "cordova-plugin-device": "1.1.5",
         "cordova-plugin-email": "1.2.6",
         "cordova-plugin-file": "4.3.2",
-        "cordova-plugin-filepath": "1.0.2",
         "cordova-plugin-file-transfer": "1.6.2",
+        "cordova-plugin-filepath": "1.0.2",
         "cordova-plugin-geolocation": "2.4.2",
-        "cordova-plugin-google-analytics": "1.7.5",
+        "cordova-plugin-google-analytics": "1.7.9",
         "cordova-plugin-inappbrowser": "1.7.0",
         "cordova-plugin-ios-longpress-fix": "1.1.0",
         "cordova-plugin-ios-no-export-compliance": "0.0.1",
         "cordova-plugin-is-debug": "1.0.0",
         "cordova-plugin-media-capture": "1.4.2",
-        "cordova-plugin-networkactivityindicator": "0.1.1",
         "cordova-plugin-network-information": "1.3.2",
+        "cordova-plugin-networkactivityindicator": "0.1.1",
         "cordova-plugin-secure-storage": "2.6.4",
         "cordova-plugin-spinner-dialog": "1.3.1",
         "cordova-plugin-splashscreen": "4.0.2",
         "cordova-plugin-statusbar": "2.2.2",
         "cordova-plugin-whitelist": "1.3.2",
         "cordova-plugin-x-socialsharing": "5.1.7",
-        "cordova-sqlite-storage": "1.5.3",
+        "cordova-sqlite-storage": "2.0.3",
+        "cordova.plugins.diagnostic": "3.4.2",
         "ionic-plugin-deeplinks": "1.0.14",
-        "ionic-plugin-keyboard": "2.2.1",
-        "cordova.plugins.diagnostic": "3.4.2"
+        "ionic-plugin-keyboard": "2.2.1"
     }
 }

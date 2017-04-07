@@ -1,6 +1,7 @@
 import { Component, ViewChild, NgZone } from '@angular/core';
 import { Alert, Toast, Loading, Events, Nav, Platform, ModalController, LoadingController, ToastController, AlertController, MenuController } from 'ionic-angular';
-import { StatusBar, Splashscreen } from 'ionic-native';
+import { StatusBar } from '@ionic-native/status-bar';
+import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { Model } from '../models/model';
 import { Deployment } from '../models/deployment';
@@ -22,7 +23,7 @@ import { HomePage } from '../pages/home/home';
 import { DeploymentSearchPage } from '../pages/deployment-search/deployment-search';
 import { DeploymentDetailsPage } from '../pages/deployment-details/deployment-details';
 
-declare var window: any;
+declare var window:any;
 declare var cordova:any;
 
 @Component({
@@ -41,6 +42,8 @@ export class MyApp {
 
   constructor(
     zone: NgZone,
+    private statusBar: StatusBar,
+    private splashScreen: SplashScreen,
     public events:Events,
     public platform: Platform,
     public api:ApiService,
@@ -65,7 +68,7 @@ export class MyApp {
       new Filter()];
     this.platform.ready().then(() => {
       this.logger.info(this, "Platform Ready", this.platform.platforms());
-      StatusBar.styleDefault();
+      this.statusBar.styleDefault();
       this.loadDatabase(models).then(
         (loaded) => {
           this.loadDeployments().then(
@@ -77,7 +80,7 @@ export class MyApp {
             });
         },
         (error) => {
-          Splashscreen.hide();
+          this.splashScreen.hide();
           this.showAlert("Database Schema Changed", "The database schema has changed, your local database will need to be reset.", [{
             text: 'Reset Database',
             handler: (clicked) => {
@@ -165,12 +168,12 @@ export class MyApp {
     this.logger.info(this, "showRootPage");
     if (deployments && deployments.length > 0) {
       this.loginDeployment(this.deployment).then((ready) => {
-        Splashscreen.hide();
+        this.splashScreen.hide();
       });
     }
     else {
       this.rootPage = HomePage;
-      Splashscreen.hide();
+      this.splashScreen.hide();
     }
   }
 
@@ -181,8 +184,8 @@ export class MyApp {
       { });
     modal.present();
     modal.onDidDismiss((data:any) => {
-      StatusBar.styleDefault();
-      StatusBar.backgroundColorByHexString('#f9f9f8');
+      this.statusBar.styleDefault();
+      this.statusBar.backgroundColorByHexString('#f9f9f8');
       if (data && data.deployment) {
         this.logger.info(this, "addDeployment", data);
         let deployment:Deployment = data.deployment;

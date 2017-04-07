@@ -1565,11 +1565,8 @@ var mytests = function() {
             });
 
           }, function() {
-            // NOT EXPECTED by Web SQL, Android, or iOS:
-            if (isWindows)
-              expect(true).toBe(true);
-            else
-              expect(false).toBe(true);
+            // NOT EXPECTED:
+            expect(false).toBe(true);
             // Close (plugin only) & finish:
             (isWebSql) ? done() : db.close(done, done);
           });
@@ -1603,6 +1600,8 @@ var mytests = function() {
               expect(true).toBe(true); // SKIP for now
             else if (isWindows)
               expect(error.message).toMatch(/a statement with no error handler failed: SQLite3 step error result code: 21/);
+            else if (isAndroid && isImpl2)
+              expect(error.message).toMatch(/a statement with no error handler failed: query not found/);
             else if (!isWebSql)
               expect(error.message).toMatch(/a statement with no error handler failed:.*not an error/);
             else
@@ -1630,11 +1629,8 @@ var mytests = function() {
             });
 
           }, function() {
-            // NOT EXPECTED by Web SQL, Android, or iOS:
-            if (isWindows)
-              expect(true).toBe(true);
-            else
-              expect(false).toBe(true);
+            // NOT EXPECTED:
+            expect(false).toBe(true);
             // Close (plugin only) & finish:
             (isWebSql) ? done() : db.close(done, done);
           });
@@ -1668,6 +1664,8 @@ var mytests = function() {
               expect(true).toBe(true); // SKIP for now
             else if (isWindows)
               expect(error.message).toMatch(/a statement with no error handler failed: SQLite3 step error result code: 21/);
+            else if (isAndroid && isImpl2)
+              expect(error.message).toMatch(/a statement with no error handler failed: query not found/);
             else if (!isWebSql)
               expect(error.message).toMatch(/a statement with no error handler failed:.*not an error/);
             else
@@ -1695,11 +1693,8 @@ var mytests = function() {
             });
 
           }, function() {
-            // NOT EXPECTED by Web SQL, Android, or iOS:
-            if (isWindows)
-              expect(true).toBe(true);
-            else
-              expect(false).toBe(true);
+            // NOT EXPECTED:
+            expect(false).toBe(true);
             // Close (plugin only) & finish:
             (isWebSql) ? done() : db.close(done, done);
           });
@@ -1733,6 +1728,8 @@ var mytests = function() {
               expect(true).toBe(true); // SKIP for now
             else if (isWindows)
               expect(error.message).toMatch(/a statement with no error handler failed: SQLite3 step error result code: 21/);
+            else if (isAndroid && isImpl2)
+              expect(error.message).toMatch(/a statement with no error handler failed: query not found/);
             else if (!isWebSql)
               expect(error.message).toMatch(/a statement with no error handler failed:.*not an error/);
             else
@@ -1761,11 +1758,8 @@ var mytests = function() {
             });
 
           }, function() {
-            // NOT EXPECTED by Web SQL, Android, or iOS:
-            if (isWindows)
-              expect(true).toBe(true);
-            else
-              expect(false).toBe(true);
+            // NOT EXPECTED:
+            expect(false).toBe(true);
             // Close (plugin only) & finish:
             (isWebSql) ? done() : db.close(done, done);
           });
@@ -1799,6 +1793,8 @@ var mytests = function() {
               expect(true).toBe(true); // SKIP for now
             else if (isWindows)
               expect(error.message).toMatch(/a statement with no error handler failed: SQLite3 step error result code: 21/);
+            else if (isAndroid && isImpl2)
+              expect(error.message).toMatch(/a statement with no error handler failed: query not found/);
             else if (!isWebSql)
               expect(error.message).toMatch(/a statement with no error handler failed:.*not an error/);
             else
@@ -1827,11 +1823,8 @@ var mytests = function() {
             });
 
           }, function() {
-            // NOT EXPECTED by Web SQL, Android, or iOS:
-            if (isWindows)
-              expect(true).toBe(true);
-            else
-              expect(false).toBe(true);
+            // NOT EXPECTED:
+            expect(false).toBe(true);
             // Close (plugin only) & finish:
             (isWebSql) ? done() : db.close(done, done);
           });

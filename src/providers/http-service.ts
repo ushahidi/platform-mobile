@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, URLSearchParams, RequestOptions } from '@angular/http';
-import { Transfer, FileUploadOptions, FileUploadResult, FileTransferError, File, Entry, Metadata } from 'ionic-native';
+import { Transfer, TransferObject, FileUploadOptions, FileUploadResult, FileTransferError } from '@ionic-native/transfer';
+import { File, Entry, Metadata } from '@ionic-native/file';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/retry';
 import 'rxjs/add/operator/delay';
@@ -15,8 +16,9 @@ export class HttpService {
 
   constructor(
     public http: Http,
+    public file:File,
+    public transfer:Transfer,
     public logger:LoggerService) {
-
   }
 
   httpHeaders(accessToken:string=null, otherHeaders:any=null): Headers {
@@ -189,7 +191,6 @@ export class HttpService {
              contentType:string=undefined,
              contentLength:number=null) {
     return new Promise((resolve, reject) => {
-      let transfer = new Transfer();
       let fileName = file.substr(file.lastIndexOf('/') + 1).split('?').shift();
       let headers = {};
       if (acceptType) {
@@ -211,7 +212,8 @@ export class HttpService {
         headers: headers
       };
       this.logger.info(this, "UPLOAD", url, file, options);
-      transfer.upload(file, url, options, true).then(
+      let fileTransfer:TransferObject = this.transfer.create();
+      fileTransfer.upload(file, url, options, true).then(
         (data:FileUploadResult) => {
           this.logger.info(this, "UPLOAD", url, file, data);
           resolve(data);
@@ -254,7 +256,7 @@ export class HttpService {
   fileSize(filePath:any):Promise<number> {
     return new Promise((resolve, reject) => {
       this.logger.info(this, "fileSize", filePath);
-      File.resolveLocalFilesystemUrl(filePath).then(
+      this.file.resolveLocalFilesystemUrl(filePath).then(
         (entry:Entry) => {
           this.logger.info(this, "fileSize", filePath, "Entry", entry.fullPath);
           entry.getMetadata(

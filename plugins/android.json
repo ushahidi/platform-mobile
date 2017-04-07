@@ -79,6 +79,9 @@
         "cordova-sqlite-storage": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
+        "cordova.plugins.diagnostic": {
+            "PACKAGE_NAME": "com.ushahidi.mobile"
+        },
         "ionic-plugin-deeplinks": {
             "URL_SCHEME": "ushahidi",
             "DEEPLINK_SCHEME": "https",
@@ -99,9 +102,6 @@
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
         "ionic-plugin-keyboard": {
-            "PACKAGE_NAME": "com.ushahidi.mobile"
-        },
-        "cordova.plugins.diagnostic": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         }
     },

@@ -27,10 +27,10 @@
         "cordova-plugin-file": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
-        "cordova-plugin-filepath": {
+        "cordova-plugin-file-transfer": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
-        "cordova-plugin-file-transfer": {
+        "cordova-plugin-filepath": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
         "cordova-plugin-geolocation": {
@@ -58,10 +58,10 @@
             "PHOTOLIBRARY_USAGE_DESCRIPTION": "Ushahidi would like to access the photo library.",
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
-        "cordova-plugin-networkactivityindicator": {
+        "cordova-plugin-network-information": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
-        "cordova-plugin-network-information": {
+        "cordova-plugin-networkactivityindicator": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
         "cordova-plugin-secure-storage": {
@@ -85,6 +85,9 @@
         "cordova-sqlite-storage": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
+        "cordova.plugins.diagnostic": {
+            "PACKAGE_NAME": "com.ushahidi.mobile"
+        },
         "ionic-plugin-deeplinks": {
             "URL_SCHEME": "ushahidi",
             "DEEPLINK_SCHEME": "https",
@@ -92,9 +95,6 @@
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
         "ionic-plugin-keyboard": {
-            "PACKAGE_NAME": "com.ushahidi.mobile"
-        },
-        "cordova.plugins.diagnostic": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         }
     },

@@ -1,11 +1,29 @@
 # Changes
 
+## cordova-sqlite-storage 2.0.3
+
+- Drop engines rule from package.json
+- Doc fixes
+
+### cordova-sqlite-storage 1.5.4
+
+- Fix iOS/macOS version to report undefined insertId in case INSERT OR IGNORE is ignored
+- Fix FIRST_WORD check for android.sqlite.database implementation
+- SQLite 3.15.2 build fixes
+- Doc updates
+
+## cordova-sqlite-storage 2.0.2
+
+- Fix Windows target platform version
+
 ### cordova-sqlite-storage 1.5.3
 
 - Fix merges to prevent possible conflicts with other plugins (Windows)
 - Fix handling of undefined SQL argument values (Windows)
 - Signal error in case of a failure opening the database file (iOS/macOS)
 - Doc fixes and updates
+
+## cordova-sqlite-storage 2.0.1
 
 ### cordova-sqlite-storage 1.5.2
 
@@ -25,6 +43,10 @@
 - Fix openDatabase/deleteDatabase exception messages
 - Move Lawnchair adapter to a separate project
 - Doc updates
+
+### cordova-sqlite-storage 2.0.0
+
+- Reference Windows platform toolset v141 to support Visual Studio 2017 (RC)
 
 ### cordova-sqlite-storage 1.5.1
 

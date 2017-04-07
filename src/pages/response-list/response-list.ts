@@ -1,7 +1,7 @@
 import { Component, NgZone, ViewChild } from '@angular/core';
 import { Platform, NavParams, Events, Content,
   NavController, ViewController, LoadingController, ToastController, AlertController, ModalController, ActionSheetController } from 'ionic-angular';
-import { Geolocation, GeolocationOptions, Geoposition } from 'ionic-native';
+import { Geolocation, GeolocationOptions, Geoposition } from '@ionic-native/geolocation';
 
 import 'leaflet';
 
@@ -60,6 +60,7 @@ export class ResponseListPage extends BasePage {
   content: Content;
 
   constructor(
+    public geolocation: Geolocation,
     public api:ApiService,
     public cache:CacheService,
     public logger:LoggerService,
@@ -692,7 +693,7 @@ export class ResponseListPage extends BasePage {
         let options:GeolocationOptions = {
           timeout: 6000,
           enableHighAccuracy: true };
-        Geolocation.getCurrentPosition(options).then(
+        this.geolocation.getCurrentPosition(options).then(
           (position:Geoposition) => {
             this.logger.info(this, "loadCenter", "getCurrentPosition", position);
             this.mapLatitude = position.coords.latitude;

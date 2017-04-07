@@ -27,6 +27,10 @@ UniversalAnalyticsPlugin.prototype.setAppVersion = function(version, success, er
   cordova.exec(success, error, 'UniversalAnalytics', 'setAppVersion', [version]);
 };
 
+UniversalAnalyticsPlugin.prototype.getVar = function(variable, success, error) {
+  cordova.exec(success, error, 'UniversalAnalytics', 'get', [variable]);
+};
+
 /* enables verbose logging */
 UniversalAnalyticsPlugin.prototype.debugMode = function(success, error) {
   cordova.exec(success, error, 'UniversalAnalytics', 'debugMode', []);
@@ -36,16 +40,16 @@ UniversalAnalyticsPlugin.prototype.trackMetric = function(key, value, success, e
   cordova.exec(success, error, 'UniversalAnalytics', 'trackMetric', [key, value]);
 };
 
-UniversalAnalyticsPlugin.prototype.trackView = function(screen, campaingUrl, newSession, success, error) {
-  if (typeof campaingUrl === 'undefined' || campaingUrl === null) {
-    campaingUrl = '';
+UniversalAnalyticsPlugin.prototype.trackView = function(screen, campaignUrl, newSession, success, error) {
+  if (typeof campaignUrl === 'undefined' || campaignUrl === null) {
+    campaignUrl = '';
   }
 
   if (typeof newSession === 'undefined' || newSession === null) {
     newSession = false;
   }  
 
-  cordova.exec(success, error, 'UniversalAnalytics', 'trackView', [screen, campaingUrl, newSession]);
+  cordova.exec(success, error, 'UniversalAnalytics', 'trackView', [screen, campaignUrl, newSession]);
 };
 
 UniversalAnalyticsPlugin.prototype.addCustomDimension = function(key, value, success, error) {

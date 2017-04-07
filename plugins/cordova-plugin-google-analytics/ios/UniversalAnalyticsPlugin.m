@@ -57,13 +57,32 @@
 
         NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
         f.numberStyle = NSNumberFormatterDecimalStyle;
-        NSNumber *myKey = [f numberFromString:@"42"];
+        NSNumber *myKey = [f numberFromString:key];
 
         /* NSLog(@"Setting tracker dimension slot %@: <%@>", key, value); */
         [tracker set:[GAIFields customDimensionForIndex:myKey.unsignedIntegerValue]
         value:value];
       }
     }
+}
+
+- (void) getVar: (CDVInvokedUrlCommand*) command
+{
+    [self.commandDelegate runInBackground:^{
+        CDVPluginResult* pluginResult = nil;
+        if ( ! _trackerStarted) {
+            pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Tracker not started"];
+            [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+            return;
+        }
+        
+        id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
+        NSString* parameter = [command.arguments objectAtIndex:0];
+        NSString* result = [tracker get:parameter];   
+
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:result];
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];             
+    }];
 }
 
 - (void) debugMode: (CDVInvokedUrlCommand*) command
@@ -171,7 +190,7 @@
     }
 
     _customDimensions[key.stringValue] = value;
-
+    
     pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }

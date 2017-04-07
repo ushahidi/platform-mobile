@@ -442,6 +442,14 @@ module.exports = [
         ]
     },
     {
+        "id": "cordova.plugins.diagnostic.Diagnostic",
+        "file": "plugins/cordova.plugins.diagnostic/www/android/diagnostic.js",
+        "pluginId": "cordova.plugins.diagnostic",
+        "clobbers": [
+            "cordova.plugins.diagnostic"
+        ]
+    },
+    {
         "id": "ionic-plugin-deeplinks.deeplink",
         "file": "plugins/ionic-plugin-deeplinks/www/deeplink.js",
         "pluginId": "ionic-plugin-deeplinks",
@@ -458,14 +466,6 @@ module.exports = [
             "cordova.plugins.Keyboard"
         ],
         "runs": true
-    },
-    {
-        "id": "cordova.plugins.diagnostic.Diagnostic",
-        "file": "plugins/cordova.plugins.diagnostic/www/android/diagnostic.js",
-        "pluginId": "cordova.plugins.diagnostic",
-        "clobbers": [
-            "cordova.plugins.diagnostic"
-        ]
     }
 ];
 module.exports.metadata = 
@@ -481,7 +481,7 @@ module.exports.metadata =
     "cordova-plugin-file-transfer": "1.6.2",
     "cordova-plugin-filepath": "1.0.2",
     "cordova-plugin-geolocation": "2.4.2",
-    "cordova-plugin-google-analytics": "1.7.5",
+    "cordova-plugin-google-analytics": "1.7.9",
     "cordova-plugin-inappbrowser": "1.7.0",
     "cordova-plugin-ios-longpress-fix": "1.1.0",
     "cordova-plugin-ios-no-export-compliance": "0.0.1",
@@ -495,10 +495,10 @@ module.exports.metadata =
     "cordova-plugin-statusbar": "2.2.2",
     "cordova-plugin-whitelist": "1.3.2",
     "cordova-plugin-x-socialsharing": "5.1.7",
-    "cordova-sqlite-storage": "1.5.3",
+    "cordova-sqlite-storage": "2.0.3",
+    "cordova.plugins.diagnostic": "3.4.2",
     "ionic-plugin-deeplinks": "1.0.14",
-    "ionic-plugin-keyboard": "2.2.1",
-    "cordova.plugins.diagnostic": "3.4.2"
+    "ionic-plugin-keyboard": "2.2.1"
 };
 // BOTTOM OF METADATA
 });

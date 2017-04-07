@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
+import { Transfer} from '@ionic-native/transfer';
+import { File } from '@ionic-native/file';
 
 import { Deployment } from '../models/deployment';
 import { User } from '../models/user';
@@ -30,10 +32,12 @@ export class ApiService extends HttpService {
 
   constructor(
     public http: Http,
+    public file:File,
+    public transfer:Transfer,
     public vimeo:VimeoService,
     public logger:LoggerService,
     public database:DatabaseService) {
-    super(http, logger);
+    super(http, file, transfer, logger);
   }
 
   searchDeployments(search:string):Promise<Deployment[]> {

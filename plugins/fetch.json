@@ -87,7 +87,7 @@
     "cordova-plugin-google-analytics": {
         "source": {
             "type": "registry",
-            "id": "cordova-plugin-google-analytics@~1.7.5"
+            "id": "cordova-plugin-google-analytics@~1.7.9"
         },
         "is_top_level": true,
         "variables": {}
@@ -156,7 +156,7 @@
     "cordova-plugin-secure-storage": {
         "source": {
             "type": "registry",
-            "id": "cordova-plugin-secure-storage@~2.6.3"
+            "id": "cordova-plugin-secure-storage@~2.6.4"
         },
         "is_top_level": true,
         "variables": {}
@@ -185,6 +185,14 @@
         "is_top_level": true,
         "variables": {}
     },
+    "cordova-sqlite-storage": {
+        "source": {
+            "type": "registry",
+            "id": "cordova-sqlite-storage@~2.0.3"
+        },
+        "is_top_level": true,
+        "variables": {}
+    },
     "cordova-plugin-whitelist": {
         "source": {
             "type": "registry",
@@ -197,14 +205,6 @@
         "source": {
             "type": "registry",
             "id": "cordova-plugin-x-socialsharing@~5.1.6"
-        },
-        "is_top_level": true,
-        "variables": {}
-    },
-    "cordova-sqlite-storage": {
-        "source": {
-            "type": "registry",
-            "id": "cordova-sqlite-storage@~1.5.3"
         },
         "is_top_level": true,
         "variables": {}
@@ -224,7 +224,7 @@
     "ionic-plugin-keyboard": {
         "source": {
             "type": "registry",
-            "id": "ionic-plugin-keyboard@~2.2.1"
+            "id": "ionic-plugin-keyboard"
         },
         "is_top_level": true,
         "variables": {}

@@ -206,7 +206,7 @@
 		</data>
 		<key>CDVLaunchScreen.storyboardc/01J-lp-oVM-view-Ze5-6b-2t3.nib</key>
 		<data>
-		Zk3ZTha6/WkCRXqy+MdqbjQ8O6k=
+		t6Pp4HlhRcIRcYw275dS/Kj/pB0=
 		</data>
 		<key>CDVLaunchScreen.storyboardc/Info.plist</key>
 		<data>
@@ -214,11 +214,11 @@
 		</data>
 		<key>CDVLaunchScreen.storyboardc/UIViewController-01J-lp-oVM.nib</key>
 		<data>
-		zhnxPztt/vkYdWcUFZxgoAMu2Y4=
+		VYDcSiZxeSzrIisDfVbFiWx52Z0=
 		</data>
 		<key>Info.plist</key>
 		<data>
-		BHzpLnxeRZdaet1fLbSR2ATFacg=
+		820nyWy24QkKdcb0JQzLu05eQGg=
 		</data>
 		<key>LaunchImage-568h@2x.png</key>
 		<data>
@@ -278,7 +278,7 @@
 		</data>
 		<key>MainViewController.nib</key>
 		<data>
-		usZg/Qujq9kikohYe3KF9hzysB8=
+		4SX/mpRePdQxo+/H2LTjDrRNITk=
 		</data>
 		<key>PkgInfo</key>
 		<data>
@@ -303,7 +303,7 @@
 		</data>
 		<key>config.xml</key>
 		<data>
-		+OicgH/u2gxFJY46OY34gtxfmQQ=
+		Zjj3wBKJr8FTjRP4u+ICnTauaoY=
 		</data>
 		<key>embedded.mobileprovision</key>
 		<data>
@@ -463,7 +463,7 @@
 		</data>
 		<key>www/assets/stylesheets/leaflet.css</key>
 		<data>
-		EvKkBOCF6QsLT0JWK1bOyay958M=
+		FjaVY+XnVADhjyFDAuOhUKrzY9g=
 		</data>
 		<key>www/assets/ushahidi-logo-gold.png</key>
 		<data>
@@ -479,11 +479,11 @@
 		</data>
 		<key>www/build/main.js</key>
 		<data>
-		/YlfQlZlIarV4CgEkt4t2HaQnGs=
+		BhIdTvznl0eMpwrYmaVh0cGOq50=
 		</data>
 		<key>www/build/main.js.map</key>
 		<data>
-		TyFR3uM6CYxGSw8y5mrPsI4XqEo=
+		TzZtpEsKuXVOg6G/AlTx7bHz6xs=
 		</data>
 		<key>www/build/polyfills.js</key>
 		<data>
@@ -507,7 +507,7 @@
 		</data>
 		<key>www/cordova_plugins.js</key>
 		<data>
-		NzQaoLR2mqiTrQ2W4RYxxNcoIsw=
+		CPZyxNaZojZIQ+gR+dTdSBs2u7I=
 		</data>
 		<key>www/index.html</key>
 		<data>
@@ -667,7 +667,7 @@
 		</data>
 		<key>www/plugins/cordova-plugin-google-analytics/www/analytics.js</key>
 		<data>
-		unkMHyTGgseiPJ0+bUJ7IIT8aAQ=
+		pASEYvvJ2GWZkCzTAtNIP/dFE2E=
 		</data>
 		<key>www/plugins/cordova-plugin-inappbrowser/www/inappbrowser.js</key>
 		<data>
@@ -1275,11 +1275,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			Zk3ZTha6/WkCRXqy+MdqbjQ8O6k=
+			t6Pp4HlhRcIRcYw275dS/Kj/pB0=
 			</data>
 			<key>hash2</key>
 			<data>
-			6okPHojJ/r1xtjF2m1pQdeie8N0F2835BpXITqqNyCs=
+			9a2TKntPefUZQ2FOvV+BLbecKwhy7pLPF/JT8bLLTMg=
 			</data>
 		</dict>
 		<key>CDVLaunchScreen.storyboardc/Info.plist</key>
@@ -1297,11 +1297,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			zhnxPztt/vkYdWcUFZxgoAMu2Y4=
+			VYDcSiZxeSzrIisDfVbFiWx52Z0=
 			</data>
 			<key>hash2</key>
 			<data>
-			HZ/qP83GLJ3BvaXj9CYI6lSaH3RshX80C3j2eq/NrqU=
+			isMc9sRKHdQxVkDBa6AMpNfGNoxPBgCvDEoHE4QxTF4=
 			</data>
 		</dict>
 		<key>LaunchImage-568h@2x.png</key>
@@ -1462,11 +1462,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			usZg/Qujq9kikohYe3KF9hzysB8=
+			4SX/mpRePdQxo+/H2LTjDrRNITk=
 			</data>
 			<key>hash2</key>
 			<data>
-			/bieH1/F5IHDGPohCTmmC0hsXN3+8kw8ctme4goVfdY=
+			0ew4ZSNI/3zF9Pf5MtIH7DtGxig63JVFqvL0RnO+Ok4=
 			</data>
 		</dict>
 		<key>SAMKeychain.bundle/en.lproj/SAMKeychain.strings</key>
@@ -1508,11 +1508,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			+OicgH/u2gxFJY46OY34gtxfmQQ=
+			Zjj3wBKJr8FTjRP4u+ICnTauaoY=
 			</data>
 			<key>hash2</key>
 			<data>
-			BYwxM5H/d/mK+ZspPlsZvrv+hW9DbAY2ckz9sS56N9g=
+			yzKZT37OV4aWUh3bLNyoXDv/diqV7KhY7NHLT9gNqQk=
 			</data>
 		</dict>
 		<key>embedded.mobileprovision</key>
@@ -1948,11 +1948,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			EvKkBOCF6QsLT0JWK1bOyay958M=
+			FjaVY+XnVADhjyFDAuOhUKrzY9g=
 			</data>
 			<key>hash2</key>
 			<data>
-			TKYF7UCegPRIRoaV8LQDD/H/ubwjI1YJXeYQ0GDzAj0=
+			mX1FFJAZZMAuulO0h53qq0HAPOuou/yBj/qgjd+DDeM=
 			</data>
 		</dict>
 		<key>www/assets/ushahidi-logo-gold.png</key>
@@ -1992,22 +1992,22 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			/YlfQlZlIarV4CgEkt4t2HaQnGs=
+			BhIdTvznl0eMpwrYmaVh0cGOq50=
 			</data>
 			<key>hash2</key>
 			<data>
-			SecWQ2w7sSs7yVoVeVmA4rQbA+KItaWyxEWshzXqnEY=
+			9V4VW0eXITkhytjNuxv3YyRfsOy1UcZhEEpVoBhqGPM=
 			</data>
 		</dict>
 		<key>www/build/main.js.map</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			TyFR3uM6CYxGSw8y5mrPsI4XqEo=
+			TzZtpEsKuXVOg6G/AlTx7bHz6xs=
 			</data>
 			<key>hash2</key>
 			<data>
-			zno6Yf2jhNf68z3eoVxIPeU1U86O1NCaigyEQa/s/WU=
+			1pUCVfbtgn2kco/bmsJms7gYax9XOhLx3RppHwlurSE=
 			</data>
 		</dict>
 		<key>www/build/polyfills.js</key>
@@ -2069,11 +2069,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			NzQaoLR2mqiTrQ2W4RYxxNcoIsw=
+			CPZyxNaZojZIQ+gR+dTdSBs2u7I=
 			</data>
 			<key>hash2</key>
 			<data>
-			YTgb/xUGiMOCVSsWphQw+Ypjr9XtEdLYit85W+IxHxU=
+			dXCoREEL5X+xxRtZ7pRhe8o3r5rOGIjk8glbW9rxlds=
 			</data>
 		</dict>
 		<key>www/index.html</key>
@@ -2509,11 +2509,11 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			unkMHyTGgseiPJ0+bUJ7IIT8aAQ=
+			pASEYvvJ2GWZkCzTAtNIP/dFE2E=
 			</data>
 			<key>hash2</key>
 			<data>
-			Y5RaRYeffh1MX8LOyCDEQTjHQ6hcuwYo/8LEl5rZVpw=
+			dRCruYjHq8+ZvCJdRhWnOd9D27a7zk5cIw6kFQQvtAA=
 			</data>
 		</dict>
 		<key>www/plugins/cordova-plugin-inappbrowser/www/inappbrowser.js</key>
