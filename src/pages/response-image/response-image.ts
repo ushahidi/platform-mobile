@@ -4,6 +4,9 @@ import { Platform, NavParams, Content,
 
 import { BasePage } from '../../pages/base-page/base-page';
 
+import { Deployment } from '../../models/deployment';
+import { Post } from '../../models/post';
+
 import { LoggerService } from '../../providers/logger-service';
 
 import { PLACEHOLDER_PHOTO } from '../../constants/placeholders';
@@ -17,6 +20,8 @@ export class ResponseImagePage extends BasePage {
   @ViewChild(Content)
   content: Content;
 
+  deployment:Deployment = null;
+  post:Post = null;
   image:string = null;
   placeholder:string = PLACEHOLDER_PHOTO;
 
@@ -37,8 +42,28 @@ export class ResponseImagePage extends BasePage {
 
   ionViewWillEnter() {
     super.ionViewWillEnter();
+    this.deployment = this.getParameter<Deployment>("deployment");
+    this.post = this.getParameter<Post>("post");
     this.image = this.getParameter<string>("image");
     this.logger.info(this, 'ionViewWillEnter', this.image);
+  }
+
+  shareImage(event:any) {
+    let subject = this.deployment.name;
+    let message = this.post.title;
+    let file = this.image;
+    let url = this.post.url;
+    this.logger.info(this, "shareImage", "Subject", subject, "Message", message, "File", file, "URL", url);
+    this.showShare(subject, message, file, url).then(
+      (shared) => {
+        if (shared) {
+          this.showToast("Image Shared");
+          this.trackEvent("Images", "shared", this.image);
+        }
+      },
+      (error) => {
+        this.showToast(error);
+    });
   }
 
 }

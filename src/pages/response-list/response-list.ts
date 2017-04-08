@@ -491,6 +491,7 @@ export class ResponseListPage extends BasePage {
         (results:any) => {
           loading.dismiss();
           this.showToast("Added To Collection");
+          this.trackEvent("Posts", "collected", post.url);
         },
         (error:any) => {
           loading.dismiss();
@@ -524,6 +525,7 @@ export class ResponseListPage extends BasePage {
         this.database.savePost(this.deployment, post).then(saved => {
           loading.dismiss();
           this.showToast("Responsed archived");
+          this.trackEvent("Posts", "archived", post.url);
         });
       },
       (error:any) => {
@@ -541,7 +543,8 @@ export class ResponseListPage extends BasePage {
         post.status = "published";
         this.database.savePost(this.deployment, post).then(saved => {
           loading.dismiss();
-          this.showToast("Response archived");
+          this.showToast("Response published");
+          this.trackEvent("Posts", "published", post.url);
         });
       },
       (error:any) => {
@@ -574,6 +577,7 @@ export class ResponseListPage extends BasePage {
             }
             loading.dismiss();
             this.showToast("Responsed removed");
+            this.trackEvent("Posts", "removed", post.url);
           },
           (error) => {
             loading.dismiss();
@@ -607,6 +611,7 @@ export class ResponseListPage extends BasePage {
                    this.filtered.splice(filteredIndex, 1);
                  }
                  this.showToast("Response deleted");
+                 this.trackEvent("Posts", "deleted", post.url);
               });
              },
              (error:any) => {

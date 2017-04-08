@@ -10,6 +10,7 @@ import {
 import { InAppBrowser, InAppBrowserObject } from '@ionic-native/in-app-browser';
 import { Network } from '@ionic-native/network';
 import { SocialSharing } from '@ionic-native/social-sharing';
+import { GoogleAnalytics } from '@ionic-native/google-analytics';
 
 import { LoggerService } from '../../providers/logger-service';
 
@@ -25,8 +26,9 @@ export class BasePage {
   connection: any = null;
   disconnection: any = null;
   network:Network;
-  sharing:SocialSharing;
-  browser:InAppBrowser;
+  socialSharing:SocialSharing;
+  inAppBrowser:InAppBrowser;
+  googleAnalytics:GoogleAnalytics;
 
   @ViewChild(Content)
   content: Content;
@@ -45,8 +47,9 @@ export class BasePage {
     protected actionController:ActionSheetController) {
     this.zone = zone;
     this.network = new Network();
-    this.sharing = new SocialSharing();
-    this.browser = new InAppBrowser();
+    this.socialSharing = new SocialSharing();
+    this.inAppBrowser = new InAppBrowser();
+    this.googleAnalytics = new GoogleAnalytics();
   }
 
   ionViewDidLoad() {
@@ -84,6 +87,8 @@ export class BasePage {
 
   ionViewDidEnter() {
     this.logger.info(this, "ionViewDidEnter");
+    let screen = this.constructor.name.replace("Page","").replace(/([A-Z])/g," $1").trim();
+    this.trackView(screen);
   }
 
   ionViewWillLeave() {
@@ -179,12 +184,12 @@ export class BasePage {
   }
 
   showShare(subject:string, message:string=null, file:string=null, url:string=null) {
-    return this.sharing.share(message, subject, file, url);
+    return this.socialSharing.share(message, subject, file, url);
   }
 
   showUrl(url:string, target:string="_system"):InAppBrowserObject {
     this.logger.info(this, "showUrl", url, target);
-    let browser = this.browser.create(url, target);
+    let browser = this.inAppBrowser.create(url, target);
     browser.show();
     return browser;
   }
@@ -211,6 +216,18 @@ export class BasePage {
       result = result.then(() => task());
     });
     return result;
+  }
+
+  trackView(screen:string, campaign:string=null, session:boolean=false) {
+    this.googleAnalytics.trackView(screen, campaign, session).then((tracked) => {
+      this.logger.info(this, "trackView", screen);
+    });
+  }
+
+  trackEvent(category:string, action:string, label:string, value:number=0, newSession:boolean=false) {
+    this.googleAnalytics.trackEvent(category, action, label, value, newSession).then((tracked) => {
+      this.logger.info(this, "trackEvent", category, action, label);
+    });
   }
 
 }

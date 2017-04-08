@@ -4,6 +4,7 @@ import { HttpModule } from '@angular/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
+import { AppVersion } from '@ionic-native/app-version';
 import { IsDebug } from '@ionic-native/is-debug';
 import { StatusBar } from '@ionic-native/status-bar';
 import { Transfer } from '@ionic-native/transfer';
@@ -18,6 +19,7 @@ import { Diagnostic } from '@ionic-native/diagnostic';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { SQLite } from '@ionic-native/sqlite';
 import { Keyboard } from '@ionic-native/keyboard';
+import { GoogleAnalytics } from '@ionic-native/google-analytics';
 
 import { MyApp } from './app.component';
 import { BasePage } from '../pages/base-page/base-page';
@@ -132,12 +134,14 @@ import { VimeoService } from '../providers/vimeo-service';
     { provide: Keyboard, useClass: Keyboard },
     { provide: Transfer, useClass: Transfer },
     { provide: StatusBar, useClass: StatusBar },
+    { provide: AppVersion, useClass: AppVersion },
     { provide: Diagnostic, useClass: Diagnostic },
     { provide: Geolocation, useClass: Geolocation },
     { provide: SplashScreen, useClass: SplashScreen },
     { provide: InAppBrowser, useClass: InAppBrowser },
     { provide: MediaCapture, useClass: MediaCapture },
     { provide: SocialSharing, useClass: SocialSharing },
+    { provide: GoogleAnalytics, useClass: GoogleAnalytics },
     { provide: ApiService, useClass: ApiService },
     { provide: VimeoService, useClass: VimeoService },
     { provide: CacheService, useClass: CacheService },

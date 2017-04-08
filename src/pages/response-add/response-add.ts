@@ -90,6 +90,7 @@ export class ResponseAddPage extends BasePage {
     this.logger.info(this, "onCancel");
     this.post = null;
     this.hideModal();
+    this.trackEvent("Posts", "cancelled", this.deployment.website);
   }
 
   onSubmit(event:any=null) {
@@ -111,6 +112,7 @@ export class ResponseAddPage extends BasePage {
               }
             }];
             this.showAlert('Response Saved', 'Your response has been saved!', buttons);
+            this.trackEvent("Posts", "saved", this.deployment.website);
           },
           (error) => {
             loading.dismiss();
@@ -131,6 +133,7 @@ export class ResponseAddPage extends BasePage {
               }
             }];
             this.showAlert('Response Updated', 'Your response has been updated!', buttons);
+            this.trackEvent("Posts", "updated", this.post.url);
           },
           (error) => {
             loading.dismiss();
@@ -151,6 +154,7 @@ export class ResponseAddPage extends BasePage {
               }
             }];
             this.showAlert('Response Posted', 'Your response has been posted!', buttons);
+            this.trackEvent("Posts", "added", this.post.url);
           },
           (error) => {
             loading.dismiss();

@@ -27,6 +27,8 @@ export class DeploymentSearchPage extends BasePage {
   @ViewChild('searchbar')
   searchbar: Searchbar;
 
+  search:string = null;
+
   constructor(
     public statusBar:StatusBar,
     public api:ApiService,
@@ -60,10 +62,10 @@ export class DeploymentSearchPage extends BasePage {
 
   onSearch(event:any) {
     this.logger.info(this, "onSearch", event.target.value);
-    let search:string = event.target.value;
-    if (search && search.length > 0) {
+    this.search = event.target.value;
+    if (this.search && this.search.length > 0) {
       this.loading = true;
-      this.api.searchDeployments(search).then(
+      this.api.searchDeployments(this.search).then(
         (deployments:Deployment[]) => {
           this.deployments = deployments;
           this.loading = false;
@@ -80,6 +82,7 @@ export class DeploymentSearchPage extends BasePage {
 
   addDeployment(event:any, deployment:Deployment) {
     this.logger.info(this, "addDeployment");
+    this.trackEvent("Deployments", "searched", this.search);
     let where = { domain: deployment.domain };
     return this.database.getDeployments(where).then(
       (deployments:Deployment[]) => {
@@ -87,6 +90,7 @@ export class DeploymentSearchPage extends BasePage {
           this.showAlert('Deployment Already Added', 'Looks like that deployment has already been added.');
         }
         else {
+          this.trackEvent("Deployments", "added", deployment.website);
           this.loginDeployment(deployment);
         }
       });

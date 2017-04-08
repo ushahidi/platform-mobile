@@ -284,6 +284,7 @@ export class DeploymentDetailsPage extends BasePage {
         (shared) => {
           if (shared) {
             this.showToast("Deployment Shared");
+            this.trackEvent("Deployments", "shared", this.deployment.website);
           }
         },
         (error) => {
@@ -299,6 +300,7 @@ export class DeploymentDetailsPage extends BasePage {
 
     userLogout(event:any) {
       this.logger.info(this, "userLogout");
+      this.trackEvent("Deployments", "logout", this.deployment.website);
       let loading = this.showLoading("Logging out...");
       return Promise.all([
         this.demoteDeployment(),

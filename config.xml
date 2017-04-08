@@ -114,11 +114,11 @@
   <feature name="SocialSharing">
     <param name="android-package" value="nl.xservices.plugins.SocialSharing"/>
   </feature>
-  <plugin name="cordova-plugin-app-version" spec="~0.1.9"/>
   <plugin name="cordova-plugin-camera" spec="~2.4.0">
     <variable name="CAMERA_USAGE_DESCRIPTION" value="Ushahidi would like to access the camera."/>
     <variable name="PHOTOLIBRARY_USAGE_DESCRIPTION" value="Ushahidi would like to access the photo library."/>
   </plugin>
+  <plugin name="cordova-plugin-app-version" spec="~0.1.9"/>
   <plugin name="cordova-plugin-console" spec="~1.0.6"/>
   <plugin name="cordova-plugin-device" spec="~1.1.5"/>
   <plugin name="cordova.plugins.diagnostic" spec="~3.4.2"/>

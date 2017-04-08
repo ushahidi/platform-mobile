@@ -207,6 +207,7 @@ export class ResponseDetailsPage extends BasePage {
       (shared:boolean) => {
         if (shared) {
           this.showToast("Response Shared");
+          this.trackEvent("Posts", "shared", this.post.url);
         }
       },
       (error:any) => {
@@ -228,6 +229,8 @@ export class ResponseDetailsPage extends BasePage {
   showImage(title:string, image:string) {
     this.logger.info(this, "showImage", title, image);
     this.showPage(ResponseImagePage, {
+      deployment: this.deployment,
+      post: this.post,
       title: title,
       image: image
     });
@@ -257,6 +260,7 @@ export class ResponseDetailsPage extends BasePage {
         (results:any) => {
           loading.dismiss();
           this.showToast("Added To Collection");
+          this.trackEvent("Posts", "collected", post.url);
         },
         (error:any) => {
           loading.dismiss();
@@ -291,6 +295,7 @@ export class ResponseDetailsPage extends BasePage {
           loading.dismiss();
           this.events.publish(POST_UPDATED, post.id);
           this.showToast("Responsed put under review");
+          this.trackEvent("Posts", "drafted", this.post.url);
         });
       },
       (error:any) => {
@@ -310,6 +315,7 @@ export class ResponseDetailsPage extends BasePage {
           loading.dismiss();
           this.events.publish(POST_UPDATED, post.id);
           this.showToast("Response archived");
+          this.trackEvent("Posts", "archived", this.post.url);
         });
       },
       (error:any) => {
@@ -328,7 +334,8 @@ export class ResponseDetailsPage extends BasePage {
         this.database.savePost(this.deployment, post).then(saved => {
           loading.dismiss();
           this.events.publish('post:updated', post.id);
-          this.showToast("Response archived");
+          this.showToast("Response published");
+          this.trackEvent("Posts", "published", this.post.url);
         });
       },
       (error:any) => {
@@ -351,6 +358,7 @@ export class ResponseDetailsPage extends BasePage {
                this.database.removePost(this.deployment, post).then(removed => {
                  this.showToast("Response deleted");
                  this.events.publish(POST_DELETED, post.id);
+                 this.trackEvent("Posts", "deleted", this.post.url);
                  this.closePage();
               });
              },

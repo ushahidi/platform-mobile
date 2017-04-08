@@ -2,6 +2,8 @@ import { Component, ViewChild, NgZone } from '@angular/core';
 import { Alert, Toast, Loading, Events, Nav, Platform, ModalController, LoadingController, ToastController, AlertController, MenuController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { GoogleAnalytics } from '@ionic-native/google-analytics';
+import { AppVersion } from '@ionic-native/app-version';
 
 import { Model } from '../models/model';
 import { Deployment } from '../models/deployment';
@@ -23,6 +25,8 @@ import { HomePage } from '../pages/home/home';
 import { DeploymentSearchPage } from '../pages/deployment-search/deployment-search';
 import { DeploymentDetailsPage } from '../pages/deployment-details/deployment-details';
 
+import { GOOGLE_ANALYTICS_ID } from '../constants/secrets';
+
 declare var window:any;
 declare var cordova:any;
 
@@ -42,6 +46,8 @@ export class MyApp {
 
   constructor(
     zone: NgZone,
+    private appVersion:AppVersion,
+    private googleAnalytics:GoogleAnalytics,
     private statusBar: StatusBar,
     private splashScreen: SplashScreen,
     public events:Events,
@@ -55,62 +61,79 @@ export class MyApp {
     public alertController: AlertController,
     public menuController: MenuController) {
     this.zone = zone;
-    let models = [
-      new Deployment(),
-      new User(),
-      new Form(),
-      new Stage(),
-      new Attribute(),
-      new Post(),
-      new Value(),
-      new Image(),
-      new Collection(),
-      new Filter()];
     this.platform.ready().then(() => {
       this.logger.info(this, "Platform Ready", this.platform.platforms());
-      this.statusBar.styleDefault();
-      this.loadDatabase(models).then(
-        (loaded) => {
-          this.loadDeployments().then(
-            (deployments) => {
-              this.showRootPage(deployments);
-            },
-            (error) => {
-              this.showRootPage();
-            });
-        },
-        (error) => {
-          this.splashScreen.hide();
-          this.showAlert("Database Schema Changed", "The database schema has changed, your local database will need to be reset.", [{
-            text: 'Reset Database',
-            handler: (clicked) => {
-              let loading = this.showLoading("Resetting...");
-              this.resetDatabase().then(
-                (reset) => {
-                  this.loadDatabase(models).then(
-                    (created) => {
-                      loading.dismiss();
-                      this.showRootPage();
-                    },
-                    (error) => {
-                      loading.dismiss();
-                      this.showAlert("Problem Creating Database", "There was a problem creating the database.");
-                    }
-                  );
-                },
-                (error) => {
-                  loading.dismiss();
-                  this.showAlert("Problem Resetting Database", "There was a problem resetting the database.");
-              });
-            }
-          }]);
-      });
+      this.loadStatusBar();
+      this.loadAnalytics();
+      this.loadApplication([
+        new Deployment(),
+        new User(),
+        new Form(),
+        new Stage(),
+        new Attribute(),
+        new Post(),
+        new Value(),
+        new Image(),
+        new Collection(),
+        new Filter()]);
     });
   }
 
-  resetDatabase():Promise<any> {
-    this.logger.info(this, "resetDatabase");
-    return this.database.deleteDatabase();
+  loadApplication(models:Model[]) {
+    this.loadDatabase(models).then(
+      (loaded:any) => {
+        this.loadDeployments().then(
+          (deployments:Deployment[]) => {
+            this.showRootPage(deployments);
+          },
+          (error:any) => {
+            this.showRootPage();
+          });
+      },
+      (error) => {
+        this.splashScreen.hide();
+        this.showAlert("Database Schema Changed", "The database schema has changed, your local database will need to be reset.", [{
+          text: 'Reset Database',
+          handler: (clicked) => {
+            let loading = this.showLoading("Resetting...");
+            this.resetDatabase().then(
+              (reset:any) => {
+                this.loadDatabase(models).then(
+                  (created:any) => {
+                    loading.dismiss();
+                    this.showRootPage();
+                  },
+                  (error:any) => {
+                    loading.dismiss();
+                    this.showAlert("Problem Creating Database", "There was a problem creating the database.");
+                  }
+                );
+              },
+              (error:any) => {
+                loading.dismiss();
+                this.showAlert("Problem Resetting Database", "There was a problem resetting the database.");
+            });
+          }
+        }]);
+    });
+  }
+
+  loadStatusBar() {
+    this.statusBar.styleDefault();
+  }
+
+  loadAnalytics() {
+    this.appVersion.getVersionCode().then((appVersion) => {
+      this.logger.info(this, "loadAnalytics", "App Version", appVersion);
+      this.googleAnalytics.setAppVersion(appVersion);
+    });
+    this.googleAnalytics.startTrackerWithId(GOOGLE_ANALYTICS_ID)
+      .then(() => {
+        this.logger.info(this, "loadAnalytics", "Google Analytics", "Ready");
+      })
+      .catch((error) => {
+        this.logger.error(this, "loadAnalytics", "Google Analytics", error);
+      });
   }
 
   loadDatabase(models:Model[]):Promise<any> {
@@ -138,6 +161,11 @@ export class MyApp {
           reject(error);
         });
     });
+  }
+
+  resetDatabase():Promise<any> {
+    this.logger.info(this, "resetDatabase");
+    return this.database.deleteDatabase();
   }
 
   loadDeployments(event:any=null):Promise<Deployment[]> {
@@ -262,6 +290,7 @@ export class MyApp {
 
   removeDeployment(event:any, deployment:Deployment) {
     this.logger.info(this, "removeDeployment", deployment.name);
+    this.trackEvent("Deployments", "removed", deployment.website);
     let loading = this.showLoading("Removing...");
     let promises = [
       this.database.removeUsers(deployment),
@@ -322,5 +351,11 @@ export class MyApp {
     });
     toast.present();
     return toast;
+  }
+
+  trackEvent(category:string, action:string, label:string, value:number=0, newSession:boolean=false) {
+    this.googleAnalytics.trackEvent(category, action, label, value, newSession).then((tracked) => {
+      this.logger.info(this, "trackEvent", category, action, label);
+    });
   }
 }
