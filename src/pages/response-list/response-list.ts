@@ -161,7 +161,7 @@ export class ResponseListPage extends BasePage {
 
   loadPosts(cache:boolean=true):Promise<any> {
     this.logger.info(this, "loadPosts", "Cache", cache);
-    if (cache && this.posts != null && this.posts.length > 0) {
+    if (cache && this.posts != null && this.posts.length >= this.limit) {
       this.logger.info(this, "loadPosts", "Cached", this.posts.length);
       return Promise.resolve();
     }
@@ -258,24 +258,25 @@ export class ResponseListPage extends BasePage {
       this.api.createPostWithMedia(this.deployment, post).then(
         (posted:any) => {
           this.logger.info(this, "createPost", "Posted", posted);
-          let removes = [
-            this.database.removePost(this.deployment, post),
-            this.database.removeValues(this.deployment, post),
-          ];
+          let removes = [];
+          if (posted.id != null && posted.id > 0) {
+            removes.push(this.database.removePost(this.deployment, post));
+            removes.push(this.database.removeValues(this.deployment, post));
+          }
           Promise.all(removes).then(
             (removed) => {
-              this.logger.info(this, "createPost", "Pending Removed", removed);
-              post.id = posted.id;
-              post.saved = null;
+              let saves = [];
               post.pending = false;
-              let saves = [
-                this.database.savePost(this.deployment, post),
-              ];
-              for (let value of post.values) {
-                value.post_id = posted.id;
-                value.saved = null;
-                saves.push(this.database.saveValue(this.deployment, value));
+              if (posted.id != null && posted.id > 0) {
+                post.saved = null;
+                post.id = posted.id;
+                for (let value of post.values) {
+                  value.saved = null;
+                  value.post_id = posted.id;
+                  saves.push(this.database.saveValue(this.deployment, value));
+                }
               }
+              saves.push(this.database.savePost(this.deployment, post));
               Promise.all(saves).then(
                 (saved) => {
                   this.logger.info(this, "createPost", "Saved", saved);

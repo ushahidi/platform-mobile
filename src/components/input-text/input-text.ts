@@ -40,7 +40,7 @@ export class InputTextComponent {
   }
 
   onBlur(event) {
-    this.logger.info(this, "onBlue", this.attribute);
+    this.logger.info(this, "onBlur", this.attribute);
     this.focused = false;
   }
 

@@ -105,7 +105,7 @@ export class ResponseAddPage extends BasePage {
             this.events.publish(POST_UPDATED, this.post.id);
             loading.dismiss();
             let buttons = [{
-              text: 'Ok',
+              text: 'OK',
               role: 'cancel',
               handler: () => {
                 this.hideModal();
@@ -126,7 +126,7 @@ export class ResponseAddPage extends BasePage {
             this.events.publish(POST_UPDATED, this.post.id);
             loading.dismiss();
             let buttons = [{
-              text: 'Ok',
+              text: 'OK',
               role: 'cancel',
               handler: () => {
                 this.hideModal();
@@ -147,7 +147,7 @@ export class ResponseAddPage extends BasePage {
             this.events.publish(POST_UPDATED, this.post.id);
             loading.dismiss();
             let buttons = [{
-              text: 'Ok',
+              text: 'OK',
               role: 'cancel',
               handler: () => {
                 this.hideModal();
@@ -198,13 +198,14 @@ export class ResponseAddPage extends BasePage {
       this.api.createPostWithMedia(this.deployment, post).then(
         (posted:any) => {
           this.logger.info(this, "createPost", "Posted", posted);
-          post.id = posted.id;
+          let saves = [];
           post.pending = false;
-          let saves = [
-            this.database.savePost(this.deployment, post)
-          ];
+          if (posted.id != null && posted.id > 0) {
+            post.id = posted.id;
+          }
+          saves.push(this.database.savePost(this.deployment, post));
           for (let value of post.values) {
-            value.post_id = posted.id;
+            value.post_id = post.id;
             saves.push(this.database.saveValue(this.deployment, value));
           }
           Promise.all(saves).then(
@@ -327,6 +328,10 @@ export class ResponseAddPage extends BasePage {
             let latitude = (coordinates.length > 1) ? coordinates[0] : '';
             let longitude = (coordinates.length > 1) ? coordinates[1] : '';
             let formGroup = new FormGroup({
+              street: new FormControl(null),
+              city: new FormControl(null),
+              province: new FormControl(null),
+              country: new FormControl(null),
               lat: new FormControl(latitude),
               lon: new FormControl(longitude)}, validator);
             this.formGroup.addControl(attribute.key, formGroup);
@@ -384,6 +389,23 @@ export class ResponseAddPage extends BasePage {
       else if (postValue.input == 'location') {
         if (formValue && formValue.lat && formValue.lon) {
           postValue.value = `${formValue.lat},${formValue.lon}`;
+        }
+        else if (formValue && formValue.street) {
+          let address = [];
+          if (formValue.street && formValue.street.length > 0) {
+            address.push(formValue.street);
+          }
+          if (formValue.city && formValue.city.length > 0) {
+            address.push(formValue.city);
+          }
+          if (formValue.province != null && formValue.province.length > 0) {
+            address.push(formValue.province);
+          }
+          if (formValue.country != null && formValue.country.length > 0) {
+            address.push(formValue.country);
+          }
+          this.logger.info(this, "loadFormValues", "Address", address);
+          postValue.value = address.join(", ");
         }
         else {
           postValue.value = formValue;

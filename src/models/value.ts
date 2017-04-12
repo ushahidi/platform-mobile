@@ -75,4 +75,16 @@ export class Value extends Model {
       }
     }
   }
+
+  hasPendingImage() {
+    return this.input == 'upload' && this.value && this.value.indexOf("file:") > -1;
+  }
+
+  hasPendingVideo() {
+    return this.input == 'video' && this.value && this.value.indexOf("file:") > -1;
+  }
+
+  hasPendingAddress() {
+    return this.input == 'location' && this.value && this.value.indexOf(", ") > -1;
+  }
 }

@@ -310,8 +310,14 @@ export class DeploymentDetailsPage extends BasePage {
         this.demoteAttributes(),
         this.demoteCollections()]).then(
           (done:any) => {
-            loading.dismiss();
-            this.showToast('Logout Successful');
+            this.api.clientLogin(this.deployment).then((tokens:any) => {
+              this.logger.info(this, "userLogout", "clientLogin", tokens);
+              this.deployment.copyInto(tokens);
+              this.database.saveDeployment(this.deployment).then((saved:any) => {
+                loading.dismiss();
+                this.showToast('Logout Successful');
+              });
+            });
           },
           (error:any) => {
             loading.dismiss();
@@ -320,6 +326,7 @@ export class DeploymentDetailsPage extends BasePage {
     }
 
     demoteDeployment() {
+      this.deployment.user_id = 0;
       this.deployment.username = "";
       this.deployment.password = "";
       this.deployment.access_token = "";

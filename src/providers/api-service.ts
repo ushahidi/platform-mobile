@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import { Transfer} from '@ionic-native/transfer';
 import { File } from '@ionic-native/file';
+import { NativeGeocoder, NativeGeocoderForwardResult } from '@ionic-native/native-geocoder';
 
 import { Deployment } from '../models/deployment';
 import { User } from '../models/user';
@@ -36,7 +37,8 @@ export class ApiService extends HttpService {
     public transfer:Transfer,
     public vimeo:VimeoService,
     public logger:LoggerService,
-    public database:DatabaseService) {
+    public database:DatabaseService,
+    public nativeGeocoder:NativeGeocoder) {
     super(http, file, transfer, logger);
   }
 
@@ -136,7 +138,7 @@ export class ApiService extends HttpService {
     });
   }
 
-  getUsers(deployment:Deployment, cache:boolean=false, offline:boolean=false) : Promise<User[]> {
+  getUsers(deployment:Deployment, cache:boolean=false, offline:boolean=false):Promise<User[]> {
     return new Promise((resolve, reject) => {
       if (cache || offline) {
         this.database.getUsers(deployment).then(
@@ -196,7 +198,7 @@ export class ApiService extends HttpService {
     });
   }
 
-  getUser(deployment:Deployment, user:any="me", cache:boolean=false, offline:boolean=false): Promise<User>  {
+  getUser(deployment:Deployment, user:any="me", cache:boolean=false, offline:boolean=false):Promise<User>  {
     return new Promise((resolve, reject) => {
       let url = deployment.api + `/api/v3/users/${user}`;
       this.httpGet(url, deployment.access_token).then(
@@ -215,7 +217,7 @@ export class ApiService extends HttpService {
     });
   }
 
-  getDeployment(deployment:Deployment, cache:boolean=false, offline:boolean=false): Promise<Deployment> {
+  getDeployment(deployment:Deployment, cache:boolean=false, offline:boolean=false):Promise<Deployment> {
     return new Promise((resolve, reject) => {
       if (cache || offline) {
         this.database.getDeployment(deployment.id).then(
@@ -304,12 +306,12 @@ export class ApiService extends HttpService {
     });
   }
 
-  getPosts(deployment:Deployment, cache:boolean=false, offline:boolean=false, limit:number=10, offset:number=0): Promise<Post[]> {
+  getPosts(deployment:Deployment, cache:boolean=false, offline:boolean=false, limit:number=10, offset:number=0):Promise<Post[]> {
     return new Promise((resolve, reject) => {
       if (cache || offline) {
         this.database.getPosts(deployment, limit, offset).then(
           (posts:Post[]) => {
-            if (posts && posts.length > 0) {
+            if (posts && posts.length >= limit) {
               resolve(posts);
             }
             else if (offline) {
@@ -408,7 +410,7 @@ export class ApiService extends HttpService {
     });
   }
 
-  createPost(deployment:Deployment, post:Post): Promise<any> {
+  createPost(deployment:Deployment, post:Post):Promise<any> {
     return new Promise((resolve, reject) => {
       let url = deployment.api + "/api/v3/posts/";
       let values = {}
@@ -436,11 +438,13 @@ export class ApiService extends HttpService {
       }
       let params = {
         source: this.source,
-        user: { id: post.user_id },
         form: { id: post.form_id },
         title: post.title,
         content: post.description,
         values: values };
+      if (post.user_id && post.user_id > 0) {
+        params['user'] = { id: post.user_id };
+      }
       this.httpPost(url, deployment.access_token, params).then(
         (data:any) => {
           resolve(data);
@@ -455,13 +459,14 @@ export class ApiService extends HttpService {
     return new Promise((resolve, reject) => {
       let uploads = [];
       for (let value of post.values) {
-        if (value.input == 'upload' && value.value && value.value.indexOf("file:") > -1) {
-          let file:string = value.value;
-          uploads.push(this.uploadImage(deployment, post, file));
+        if (value.hasPendingImage()) {
+          uploads.push(this.uploadImage(deployment, post, value));
         }
-        else if (value.input == 'video' && value.value && value.value.indexOf("file:") > -1) {
-          let file:string = value.value;
-          uploads.push(this.uploadVideo(deployment, post, file));
+        else if (value.hasPendingVideo()) {
+          uploads.push(this.uploadVideo(deployment, post, value));
+        }
+        else if (value.hasPendingAddress()) {
+          uploads.push(this.geocodeAddress(deployment, post, value));
         }
       }
       Promise.all(uploads).then(
@@ -526,13 +531,14 @@ export class ApiService extends HttpService {
     return new Promise((resolve, reject) => {
       let uploads = [];
       for (let value of post.values) {
-        if (value.input == 'upload' && value.value && value.value.indexOf("file:") > -1) {
-          let file:string = value.value;
-          uploads.push(this.uploadImage(deployment, post, file));
+        if (value.hasPendingImage()) {
+          uploads.push(this.uploadImage(deployment, post, value));
         }
-        else if (value.input == 'video' && value.value && value.value.indexOf("file:") > -1) {
-          let file:string = value.value;
-          uploads.push(this.uploadVideo(deployment, post, file));
+        else if (value.hasPendingVideo()) {
+          uploads.push(this.uploadVideo(deployment, post, value));
+        }
+        else if (value.hasPendingAddress()) {
+          uploads.push(this.geocodeAddress(deployment, post, value));
         }
       }
       Promise.all(uploads).then(
@@ -565,21 +571,15 @@ export class ApiService extends HttpService {
     });
   }
 
-  uploadVideo(deployment:Deployment, post:Post, file:string): Promise<string> {
-    this.logger.info(this, "uploadVideo", file);
+  uploadVideo(deployment:Deployment, post:Post, value:Value):Promise<string> {
     return new Promise((resolve, reject) => {
+      let file:string = value.value;
+      this.logger.info(this, "uploadVideo", file);
       this.vimeo.uploadVideo(file, post.title, post.description).then(
         (url:any) => {
-          this.logger.info(this, "uploadVideo", url);
-          let saves = [];
-          for (let value of post.values) {
-            if (value.input == 'video' && value.value == file) {
-              value.value = url;
-              saves.push(this.database.saveValue(deployment, value));
-              break;
-            }
-          }
-          Promise.all(saves).then(
+          this.logger.info(this, "uploadVideo", file, url);
+          value.value = url;
+          this.database.saveValue(deployment, value).then(
             (saved:any) => {
               resolve(url);
             },
@@ -588,18 +588,18 @@ export class ApiService extends HttpService {
             });
         },
         (error:any) => {
-          this.logger.error(this, "uploadVideo", error);
+          this.logger.error(this, "uploadVideo", file, error);
           reject(error);
         });
     });
   }
 
-  getImages(deployment:Deployment, cache:boolean=false, offline:boolean=false, limit:number=10, offset:number=0): Promise<Image[]> {
+  getImages(deployment:Deployment, cache:boolean=false, offline:boolean=false, limit:number=10, offset:number=0):Promise<Image[]> {
     return new Promise((resolve, reject) => {
       if (cache || offline) {
         this.database.getImages(deployment, limit, offset).then(
           (images:Image[]) => {
-            if (images && images.length > 0) {
+            if (images && images.length >= limit) {
               resolve(images);
             }
             else if (offline) {
@@ -676,15 +676,16 @@ export class ApiService extends HttpService {
     });
   }
 
-  uploadImage(deployment:Deployment, post:Post, file:string): Promise<Image> {
+  uploadImage(deployment:Deployment, post:Post, value:Value):Promise<Image> {
     return new Promise((resolve, reject) => {
       let url = deployment.api + "/api/v3/media";
+      let file = value.value;
       let mimeType = this.mimeType(file);
+      this.logger.info(this, "uploadImage", file);
       this.fileUpload(url, deployment.access_token, file, "POST", mimeType).then(
         (data:any) => {
-          this.logger.info(this, "uploadImage", "Data", data);
+          this.logger.info(this, "uploadImage", file, data);
           let item = JSON.parse(data.response);
-          this.logger.info(this, "uploadImage", "Response", item);
           let image:Image = new Image();
           image.deployment_id = deployment.id;
           image.id = item.id;
@@ -708,16 +709,11 @@ export class ApiService extends HttpService {
             image.can_update = false;
             image.can_delete = false;
           }
+          value.value = "" + image.id;
           let saves = [
-            this.database.saveImage(deployment, image)
+            this.database.saveImage(deployment, image),
+            this.database.saveValue(deployment, value)
           ];
-          for (let value of post.values) {
-            if (value.input == 'upload' && value.value == file) {
-              value.value = "" + image.id;
-              saves.push(this.database.saveValue(deployment, value));
-              break;
-            }
-          }
           Promise.all(saves).then(
             (saved:any) => {
               resolve(image);
@@ -726,13 +722,13 @@ export class ApiService extends HttpService {
               reject(error);
             });
         },
-        (error) => {
+        (error:any) => {
           reject(error);
         });
     });
   }
 
-  getForms(deployment:Deployment, cache:boolean=false, offline:boolean=false): Promise<Form[]> {
+  getForms(deployment:Deployment, cache:boolean=false, offline:boolean=false):Promise<Form[]> {
     return new Promise((resolve, reject) => {
       if (cache || offline) {
         this.database.getForms(deployment).then(
@@ -805,7 +801,7 @@ export class ApiService extends HttpService {
     });
   }
 
-  getStages(deployment:Deployment, cache:boolean=false, offline:boolean=false): Promise<Stage[]> {
+  getStages(deployment:Deployment, cache:boolean=false, offline:boolean=false):Promise<Stage[]> {
     return new Promise((resolve, reject) => {
       if (cache || offline) {
         this.database.getStages(deployment).then(
@@ -879,7 +875,7 @@ export class ApiService extends HttpService {
     });
   }
 
-  getAttributes(deployment:Deployment, cache:boolean=false, offline:boolean=false): Promise<Attribute[]> {
+  getAttributes(deployment:Deployment, cache:boolean=false, offline:boolean=false):Promise<Attribute[]> {
     return new Promise((resolve, reject) => {
       if (cache || offline) {
         this.database.getAttributes(deployment).then(
@@ -959,7 +955,7 @@ export class ApiService extends HttpService {
     });
   }
 
-  getCollections(deployment:Deployment, cache:boolean=false, offline:boolean=false): Promise<Collection[]> {
+  getCollections(deployment:Deployment, cache:boolean=false, offline:boolean=false):Promise<Collection[]> {
     return new Promise((resolve, reject) => {
       if (cache || offline) {
         this.database.getCollections(deployment).then(
@@ -1062,7 +1058,7 @@ export class ApiService extends HttpService {
     });
   }
 
-  getFormsWithAttributes(deployment:Deployment, cache:boolean=false, offline:boolean=false): Promise<Form[]> {
+  getFormsWithAttributes(deployment:Deployment, cache:boolean=false, offline:boolean=false):Promise<Form[]> {
     return new Promise((resolve, reject) => {
       this.logger.info(this, "getFormsWithAttributes", cache);
       Promise.all([
@@ -1144,6 +1140,36 @@ export class ApiService extends HttpService {
             this.logger.error(this, "getPostsWithValues", "Failed", error);
             reject(error);
           });
+    });
+  }
+
+  geocodeAddress(deployment:Deployment, post:Post, value:Value):Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      let address:string = value.value;
+      this.logger.info(this, "geocodeAddress", address);
+      this.nativeGeocoder.forwardGeocode(address)
+        .then((coordinates:NativeGeocoderForwardResult) => {
+          this.logger.info(this, "geocodeAddress", address, coordinates);
+          post.latitude = Number(coordinates.latitude);
+          post.longitude = Number(coordinates.longitude);
+          value.value = `${coordinates.latitude},${coordinates.longitude}`;
+          let saves = [];
+          if (post.isPersisted()) {
+            saves.push(this.database.savePost(deployment, post));
+          }
+          saves.push(this.database.saveValue(deployment, value));
+          Promise.all(saves).then(
+            (saved:any) => {
+              resolve(true);
+            },
+            (error:any) => {
+              reject(error);
+            });
+        })
+        .catch((error:any) => {
+          this.logger.error(this, "geocodeAddress", address, error);
+          reject(error);
+        });
     });
   }
 

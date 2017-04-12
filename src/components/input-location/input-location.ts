@@ -1,5 +1,6 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { Http } from '@angular/http';
 import { AlertController } from 'ionic-angular';
 import { Geolocation, GeolocationOptions, Geoposition } from '@ionic-native/geolocation';
 import { Diagnostic } from '@ionic-native/diagnostic';
@@ -8,6 +9,8 @@ import { StaticMap } from '../../maps/static-map';
 
 import { Value } from '../../models/value';
 import { Attribute } from '../../models/attribute';
+import { Country } from '../../models/country';
+import { Province } from '../../models/province';
 
 import { LoggerService } from '../../providers/logger-service';
 
@@ -23,21 +26,41 @@ export class InputLocationComponent {
   PERMISSION_GRANTED_WHEN_IN_USE:string = "granted_when_in_use";
   PERMISSION_AUTHORIZED_ALWAYS:string = "authorized_always";
   PERMISSION_AUTHORIZED_WHEN_IN_USE:string = "authorized_when_in_use";
-  formGroup: FormGroup;
-  attribute: Attribute = null;
+
+  formGroup:FormGroup;
+  attribute:Attribute = null;
   value: Value = null;
   map:string = null;
-  latitude: number = null;
-  longitude: number = null;
-  submitted: boolean = false;
-  error: boolean = false;
-  offline: boolean = false;
-  shouldTimeout: boolean = false;
+
+  latitude:number = null;
+  longitude:number = null;
+  street:string = null;
+  city:string = null;
+  province:string = null;
+  country:string = null;
+
+  submitted:boolean = false;
+  error:boolean = false;
+  offline:boolean = false;
+  shouldTimeout:boolean = false;
+
+  countries:Country[] = [];
+  countriesOptions:{} = {
+    title: 'Countries',
+    placeholder: 'Country'
+  };
+
+  provinces:Province[] = [];
+  provincesOptions:{} = {
+    title: 'Provinces',
+    placeholder: 'Province'
+  };
 
   @Output()
   changeLocation = new EventEmitter();
 
   constructor(
+    private http:Http,
     private logger:LoggerService,
     private diagnostic:Diagnostic,
     private geolocation:Geolocation,
@@ -48,8 +71,11 @@ export class InputLocationComponent {
   ngOnInit() {
     this.logger.info(this, "Attribute", this.attribute, "Value", this.value);
     if (this.value && this.value.value) {
-      let location:any = this.value.value.split(",");
-      if (location && location.length > 0) {
+      if (this.value.value.indexOf(", ") > -1) {
+        // IGNORE ADDRESS STRING
+      }
+      else if (this.value.value.indexOf(",") > -1) {
+        let location:any = this.value.value.split(",");
         this.latitude = Number(location[0]);
         this.longitude = Number(location[1]);
       }
@@ -72,20 +98,35 @@ export class InputLocationComponent {
           this.showLocationError();
         });
     }
+    if (this.offline) {
+      this.loadCountries().then((countries:Country[]) => {
+        this.countries = countries;
+      });
+    }
   }
 
   ngAfterContentChecked() {
-    if (this.value && this.value.value && this.value.value.length > 0) {
-      let location:any = this.value.value.split(",");
-      if (location && location.length > 0) {
-        let latitude = Number(location[0]);
-        let longitude = Number(location[1]);
-        if (this.latitude != latitude || this.longitude != longitude) {
-          this.latitude = latitude;
-          this.longitude = longitude;
-          this.loadMapSrc(latitude, longitude);
+    if (this.value && this.value.value) {
+      if (this.value.value.indexOf(", ") > -1) {
+        // IGNORE ADDRESS STRING
+      }
+      else if (this.value.value.indexOf(",") > -1) {
+        let location:any = this.value.value.split(",");
+        if (location && location.length > 0) {
+          let latitude = Number(location[0]);
+          let longitude = Number(location[1]);
+          if (this.latitude != latitude || this.longitude != longitude) {
+            this.latitude = latitude;
+            this.longitude = longitude;
+            this.loadMapSrc(latitude, longitude);
+          }
         }
       }
+    }
+    if (this.offline && this.countries.length == 0) {
+      this.loadCountries().then((countries:Country[]) => {
+        this.countries = countries;
+      });
     }
   }
 
@@ -206,4 +247,43 @@ export class InputLocationComponent {
       this.map = null;
     }
   }
+
+  loadCountries():Promise<Country[]> {
+    return new Promise((resolve, reject) => {
+      this.logger.info(this, "loadCountries");
+      this.http.get("assets/data/countries.json")
+        .map((res) => res.json())
+        .subscribe((json) => {
+          this.logger.info(this, "loadCountries", json);
+          resolve(<Country[]>json);
+        });
+    });
+  }
+
+  loadProvinces():Promise<Province[]> {
+    return new Promise((resolve, reject) => {
+      this.logger.info(this, "loadProvinces");
+      this.http.get("assets/data/provinces.json")
+        .map((res) => res.json())
+        .subscribe((json) => {
+          this.logger.info(this, "loadProvinces", json);
+          resolve(<Province[]>json);
+        });
+    });
+  }
+
+  countryChanged(event:any) {
+    this.logger.info(this, "countryChanged", this.country);
+    let filteredProvinces = [];
+    this.loadProvinces().then((allProvinces:Province[]) => {
+      let country:Country = this.countries.filter(c => c.name == this.country)[0];
+      for (let province of allProvinces) {
+        if (province.country == country.code) {
+          filteredProvinces.push(province);
+        }
+      }
+      this.provinces = filteredProvinces;
+    });
+  }
+
 }

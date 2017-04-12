@@ -8,7 +8,7 @@
     <ion-title *ngIf="form">{{form.name}}</ion-title>
     <ion-buttons end>
       <button #submit ion-button icon-only *ngIf="offline == true" (click)="onSubmit($event)">
-        <ion-icon ios="ios-download" md="md-download"></ion-icon>
+        <ion-icon ios="ios-send" md="md-send"></ion-icon>
       </button>
       <button #submit ion-button icon-only *ngIf="offline == false" (click)="onSubmit($event)">
         <ion-icon ios="ios-send" md="md-send"></ion-icon>

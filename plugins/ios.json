@@ -96,10 +96,16 @@
         },
         "ionic-plugin-keyboard": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
+        },
+        "cordova-plugin-nativegeocoder": {
+            "PACKAGE_NAME": "com.ushahidi.mobile"
         }
     },
     "dependent_plugins": {
         "cordova-plugin-compat": {
+            "PACKAGE_NAME": "com.ushahidi.mobile"
+        },
+        "cordova-plugin-add-swift-support": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         }
     }

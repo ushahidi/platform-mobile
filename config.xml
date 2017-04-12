@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<widget android-versionCode="10200" id="com.ushahidi.mobile" ios-CFBundleVersion="1.2.0" version="1.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-versionCode="10201" id="com.ushahidi.mobile" ios-CFBundleVersion="1.2.1" version="1.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
   <name>Ushahidi</name>
   <description>Ushahidi Mobile</description>
   <author email="support@ushahidi.com" href="https://www.ushahidi.com/">Ushahidi</author>
@@ -154,4 +154,5 @@
     <variable name="DEEPLINK_HOST" value="ushahidi.com"/>
   </plugin>
   <plugin name="ionic-plugin-keyboard" spec="~2.2.1"/>
+  <plugin name="cordova-plugin-nativegeocoder" spec="~1.0.1"/>
 </widget>

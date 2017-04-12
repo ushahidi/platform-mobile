@@ -75,6 +75,7 @@
 		F5E5E6D1AF2649FFADAE8257 /* CDVFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 233EF3519F8C4F51BFEC938D /* CDVFile.m */; };
 		F771E7C8A40D42E58D956711 /* Contacts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0703896833240629C59832E /* Contacts.framework */; };
 		FDCFB118F3A2488AAE2D22B1 /* libAdIdAccess.a in Frameworks */ = {isa = PBXBuildFile; fileRef = BC6BEDEA932B4FD58009477C /* libAdIdAccess.a */; };
+		9817E44C326F4B619F5FBDEA /* NativeGeocoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D44E8C0EA1E447195F03482 /* NativeGeocoder.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -222,6 +223,8 @@
 		FD1AF51D9039480CBBE174DB /* SAMKeychain.h */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.h; name = SAMKeychain.h; path = "cordova-plugin-secure-storage/SAMKeychain.h"; sourceTree = "<group>"; };
 		FD6DBB1317F24847880362A0 /* SystemConfiguration.framework */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		FDB83DCA2AF242CCA2269D11 /* Social.framework */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
+		6D44E8C0EA1E447195F03482 /* NativeGeocoder.swift */ = {isa = PBXFileReference; name = "NativeGeocoder.swift"; path = "cordova-plugin-nativegeocoder/NativeGeocoder.swift"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.swift; explicitFileType = undefined; includeInIndex = 0; };
+		49E15E501A314B7F9DCDDA05 /* NativeGeocoder-Bridging-Header.h */ = {isa = PBXFileReference; name = "NativeGeocoder-Bridging-Header.h"; path = "cordova-plugin-nativegeocoder/NativeGeocoder-Bridging-Header.h"; sourceTree = "<group>"; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -454,6 +457,8 @@
 				C7167CB9CF70442F99640112 /* IonicDeeplinkPlugin.h */,
 				F699B72E99CC4EFD8F83C720 /* IonicKeyboard.m */,
 				1BECCD9F1F8340DBA4CB67D0 /* IonicKeyboard.h */,
+				6D44E8C0EA1E447195F03482 /* NativeGeocoder.swift */,
+				49E15E501A314B7F9DCDDA05 /* NativeGeocoder-Bridging-Header.h */,
 			);
 			name = Plugins;
 			path = Ushahidi/Plugins;
@@ -615,6 +620,7 @@
 				09C5F7D2BA6F48038C157BA5 /* AppDelegate+IonicDeeplink.m in Sources */,
 				BFF51FB5E8CA44128DF84B5D /* IonicDeeplinkPlugin.m in Sources */,
 				240D195683A74C6B82988522 /* IonicKeyboard.m in Sources */,
+				9817E44C326F4B619F5FBDEA /* NativeGeocoder.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -660,6 +666,10 @@
 				PROVISIONING_PROFILE = "f446358a-cfb4-4608-9ca8-5cc70fb91410";
 				PROVISIONING_PROFILE_SPECIFIER = "Ushahidi Mobile Development";
 				TARGETED_DEVICE_FAMILY = "1,2";
+				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/$(PROJECT_NAME)/Bridging-Header.h";
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				SWIFT_VERSION = 3.0;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
@@ -692,6 +702,9 @@
 				PROVISIONING_PROFILE = "5af2ac50-6d87-487b-8858-0ccacc60c9e0";
 				PROVISIONING_PROFILE_SPECIFIER = "Ushahidi Mobile App Store";
 				TARGETED_DEVICE_FAMILY = "1,2";
+				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/$(PROJECT_NAME)/Bridging-Header.h";
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -728,6 +741,10 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = NO;
+				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/$(PROJECT_NAME)/Bridging-Header.h";
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				SWIFT_VERSION = 3.0;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
@@ -762,6 +779,9 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = NO;
+				SWIFT_OBJC_BRIDGING_HEADER = "$(PROJECT_DIR)/$(PROJECT_NAME)/Bridging-Header.h";
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};

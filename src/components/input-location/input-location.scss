@@ -7,14 +7,20 @@
   .input-error {
     color: #dd0000;
   }
-  .latitude {
+  .latitude, .longitude, .street, .city, .province, .country {
     margin: 0;
     padding: 0;
+    margin-bottom: 10px;
+  }
+  .latitude, .street, .province {
     padding-right: 10px;
   }
-  .longitude {
-    margin: 0;
-    padding: 0;
+  ion-select {
+    padding-top: 0;
+    padding-left: 0;
+    width: 100% !important;
+    max-width: 100% !important;
+    border-bottom: 1px solid #cccccc;
   }
   ion-input {
     position: relative;
