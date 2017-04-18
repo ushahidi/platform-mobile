@@ -16,20 +16,21 @@
 <ion-content class="deployment-settings">
   <div margin-bottom>
     <ion-item margin-bottom *ngIf="deployment">
-      <ion-label floating>Name</ion-label>
+      <ion-label floating>Deployment name</ion-label>
       <ion-input #name type="text" [(ngModel)]="deployment.name"></ion-input>
     </ion-item>
   </div>
   <div margin-top margin-bottom>
     <ion-item *ngIf="deployment">
-      <ion-label floating>Description</ion-label>
+      <ion-label floating>Describe your site</ion-label>
       <ion-textarea #description type="text" [(ngModel)]="deployment.description"></ion-textarea>
     </ion-item>
   </div>
   <div margin-bottom>
-    <ion-item margin-bottom *ngIf="deployment">
-      <ion-label floating>Email</ion-label>
-      <ion-input #email type="text" [(ngModel)]="deployment.email"></ion-input>
+    <ion-item *ngIf="deployment">
+      <ion-label floating>Contact email address</ion-label>
+      <ion-input #email type="email" [(ngModel)]="deployment.email"></ion-input>
     </ion-item>
+    <p class="hint" padding-left padding-right>Use caution, as this will be visible to anyone on your site.</p>
   </div>
 </ion-content>
