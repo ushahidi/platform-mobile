@@ -1,6 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { TextInput } from 'ionic-angular';
 import { FormGroup } from '@angular/forms';
+import { Keyboard } from '@ionic-native/keyboard';
 
 import { Value } from '../../models/value';
 import { Attribute } from '../../models/attribute';
@@ -24,7 +25,9 @@ export class InputTextComponent {
   @ViewChild('input')
   input: TextInput;
 
-  constructor(public logger:LoggerService) {
+  constructor(
+    private keyboard:Keyboard,
+    private logger:LoggerService) {
   }
 
   ngOnInit() {
@@ -42,6 +45,16 @@ export class InputTextComponent {
   onBlur(event) {
     this.logger.info(this, "onBlur", this.attribute);
     this.focused = false;
+  }
+
+  onKeyPress(event) {
+    if (event.keyCode == 13) {
+      this.keyboard.close();
+      return false;
+    }
+    else {
+      return true;
+    }
   }
 
 }

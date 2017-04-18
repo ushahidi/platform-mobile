@@ -32,7 +32,7 @@
     "@ionic-native/google-analytics": "^3.4.4",
     "@ionic-native/in-app-browser": "^3.4.4",
     "@ionic-native/is-debug": "^3.4.4",
-    "@ionic-native/keyboard": "^3.4.4",
+    "@ionic-native/keyboard": "^3.5.0",
     "@ionic-native/media-capture": "^3.4.4",
     "@ionic-native/native-geocoder": "^3.4.4",
     "@ionic-native/network": "^3.4.4",
