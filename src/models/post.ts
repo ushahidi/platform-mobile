@@ -164,4 +164,16 @@ export class Post extends Model {
     return false;
   }
 
+  isPublished():boolean {
+    return this.status === 'published';
+  }
+
+  isArchived():boolean {
+    return this.status === 'archived';
+  }
+
+  isDraft():boolean {
+    return this.status === 'draft';
+  }
+
 }

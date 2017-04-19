@@ -5,7 +5,6 @@ import { Column } from '../decorators/column';
 
 import { Model, TEXT, INTEGER, BOOLEAN, PRIMARY_KEY } from '../models/model';
 import { Form } from '../models/form';
-import { Post } from '../models/post';
 
 @Injectable()
 @Table("filters")
@@ -41,29 +40,8 @@ export class Filter extends Model {
   @Column("show_forms", TEXT)
   public show_forms: string = null;
 
-  public showPost(post:Post) : boolean  {
-    if (this.show_archived == false && post.status == "archived") {
-      return false;
-    }
-    if (this.show_published == false && post.status == "published") {
-      return false;
-    }
-    if (this.show_inreview == false && post.status == "draft") {
-      return false;
-    }
-    if (this.showForm(post.form) == false) {
-      return false;
-    }
-    if (this.search_text && this.search_text.length > 0) {
-      if (post.title && post.title.includes(this.search_text) == false) {
-        return false;
-      }
-      if (post.description && post.description.includes(this.search_text) == false) {
-        return false;
-      }
-    }
-    return true;
-  }
+  @Column("saved", TEXT)
+  public saved: Date = null;
 
   public showForm(form:Form) : boolean {
     if (this.show_forms != null && this.show_forms.length > 0) {
@@ -93,6 +71,20 @@ export class Filter extends Model {
       }
       this.show_forms = forms.join(",");
     }
+  }
+
+  public getStatus():string {
+    let status = [];
+    if (this.show_published) {
+      status.push("published");
+    }
+    if (this.show_archived) {
+      status.push("archived");
+    }
+    if (this.show_inreview) {
+      status.push("draft");
+    }
+    return status.join(",");
   }
 
 }

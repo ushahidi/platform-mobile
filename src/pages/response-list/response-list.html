@@ -38,32 +38,28 @@
     <div #mapMany id="mapMany"></div>
   </div>
   <div class="list" *ngIf="view == 'list'">
-    <div class="spinner" text-center margin-top-lg *ngIf="posts == null && loading == true && refreshing == false">
+    <div class="spinner" margin-top-lg *ngIf="posts == null && loading == true && refreshing == false">
       <ion-spinner name="ios"></ion-spinner>
     </div>
-    <div padding-left padding-right *ngIf="posts == null && loading == false && refreshing == false">
-      <h6 text-center class="no-responses" *ngIf="offline == false">
-        There was a problem downloading survey responses. Please try again later.
+    <div class="no-responses" padding-left padding-right *ngIf="loading == false && refreshing == false">
+      <h6 *ngIf="posts == null && offline == false">
+        There was a problem downloading survey responses, please try again later.
       </h6>
-      <h6 text-center class="no-responses" *ngIf="offline == true">
+      <h6 *ngIf="posts == null && offline == true">
         Please verify you have an internet connection, then try downloading survey responses again.
       </h6>
-    </div>
-    <div padding-left padding-right *ngIf="posts && filtered && loading == false && refreshing == false">
-      <h6 text-center padding-bottom margin-bottom class="no-responses" *ngIf="posts && posts.length == 0">
+      <h6 *ngIf="filter == null && posts && posts.length == 0">
         This deployment doesn't have any<br> survey responses, yet.
       </h6>
-      <h6 text-center padding-bottom margin-bottom class="no-responses" *ngIf="posts && posts.length > 0 && filtered && filtered.length == 0">
+      <h6 *ngIf="filter != null && posts && posts.length == 0">
         There are no responses<br> for the current filter.
       </h6>
-      <button ion-button block margin-top text-uppercase color="primary"
-            (click)="addResponse($event)" *ngIf="posts && posts.length == 0">Submit A Survey Response</button>
+      <button ion-button block text-uppercase color="primary" (click)="addResponse($event)" *ngIf="filter == null && posts && posts.length == 0">Submit Survey Response</button>
     </div>
-    <ion-list *ngIf="filtered && filtered.length > 0">
-      <post-card [post]="post" (cardSelected)="showResponse(post)" (menuSelected)="showOptions(post)"
-                 *ngFor="let post of filtered"></post-card>
+    <ion-list *ngIf="posts && posts.length > 0">
+      <post-card [post]="post" (cardSelected)="showResponse(post)" (menuSelected)="showOptions(post)" *ngFor="let post of posts"></post-card>
     </ion-list>
-    <div class="more" padding-left padding-right padding-bottom *ngIf="refreshing == false && filtered && filtered.length > 0">
+    <div class="more" padding-left padding-right padding-bottom *ngIf="refreshing == false && posts && posts.length > 0">
       <button ion-button block color="more" (click)="loadMore($event)">
         <span *ngIf="loading == true">Loading...</span>
         <span *ngIf="loading == false">Load More</span>

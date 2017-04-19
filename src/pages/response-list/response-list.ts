@@ -39,7 +39,6 @@ export class ResponseListPage extends BasePage {
 
   deployment:Deployment = null;
   posts:Post[] = null;
-  filtered:Post[] = null;
   pending:Post[] = null;
   filter:Filter = null;
   view:string = 'list';
@@ -84,13 +83,11 @@ export class ResponseListPage extends BasePage {
     this.events.subscribe(POST_DELETED, (post_id:number) => {
       this.logger.info(this, 'Events', POST_DELETED, post_id);
       this.posts = null;
-      this.filtered = null;
       this.loadPosts(true);
     });
     this.events.subscribe(POST_UPDATED, (post_id:number) => {
       this.logger.info(this, 'Events', POST_UPDATED, post_id);
       this.posts = null;
-      this.filtered = null;
       this.loadPosts(true);
     });
   }
@@ -151,7 +148,7 @@ export class ResponseListPage extends BasePage {
             resolve();
           },
           (error:any) => {
-            this.logger.info(this, "loadFilters", "Loaded", error);
+            this.logger.info(this, "loadFilters", "Failed", error);
             this.filter = null;
             resolve();
           });
@@ -160,26 +157,24 @@ export class ResponseListPage extends BasePage {
   }
 
   loadPosts(cache:boolean=true):Promise<any> {
-    this.logger.info(this, "loadPosts", "Cache", cache);
     if (cache && this.posts != null && this.posts.length >= this.limit) {
       this.logger.info(this, "loadPosts", "Cached", this.posts.length);
       return Promise.resolve();
     }
     else {
+      this.logger.info(this, "loadPosts", "Cache", cache);
       return new Promise((resolve, reject) => {
         this.offset = 0;
-        this.api.getPostsWithValues(this.deployment, cache, this.offline, this.limit, this.offset).then(
+        this.api.getPostsWithValues(this.deployment, this.filter, cache, this.offline, this.limit, this.offset).then(
           (posts:Post[]) => {
-            this.logger.info(this, "loadPosts", "Posts", posts.length);
             this.loadCache(posts);
             this.posts = posts;
-            this.filtered = this.getFiltered(posts, this.filter);
             this.pending = this.getPending(posts);
-            this.logger.info(this, "loadPosts", "Filtered", this.filtered.length, "Pending", this.pending.length);
+            this.logger.info(this, "loadPosts", "Posts", posts.length, "Pending", this.pending.length);
             resolve();
           },
           (error:any) => {
-            this.logger.error(this, "loadPosts", "API", error);
+            this.logger.error(this, "loadPosts", "Failed", error);
             reject(error);
           });
         });
@@ -190,14 +185,13 @@ export class ResponseListPage extends BasePage {
     this.logger.info(this, "loadMore", cache);
     this.loading = true;
     this.offset = this.offset + this.limit;
-    this.logger.info(this, "loadMore", "Limit", this.limit, "Offset", this.offset);
-    this.api.getPostsWithValues(this.deployment, cache, this.offline, this.limit, this.offset).then(
+    this.logger.info(this, "loadMore", "Filter", this.filter, "Limit", this.limit, "Offset", this.offset);
+    this.api.getPostsWithValues(this.deployment, this.filter, cache, this.offline, this.limit, this.offset).then(
       (posts:Post[]) => {
         this.loadCache(posts);
         this.posts = this.posts.concat(posts);
-        this.filtered = this.getFiltered(this.posts, this.filter);
         this.pending = this.getPending(this.posts);
-        this.logger.info(this, "loadMore", "Limit", this.limit, "Offset", this.offset, "Filtered", this.filtered.length, "Pending", this.pending.length);
+        this.logger.info(this, "loadMore", "Filter", this.filter, "Limit", this.limit, "Offset", this.offset, "Posts", this.posts.length, "Pending", this.pending.length);
         this.loading = false;
       },
       (error:any) => {
@@ -299,21 +293,6 @@ export class ResponseListPage extends BasePage {
     });
   }
 
-  getFiltered(posts:Post[], filter:Filter): Post[] {
-    let filtered: Post[] = [];
-    if (posts) {
-      for (let post of posts) {
-        if (filter == null) {
-          filtered.push(post);
-        }
-        else if (filter.showPost(post)) {
-          filtered.push(post);
-        }
-      }
-    }
-    return filtered;
-  }
-
   getPending(posts:Post[]): Post[] {
     let pending: Post[] = [];
     if (posts) {
@@ -366,11 +345,16 @@ export class ResponseListPage extends BasePage {
     let modal = this.showModal(ResponseSearchPage,
       { deployment: this.deployment,
         filter: this.filter });
-    modal.onDidDismiss(data => {
-      this.logger.info(this, "searchResponses", "Modal", data);
-      if (data) {
-        this.filter = data['filter'];
-        this.filtered = this.getFiltered(this.posts, this.filter);
+    modal.onDidDismiss((data:any) => {
+      if (data && data.filter) {
+        this.logger.info(this, "searchResponses", "Filter", data.filter);
+        this.filter = data.filter;
+        this.loading = true;
+        let loading = this.showLoading("Filtering...");
+        this.loadPosts(false).then((filtered) => {
+          loading.dismiss();
+          this.loading = false;
+        });
       }
       this.resizeContent(400);
     });
@@ -571,11 +555,6 @@ export class ResponseListPage extends BasePage {
               this.posts.splice(postIndex, 1);
               this.logger.info(this, "removeResponse", "Post Removed")
             }
-            let filteredIndex = this.filtered.indexOf(post);
-            if (filteredIndex > -1) {
-              this.filtered.splice(filteredIndex, 1);
-              this.logger.info(this, "removeResponse", "Filtered Removed");
-            }
             loading.dismiss();
             this.showToast("Responsed removed");
             this.trackEvent("Posts", "removed", post.url);
@@ -607,9 +586,9 @@ export class ResponseListPage extends BasePage {
                  if (postIndex > -1) {
                    this.posts.splice(postIndex, 1);
                  }
-                 let filteredIndex = this.filtered.indexOf(post, 0);
-                 if (filteredIndex > -1) {
-                   this.filtered.splice(filteredIndex, 1);
+                 let pendingIndex = this.pending.indexOf(post, 0);
+                 if (pendingIndex > -1) {
+                   this.pending.splice(pendingIndex, 1);
                  }
                  this.showToast("Response deleted");
                  this.trackEvent("Posts", "deleted", post.url);
@@ -637,12 +616,17 @@ export class ResponseListPage extends BasePage {
     this.database.removeFilters(this.deployment).then(
       (results:any) => {
         this.filter = null;
-        this.filtered = this.getFiltered(this.posts, this.filter);
+        this.loading = true;
+        let loading = this.showLoading("Loading...");
+        this.loadPosts(true).then((cleared) => {
+          loading.dismiss();
+          this.loading = false;
+          this.resizeContent();
+        });
       },
       (error:any) => {
         this.showToast(error);
       });
-      this.resizeContent();
   }
 
   showList(event:any) {
@@ -736,7 +720,7 @@ export class ResponseListPage extends BasePage {
         promise = promise.then(
           () => {
             if (this.view == 'map') {
-              return this.api.getPosts(this.deployment, cache, this.offline, limit, offset).then((posts:Post[]) => {
+              return this.api.getPosts(this.deployment, this.filter, cache, this.offline, limit, offset).then((posts:Post[]) => {
                 this.logger.info(this, "loadMarkers", "Limit", limit, "Offset", offset, "Loaded");
                 for (let post of posts) {
                   if (post.latitude && post.longitude) {

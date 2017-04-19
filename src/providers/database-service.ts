@@ -277,7 +277,20 @@ export class DatabaseService {
     if (where != null && Object.keys(where).length > 0) {
       let clause = [];
       for (let column in where) {
-        clause.push(`${column} = ?`);
+        let parameter = where[column];
+        if (Array.isArray(parameter)) {
+          let inClause = [];
+          for (let param of parameter) {
+            inClause.push("?");
+          }
+          clause.push(`${column} IN (${inClause.join(', ')})`);
+        }
+        else if (parameter.toString().indexOf("%") != -1){
+          clause.push(`${column} LIKE ?`);
+        }
+        else {
+          clause.push(`${column} = ?`);
+        }
       }
       query.push(`WHERE ${clause.join(' AND ')}`);
     }
@@ -301,7 +314,15 @@ export class DatabaseService {
     let parameters = [];
     if (where != null && Object.keys(where).length > 0) {
       for (let column in where) {
-        parameters.push(where[column]);
+        let parameter = where[column];
+        if (Array.isArray(parameter)) {
+          for (let param of parameter) {
+            parameters.push(param);
+          }
+        }
+        else {
+          parameters.push(parameter);
+        }
       }
     }
     return parameters;
@@ -563,17 +584,38 @@ export class DatabaseService {
     return this.removeModel<User>(new User(), where);
   }
 
-  getPosts(deployment:Deployment, limit:number=null, offset:number=null) : Promise<Post[]> {
-    let where = { deployment_id: deployment.id };
+  getPosts(deployment:Deployment, filter:Filter=null, limit:number=null, offset:number=null) : Promise<Post[]> {
+    let postsWhere = { deployment_id: deployment.id };
+    let valuesWhere = { deployment_id: deployment.id };
+    let statuses = [];
+    if (filter == null || filter.show_published) {
+      statuses.push("published");
+    }
+    if (filter == null || filter.show_archived) {
+      statuses.push("archived");
+    }
+    if (filter == null || filter.show_inreview) {
+      statuses.push("draft");
+    }
+    if (statuses.length > 0) {
+      postsWhere['status'] = statuses;
+    }
+    if (filter && filter.show_forms && filter.show_forms.length > 0) {
+      postsWhere['form_id'] = filter.show_forms.split(",");
+    }
+    if (filter && filter.search_text && filter.search_text.length > 0) {
+      postsWhere['title'] = `%${ filter.search_text}%`;
+    }
     return Promise.all([
-      this.getModels<Post>(new Post(), where, { created: "DESC" }, limit, offset),
-      this.getModels<Value>(new Value(), where,  { cardinality: "ASC" })]).
+      this.getModels<Post>(new Post(), postsWhere, { created: "DESC" }, limit, offset),
+      this.getModels<Value>(new Value(), valuesWhere, { cardinality: "ASC" })]).
       then((results:any[]) => {
         let posts = <Post[]>results[0];
         let values = <Value[]>results[1];
         for (let post of posts) {
           post.loadValues(values);
         }
+        this.logger.info(this, "getPosts", posts.length);
         return posts;
       });
   }
