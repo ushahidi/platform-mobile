@@ -350,11 +350,18 @@ export class ResponseListPage extends BasePage {
         this.logger.info(this, "searchResponses", "Filter", data.filter);
         this.filter = data.filter;
         this.loading = true;
-        let loading = this.showLoading("Filtering...");
-        this.loadPosts(false).then((filtered) => {
-          loading.dismiss();
-          this.loading = false;
-        });
+        if (this.view == 'list') {
+          let loading = this.showLoading("Filtering...");
+          this.loadPosts(false).then((filtered) => {
+            loading.dismiss();
+            this.loading = false;
+          });
+        }
+        else {
+          this.loadMarkers(false).then((filtered) => {
+            this.loading = false;
+          });
+        }
       }
       this.resizeContent(400);
     });
@@ -617,12 +624,19 @@ export class ResponseListPage extends BasePage {
       (results:any) => {
         this.filter = null;
         this.loading = true;
-        let loading = this.showLoading("Loading...");
-        this.loadPosts(true).then((cleared) => {
-          loading.dismiss();
-          this.loading = false;
-          this.resizeContent();
-        });
+        this.resizeContent();
+        if (this.view == 'list') {
+          let loading = this.showLoading("Loading...");
+          this.loadPosts(true).then((cleared) => {
+            loading.dismiss();
+            this.loading = false;
+          });
+        }
+        else {
+          this.loadMarkers(true).then((cleared) => {
+            this.loading = false;
+          });
+        }
       },
       (error:any) => {
         this.showToast(error);
@@ -710,43 +724,47 @@ export class ResponseListPage extends BasePage {
     });
   }
 
-  loadMarkers(cache:boolean=true):Promise<any> {
+  loadMarkers(cache:boolean=true, offset:number=0, limit:number=10):Promise<any> {
     return new Promise((resolve, reject) => {
-      this.loading = true;
-      let limit = 10;
-      let promise = Promise.resolve();
-      for (let offset = 0; offset < this.deployment.posts_count; offset += limit) {
-        this.logger.info(this, "loadMarkers", "Limit", limit, "Offset", offset, "Queued");
-        promise = promise.then(
-          () => {
-            if (this.view == 'map') {
-              return this.api.getPosts(this.deployment, this.filter, cache, this.offline, limit, offset).then((posts:Post[]) => {
-                this.logger.info(this, "loadMarkers", "Limit", limit, "Offset", offset, "Loaded");
-                for (let post of posts) {
-                  if (post.latitude && post.longitude) {
-                    let marker = this.loadMarker(post);
-                    marker.addTo(this.map);
-                  }
-                }
+      if (this.view == 'map') {
+        this.loading = true;
+        this.logger.info(this, "loadMarkers", "Limit", limit, "Offset", offset);
+        this.api.getPosts(this.deployment, this.filter, cache, this.offline, limit, offset).then(
+          (posts:Post[]) => {
+            this.logger.info(this, "loadMarkers", "Limit", limit, "Offset", offset, "Loaded");
+            for (let post of posts) {
+              if (post.latitude && post.longitude) {
+                let marker = this.loadMarker(post);
+                marker.addTo(this.map);
+              }
+            }
+            if (posts.length == limit) {
+              this.logger.info(this, "loadMarkers", "Limit", limit, "Offset", offset, "Resurse");
+              this.loadMarkers(cache, offset + limit, limit).then(
+                (resurse:any) => {
+                  resolve(resurse);
+                },
+                (error:any) => {
+                  reject(error);
               });
             }
             else {
-              this.logger.error(this, "loadMarkers", "Interrupted");
-              return Promise.reject(this.interrupted);
+              this.logger.info(this, "loadMarkers", "Limit", limit, "Offset", offset, "Finished");
+              this.loading = false;
+              resolve(offset);
             }
+          },
+          (error:any) => {
+            this.logger.error(this, "loadMarkers", error);
+            this.loading = false;
+            reject(error);
           });
       }
-      promise.then(
-        () => {
-          this.logger.info(this, "loadMarkers", "Finished");
-          this.loading = false;
-          resolve();
-        },
-        (error) => {
-          this.logger.error(this, "loadMarkers", "Rejected");
-          this.loading = false;
-          reject(error);
-        });
+      else {
+        this.logger.error(this, "loadMarkers", "Interrupted");
+        this.loading = false;
+        reject(this.interrupted);
+      }
     });
   }
 

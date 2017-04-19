@@ -280,7 +280,7 @@ export class DatabaseService {
         let parameter = where[column];
         if (Array.isArray(parameter)) {
           let inClause = [];
-          for (let param of parameter) {
+          for (let i = 0; i < parameter.length; i++) {
             inClause.push("?");
           }
           clause.push(`${column} IN (${inClause.join(', ')})`);

@@ -32,7 +32,7 @@
     </button>
   </ion-fab>
   <div class="map" *ngIf="view == 'map'">
-    <div class="spinner" *ngIf="view == 'map' && loading == true">
+    <div class="spinner" *ngIf="loading == true">
       <ion-spinner name="ios" color="grey"></ion-spinner>
     </div>
     <div #mapMany id="mapMany"></div>
