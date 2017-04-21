@@ -5,6 +5,7 @@ import { File } from '@ionic-native/file';
 import { NativeGeocoder, NativeGeocoderForwardResult } from '@ionic-native/native-geocoder';
 import { NativeStorage } from '@ionic-native/native-storage';
 
+import { Config } from '../models/config';
 import { Login } from '../models/login';
 import { Deployment } from '../models/deployment';
 import { User } from '../models/user';
@@ -68,6 +69,41 @@ export class ApiService extends HttpService {
             }
           }
           resolve(deployments);
+        },
+        (error:any) => {
+          reject(error);
+        });
+    });
+  }
+
+  registerDeployment(name:string, website:string):Promise<Deployment> {
+    return new Promise((resolve, reject) => {
+      let url = `${website}/config.json`;
+      this.httpGet(url).then(
+        (config:Config) => {
+          if (config) {
+            let deployment:Deployment = new Deployment();
+            deployment.name = name;
+            deployment.website = website;
+            deployment.domain = website.replace("https://","").replace("http://","");
+            if (config.backend_url && config.backend_url.length > 0) {
+              deployment.api = config.backend_url;
+              resolve(deployment);
+            }
+            else if (config.backend_domain && config.backend_domain.length > 0) {
+              let link = document.createElement('a');
+              link.setAttribute('href', website);
+              let domain = link.hostname.substring(link.hostname.indexOf(".") + 1);
+              deployment.api = website.replace(domain, config.backend_domain);
+              resolve(deployment);
+            }
+            else {
+              reject("Invalid Deployment Config");
+            }
+          }
+          else {
+            reject("Invalid Deployment Config");
+          }
         },
         (error:any) => {
           reject(error);

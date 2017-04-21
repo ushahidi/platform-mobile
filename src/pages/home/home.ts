@@ -77,7 +77,7 @@ export class HomePage extends BasePage {
     this.logger.info(this, "showDialog");
     let prompt = this.alertController.create({
       title: 'Add by URL',
-      message: "Enter your deployment details",
+      message: "Enter the deployment details",
       inputs: [
         {
           name: 'name',
@@ -131,21 +131,16 @@ export class HomePage extends BasePage {
     }
     else {
       let loading = this.showLoading("Adding...");
-      let deployment = new Deployment();
-      deployment.name = name;
-      if (url.startsWith("http")) {
-        deployment.website = url;
-        deployment.api = `${url}/platform`;
-      }
-      else {
-        deployment.website = `https://${url}`;
-        deployment.api = `https://${url}/platform`;
-      }
-      deployment.domain = url.replace("http://","").replace("https://","");
-      this.database.saveDeployment(deployment).then((saved) => {
-        loading.dismiss();
-        this.showDeployment(deployment);
-      });
+      this.api.registerDeployment(name, url).then(
+        (deployment:Deployment) => {
+          this.database.saveDeployment(deployment).then((saved) => {
+            loading.dismiss();
+            this.showDeployment(deployment);
+          });
+        },
+        (error:any) => {
+          this.showAlert("Problem Adding Deployment", "The deployment does not have the necessary configuration to be added into the app, please contact the deployer letting them know about the problem.");
+        });
     }
   }
 

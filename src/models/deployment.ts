@@ -80,6 +80,21 @@ export class Deployment extends Model {
   @Column("map_longitude", DOUBLE)
   public map_longitude: number = null;
 
+  @Column("client_id", TEXT)
+  public client_id: string = null;
+
+  @Column("client_id", TEXT)
+  public client_secret: string = null;
+
+  @Column("google_analytics_id", TEXT)
+  public google_analytics_id: string = null;
+
+  @Column("intercom_app_id", TEXT)
+  public intercom_app_id: string = null;
+
+  @Column("mapbox_api_key", TEXT)
+  public mapbox_api_key: string = null;
+  
   @Column("saved", TEXT)
   public saved: Date = null;
 
