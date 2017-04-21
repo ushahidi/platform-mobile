@@ -1,8 +1,8 @@
 import { Component, ViewChild, NgZone } from '@angular/core';
-import { Platform, TextInput, Button, NavParams, Events,
-  NavController, ViewController, ModalController, LoadingController, ToastController, AlertController, ActionSheetController } from 'ionic-angular';
+import { Platform, TextInput, NavParams, Events, NavController, ViewController, ModalController, LoadingController, ToastController, AlertController, ActionSheetController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 
+import { Login } from '../../models/login';
 import { Deployment } from '../../models/deployment';
 import { Collection } from '../../models/collection';
 import { Form } from '../../models/form';
@@ -22,10 +22,8 @@ import { DEPLOYMENT_UPDATED } from '../../constants/events';
 })
 export class DeploymentLoginPage extends BasePage {
 
+  login: Login = null;
   deployment: Deployment = null;
-
-  @ViewChild('login')
-  login: Button;
 
   @ViewChild('username')
   username: TextInput;
@@ -54,16 +52,13 @@ export class DeploymentLoginPage extends BasePage {
 
     ionViewWillEnter() {
       super.ionViewWillEnter();
-      this.platform.ready().then(() => {
-        this.statusBar.styleLightContent();
-        this.statusBar.backgroundColorByHexString('#3f4751');
-      });
       this.deployment = this.getParameter<Deployment>("deployment");
-      if (this.deployment.username) {
-        this.username.value = this.deployment.username;
+      this.login = this.getParameter<Login>("login");
+      if (this.login && this.login.username) {
+        this.username.value = this.login.username;
       }
-      if (this.deployment.password) {
-        this.password.value = this.deployment.password;
+      if (this.login && this.login.password) {
+        this.password.value = this.login.password;
       }
     }
 
@@ -73,11 +68,10 @@ export class DeploymentLoginPage extends BasePage {
       let password = this.password.value.toString();
       if (username.length > 0 && password.length > 0) {
         let loading = this.showLoading("Logging in...");
-        this.api.authLogin(this.deployment, username, password).then(
-          (tokens:any) => {
-            this.logger.info(this, "userLogin", "Tokens", tokens);
-            if (tokens != null) {
-              this.deployment.copyInto(tokens);
+        this.api.userLogin(this.deployment, username, password).then(
+          (login:Login) => {
+            this.logger.info(this, "userLogin", "Login", login);
+            if (login != null) {
               return Promise.resolve()
                 .then(() => { return this.loadDeployment(); })
                 .then(() => { return this.loadForms(); })

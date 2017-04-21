@@ -55,13 +55,13 @@
         "cordova-plugin-nativegeocoder": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
+        "cordova-plugin-nativestorage": {
+            "PACKAGE_NAME": "com.ushahidi.mobile"
+        },
         "cordova-plugin-network-information": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
         "cordova-plugin-networkactivityindicator": {
-            "PACKAGE_NAME": "com.ushahidi.mobile"
-        },
-        "cordova-plugin-secure-storage": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
         "cordova-plugin-spinner-dialog": {
@@ -88,7 +88,7 @@
         "ionic-plugin-deeplinks": {
             "URL_SCHEME": "ushahidi",
             "DEEPLINK_SCHEME": "https",
-            "DEEPLINK_HOST": "ushahidi.com",
+            "DEEPLINK_HOST": "ushahidi.io",
             "ANDROID_PATH_PREFIX": "/",
             "ANDROID_2_PATH_PREFIX": "/",
             "ANDROID_3_PATH_PREFIX": "/",

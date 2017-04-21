@@ -7,12 +7,12 @@
         "files": {}
     },
     "installed_plugins": {
-        "cordova-plugin-app-version": {
-            "PACKAGE_NAME": "com.ushahidi.mobile"
-        },
         "cordova-plugin-camera": {
             "CAMERA_USAGE_DESCRIPTION": "Ushahidi would like to access the camera.",
             "PHOTOLIBRARY_USAGE_DESCRIPTION": "Ushahidi would like to access the photo library.",
+            "PACKAGE_NAME": "com.ushahidi.mobile"
+        },
+        "cordova-plugin-app-version": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
         "cordova-plugin-console": {
@@ -21,16 +21,19 @@
         "cordova-plugin-device": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
+        "cordova.plugins.diagnostic": {
+            "PACKAGE_NAME": "com.ushahidi.mobile"
+        },
         "cordova-plugin-email": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
         "cordova-plugin-file": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
-        "cordova-plugin-file-transfer": {
+        "cordova-plugin-filepath": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
-        "cordova-plugin-filepath": {
+        "cordova-plugin-file-transfer": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
         "cordova-plugin-geolocation": {
@@ -58,13 +61,13 @@
             "PHOTOLIBRARY_USAGE_DESCRIPTION": "Ushahidi would like to access the photo library.",
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
-        "cordova-plugin-network-information": {
+        "cordova-plugin-nativegeocoder": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
         "cordova-plugin-networkactivityindicator": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
-        "cordova-plugin-secure-storage": {
+        "cordova-plugin-network-information": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
         "cordova-plugin-spinner-dialog": {
@@ -76,28 +79,25 @@
         "cordova-plugin-statusbar": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
+        "cordova-sqlite-storage": {
+            "PACKAGE_NAME": "com.ushahidi.mobile"
+        },
         "cordova-plugin-whitelist": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
         "cordova-plugin-x-socialsharing": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
-        "cordova-sqlite-storage": {
-            "PACKAGE_NAME": "com.ushahidi.mobile"
-        },
-        "cordova.plugins.diagnostic": {
-            "PACKAGE_NAME": "com.ushahidi.mobile"
-        },
         "ionic-plugin-deeplinks": {
             "URL_SCHEME": "ushahidi",
             "DEEPLINK_SCHEME": "https",
-            "DEEPLINK_HOST": "ushahidi.com",
+            "DEEPLINK_HOST": "ushahidi.io",
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
         "ionic-plugin-keyboard": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         },
-        "cordova-plugin-nativegeocoder": {
+        "cordova-plugin-nativestorage": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
         }
     },

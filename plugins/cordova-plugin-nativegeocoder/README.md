@@ -11,6 +11,10 @@ cordova plugin add cordova-plugin-nativegeocoder
 ```
 The iOS part is written in Swift 3 and the [Swift support plugin](https://github.com/akofman/cordova-plugin-add-swift-support) is configured as a dependency.
 
+## Ionic Native Demo
+
+Have a look at the [demo](https://github.com/sebastianbaar/cordova-plugin-nativegeocoder/tree/master/demo) project for a working demo with the [Ionic Framework](http://ionicframework.com/) and [Ionic Native](http://ionicframework.com/docs/v2/native/).
+
 ## Supported Platforms
 
 - iOS
@@ -37,7 +41,7 @@ Reverse geocode a given latitude and longitude to find location address.
 ```js
 nativegeocoder.reverseGeocode(success, failure, 52.5072095, 13.1452818);
 function success(result) {
-  alert("The address is: \n\n" + result.street + " " + result.houseNumber + ", " + result.postalCode + " " + result.city + " in " + result.countryName + " - " +result.countryCode);
+  alert("The address is: \n\n" + result.street + " " + result.houseNumber + ", " + result.postalCode + " " + result.city + " " + result.district + " in " + result.countryName + " - " + result.countryCode);
 }
 function failure(err) {
   alert(JSON.stringify(err));

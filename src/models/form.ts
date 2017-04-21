@@ -4,6 +4,7 @@ import { Table } from '../decorators/table';
 import { Column } from '../decorators/column';
 
 import { Model, TEXT, INTEGER, BOOLEAN, PRIMARY_KEY } from '../models/model';
+import { Login } from '../models/login';
 import { Stage } from '../models/stage';
 import { Attribute } from '../models/attribute';
 
@@ -41,6 +42,9 @@ export class Form extends Model {
   @Column("disabled", BOOLEAN)
   public disabled: boolean = null;
 
+  @Column("user_roles", TEXT)
+  public user_roles: string = null;
+
   @Column("created", TEXT)
   public created: Date = null;
 
@@ -49,6 +53,9 @@ export class Form extends Model {
 
   @Column("saved", TEXT)
   public saved: Date = null;
+
+  @Column("can_submit", BOOLEAN)
+  public can_submit: boolean = null;
 
   @Column("can_read", BOOLEAN)
   public can_read: boolean = null;
@@ -98,6 +105,29 @@ export class Form extends Model {
     else {
       this.attributes = [];
     }
+  }
+
+  canSubmit(login:Login=null) {
+    if (this.disabled == true) {
+      return false;
+    }
+    if (this.can_submit == true) {
+      return true;
+    }
+    if (login && login.user_role && login.user_role.length > 0) {
+      if (login.user_role == 'admin') {
+        return true;
+      }
+      if (this.user_roles && this.user_roles.length > 0) {
+        let user_roles = JSON.parse(this.user_roles);
+        for (let user_role of user_roles) {
+          if (user_role === login.user_role) {
+            return true;
+          }
+        }
+      }
+    }
+    return false;
   }
 
 }

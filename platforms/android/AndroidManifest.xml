@@ -18,7 +18,7 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:host="ushahidi.com" android:pathPrefix="/" android:scheme="https" />
+                <data android:host="ushahidi.io" android:pathPrefix="/" android:scheme="https" />
                 <data android:host=" " android:pathPrefix="/" android:scheme=" " />
                 <data android:host=" " android:pathPrefix="/" android:scheme=" " />
                 <data android:host=" " android:pathPrefix="/" android:scheme=" " />

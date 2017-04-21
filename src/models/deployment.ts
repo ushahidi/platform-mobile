@@ -53,21 +53,6 @@ export class Deployment extends Model {
   @Column("image", TEXT)
   public image: string = null;
 
-  @Column("username", TEXT)
-  public username: string = null;
-
-  @Column("password", TEXT)
-  public password: string = null;
-
-  @Column("user_id", INTEGER)
-  public user_id: number = null;
-
-  @Column("access_token", TEXT)
-  public access_token: string = null;
-
-  @Column("refresh_token", TEXT)
-  public refresh_token: string = null;
-
   @Column("users_count", INTEGER)
   public users_count: number = null;
 
@@ -117,18 +102,6 @@ export class Deployment extends Model {
   public posts: Post[] = [];
 
   public collections: Collection[] = [];
-
-  public hasUsername():boolean {
-    return this.username != null && this.username.length > 0;
-  }
-
-  public hasPassword():boolean {
-    return this.password != null && this.password.length > 0;
-  }
-
-  public hasAccessToken():boolean {
-    return this.access_token != null && this.access_token.length > 0;
-  }
 
   public hasPosts():boolean {
     return this.posts != null && this.posts.length > 0;

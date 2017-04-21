@@ -10,6 +10,7 @@ import { MapMarker } from '../../maps/map-marker';
 
 import { TruncatePipe } from '../../pipes/truncate';
 
+import { Login } from '../../models/login';
 import { Deployment } from '../../models/deployment';
 import { Post } from '../../models/post';
 import { Form } from '../../models/form';
@@ -37,6 +38,7 @@ import { PLACEHOLDER_LATITUDE, PLACEHOLDER_LONGITUDE } from '../../constants/pla
 })
 export class ResponseListPage extends BasePage {
 
+  login:Login = null;
   deployment:Deployment = null;
   posts:Post[] = null;
   pending:Post[] = null;
@@ -97,6 +99,7 @@ export class ResponseListPage extends BasePage {
     if (this.deployment == null) {
       this.deployment = this.getParameter<Deployment>("deployment");
     }
+    this.login = this.getParameter<Login>("login");
     this.loadUpdates(null, true);
   }
 
@@ -309,6 +312,7 @@ export class ResponseListPage extends BasePage {
     this.logger.info(this, "showResponse", post);
     this.showPage(ResponseDetailsPage,
       { deployment: this.deployment,
+        login: this.login,
         post: post });
   }
 
@@ -317,24 +321,27 @@ export class ResponseListPage extends BasePage {
     let buttons = [];
     if (this.deployment.forms != null) {
       for (let form of this.deployment.forms){
-        buttons.push({
-          text: form.name,
-          handler: () => {
-            this.logger.info(this, "addResponse", "Form", form);
-            this.showResponseAdd(form);
-        }});
+        if (form.canSubmit(this.login)) {
+          buttons.push({
+            text: form.name,
+            handler: () => {
+              this.logger.info(this, "addResponse", "Form", form);
+              this.showResponseAdd(form);
+          }});
+        }
       }
     }
     buttons.push({
       text: 'Cancel',
       role: 'cancel'});
-    this.showActionSheet('Submit a survey response', buttons);
+    this.showActionSheet('Submit Survey Response', buttons);
   }
 
   showResponseAdd(form) {
     let modal = this.showModal(ResponseAddPage,
-      { form: form,
-        deployment: this.deployment })
+      { deployment: this.deployment,
+        login: this.login,
+        form: form })
     modal.onDidDismiss(data => {
       this.logger.info(this, "showResponseAdd", "Modal", data);
     });

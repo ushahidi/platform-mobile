@@ -33,6 +33,9 @@ export class User extends Model {
   @Column("name", TEXT)
   public name: string = null;
 
+  @Column("role", TEXT)
+  public role: string = null;
+
   @Column("gravatar", TEXT)
   public gravatar: string = null;
 

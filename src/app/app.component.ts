@@ -6,6 +6,7 @@ import { GoogleAnalytics } from '@ionic-native/google-analytics';
 import { AppVersion } from '@ionic-native/app-version';
 
 import { Model } from '../models/model';
+import { Login } from '../models/login';
 import { Deployment } from '../models/deployment';
 import { User } from '../models/user';
 import { Form } from '../models/form';
@@ -195,7 +196,7 @@ export class MyApp {
   showRootPage(deployments:Deployment[]=null) {
     this.logger.info(this, "showRootPage");
     if (deployments && deployments.length > 0) {
-      this.loginDeployment(this.deployment).then((ready) => {
+      this.showDeployment(this.deployment).then((ready) => {
         this.splashScreen.hide();
       });
     }
@@ -212,80 +213,31 @@ export class MyApp {
       { });
     modal.present();
     modal.onDidDismiss((data:any) => {
-      this.statusBar.styleDefault();
-      this.statusBar.backgroundColorByHexString('#f9f9f8');
       if (data && data.deployment) {
         this.logger.info(this, "addDeployment", data);
         let deployment:Deployment = data.deployment;
-        this.loginDeployment(deployment);
+        this.showDeployment(deployment);
       }
     });
   }
 
-  changeDeployment(deployment:Deployment) {
+  changeDeployment(deployment:Deployment):Promise<any> {
     let loading = this.showLoading("Loading...");
-    this.loginDeployment(deployment).then((loaded) => {
+    return this.showDeployment(deployment).then((loaded) => {
       loading.dismiss();
     })
   }
 
-  loginDeployment(deployment:Deployment) {
-    this.logger.info(this, "loginDeployment", deployment);
+  showDeployment(deployment:Deployment):Promise<any> {
+    this.logger.info(this, "showDeployment", deployment);
     this.deployment = deployment;
-    if (deployment.hasUsername() && deployment.hasPassword()) {
-      this.logger.info(this, "loginDeployment", "Username", deployment.username);
-      return this.api.authLogin(deployment, deployment.username, deployment.password).then(
-        (tokens:any) => {
-          this.logger.info(this, "loginDeployment", "Username", deployment.username, "Tokens", tokens);
-          if (tokens) {
-            this.showDeployment(deployment, tokens);
-          }
-          else {
-            return this.api.clientLogin(deployment).then(
-              (tokens:any) => {
-                this.logger.info(this, "loginDeployment", "Client", tokens);
-                this.showDeployment(deployment, tokens);
-              },
-              (error:any) => {
-                this.logger.error(this, "loginDeployment", "Client", error);
-              });
-          }
-        },
-        (error:any) => {
-          this.logger.error(this, "loginDeployment", "Username", error);
-          return this.api.clientLogin(deployment).then(
-            (tokens:any) => {
-              this.logger.info(this, "loginDeployment", "Client", tokens);
-              this.showDeployment(deployment, tokens);
-            },
-            (error:any) => {
-              this.logger.error(this, "loginDeployment", "Client", error);
-            });
-        });
-    }
-    else {
-      this.logger.info(this, "loginDeployment", "Client");
-      return this.api.clientLogin(deployment).then(
-        (tokens:any) => {
-          this.logger.info(this, "loginDeployment", "Client", tokens);
-          this.showDeployment(deployment, tokens);
-        },
-        (error:any) => {
-          this.logger.error(this, "loginDeployment", "Client", error);
-        });
-    }
-  }
-
-  showDeployment(deployment:Deployment, tokens:any) {
-    this.logger.info(this, "showDeployment", tokens, deployment);
-    deployment.copyInto(tokens);
-    this.database.saveDeployment(deployment).then(
-      (saved) => {
+    return this.api.userOrClientLogin(deployment).then(
+      (login:Login) => {
         this.menuController.close();
         this.nav.setRoot(
           DeploymentDetailsPage,
           { deployment: deployment });
-      });
+    });
   }
 
   removeDeployment(event:any, deployment:Deployment) {
@@ -314,7 +266,6 @@ export class MyApp {
             }
             else if (this.deployment.id == deployment.id){
               this.deployment = this.deployments[0];
-              this.loginDeployment(this.deployment);
             }
           });
         });

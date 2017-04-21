@@ -21,6 +21,7 @@ import { SQLite } from '@ionic-native/sqlite';
 import { Keyboard } from '@ionic-native/keyboard';
 import { GoogleAnalytics } from '@ionic-native/google-analytics';
 import { NativeGeocoder } from '@ionic-native/native-geocoder'
+import { NativeStorage } from '@ionic-native/native-storage';
 
 import { MyApp } from './app.component';
 import { BasePage } from '../pages/base-page/base-page';
@@ -144,6 +145,7 @@ import { VimeoService } from '../providers/vimeo-service';
     { provide: SocialSharing, useClass: SocialSharing },
     { provide: NativeGeocoder, useClass: NativeGeocoder },
     { provide: GoogleAnalytics, useClass: GoogleAnalytics },
+    { provide: NativeStorage, useClass: NativeStorage },
     { provide: ApiService, useClass: ApiService },
     { provide: VimeoService, useClass: VimeoService },
     { provide: CacheService, useClass: CacheService },

@@ -5,8 +5,8 @@ import { StatusBar } from '@ionic-native/status-bar';
 
 import { PLACEHOLDER_BLANK } from '../../constants/placeholders';
 
+import { Login } from '../../models/login';
 import { Deployment } from '../../models/deployment';
-import { User } from '../../models/user';
 import { Form } from '../../models/form';
 import { Stage } from '../../models/stage';
 import { Attribute } from '../../models/attribute';
@@ -39,7 +39,7 @@ import { ResponseListPage } from '../../pages/response-list/response-list';
 })
 export class DeploymentDetailsPage extends BasePage {
 
-  user: User = null;
+  login: Login = null;
   deployment: Deployment = null;
   placeholder: string = PLACEHOLDER_BLANK;
   refreshing:boolean = false;
@@ -74,15 +74,19 @@ export class DeploymentDetailsPage extends BasePage {
       if (this.deployment == null) {
         this.deployment = this.getParameter<Deployment>("deployment");
       }
-      this.loadUpdates(null, true);
+      let loading = this.showLoading("Loading...");
+      this.loadUpdates(null, true).then((loaded) => {
+        this.logger.info(this, "ionViewWillEnter", "Loaded");
+        loading.dismiss();
+      });
     }
 
     loadUpdates(event:any=null, cache:boolean=false) {
       this.logger.info(this, "loadUpdates", cache);
       this.refreshing = true;
       return Promise.resolve()
+        .then(() => { return this.loadLogin(cache); })
         .then(() => { return this.loadDeployment(cache); })
-        .then(() => { return this.loadUser(cache); })
         .then(() => { return this.loadForms(cache); })
         .then(() => { return this.loadCollections(cache); })
         .then(() => {
@@ -101,11 +105,33 @@ export class DeploymentDetailsPage extends BasePage {
         });
     }
 
-    loadDeployment(cache:boolean=true):Promise<any> {
+    loadLogin(cache:boolean=true):Promise<Login> {
+      this.logger.info(this, "loadLogin", cache);
+      if (cache && this.login) {
+        this.logger.info(this, "loadLogin", "Cached", this.login);
+        return Promise.resolve(this.login);
+      }
+      else {
+        return new Promise((resolve, reject) => {
+          this.api.userOrClientLogin(this.deployment).then(
+            (login:Login) => {
+              this.logger.info(this, "loadLogin", "Loaded", login);
+              this.login = login;
+              resolve(login);
+            },
+            (error:any) => {
+              this.logger.error(this, "loadLogin", "Failed", error);
+              reject(error);
+            });
+        });
+      }
+    }
+
+    loadDeployment(cache:boolean=true):Promise<Deployment> {
       this.logger.info(this, "loadDeployment", cache);
       if (cache && (this.deployment.image || this.deployment.description)) {
         this.logger.info(this, "loadDeployment", "Cached");
-        return Promise.resolve();
+        return Promise.resolve(this.deployment);
       }
       else {
         return new Promise((resolve, reject) => {
@@ -116,7 +142,7 @@ export class DeploymentDetailsPage extends BasePage {
               this.database.saveModel(this.deployment).then(
                 (saved:any) => {
                   this.logger.info(this, "loadDeployment", "Saved", saved);
-                  resolve();
+                  resolve(this.deployment);
                 },
                 (error:any) => {
                   this.logger.error(this, "loadDeployment", "Failed", error);
@@ -131,54 +157,11 @@ export class DeploymentDetailsPage extends BasePage {
       }
     }
 
-    loadUser(cache:boolean=true):Promise<any> {
-      this.logger.info(this, "loadUser", cache);
-      if (cache && this.user) {
-        this.logger.info(this, "loadUser", "Cached", this.user);
-        return Promise.resolve();
-      }
-      else if (this.deployment.hasUsername() == false) {
-        this.logger.info(this, "loadUser", "No Username");
-        return Promise.resolve();
-      }
-      else if (this.deployment.hasPassword() == false) {
-        this.logger.info(this, "loadUser", "No Password");
-        return Promise.resolve();
-      }
-      else {
-        return new Promise((resolve, reject) => {
-          this.api.getUser(this.deployment).then(
-            (user:User) => {
-              this.logger.info(this, "loadUser", "Loaded", user);
-              this.user = user;
-              this.deployment.user_id = user.id;
-              let saves = [
-                this.database.saveDeployment(this.deployment),
-                this.database.saveUser(this.deployment, this.user)
-              ];
-              Promise.all(saves).then(
-                (saved:any) => {
-                  this.logger.info(this, "loadUser", "Saved", saved);
-                  resolve();
-                },
-                (error) => {
-                  this.logger.error(this, "loadUser", "Failed", error);
-                  reject(error);
-                });
-            },
-            (error:any) => {
-              this.logger.error(this, "loadUser", "Failed", error);
-              reject(error);
-            });
-        });
-      }
-    }
-
-    loadForms(cache:boolean=true):Promise<any> {
+    loadForms(cache:boolean=true):Promise<Form[]> {
       this.logger.info(this, "loadForms", cache);
       if (cache && this.deployment.hasForms()) {
         this.logger.info(this, "loadForms", "Cached");
-        return Promise.resolve();
+        return Promise.resolve(this.deployment.forms);
       }
       else {
         return new Promise((resolve, reject) => {
@@ -191,7 +174,7 @@ export class DeploymentDetailsPage extends BasePage {
                 this.logger.info(this, "loadForms", "Loaded", 0);
               }
               this.deployment.forms = forms;
-              resolve();
+              resolve(forms);
             },
             (error:any) => {
               this.logger.error(this, "loadForms", "Failed", error);
@@ -201,11 +184,11 @@ export class DeploymentDetailsPage extends BasePage {
       }
     }
 
-    loadCollections(cache:boolean=true):Promise<any> {
+    loadCollections(cache:boolean=true):Promise<Collection[]> {
       this.logger.info(this, "loadCollections", cache);
       if (cache && this.deployment.hasCollections()) {
         this.logger.info(this, "loadCollections", "Cached");
-        return Promise.resolve();
+        return Promise.resolve(this.deployment.collections);
       }
       else {
         return new Promise((resolve, reject) => {
@@ -218,7 +201,7 @@ export class DeploymentDetailsPage extends BasePage {
                 this.logger.info(this, "loadCollections", "Loaded", 0);
               }
               this.deployment.collections = collections;
-              resolve();
+              resolve(collections);
             },
             (error:any) => {
               this.logger.error(this, "loadCollections", "Failed", error);
@@ -231,7 +214,8 @@ export class DeploymentDetailsPage extends BasePage {
     showResponses(event:any) {
       this.logger.info(this, "showResponses");
       this.showPage(ResponseListPage,
-        { deployment: this.deployment });
+        { deployment: this.deployment,
+          login: this.login });
     }
 
     showCollections(event:any) {
@@ -249,26 +233,29 @@ export class DeploymentDetailsPage extends BasePage {
       this.logger.info(this, "addResponse");
       let buttons = [];
       if (this.deployment.forms) {
-        for (let form of this.deployment.forms){
-          buttons.push({
-            text: form.name,
-            handler: () => {
-              this.logger.info(this, "addResponse", "Form", form.name);
-              this.showResponseAdd(form);
-          }});
+        for (let form of this.deployment.forms) {
+          if (form.canSubmit(this.login)) {
+            buttons.push({
+              text: form.name,
+              handler: () => {
+                this.logger.info(this, "addResponse", "Form", form.name);
+                this.showResponseAdd(form);
+            }});
+          }
         }
       }
       buttons.push({
         text: 'Cancel',
         role: 'cancel' });
-      this.showActionSheet('Submit a survey response', buttons);
+      this.showActionSheet('Submit Survey Response', buttons);
     }
 
     showResponseAdd(form:Form) {
       this.logger.info(this, "showResponseAdd", form.name);
       let modal = this.showModal(ResponseAddPage,
         { deployment: this.deployment,
-          form: form })
+          login: this.login,
+          form: form });
       modal.onDidDismiss(data => {
         this.logger.info(this, "showResponseAdd", "Modal", data);
       });
@@ -310,13 +297,10 @@ export class DeploymentDetailsPage extends BasePage {
         this.demoteAttributes(),
         this.demoteCollections()]).then(
           (done:any) => {
-            this.api.clientLogin(this.deployment).then((tokens:any) => {
-              this.logger.info(this, "userLogout", "clientLogin", tokens);
-              this.deployment.copyInto(tokens);
-              this.database.saveDeployment(this.deployment).then((saved:any) => {
-                loading.dismiss();
-                this.showToast('Logout Successful');
-              });
+            this.api.clientLogin(this.deployment).then((login:Login) => {
+              this.logger.info(this, "userLogout", "clientLogin", login);
+              loading.dismiss();
+              this.showToast('Logout Successful');
             });
           },
           (error:any) => {
@@ -326,11 +310,6 @@ export class DeploymentDetailsPage extends BasePage {
     }
 
     demoteDeployment() {
-      this.deployment.user_id = 0;
-      this.deployment.username = "";
-      this.deployment.password = "";
-      this.deployment.access_token = "";
-      this.deployment.refresh_token = "";
       this.deployment.can_create = false;
       this.deployment.can_update = false;
       this.deployment.can_delete = false;

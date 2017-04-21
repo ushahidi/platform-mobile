@@ -3,6 +3,7 @@ import { Platform, NavParams, Events, Content,
   NavController, ViewController, LoadingController, ToastController, AlertController, ModalController, ActionSheetController  } from 'ionic-angular';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 
+import { Login } from '../../models/login';
 import { Deployment } from '../../models/deployment';
 import { Post } from '../../models/post';
 import { Form } from '../../models/form';
@@ -25,6 +26,7 @@ import { POST_UPDATED } from '../../constants/events';
 })
 export class ResponseAddPage extends BasePage {
 
+  login: Login = null;
   deployment: Deployment = null;
   post: Post = null;
   form: Form = null;
@@ -58,12 +60,12 @@ export class ResponseAddPage extends BasePage {
   ionViewDidLoad() {
     super.ionViewDidLoad();
     this.deployment = this.getParameter<Deployment>("deployment");
+    this.login = this.getParameter<Login>("login");
     this.form = this.getParameter<Form>("form");
     this.post = this.getParameter<Post>("post");
     if (this.form) {
       this.color = this.form.color;
     }
-    this.logger.info(this, "Form Attributes", this.form.attributes);
     this.loadUpdates();
   }
 
@@ -255,6 +257,14 @@ export class ResponseAddPage extends BasePage {
     });
   }
 
+  loadLogin() {
+    this.logger.info(this, "loadLogin");
+    this.api.getLogin(this.deployment).then(
+      (login:Login) => {
+        this.login = login;
+      });
+  }
+
   loadPostValues() {
     this.logger.info(this, "loadPostValues");
     if (this.post == null) {
@@ -265,7 +275,9 @@ export class ResponseAddPage extends BasePage {
         this.post.id = Math.min(id, 0) - 1;
       });
       this.post.deployment_id = this.deployment.id;
-      this.post.user_id = this.deployment.user_id;
+      if (this.login) {
+        this.post.user_id = this.login.user_id;
+      }
       this.post.form_id = this.form.id;
       this.post.color = this.form.color;
       this.post.posted = new Date();

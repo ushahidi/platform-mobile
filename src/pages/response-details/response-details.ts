@@ -2,6 +2,7 @@ import { Component, NgZone, ViewChild } from '@angular/core';
 import { Platform, NavParams, Events, Content,
   NavController, ViewController, LoadingController, ToastController, AlertController, ModalController, ActionSheetController  } from 'ionic-angular';
 
+import { Login } from '../../models/login';
 import { Deployment } from '../../models/deployment';
 import { Post } from '../../models/post';
 import { Form } from '../../models/form';
@@ -31,6 +32,7 @@ import { PLACEHOLDER_USER, PLACEHOLDER_NAME } from '../../constants/placeholders
 export class ResponseDetailsPage extends BasePage {
 
   color:string = "#cccccc";
+  login:Login = null;
   deployment:Deployment = null;
   post:Post = null;
   form:Form = null;
@@ -62,6 +64,7 @@ export class ResponseDetailsPage extends BasePage {
   ionViewWillEnter() {
     super.ionViewWillEnter();
     this.deployment = this.getParameter<Deployment>("deployment");
+    this.login = this.getParameter<Login>("login");
     this.post = this.getParameter<Post>("post");
     this.color = this.post.color;
     this.loadUpdates();

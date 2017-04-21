@@ -3,7 +3,9 @@ import { Http } from '@angular/http';
 import { Transfer} from '@ionic-native/transfer';
 import { File } from '@ionic-native/file';
 import { NativeGeocoder, NativeGeocoderForwardResult } from '@ionic-native/native-geocoder';
+import { NativeStorage } from '@ionic-native/native-storage';
 
+import { Login } from '../models/login';
 import { Deployment } from '../models/deployment';
 import { User } from '../models/user';
 import { Form } from '../models/form';
@@ -38,6 +40,7 @@ export class ApiService extends HttpService {
     public transfer:Transfer,
     public vimeo:VimeoService,
     public logger:LoggerService,
+    private storage: NativeStorage,
     public database:DatabaseService,
     public nativeGeocoder:NativeGeocoder) {
     super(http, file, transfer, logger);
@@ -45,10 +48,10 @@ export class ApiService extends HttpService {
 
   searchDeployments(search:string):Promise<Deployment[]> {
     return new Promise((resolve, reject) => {
-      let url = "https://api.ushahidi.io/deployments";
       let params = {
         q: search
       };
+      let url = "https://api.ushahidi.io/deployments";
       this.httpGet(url, null, params).then(
         (results:any[]) => {
           let deployments = [];
@@ -66,13 +69,13 @@ export class ApiService extends HttpService {
           }
           resolve(deployments);
         },
-        (error) => {
+        (error:any) => {
           reject(error);
         });
     });
   }
 
-  clientLogin(deployment:Deployment):Promise<any> {
+  clientLogin(deployment:Deployment):Promise<Login> {
     return new Promise((resolve, reject) => {
       let url = deployment.api + "/oauth/token";
       let params = {
@@ -82,17 +85,23 @@ export class ApiService extends HttpService {
         client_secret: this.clientSecret};
       this.httpPost(url, null, params).then(
         (data:any) => {
-          let tokens = {
+          let login:Login = <Login> {
             access_token: data.access_token };
-          resolve(tokens);
+          this.storage.setItem(deployment.website, JSON.stringify(login)).then(
+              (data:any) => {
+                resolve(login);
+              },
+              (error:any) => {
+                reject(error);
+              });
         },
-        (error) => {
+        (error:any) => {
           reject(error);
         })
     });
   }
 
-  authLogin(deployment:Deployment, username:string, password:string):Promise<any> {
+  userLogin(deployment:Deployment, username:string, password:string):Promise<Login> {
     return new Promise((resolve, reject) => {
       let url = deployment.api + "/oauth/token";
       let params = {
@@ -101,23 +110,74 @@ export class ApiService extends HttpService {
         client_id: this.clientId,
         client_secret: this.clientSecret,
         username: username,
-        password: password};
+        password: password };
       this.httpPost(url, null, params).then(
         (data:any) => {
-          let tokens = {
+          let login:Login = <Login> {
             username: username,
             password: password,
             access_token: data.access_token,
             refresh_token: data.refresh_token }
-          resolve(tokens);
+          this.storage.setItem(deployment.website, JSON.stringify(login)).then(
+            (data:any) => {
+              this.getUser(deployment, "me").then((user:User) => {
+                login.user_id = user.id;
+                login.user_role = user.role;
+                this.storage.setItem(deployment.website, JSON.stringify(login)).then(
+                  (data:any) => {
+                    resolve(login);
+                  },
+                  (error:any) => {
+                    reject(error);
+                  });
+              });
+            },
+            (error:any) => {
+              reject(error);
+            });
         },
-        (error) => {
+        (error:any) => {
           reject(error);
         })
     });
   }
 
-  authRefresh(deployment:Deployment, refreshToken:string):Promise<any> {
+  userOrClientLogin(deployment:Deployment):Promise<Login> {
+    return new Promise((resolve, reject) => {
+      this.getLogin(deployment).then(
+        (login:Login) => {
+            if (login.username && login.password) {
+              this.userLogin(deployment, login.username, login.password).then(
+                (_login:Login) => {
+                  resolve(_login);
+                },
+                (error:any) => {
+                  reject(error);
+                });
+            }
+            else {
+              this.clientLogin(deployment).then(
+                (_login:Login) => {
+                  resolve(_login);
+                },
+                (error:any) => {
+                  reject(error);
+                });
+            }
+         },
+        (error:any) => {
+          this.clientLogin(deployment).then(
+            (_login:Login) => {
+              resolve(_login);
+            },
+            (error:any) => {
+              reject(error);
+            });
+        });
+    });
+  }
+
+  authRefresh(deployment:Deployment, refreshToken:string):Promise<Login> {
     return new Promise((resolve, reject) => {
       let url = deployment.api + "/oauth/token";
       let params = {
@@ -125,17 +185,117 @@ export class ApiService extends HttpService {
         scope: this.scope,
         client_id: this.clientId,
         client_secret: this.clientSecret,
-        refresh_token: refreshToken};
+        refresh_token: refreshToken };
       this.httpPost(url, null, params).then(
         (data:any) => {
-          let tokens = {
+          let login:Login = <Login> {
             access_token: data.access_token,
             refresh_token: data.refresh_token }
-          resolve(tokens);
+          this.storage.setItem(deployment.website, JSON.stringify(login)).then(
+            (data:any) => {
+              resolve(login);
+            },
+            (error:any) => {
+              reject(error);
+            });
         },
         (error:any) => {
           reject(error);
         })
+    });
+  }
+
+  getLogin(deployment:Deployment):Promise<Login> {
+    return new Promise((resolve, reject) => {
+       this.storage.getItem(deployment.website).then(
+          (data:any) => {
+            this.logger.info(this, "getLogin", deployment.api, data);
+            if (data && data.length > 0) {
+              resolve(JSON.parse(data));
+            }
+            else {
+              reject("No Login");
+            }
+          },
+          (error:any) => {
+            this.logger.error(this, "getLogin", deployment.api, error);
+            reject(error);
+          });
+    });
+  }
+
+  apiGet(deployment:Deployment, endpoint:string, params:any=null):Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.getLogin(deployment).then((login:Login) => {
+        let url = deployment.api + endpoint;
+        this.httpGet(url, login.access_token, params).then(
+          (data:any) => {
+            resolve(data);
+          },
+          (error:any) => {
+            reject(error);
+          });
+      });
+    });
+  }
+
+  apiPost(deployment:Deployment, endpoint:string, params:any=null):Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.getLogin(deployment).then((login:Login) => {
+        let url = deployment.api + endpoint;
+        this.httpPost(url, login.access_token, params).then(
+          (data:any) => {
+            resolve(data);
+          },
+          (error:any) => {
+            reject(error);
+          });
+      });
+    });
+  }
+
+  apiPut(deployment:Deployment, endpoint:string, params:any=null):Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.getLogin(deployment).then((login:Login) => {
+        let url = deployment.api + endpoint;
+        this.httpPut(url, login.access_token, params).then(
+          (data:any) => {
+            resolve(data);
+          },
+          (error:any) => {
+            reject(error);
+          });
+      });
+    });
+  }
+
+  apiDelete(deployment:Deployment, endpoint:string):Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.getLogin(deployment).then((login:Login) => {
+        let url = deployment.api + endpoint;
+        this.httpDelete(url, login.access_token).then(
+          (data:any) => {
+            resolve(data);
+          },
+          (error:any) => {
+            reject(error);
+          });
+      });
+    });
+  }
+
+  apiUpload(deployment:Deployment, endpoint:string, file:string, mimeType:string):Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.getLogin(deployment).then((login:Login) => {
+        let url = deployment.api + endpoint;
+        this.fileUpload(url, login.access_token, file, "POST", mimeType).then(
+          (data:any) => {
+            resolve(data);
+          },
+          (error:any) => {
+            reject(error);
+          });
+      });
     });
   }
 
@@ -165,8 +325,7 @@ export class ApiService extends HttpService {
           });
       }
       else {
-        let url = deployment.api + "/api/v3/users";
-        this.httpGet(url, deployment.access_token).then(
+        this.apiGet(deployment, "/api/v3/users/").then(
           (data:any) => {
             let saves = [];
             let users = [];
@@ -175,6 +334,7 @@ export class ApiService extends HttpService {
             for (let item of data.results) {
               let user:User = new User();
               user.id = item.id;
+              user.role = item.role;
               user.email = item.email;
               user.name = item.realname;
               if (item.gravatar) {
@@ -188,11 +348,11 @@ export class ApiService extends HttpService {
               (saved) => {
                 resolve(users);
               },
-              (error) => {
+              (error:any) => {
                 reject(error);
               });
           },
-          (error) => {
+          (error:any) => {
             reject(error);
           });
       }
@@ -201,18 +361,20 @@ export class ApiService extends HttpService {
 
   getUser(deployment:Deployment, user:any="me", cache:boolean=false, offline:boolean=false):Promise<User>  {
     return new Promise((resolve, reject) => {
-      let url = deployment.api + `/api/v3/users/${user}`;
-      this.httpGet(url, deployment.access_token).then(
+      this.apiGet(deployment, `/api/v3/users/${user}`).then(
         (data:any) => {
           let user:User = new User();
           user.id = data.id;
+          user.role = data.role;
           user.email = data.email;
           user.name = data.realname;
-          user.gravatar = data.gravatar;
-          user.image = `https://www.gravatar.com/avatar/${data.gravatar}.jpg?s=32`;
+          if (data.gravatar) {
+            user.gravatar = data.gravatar;
+            user.image = `https://www.gravatar.com/avatar/${data.gravatar}.jpg?s=32`;
+          }
           resolve(user);
         },
-        (error) => {
+        (error:any) => {
           reject(error);
         });
     });
@@ -244,8 +406,7 @@ export class ApiService extends HttpService {
           });
       }
       else {
-        let url = deployment.api + "/api/v3/config";
-        this.httpGet(url, deployment.access_token).then(
+        this.apiGet(deployment, "/api/v3/config").then(
           (data:any) => {
             let deployment:Deployment = new Deployment();
             this.logger.info(this, "getDeployment", deployment);
@@ -288,16 +449,15 @@ export class ApiService extends HttpService {
     });
   }
 
-  updateDeployment(deployment:Deployment, changes:{}=null) {
+  updateDeployment(deployment:Deployment, changes:{}=null):Promise<any> {
     return new Promise((resolve, reject) => {
-      let url = deployment.api + "/api/v3/config/site";
       if (changes == null) {
         changes = {
           name: deployment.name,
           email: deployment.email,
           description: deployment.description };
       }
-      this.httpPut(url, deployment.access_token, changes).then(
+      this.apiPut(deployment, "/api/v3/config/site", changes).then(
         (data:any) => {
           resolve(data);
         },
@@ -333,7 +493,6 @@ export class ApiService extends HttpService {
           });
       }
       else {
-        let url = deployment.api + "/api/v3/posts/";
         let params = { limit: limit, offset: offset };
         let statuses = [];
         if (filter == null || filter.show_published) {
@@ -354,7 +513,7 @@ export class ApiService extends HttpService {
         if (filter && filter.search_text && filter.search_text.length > 0) {
           params["q"] = filter.search_text;
         }
-        this.httpGet(url, deployment.access_token, params).then(
+        this.apiGet(deployment, "/api/v3/posts", params).then(
           (data:any) => {
             let saves = [];
             deployment.posts_count = data.total_count;
@@ -430,7 +589,6 @@ export class ApiService extends HttpService {
 
   createPost(deployment:Deployment, post:Post):Promise<any> {
     return new Promise((resolve, reject) => {
-      let url = deployment.api + "/api/v3/posts/";
       let values = {}
       for (let value of post.values) {
         if (value.value == null || value.value.length == 0) {
@@ -463,7 +621,7 @@ export class ApiService extends HttpService {
       if (post.user_id && post.user_id > 0) {
         params['user'] = { id: post.user_id };
       }
-      this.httpPost(url, deployment.access_token, params).then(
+      this.apiPost(deployment, "/api/v3/posts", params).then(
         (data:any) => {
           resolve(data);
         },
@@ -488,16 +646,16 @@ export class ApiService extends HttpService {
         }
       }
       Promise.all(uploads).then(
-        (uploaded) => {
+        (uploaded:any) => {
           this.createPost(deployment, post).then(
-            (posted) => {
+            (posted:any) => {
               resolve(posted);
             },
-            (error) => {
+            (error:any) => {
               reject(error);
             });
         },
-        (error) => {
+        (error:any) => {
           reject(error);
         });
       });
@@ -505,7 +663,6 @@ export class ApiService extends HttpService {
 
   updatePost(deployment:Deployment, post:Post, changes:{}=null) {
     return new Promise((resolve, reject) => {
-      let url = deployment.api + `/api/v3/posts/${post.id}`;
       if (changes == null) {
         let values = {}
         for (let value of post.values) {
@@ -535,7 +692,7 @@ export class ApiService extends HttpService {
           content: post.description,
           values: values };
       }
-      this.httpPut(url, deployment.access_token, changes).then(
+      this.apiPut(deployment, `/api/v3/posts/${post.id}`, changes).then(
         (data:any) => {
           resolve(data);
         },
@@ -560,16 +717,16 @@ export class ApiService extends HttpService {
         }
       }
       Promise.all(uploads).then(
-        (uploaded) => {
+        (uploaded:any) => {
           this.updatePost(deployment, post).then(
-            (posted) => {
+            (posted:any) => {
               resolve(posted);
             },
-            (error) => {
+            (error:any) => {
               reject(error);
             });
         },
-        (error) => {
+        (error:any) => {
           reject(error);
         });
       });
@@ -577,9 +734,7 @@ export class ApiService extends HttpService {
 
   deletePost(deployment:Deployment, post:Post):Promise<any> {
     return new Promise((resolve, reject) => {
-      let url = deployment.api + `/api/v3/posts/${post.id}`;
-      let params = {};
-      this.httpDelete(url, deployment.access_token, params).then(
+      this.apiDelete(deployment, `/api/v3/posts/${post.id}`).then(
         (data:any) => {
           resolve(data);
         },
@@ -634,17 +789,16 @@ export class ApiService extends HttpService {
               );
             }
           },
-          (error) => {
+          (error:any) => {
             reject(error);
           });
       }
       else {
-        let url = deployment.api + "/api/v3/media";
         let params = {
           order: "desc",
           limit: limit,
           offset: offset };
-        this.httpGet(url, deployment.access_token, params).then(
+        this.apiGet(deployment, "/api/v3/media", params).then(
           (data:any) => {
             let saves = [];
             let images = [];
@@ -696,11 +850,10 @@ export class ApiService extends HttpService {
 
   uploadImage(deployment:Deployment, post:Post, value:Value):Promise<Image> {
     return new Promise((resolve, reject) => {
-      let url = deployment.api + "/api/v3/media";
       let file = value.value;
       let mimeType = this.mimeType(file);
       this.logger.info(this, "uploadImage", file);
-      this.fileUpload(url, deployment.access_token, file, "POST", mimeType).then(
+      this.apiUpload(deployment, "/api/v3/media", file, mimeType).then(
         (data:any) => {
           this.logger.info(this, "uploadImage", file, data);
           let item = JSON.parse(data.response);
@@ -772,8 +925,7 @@ export class ApiService extends HttpService {
           });
       }
       else {
-        let url = deployment.api + "/api/v3/forms";
-        this.httpGet(url, deployment.access_token).then(
+        this.apiGet(deployment, "/api/v3/forms").then(
           (data:any) => {
             let forms = [];
             let saves = [];
@@ -788,7 +940,12 @@ export class ApiService extends HttpService {
               form.color = item.color;
               form.created = item.created;
               form.updated = item.updated;
+              form.disabled = item.disabled;
               form.description = item.description;
+              form.can_submit = item.everyone_can_create;
+              if (item.can_create) {
+                form.user_roles = JSON.stringify(item.can_create);
+              }
               if (item.allowed_privileges) {
                 form.can_read = item.allowed_privileges.indexOf("read") > -1;
                 form.can_create = item.allowed_privileges.indexOf("create") > -1;
@@ -846,8 +1003,7 @@ export class ApiService extends HttpService {
           });
       }
       else {
-        let url = deployment.api + "/api/v3/forms/stages";
-        this.httpGet(url, deployment.access_token).then(
+        this.apiGet(deployment, "/api/v3/forms/stages").then(
           (data:any) => {
             let saves = [];
             let stages = [];
@@ -920,8 +1076,7 @@ export class ApiService extends HttpService {
           });
       }
       else {
-        let url = deployment.api + "/api/v3/forms/attributes";
-        this.httpGet(url, deployment.access_token).then(
+        this.apiGet(deployment, "/api/v3/forms/attributes").then(
           (data:any) => {
             let saves = [];
             let attributes = [];
@@ -999,8 +1154,7 @@ export class ApiService extends HttpService {
           });
       }
       else {
-        let url = deployment.api + "/api/v3/collections";
-        this.httpGet(url, deployment.access_token).then(
+        this.apiGet(deployment, "/api/v3/collections").then(
           (data:any) => {
             let saves = [];
             let collections = [];
@@ -1040,7 +1194,7 @@ export class ApiService extends HttpService {
                 reject(error);
               });
           },
-          (error) => {
+          (error:any) => {
             reject(error);
           });
       }
@@ -1049,10 +1203,9 @@ export class ApiService extends HttpService {
 
   addPostToCollection(deployment:Deployment, post:Post, collection:Collection) {
     return new Promise((resolve, reject) => {
-      let url = deployment.api + `/api/v3/collections/${collection.id}/posts`;
       let params = {
         id: post.id };
-      this.httpPost(url, deployment.access_token, params).then(
+      this.apiPost(deployment, `/api/v3/collections/${collection.id}/posts`, params).then(
         (data:any) => {
           resolve(data);
         },
@@ -1064,9 +1217,7 @@ export class ApiService extends HttpService {
 
   removePostToCollection(deployment:Deployment, post:Post, collection:Collection) {
     return new Promise((resolve, reject) => {
-      let url = deployment.api + `/api/v3/collections/${collection.id}/posts/${post.id}`;
-      let params = { };
-      this.httpDelete(url, deployment.access_token, params).then(
+      this.apiDelete(deployment, `/api/v3/collections/${collection.id}/posts/${post.id}`).then(
         (data:any) => {
           resolve(data);
         },
