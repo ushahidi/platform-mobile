@@ -91,7 +91,7 @@ export class VimeoService extends HttpService {
         (fileSize) => {
           this.logger.info(this, "uploadFile", "fileSize", fileSize);
           let mimeType = this.mimeType(file);
-          this.fileUpload(url, this.accessToken, file, "PUT", mimeType, this.acceptType, mimeType, fileSize).then(
+          this.fileUpload(url, this.accessToken, file, null, "PUT", mimeType, this.acceptType, mimeType, fileSize).then(
             (data:any) => {
               this.logger.info(this, "uploadFile", url, file, data);
               resolve(data);

@@ -30,6 +30,7 @@ export class InputImageComponent {
   imageThumbnail: SafeResourceUrl = null;
   submitted: boolean = false;
   cameraPresent: boolean = true;
+  caption:string = null;
 
   constructor(
     private file:File,

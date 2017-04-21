@@ -257,14 +257,6 @@ export class ResponseAddPage extends BasePage {
     });
   }
 
-  loadLogin() {
-    this.logger.info(this, "loadLogin");
-    this.api.getLogin(this.deployment).then(
-      (login:Login) => {
-        this.login = login;
-      });
-  }
-
   loadPostValues() {
     this.logger.info(this, "loadPostValues");
     if (this.post == null) {
@@ -359,6 +351,12 @@ export class ResponseAddPage extends BasePage {
           else if (attribute.input == 'radio') {
             this.formGroup.addControl(attribute.key, new FormControl(text, validator));
           }
+          else if (attribute.input == 'upload') {
+            let formGroup = new FormGroup({
+              image: new FormControl(null),
+              caption: new FormControl(null)}, validator);
+            this.formGroup.addControl(attribute.key, formGroup);
+          }
           else {
             this.formGroup.addControl(attribute.key, new FormControl(text, validator));
           }
@@ -422,6 +420,10 @@ export class ResponseAddPage extends BasePage {
         else {
           postValue.value = formValue;
         }
+      }
+      else if (postValue.input == 'upload') {
+        postValue.value = formValue.image;
+        postValue.caption = formValue.caption;
       }
       else {
         postValue.value = formValue;

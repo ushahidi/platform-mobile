@@ -284,11 +284,11 @@ export class ApiService extends HttpService {
     });
   }
 
-  apiUpload(deployment:Deployment, endpoint:string, file:string, mimeType:string):Promise<any> {
+  apiUpload(deployment:Deployment, endpoint:string, file:string, caption:string, mimeType:string):Promise<any> {
     return new Promise((resolve, reject) => {
       this.getLogin(deployment).then((login:Login) => {
         let url = deployment.api + endpoint;
-        this.fileUpload(url, login.access_token, file, "POST", mimeType).then(
+        this.fileUpload(url, login.access_token, file, caption, "POST", mimeType).then(
           (data:any) => {
             resolve(data);
           },
@@ -852,8 +852,9 @@ export class ApiService extends HttpService {
     return new Promise((resolve, reject) => {
       let file = value.value;
       let mimeType = this.mimeType(file);
+      let caption = value.caption;
       this.logger.info(this, "uploadImage", file);
-      this.apiUpload(deployment, "/api/v3/media", file, mimeType).then(
+      this.apiUpload(deployment, "/api/v3/media", file, caption, mimeType).then(
         (data:any) => {
           this.logger.info(this, "uploadImage", file, data);
           let item = JSON.parse(data.response);

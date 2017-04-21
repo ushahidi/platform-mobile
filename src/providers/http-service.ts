@@ -184,7 +184,7 @@ export class HttpService {
     });
   }
 
-  fileUpload(url:string, token:string, file:string,
+  fileUpload(url:string, token:string, file:string, caption:string,
              httpMethod:string="POST",
              mimeType:string='application/binary',
              acceptType:string="application/json",
@@ -205,11 +205,16 @@ export class HttpService {
       if (token) {
         headers['Authorization'] = `Bearer ${token}`;
       }
+      var params = {};
+      if (caption && caption.length > 0) {
+        params['caption'] = caption;
+      }
       var options:FileUploadOptions = {
         httpMethod: httpMethod,
         mimeType: mimeType,
         fileName: fileName,
-        headers: headers
+        headers: headers,
+        params: params
       };
       this.logger.info(this, "UPLOAD", url, file, options);
       let fileTransfer:TransferObject = this.transfer.create();

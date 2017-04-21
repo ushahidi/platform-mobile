@@ -7,6 +7,9 @@
   .input-error {
     color: #dd0000;
   }
+  ion-input {
+    border-bottom: 1px solid #cccccc !important;
+  }
   ion-card {
     max-width: 90%;
     img {

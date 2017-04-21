@@ -47,6 +47,9 @@ export class Value extends Model {
   @Column("image", TEXT)
   public image: string = null;
 
+  @Column("caption", TEXT)
+  public caption: string = null;
+
   @Column("saved", TEXT)
   public saved: Date = null;
 
