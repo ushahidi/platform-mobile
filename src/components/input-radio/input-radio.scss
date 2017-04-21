@@ -7,6 +7,17 @@
   .input-error {
     color: #dd0000;
   }
+  ion-radio {
+    .radio-icon {
+      width: 20px;
+      height: 20px;
+      border-width: 1px;
+      .radio-inner {
+        width: 14px;
+        height: 14px;
+      }
+    }
+  }
   ion-list {
     border: none;
     margin-top: 0;
