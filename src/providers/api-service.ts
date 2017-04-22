@@ -86,6 +86,11 @@ export class ApiService extends HttpService {
             deployment.name = name;
             deployment.website = website;
             deployment.domain = website.replace("https://","").replace("http://","");
+            deployment.client_id = config.client_id;
+            deployment.client_secret = config.client_secret;
+            deployment.google_analytics_id = config.google_analytics_id;
+            deployment.intercom_app_id = config.intercom_app_id;
+            deployment.mapbox_api_key = config.mapbox_api_key;
             if (config.backend_url && config.backend_url.length > 0) {
               deployment.api = config.backend_url;
               resolve(deployment);

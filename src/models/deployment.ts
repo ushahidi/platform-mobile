@@ -83,7 +83,7 @@ export class Deployment extends Model {
   @Column("client_id", TEXT)
   public client_id: string = null;
 
-  @Column("client_id", TEXT)
+  @Column("client_secret", TEXT)
   public client_secret: string = null;
 
   @Column("google_analytics_id", TEXT)
@@ -94,7 +94,7 @@ export class Deployment extends Model {
 
   @Column("mapbox_api_key", TEXT)
   public mapbox_api_key: string = null;
-  
+
   @Column("saved", TEXT)
   public saved: Date = null;
 
