@@ -1,19 +1,19 @@
-export class Config {
+export interface Config {
 
-  public client_id: string = null;
+ client_id: string;
 
-  public client_secret: string = null;
+ client_secret: string;
 
-  public backend_url: string = null;
+ backend_url: string;
 
-  public backend_domain: string = null;
+ backend_domain: string;
 
-  public google_analytics_id: string = null;
+ google_analytics_id: string;
 
-  public intercom_app_id: string = null;
+ intercom_app_id: string;
 
-  public mapbox_api_key: string = null;
+ mapbox_api_key: string;
 
-  public raven_url: string = null;
+ raven_url: string;
 
 }

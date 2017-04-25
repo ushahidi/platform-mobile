@@ -28,6 +28,7 @@ export class DeploymentSearchPage extends BasePage {
   searchbar: Searchbar;
 
   search:string = null;
+  domain:string = null;
 
   constructor(
     public statusBar:StatusBar,
@@ -63,8 +64,19 @@ export class DeploymentSearchPage extends BasePage {
   onSearch(event:any) {
     this.logger.info(this, "onSearch", event.target.value);
     this.search = event.target.value;
-    if (this.search && this.search.length > 0) {
+    if (this.search == null) {
+      this.loading = false;
+      this.deployments = [];
+      this.domain = null;
+    }
+    else if (this.search.indexOf(".") != -1 || this.search.indexOf("http:") != -1 || this.search.indexOf("https:") != -1) {
+      this.loading = false;
+      this.deployments = [];
+      this.domain = this.search.toLowerCase().replace("http://","").replace("https://","");
+    }
+    else if (this.search.length > 0) {
       this.loading = true;
+      this.domain = null;
       this.api.searchDeployments(this.search).then(
         (deployments:Deployment[]) => {
           this.deployments = deployments;
@@ -76,8 +88,37 @@ export class DeploymentSearchPage extends BasePage {
         });
     }
     else {
+      this.loading = false;
       this.deployments = [];
     }
+  }
+
+  registerDeployment(event:any) {
+    this.logger.info(this, "registerDeployment", this.search);
+    let loading = this.showLoading("Adding...");
+    let name = "";
+    let url = `https://${this.domain}`;
+    this.api.registerDeployment(name, url).then(
+      (deployment:Deployment) => {
+        this.database.saveDeployment(deployment).then((saved) => {
+          loading.dismiss();
+          this.loginDeployment(deployment);
+        });
+      },
+      (error:any) => {
+        let url = `http://${this.domain}`;
+        this.api.registerDeployment(name, url).then(
+          (deployment:Deployment) => {
+            this.database.saveDeployment(deployment).then((saved) => {
+              loading.dismiss();
+              this.loginDeployment(deployment);
+            });
+          },
+          (error:any) => {
+            loading.dismiss();
+            this.showAlert("Problem Adding Deployment", "The deployment does not have the necessary configuration to be added into the app, please contact the deployer letting them know about the problem.");
+          });
+      });
   }
 
   addDeployment(event:any, deployment:Deployment) {
