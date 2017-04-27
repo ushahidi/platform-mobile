@@ -25,8 +25,8 @@ import { NativeStorage } from '@ionic-native/native-storage';
 
 import { MyApp } from './app.component';
 import { BasePage } from '../pages/base-page/base-page';
-import { HomePage } from '../pages/home/home';
 
+import { DeploymentNonePage } from '../pages/deployment-none/deployment-none';
 import { DeploymentSearchPage } from '../pages/deployment-search/deployment-search';
 import { DeploymentDetailsPage } from '../pages/deployment-details/deployment-details';
 import { DeploymentLoginPage } from '../pages/deployment-login/deployment-login';
@@ -72,7 +72,7 @@ import { VimeoService } from '../providers/vimeo-service';
   declarations: [
     MyApp,
     BasePage,
-    HomePage,
+    DeploymentNonePage,
     DeploymentSearchPage,
     DeploymentDetailsPage,
     DeploymentSettingsPage,
@@ -115,7 +115,7 @@ import { VimeoService } from '../providers/vimeo-service';
   bootstrap: [ IonicApp ],
   entryComponents: [
     MyApp,
-    HomePage,
+    DeploymentNonePage,
     DeploymentSearchPage,
     DeploymentLoginPage,
     DeploymentDetailsPage,
@@ -151,6 +151,7 @@ import { VimeoService } from '../providers/vimeo-service';
     { provide: CacheService, useClass: CacheService },
     { provide: LoggerService, useClass: LoggerService },
     { provide: DatabaseService, useClass: DatabaseService },
-    { provide: ErrorHandler, useClass: IonicErrorHandler } ]
+    { provide: ErrorHandler, useClass: IonicErrorHandler }
+  ]
 })
 export class AppModule {}

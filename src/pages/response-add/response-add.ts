@@ -1,6 +1,5 @@
 import { Component, NgZone, ViewChild } from '@angular/core';
-import { Platform, NavParams, Events, Content,
-  NavController, ViewController, LoadingController, ToastController, AlertController, ModalController, ActionSheetController  } from 'ionic-angular';
+import { Platform, Events, Content, NavParams, NavController, ViewController, ModalController, ToastController, AlertController, LoadingController, ActionSheetController } from 'ionic-angular';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 
 import { Login } from '../../models/login';
@@ -39,22 +38,22 @@ export class ResponseAddPage extends BasePage {
   content: Content;
 
   constructor(
-    public api:ApiService,
-    public logger:LoggerService,
-    public database:DatabaseService,
-    public events:Events,
-    public navParams: NavParams,
-    public zone: NgZone,
-    public platform:Platform,
-    public navController:NavController,
-    public viewController:ViewController,
-    public modalController:ModalController,
-    public toastController:ToastController,
-    public alertController:AlertController,
-    public loadingController:LoadingController,
-    public actionController:ActionSheetController,
-    public formBuilder: FormBuilder) {
-      super(zone, platform, logger, navParams, navController, viewController, modalController, toastController, alertController, loadingController, actionController);
+    protected zone:NgZone,
+    protected platform:Platform,
+    protected navParams:NavParams,
+    protected navController:NavController,
+    protected viewController:ViewController,
+    protected modalController:ModalController,
+    protected toastController:ToastController,
+    protected alertController:AlertController,
+    protected loadingController:LoadingController,
+    protected actionController:ActionSheetController,
+    protected logger:LoggerService,
+    protected api:ApiService,
+    protected database:DatabaseService,
+    protected events:Events,
+    protected formBuilder: FormBuilder) {
+    super(zone, platform, navParams, navController, viewController, modalController, toastController, alertController, loadingController, actionController, logger);
   }
 
   ionViewDidLoad() {

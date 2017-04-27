@@ -1,18 +1,13 @@
 import { Component, ViewChild, NgZone } from '@angular/core';
-import {
-  Content, Platform, NavParams,
-  Alert, AlertController,
-  Toast, ToastController,
-  Modal, ModalController,
-  Loading, LoadingController,
-  ActionSheet, ActionSheetController,
-  NavController, ViewController } from 'ionic-angular';
+import { Content, Platform, NavParams, Alert, AlertController, Toast, ToastController, Modal, ModalController, Loading, LoadingController, ActionSheet, ActionSheetController, NavController, ViewController } from 'ionic-angular';
+import { StatusBar } from '@ionic-native/status-bar';
 import { InAppBrowser, InAppBrowserObject } from '@ionic-native/in-app-browser';
 import { Network } from '@ionic-native/network';
 import { SocialSharing } from '@ionic-native/social-sharing';
 import { GoogleAnalytics } from '@ionic-native/google-analytics';
 
 import { LoggerService } from '../../providers/logger-service';
+import { InjectorService } from '../../providers/injector-service';
 
 @Component({
   selector: 'base-page',
@@ -21,35 +16,38 @@ import { LoggerService } from '../../providers/logger-service';
 })
 export class BasePage {
 
-  zone: NgZone = null;
-  offline: boolean = false;
-  connection: any = null;
-  disconnection: any = null;
-  network:Network;
-  socialSharing:SocialSharing;
-  inAppBrowser:InAppBrowser;
-  googleAnalytics:GoogleAnalytics;
+  protected offline: boolean = false;
+  protected connection: any = null;
+  protected disconnection: any = null;
+
+  protected zone:NgZone;
+  protected network:Network;
+  protected statusBar:StatusBar;
+  protected inAppBrowser:InAppBrowser;
+  protected socialSharing:SocialSharing;
+  protected googleAnalytics:GoogleAnalytics;
 
   @ViewChild(Content)
   content: Content;
 
   constructor(
-    zone: NgZone,
+    protected _zone:NgZone,
     protected platform:Platform,
-    protected logger:LoggerService,
-    protected navParams: NavParams,
+    protected navParams:NavParams,
     protected navController:NavController,
     protected viewController:ViewController,
     protected modalController:ModalController,
     protected toastController:ToastController,
     protected alertController:AlertController,
     protected loadingController:LoadingController,
-    protected actionController:ActionSheetController) {
-    this.zone = zone;
-    this.network = new Network();
-    this.socialSharing = new SocialSharing();
-    this.inAppBrowser = new InAppBrowser();
-    this.googleAnalytics = new GoogleAnalytics();
+    protected actionController:ActionSheetController,
+    protected logger:LoggerService) {
+    this.zone = _zone;
+    this.network = InjectorService.injector.get(Network);
+    this.statusBar = InjectorService.injector.get(StatusBar);
+    this.inAppBrowser = InjectorService.injector.get(InAppBrowser);
+    this.socialSharing = InjectorService.injector.get(SocialSharing);
+    this.googleAnalytics = InjectorService.injector.get(GoogleAnalytics);
   }
 
   ionViewDidLoad() {
@@ -58,6 +56,30 @@ export class BasePage {
 
   ionViewWillEnter() {
     this.logger.info(this, "ionViewWillEnter", "Network", this.network.type);
+    this.subscribeNetwork();
+  }
+
+  ionViewDidEnter() {
+    this.logger.info(this, "ionViewDidEnter");
+    let screen = this.constructor.name.replace("Page","").replace(/([A-Z])/g," $1").trim();
+    this.trackView(screen);
+  }
+
+  ionViewWillLeave() {
+    this.logger.info(this, "ionViewWillLeave");
+    this.unsubscribeNetwork();
+  }
+
+  ionViewDidLeave() {
+    this.logger.info(this, "ionViewDidLeave");
+  }
+
+  ionViewWillUnload() {
+    this.logger.info(this, "ionViewWillUnload");
+  }
+
+  subscribeNetwork() {
+    this.logger.info(this, "subscribeNetwork", "Network", this.network.type);
     if (this.network.type == 'none') {
       this.zone.run(() => {
         this.offline = true;
@@ -70,14 +92,14 @@ export class BasePage {
       });
     }
     this.connection = this.network.onConnect().subscribe(() => {
-      this.logger.info(this, "Network Connected", this.network.type);
+      this.logger.info(this, "subscribeNetwork", "Network Connected", this.network.type);
       this.zone.run(() => {
         this.offline = false;
         this.resizeContent();
       });
     });
     this.disconnection = this.network.onDisconnect().subscribe(() => {
-      this.logger.info(this, "Network Disconnected", this.network.type);
+      this.logger.info(this, "subscribeNetwork", "Network Disconnected", this.network.type);
       this.zone.run(() => {
         this.offline = true;
         this.resizeContent();
@@ -85,14 +107,8 @@ export class BasePage {
     });
   }
 
-  ionViewDidEnter() {
-    this.logger.info(this, "ionViewDidEnter");
-    let screen = this.constructor.name.replace("Page","").replace(/([A-Z])/g," $1").trim();
-    this.trackView(screen);
-  }
-
-  ionViewWillLeave() {
-    this.logger.info(this, "ionViewWillLeave");
+  unsubscribeNetwork() {
+    this.logger.info(this, "unsubscribeNetwork", "Network", this.network.type);
     if (this.connection) {
       this.connection.unsubscribe();
       this.connection = null;
@@ -103,12 +119,17 @@ export class BasePage {
     }
   }
 
-  ionViewDidLeave() {
-    this.logger.info(this, "ionViewDidLeave");
-  }
-
-  ionViewWillUnload() {
-    this.logger.info(this, "ionViewWillUnload");
+  loadStatusBar(lightContent:boolean=true) {
+    this.platform.ready().then(() => {
+      if (lightContent) {
+        this.statusBar.styleLightContent();
+        this.statusBar.backgroundColorByHexString('#3f4751');
+      }
+      else {
+        this.statusBar.styleDefault();
+        this.statusBar.backgroundColorByHexString('#f9f9f8');
+      }
+    });
   }
 
   getParameter<T extends Object>(param:string):T {

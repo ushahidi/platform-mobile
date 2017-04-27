@@ -26,7 +26,7 @@
           </button>
         </ion-item-options>
       </ion-item-sliding>
-      <ion-item tappable menuClose (click)="addDeployment($event)">
+      <ion-item tappable *ngIf="offline == false" (click)="addDeployment($event)">
         <div class="name">
           <ion-icon ios="md-add" md="md-add"></ion-icon> Add Deployment
         </div>

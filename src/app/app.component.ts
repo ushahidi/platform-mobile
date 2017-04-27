@@ -1,9 +1,10 @@
-import { Component, ViewChild, NgZone } from '@angular/core';
+import { Component, Injector, ViewChild, NgZone } from '@angular/core';
 import { Alert, Toast, Loading, Events, Nav, Platform, ModalController, LoadingController, ToastController, AlertController, MenuController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { GoogleAnalytics } from '@ionic-native/google-analytics';
 import { AppVersion } from '@ionic-native/app-version';
+import { Network } from '@ionic-native/network';
 
 import { Model } from '../models/model';
 import { Login } from '../models/login';
@@ -21,8 +22,9 @@ import { Collection } from '../models/collection';
 import { ApiService } from '../providers/api-service';
 import { LoggerService } from '../providers/logger-service';
 import { DatabaseService } from '../providers/database-service';
+import { InjectorService } from '../providers/injector-service';
 
-import { HomePage } from '../pages/home/home';
+import { DeploymentNonePage } from '../pages/deployment-none/deployment-none';
 import { DeploymentSearchPage } from '../pages/deployment-search/deployment-search';
 import { DeploymentDetailsPage } from '../pages/deployment-details/deployment-details';
 
@@ -33,7 +35,7 @@ declare var cordova:any;
 
 @Component({
   templateUrl: 'app.html',
-  entryComponents:[ HomePage, DeploymentSearchPage, DeploymentDetailsPage ]
+  entryComponents:[ DeploymentNonePage, DeploymentSearchPage, DeploymentDetailsPage ]
 })
 export class MyApp {
 
@@ -41,12 +43,15 @@ export class MyApp {
   rootPage: any = null;
   deployment : Deployment = null;
   deployments: Deployment[] = null;
+  offline: boolean = false;
 
   @ViewChild(Nav)
   nav: Nav;
 
   constructor(
-    zone: NgZone,
+    _zone: NgZone,
+    private injector:Injector,
+    private network:Network,
     private appVersion:AppVersion,
     private googleAnalytics:GoogleAnalytics,
     private statusBar: StatusBar,
@@ -61,9 +66,11 @@ export class MyApp {
     public loadingController:LoadingController,
     public alertController: AlertController,
     public menuController: MenuController) {
-    this.zone = zone;
+    this.zone = _zone;
+    InjectorService.injector = injector;
     this.platform.ready().then(() => {
       this.logger.info(this, "Platform Ready", this.platform.platforms());
+      this.loadNetwork();
       this.loadStatusBar();
       this.loadAnalytics();
       this.loadApplication([
@@ -116,6 +123,24 @@ export class MyApp {
             });
           }
         }]);
+    });
+  }
+
+  loadNetwork() {
+    this.logger.info(this, "Network", this.network.type);
+    if (this.network.type == 'none') {
+      this.offline = true;
+    }
+    else {
+      this.offline = false;
+    }
+    this.network.onConnect().subscribe(() => {
+      this.logger.info(this, "Network Connected", this.network.type);
+      this.offline = false;
+    });
+    this.network.onDisconnect().subscribe(() => {
+      this.logger.info(this, "Network Disconnected", this.network.type);
+      this.offline = true;
     });
   }
 
@@ -201,13 +226,14 @@ export class MyApp {
       });
     }
     else {
-      this.rootPage = HomePage;
+      this.rootPage = DeploymentNonePage;
       this.splashScreen.hide();
     }
   }
 
   addDeployment(event:any) {
     this.logger.info(this, "addDeployment");
+    this.menuController.close();
     let modal = this.modalController.create(
       DeploymentSearchPage,
       { });
@@ -231,7 +257,7 @@ export class MyApp {
   showDeployment(deployment:Deployment):Promise<any> {
     this.logger.info(this, "showDeployment", deployment);
     this.deployment = deployment;
-    return this.api.userOrClientLogin(deployment).then(
+    return this.api.userOrClientLogin(deployment, this.offline).then(
       (login:Login) => {
         this.menuController.close();
         this.nav.setRoot(
@@ -261,7 +287,7 @@ export class MyApp {
           this.zone.run(() => {
             this.deployments = <any[]>results;
             if (this.deployments.length == 0) {
-              this.nav.setRoot(HomePage);
+              this.nav.setRoot(DeploymentNonePage);
               this.menuController.close();
             }
             else if (this.deployment.id == deployment.id){

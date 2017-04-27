@@ -1,6 +1,5 @@
 import { Component, ViewChild, NgZone } from '@angular/core';
-import { Platform, TextInput, NavParams, Events, NavController, ViewController, ModalController, LoadingController, ToastController, AlertController, ActionSheetController } from 'ionic-angular';
-import { StatusBar } from '@ionic-native/status-bar';
+import { Platform, TextInput, Events, NavParams, NavController, ViewController, ModalController, ToastController, AlertController, LoadingController, ActionSheetController } from 'ionic-angular';
 
 import { Login } from '../../models/login';
 import { Deployment } from '../../models/deployment';
@@ -32,107 +31,107 @@ export class DeploymentLoginPage extends BasePage {
   password: TextInput;
 
   constructor(
-    public statusBar:StatusBar,
-    public events:Events,
-    public api:ApiService,
-    public logger:LoggerService,
-    public database:DatabaseService,
-    public navParams: NavParams,
-    public zone: NgZone,
-    public platform:Platform,
-    public navController:NavController,
-    public viewController:ViewController,
-    public modalController:ModalController,
-    public toastController:ToastController,
-    public alertController:AlertController,
-    public loadingController:LoadingController,
-    public actionController:ActionSheetController) {
-      super(zone, platform, logger, navParams, navController, viewController, modalController, toastController, alertController, loadingController, actionController);
-    }
+    protected zone:NgZone,
+    protected platform:Platform,
+    protected navParams:NavParams,
+    protected navController:NavController,
+    protected viewController:ViewController,
+    protected modalController:ModalController,
+    protected toastController:ToastController,
+    protected alertController:AlertController,
+    protected loadingController:LoadingController,
+    protected actionController:ActionSheetController,
+    protected logger:LoggerService,
+    protected api:ApiService,
+    protected database:DatabaseService,
+    protected events:Events) {
+    super(zone, platform, navParams, navController, viewController, modalController, toastController, alertController, loadingController, actionController, logger);
+  }
 
-    ionViewWillEnter() {
-      super.ionViewWillEnter();
-      this.deployment = this.getParameter<Deployment>("deployment");
-      this.login = this.getParameter<Login>("login");
-      if (this.login && this.login.username) {
-        this.username.value = this.login.username;
-      }
-      if (this.login && this.login.password) {
-        this.password.value = this.login.password;
-      }
+  ionViewWillEnter() {
+    super.ionViewWillEnter();
+    this.loadStatusBar(true);
+    this.deployment = this.getParameter<Deployment>("deployment");
+    this.login = this.getParameter<Login>("login");
+    if (this.login && this.login.username) {
+      this.username.value = this.login.username;
     }
+    if (this.login && this.login.password) {
+      this.password.value = this.login.password;
+    }
+  }
 
-    userLogin(event:any) {
-      this.logger.info(this, "userLogin");
-      let username = this.username.value.toString();
-      let password = this.password.value.toString();
-      if (username.length > 0 && password.length > 0) {
-        let loading = this.showLoading("Logging in...");
-        this.api.userLogin(this.deployment, username, password).then(
-          (login:Login) => {
-            this.logger.info(this, "userLogin", "Login", login);
-            if (login != null) {
-              return Promise.resolve()
-                .then(() => { return this.loadDeployment(); })
-                .then(() => { return this.loadForms(); })
-                .then(() => { return this.loadCollections(); })
-                .then(() => { return this.removePosts(); })
-                .then(() => {
-                  loading.dismiss();
-                  this.events.publish(DEPLOYMENT_UPDATED, this.deployment.id);
-                  this.showToast('Login Successful');
-                  this.showDeployment(this.deployment);
-                })
-                .catch((error:any) => {
-                  loading.dismiss();
-                  this.showAlert('Problem Updating Deployment', error);
-                });
-            }
-            else {
-              loading.dismiss();
-              this.showAlert('Invalid Credentials', 'Please verify your email and password, then try again.');
-            }
-          },
-          (error:any) => {
+  userLogin(event:any) {
+    this.logger.info(this, "userLogin");
+    let username = this.username.value.toString();
+    let password = this.password.value.toString();
+    if (username.length > 0 && password.length > 0) {
+      let loading = this.showLoading("Logging in...");
+      this.api.userLogin(this.deployment, username, password).then(
+        (login:Login) => {
+          this.logger.info(this, "userLogin", "Login", login);
+          if (login != null) {
+            return Promise.resolve()
+              .then(() => { return this.loadDeployment(); })
+              .then(() => { return this.loadForms(); })
+              .then(() => { return this.loadCollections(); })
+              .then(() => { return this.removePosts(); })
+              .then(() => {
+                loading.dismiss();
+                this.events.publish(DEPLOYMENT_UPDATED, this.deployment.id);
+                this.showToast('Login Successful');
+                this.showDeployment(this.deployment);
+              })
+              .catch((error:any) => {
+                loading.dismiss();
+                this.showAlert('Problem Updating Deployment', error);
+              });
+          }
+          else {
             loading.dismiss();
             this.showAlert('Invalid Credentials', 'Please verify your email and password, then try again.');
-          });
-      }
-    }
-
-    showDeployment(deployment:Deployment) {
-      this.trackEvent("Deployments", "login", this.deployment.website);
-      this.closePage({
-        deployment: deployment });
-    }
-
-    onCancel(event:any=null) {
-      this.logger.info(this, "onCancel");
-      this.closePage();
-    }
-
-    loadDeployment():Promise<any> {
-      this.logger.info(this, "loadDeployment");
-      return new Promise((resolve, reject) => {
-        this.api.getDeployment(this.deployment, false, this.offline).then(
-          (deployment:Deployment) => {
-            this.logger.info(this, "loadDeployment", "Loaded", deployment);
-            this.deployment.copyInto(deployment);
-            this.database.saveModel(this.deployment).then(
-              (saved:any) => {
-                this.logger.info(this, "loadDeployment", "Saved", saved);
-                resolve();
-              },
-              (error:any) => {
-                this.logger.error(this, "loadDeployment", "Failed", error);
-                reject(error);
-            });
-          },
-          (error:any) => {
-            this.logger.error(this, "loadDeployment", "Failed", error);
-            reject(error);
+          }
+        },
+        (error:any) => {
+          loading.dismiss();
+          this.showAlert('Invalid Credentials', 'Please verify your email and password, then try again.');
         });
+    }
+  }
+
+  showDeployment(deployment:Deployment) {
+    this.trackEvent("Deployments", "login", this.deployment.website);
+    this.closePage({
+      deployment: deployment });
+  }
+
+  onCancel(event:any=null) {
+    this.logger.info(this, "onCancel");
+    this.closePage();
+  }
+
+  loadDeployment():Promise<any> {
+    this.logger.info(this, "loadDeployment");
+    return new Promise((resolve, reject) => {
+      this.api.getDeployment(this.deployment, false, this.offline).then(
+        (deployment:Deployment) => {
+          this.logger.info(this, "loadDeployment", "Loaded", deployment);
+          this.deployment.copyInto(deployment);
+          this.database.saveModel(this.deployment).then(
+            (saved:any) => {
+              this.logger.info(this, "loadDeployment", "Saved", saved);
+              resolve();
+            },
+            (error:any) => {
+              this.logger.error(this, "loadDeployment", "Failed", error);
+              reject(error);
+          });
+        },
+        (error:any) => {
+          this.logger.error(this, "loadDeployment", "Failed", error);
+          reject(error);
       });
+    });
   }
 
   loadForms():Promise<any> {

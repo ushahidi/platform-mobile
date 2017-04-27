@@ -40,6 +40,10 @@ img {
     max-width: 100px;
   }
 }
+.disabled {
+  opacity: .4;
+  pointer-events: none;
+}
 .line-clamp-2 {
   width: 100%;
   overflow: hidden;

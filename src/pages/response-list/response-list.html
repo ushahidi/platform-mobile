@@ -2,7 +2,7 @@
   <ion-navbar color="dark">
     <ion-title>Responses</ion-title>
     <ion-buttons end>
-      <button ion-button icon-only (click)="searchResponses($event)">
+      <button ion-button icon-only [disabled]="offline" (click)="searchResponses($event)">
         <ion-icon ios="ios-search" md="md-search"></ion-icon>
       </button>
       <button ion-button icon-only [disabled]="offline" (click)="showMap($event)" *ngIf="view == 'list'">
@@ -45,16 +45,17 @@
       <h6 *ngIf="posts == null && offline == false">
         There was a problem downloading survey responses, please try again later.
       </h6>
-      <h6 *ngIf="posts == null && offline == true">
+      <h6 *ngIf="(posts == null || posts.length == 0) && offline == true">
         Please verify you have an internet connection, then try downloading survey responses again.
       </h6>
-      <h6 *ngIf="filter == null && posts && posts.length == 0">
+      <h6 *ngIf="filter == null && posts && posts.length == 0 && offline == false">
         This deployment doesn't have any<br> survey responses, yet.
       </h6>
       <h6 *ngIf="filter != null && posts && posts.length == 0">
         There are no responses<br> for the current filter.
       </h6>
-      <button ion-button block text-uppercase color="primary" (click)="addResponse($event)" *ngIf="filter == null && posts && posts.length == 0">Submit Survey Response</button>
+      <button ion-button block text-uppercase color="primary" (click)="addResponse($event)"
+              *ngIf="filter == null && posts && posts.length == 0 && offline == false">Submit Survey Response</button>
     </div>
     <ion-list *ngIf="posts && posts.length > 0">
       <post-card [post]="post" (cardSelected)="showResponse(post)" (menuSelected)="showOptions(post)" *ngFor="let post of posts"></post-card>

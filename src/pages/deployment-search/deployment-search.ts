@@ -1,7 +1,5 @@
 import { Component, ViewChild, NgZone } from '@angular/core';
-import { Platform, NavParams, Searchbar, Content,
-  NavController, ViewController, ModalController, LoadingController, ToastController, AlertController, ActionSheetController } from 'ionic-angular';
-import { StatusBar } from '@ionic-native/status-bar';
+import { Platform, Searchbar, Content, NavParams, NavController, ViewController, ModalController, ToastController, AlertController, LoadingController, ActionSheetController } from 'ionic-angular';
 
 import { Deployment } from '../../models/deployment';
 
@@ -31,29 +29,25 @@ export class DeploymentSearchPage extends BasePage {
   domain:string = null;
 
   constructor(
-    public statusBar:StatusBar,
-    public api:ApiService,
-    public logger:LoggerService,
-    public database:DatabaseService,
-    public navParams: NavParams,
-    public zone: NgZone,
-    public platform:Platform,
-    public navController:NavController,
-    public viewController:ViewController,
-    public modalController:ModalController,
-    public toastController:ToastController,
-    public alertController:AlertController,
-    public loadingController:LoadingController,
-    public actionController:ActionSheetController) {
-      super(zone, platform, logger, navParams, navController, viewController, modalController, toastController, alertController, loadingController, actionController);
+    protected zone:NgZone,
+    protected platform:Platform,
+    protected navParams:NavParams,
+    protected navController:NavController,
+    protected viewController:ViewController,
+    protected modalController:ModalController,
+    protected toastController:ToastController,
+    protected alertController:AlertController,
+    protected loadingController:LoadingController,
+    protected actionController:ActionSheetController,
+    protected logger:LoggerService,
+    protected api:ApiService,
+    protected database:DatabaseService) {
+    super(zone, platform, navParams, navController, viewController, modalController, toastController, alertController, loadingController, actionController, logger);
   }
 
   ionViewWillEnter() {
     super.ionViewWillEnter();
-    this.platform.ready().then(() => {
-      this.statusBar.styleLightContent();
-      this.statusBar.backgroundColorByHexString('#3f4751');
-    });
+    this.loadStatusBar(true);
   }
 
   onCancel(event:any) {

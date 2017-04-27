@@ -1,7 +1,5 @@
 import { Component, NgZone, ViewChild } from '@angular/core';
-import { Platform, NavParams, Content,
-  NavController, ViewController, ModalController, LoadingController, ToastController, AlertController, ActionSheetController } from 'ionic-angular';
-import { StatusBar } from '@ionic-native/status-bar';
+import { Platform, Content, NavParams, NavController, ViewController, ModalController, ToastController, AlertController, LoadingController, ActionSheetController } from 'ionic-angular';
 
 import { Deployment } from '../../models/deployment';
 
@@ -12,27 +10,26 @@ import { DeploymentSearchPage } from '../../pages/deployment-search/deployment-s
 import { DeploymentDetailsPage } from '../../pages/deployment-details/deployment-details';
 
 @Component({
-  selector: 'home-page',
-  templateUrl: 'home.html',
+  selector: 'deployment-none',
+  templateUrl: 'deployment-none.html',
   providers: [ LoggerService ],
   entryComponents:[ DeploymentSearchPage, DeploymentDetailsPage ]
 })
-export class HomePage extends BasePage {
+export class DeploymentNonePage extends BasePage {
 
   constructor(
-    public statusBar:StatusBar,
-    public logger:LoggerService,
-    public navParams: NavParams,
-    public zone: NgZone,
-    public platform:Platform,
-    public navController:NavController,
-    public viewController:ViewController,
-    public modalController:ModalController,
-    public toastController:ToastController,
-    public alertController:AlertController,
-    public loadingController:LoadingController,
-    public actionController:ActionSheetController) {
-      super(zone, platform, logger, navParams, navController, viewController, modalController, toastController, alertController, loadingController, actionController);
+    protected zone:NgZone,
+    protected platform:Platform,
+    protected navParams:NavParams,
+    protected navController:NavController,
+    protected viewController:ViewController,
+    protected modalController:ModalController,
+    protected toastController:ToastController,
+    protected alertController:AlertController,
+    protected loadingController:LoadingController,
+    protected actionController:ActionSheetController,
+    protected logger:LoggerService) {
+    super(zone, platform, navParams, navController, viewController, modalController, toastController, alertController, loadingController, actionController, logger);
   }
 
   @ViewChild(Content)
@@ -40,18 +37,14 @@ export class HomePage extends BasePage {
 
   ionViewWillEnter() {
     super.ionViewWillEnter();
-    this.platform.ready().then(() => {
-      this.statusBar.styleDefault();
-      this.statusBar.backgroundColorByHexString('#f9f9f8');
-    });
+    this.loadStatusBar(false);
   }
 
   showSearch() {
     this.logger.info(this, "showSearch");
     let modal = this.showModal(DeploymentSearchPage, {});
     modal.onDidDismiss((data:any) => {
-      this.statusBar.styleDefault();
-      this.statusBar.backgroundColorByHexString('#f9f9f8');
+      this.loadStatusBar(false);
       if (data) {
         this.logger.info(this, "showSearch", data);
         let deployment:Deployment = data.deployment;

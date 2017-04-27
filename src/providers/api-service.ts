@@ -200,11 +200,15 @@ export class ApiService extends HttpService {
     });
   }
 
-  userOrClientLogin(deployment:Deployment):Promise<Login> {
+  userOrClientLogin(deployment:Deployment, offline:boolean=false):Promise<Login> {
     return new Promise((resolve, reject) => {
+      this.logger.info(this, "userOrClientLogin", deployment.website, "Offline", offline);
       this.getLogin(deployment).then(
         (login:Login) => {
-            if (login.username && login.password) {
+            if (offline) {
+              resolve(login);
+            }
+            else if (login.username && login.password) {
               this.userLogin(deployment, login.username, login.password).then(
                 (_login:Login) => {
                   resolve(_login);
@@ -237,7 +241,7 @@ export class ApiService extends HttpService {
 
   getLogin(deployment:Deployment):Promise<Login> {
     return new Promise((resolve, reject) => {
-       this.storage.getItem(deployment.website).then(
+      this.storage.getItem(deployment.website).then(
           (data:any) => {
             this.logger.info(this, "getLogin", deployment.website, data);
             if (data && data.length > 0) {
