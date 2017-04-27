@@ -10,13 +10,45 @@ import { Attribute } from '../models/attribute';
 @Table("stages")
 export class Stage extends Model {
 
-  constructor(values:any=null) {
-    super(values);
-    this.copyInto(values);
+  constructor(data:any=null) {
+    super(data);
+    this.copyInto(data);
+    if (data) {
+      if (data.id) {
+        this.id = data.id;
+      }
+      if (data.form_id) {
+        this.form_id = data.form_id;
+      }
+      if (data.label) {
+        this.label = data.label;
+      }
+      if (data.description) {
+        this.description = data.description;
+      }
+      if (data.priority) {
+        this.priority = data.priority;
+      }
+      if (data.type) {
+        this.type = data.type;
+      }
+      if (data.icon) {
+        this.icon = data.icon;
+      }
+      if (data.required) {
+        this.required = data.required;
+      }
+      if (data.allowed_privileges) {
+        this.can_read = data.allowed_privileges.indexOf("read") > -1;
+        this.can_create = data.allowed_privileges.indexOf("create") > -1;
+        this.can_update = data.allowed_privileges.indexOf("update") > -1;
+        this.can_delete = data.allowed_privileges.indexOf("delete") > -1;
+      }
+    }
   }
 
-  public newInstance<M extends Stage>(values:any=null) : Stage {
-    return new Stage(values);
+  public newInstance<M extends Stage>(data:any=null):Stage {
+    return new Stage(data);
   }
 
   @Column("id", INTEGER, PRIMARY_KEY)

@@ -1,15 +1,15 @@
-export class Login {
+export interface Login {
 
-  public user_id: number = null;
+  user_id: number;
 
-  public user_role: string = null;
+  user_role: string;
 
-  public username: string = null;
+  username: string;
 
-  public password: string = null;
+  password: string;
 
-  public access_token: string = null;
+  access_token: string;
 
-  public refresh_token: string = null;
+  refresh_token: string;
 
 }

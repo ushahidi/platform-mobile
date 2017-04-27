@@ -14,11 +14,11 @@ export class Model {
 
   public saved: Date = null;
 
-  constructor(values:any=null) {
-    this.copyInto(values);
+  constructor(data:any=null) {
+    this.copyInto(data);
   }
 
-  public newInstance<M extends Model>(values:any=null) : M {
+  public newInstance<M extends Model>(data:any=null) : M {
     return null;
   }
 

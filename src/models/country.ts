@@ -1,10 +1,7 @@
-import { Injectable } from '@angular/core';
+export interface Country {
 
-@Injectable()
-export class Country {
+  name: string;
 
-  public name: string;
-
-  public code: string;
+  code: string;
 
 }

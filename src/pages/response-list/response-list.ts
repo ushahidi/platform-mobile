@@ -16,11 +16,13 @@ import { Post } from '../../models/post';
 import { Form } from '../../models/form';
 import { Filter } from '../../models/filter';
 import { Collection } from '../../models/collection';
+import { Value } from '../../models/value';
+import { Image } from '../../models/image';
 
 import { ApiService } from '../../providers/api-service';
-import { CacheService } from '../../providers/cache-service';
 import { LoggerService } from '../../providers/logger-service';
 import { DatabaseService } from '../../providers/database-service';
+import { CacheService } from '../../providers/cache-service';
 
 import { BasePage } from '../../pages/base-page/base-page';
 import { ResponseAddPage } from '../response-add/response-add';
@@ -63,13 +65,13 @@ export class ResponseListPage extends BasePage {
   constructor(
     public geolocation: Geolocation,
     public api:ApiService,
-    public cache:CacheService,
     public logger:LoggerService,
     public database:DatabaseService,
     public events:Events,
     public navParams:NavParams,
     public zone: NgZone,
     public platform:Platform,
+    public cache:CacheService,
     public navController:NavController,
     public viewController:ViewController,
     public modalController:ModalController,
@@ -110,6 +112,7 @@ export class ResponseListPage extends BasePage {
     return Promise.resolve()
       .then(() => { return this.loadFilters(cache); })
       .then(() => { return this.loadPosts(cache); })
+      .then(() => { return this.loadImages(cache); })
       .then(() => { return this.uploadPending(cache); })
       .then(() => {
         this.logger.info(this, "loadUpdates", "Updated");
@@ -170,7 +173,6 @@ export class ResponseListPage extends BasePage {
         this.offset = 0;
         this.api.getPostsWithValues(this.deployment, this.filter, cache, this.offline, this.limit, this.offset).then(
           (posts:Post[]) => {
-            this.loadCache(posts);
             this.posts = posts;
             this.pending = this.getPending(posts);
             this.logger.info(this, "loadPosts", "Posts", posts.length, "Pending", this.pending.length);
@@ -184,6 +186,46 @@ export class ResponseListPage extends BasePage {
     }
   }
 
+  loadImages(cache:boolean=true):Promise<any> {
+    this.logger.info(this, "loadImages");
+    let images = [];
+    for (let post of this.posts) {
+      for (let value of post.values) {
+        if (value.hasMissingImage()) {
+          images.push(this.loadImage(post, value));
+        }
+      }
+      this.cache.fetchMap(post.latitude, post.longitude);
+    }
+    return Promise.all(images).then((saved) => {
+      this.logger.info(this, "loadImages", "Done");
+    });
+  }
+
+  loadImage(post:Post, value:Value):Promise<Image> {
+    return new Promise((resolve, reject) => {
+      this.logger.info(this, "loadImage", post.title, "Value", value.value);
+      let id = Number(value.value);
+      this.api.getImage(this.deployment, id, true).then((image:Image) => {
+        this.logger.info(this, "loadImage", post.title, "Value", value.value, "Downloaded", image);
+        image.post_id = post.id;
+        value.image = image.url;
+        post.image = image;
+        post.image_url = image.url;
+        let saves = [
+          this.database.saveImage(this.deployment, image),
+          this.database.saveValue(this.deployment, value),
+          this.database.savePost(this.deployment, post)
+        ];
+        Promise.all(saves).then((saved) => {
+          this.logger.info(this, "loadImage", post.title, "Value", value.value, "Saved", image);
+          this.cache.fetchImage(image.url);
+          resolve(image);
+        });
+      });
+    });
+  }
+
   loadMore(event, cache:boolean=true) {
     this.logger.info(this, "loadMore", cache);
     this.loading = true;
@@ -191,27 +233,27 @@ export class ResponseListPage extends BasePage {
     this.logger.info(this, "loadMore", "Filter", this.filter, "Limit", this.limit, "Offset", this.offset);
     this.api.getPostsWithValues(this.deployment, this.filter, cache, this.offline, this.limit, this.offset).then(
       (posts:Post[]) => {
-        this.loadCache(posts);
         this.posts = this.posts.concat(posts);
         this.pending = this.getPending(this.posts);
-        this.logger.info(this, "loadMore", "Filter", this.filter, "Limit", this.limit, "Offset", this.offset, "Posts", this.posts.length, "Pending", this.pending.length);
-        this.loading = false;
+        let images = [];
+        for (let post of posts) {
+          for (let value of post.values) {
+            if (value.hasMissingImage()) {
+              images.push(this.loadImage(post, value));
+            }
+          }
+          this.cache.fetchMap(post.latitude, post.longitude);
+        }
+        return Promise.all(images).then((saved) => {
+          this.logger.info(this, "loadMore", "Filter", this.filter, "Limit", this.limit, "Offset", this.offset, "Posts", this.posts.length, "Pending", this.pending.length);
+          this.loading = false;
+        });
       },
       (error:any) => {
         this.logger.error(this, "loadMore", "Failed", error);
         this.loading = false;
         this.showToast(error);
       });
-  }
-
-  loadCache(posts:Post[]) {
-    if (posts != null && this.offline == false) {
-      this.logger.info(this, "loadCache", posts.length);
-      for (let post of posts) {
-        this.cache.fetchImage(post.image_url);
-        this.cache.fetchMap(post.latitude, post.longitude);
-      }
-    }
   }
 
   uploadPending(cache:boolean=true):Promise<any> {

@@ -45,7 +45,6 @@ export class CacheService {
       //WAIT UNTIL CURRENT PROMISE HAS COMPLETED
     }
     else if (this.promises.length > 0) {
-      this.logger.info(this, "fetchNext", "Queue", this.promises.length);
       this.promise = this.promises[0];
       this.promise.then(
         (done:any) => {
@@ -58,9 +57,6 @@ export class CacheService {
           this.logger.error(this, "fetchNext", "Error", error);
           this.fetchNext();
         });
-    }
-    else {
-      this.logger.info(this, "fetchNext", "Empty");
     }
   }
 

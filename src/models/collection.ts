@@ -9,13 +9,45 @@ import { Model, TEXT, INTEGER, BOOLEAN, PRIMARY_KEY } from '../models/model';
 @Table("collections")
 export class Collection extends Model {
 
-  constructor(values:any=null) {
-    super(values);
-    this.copyInto(values);
+  constructor(data:any=null) {
+    super(data);
+    this.copyInto(data);
+    if (data) {
+      if (data.id) {
+        this.id = data.id;
+      }
+      if (data.name) {
+        this.name = data.name;
+      }
+      if (data.description) {
+        this.description = data.description;
+      }
+      if (data.view) {
+        this.view = data.view;
+      }
+      if (data.options) {
+        this.options = data.options;
+      }
+      if (data.featured) {
+        this.featured = data.featured;
+      }
+      if (data.created) {
+        this.created = data.created;
+      }
+      if (data.updated) {
+        this.updated = data.updated;
+      }
+      if (data.allowed_privileges) {
+        this.can_read = data.allowed_privileges.indexOf("read") > -1;
+        this.can_create = data.allowed_privileges.indexOf("create") > -1;
+        this.can_update = data.allowed_privileges.indexOf("update") > -1;
+        this.can_delete = data.allowed_privileges.indexOf("delete") > -1;
+      }
+    }
   }
 
-  public newInstance<M extends Collection>(values:any=null) : Collection {
-    return new Collection(values);
+  public newInstance<M extends Collection>(data:any=null):Collection {
+    return new Collection(data);
   }
 
   @Column("id", INTEGER, PRIMARY_KEY)
@@ -44,6 +76,9 @@ export class Collection extends Model {
 
   @Column("updated", TEXT)
   public updated: Date = null;
+
+  @Column("saved", TEXT)
+  public saved: Date = null;
 
   @Column("can_read", BOOLEAN)
   public can_read: boolean = null;

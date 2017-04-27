@@ -12,13 +12,51 @@ import { Attribute } from '../models/attribute';
 @Table("forms")
 export class Form extends Model {
 
-  constructor(values:any=null) {
-    super(values);
-    this.copyInto(values);
+  constructor(data:any=null) {
+    super(data);
+    this.copyInto(data);
+    if (data) {
+      if (data.id) {
+        this.id = data.id;
+      }
+      if (data.type) {
+        this.type = data.type;
+      }
+      if (data.name) {
+        this.name = data.name;
+      }
+      if (data.color) {
+        this.color = data.color;
+      }
+      if (data.created) {
+        this.created = data.created;
+      }
+      if (data.updated) {
+        this.updated = data.updated;
+      }
+      if (data.disabled) {
+        this.disabled = data.disabled;
+      }
+      if (data.description) {
+        this.description = data.description;
+      }
+      if (data.everyone_can_create) {
+        this.can_submit = data.everyone_can_create;
+      }
+      if (data.can_create) {
+        this.user_roles = JSON.stringify(data.can_create);
+      }
+      if (data.allowed_privileges) {
+        this.can_read = data.allowed_privileges.indexOf("read") > -1;
+        this.can_create = data.allowed_privileges.indexOf("create") > -1;
+        this.can_update = data.allowed_privileges.indexOf("update") > -1;
+        this.can_delete = data.allowed_privileges.indexOf("delete") > -1;
+      }
+    }
   }
 
-  public newInstance<M extends Form>(values:any=null) : Form {
-    return new Form(values);
+  public newInstance<M extends Form>(data:any=null):Form {
+    return new Form(data);
   }
 
   @Column("id", INTEGER, PRIMARY_KEY)

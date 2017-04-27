@@ -9,13 +9,33 @@ import { Model, TEXT, INTEGER, BOOLEAN, PRIMARY_KEY } from '../models/model';
 @Table("images")
 export class Image extends Model {
 
-  constructor(values:any=null) {
-    super(values);
-    this.copyInto(values);
+  constructor(data:any=null) {
+    super(data);
+    this.copyInto(data);
+    if (data) {
+      if (data.original_file_url) {
+        this.url = encodeURI(data.original_file_url);
+      }
+      if (data.original_width) {
+        this.width = data.original_width;
+      }
+      if (data.original_height) {
+        this.height = data.original_height;
+      }
+      if (data.original_file_size) {
+        this.filesize = data.original_file_size;
+      }
+      if (data.allowed_privileges) {
+        this.can_read = data.allowed_privileges.indexOf("read") > -1;
+        this.can_create = data.allowed_privileges.indexOf("create") > -1;
+        this.can_update = data.allowed_privileges.indexOf("update") > -1;
+        this.can_delete = data.allowed_privileges.indexOf("delete") > -1;
+      }
+    }
   }
 
-  public newInstance<M extends Image>(values:any=null) : Image {
-    return new Image(values);
+  public newInstance<M extends Image>(data:any=null):Image {
+    return new Image(data);
   }
 
   @Column("id", INTEGER, PRIMARY_KEY)

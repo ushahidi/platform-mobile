@@ -10,13 +10,13 @@ import { Form } from '../models/form';
 @Table("filters")
 export class Filter extends Model {
 
-  constructor(values:any=null) {
-    super(values);
-    this.copyInto(values);
+  constructor(data:any=null) {
+    super(data);
+    this.copyInto(data);
   }
 
-  public newInstance<M extends Filter>(values:any=null) : Filter {
-    return new Filter(values);
+  public newInstance<M extends Filter>(data:any=null):Filter {
+    return new Filter(data);
   }
 
   @Column("id", INTEGER, PRIMARY_KEY)

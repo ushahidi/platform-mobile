@@ -41,7 +41,7 @@ export class ApiService extends HttpService {
     public transfer:Transfer,
     public vimeo:VimeoService,
     public logger:LoggerService,
-    private storage: NativeStorage,
+    public storage: NativeStorage,
     public database:DatabaseService,
     public nativeGeocoder:NativeGeocoder) {
     super(http, file, transfer, logger);
@@ -56,15 +56,9 @@ export class ApiService extends HttpService {
       this.httpGet(url, null, params).then(
         (results:any[]) => {
           let deployments = [];
-          for (let item of results) {
-            if (item.status == 'deployed') {
-              let deployment:Deployment = new Deployment();
-              deployment.tier = item.tier;
-              deployment.status = item.status;
-              deployment.name = item.deployment_name;
-              deployment.domain = `${item.subdomain}.ushahidi.io`;
-              deployment.website = `https://${item.subdomain}.ushahidi.io`;
-              deployment.api = `https://${item.subdomain}.${item.domain}`;
+          for (let data of results) {
+            if (data.status == 'deployed') {
+              let deployment:Deployment = new Deployment(data);
               deployments.push(deployment);
             }
           }
@@ -82,15 +76,10 @@ export class ApiService extends HttpService {
       this.httpGet(url).then(
         (config:Config) => {
           if (config) {
-            let deployment:Deployment = new Deployment();
+            let deployment:Deployment = new Deployment(config);
             deployment.name = name;
             deployment.website = website;
             deployment.domain = website.replace("https://","").replace("http://","");
-            deployment.client_id = config.client_id;
-            deployment.client_secret = config.client_secret;
-            deployment.google_analytics_id = config.google_analytics_id;
-            deployment.intercom_app_id = config.intercom_app_id;
-            deployment.mapbox_api_key = config.mapbox_api_key;
             if (config.backend_url && config.backend_url.length > 0) {
               deployment.api = config.backend_url;
               resolve(deployment);
@@ -122,8 +111,8 @@ export class ApiService extends HttpService {
       let params = {
         grant_type: "client_credentials",
         scope: this.scope,
-        client_id: this.clientId,
-        client_secret: this.clientSecret};
+        client_id: deployment.client_id || this.clientId,
+        client_secret: deployment.client_secret || this.clientSecret };
       this.httpPost(url, null, params).then(
         (data:any) => {
           let login:Login = <Login> {
@@ -148,17 +137,17 @@ export class ApiService extends HttpService {
       let params = {
         grant_type: "password",
         scope: this.scope,
-        client_id: this.clientId,
-        client_secret: this.clientSecret,
         username: username,
-        password: password };
+        password: password,
+        client_id: deployment.client_id || this.clientId,
+        client_secret: deployment.client_secret || this.clientSecret };
       this.httpPost(url, null, params).then(
         (data:any) => {
           let login:Login = <Login> {
             username: username,
             password: password,
             access_token: data.access_token,
-            refresh_token: data.refresh_token }
+            refresh_token: data.refresh_token };
           this.storage.setItem(deployment.website, JSON.stringify(login)).then(
             (data:any) => {
               this.getUser(deployment, "me").then((user:User) => {
@@ -172,6 +161,34 @@ export class ApiService extends HttpService {
                     reject(error);
                   });
               });
+            },
+            (error:any) => {
+              reject(error);
+            });
+        },
+        (error:any) => {
+          reject(error);
+        })
+    });
+  }
+
+  authRefresh(deployment:Deployment, refreshToken:string):Promise<Login> {
+    return new Promise((resolve, reject) => {
+      let url = deployment.api + "/oauth/token";
+      let params = {
+        grant_type: "refresh_token",
+        scope: this.scope,
+        refresh_token: refreshToken,
+        client_id: deployment.client_id || this.clientId,
+        client_secret: deployment.client_secret || this.clientSecret };
+      this.httpPost(url, null, params).then(
+        (data:any) => {
+          let login:Login = <Login> {
+            access_token: data.access_token,
+            refresh_token: data.refresh_token };
+          this.storage.setItem(deployment.website, JSON.stringify(login)).then(
+            (data:any) => {
+              resolve(login);
             },
             (error:any) => {
               reject(error);
@@ -218,48 +235,21 @@ export class ApiService extends HttpService {
     });
   }
 
-  authRefresh(deployment:Deployment, refreshToken:string):Promise<Login> {
-    return new Promise((resolve, reject) => {
-      let url = deployment.api + "/oauth/token";
-      let params = {
-        grant_type: "refresh_token",
-        scope: this.scope,
-        client_id: this.clientId,
-        client_secret: this.clientSecret,
-        refresh_token: refreshToken };
-      this.httpPost(url, null, params).then(
-        (data:any) => {
-          let login:Login = <Login> {
-            access_token: data.access_token,
-            refresh_token: data.refresh_token }
-          this.storage.setItem(deployment.website, JSON.stringify(login)).then(
-            (data:any) => {
-              resolve(login);
-            },
-            (error:any) => {
-              reject(error);
-            });
-        },
-        (error:any) => {
-          reject(error);
-        })
-    });
-  }
-
   getLogin(deployment:Deployment):Promise<Login> {
     return new Promise((resolve, reject) => {
        this.storage.getItem(deployment.website).then(
           (data:any) => {
-            this.logger.info(this, "getLogin", deployment.api, data);
+            this.logger.info(this, "getLogin", deployment.website, data);
             if (data && data.length > 0) {
-              resolve(JSON.parse(data));
+              let login:Login = <Login>JSON.parse(data);
+              resolve(login);
             }
             else {
               reject("No Login");
             }
           },
           (error:any) => {
-            this.logger.error(this, "getLogin", deployment.api, error);
+            this.logger.error(this, "getLogin", deployment.website, error);
             reject(error);
           });
     });
@@ -366,22 +356,14 @@ export class ApiService extends HttpService {
           });
       }
       else {
-        this.apiGet(deployment, "/api/v3/users/").then(
+        this.apiGet(deployment, "/api/v3/users").then(
           (data:any) => {
             let saves = [];
             let users = [];
             deployment.users_count = data.total_count;
             saves.push(this.database.saveDeployment(deployment));
             for (let item of data.results) {
-              let user:User = new User();
-              user.id = item.id;
-              user.role = item.role;
-              user.email = item.email;
-              user.name = item.realname;
-              if (item.gravatar) {
-                user.gravatar = item.gravatar;
-                user.image = `https://www.gravatar.com/avatar/${item.gravatar}.jpg?s=32`;
-              }
+              let user:User = new User(item);
               users.push(user);
               saves.push(this.database.saveUser(deployment, user));
             }
@@ -404,15 +386,7 @@ export class ApiService extends HttpService {
     return new Promise((resolve, reject) => {
       this.apiGet(deployment, `/api/v3/users/${user}`).then(
         (data:any) => {
-          let user:User = new User();
-          user.id = data.id;
-          user.role = data.role;
-          user.email = data.email;
-          user.name = data.realname;
-          if (data.gravatar) {
-            user.gravatar = data.gravatar;
-            user.image = `https://www.gravatar.com/avatar/${data.gravatar}.jpg?s=32`;
-          }
+          let user:User = new User(data);
           resolve(user);
         },
         (error:any) => {
@@ -449,38 +423,22 @@ export class ApiService extends HttpService {
       else {
         this.apiGet(deployment, "/api/v3/config").then(
           (data:any) => {
-            let deployment:Deployment = new Deployment();
-            this.logger.info(this, "getDeployment", deployment);
+            let config:any = {};
             for (let result of data.results) {
               if (result.id == 'map') {
-                if (result.default_view) {
-                  deployment.map_zoom = result.default_view.zoom;
-                  deployment.map_style = result.default_view.baselayer;
-                  deployment.map_latitude = result.default_view.lat;
-                  deployment.map_longitude = result.default_view.lon;
-                }
+                config.default_view = result.default_view;
               }
               else if (result.id == 'site') {
-                deployment.name = result.name;
-                deployment.email = result.email;
-                deployment.description = result.description;
-                if (result.image_header) {
-                  deployment.image = encodeURI(result.image_header);
-                }
-                if (result.allowed_privileges) {
-                  deployment.can_read = result.allowed_privileges.indexOf("read") > -1;
-                  deployment.can_create = result.allowed_privileges.indexOf("create") > -1;
-                  deployment.can_update = result.allowed_privileges.indexOf("update") > -1;
-                  deployment.can_delete = result.allowed_privileges.indexOf("delete") > -1;
-                }
-                else {
-                  deployment.can_read = false;
-                  deployment.can_create = false;
-                  deployment.can_update = false;
-                  deployment.can_delete = false;
-                }
+                config.name = result.name;
+                config.email = result.email;
+                config.timezone = result.timezone;
+                config.language = result.language;
+                config.image = result.image_header;
+                config.description = result.description;
+                config.allowed_privileges = result.allowed_privileges;
               }
             }
+            let deployment:Deployment = new Deployment(config);
             resolve(deployment);
           },
           (error:any) => {
@@ -560,36 +518,9 @@ export class ApiService extends HttpService {
             deployment.posts_count = data.total_count;
             saves.push(this.database.saveDeployment(deployment));
             for (let item of data.results) {
-              let post:Post = new Post();
+              let post:Post = new Post(item);
               post.deployment_id = deployment.id;
-              post.id = item.id;
               post.url = `${deployment.website}/posts/${item.id}`;
-              post.slug = item.slug;
-              post.title = item.title;
-              post.description = item.content;
-              post.color = item.color;
-              post.status = item.status;
-              post.created = item.created;
-              post.updated = item.updated;
-              post.posted = item.post_date;
-              if (item.user) {
-                post.user_id = item.user.id;
-              }
-              if (item.form) {
-                post.form_id = item.form.id;
-              }
-              if (item.allowed_privileges) {
-                post.can_read = item.allowed_privileges.indexOf("read") > -1;
-                post.can_create = item.allowed_privileges.indexOf("create") > -1;
-                post.can_update = item.allowed_privileges.indexOf("update") > -1;
-                post.can_delete = item.allowed_privileges.indexOf("delete") > -1;
-              }
-              else {
-                post.can_read = false;
-                post.can_create = false;
-                post.can_update = false;
-                post.can_delete = false;
-              }
               post.values = [];
               for (let key in item.values) {
                 let text:any = item.values[key][0];
@@ -635,10 +566,10 @@ export class ApiService extends HttpService {
         if (value.value == null || value.value.length == 0) {
           values[value.key] = [];
         }
-        else if (value.input == 'number' || value.input == 'upload' || value.input == 'video') {
+        else if (value.isNumber() || value.isImage() || value.isVideo()) {
           values[value.key] = [Number(value.value)];
         }
-        else if (value.input == 'location') {
+        else if (value.isLocation()) {
           if (value.value.indexOf(",") > -1) {
             let location = value.value.split(",");
             values[value.key] = [{
@@ -710,10 +641,10 @@ export class ApiService extends HttpService {
           if (value.value == null || value.value.length == 0) {
             values[value.key] = [];
           }
-          else if (value.input == 'number' || value.input == 'upload' || value.input == 'video') {
+          else if (value.isNumber() || value.isImage() || value.isVideo()) {
             values[value.key] = [Number(value.value)];
           }
-          else if (value.input == 'location') {
+          else if (value.isLocation()) {
             if (value.value.indexOf(",") > -1) {
               let location = value.value.split(",");
               values[value.key] = [{
@@ -826,12 +757,17 @@ export class ApiService extends HttpService {
                 },
                 (error:any) => {
                   reject(error);
-                }
-              );
+                });
             }
           },
           (error:any) => {
-            reject(error);
+            this.getImages(deployment, false, offline, limit, offset).then(
+              (images:Image[]) => {
+                resolve(images);
+              },
+              (error:any) => {
+                reject(error);
+              });
           });
       }
       else {
@@ -846,31 +782,8 @@ export class ApiService extends HttpService {
             deployment.images_count = data.total_count;
             saves.push(this.database.saveDeployment(deployment));
             for (let item of data.results) {
-              let image:Image = new Image();
+              let image:Image = new Image(item);
               image.deployment_id = deployment.id;
-              image.id = item.id;
-              if (item.original_file_url) {
-                image.url = encodeURI(item.original_file_url);
-              }
-              image.mime = item.mime;
-              image.caption = item.caption;
-              image.width = item.original_width;
-              image.height = item.original_height;
-              image.filesize = item.original_file_size;
-              image.created = item.created;
-              image.updated = item.updated;
-              if (item.allowed_privileges) {
-                image.can_read = item.allowed_privileges.indexOf("read") > -1;
-                image.can_create = item.allowed_privileges.indexOf("create") > -1;
-                image.can_update = item.allowed_privileges.indexOf("update") > -1;
-                image.can_delete = item.allowed_privileges.indexOf("delete") > -1;
-              }
-              else {
-                image.can_read = false;
-                image.can_create = false;
-                image.can_update = false;
-                image.can_delete = false;
-              }
               images.push(image);
               saves.push(this.database.saveImage(deployment, image));
             }
@@ -889,6 +802,53 @@ export class ApiService extends HttpService {
     });
   }
 
+  getImage(deployment:Deployment, id:number, cache:boolean=false, offline:boolean=false):Promise<Image> {
+    return new Promise((resolve, reject) => {
+      if (cache || offline) {
+        this.database.getImage(deployment, id).then(
+          (image:Image) => {
+            if (image) {
+              resolve(image);
+            }
+            else if (offline) {
+              reject("No Internet");
+            }
+            else {
+              this.getImage(deployment, id, false, offline).then(
+                (image:Image) => {
+                  resolve(image);
+                },
+                (error:any) => {
+                  reject(error);
+                });
+            }
+          },
+          (error:any) => {
+            this.getImage(deployment, id, false, offline).then(
+              (image:Image) => {
+                resolve(image);
+              },
+              (error:any) => {
+                reject(error);
+              });
+          });
+      }
+      else {
+        this.apiGet(deployment, `/api/v3/media/${id}`).then(
+          (data:any) => {
+            let image:Image = new Image(data);
+            image.deployment_id = deployment.id;
+            this.database.saveImage(deployment, image).then((saved) => {
+              resolve(image);
+            })
+          },
+          (error:any) => {
+            reject(error);
+          });
+      }
+    });
+  }
+
   uploadImage(deployment:Deployment, post:Post, value:Value):Promise<Image> {
     return new Promise((resolve, reject) => {
       let file = value.value;
@@ -899,29 +859,8 @@ export class ApiService extends HttpService {
         (data:any) => {
           this.logger.info(this, "uploadImage", file, data);
           let item = JSON.parse(data.response);
-          let image:Image = new Image();
+          let image:Image = new Image(item);
           image.deployment_id = deployment.id;
-          image.id = item.id;
-          image.url = item.original_file_url;
-          image.mime = item.mime;
-          image.caption = item.caption;
-          image.width = item.original_width;
-          image.height = item.original_height;
-          image.filesize = item.original_file_size;
-          image.created = item.created;
-          image.updated = item.updated;
-          if (item.allowed_privileges) {
-            image.can_read = item.allowed_privileges.indexOf("read") > -1;
-            image.can_create = item.allowed_privileges.indexOf("create") > -1;
-            image.can_update = item.allowed_privileges.indexOf("update") > -1;
-            image.can_delete = item.allowed_privileges.indexOf("delete") > -1;
-          }
-          else {
-            image.can_read = false;
-            image.can_create = false;
-            image.can_update = false;
-            image.can_delete = false;
-          }
           value.value = "" + image.id;
           let saves = [
             this.database.saveImage(deployment, image),
@@ -974,32 +913,8 @@ export class ApiService extends HttpService {
             deployment.forms_count = data.total_count;
             saves.push(this.database.saveDeployment(deployment));
             for (let item of data.results) {
-              let form:Form = new Form();
+              let form:Form = new Form(item);
               form.deployment_id = deployment.id;
-              form.id = item.id;
-              form.type = item.type;
-              form.name = item.name;
-              form.color = item.color;
-              form.created = item.created;
-              form.updated = item.updated;
-              form.disabled = item.disabled;
-              form.description = item.description;
-              form.can_submit = item.everyone_can_create;
-              if (item.can_create) {
-                form.user_roles = JSON.stringify(item.can_create);
-              }
-              if (item.allowed_privileges) {
-                form.can_read = item.allowed_privileges.indexOf("read") > -1;
-                form.can_create = item.allowed_privileges.indexOf("create") > -1;
-                form.can_update = item.allowed_privileges.indexOf("update") > -1;
-                form.can_delete = item.allowed_privileges.indexOf("delete") > -1;
-              }
-              else {
-                form.can_read = false;
-                form.can_create = false;
-                form.can_update = false;
-                form.can_delete = false;
-              }
               forms.push(form);
               saves.push(this.database.saveForm(deployment, form));
             }
@@ -1050,29 +965,8 @@ export class ApiService extends HttpService {
             let saves = [];
             let stages = [];
             for (let item of data.results) {
-              this.logger.info(this, "getStages", item);
-              let stage:Stage = new Stage();
+              let stage:Stage = new Stage(item);
               stage.deployment_id = deployment.id;
-              stage.id = item.id;
-              stage.form_id = item.form_id;
-              stage.label = item.label;
-              stage.description = item.description;
-              stage.priority = item.priority;
-              stage.type = item.type;
-              stage.icon = item.icon;
-              stage.required = item.required;
-              if (item.allowed_privileges) {
-                stage.can_read = item.allowed_privileges.indexOf("read") > -1;
-                stage.can_create = item.allowed_privileges.indexOf("create") > -1;
-                stage.can_update = item.allowed_privileges.indexOf("update") > -1;
-                stage.can_delete = item.allowed_privileges.indexOf("delete") > -1;
-              }
-              else {
-                stage.can_read = false;
-                stage.can_create = false;
-                stage.can_update = false;
-                stage.can_delete = false;
-              }
               stages.push(stage);
               saves.push(this.database.saveStage(deployment, stage));
             }
@@ -1124,34 +1018,8 @@ export class ApiService extends HttpService {
             let attributes = [];
             for (let item of data.results) {
               this.logger.info(this, "getAttributes", item);
-              let attribute:Attribute = new Attribute();
+              let attribute:Attribute = new Attribute(item);
               attribute.deployment_id = deployment.id;
-              attribute.id = item.id;
-              attribute.form_stage_id = item.form_stage_id;
-              attribute.key = item.key;
-              attribute.label = item.label;
-              attribute.instructions = item.instructions;
-              attribute.input = item.input;
-              attribute.type = item.type;
-              attribute.required = item.required;
-              attribute.priority = item.priority;
-              attribute.options = item.options;
-              attribute.cardinality = item.cardinality;
-              if (item.form_id) {
-                attribute.form_id = item.form_id;
-              }
-              if (item.allowed_privileges) {
-                attribute.can_read = item.allowed_privileges.indexOf("read") > -1;
-                attribute.can_create = item.allowed_privileges.indexOf("create") > -1;
-                attribute.can_update = item.allowed_privileges.indexOf("update") > -1;
-                attribute.can_delete = item.allowed_privileges.indexOf("delete") > -1;
-              }
-              else {
-                attribute.can_read = false;
-                attribute.can_create = false;
-                attribute.can_update = false;
-                attribute.can_delete = false;
-              }
               attributes.push(attribute);
               saves.push(this.database.saveAttribute(deployment, attribute));
             }
@@ -1203,28 +1071,8 @@ export class ApiService extends HttpService {
             deployment.collections_count = data.total_count;
             saves.push(this.database.saveDeployment(deployment));
             for (let item of data.results) {
-              let collection:Collection = new Collection();
+              let collection:Collection = new Collection(item);
               collection.deployment_id = deployment.id;
-              collection.id = item.id;
-              collection.name = item.name;
-              collection.description = item.description;
-              collection.view = item.view;
-              collection.options = item.options;
-              collection.featured = item.featured;
-              collection.created = item.created;
-              collection.updated = item.updated;
-              if (item.allowed_privileges) {
-                collection.can_read = item.allowed_privileges.indexOf("read") > -1;
-                collection.can_create = item.allowed_privileges.indexOf("create") > -1;
-                collection.can_update = item.allowed_privileges.indexOf("update") > -1;
-                collection.can_delete = item.allowed_privileges.indexOf("delete") > -1;
-              }
-              else {
-                collection.can_read = false;
-                collection.can_create = false;
-                collection.can_update = false;
-                collection.can_delete = false;
-              }
               collections.push(collection);
               saves.push(this.database.saveCollection(deployment, collection));
             }
@@ -1317,7 +1165,7 @@ export class ApiService extends HttpService {
       this.logger.info(this, "getPostsWithValues", "Filter", filter, "Cache", cache, "Offline", offline, "Limit", limit, "Offset", offset);
       Promise.all([
         this.getPosts(deployment, filter, cache, offline, limit, offset),
-        this.getImages(deployment, cache, offline),
+        this.getImages(deployment, true, offline, limit, offset),
         this.getForms(deployment, true, offline),
         this.getUsers(deployment, true, offline),
         this.getAttributes(deployment, true, offline)]).then(
@@ -1334,7 +1182,7 @@ export class ApiService extends HttpService {
               post.loadForm(forms);
               for (let value of post.values) {
                 value.loadAttribute(attributes);
-                if (value.input == 'upload') {
+                if (value.isImage()) {
                   value.loadImage(images);
                   post.loadImage(images, value.value);
                 }

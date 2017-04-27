@@ -11,13 +11,13 @@ import { Attribute } from '../models/attribute';
 @Table("values_")
 export class Value extends Model {
 
-  constructor(values:any=null) {
-    super(values);
-    this.copyInto(values);
+  constructor(data:any=null) {
+    super(data);
+    this.copyInto(data);
   }
 
-  public newInstance<M extends Value>(values:any=null) : Value {
-    return new Value(values);
+  public newInstance<M extends Value>(data:any=null):Value {
+    return new Value(data);
   }
 
   @Column("deployment_id", INTEGER, PRIMARY_KEY)
@@ -79,6 +79,26 @@ export class Value extends Model {
     }
   }
 
+  isNumber() {
+    return this.input == 'number';
+  }
+
+  isImage() {
+    return this.input == 'upload';
+  }
+
+  isVideo() {
+    return this.input == 'video';
+  }
+
+  isLocation() {
+    return this.input == 'location';
+  }
+
+  hasMissingImage() {
+    return this.input == 'upload' && this.value != null && this.image == null;
+  }
+
   hasPendingImage() {
     return this.input == 'upload' && this.value && this.value.indexOf("file:") > -1;
   }
@@ -90,4 +110,5 @@ export class Value extends Model {
   hasPendingAddress() {
     return this.input == 'location' && this.value && this.value.indexOf(", ") > -1;
   }
+
 }

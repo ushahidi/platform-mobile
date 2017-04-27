@@ -32,7 +32,7 @@
       <div *ngIf="value.value" [innerHTML]="value.value | htmlParser"></div>
     </div>
     <div class="value-upload" *ngIf="value.input == 'upload'">
-      <image-cache *ngIf="value.image" [src]="value.image" [fallback]="photoPaceholder" tappable (click)="imageClicked(value.value)"></image-cache>
+      <image-cache *ngIf="value.value" [src]="value.image" [fallback]="photoPaceholder" tappable (click)="imageClicked(value.image)"></image-cache>
       <span *ngIf="value.caption">{{value.caption}}</span>
     </div>
     <div class="value-varchar" *ngIf="value.input == 'varchar'">

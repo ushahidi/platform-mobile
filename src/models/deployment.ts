@@ -14,13 +14,102 @@ import { Collection } from '../models/collection';
 @Table("deployments")
 export class Deployment extends Model {
 
-  constructor(values:any=null) {
-    super(values);
-    this.copyInto(values);
+  constructor(data:any=null) {
+    super(data);
+    this.copyInto(data);
+    if (data) {
+      if (data.name) {
+        this.name = data.name;
+      }
+      if (data.deployment_name) {
+        this.name = data.deployment_name;
+      }
+      if (data.tier) {
+        this.tier = data.tier;
+      }
+      if (data.status) {
+        this.status = data.status;
+      }
+      if (data.email) {
+        this.email = data.email;
+      }
+      if (data.timezone) {
+        this.timezone = data.timezone;
+      }
+      if (data.language) {
+        this.language = data.language;
+      }
+      if (data.description) {
+        this.description = data.description;
+      }
+      if (data.image) {
+        if (data.image.indexOf(" ") != -1) {
+          this.image = encodeURI(data.image);
+        }
+        else {
+          this.image = data.image;
+        }
+      }
+      if (data.image_header) {
+        if (data.image_header.indexOf(" ") != -1) {
+          this.image = encodeURI(data.image_header);
+        }
+        else {
+          this.image = data.image_header;
+        }
+      }
+      if (data.subdomain) {
+        this.domain = `${data.subdomain}.ushahidi.io`;
+        this.website = `https://${data.subdomain}.ushahidi.io`;
+      }
+      if (data.website) {
+        this.website = data.website;
+        this.domain = data.website.replace("https://","").replace("http://","");
+      }
+      if (data.domain && data.subdomain) {
+        this.api = `https://${data.subdomain}.${data.domain}`;
+      }
+      if (data.backend_url) {
+        this.api = data.backend_url;
+      }
+      if (this.website && data.backend_domain) {
+        let link = document.createElement('a');
+        link.setAttribute('href', this.website);
+        let domain = link.hostname.substring(link.hostname.indexOf(".") + 1);
+        this.api = this.website.replace(domain, data.backend_domain);
+      }
+      if (data.default_view) {
+        this.map_zoom = data.default_view.zoom;
+        this.map_style = data.default_view.baselayer;
+        this.map_latitude = data.default_view.lat;
+        this.map_longitude = data.default_view.lon;
+      }
+      if (data.client_id) {
+        this.client_id = data.client_id;
+      }
+      if (data.client_secret) {
+        this.client_secret = data.client_secret;
+      }
+      if (data.google_analytics_id) {
+        this.google_analytics_id = data.google_analytics_id;
+      }
+      if (data.intercom_app_id) {
+        this.intercom_app_id = data.intercom_app_id;
+      }
+      if (data.mapbox_api_key) {
+        this.mapbox_api_key = data.mapbox_api_key;
+      }
+      if (data.allowed_privileges) {
+        this.can_read = data.allowed_privileges.indexOf("read") > -1;
+        this.can_create = data.allowed_privileges.indexOf("create") > -1;
+        this.can_update = data.allowed_privileges.indexOf("update") > -1;
+        this.can_delete = data.allowed_privileges.indexOf("delete") > -1;
+      }
+    }
   }
 
-  public newInstance<M extends Deployment>(values:any=null) : Deployment {
-    return new Deployment(values);
+  public newInstance<M extends Deployment>(data:any=null):Deployment {
+    return new Deployment(data);
   }
 
   @Column("id", INTEGER, PRIMARY_KEY)
@@ -46,6 +135,12 @@ export class Deployment extends Model {
 
   @Column("description", TEXT)
   public description: string = null;
+
+  @Column("timezone", TEXT)
+  public timezone: string = null;
+
+  @Column("language", TEXT)
+  public language: string = null;
 
   @Column("email", TEXT)
   public email: string = null;

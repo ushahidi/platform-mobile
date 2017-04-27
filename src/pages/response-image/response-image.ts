@@ -23,6 +23,7 @@ export class ResponseImagePage extends BasePage {
   deployment:Deployment = null;
   post:Post = null;
   image:string = null;
+  title:string = "Image";
   placeholder:string = PLACEHOLDER_PHOTO;
 
   constructor(
@@ -45,7 +46,7 @@ export class ResponseImagePage extends BasePage {
     this.deployment = this.getParameter<Deployment>("deployment");
     this.post = this.getParameter<Post>("post");
     this.image = this.getParameter<string>("image");
-    this.logger.info(this, 'ionViewWillEnter', this.image);
+    this.title = this.getParameter<string>("title");
   }
 
   shareImage(event:any) {

@@ -9,13 +9,34 @@ import { Model, TEXT, INTEGER, PRIMARY_KEY } from '../models/model';
 @Table("users")
 export class User extends Model {
 
-  constructor(values:any=null) {
-    super(values);
-    this.copyInto(values);
+  constructor(data:any=null) {
+    super(data);
+    this.copyInto(data);
+    if (data) {
+      if (data.id) {
+        this.id = data.id;
+      }
+      if (data.role) {
+        this.role = data.role;
+      }
+      if (data.email) {
+        this.email = data.email;
+      }
+      if (data.name) {
+        this.name = data.name;
+      }
+      if (data.realname) {
+        this.name = data.realname;
+      }
+      if (data.gravatar) {
+        this.gravatar = data.gravatar;
+        this.image = `https://www.gravatar.com/avatar/${data.gravatar}.jpg?s=32`;
+      }
+    }
   }
 
-  public newInstance<M extends User>(values:any=null) : User {
-    return new User(values);
+  public newInstance<M extends User>(data:any=null):User {
+    return new User(data);
   }
 
   @Column("id", INTEGER, PRIMARY_KEY)

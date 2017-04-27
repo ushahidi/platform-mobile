@@ -9,13 +9,57 @@ import { Model, TEXT, INTEGER, BOOLEAN, PRIMARY_KEY } from '../models/model';
 @Table("attributes")
 export class Attribute extends Model {
 
-  constructor(values:any=null) {
-    super(values);
-    this.copyInto(values);
+  constructor(data:any=null) {
+    super(data);
+    this.copyInto(data);
+    if (data) {
+      if (data.id) {
+        this.id = data.id;
+      }
+      if (data.form_stage_id) {
+        this.form_stage_id = data.form_stage_id;
+      }
+      if (data.key) {
+        this.key = data.key;
+      }
+      if (data.label) {
+        this.label = data.label;
+      }
+      if (data.instructions) {
+        this.instructions = data.instructions;
+      }
+      if (data.input) {
+        this.input = data.input;
+      }
+      if (data.type) {
+        this.type = data.type;
+      }
+      if (data.required) {
+        this.required = data.required;
+      }
+      if (data.priority) {
+        this.priority = data.priority;
+      }
+      if (data.options) {
+        this.options = data.options;
+      }
+      if (data.cardinality) {
+        this.cardinality = data.cardinality;
+      }
+      if (data.form_id) {
+        this.form_id = data.form_id;
+      }
+      if (data.allowed_privileges) {
+        this.can_read = data.allowed_privileges.indexOf("read") > -1;
+        this.can_create = data.allowed_privileges.indexOf("create") > -1;
+        this.can_update = data.allowed_privileges.indexOf("update") > -1;
+        this.can_delete = data.allowed_privileges.indexOf("delete") > -1;
+      }
+    }
   }
 
-  public newInstance<M extends Attribute>(values:any=null) : Attribute {
-    return new Attribute(values);
+  public newInstance<M extends Attribute>(data:any=null):Attribute {
+    return new Attribute(data);
   }
 
   @Column("id", INTEGER, PRIMARY_KEY)

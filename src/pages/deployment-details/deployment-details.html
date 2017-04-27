@@ -42,10 +42,10 @@
         Settings
       </ion-item>
       <ion-item detail-push *ngIf="deployment.username == null || deployment.username == ''" (click)="userLogin($event)">
-        Login
+        Log in
       </ion-item>
       <ion-item detail-push *ngIf="deployment.username != null && deployment.username.length > 0" (click)="userLogout($event)">
-        Logout
+        Log out
       </ion-item>
     </ion-list>
   </div>

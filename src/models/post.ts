@@ -13,13 +13,54 @@ import { Image } from '../models/image';
 @Table("posts")
 export class Post extends Model {
 
-  constructor(values:any=null) {
-    super(values);
-    this.copyInto(values);
+  constructor(data:any=null) {
+    super(data);
+    this.copyInto(data);
+    if (data) {
+      if (data.id) {
+        this.id = data.id;
+      }
+      if (data.slug) {
+        this.slug = data.slug;
+      }
+      if (data.title) {
+        this.title = data.title;
+      }
+      if (data.content) {
+        this.description = data.content;
+      }
+      if (data.color) {
+        this.color = data.color;
+      }
+      if (data.status) {
+        this.status = data.status;
+      }
+      if (data.created) {
+        this.created = data.created;
+      }
+      if (data.updated) {
+        this.updated = data.updated;
+      }
+      if (data.post_date) {
+        this.posted = data.post_date;
+      }
+      if (data.user) {
+        this.user_id = data.user.id;
+      }
+      if (data.form) {
+        this.form_id = data.form.id;
+      }
+      if (data.allowed_privileges) {
+        this.can_read = data.allowed_privileges.indexOf("read") > -1;
+        this.can_create = data.allowed_privileges.indexOf("create") > -1;
+        this.can_update = data.allowed_privileges.indexOf("update") > -1;
+        this.can_delete = data.allowed_privileges.indexOf("delete") > -1;
+      }
+    }
   }
 
-  public newInstance<M extends Post>(values:any=null) : Post {
-    return new Post(values);
+  public newInstance<M extends Post>(data:any=null):Post {
+    return new Post(data);
   }
 
   @Column("id", INTEGER, PRIMARY_KEY)

@@ -95,8 +95,10 @@ export class PostValueComponent {
 
   imageClicked(url:string) {
     this.logger.info(this, "imageClicked", url);
-    this.showImage.emit({
-      url: url });
+    if (url) {
+      this.showImage.emit({
+        url: url });  
+    }
   }
 
 }

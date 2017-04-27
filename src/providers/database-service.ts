@@ -124,7 +124,7 @@ export class DatabaseService {
     });
   }
 
-  executeFirst(table:string, where:{}=null, order:{}=null) : Promise<any[]> {
+  executeFirst(table:string, where:{}=null, order:{}=null):Promise<any[]> {
     return new Promise((resolve, reject) => {
       this.executeSelect(table, where, order, 1, 0).then(rows => {
         let results = <any[]>rows;
@@ -161,7 +161,7 @@ export class DatabaseService {
     });
   }
 
-  executeSelect(table:string, where:{}=null, order:{}=null, limit:number=null, offset:number=null) : Promise<any[]> {
+  executeSelect(table:string, where:{}=null, order:{}=null, limit:number=null, offset:number=null):Promise<any[]> {
     return new Promise((resolve, reject) => {
       this.openDatabase().then((database:SQLiteObject) => {
         let statement = this.selectStatement(table, where, order, limit, offset);
@@ -392,19 +392,19 @@ export class DatabaseService {
   testModel<M extends Model>(type:M):Promise<boolean> {
     return new Promise((resolve, reject) => {
       this.executeTest(type.getTable(), type.getColumns()).then(
-        (rows) => {
+        (rows:any) => {
           resolve(true);
         },
-        (error) => {
+        (error:any) => {
           reject(error);
         });
     });
   }
 
-  getModels<M extends Model>(type:M, where:{}=null, order:{}=null, limit:number=null, offset:number=null) : Promise<M[]> {
+  getModels<M extends Model>(type:M, where:{}=null, order:{}=null, limit:number=null, offset:number=null):Promise<M[]> {
     return new Promise((resolve, reject) => {
       this.executeSelect(type.getTable(), where, order, limit, offset).then(
-        (rows) => {
+        (rows:any) => {
           let models = [];
           let columns = type.getColumns();
           for (let i = 0; i < rows.length; i++) {
@@ -432,16 +432,16 @@ export class DatabaseService {
           }
           resolve(models);
         },
-        (error) => {
+        (error:any) => {
           reject(error);
         });
     });
   }
 
-  getModel<M extends Model>(type:M, where:{}=null, order:{}=null) : Promise<M> {
+  getModel<M extends Model>(type:M, where:{}=null, order:{}=null):Promise<M> {
     return new Promise((resolve, reject) => {
       this.executeFirst(type.getTable(), where, order).then(
-        (row) => {
+        (row:any) => {
           let columns = type.getColumns();
           let values = {};
           for (let column of columns) {
@@ -464,7 +464,7 @@ export class DatabaseService {
           let model = type.newInstance<M>(values);
           resolve(model);
         },
-        (error) => {
+        (error:any) => {
           reject(error);
         });
     });
@@ -504,7 +504,7 @@ export class DatabaseService {
     return this.executeDelete(model.getTable(), where);
   }
 
-  getMinium<M extends Model>(type:M, column:string) : Promise<number> {
+  getMinium<M extends Model>(type:M, column:string):Promise<number> {
     return new Promise((resolve, reject) => {
       this.openDatabase().then((database:SQLiteObject) => {
         let statement = `SELECT MIN(${column}) as value FROM ${type.getTable()}`;
@@ -531,11 +531,11 @@ export class DatabaseService {
     return this.saveModel(deployment);
   }
 
-  getDeployments(where:{}=null, order:{}=null) : Promise<Deployment[]> {
+  getDeployments(where:{}=null, order:{}=null):Promise<Deployment[]> {
     return this.getModels<Deployment>(new Deployment(), where, order);
   }
 
-  getDeployment(id:number) : Promise<Deployment> {
+  getDeployment(id:number):Promise<Deployment> {
     let where = { id: id };
     return this.getModel<Deployment>(new Deployment(), where);
   }
@@ -545,13 +545,13 @@ export class DatabaseService {
     return this.removeModel<Deployment>(new Deployment(), where);
   }
 
-  getForms(deployment:Deployment) : Promise<Form[]> {
+  getForms(deployment:Deployment):Promise<Form[]> {
     let where = { deployment_id: deployment.id };
     let order = { name: "ASC" };
     return this.getModels<Form>(new Form(), where, order);
   }
 
-  getForm(deployment:Deployment, id:number) : Promise<Form> {
+  getForm(deployment:Deployment, id:number):Promise<Form> {
     let where = {
       deployment_id: deployment.id,
       id: id };
@@ -568,7 +568,7 @@ export class DatabaseService {
     return this.removeModel<Form>(new Form(), where);
   }
 
-  getUsers(deployment:Deployment) : Promise<User[]> {
+  getUsers(deployment:Deployment):Promise<User[]> {
     let where = { deployment_id: deployment.id };
     let order = {};
     return this.getModels<User>(new User(), where, order);
@@ -584,7 +584,7 @@ export class DatabaseService {
     return this.removeModel<User>(new User(), where);
   }
 
-  getPosts(deployment:Deployment, filter:Filter=null, limit:number=null, offset:number=null) : Promise<Post[]> {
+  getPosts(deployment:Deployment, filter:Filter=null, limit:number=null, offset:number=null):Promise<Post[]> {
     let postsWhere = { deployment_id: deployment.id };
     let valuesWhere = { deployment_id: deployment.id };
     let statuses = [];
@@ -620,13 +620,13 @@ export class DatabaseService {
       });
   }
 
-  getPostsPending(deployment:Deployment) : Promise<Post[]> {
+  getPostsPending(deployment:Deployment):Promise<Post[]> {
     let where = { deployment_id: deployment.id, pending: true };
     let order = { created: "DESC" };
     return this.getModels<Post>(new Post(), where, order);
   }
 
-  getPost(deployment:Deployment, id:number) : Promise<Post> {
+  getPost(deployment:Deployment, id:number):Promise<Post> {
     let where = {
       deployment_id: deployment.id,
       id: id };
@@ -650,14 +650,19 @@ export class DatabaseService {
     return this.removeModel<Post>(new Post(), where);
   }
 
-  getPostsLowestID() : Promise<number> {
+  getPostsLowestID():Promise<number> {
     return this.getMinium<Post>(new Post(), "id");
   }
 
-  getImages(deployment:Deployment, limit:number=null, offset:number=null) : Promise<Image[]> {
+  getImages(deployment:Deployment, limit:number=null, offset:number=null):Promise<Image[]> {
     let where = { deployment_id: deployment.id };
     let order = { created: "DESC" };
     return this.getModels<Image>(new Image(), where, order, limit, offset);
+  }
+
+  getImage(deployment:Deployment, id:number):Promise<Image> {
+    let where = { deployment_id: deployment.id, id: id };
+    return this.getModel<Image>(new Image(), where);
   }
 
   saveImage(deployment:Deployment, image:Image) {
@@ -670,7 +675,7 @@ export class DatabaseService {
     return this.removeModel<Image>(new Image(), where);
   }
 
-  getPostsWithValues(deployment:Deployment): Promise<Post[]> {
+  getPostsWithValues(deployment:Deployment):Promise<Post[]> {
     return new Promise((resolve, reject) => {
       Promise.all([
         this.getPosts(deployment),
@@ -695,7 +700,7 @@ export class DatabaseService {
     });
   }
 
-  getAttributes(deployment:Deployment, form_id:number=null): Promise<Attribute[]> {
+  getAttributes(deployment:Deployment, form_id:number=null):Promise<Attribute[]> {
     let where = { deployment_id: deployment.id };
     if (form_id != null) {
       where['form_id'] = form_id;
@@ -714,7 +719,7 @@ export class DatabaseService {
     return this.removeModel<Attribute>(new Attribute(), where);
   }
 
-  getFormsWithAttributes(deployment:Deployment): Promise<Form[]> {
+  getFormsWithAttributes(deployment:Deployment):Promise<Form[]> {
     return new Promise((resolve, reject) => {
       Promise.all([
         this.getForms(deployment),
@@ -739,7 +744,7 @@ export class DatabaseService {
     });
   }
 
-  getFormWithAttributes(deployment:Deployment, id:number): Promise<Form> {
+  getFormWithAttributes(deployment:Deployment, id:number):Promise<Form> {
     return new Promise((resolve, reject) => {
       Promise.all([
         this.getForm(deployment, id),
@@ -762,7 +767,7 @@ export class DatabaseService {
     });
   }
 
-  getStages(deployment:Deployment, form_id:number=null): Promise<Stage[]> {
+  getStages(deployment:Deployment, form_id:number=null):Promise<Stage[]> {
     let where = { deployment_id: deployment.id };
     if (form_id != null) {
       where['form_id'] = form_id;
@@ -781,7 +786,7 @@ export class DatabaseService {
     return this.removeModel<Stage>(new Stage(), where);
   }
 
-  getValues(deployment:Deployment, post:Post=null) : Promise<Value[]> {
+  getValues(deployment:Deployment, post:Post=null):Promise<Value[]> {
     let where:any = { deployment_id: deployment.id };
     if (post != null) {
       where['post_id'] = post.id;
@@ -803,7 +808,7 @@ export class DatabaseService {
     return this.removeModel<Value>(new Value(), where);
   }
 
-  getFilter(deployment:Deployment) : Promise<Filter> {
+  getFilter(deployment:Deployment):Promise<Filter> {
     let where:any = { deployment_id: deployment.id };
     return this.getModel<Filter>(new Filter(), where);
   }
@@ -818,7 +823,7 @@ export class DatabaseService {
     return this.removeModel<Filter>(new Filter(), where);
   }
 
-  getCollections(deployment:Deployment) : Promise<Collection[]> {
+  getCollections(deployment:Deployment):Promise<Collection[]> {
     let where:any = { deployment_id: deployment.id };
     let order = { name: "ASC" };
     return this.getModels<Collection>(new Collection(), where, order);

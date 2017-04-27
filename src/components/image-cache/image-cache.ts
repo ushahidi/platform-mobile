@@ -65,6 +65,9 @@ export class ImageCacheComponent implements OnInit, OnChanges, AfterContentCheck
           this.useFallback();
         });
     }
+    else {
+      this.useFallback();
+    }
   }
 
   reloadCacheImage(url:string) {

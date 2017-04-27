@@ -1,12 +1,9 @@
-import { Injectable } from '@angular/core';
+export interface Province {
 
-@Injectable()
-export class Province {
+  name: string;
 
-  public name: string;
+  code: string;
 
-  public code: string;
-
-  public country: string;
+  country: string;
 
 }
