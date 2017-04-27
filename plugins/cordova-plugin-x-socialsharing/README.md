@@ -205,14 +205,14 @@ Example: share a PDF file from the local www folder:
 
 ### Sharing directly to..
 
-####Twitter
+#### Twitter
 ```html
 <!-- unlike most apps Twitter doesn't like it when you use an array to pass multiple files as the second param -->
 <button onclick="window.plugins.socialsharing.shareViaTwitter('Message via Twitter')">message via Twitter</button>
 <button onclick="window.plugins.socialsharing.shareViaTwitter('Message and link via Twitter', null /* img */, 'http://www.x-services.nl')">msg and link via Twitter</button>
 ```
 
-####Facebook
+#### Facebook
 ```html
 <button onclick="window.plugins.socialsharing.shareViaFacebook('Message via Facebook', null /* img */, null /* url */, function() {console.log('share ok')}, function(errormsg){alert(errormsg)})">msg via Facebook (with errcallback)</button>
 ```
@@ -234,7 +234,7 @@ Whitelisting Facebook in your app's .plist:
 </array>
 ```
 
-####Instagram
+#### Instagram
 ```html
 <button onclick="window.plugins.socialsharing.shareViaInstagram('Message via Instagram', 'https://www.google.nl/images/srpr/logo4w.png', function() {console.log('share ok')}, function(errormsg){alert(errormsg)})">msg via Instagram</button>
 ```
@@ -266,7 +266,7 @@ Don't pass in an image on iOS because that can't be sent to someone directly unf
 
 On Android pass in the phone number of the person you want to send a message to (untested at the moment).
 
-####SMS
+#### SMS
 Note that on Android, SMS via Hangouts may not behave correctly
 ```html
 <!-- Want to share a prefilled SMS text? -->
@@ -277,7 +277,7 @@ Note that on Android, SMS via Hangouts may not behave correctly
 <button onclick="window.plugins.socialsharing.shareViaSMS({'message':'My cool message', 'subject':'The subject', 'image':'https://www.google.nl/images/srpr/logo4w.png'}, '0612345678,0687654321', function(msg) {console.log('ok: ' + msg)}, function(msg) {alert('error: ' + msg)})">share via SMS</button>
 ```
 
-####Email
+#### Email
 Code inspired by the [EmailComposer plugin](https://github.com/katzer/cordova-plugin-email-composer), note that this is not supported on the iOS 8 simulator (an alert will be shown if your try to).
 ```js
 window.plugins.socialsharing.shareViaEmail(
@@ -419,6 +419,23 @@ Here's the list of available activities you can disable :
  - com.apple.UIKit.activity.AddToReadingList
  - com.apple.UIKit.activity.AirDrop
 
+#### Web Share API
+
+Chrome is introducing a new [Web Share API](https://github.com/WICG/web-share) to share data.
+
+```js
+navigator.share({
+  'title': 'Optional title',
+  'text': 'Optional message',
+  'url': 'http://www.myurl.com'
+}).then(function() {
+  console.log('Successful share');
+}).catch(function(error) {
+  console.log('Error sharing:', error)
+});
+```
+
+It doesn't provide all the options that the other share methods do but it is spec compliant.
 
 ## 4b. Usage on Windows Phone
 The available methods on WP8 are: `available`, `canShareViaEmail`, `share`, `shareViaEmail` and `shareViaSMS`.
@@ -496,7 +513,7 @@ This is a stright forward approach - you just manually edit the .plist file - ei
 There is a plugin designed specifically to address query schema whitelisting. You can find the plugin and how to use it [here](https://www.npmjs.com/package/cordova-plugin-queries-schemes). In general, after installation, you can change plugin.xml file under the plugin subfolder within the plugins directory of your project to add the required schemas. Here again though, you have to edit an additional file and should take care not to overwrite it when making changes to your project.
 
 ### Use Custom Config plugin
-The Custom Config plugin ([here](https://github.com/dpa99c/cordova-custom-config)) allows you to add configuration to your platforms "native" configuration files (e.g. .plist or AndroidManifest.xml) through the project's main config.xml file. 
+The Custom Config plugin ([here](https://github.com/dpa99c/cordova-custom-config)) allows you to add configuration to your platforms "native" configuration files (e.g. .plist or AndroidManifest.xml) through the project's main config.xml file.
 
 To address query schema issue, after installaing the plugin you can edit the iOS platform section of your config.xml (in the project main folder) to include the required entries:
 
@@ -506,11 +523,11 @@ To address query schema issue, after installaing the plugin you can edit the iOS
         version="0.9.1"
         xmlns="http://www.w3.org/ns/widgets"
         xmlns:cdv="http://cordova.apache.org/ns/1.0">
-        
+
     <!-- a bunch of elements like name, description etc -->
-    
+
     <platform name="ios">
-        
+
         <!-- add this entry -->
         <config-file platform="ios" target="*-Info.plist" parent="LSApplicationQueriesSchemes">
             <array>

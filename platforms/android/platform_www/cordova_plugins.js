@@ -438,6 +438,12 @@ module.exports = [
         ]
     },
     {
+        "id": "es6-promise-plugin.Promise",
+        "file": "plugins/es6-promise-plugin/www/promise.js",
+        "pluginId": "es6-promise-plugin",
+        "runs": true
+    },
+    {
         "id": "cordova-plugin-x-socialsharing.SocialSharing",
         "file": "plugins/cordova-plugin-x-socialsharing/www/SocialSharing.js",
         "pluginId": "cordova-plugin-x-socialsharing",
@@ -508,7 +514,8 @@ module.exports.metadata =
     "cordova-plugin-splashscreen": "4.0.2",
     "cordova-plugin-statusbar": "2.2.2",
     "cordova-plugin-whitelist": "1.3.2",
-    "cordova-plugin-x-socialsharing": "5.1.7",
+    "es6-promise-plugin": "4.1.0",
+    "cordova-plugin-x-socialsharing": "5.1.8",
     "cordova-sqlite-storage": "2.0.3",
     "cordova.plugins.diagnostic": "3.4.2",
     "ionic-plugin-deeplinks": "1.0.14",

@@ -114,6 +114,9 @@
         },
         "cordova-plugin-compat": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
+        },
+        "es6-promise-plugin": {
+            "PACKAGE_NAME": "com.ushahidi.mobile"
         }
     }
 }
