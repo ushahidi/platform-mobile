@@ -25,11 +25,9 @@ export class StaticMap {
 
   getUrl() {
     let marker = new MapMarker(this.color).getUrl();
-    let url = `https://api.mapbox.com/styles/v1/mapbox/${this.style}${this.version}/static/` +
-              `url-${encodeURIComponent(marker)}(${this.longitude},${this.latitude})/` +
-              `${this.longitude},${this.latitude},${this.zoom}/`+
-              `${this.width}x${this.height}?access_token=${MAPBOX_ACCESS_TOKEN}`;
-    console.log(url);
-    return url;
+    return `https://api.mapbox.com/styles/v1/mapbox/${this.style}${this.version}/static/` +
+            `url-${encodeURIComponent(marker)}(${this.longitude},${this.latitude})/` +
+            `${this.longitude},${this.latitude},${this.zoom}/`+
+            `${this.width}x${this.height}?access_token=${MAPBOX_ACCESS_TOKEN}`;
   }
 }

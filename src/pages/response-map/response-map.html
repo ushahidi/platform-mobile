@@ -19,7 +19,8 @@
       <ion-icon ios="ios-map" md="md-map"></ion-icon>
     </button>
   </ion-fab>
-  <div #mapOne id="mapOne"></div>
+  <ion-searchbar type="search" color="light" placeholder="Search by address..." debounce="500" [(ngModel)]="search" (keypress)="searchAddress($event)" *ngIf="draggable"></ion-searchbar>
+  <div #mapOne id="mapOne" [class.draggable]="draggable"></div>
 </ion-content>
 <ion-footer>
   <ion-toolbar color="black" *ngIf="offline">

@@ -259,6 +259,18 @@ export class ApiService extends HttpService {
     });
   }
 
+  removeLogin(deployment:Deployment):Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      this.storage.remove(deployment.website).then(
+        (removed:any) => {
+          resolve(true);
+        },
+        (error:any) => {
+          reject(error);
+        });
+    });
+  }
+
   apiGet(deployment:Deployment, endpoint:string, params:any=null):Promise<any> {
     return new Promise((resolve, reject) => {
       this.getLogin(deployment).then((login:Login) => {

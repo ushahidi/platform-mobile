@@ -1,6 +1,9 @@
 import { Component, NgZone, ViewChild } from '@angular/core';
 import { Platform, Content, NavParams, NavController, ViewController, ModalController, ToastController, AlertController, LoadingController, ActionSheetController } from 'ionic-angular';
 
+import { Keyboard } from '@ionic-native/keyboard';
+import { NativeGeocoder, NativeGeocoderForwardResult } from '@ionic-native/native-geocoder';
+
 import { TileLayer } from '../../maps/tile-layer';
 import { MapMarker } from '../../maps/map-marker';
 
@@ -18,12 +21,14 @@ export class ResponseMapPage extends BasePage {
   map:any = null;
   mapZoom:number = 17;
   mapLayer:any = null;
+  marker:any = null;
   mapStyle:string = "streets";
   draggable:boolean = false;
   latitude:number = null;
   longitude:number = null;
   modal:boolean = true;
   title:string = "Location";
+  search:string = null;
 
   @ViewChild(Content)
   content: Content;
@@ -39,7 +44,9 @@ export class ResponseMapPage extends BasePage {
     protected alertController:AlertController,
     protected loadingController:LoadingController,
     protected actionController:ActionSheetController,
-    protected logger:LoggerService) {
+    protected logger:LoggerService,
+    protected nativeGeocoder:NativeGeocoder,
+    protected keyboard:Keyboard) {
     super(zone, platform, navParams, navController, viewController, modalController, toastController, alertController, loadingController, actionController, logger);
   }
 
@@ -58,7 +65,7 @@ export class ResponseMapPage extends BasePage {
   ionViewDidEnter() {
     super.ionViewDidEnter();
     if (this.draggable) {
-      this.showToast("Drag the marker to change the location");
+      this.showToast("Drag the marker to change the location, or search for location by address.", 3000);
     }
   }
 
@@ -91,16 +98,16 @@ export class ResponseMapPage extends BasePage {
       iconSize: [30, 70],
       popupAnchor: [0, -26]
     });
-    let marker = L.marker([latitude, longitude], {
+    this.marker = L.marker([latitude, longitude], {
       icon: icon,
       draggable: this.draggable });
-    marker.on("dragend", (event) => {
+    this.marker.on("dragend", (event) => {
       let coordinates = event.target.getLatLng();
       this.latitude = coordinates.lat;
       this.longitude = coordinates.lng;
       this.logger.info(this, "dragEnd", this.latitude, this.longitude);
     });
-    return marker;
+    return this.marker;
   }
 
   showStyles(event) {
@@ -144,6 +151,32 @@ export class ResponseMapPage extends BasePage {
     this.map.removeLayer(this.mapLayer);
     this.mapLayer = L.tileLayer(new TileLayer(this.mapStyle).getUrl(), { maxZoom: 20 });
     this.mapLayer.addTo(this.map);
+  }
+
+  searchAddress(event:any) {
+    this.logger.info(this, "searchAddress", event.keyCode);
+    if (event.keyCode == 13 || event.keyCode == 176) {
+      this.keyboard.close();
+      if (this.search && this.search.length > 0) {
+        this.nativeGeocoder.forwardGeocode(this.search).then(
+          (coordinates:NativeGeocoderForwardResult) => {
+            this.logger.info(this, "searchAddress", coordinates);
+            if (coordinates && coordinates.latitude && coordinates.longitude) {
+              this.latitude = Number(coordinates.latitude);
+              this.longitude = Number(coordinates.longitude);
+              let latLng:L.LatLngLiteral = {
+                lat: this.latitude,
+                lng: this.longitude
+              };
+              this.marker.setLatLng(latLng);
+              this.map.flyTo(latLng);
+            }
+          },
+          (error:any) => {
+            this.logger.error(this, "searchAddress", error)
+          });
+      }
+    }
   }
 
 }

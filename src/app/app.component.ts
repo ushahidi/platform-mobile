@@ -271,6 +271,7 @@ export class MyApp {
     this.trackEvent("Deployments", "removed", deployment.website);
     let loading = this.showLoading("Removing...");
     let promises = [
+      this.api.removeLogin(deployment),
       this.database.removeUsers(deployment),
       this.database.removeAttributes(deployment),
       this.database.removeStages(deployment),
@@ -291,7 +292,7 @@ export class MyApp {
               this.menuController.close();
             }
             else if (this.deployment.id == deployment.id){
-              this.deployment = this.deployments[0];
+              this.showDeployment(this.deployments[0]);
             }
           });
         });

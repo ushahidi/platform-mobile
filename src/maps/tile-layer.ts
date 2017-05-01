@@ -13,8 +13,6 @@ export class TileLayer {
   }
 
   getUrl() {
-    let url = `https://api.mapbox.com/styles/v1/mapbox/${this.style}${this.version}/tiles/${this.size}/{z}/{x}/{y}?access_token=${MAPBOX_ACCESS_TOKEN}`;
-    console.log(url);
-    return url;
+    return `https://api.mapbox.com/styles/v1/mapbox/${this.style}${this.version}/tiles/${this.size}/{z}/{x}/{y}?access_token=${MAPBOX_ACCESS_TOKEN}`;
   }
 }
