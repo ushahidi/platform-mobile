@@ -24,9 +24,9 @@ export class DatabaseService {
   protected location:string = 'default';
 
   constructor(
-    public sqlite: SQLite,
-    public platform:Platform,
-    public logger:LoggerService) {
+    protected sqlite: SQLite,
+    protected platform:Platform,
+    protected logger:LoggerService) {
   }
 
   testDatabase() {

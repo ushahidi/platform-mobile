@@ -7,7 +7,9 @@ export class LoggerService {
 
   private enabled:boolean = true;
 
-  constructor(private isDebug:IsDebug, public platform: Platform) {
+  constructor(
+    private isDebug:IsDebug,
+    protected platform: Platform) {
     this.platform.ready().then(() => {
       this.isDebug.getIsDebug().then(
         (isDebug:boolean) => {

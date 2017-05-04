@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnChanges, AfterContentChecked } from '@angular/core';
+import { Injectable, Component, Input, OnInit, OnChanges, AfterContentChecked } from '@angular/core';
 import { Transfer, TransferObject } from '@ionic-native/transfer';
 import { File, Entry, FileEntry, FileError, Metadata } from '@ionic-native/file';
 import { SafeUrl, DomSanitizer } from '@angular/platform-browser';
@@ -12,6 +12,7 @@ declare var cordova:any;
   selector: 'image-cache',
   template: `<div class="image-cache"><img [src]="placeholder" *ngIf="placeholder"><img class="fadein" [src]="safeUrl" *ngIf="safeUrl" /></div>`
 })
+@Injectable()
 export class ImageCacheComponent implements OnInit, OnChanges, AfterContentChecked {
 
   @Input('src')

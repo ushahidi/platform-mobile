@@ -17,10 +17,10 @@ export class VimeoService extends HttpService {
   private acceptType: string = "application/vnd.vimeo.*+json;version=3.2";
 
   constructor(
-    public http: Http,
-    public file:File,
-    public transfer:Transfer,
-    public logger:LoggerService) {
+    protected http: Http,
+    protected file:File,
+    protected transfer:Transfer,
+    protected logger:LoggerService) {
     super(http, file, transfer, logger);
   }
 

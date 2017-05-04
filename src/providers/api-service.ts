@@ -36,14 +36,14 @@ export class ApiService extends HttpService {
   // config messages notifications contacts roles permissions csv
 
   constructor(
-    public http: Http,
-    public file:File,
-    public transfer:Transfer,
-    public vimeo:VimeoService,
-    public logger:LoggerService,
-    public storage: NativeStorage,
-    public database:DatabaseService,
-    public nativeGeocoder:NativeGeocoder) {
+    protected http: Http,
+    protected file:File,
+    protected transfer:Transfer,
+    protected vimeo:VimeoService,
+    protected logger:LoggerService,
+    protected storage: NativeStorage,
+    protected database:DatabaseService,
+    protected nativeGeocoder:NativeGeocoder) {
     super(http, file, transfer, logger);
   }
 
@@ -70,14 +70,13 @@ export class ApiService extends HttpService {
     });
   }
 
-  registerDeployment(name:string, website:string):Promise<Deployment> {
+  registerDeployment(website:string):Promise<Deployment> {
     return new Promise((resolve, reject) => {
       let url = `${website}/config.json`;
       this.httpGet(url).then(
         (config:Config) => {
           if (config) {
             let deployment:Deployment = new Deployment(config);
-            deployment.name = name;
             deployment.website = website;
             deployment.domain = website.replace("https://","").replace("http://","");
             if (config.backend_url && config.backend_url.length > 0) {

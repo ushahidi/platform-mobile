@@ -1,6 +1,7 @@
 import { Component, ViewChild, NgZone } from '@angular/core';
 import { Platform, Searchbar, Content, NavParams, NavController, ViewController, ModalController, ToastController, AlertController, LoadingController, ActionSheetController } from 'ionic-angular';
 
+import { Login } from '../../models/login';
 import { Deployment } from '../../models/deployment';
 
 import { ApiService } from '../../providers/api-service';
@@ -55,8 +56,8 @@ export class DeploymentSearchPage extends BasePage {
     this.hideModal();
   }
 
-  onSearch(event:any) {
-    this.logger.info(this, "onSearch", event.target.value);
+  searchDeployments(event:any) {
+    this.logger.info(this, "searchDeployments", event.target.value);
     this.search = event.target.value;
     if (this.search == null) {
       this.loading = false;
@@ -90,23 +91,18 @@ export class DeploymentSearchPage extends BasePage {
   registerDeployment(event:any) {
     this.logger.info(this, "registerDeployment", this.search);
     let loading = this.showLoading("Adding...");
-    let name = "";
     let url = `https://${this.domain}`;
-    this.api.registerDeployment(name, url).then(
+    this.api.registerDeployment(url).then(
       (deployment:Deployment) => {
-        this.database.saveDeployment(deployment).then((saved) => {
-          loading.dismiss();
-          this.loginDeployment(deployment);
-        });
+        loading.dismiss();
+        this.loginDeployment(deployment);
       },
       (error:any) => {
         let url = `http://${this.domain}`;
-        this.api.registerDeployment(name, url).then(
+        this.api.registerDeployment(url).then(
           (deployment:Deployment) => {
-            this.database.saveDeployment(deployment).then((saved) => {
-              loading.dismiss();
-              this.loginDeployment(deployment);
-            });
+            loading.dismiss();
+            this.loginDeployment(deployment);
           },
           (error:any) => {
             loading.dismiss();
@@ -135,29 +131,32 @@ export class DeploymentSearchPage extends BasePage {
     this.logger.info(this, "loginDeployment");
     let loading = this.showLoading("Adding...");
     return this.api.clientLogin(deployment).then(
-      (tokens:any) => {
-        this.logger.info(this, "loginDeployment", "Tokens", tokens);
-        deployment.copyInto(tokens);
-        this.database.saveDeployment(deployment).then(
-          (id:number) => {
-            this.logger.info(this, "loginDeployment", "ID", id);
-            if (id) {
-              deployment.id = id;
+      (login:Login) => {
+        this.logger.info(this, "loginDeployment", "Tokens", login);
+        deployment.copyInto(login);
+        this.api.getDeployment(deployment, false).then((details:Deployment) => {
+          deployment.copyInto(details);
+          this.database.saveDeployment(deployment).then(
+            (id:number) => {
+              this.logger.info(this, "loginDeployment", "ID", id);
+              if (id) {
+                deployment.id = id;
+                loading.dismiss();
+                this.hideModal({
+                  deployment : deployment
+                });
+              }
+              else {
+                loading.dismiss();
+                this.showAlert('Problem Adding Deployment', 'There was a problem adding your deployment.');
+              }
+            },
+            (error:any) => {
+              this.logger.error(this, "loginDeployment", error);
               loading.dismiss();
-              this.hideModal({
-                deployment : deployment
-              });
-            }
-            else {
-              loading.dismiss();
-              this.showAlert('Problem Adding Deployment', 'There was a problem adding your deployment.');
-            }
-          },
-          (error:any) => {
-            this.logger.error(this, "loginDeployment", error);
-            loading.dismiss();
-            this.showAlert('Problem Adding Deployment', error);
-          });
+              this.showAlert('Problem Adding Deployment', error);
+            });
+        });
       },
       (error:any) => {
         this.logger.error(this, "loginDeployment", "Client", error);

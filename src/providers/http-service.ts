@@ -1,13 +1,16 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers, URLSearchParams, RequestOptions } from '@angular/http';
-import { Transfer, TransferObject, FileUploadOptions, FileUploadResult, FileTransferError } from '@ionic-native/transfer';
+import { Http, Headers, URLSearchParams, RequestOptions, Response } from '@angular/http';
+import { Observable } from 'rxjs/Observable';
 import { File, Entry, Metadata } from '@ionic-native/file';
+import { Transfer, TransferObject, FileUploadOptions, FileUploadResult, FileTransferError } from '@ionic-native/transfer';
+
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/retry';
 import 'rxjs/add/operator/delay';
-import 'rxjs/add/operator/timeout';
 import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/timeout';
 import 'rxjs/add/operator/mergeMap';
+import 'rxjs/add/observable/throw';
 
 import { LoggerService } from '../providers/logger-service';
 
@@ -15,10 +18,10 @@ import { LoggerService } from '../providers/logger-service';
 export class HttpService {
 
   constructor(
-    public http: Http,
-    public file:File,
-    public transfer:Transfer,
-    public logger:LoggerService) {
+    protected http: Http,
+    protected file:File,
+    protected transfer:Transfer,
+    protected logger:LoggerService) {
   }
 
   httpHeaders(accessToken:string=null, otherHeaders:any=null): Headers {
@@ -53,7 +56,17 @@ export class HttpService {
         search: search });
       this.logger.info(this, "GET", url, params);
       this.http.get(url, options)
+        .timeout(200)
         .map(res => res.json())
+        .catch((error:any) => {
+          if (error instanceof Response) {
+            return Observable.throw(error.json().error || 'Request Error');
+          }
+          else if (error.name === "TimeoutError") {
+            return Observable.throw("Request Timeout");
+          }
+          return Observable.throw(error || 'Request Error');
+        })
         .subscribe(
           (items) => {
             this.logger.info(this, "GET", url, items);
@@ -74,6 +87,7 @@ export class HttpService {
         headers: headers });
       this.logger.info(this, "POST", url, body);
       this.http.post(url, body, options)
+        .timeout(12000)
         .map(res => {
           if (res.status == 204) {
             return {}
@@ -81,6 +95,15 @@ export class HttpService {
           else {
             return res.json();
           }
+        })
+        .catch((error:any) => {
+          if (error instanceof Response) {
+            return Observable.throw(error.json().error || 'Request Error');
+          }
+          else if (error.name === "TimeoutError") {
+            return Observable.throw("Request Timeout");
+          }
+          return Observable.throw(error || 'Request Error');
         })
         .subscribe(
           (json) => {
@@ -103,6 +126,7 @@ export class HttpService {
         headers: headers });
       this.logger.info(this, "PUT", url, body);
       this.http.put(url, body, options)
+        .timeout(12000)
         .map(res => {
           if (res.status == 204) {
             return {}
@@ -110,6 +134,15 @@ export class HttpService {
           else {
             return res.json();
           }
+        })
+        .catch((error:any) => {
+          if (error instanceof Response) {
+            return Observable.throw(error.json().error || 'Request Error');
+          }
+          else if (error.name === "TimeoutError") {
+            return Observable.throw("Request Timeout");
+          }
+          return Observable.throw(error || 'Request Error');
         })
         .subscribe(
           (json) => {
@@ -132,6 +165,7 @@ export class HttpService {
         headers: headers });
       this.logger.info(this, "PATCH", url, body);
       this.http.patch(url, body, options)
+        .timeout(12000)
         .map(res => {
           if (res.status == 204) {
             return {}
@@ -139,6 +173,15 @@ export class HttpService {
           else {
             return res.json();
           }
+        })
+        .catch((error:any) => {
+          if (error instanceof Response) {
+            return Observable.throw(error.json().error || 'Request Error');
+          }
+          else if (error.name === "TimeoutError") {
+            return Observable.throw("Request Timeout");
+          }
+          return Observable.throw(error || 'Request Error');
         })
         .subscribe(
           (json) => {
@@ -160,6 +203,7 @@ export class HttpService {
         headers: headers });
       this.logger.info(this, "DELETE", url);
       this.http.delete(url, options)
+        .timeout(12000)
         .map(res => {
           this.logger.info(this, "DELETE", url, res);
           if (res.status == 201) {
@@ -171,6 +215,15 @@ export class HttpService {
           else {
             return res.json();
           }
+        })
+        .catch((error:any) => {
+          if (error instanceof Response) {
+            return Observable.throw(error.json().error || 'Request Error');
+          }
+          else if (error.name === "TimeoutError") {
+            return Observable.throw("Request Timeout");
+          }
+          return Observable.throw(error || 'Request Error');
         })
         .subscribe(
           (items) => {
