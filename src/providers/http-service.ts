@@ -18,8 +18,8 @@ import { LoggerService } from '../providers/logger-service';
 export class HttpService {
 
   constructor(
-    protected http: Http,
     protected file:File,
+    protected http: Http,
     protected transfer:Transfer,
     protected logger:LoggerService) {
   }
@@ -56,7 +56,7 @@ export class HttpService {
         search: search });
       this.logger.info(this, "GET", url, params);
       this.http.get(url, options)
-        .timeout(200)
+        .timeout(12000)
         .map(res => res.json())
         .catch((error:any) => {
           if (error instanceof Response) {
