@@ -18,8 +18,8 @@ import { LoggerService } from '../providers/logger-service';
 export class HttpService {
 
   constructor(
+    protected http:Http,
     protected file:File,
-    protected http: Http,
     protected transfer:Transfer,
     protected logger:LoggerService) {
   }
