@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <title>Ushahidi</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="msapplication-tap-highlight" content="no">
+  <link rel="icon" type="image/x-icon" href="assets/icon/favicon.ico">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#4e8ef7">
+  <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+  <link href="build/main.css" rel="stylesheet">
+  <link href="assets/stylesheets/leaflet.css" rel="stylesheet">
+</head>
+<body>
+  <ion-app></ion-app>
+  <script src="build/polyfills.js"></script>
+  <script src="build/main.js"></script>
+  <script src="assets/javascripts/leaflet.js"></script>
+  <script>
+     document.onclick = function (event) {
+       event = event || window.event;
+       let element = event.target || event.srcElement;
+       if (element.tagName == 'A') {
+         console.log(element.href);
+         console.log(element.target);
+         if (element.target == '_blank') {
+           let options = {
+             toolbar: "yes",
+             location: "no",
+             toolbarposition: "top",
+             presentationstyle: "pagesheet",
+             allowInlineMediaPlayback: "yes" }
+           window.open(element.href, "_blank", Object.keys(options).map((key) => key+'='+options[key]).join(','));
+           return false;
+         }
+         else {
+           window.open(element.href, "_system");
+           return false;
+         }
+       }
+     };
+   </script>
+</body>
+</html>

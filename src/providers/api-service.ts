@@ -581,8 +581,16 @@ export class ApiService extends HttpService {
         if (value.value == null || value.value.length == 0) {
           values[value.key] = [];
         }
-        else if (value.isNumber() || value.isImage() || value.isVideo()) {
+        else if (value.isNumber() || value.isImage()) {
           values[value.key] = [Number(value.value)];
+        }
+        else if (value.isVideo()) {
+          if (value.value.startsWith('http://') || value.value.startsWith('https://')) {
+            values[value.key] = [value.value];
+          }
+          else {
+            values[value.key] = [];
+          }
         }
         else if (value.isLocation()) {
           if (value.value.indexOf(",") > -1) {
@@ -656,8 +664,16 @@ export class ApiService extends HttpService {
           if (value.value == null || value.value.length == 0) {
             values[value.key] = [];
           }
-          else if (value.isNumber() || value.isImage() || value.isVideo()) {
+          else if (value.isNumber() || value.isImage()) {
             values[value.key] = [Number(value.value)];
+          }
+          else if (value.isVideo()) {
+            if (value.value.startsWith('http://') || value.value.startsWith('https://')) {
+              values[value.key] = [value.value];
+            }
+            else {
+              values[value.key] = [];
+            }
           }
           else if (value.isLocation()) {
             if (value.value.indexOf(",") > -1) {
