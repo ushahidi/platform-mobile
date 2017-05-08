@@ -31,10 +31,10 @@ export class CacheService {
     this.fetchNext();
   }
 
-  fetchMap(latitude:number, longitude:number) {
+  fetchMap(mapToken:string, latitude:number, longitude:number) {
     if (latitude != null && longitude != null) {
-      this.logger.info(this, "fetchMap", latitude, longitude);
-      let staticMap = new StaticMap(latitude, longitude);
+      this.logger.info(this, "fetchMap", mapToken, latitude, longitude);
+      let staticMap = new StaticMap(mapToken, latitude, longitude);
       this.promises.push(this.imageCache.fetchCacheImage(staticMap.getUrl()));
     }
     this.fetchNext();

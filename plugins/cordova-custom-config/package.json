@@ -1,0 +1,114 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "cordova-custom-config",
+        "scope": null,
+        "escapedName": "cordova-custom-config",
+        "name": "cordova-custom-config",
+        "rawSpec": "",
+        "spec": "latest",
+        "type": "tag"
+      },
+      "/Users/dalezak/SandBox/Ushahidi_Mobile/node_modules"
+    ]
+  ],
+  "_from": "cordova-custom-config@latest",
+  "_id": "cordova-custom-config@3.1.4",
+  "_inCache": true,
+  "_location": "/cordova-custom-config",
+  "_nodeVersion": "7.3.0",
+  "_npmOperationalInternal": {
+    "host": "packages-12-west.internal.npmjs.com",
+    "tmp": "tmp/cordova-custom-config-3.1.4.tgz_1491898800204_0.6171986071858555"
+  },
+  "_npmUser": {
+    "name": "davealden",
+    "email": "dave@workingedge.co.uk"
+  },
+  "_npmVersion": "4.0.5",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "cordova-custom-config",
+    "scope": null,
+    "escapedName": "cordova-custom-config",
+    "name": "cordova-custom-config",
+    "rawSpec": "",
+    "spec": "latest",
+    "type": "tag"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/cordova-custom-config/-/cordova-custom-config-3.1.4.tgz",
+  "_shasum": "c43c32dc3b1147def6536721b71391af4828a36d",
+  "_shrinkwrap": null,
+  "_spec": "cordova-custom-config",
+  "_where": "/Users/dalezak/SandBox/Ushahidi_Mobile/node_modules",
+  "author": {
+    "name": "Dave Alden"
+  },
+  "bugs": {
+    "url": "https://github.com/dpa99c/cordova-custom-config/issues"
+  },
+  "cordova": {
+    "id": "cordova-custom-config",
+    "platforms": [
+      "android",
+      "ios"
+    ]
+  },
+  "cordova_name": "cordova-custom-config",
+  "dependencies": {
+    "colors": "^1.1.2",
+    "elementtree": "^0.1.6",
+    "lodash": "^4.3.0",
+    "plist": "^1.2.0",
+    "shelljs": "^0.7.0",
+    "tostr": "^0.1.0",
+    "xcode": "^0.8.9"
+  },
+  "description": "Cordova/Phonegap plugin to update platform configuration files based on preferences and config-file data defined in config.xml.",
+  "devDependencies": {
+    "got": "^6.5.0",
+    "jshint": "^2.6.0"
+  },
+  "directories": {},
+  "dist": {
+    "shasum": "c43c32dc3b1147def6536721b71391af4828a36d",
+    "tarball": "https://registry.npmjs.org/cordova-custom-config/-/cordova-custom-config-3.1.4.tgz"
+  },
+  "gitHead": "501e81d01b4fa10bbd481eece94ce83212bfca1f",
+  "homepage": "https://github.com/dpa99c/cordova-custom-config#readme",
+  "issue": "https://github.com/dpa99c/cordova-custom-config/issues",
+  "keywords": [
+    "ecosystem:cordova",
+    "cordova",
+    "cordova-android",
+    "cordova-ios",
+    "phonegap",
+    "config",
+    "configuration",
+    "plist",
+    "manifest"
+  ],
+  "license": "MIT",
+  "maintainers": [
+    {
+      "name": "davealden",
+      "email": "dave@workingedge.co.uk"
+    }
+  ],
+  "name": "cordova-custom-config",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dpa99c/cordova-custom-config.git"
+  },
+  "scripts": {
+    "test": "jshint hooks"
+  },
+  "version": "3.1.4"
+}

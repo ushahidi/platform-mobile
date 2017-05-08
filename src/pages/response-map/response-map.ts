@@ -9,6 +9,8 @@ import { MapMarker } from '../../maps/map-marker';
 
 import { BasePage } from '../../pages/base-page/base-page';
 
+import { Deployment } from '../../models/deployment';
+
 import { LoggerService } from '../../providers/logger-service';
 
 @Component({
@@ -18,6 +20,7 @@ import { LoggerService } from '../../providers/logger-service';
 })
 export class ResponseMapPage extends BasePage {
 
+  deployment:Deployment;
   map:any = null;
   mapZoom:number = 17;
   mapLayer:any = null;
@@ -52,6 +55,7 @@ export class ResponseMapPage extends BasePage {
 
   ionViewWillEnter() {
     super.ionViewWillEnter();
+    this.deployment = this.getParameter<Deployment>("deployment");
     this.modal = this.getParameter<boolean>("modal");
     this.title = this.getParameter<string>("title");
     this.latitude = this.getParameter<number>("latitude");
@@ -84,8 +88,9 @@ export class ResponseMapPage extends BasePage {
   loadMap(latitude:number, longitude:number):Promise<any> {
     return new Promise((resolve, reject) => {
       this.logger.info(this, "loadMap");
+      let tileLayerUrl = new TileLayer(this.deployment.mapbox_api_key, this.mapStyle).getUrl();
       this.map = L.map("mapOne").setView([latitude, longitude], this.mapZoom);
-      this.mapLayer = L.tileLayer(new TileLayer(this.mapStyle).getUrl(), { maxZoom: 20 });
+      this.mapLayer = L.tileLayer(tileLayerUrl, { maxZoom: 20 });
       this.mapLayer.addTo(this.map);
       resolve(this.map);
     });
@@ -93,8 +98,9 @@ export class ResponseMapPage extends BasePage {
 
   loadMarker(latitude:number, longitude:number):L.Marker {
     this.logger.info(this, "loadMarker", latitude, longitude);
+    let iconUrl = new MapMarker(this.deployment.mapbox_api_key).getUrl();
     let icon = L.icon({
-      iconUrl: new MapMarker().getUrl(),
+      iconUrl: iconUrl,
       iconSize: [30, 70],
       popupAnchor: [0, -26]
     });

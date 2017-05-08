@@ -17,7 +17,7 @@ import { LoggerService } from '../../providers/logger-service';
 @Component({
   selector: 'input-location',
   templateUrl: 'input-location.html',
-  inputs: ['value', 'attribute', 'formGroup', 'submitted', 'offline']
+  inputs: ['value', 'attribute', 'formGroup', 'submitted', 'offline', 'mapToken']
 })
 export class InputLocationComponent {
 
@@ -31,6 +31,7 @@ export class InputLocationComponent {
   attribute:Attribute = null;
   value: Value = null;
   map:string = null;
+  mapToken:string;
 
   latitude:number = null;
   longitude:number = null;
@@ -241,7 +242,7 @@ export class InputLocationComponent {
 
   loadMapSrc(latitude, longitude) {
     if (latitude && longitude) {
-      this.map = new StaticMap(latitude, longitude).getUrl();
+      this.map = new StaticMap(this.mapToken, latitude, longitude).getUrl();
     }
     else {
       this.map = null;

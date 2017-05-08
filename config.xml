@@ -21,6 +21,7 @@
   <allow-navigation href="*ytimg*"/>
   <allow-navigation href="http://ionic.local/*"/>
   <allow-navigation href="http://localhost:3000"/>
+  <allow-navigation href="http://192.168.0.12:8100"/>
   <platform name="android">
     <allow-intent href="market:*"/>
     <splash density="port-ldpi" src="resources/android/splash/drawable-port-ldpi-screen.png"/>
@@ -40,6 +41,12 @@
     <allow-intent href="itms:*"/>
     <allow-intent href="itms-apps:*"/>
     <preference name="KeychainAccessibility" value="WhenUnlocked"/>
+    <config-file platform="ios" target="*-Info.plist" parent="NSLocationWhenInUseUsageDescription">
+      <string>Ushahidi would like to access your location.</string>
+    </config-file>
+    <config-file platform="ios" target="*-Info.plist" parent="NSLocationAlwaysUsageDescription">
+      <string>Ushahidi would like to access your location in the background.</string>
+    </config-file>
     <splash height="1136" src="resources/ios/splash/Default-568h@2x~iphone.png" width="640"/>
     <splash height="1334" src="resources/ios/splash/Default-667h.png" width="750"/>
     <splash height="2208" src="resources/ios/splash/Default-736h.png" width="1242"/>
@@ -136,6 +143,7 @@
     <variable name="PHOTOLIBRARY_USAGE_DESCRIPTION" value="Ushahidi would like to access the photo library."/>
   </plugin>
   <plugin name="cordova-plugin-nativegeocoder" spec="~1.0.1"/>
+  <plugin name="cordova-plugin-nativestorage" spec="~2.2.2"/>
   <plugin name="cordova-plugin-networkactivityindicator" spec="~0.1.1"/>
   <plugin name="cordova-plugin-network-information" spec="~1.3.2"/>
   <plugin name="cordova-plugin-spinner-dialog" spec="~1.3.1"/>
@@ -150,5 +158,5 @@
     <variable name="DEEPLINK_HOST" value="ushahidi.io"/>
   </plugin>
   <plugin name="ionic-plugin-keyboard" spec="~2.2.1"/>
-  <plugin name="cordova-plugin-nativestorage" spec="~2.2.2"/>
+  <plugin name="cordova-custom-config" spec="~3.1.4"/>
 </widget>

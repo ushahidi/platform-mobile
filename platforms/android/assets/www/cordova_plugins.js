@@ -519,7 +519,8 @@ module.exports.metadata =
     "cordova-sqlite-storage": "2.0.3",
     "cordova.plugins.diagnostic": "3.4.2",
     "ionic-plugin-deeplinks": "1.0.14",
-    "ionic-plugin-keyboard": "2.2.1"
+    "ionic-plugin-keyboard": "2.2.1",
+    "cordova-custom-config": "3.1.4"
 };
 // BOTTOM OF METADATA
 });

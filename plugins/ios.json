@@ -99,6 +99,9 @@
         },
         "cordova-plugin-nativestorage": {
             "PACKAGE_NAME": "com.ushahidi.mobile"
+        },
+        "cordova-custom-config": {
+            "PACKAGE_NAME": "com.ushahidi.mobile"
         }
     },
     "dependent_plugins": {

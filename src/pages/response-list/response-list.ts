@@ -194,7 +194,7 @@ export class ResponseListPage extends BasePage {
           images.push(this.loadImage(post, value));
         }
       }
-      this.cache.fetchMap(post.latitude, post.longitude);
+      this.cache.fetchMap(this.deployment.mapbox_api_key, post.latitude, post.longitude);
     }
     return Promise.all(images).then((saved) => {
       this.logger.info(this, "loadImages", "Done");
@@ -241,7 +241,7 @@ export class ResponseListPage extends BasePage {
               images.push(this.loadImage(post, value));
             }
           }
-          this.cache.fetchMap(post.latitude, post.longitude);
+          this.cache.fetchMap(this.deployment.mapbox_api_key, post.latitude, post.longitude);
         }
         return Promise.all(images).then((saved) => {
           this.logger.info(this, "loadMore", "Filter", this.filter, "Limit", this.limit, "Offset", this.offset, "Posts", this.posts.length, "Pending", this.pending.length);
@@ -766,7 +766,7 @@ export class ResponseListPage extends BasePage {
     return new Promise((resolve, reject) => {
       this.logger.info(this, "loadMap");
       this.map = L.map("mapMany").setView([this.mapLatitude, this.mapLongitude], this.mapZoom);
-      this.mapLayer = L.tileLayer(new TileLayer(this.mapStyle).getUrl(), { maxZoom: 20 });
+      this.mapLayer = L.tileLayer(new TileLayer(this.deployment.mapbox_api_key, this.mapStyle).getUrl(), { maxZoom: 20 });
       this.mapLayer.addTo(this.map);
       resolve(this.map);
     });
@@ -818,8 +818,9 @@ export class ResponseListPage extends BasePage {
 
   loadMarker(post:Post):L.Marker {
     this.logger.info(this, "loadMarker", post.title, post.latitude, post.longitude);
+    let iconUrl =  new MapMarker(this.deployment.mapbox_api_key, post.color).getUrl();
     let icon = L.icon({
-      iconUrl: new MapMarker(post.color).getUrl(),
+      iconUrl: iconUrl,
       iconSize: [30, 70],
       popupAnchor: [0, -25]
     });
@@ -876,7 +877,8 @@ export class ResponseListPage extends BasePage {
     this.logger.info(this, "changeStyle", mapStyle);
     this.mapStyle = mapStyle;
     this.map.removeLayer(this.mapLayer);
-    this.mapLayer = L.tileLayer(new TileLayer(this.mapStyle).getUrl(), { maxZoom: 20 });
+    let tileLayerUrl = new TileLayer(this.deployment.mapbox_api_key, this.mapStyle).getUrl()
+    this.mapLayer = L.tileLayer(tileLayerUrl, { maxZoom: 20 });
     this.mapLayer.addTo(this.map);
   }
 

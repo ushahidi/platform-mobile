@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="10209" id="com.ushahidi.mobile" ios-CFBundleVersion="1.2.9" version="1.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-versionCode="10210" id="com.ushahidi.mobile" ios-CFBundleVersion="1.2.10" version="1.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <feature name="LocalStorage">
         <param name="ios-package" value="CDVLocalStorage" />
     </feature>
@@ -98,7 +98,7 @@
     <name>Ushahidi</name>
     <description>Ushahidi Mobile</description>
     <author email="support@ushahidi.com" href="https://www.ushahidi.com/">Ushahidi</author>
-    <content original-src="index.html" src="http://192.168.0.12:8100" />
+    <content original-src="index.html" src="http://localhost:3000" />
     <access origin="*" subdomains="true" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -116,13 +116,16 @@
     <allow-navigation href="*ytimg*" />
     <allow-navigation href="http://ionic.local/*" />
     <allow-navigation href="http://localhost:3000" />
-    <allow-navigation href="http://localhost:3001" />
-    <allow-navigation href="http://192.168.0.18:8100" />
     <allow-navigation href="http://192.168.0.12:8100" />
-    <allow-navigation href="http://192.168.58.1:8100" />
     <icon src="resources/android/icon/drawable-xhdpi-icon.png" />
     <allow-intent href="itms:*" />
     <allow-intent href="itms-apps:*" />
+    <config-file parent="NSLocationWhenInUseUsageDescription" platform="ios" target="*-Info.plist">
+        <string>Ushahidi would like to access your location.</string>
+    </config-file>
+    <config-file parent="NSLocationAlwaysUsageDescription" platform="ios" target="*-Info.plist">
+        <string>Ushahidi would like to access your location in the background.</string>
+    </config-file>
     <splash height="1136" src="resources/ios/splash/Default-568h@2x~iphone.png" width="640" />
     <splash height="1334" src="resources/ios/splash/Default-667h.png" width="750" />
     <splash height="2208" src="resources/ios/splash/Default-736h.png" width="1242" />

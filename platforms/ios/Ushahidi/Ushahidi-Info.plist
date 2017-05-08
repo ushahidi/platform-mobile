@@ -34,7 +34,7 @@
       </dict>
     </array>
     <key>CFBundleVersion</key>
-    <string>1.2.9</string>
+    <string>1.2.10</string>
     <key>ITSAppUsesNonExemptEncryption</key>
     <false/>
     <key>LSApplicationQueriesSchemes</key>
@@ -66,17 +66,7 @@
           <key>NSExceptionAllowsInsecureHTTPLoads</key>
           <true/>
         </dict>
-        <key>192.168.0.18</key>
-        <dict>
-          <key>NSExceptionAllowsInsecureHTTPLoads</key>
-          <true/>
-        </dict>
         <key>192.168.0.12</key>
-        <dict>
-          <key>NSExceptionAllowsInsecureHTTPLoads</key>
-          <true/>
-        </dict>
-        <key>192.168.58.1</key>
         <dict>
           <key>NSExceptionAllowsInsecureHTTPLoads</key>
           <true/>
@@ -92,9 +82,9 @@
     <key>NSContactsUsageDescription</key>
     <string>This app requires contacts access to function properly.</string>
     <key>NSLocationAlwaysUsageDescription</key>
-    <string>This app requires constant access to your location in order to track your position, even when the screen is off.</string>
+    <string>Ushahidi would like to access your location in the background.</string>
     <key>NSLocationWhenInUseUsageDescription</key>
-    <string>Using geocoder service</string>
+    <string>Ushahidi would like to access your location.</string>
     <key>NSMainNibFile</key>
     <string/>
     <key>NSMainNibFile~ipad</key>

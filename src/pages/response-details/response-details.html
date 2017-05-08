@@ -12,7 +12,7 @@
   <ion-refresher (ionRefresh)="loadUpdates($event, false)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
-  <ion-list *ngIf="post">
+  <ion-list *ngIf="deployment && post">
     <ion-item no-lines>
       <ion-row>
         <ion-col class="pending" *ngIf="post.pending == true">
@@ -40,7 +40,7 @@
       <div class="value-text" [innerHTML]="post.description | htmlParser"></div>
     </ion-item>
     <div *ngFor="let value of post.values">
-      <post-value [value]="value" (showImage)="showImage(value.label,value.image)" (showLocation)="showLocation(value.label,value.value)"></post-value>
+      <post-value [value]="value" [mapToken]="deployment.mapbox_api_key" (showImage)="showImage(value.label,value.image)" (showLocation)="showLocation(value.label,value.value)"></post-value>
     </div>
   </ion-list>
 </ion-content>

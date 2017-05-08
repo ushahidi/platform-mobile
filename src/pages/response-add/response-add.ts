@@ -434,7 +434,8 @@ export class ResponseAddPage extends BasePage {
   changeLocation(event, key) {
     this.logger.info(this, "changeLocation", event);
     let modal = this.showModal(ResponseMapPage,
-      { latitude: event['latitude'],
+      { deployment: this.deployment,
+        latitude: event['latitude'],
         longitude: event['longitude'],
         draggable: true,
         modal: true },

@@ -247,6 +247,7 @@ export class ResponseDetailsPage extends BasePage {
           modal: false,
           draggable: false,
           title: title,
+          deployment: this.deployment,
           latitude: location[0],
           longitude: location[1]
         });
