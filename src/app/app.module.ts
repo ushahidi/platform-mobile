@@ -60,6 +60,7 @@ import { TimeAgoPipe } from '../pipes/time-ago';
 import { TitleizePipe } from '../pipes/titleize';
 import { CapitalizePipe } from '../pipes/capitalize';
 import { TruncatePipe } from '../pipes/truncate';
+import { HtmlStripPipe } from '../pipes/html-strip';
 import { HtmlParserPipe } from '../pipes/html-parser';
 
 import { LoggerService } from '../providers/logger-service';
@@ -103,6 +104,7 @@ import { VimeoService } from '../providers/vimeo-service';
     TitleizePipe,
     CapitalizePipe,
     TruncatePipe,
+    HtmlStripPipe,
     HtmlParserPipe
   ],
   imports: [
