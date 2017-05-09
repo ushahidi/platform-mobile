@@ -61,7 +61,7 @@ import { TitleizePipe } from '../pipes/titleize';
 import { CapitalizePipe } from '../pipes/capitalize';
 import { TruncatePipe } from '../pipes/truncate';
 import { HtmlStripPipe } from '../pipes/html-strip';
-import { HtmlParserPipe } from '../pipes/html-parser';
+import { HtmlParsePipe } from '../pipes/html-parse';
 
 import { LoggerService } from '../providers/logger-service';
 import { ApiService } from '../providers/api-service';
@@ -105,7 +105,7 @@ import { VimeoService } from '../providers/vimeo-service';
     CapitalizePipe,
     TruncatePipe,
     HtmlStripPipe,
-    HtmlParserPipe
+    HtmlParsePipe
   ],
   imports: [
     HttpModule,

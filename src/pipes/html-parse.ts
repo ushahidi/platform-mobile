@@ -1,10 +1,10 @@
 import { Injectable, Pipe } from '@angular/core';
 
 @Pipe({
-  name: 'htmlParser'
+  name: 'htmlParse'
 })
 @Injectable()
-export class HtmlParserPipe {
+export class HtmlParsePipe {
   transform(value: string, args: any[]) {
     let regex1 = /(\b(https?|ftp):\/\/[-A-Z0-9+&#\/%?=~_|!:,.;]*[-A-Z0-9+&#\/%=~_|])/gim;
     let html = value.replace(regex1, '<a href="$1" target="_blank">$1</a>');
