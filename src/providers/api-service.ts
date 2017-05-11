@@ -752,7 +752,7 @@ export class ApiService extends HttpService {
       let file:string = value.value;
       this.logger.info(this, "uploadVideo", file);
       this.vimeo.uploadVideo(file, post.title, post.description).then(
-        (url:any) => {
+        (url:string) => {
           this.logger.info(this, "uploadVideo", file, url);
           value.value = url;
           this.database.saveValue(deployment, value).then(
