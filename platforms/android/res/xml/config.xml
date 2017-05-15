@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="10211" id="com.ushahidi.mobile" ios-CFBundleVersion="1.2.11" version="1.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-versionCode="10212" id="com.ushahidi.mobile" ios-CFBundleVersion="1.2.12" version="1.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <feature name="AppVersion">
         <param name="android-package" value="uk.co.whiteoctober.cordova.AppVersion" />
     </feature>
@@ -99,6 +99,7 @@
     <allow-navigation href="https://*/*" />
     <allow-navigation href="*://*.youtube.com/*" />
     <allow-navigation href="*youtube*" />
+    <allow-navigation href="*://*.vimeo.com/*" />
     <allow-navigation href="*ytimg*" />
     <allow-navigation href="http://ionic.local/*" />
     <allow-navigation href="http://localhost:3000" />

@@ -56,6 +56,13 @@
           <key>NSExceptionAllowsInsecureHTTPLoads</key>
           <true/>
         </dict>
+        <key>vimeo.com/*</key>
+        <dict>
+          <key>NSIncludesSubdomains</key>
+          <true/>
+          <key>NSExceptionAllowsInsecureHTTPLoads</key>
+          <true/>
+        </dict>
         <key>ionic.local</key>
         <dict>
           <key>NSExceptionAllowsInsecureHTTPLoads</key>
