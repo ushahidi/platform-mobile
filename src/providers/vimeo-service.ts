@@ -44,7 +44,9 @@ export class VimeoService extends HttpService {
                   this.updateVideo(identifier, title, description).then(
                     (updated:any) => {
                       this.logger.info(this, "uploadVideo", "updateVideo", updated);
-                      resolve(updated.link || `https://vimeo.com${location}`);
+                      let videoUrl = `https://player.vimeo.com/video/${identifier}/`;
+                      this.logger.info(this, "uploadVideo", "updateVideo", videoUrl);
+                      resolve(videoUrl);
                     },
                     (error) => {
                       this.logger.error(this, "uploadVideo", "updateVideo", error);
