@@ -25,7 +25,7 @@
       <image-cache padding [src]="deployment.image"></image-cache>
     </div>
     <div class="description" padding-left padding-right *ngIf="deployment.description">
-      <p [innerHTML]="deployment.description | htmlParse"></p>
+      <p [innerHTML]="deployment.description | MarkdownToHtml | htmlParse"></p>
     </div>
     <div class="submit" padding-left padding-right [@fadeInOut]="refreshing">
       <button ion-button block margin-top margin-bottom color="primary"

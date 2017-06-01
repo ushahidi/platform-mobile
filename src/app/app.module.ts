@@ -2,7 +2,9 @@ import { NgModule, ErrorHandler } from '@angular/core';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { HttpModule } from '@angular/http';
 import { BrowserModule } from '@angular/platform-browser';
+
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MarkdownToHtmlModule } from 'markdown-to-html-pipe';
 
 import { AppVersion } from '@ionic-native/app-version';
 import { IsDebug } from '@ionic-native/is-debug';
@@ -114,6 +116,7 @@ import { VimeoService } from '../providers/vimeo-service';
     BrowserModule,
     FormsModule,
     ReactiveFormsModule,
+    MarkdownToHtmlModule,
     IonicModule.forRoot(MyApp)
   ],
   bootstrap: [ IonicApp ],
