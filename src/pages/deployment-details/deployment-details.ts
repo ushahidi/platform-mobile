@@ -9,7 +9,6 @@ import { Form } from '../../models/form';
 import { Stage } from '../../models/stage';
 import { Attribute } from '../../models/attribute';
 import { Collection } from '../../models/collection';
-import { Post } from '../../models/post';
 import { Tag } from '../../models/tag';
 
 import { ApiService } from '../../providers/api-service';
@@ -348,21 +347,8 @@ export class DeploymentDetailsPage extends BasePage {
 
   demotePosts() {
     return new Promise((resolve, reject) => {
-      this.database.getPosts(this.deployment).then((posts:Post[]) => {
-        let updates = [];
-        for (let post of posts) {
-          post.can_create = false;
-          post.can_update = false;
-          post.can_delete = false;
-          updates.push(this.database.savePost(this.deployment, post));
-        }
-        Promise.all(updates).then(
-          (updated) => {
-            resolve(updated);
-          },
-          (error) => {
-            reject(error);
-          });
+      this.database.removePosts(this.deployment).then((removed:any) => {
+        resolve(removed);
       });
     });
   }

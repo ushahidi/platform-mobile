@@ -9,6 +9,7 @@ import { User } from '../../models/user';
 import { Image } from '../../models/image';
 import { Attribute } from '../../models/attribute';
 import { Collection } from '../../models/collection';
+import { Tag } from '../../models/tag';
 
 import { ApiService } from '../../providers/api-service';
 import { LoggerService } from '../../providers/logger-service';
@@ -74,6 +75,7 @@ export class ResponseDetailsPage extends BasePage {
     return Promise.resolve()
       .then(() => { return this.loadForm(cache); })
       .then(() => { return this.loadValues(cache); })
+      .then(() => { return this.loadTags(cache); })
       .then(() => {
         this.logger.info(this, "loadUpdates", "Finished");
         if (event) {
@@ -121,7 +123,8 @@ export class ResponseDetailsPage extends BasePage {
           this.database.getUsers(this.deployment),
           this.database.getImages(this.deployment),
           this.database.getForms(this.deployment),
-          this.database.getAttributes(this.deployment)]).then((results:any[]) => {
+          this.database.getAttributes(this.deployment),
+          this.database.getTags(this.deployment)]).then((results:any[]) => {
           let users:User[] = <User[]>results[0];
           let images:Image[] = <Image[]>results[1];
           let forms:Form[] = <Form[]>results[2];
@@ -150,6 +153,17 @@ export class ResponseDetailsPage extends BasePage {
         });
       });
     }
+  }
+
+  loadTags(cache:boolean=true):Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.database.getTags(this.deployment).then((tags:Tag[]) => {
+        for (let value of this.post.values) {
+          value.loadTags(tags);
+        }
+        resolve(true);
+      });
+    });
   }
 
   showOptions(event:any) {

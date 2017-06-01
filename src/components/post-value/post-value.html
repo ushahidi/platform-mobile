@@ -44,8 +44,12 @@
       </div>
     </div>
     <div class="value-tags" *ngIf="value.input == 'tags'">
-      <ion-icon ios="ios-pricetag" md="md-pricetag" color="grey"></ion-icon>
-      <span *ngIf="value.value" [innerHTML]="value.value"></span>
+      <div *ngIf="value.tags">
+        <div *ngFor="let tag of value.tags">
+          <ion-icon ios="ios-pricetag" md="md-pricetag" color="grey"></ion-icon>
+          <span [innerHTML]="tag.tag"></span>
+        </div>
+      </div>
     </div>
     <div class="value-markdown" *ngIf="value.input == 'markdown'">
       <div *ngIf="value.value" [innerHTML]="value.value | MarkdownToHtml | htmlParse"></div>

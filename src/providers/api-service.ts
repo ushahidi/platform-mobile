@@ -549,7 +549,7 @@ export class ApiService extends HttpService {
               post.url = `${deployment.website}/posts/${item.id}`;
               post.values = [];
               for (let key in item.values) {
-                let text:any = item.values[key][0];
+                let text:any = item.values[key].join(",");
                 let value:Value = new Value();
                 value.deployment_id = deployment.id;
                 value.post_id = post.id;

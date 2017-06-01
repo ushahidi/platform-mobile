@@ -6,6 +6,7 @@ import { Column } from '../decorators/column';
 import { Model, TEXT, INTEGER, PRIMARY_KEY } from '../models/model';
 import { Image } from '../models/image';
 import { Attribute } from '../models/attribute';
+import { Tag } from '../models/tag';
 
 @Injectable()
 @Table("values_")
@@ -55,6 +56,8 @@ export class Value extends Model {
 
   public attribute: Attribute = null;
 
+  public tags: Tag[] = [];
+
   loadAttribute(attributes:Attribute[]) {
     for (var i = 0; i < attributes.length; i++) {
       let attribute:Attribute = attributes[i];
@@ -76,6 +79,25 @@ export class Value extends Model {
         this.image = image.url;
         break;
       }
+    }
+  }
+
+  loadTags(tags:Tag[]) {
+    if (this.input == 'tags' && tags && tags.length > 0) {
+      let _tags = [];
+      if (this.value) {
+        let values = this.value.split(",");
+        for (let value of values) {
+          let tag = tags.find(t => t.id.toString() == value.toString());
+          if (tag) {
+            _tags.push(tag);
+          }
+        }
+      }
+      this.tags = _tags;
+    }
+    else {
+      this.tags = [];
     }
   }
 
