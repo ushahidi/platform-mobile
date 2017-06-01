@@ -55,8 +55,10 @@ export class CacheService {
         },
         (error:any) => {
           this.logger.error(this, "fetchNext", "Error", error);
+          this.promise = null;
           this.fetchNext();
-        });
+        }
+      );
     }
   }
 
