@@ -339,7 +339,7 @@ export class ResponseAddPage extends BasePage {
               lon: new FormControl(longitude)}, validator);
             this.formGroup.addControl(attribute.key, formGroup);
           }
-          else if (attribute.input == 'checkbox' || attribute.input == 'checkboxes') {
+          else if (attribute.input == 'checkbox' || attribute.input == 'checkboxes' || attribute.input == 'tags') {
             let formGroup = new FormGroup({}, validator);
             let options = attribute.getOptions();
             for (let option of options) {
@@ -386,14 +386,14 @@ export class ResponseAddPage extends BasePage {
     }
     for (let postValue of this.post.values) {
       let formValue = formValues[postValue.key];
-      if (postValue.input == 'checkbox' || postValue.input == 'checkboxes') {
-        let checks = [];
+      if (postValue.input == 'checkbox' || postValue.input == 'checkboxes' || postValue.input == 'tags') {
+        let checkmarks = [];
         for (let key in formValue) {
           if (formValue[key] == true || formValue[key] == 1) {
-            checks.push(key);
+            checkmarks.push(key);
           }
         }
-        postValue.value = checks.join(",");
+        postValue.value = checkmarks.join(",");
       }
       else if (postValue.input == 'location') {
         if (formValue && formValue.lat && formValue.lon) {

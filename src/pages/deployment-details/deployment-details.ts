@@ -10,6 +10,7 @@ import { Stage } from '../../models/stage';
 import { Attribute } from '../../models/attribute';
 import { Collection } from '../../models/collection';
 import { Post } from '../../models/post';
+import { Tag } from '../../models/tag';
 
 import { ApiService } from '../../providers/api-service';
 import { LoggerService } from '../../providers/logger-service';
@@ -89,6 +90,7 @@ export class DeploymentDetailsPage extends BasePage {
       .then(() => { return this.loadLogin(cache); })
       .then(() => { return this.loadDeployment(cache); })
       .then(() => { return this.loadForms(cache); })
+      .then(() => { return this.loadTags(cache); })
       .then(() => { return this.loadCollections(cache); })
       .then(() => {
         this.logger.info(this, "loadUpdates", "Finished");
@@ -179,6 +181,33 @@ export class DeploymentDetailsPage extends BasePage {
           },
           (error:any) => {
             this.logger.error(this, "loadForms", "Failed", error);
+            reject(error);
+          });
+      });
+    }
+  }
+
+  loadTags(cache:boolean=true):Promise<Tag[]> {
+    this.logger.info(this, "loadTags", cache);
+    if (cache && this.deployment.hasTags()) {
+      this.logger.info(this, "loadTags", "Cached");
+      return Promise.resolve(this.deployment.tags);
+    }
+    else {
+      return new Promise((resolve, reject) => {
+        this.api.getTags(this.deployment, cache, this.offline).then(
+          (tags:Tag[]) => {
+            if (tags) {
+              this.logger.info(this, "loadTags", "Loaded", tags.length);
+            }
+            else {
+              this.logger.info(this, "loadTags", "Loaded", 0);
+            }
+            this.deployment.tags = tags;
+            resolve(tags);
+          },
+          (error:any) => {
+            this.logger.error(this, "loadTags", "Failed", error);
             reject(error);
           });
       });

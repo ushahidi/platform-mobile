@@ -51,6 +51,7 @@ import { InputSelectComponent } from '../components/input-select/input-select';
 import { InputTextComponent } from '../components/input-text/input-text';
 import { InputTextAreaComponent } from '../components/input-textarea/input-textarea';
 import { InputVideoComponent } from '../components/input-video/input-video';
+import { InputTagsComponent } from '../components/input-tags/input-tags';
 import { ImageCacheComponent } from '../components/image-cache/image-cache';
 import { PostCardComponent } from '../components/post-card/post-card';
 import { PostValueComponent } from '../components/post-value/post-value';
@@ -96,6 +97,7 @@ import { VimeoService } from '../providers/vimeo-service';
     InputTextComponent,
     InputTextAreaComponent,
     InputVideoComponent,
+    InputTagsComponent,
     PostCardComponent,
     PostValueComponent,
     ImageCacheComponent,

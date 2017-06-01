@@ -217,4 +217,45 @@ export class Post extends Model {
     return this.status === 'draft';
   }
 
+  packageValues() {
+    let values = {}
+    for (let value of this.values) {
+      if (value.value == null || value.value.length == 0) {
+        values[value.key] = [];
+      }
+      else if (value.isNumber() || value.isImage()) {
+        values[value.key] = [Number(value.value)];
+      }
+      else if (value.isVideo()) {
+        if (value.value.startsWith('http://') || value.value.startsWith('https://')) {
+          values[value.key] = [value.value];
+        }
+        else {
+          values[value.key] = [];
+        }
+      }
+      else if (value.isLocation()) {
+        if (value.value.indexOf(",") > -1) {
+          let location = value.value.split(",");
+          values[value.key] = [{
+            lat: Number(location[0]),
+            lon: Number(location[1])}];
+        }
+        else {
+          values[value.key] = [value.value];
+        }
+      }
+      else if (value.isCheckboxes()) {
+        values[value.key] = value.value.split(",")
+      }
+      else if (value.isTags()) {
+        values[value.key] = value.value.split(",")
+      }
+      else {
+        values[value.key] = [value.value];
+      }
+    }
+    return values;
+  }
+
 }

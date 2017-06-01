@@ -18,6 +18,7 @@ import { Image } from '../models/image';
 import { Filter } from '../models/filter';
 import { Stage } from '../models/stage';
 import { Collection } from '../models/collection';
+import { Tag } from '../models/tag';
 
 import { ApiService } from '../providers/api-service';
 import { LoggerService } from '../providers/logger-service';
@@ -83,6 +84,7 @@ export class MyApp {
         new Value(),
         new Image(),
         new Collection(),
+        new Tag(),
         new Filter()]);
     });
   }

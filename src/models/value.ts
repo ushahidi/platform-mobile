@@ -95,6 +95,14 @@ export class Value extends Model {
     return this.input == 'location';
   }
 
+  isTags() {
+    return this.input == 'tags';
+  }
+
+  isCheckboxes() {
+    return this.input == 'checkbox' || this.input == 'checkboxes';
+  }
+
   hasMissingImage() {
     return this.input == 'upload' && this.value != null && this.image == null;
   }

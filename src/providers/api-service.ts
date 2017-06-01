@@ -17,6 +17,7 @@ import { Value } from '../models/value';
 import { Image } from '../models/image';
 import { Collection } from '../models/collection';
 import { Filter } from '../models/filter';
+import { Tag } from '../models/tag';
 
 import { HttpService } from '../providers/http-service';
 import { LoggerService } from '../providers/logger-service';
@@ -576,43 +577,12 @@ export class ApiService extends HttpService {
 
   createPost(deployment:Deployment, post:Post):Promise<any> {
     return new Promise((resolve, reject) => {
-      let values = {}
-      for (let value of post.values) {
-        if (value.value == null || value.value.length == 0) {
-          values[value.key] = [];
-        }
-        else if (value.isNumber() || value.isImage()) {
-          values[value.key] = [Number(value.value)];
-        }
-        else if (value.isVideo()) {
-          if (value.value.startsWith('http://') || value.value.startsWith('https://')) {
-            values[value.key] = [value.value];
-          }
-          else {
-            values[value.key] = [];
-          }
-        }
-        else if (value.isLocation()) {
-          if (value.value.indexOf(",") > -1) {
-            let location = value.value.split(",");
-            values[value.key] = [{
-              lat: Number(location[0]),
-              lon: Number(location[1])}];
-          }
-          else {
-            values[value.key] = [value.value];
-          }
-        }
-        else {
-          values[value.key] = [value.value];
-        }
-      }
       let params = {
         source: this.source,
         form: { id: post.form_id },
         title: post.title,
         content: post.description,
-        values: values };
+        values: post.packageValues() };
       if (post.user_id && post.user_id > 0) {
         params['user'] = { id: post.user_id };
       }
@@ -659,41 +629,10 @@ export class ApiService extends HttpService {
   updatePost(deployment:Deployment, post:Post, changes:{}=null) {
     return new Promise((resolve, reject) => {
       if (changes == null) {
-        let values = {}
-        for (let value of post.values) {
-          if (value.value == null || value.value.length == 0) {
-            values[value.key] = [];
-          }
-          else if (value.isNumber() || value.isImage()) {
-            values[value.key] = [Number(value.value)];
-          }
-          else if (value.isVideo()) {
-            if (value.value.startsWith('http://') || value.value.startsWith('https://')) {
-              values[value.key] = [value.value];
-            }
-            else {
-              values[value.key] = [];
-            }
-          }
-          else if (value.isLocation()) {
-            if (value.value.indexOf(",") > -1) {
-              let location = value.value.split(",");
-              values[value.key] = [{
-                lat: Number(location[0]),
-                lon: Number(location[1])}];
-            }
-            else {
-              values[value.key] = [value.value];
-            }
-          }
-          else {
-            values[value.key] = [value.value];
-          }
-        }
         changes = {
           title: post.title,
           content: post.description,
-          values: values };
+          values: post.packageValues() };
       }
       this.apiPut(deployment, `/api/v3/posts/${post.id}`, changes).then(
         (data:any) => {
@@ -1122,6 +1061,59 @@ export class ApiService extends HttpService {
     });
   }
 
+  getTags(deployment:Deployment, cache:boolean=false, offline:boolean=false):Promise<Tag[]> {
+    return new Promise((resolve, reject) => {
+      if (cache || offline) {
+        this.database.getTags(deployment).then(
+          (tags:Tag[]) => {
+            if (tags && tags.length > 0) {
+              resolve(tags);
+            }
+            else if (offline) {
+              resolve([]);
+            }
+            else {
+              this.getTags(deployment, false, offline).then(
+                (tags:Tag[]) => {
+                  resolve(tags);
+                },
+                (error:any) => {
+                  reject(error);
+                });
+            }
+          },
+          (error:any) => {
+            reject(error);
+          });
+      }
+      else {
+        this.apiGet(deployment, "/api/v3/tags").then(
+          (data:any) => {
+            let saves = [];
+            let tags = [];
+            deployment.collections_count = data.total_count;
+            saves.push(this.database.saveDeployment(deployment));
+            for (let item of data.results) {
+              let tag:Tag = new Tag(item);
+              tag.deployment_id = deployment.id;
+              tags.push(tag);
+              saves.push(this.database.saveTag(deployment, tag));
+            }
+            Promise.all(saves).then(
+              (saved:any) => {
+                resolve(tags);
+              },
+              (error:any) => {
+                reject(error);
+              });
+          },
+          (error:any) => {
+            reject(error);
+          });
+      }
+    });
+  }
+
   addPostToCollection(deployment:Deployment, post:Post, collection:Collection) {
     return new Promise((resolve, reject) => {
       let params = {
@@ -1154,15 +1146,18 @@ export class ApiService extends HttpService {
       Promise.all([
         this.getForms(deployment, cache, offline),
         this.getStages(deployment, cache, offline),
-        this.getAttributes(deployment, cache, offline)]).then(
+        this.getAttributes(deployment, cache, offline),
+        this.getTags(deployment, cache, offline)]).then(
           (results:any[]) => {
             let saves = [];
             let forms = <Form[]>results[0];
             let stages = <Stage[]>results[1];
             let attributes = <Attribute[]>results[2];
-            this.logger.info(this, "getFormsWithAttributes", "Forms", forms.length, "Stages", stages.length, "Attributes", attributes.length);
+            let tags = <Tag[]>results[3];
+            this.logger.info(this, "getFormsWithAttributes", "Forms", forms.length, "Stages", stages.length, "Attributes", attributes.length, "Tags", tags.length);
             for (let stage of stages) {
               for (let attribute of attributes) {
+                attribute.loadTags(tags);
                 if (attribute.form_stage_id == stage.id) {
                   if (attribute.form_id == null) {
                     attribute.form_id = stage.form_id;

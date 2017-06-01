@@ -4,6 +4,7 @@ import { Table } from '../decorators/table';
 import { Column } from '../decorators/column';
 
 import { Model, TEXT, INTEGER, BOOLEAN, PRIMARY_KEY } from '../models/model';
+import { Tag } from '../models/tag';
 
 @Injectable()
 @Table("attributes")
@@ -116,6 +117,8 @@ export class Attribute extends Model {
   @Column("can_delete", BOOLEAN)
   public can_delete: boolean = null;
 
+  public tags: Tag[] = [];
+
   getOptions() : string[] {
     if (this.options == null) {
       return [];
@@ -125,6 +128,33 @@ export class Attribute extends Model {
     }
     else {
       return this.options.split(',');
+    }
+  }
+
+  loadTags(tags:Tag[]) {
+    if (this.input == 'tags' && tags && tags.length > 0) {
+      let _tags = [];
+      for (let option of this.getOptions()) {
+        for (let tag of tags) {
+          if (tag.id.toString() == option.toString()) {
+            if (tag.parent_id) {
+              for (let parent of tags) {
+                if (parent.id == tag.parent_id) {
+                  _tags.push(tag);
+                  break;
+                }
+              }
+            }
+            else {
+              _tags.push(tag);
+            }
+          }
+        }
+      }
+      this.tags = _tags;
+    }
+    else {
+      this.tags = [];
     }
   }
 

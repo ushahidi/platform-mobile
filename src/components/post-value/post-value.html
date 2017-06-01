@@ -43,5 +43,9 @@
         <iframe width="560" height="349" [src]="video" frameborder="0" allowfullscreen></iframe>
       </div>
     </div>
+    <div class="value-tags" *ngIf="value.input == 'tags'">
+      <ion-icon ios="ios-pricetag" md="md-pricetag" color="grey"></ion-icon>
+      <span *ngIf="value.value" [innerHTML]="value.value"></span>
+    </div>
   </ion-item>
 </div>

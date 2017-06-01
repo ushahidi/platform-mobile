@@ -8,6 +8,7 @@ import { Model, TEXT, INTEGER, BOOLEAN, DOUBLE, PRIMARY_KEY } from '../models/mo
 import { User } from '../models/user';
 import { Form } from '../models/form';
 import { Post } from '../models/post';
+import { Tag } from '../models/tag';
 import { Collection } from '../models/collection';
 
 @Injectable()
@@ -209,6 +210,8 @@ export class Deployment extends Model {
 
   public forms: Form[] = [];
 
+  public tags: Tag[] = [];
+
   public posts: Post[] = [];
 
   public collections: Collection[] = [];
@@ -219,6 +222,10 @@ export class Deployment extends Model {
 
   public hasForms():boolean {
     return this.forms != null && this.forms.length > 0;
+  }
+
+  public hasTags():boolean {
+    return this.tags != null && this.tags.length > 0;
   }
 
   public hasCollections():boolean {
