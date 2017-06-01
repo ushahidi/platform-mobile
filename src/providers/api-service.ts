@@ -1157,7 +1157,6 @@ export class ApiService extends HttpService {
             this.logger.info(this, "getFormsWithAttributes", "Forms", forms.length, "Stages", stages.length, "Attributes", attributes.length, "Tags", tags.length);
             for (let stage of stages) {
               for (let attribute of attributes) {
-                attribute.loadTags(tags);
                 if (attribute.form_stage_id == stage.id) {
                   if (attribute.form_id == null) {
                     attribute.form_id = stage.form_id;
@@ -1173,6 +1172,9 @@ export class ApiService extends HttpService {
               }
               form.loadAttributes(attributes);
               this.logger.info(this, "getFormsWithAttributes", "Form", form.name, "Stages", form.stages.length, "Attributes", form.attributes.length);
+            }
+            for (let attribute of attributes) {
+              attribute.loadTags(tags);
             }
             return Promise.all(saves).then((saved) => {
               this.logger.info(this, "getFormsWithAttributes", "Saves", saves.length, "Saved");

@@ -119,7 +119,7 @@ export class Attribute extends Model {
 
   public tags: Tag[] = [];
 
-  getOptions() : string[] {
+  getOptions():string[] {
     if (this.options == null) {
       return [];
     }
@@ -133,25 +133,18 @@ export class Attribute extends Model {
 
   loadTags(tags:Tag[]) {
     if (this.input == 'tags' && tags && tags.length > 0) {
-      let _tags = [];
-      for (let option of this.getOptions()) {
-        for (let tag of tags) {
-          if (tag.id.toString() == option.toString()) {
-            if (tag.parent_id) {
-              for (let parent of tags) {
-                if (parent.id == tag.parent_id) {
-                  _tags.push(tag);
-                  break;
-                }
-              }
-            }
-            else {
-              _tags.push(tag);
-            }
-          }
+      let parents = [];
+      let options:string[] = this.getOptions();
+      for (let tag of tags) {
+        tag.tags = tags.filter(_tag => _tag.parent_id == tag.id);
+        if (tag.parent_id) {
+          // IGNORE tags with parent_id since they are added as children
+        }
+        else if (options.indexOf(tag.id.toString()) != -1) {
+          parents.push(tag);
         }
       }
-      this.tags = _tags;
+      this.tags = parents;
     }
     else {
       this.tags = [];

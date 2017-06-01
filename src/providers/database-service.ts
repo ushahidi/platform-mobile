@@ -224,17 +224,22 @@ export class DatabaseService extends SqlService {
       Promise.all([
         this.getForms(deployment),
         this.getStages(deployment),
-        this.getAttributes(deployment)]).then(
+        this.getAttributes(deployment),
+        this.getTags(deployment)]).then(
           (results:any[]) => {
             let forms:Form[] = <Form[]>results[0];
             let stages:Stage[] = <Stage[]>results[1];
             let attributes:Attribute[] = <Attribute[]>results[2];
+            let tags:Tag[] = <Tag[]>results[3];
             for (let form of forms) {
               form.loadStages(stages);
               for (let stage of stages) {
                 stage.loadAttributes(attributes);
               }
               form.loadAttributes(attributes);
+            }
+            for (let attribute of attributes) {
+              attribute.loadTags(tags);
             }
             resolve(forms);
           },

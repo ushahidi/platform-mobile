@@ -89,4 +89,6 @@ export class Tag extends Model {
   @Column("can_delete", BOOLEAN)
   public can_delete: boolean = null;
 
+  public tags: Tag[] = [];
+
 }
