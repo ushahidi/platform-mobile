@@ -1,8 +1,9 @@
 import { Injectable, Component, Input, OnInit, OnChanges, AfterContentChecked } from '@angular/core';
-import { Transfer, TransferObject } from '@ionic-native/transfer';
-import { File, Entry, FileEntry, FileError, Metadata } from '@ionic-native/file';
 import { SafeUrl, DomSanitizer } from '@angular/platform-browser';
 import { Md5 } from 'ts-md5/dist/md5';
+
+import { Transfer, TransferObject } from '@ionic-native/transfer';
+import { File, Entry, FileEntry, FileError, Metadata } from '@ionic-native/file';
 
 import { LoggerService } from '../../providers/logger-service';
 
@@ -81,7 +82,7 @@ export class ImageCacheComponent implements OnInit, OnChanges, AfterContentCheck
     return new Promise((resolve, reject) => {
       let file = this.getCacheFile(url);
       let directory = this.getCacheDirectory();
-      this.hasCacheImage(directory, file).then(
+      this.hasCacheImage(url, directory, file).then(
         (cache:string) => {
           this.logger.info(this, "fetchCacheImage", url, cache);
           resolve(cache);
@@ -100,7 +101,7 @@ export class ImageCacheComponent implements OnInit, OnChanges, AfterContentCheck
     });
   }
 
-  hasCacheImage(directory:string, cache:string):Promise<string> {
+  hasCacheImage(image:string, directory:string, cache:string):Promise<string> {
     return new Promise((resolve, reject) => {
       this.file.checkFile(directory, cache).then(
         (exists:boolean) => {
