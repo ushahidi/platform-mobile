@@ -328,6 +328,7 @@ export class DeploymentDetailsPage extends BasePage {
         (done:any) => {
           this.api.clientLogin(this.deployment).then((login:Login) => {
             this.logger.info(this, "userLogout", "clientLogin", login);
+            this.login = login;
             loading.dismiss();
             this.showToast('Logout Successful');
           });
