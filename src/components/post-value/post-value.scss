@@ -20,7 +20,8 @@
   .value-upload,
   .value-varchar,
   .value-video,
-  .value-tags {
+  .value-tags,
+  .value-markdown {
     color: #838383;
     font-weight: 400;
     font-size: 15px;
@@ -39,7 +40,8 @@
   }
   .value-text,
   .value-varchar,
-  .value-textarea {
+  .value-textarea,
+  .value-markdown {
     a {
       color: #777;
     }
@@ -47,7 +49,7 @@
   .value-video {
     .video {
     	position: relative;
-    	padding-bottom: 56.25%; 
+    	padding-bottom: 56.25%;
     	padding-top: 25px;
     	height: 0;
       iframe {

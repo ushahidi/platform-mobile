@@ -47,5 +47,8 @@
       <ion-icon ios="ios-pricetag" md="md-pricetag" color="grey"></ion-icon>
       <span *ngIf="value.value" [innerHTML]="value.value"></span>
     </div>
+    <div class="value-markdown" *ngIf="value.input == 'markdown'">
+      <div *ngIf="value.value" [innerHTML]="value.value | MarkdownToHtml | htmlParse"></div>
+    </div>
   </ion-item>
 </div>

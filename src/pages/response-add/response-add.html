@@ -39,6 +39,7 @@
             <input-text [submitted]="submitted" [value]="values[attribute.key]" [attribute]="attribute" [formGroup]="formGroup" *ngIf="attribute.input == 'varchar'"></input-text>
             <input-video [submitted]="submitted" [value]="values[attribute.key]" [attribute]="attribute" [formGroup]="formGroup" *ngIf="attribute.input == 'video'"></input-video>
             <input-tags [submitted]="submitted" [value]="values[attribute.key]" [attribute]="attribute" [formGroup]="formGroup" *ngIf="attribute.input == 'tags'"></input-tags>
+            <input-markdown [submitted]="submitted" [value]="values[attribute.key]" [attribute]="attribute" [formGroup]="formGroup" *ngIf="attribute.input == 'markdown'"></input-markdown>
           </div>
         </div>
       </ion-list>

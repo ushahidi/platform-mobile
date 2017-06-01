@@ -1,0 +1,21 @@
+.input-markdown {
+  .input-label {
+    color: #555;
+  }
+  .input-error {
+    color: #dd0000;
+  }
+  &.invalid {
+    ion-input {
+      border-bottom: 1px solid #dd0000 !important;
+    }
+  }
+  &.focused {
+    .input-label {
+      color: #2274b4;
+    }
+    ion-input {
+      border-bottom: 1px solid #2274b4 !important;
+    }
+  }
+}

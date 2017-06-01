@@ -1,0 +1,10 @@
+<div class="input-markdown" [class.focused]="focused" [class.invalid]="attribute.required == true && (text == null || text.length == 0) && focused == false && submitted == true">
+  <ion-item no-lines text-wrap [formGroup]="formGroup">
+    <ion-label floating class="input-label">
+      {{attribute.label}}
+      <span ion-text color="danger" *ngIf="attribute.required == true">*</span>
+    </ion-label>
+    <ion-textarea #input type="text" [formControlName]="attribute.key" [(ngModel)]="text" (focus)="onFocus($event)" (blur)="onBlur($event)"></ion-textarea>
+  </ion-item>
+  <p class="input-error" padding-left *ngIf="attribute.required == true && (text == null || text.length == 0) && focused == false && submitted == true">Markdown required</p>
+</div>
