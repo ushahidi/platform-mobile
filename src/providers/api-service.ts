@@ -85,11 +85,21 @@ export class ApiService extends HttpService {
               resolve(deployment);
             }
             else if (config.backend_domain && config.backend_domain.length > 0) {
-              let link = document.createElement('a');
-              link.setAttribute('href', website);
-              let domain = link.hostname.substring(link.hostname.indexOf(".") + 1);
-              deployment.api = website.replace(domain, config.backend_domain);
-              resolve(deployment);
+              if (config.backend_domain.indexOf("https://") != -1) {
+                deployment.api = config.backend_domain;
+                resolve(deployment);
+              }
+              else if (config.backend_domain.indexOf("http://") != -1) {
+                deployment.api = config.backend_domain;
+                resolve(deployment);
+              }
+              else {
+                let link = document.createElement('a');
+                link.setAttribute('href', website);
+                let domain = link.hostname.substring(link.hostname.indexOf(".") + 1);
+                deployment.api = website.replace(domain, config.backend_domain);
+                resolve(deployment);
+              }
             }
             else {
               reject("Invalid Deployment Config");

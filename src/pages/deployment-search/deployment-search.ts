@@ -106,7 +106,7 @@ export class DeploymentSearchPage extends BasePage {
           },
           (error:any) => {
             loading.dismiss();
-            this.showAlert("Problem Adding Deployment", "The deployment does not have the necessary configuration to be added into the app, please contact the deployer letting them know about the problem.");
+            this.showAlert("Problem Adding Deployment", "The deployment does not have the necessary configuration to be added into the app. If you are the deployer, please upgrade your deployment, otherwise please let the deployer know about the problem.");
           });
       });
   }
