@@ -549,19 +549,24 @@ export class ApiService extends HttpService {
               post.url = `${deployment.website}/posts/${item.id}`;
               post.values = [];
               for (let key in item.values) {
-                let text:any = item.values[key].join(",");
                 let value:Value = new Value();
                 value.deployment_id = deployment.id;
                 value.post_id = post.id;
                 value.key = key;
-                value.value = text;
-                if (text && text.lat && text.lon) {
-                  post.latitude = text.lat;
-                  post.longitude = text.lon;
-                  value.value = `${text.lat},${text.lon}`;
+                let values:any[] = item.values[key];
+                if (values && values.length > 0) {
+                  let text = values[0];
+                  if (text && text.lat && text.lon) {
+                    post.latitude = text.lat;
+                    post.longitude = text.lon;
+                    value.value = `${text.lat},${text.lon}`;
+                  }
+                  else {
+                    value.value = values.join(',');
+                  }
                 }
                 else {
-                  value.value = text;
+                  value.value = "";
                 }
                 post.values.push(value);
                 saves.push(this.database.saveValue(deployment, value));
