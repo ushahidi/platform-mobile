@@ -86,7 +86,7 @@ export class DeploymentDetailsPage extends BasePage {
     this.logger.info(this, "loadUpdates", cache);
     this.refreshing = true;
     return Promise.resolve()
-      .then(() => { return this.loadLogin(cache); })
+      .then(() => { return this.loadLogin(false); })
       .then(() => { return this.loadDeployment(cache); })
       .then(() => { return this.loadForms(cache); })
       .then(() => { return this.loadTags(cache); })

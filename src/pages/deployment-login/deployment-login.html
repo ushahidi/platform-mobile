@@ -10,14 +10,16 @@
   <div class="image" *ngIf="deployment && deployment.image">
     <image-cache padding [src]="deployment.image"></image-cache>
   </div>
-  <ion-item>
-    <ion-label floating>Email</ion-label>
-    <ion-input #username type="email" clearInput="true"></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label floating>Password</ion-label>
-    <ion-input #password type="password" clearInput="true"></ion-input>
-  </ion-item>
+  <ion-list>
+    <ion-item>
+      <ion-label floating>Email</ion-label>
+      <ion-input #username type="email" clearInput="true"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>Password</ion-label>
+      <ion-input #password type="password" clearInput="true"></ion-input>
+    </ion-item>
+  </ion-list>
   <div text-right padding>
     <button #login ion-button text-uppercase color="primary" (click)="userLogin($event)"
           [disabled]="username.value.length == 0 || password.value.length == 0">Log in</button>
