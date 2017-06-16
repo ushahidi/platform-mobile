@@ -204,6 +204,9 @@ export class ResponseAddPage extends BasePage {
           if (posted.id != null && posted.id > 0) {
             post.id = posted.id;
           }
+          if (posted.status != null && posted.status > 0) {
+            post.status = posted.status;
+          }
           saves.push(this.database.savePost(this.deployment, post));
           for (let value of post.values) {
             value.post_id = post.id;

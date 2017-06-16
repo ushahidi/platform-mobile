@@ -1,17 +1,77 @@
 {
-  "name": "cordova-plugin-ios-longpress-fix",
-  "version": "1.1.0",
-  "description": "Suppresses the silly magnifying glass when longpressing your app on iOS9",
+  "_args": [
+    [
+      {
+        "raw": "cordova-plugin-ios-longpress-fix@~1.1.0",
+        "scope": null,
+        "escapedName": "cordova-plugin-ios-longpress-fix",
+        "name": "cordova-plugin-ios-longpress-fix",
+        "rawSpec": "~1.1.0",
+        "spec": ">=1.1.0 <1.2.0",
+        "type": "range"
+      },
+      "/Users/dalezak/SandBox/Ushahidi_Mobile/node_modules"
+    ]
+  ],
+  "_from": "cordova-plugin-ios-longpress-fix@>=1.1.0 <1.2.0",
+  "_id": "cordova-plugin-ios-longpress-fix@1.1.0",
+  "_inCache": true,
+  "_location": "/cordova-plugin-ios-longpress-fix",
+  "_nodeVersion": "4.0.0",
+  "_npmUser": {
+    "name": "eddyverbruggen",
+    "email": "eddyverbruggen@gmail.com"
+  },
+  "_npmVersion": "2.14.2",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "cordova-plugin-ios-longpress-fix@~1.1.0",
+    "scope": null,
+    "escapedName": "cordova-plugin-ios-longpress-fix",
+    "name": "cordova-plugin-ios-longpress-fix",
+    "rawSpec": "~1.1.0",
+    "spec": ">=1.1.0 <1.2.0",
+    "type": "range"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/cordova-plugin-ios-longpress-fix/-/cordova-plugin-ios-longpress-fix-1.1.0.tgz",
+  "_shasum": "5d2d99a5b608eb9dea725404d0dd273ba02df871",
+  "_shrinkwrap": null,
+  "_spec": "cordova-plugin-ios-longpress-fix@~1.1.0",
+  "_where": "/Users/dalezak/SandBox/Ushahidi_Mobile/node_modules",
+  "author": {
+    "name": "Eddy Verbruggen",
+    "email": "eddyverbruggen@gmail.com",
+    "url": "https://github.com/EddyVerbruggen"
+  },
+  "bugs": {
+    "url": "https://github.com/EddyVerbruggen/cordova-plugin-ios-longpress-fix/issues"
+  },
   "cordova": {
     "id": "cordova-plugin-ios-longpress-fix",
     "platforms": [
       "ios"
     ]
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/EddyVerbruggen/cordova-plugin-ios-longpress-fix.git"
+  "dependencies": {},
+  "description": "Suppresses the silly magnifying glass when longpressing your app on iOS9",
+  "devDependencies": {},
+  "directories": {},
+  "dist": {
+    "shasum": "5d2d99a5b608eb9dea725404d0dd273ba02df871",
+    "tarball": "https://registry.npmjs.org/cordova-plugin-ios-longpress-fix/-/cordova-plugin-ios-longpress-fix-1.1.0.tgz"
   },
+  "engines": [
+    {
+      "name": "cordova",
+      "version": ">=3.0.0"
+    }
+  ],
+  "gitHead": "e93abc9ed8c8539b6c689b3ad7fa05d9276dcf95",
+  "homepage": "https://github.com/EddyVerbruggen/cordova-plugin-ios-longpress-fix#readme",
   "keywords": [
     "LongPress",
     "LongTap",
@@ -22,16 +82,20 @@
     "ecosystem:cordova",
     "cordova-ios"
   ],
-  "engines": [
+  "license": "MIT",
+  "maintainers": [
     {
-      "name": "cordova",
-      "version": ">=3.0.0"
+      "name": "eddyverbruggen",
+      "email": "eddyverbruggen@gmail.com"
     }
   ],
-  "author": "Eddy Verbruggen <eddyverbruggen@gmail.com> (https://github.com/EddyVerbruggen)",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/EddyVerbruggen/cordova-plugin-ios-longpress-fix/issues"
+  "name": "cordova-plugin-ios-longpress-fix",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EddyVerbruggen/cordova-plugin-ios-longpress-fix.git"
   },
-  "homepage": "https://github.com/EddyVerbruggen/cordova-plugin-ios-longpress-fix#readme"
+  "scripts": {},
+  "version": "1.1.0"
 }

@@ -2,18 +2,18 @@
   "_args": [
     [
       {
-        "raw": "cordova-custom-config",
+        "raw": "cordova-custom-config@~3.1.4",
         "scope": null,
         "escapedName": "cordova-custom-config",
         "name": "cordova-custom-config",
-        "rawSpec": "",
-        "spec": "latest",
-        "type": "tag"
+        "rawSpec": "~3.1.4",
+        "spec": ">=3.1.4 <3.2.0",
+        "type": "range"
       },
       "/Users/dalezak/SandBox/Ushahidi_Mobile/node_modules"
     ]
   ],
-  "_from": "cordova-custom-config@latest",
+  "_from": "cordova-custom-config@>=3.1.4 <3.2.0",
   "_id": "cordova-custom-config@3.1.4",
   "_inCache": true,
   "_location": "/cordova-custom-config",
@@ -29,13 +29,13 @@
   "_npmVersion": "4.0.5",
   "_phantomChildren": {},
   "_requested": {
-    "raw": "cordova-custom-config",
+    "raw": "cordova-custom-config@~3.1.4",
     "scope": null,
     "escapedName": "cordova-custom-config",
     "name": "cordova-custom-config",
-    "rawSpec": "",
-    "spec": "latest",
-    "type": "tag"
+    "rawSpec": "~3.1.4",
+    "spec": ">=3.1.4 <3.2.0",
+    "type": "range"
   },
   "_requiredBy": [
     "#USER",
@@ -44,7 +44,7 @@
   "_resolved": "https://registry.npmjs.org/cordova-custom-config/-/cordova-custom-config-3.1.4.tgz",
   "_shasum": "c43c32dc3b1147def6536721b71391af4828a36d",
   "_shrinkwrap": null,
-  "_spec": "cordova-custom-config",
+  "_spec": "cordova-custom-config@~3.1.4",
   "_where": "/Users/dalezak/SandBox/Ushahidi_Mobile/node_modules",
   "author": {
     "name": "Dave Alden"

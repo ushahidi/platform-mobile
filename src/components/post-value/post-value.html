@@ -1,4 +1,4 @@
-<div class="post-value" *ngIf="value && (value.type != 'title' || value.type != 'description')">
+<div class="post-value" *ngIf="value && value.type != 'title' && value.type != 'description'">
   <ion-item text-wrap>
     <div class="value-label">{{value.label}}</div>
     <div class="value-checkbox" *ngIf="value.input == 'checkbox'">

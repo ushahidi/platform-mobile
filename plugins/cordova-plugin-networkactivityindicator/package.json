@@ -1,17 +1,75 @@
 {
-  "name": "cordova-plugin-networkactivityindicator",
-  "version": "0.1.1",
-  "description": "This plugin allows you to show and hide the statusbar's network activity indicator on iOS.",
+  "_args": [
+    [
+      {
+        "raw": "cordova-plugin-networkactivityindicator@~0.1.1",
+        "scope": null,
+        "escapedName": "cordova-plugin-networkactivityindicator",
+        "name": "cordova-plugin-networkactivityindicator",
+        "rawSpec": "~0.1.1",
+        "spec": ">=0.1.1 <0.2.0",
+        "type": "range"
+      },
+      "/Users/dalezak/SandBox/Ushahidi_Mobile/node_modules"
+    ]
+  ],
+  "_from": "cordova-plugin-networkactivityindicator@>=0.1.1 <0.2.0",
+  "_id": "cordova-plugin-networkactivityindicator@0.1.1",
+  "_inCache": true,
+  "_location": "/cordova-plugin-networkactivityindicator",
+  "_nodeVersion": "0.12.2",
+  "_npmUser": {
+    "name": "ohh2ahh",
+    "email": "luca.schneider@me.com"
+  },
+  "_npmVersion": "2.7.5",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "cordova-plugin-networkactivityindicator@~0.1.1",
+    "scope": null,
+    "escapedName": "cordova-plugin-networkactivityindicator",
+    "name": "cordova-plugin-networkactivityindicator",
+    "rawSpec": "~0.1.1",
+    "spec": ">=0.1.1 <0.2.0",
+    "type": "range"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/cordova-plugin-networkactivityindicator/-/cordova-plugin-networkactivityindicator-0.1.1.tgz",
+  "_shasum": "483d634171819882f2a8ff092ce431af68fa784d",
+  "_shrinkwrap": null,
+  "_spec": "cordova-plugin-networkactivityindicator@~0.1.1",
+  "_where": "/Users/dalezak/SandBox/Ushahidi_Mobile/node_modules",
+  "author": {
+    "name": "ohh2ahh"
+  },
+  "bugs": {
+    "url": "https://github.com/ohh2ahh/NetworkActivityIndicator/issues"
+  },
   "cordova": {
     "id": "cordova-plugin-networkactivityindicator",
     "platforms": [
       "ios"
     ]
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ohh2ahh/NetworkActivityIndicator.git"
+  "dependencies": {},
+  "description": "This plugin allows you to show and hide the statusbar's network activity indicator on iOS.",
+  "devDependencies": {},
+  "directories": {},
+  "dist": {
+    "shasum": "483d634171819882f2a8ff092ce431af68fa784d",
+    "tarball": "https://registry.npmjs.org/cordova-plugin-networkactivityindicator/-/cordova-plugin-networkactivityindicator-0.1.1.tgz"
   },
+  "engines": [
+    {
+      "name": "cordova",
+      "version": ">=3.0.0"
+    }
+  ],
+  "gitHead": "4181a30cd26634aa96fabb5df070e30beb5cff7c",
+  "homepage": "https://github.com/ohh2ahh/NetworkActivityIndicator#readme",
   "keywords": [
     "Cordova",
     "PhoneGap",
@@ -23,16 +81,20 @@
     "ecosystem:cordova",
     "cordova-ios"
   ],
-  "engines": [
+  "license": "MIT",
+  "maintainers": [
     {
-      "name": "cordova",
-      "version": ">=3.0.0"
+      "name": "ohh2ahh",
+      "email": "luca.schneider@me.com"
     }
   ],
-  "author": "ohh2ahh",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/ohh2ahh/NetworkActivityIndicator/issues"
+  "name": "cordova-plugin-networkactivityindicator",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ohh2ahh/NetworkActivityIndicator.git"
   },
-  "homepage": "https://github.com/ohh2ahh/NetworkActivityIndicator#readme"
+  "scripts": {},
+  "version": "0.1.1"
 }

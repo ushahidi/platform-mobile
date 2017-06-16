@@ -1,8 +1,57 @@
 {
-  "name": "cordova-plugin-media-capture",
-  "version": "1.4.2",
-  "description": "Cordova Media Capture Plugin",
-  "types": "./types/index.d.ts",
+  "_args": [
+    [
+      {
+        "raw": "cordova-plugin-media-capture@~1.4.2",
+        "scope": null,
+        "escapedName": "cordova-plugin-media-capture",
+        "name": "cordova-plugin-media-capture",
+        "rawSpec": "~1.4.2",
+        "spec": ">=1.4.2 <1.5.0",
+        "type": "range"
+      },
+      "/Users/dalezak/SandBox/Ushahidi_Mobile/node_modules"
+    ]
+  ],
+  "_from": "cordova-plugin-media-capture@>=1.4.2 <1.5.0",
+  "_id": "cordova-plugin-media-capture@1.4.3",
+  "_inCache": true,
+  "_location": "/cordova-plugin-media-capture",
+  "_nodeVersion": "6.10.1",
+  "_npmOperationalInternal": {
+    "host": "packages-12-west.internal.npmjs.com",
+    "tmp": "tmp/cordova-plugin-media-capture-1.4.3.tgz_1493685648831_0.005625565070658922"
+  },
+  "_npmUser": {
+    "name": "filmaj",
+    "email": "maj.fil@gmail.com"
+  },
+  "_npmVersion": "3.10.10",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "cordova-plugin-media-capture@~1.4.2",
+    "scope": null,
+    "escapedName": "cordova-plugin-media-capture",
+    "name": "cordova-plugin-media-capture",
+    "rawSpec": "~1.4.2",
+    "spec": ">=1.4.2 <1.5.0",
+    "type": "range"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/cordova-plugin-media-capture/-/cordova-plugin-media-capture-1.4.3.tgz",
+  "_shasum": "20e3bbe334fbb89f624b02188eac5372743920fa",
+  "_shrinkwrap": null,
+  "_spec": "cordova-plugin-media-capture@~1.4.2",
+  "_where": "/Users/dalezak/SandBox/Ushahidi_Mobile/node_modules",
+  "author": {
+    "name": "Apache Software Foundation"
+  },
+  "bugs": {
+    "url": "https://github.com/apache/cordova-plugin-media-capture/issues"
+  },
   "cordova": {
     "id": "cordova-plugin-media-capture",
     "platforms": [
@@ -17,10 +66,24 @@
       "windows"
     ]
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/apache/cordova-plugin-media-capture"
+  "dependencies": {},
+  "description": "Cordova Media Capture Plugin",
+  "devDependencies": {
+    "jshint": "^2.6.0"
   },
+  "directories": {},
+  "dist": {
+    "shasum": "20e3bbe334fbb89f624b02188eac5372743920fa",
+    "tarball": "https://registry.npmjs.org/cordova-plugin-media-capture/-/cordova-plugin-media-capture-1.4.3.tgz"
+  },
+  "engines": {
+    "cordovaDependencies": {
+      "2.0.0": {
+        "cordova": ">100"
+      }
+    }
+  },
+  "homepage": "https://github.com/apache/cordova-plugin-media-capture#readme",
   "keywords": [
     "cordova",
     "media",
@@ -36,20 +99,44 @@
     "cordova-windows8",
     "cordova-windows"
   ],
-  "scripts": {
-    "test": "npm run jshint",
-    "jshint": "jshint www && jshint src && jshint tests"
-  },
-  "author": "Apache Software Foundation",
   "license": "Apache-2.0",
-  "engines": {
-    "cordovaDependencies": {
-      "2.0.0": {
-        "cordova": ">100"
-      }
+  "maintainers": [
+    {
+      "name": "bowserj",
+      "email": "bowserj@apache.org"
+    },
+    {
+      "name": "csantanapr",
+      "email": "csantana23@gmail.com"
+    },
+    {
+      "name": "filmaj",
+      "email": "maj.fil@gmail.com"
+    },
+    {
+      "name": "purplecabbage",
+      "email": "purplecabbage@gmail.com"
+    },
+    {
+      "name": "shazron",
+      "email": "shazron@gmail.com"
+    },
+    {
+      "name": "stevegill",
+      "email": "stevengill97@gmail.com"
     }
+  ],
+  "name": "cordova-plugin-media-capture",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/apache/cordova-plugin-media-capture.git"
   },
-  "devDependencies": {
-    "jshint": "^2.6.0"
-  }
+  "scripts": {
+    "jshint": "jshint www && jshint src && jshint tests",
+    "test": "npm run jshint"
+  },
+  "types": "./types/index.d.ts",
+  "version": "1.4.3"
 }

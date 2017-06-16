@@ -1,6 +1,58 @@
 {
-  "name": "ionic-plugin-deeplinks",
-  "version": "1.0.14",
+  "_args": [
+    [
+      {
+        "raw": "ionic-plugin-deeplinks@~1.0.14",
+        "scope": null,
+        "escapedName": "ionic-plugin-deeplinks",
+        "name": "ionic-plugin-deeplinks",
+        "rawSpec": "~1.0.14",
+        "spec": ">=1.0.14 <1.1.0",
+        "type": "range"
+      },
+      "/Users/dalezak/SandBox/Ushahidi_Mobile/node_modules"
+    ]
+  ],
+  "_from": "ionic-plugin-deeplinks@>=1.0.14 <1.1.0",
+  "_id": "ionic-plugin-deeplinks@1.0.15",
+  "_inCache": true,
+  "_location": "/ionic-plugin-deeplinks",
+  "_nodeVersion": "6.10.1",
+  "_npmOperationalInternal": {
+    "host": "packages-18-east.internal.npmjs.com",
+    "tmp": "tmp/ionic-plugin-deeplinks-1.0.15.tgz_1494463317449_0.628992939600721"
+  },
+  "_npmUser": {
+    "name": "maxlynch",
+    "email": "max@ionic.io"
+  },
+  "_npmVersion": "3.10.10",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "ionic-plugin-deeplinks@~1.0.14",
+    "scope": null,
+    "escapedName": "ionic-plugin-deeplinks",
+    "name": "ionic-plugin-deeplinks",
+    "rawSpec": "~1.0.14",
+    "spec": ">=1.0.14 <1.1.0",
+    "type": "range"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/ionic-plugin-deeplinks/-/ionic-plugin-deeplinks-1.0.15.tgz",
+  "_shasum": "655dee340a4b19fb9f961f195f0e9f08ffd02c4a",
+  "_shrinkwrap": null,
+  "_spec": "ionic-plugin-deeplinks@~1.0.14",
+  "_where": "/Users/dalezak/SandBox/Ushahidi_Mobile/node_modules",
+  "author": {
+    "name": "Max Lynch",
+    "email": "max@ionic.io"
+  },
+  "bugs": {
+    "url": "https://github.com/driftyco/ionic-plugin-deeplinks/issues"
+  },
   "cordova": {
     "id": "ionic-plugin-deeplinks",
     "platforms": [
@@ -8,8 +60,21 @@
       "ios"
     ]
   },
+  "dependencies": {
+    "mkpath": ">=1.0.0",
+    "node-version-compare": ">=1.0.1",
+    "plist": ">=1.2.0",
+    "xml2js": ">=0.4"
+  },
   "description": "Ionic Deeplinks Plugin",
-  "repository": "https://github.com/driftyco/ionic-plugin-deeplinks.git",
+  "devDependencies": {},
+  "directories": {},
+  "dist": {
+    "shasum": "655dee340a4b19fb9f961f195f0e9f08ffd02c4a",
+    "tarball": "https://registry.npmjs.org/ionic-plugin-deeplinks/-/ionic-plugin-deeplinks-1.0.15.tgz"
+  },
+  "gitHead": "fb333f164414650d498da69f1fe8ecded64e5876",
+  "homepage": "https://github.com/driftyco/ionic-plugin-deeplinks#readme",
   "issue": "https://github.com/driftyco/ionic-plugin-deeplinks/issues",
   "keywords": [
     "ionic",
@@ -22,12 +87,20 @@
     "cordova-android",
     "cordova-ios"
   ],
-  "dependencies": {
-    "mkpath": ">=1.0.0",
-    "xml2js": ">=0.4",
-    "node-version-compare": ">=1.0.1",
-    "plist": ">=1.2.0"
+  "license": "MIT",
+  "maintainers": [
+    {
+      "name": "maxlynch",
+      "email": "max@ionic.io"
+    }
+  ],
+  "name": "ionic-plugin-deeplinks",
+  "optionalDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/driftyco/ionic-plugin-deeplinks.git"
   },
-  "author": "Max Lynch <max@ionic.io>",
-  "license": "MIT"
+  "scripts": {},
+  "version": "1.0.15"
 }
