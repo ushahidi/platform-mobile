@@ -314,6 +314,9 @@ export class ResponseListPage extends BasePage {
                   saves.push(this.database.saveValue(this.deployment, value));
                 }
               }
+              if (posted.status && posted.status.length > 0) {
+                post.status = posted.status;
+              }
               saves.push(this.database.savePost(this.deployment, post));
               Promise.all(saves).then(
                 (saved) => {

@@ -1,4 +1,4 @@
-<div class="input-tags" [class.invalid]="attribute.required == true && hasValue() == false && submitted == true">
+<div class="input-tags" *ngIf="attribute && attribute.tags && attribute.tags.length > 0" [class.invalid]="attribute.required == true && hasValue() == false && submitted == true">
   <ion-item no-lines text-wrap>
     <ion-label class="input-label">
       {{attribute.label}}
