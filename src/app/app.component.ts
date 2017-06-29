@@ -24,6 +24,7 @@ import { ApiService } from '../providers/api-service';
 import { LoggerService } from '../providers/logger-service';
 import { DatabaseService } from '../providers/database-service';
 import { InjectorService } from '../providers/injector-service';
+import { LanguageService } from '../providers/language-service';
 
 import { DeploymentNonePage } from '../pages/deployment-none/deployment-none';
 import { DeploymentSearchPage } from '../pages/deployment-search/deployment-search';
@@ -45,6 +46,19 @@ export class MyApp {
   deployment : Deployment = null;
   deployments: Deployment[] = null;
   offline: boolean = false;
+  i18n: string = "en";
+  direction: string = "ltr";
+  languages:any[] = [
+    { name: 'English', code: 'en' },
+    { name: 'Français', code: 'fr' },
+    { name: 'Español', code: 'es' },
+    { name: 'Deutsche', code: 'de' },
+    { name: 'Português', code: 'pt' },
+    { name: 'Pусский', code: 'ru' },
+    { name: 'Nederlands', code: 'nl' },
+    { name: 'Kiswahili', code: 'sw' },
+    { name: 'عربى', code: 'ar' }
+  ];
 
   @ViewChild(Nav)
   nav: Nav;
@@ -57,20 +71,22 @@ export class MyApp {
     private googleAnalytics:GoogleAnalytics,
     private statusBar: StatusBar,
     private splashScreen: SplashScreen,
-    public events:Events,
-    public platform: Platform,
-    public api:ApiService,
-    public logger:LoggerService,
-    public database:DatabaseService,
-    public modalController:ModalController,
-    public toastController:ToastController,
-    public loadingController:LoadingController,
-    public alertController: AlertController,
-    public menuController: MenuController) {
+    private events:Events,
+    private platform: Platform,
+    private api:ApiService,
+    private logger:LoggerService,
+    private database:DatabaseService,
+    private language:LanguageService,
+    private modalController:ModalController,
+    private toastController:ToastController,
+    private loadingController:LoadingController,
+    private alertController: AlertController,
+    private menuController: MenuController) {
     this.zone = _zone;
     InjectorService.injector = injector;
     this.platform.ready().then(() => {
       this.logger.info(this, "Platform Ready", this.platform.platforms());
+      this.loadLanguages();
       this.loadNetwork();
       this.loadStatusBar();
       this.loadAnalytics();
@@ -162,6 +178,28 @@ export class MyApp {
       .catch((error) => {
         this.logger.error(this, "loadAnalytics", "Google Analytics", error);
       });
+  }
+
+  loadLanguages() {
+    this.language.getLanguage().then(
+      (i18n) => {
+        this.setLanguage(i18n);
+      },
+      (error) => {
+        this.setLanguage("en");
+    });
+  }
+
+  setLanguage(i18n:string) {
+    this.logger.info(this, "setLanguage", i18n);
+    this.i18n = i18n;
+    this.language.setLanguage(i18n);
+    if (i18n == 'ar' || i18n == 'fa') {
+      this.direction = 'rtl';
+    }
+    else {
+      this.direction = 'ltr';
+    }
   }
 
   loadDatabase(models:Model[]):Promise<any> {

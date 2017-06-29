@@ -1,18 +1,22 @@
 <ion-menu #menu [content]="content" side="left" type="reveal" swipeEnabled="false" (ionOpen)="loadDeployments()">
   <ion-header>
-    <ion-toolbar color="dark">
-      <ion-buttons>
-        <button ion-button text-only>
-          Deployments
-        </button>
-      </ion-buttons>
-    </ion-toolbar>
+    <ion-toolbar color="dark"></ion-toolbar>
   </ion-header>
   <ion-content>
     <ion-refresher (ionRefresh)="loadDeployments($event)">
       <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
     <ion-list *ngIf="deployments && deployments.length > 0">
+      <ion-list-header>{{'SETTINGS' | translate}}</ion-list-header>
+      <ion-item>
+        <ion-label>{{'LANGUAGE' | translate}}</ion-label>
+        <ion-select [(ngModel)]="i18n" [okText]="'OK' | translate" [cancelText]="'CANCEL' | translate"  (ionChange)="setLanguage(i18n)">
+          <ion-option [value]="_language.code" *ngFor="let _language of languages">{{_language.name}}</ion-option>
+        </ion-select>
+      </ion-item>
+    </ion-list>
+    <ion-list *ngIf="deployments && deployments.length > 0">
+      <ion-list-header>{{'DEPLOYMENTS' | translate}}</ion-list-header>
       <ion-item-sliding *ngFor="let _deployment of deployments">
         <ion-item [class.selected]="deployment != null && deployment.api === _deployment.api"
                   (click)="changeDeployment(_deployment)">
@@ -22,13 +26,13 @@
         <ion-item-options side="right">
           <button ion-button color="danger" (click)="removeDeployment($event, _deployment)">
             <ion-icon name="trash"></ion-icon>
-            Remove
+            {{'REMOVE' | translate}}
           </button>
         </ion-item-options>
       </ion-item-sliding>
       <ion-item tappable *ngIf="offline == false" (click)="addDeployment($event)">
         <div class="name">
-          <ion-icon ios="md-add" md="md-add"></ion-icon> Add Deployment
+          <ion-icon ios="md-add" md="md-add"></ion-icon> {{'ADD_DEPLOYMENT' | translate}}
         </div>
       </ion-item>
     </ion-list>

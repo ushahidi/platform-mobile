@@ -45,11 +45,11 @@
     </ion-col>
   </ion-row>
   <button ion-button margin-left icon-left text-uppercase small color="light" [disabled]="offline" *ngIf="latitude && longitude" (click)="updateLocation($event)">
-    <ion-icon ios="ios-pin" md="md-pin"></ion-icon> Change Location
+    <ion-icon ios="ios-pin" md="md-pin"></ion-icon> {{'LOCATION_CHANGE' | translate}}
   </button>
   <button ion-button margin-left icon-left text-uppercase small color="light" *ngIf="error == true" (click)="detectLocation()">
-    <ion-icon ios="ios-locate-outline" md="md-locate"></ion-icon> Detect Location
+    <ion-icon ios="ios-locate-outline" md="md-locate"></ion-icon> {{'LOCATION_DETECT' | translate}}
   </button>
-  <p class="input-error" padding-left *ngIf="attribute.required == true && latitude == null && longitude == null && submitted == true">Location required</p>
-  <p class="input-error" padding-left *ngIf="error == true">There was a problem finding- location.</p>
+  <p class="input-error" padding-left *ngIf="attribute.required == true && latitude == null && longitude == null && submitted == true">{{'LOCATION_REQUIRED' | translate}}</p>
+  <p class="input-error" padding-left *ngIf="error == true">{{'LOCATION_ERROR' | translate}}</p>
 </div>

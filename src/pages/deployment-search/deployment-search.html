@@ -5,18 +5,18 @@
         <ion-icon ios="md-close" md="md-close"></ion-icon>
       </button>
     </ion-buttons>
-    <ion-title>Add Deployment</ion-title>
+    <ion-title>{{'ADD_DEPLOYMENT' | translate}}</ion-title>
   </ion-navbar>
 </ion-header>
 <ion-content class="deployment-search-page">
-  <ion-searchbar #searchbar color="light" type="search" debounce="500" placeholder="Find deployment by name or URL"
+  <ion-searchbar #searchbar color="light" type="search" debounce="500" [placeholder]="'FIND_DEPLOYMENT' | translate"
                  autocomplete="off" autocorrect="off" spellcheck="false" (ionInput)="searchDeployments($event)"></ion-searchbar>
   <div class="loading" text-center *ngIf="deployments.length == 0 && loading == true">
     <ion-spinner></ion-spinner>
   </div>
   <ion-list>
     <ion-item tappable menuClose *ngIf="loading == false && domain && domain.length > 0" (click)="registerDeployment($event)">
-      <h2><ion-icon ios="md-add" md="md-add"></ion-icon> Add deployment by its URL</h2>
+      <h2><ion-icon ios="md-add" md="md-add"></ion-icon> {{'ADD_DEPLOYMENT_BY_URL' | translate}}</h2>
       <p>{{domain}}</p>
     </ion-item>
     <ion-item (click)="addDeployment($event, deployment)" *ngFor="let deployment of deployments">
@@ -28,6 +28,6 @@
 </ion-content>
 <ion-footer>
   <ion-toolbar color="black" *ngIf="offline">
-    <p color="white" ion-text padding-left tappable (click)="showOfflineAlert()">Offline</p>
+    <p color="white" ion-text padding-left tappable (click)="showOfflineAlert()">{{'OFFLINE' | translate}}</p>
   </ion-toolbar>
 </ion-footer>

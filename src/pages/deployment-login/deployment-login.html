@@ -1,6 +1,6 @@
 <ion-header>
   <ion-navbar color="dark">
-    <ion-title>Log in</ion-title>
+    <ion-title>{{'LOGIN' | translate}}</ion-title>
   </ion-navbar>
 </ion-header>
 <ion-content class="deployment-login-page">
@@ -12,21 +12,21 @@
   </div>
   <ion-list>
     <ion-item>
-      <ion-label floating>Email</ion-label>
+      <ion-label floating>{{'EMAIL' | translate}}</ion-label>
       <ion-input #username type="email" clearInput="true"></ion-input>
     </ion-item>
     <ion-item>
-      <ion-label floating>Password</ion-label>
+      <ion-label floating>{{'PASSWORD' | translate}}</ion-label>
       <ion-input #password type="password" clearInput="true"></ion-input>
     </ion-item>
   </ion-list>
   <div text-right padding>
     <button #login ion-button text-uppercase color="primary" (click)="userLogin($event)"
-          [disabled]="username.value.length == 0 || password.value.length == 0">Log in</button>
+          [disabled]="username.value.length == 0 || password.value.length == 0">{{'LOGIN' | translate}}</button>
   </div>
 </ion-content>
 <ion-footer>
   <ion-toolbar color="black" *ngIf="offline">
-    <p color="white" ion-text padding-left tappable (click)="showOfflineAlert()">Offline</p>
+    <p color="white" ion-text padding-left tappable (click)="showOfflineAlert()">{{'OFFLINE' | translate}}</p>
   </ion-toolbar>
 </ion-footer>

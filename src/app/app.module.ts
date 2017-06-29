@@ -1,7 +1,8 @@
 import { NgModule, ErrorHandler } from '@angular/core';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
-import { HttpModule } from '@angular/http';
+import { HttpModule, Http } from '@angular/http';
 import { BrowserModule } from '@angular/platform-browser';
+import { TranslateModule, TranslateService, TranslateLoader, TranslateStaticLoader } from 'ng2-translate/ng2-translate';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MarkdownToHtmlModule } from 'markdown-to-html-pipe';
@@ -72,6 +73,11 @@ import { ApiService } from '../providers/api-service';
 import { DatabaseService } from '../providers/database-service';
 import { CacheService } from '../providers/cache-service';
 import { VimeoService } from '../providers/vimeo-service';
+import { LanguageService } from '../providers/language-service';
+
+export function translateLoaderFactory(http: Http) {
+  return new TranslateStaticLoader(http, 'assets/i18n', '.json');
+}
 
 @NgModule({
   declarations: [
@@ -119,7 +125,14 @@ import { VimeoService } from '../providers/vimeo-service';
     FormsModule,
     ReactiveFormsModule,
     MarkdownToHtmlModule,
-    IonicModule.forRoot(MyApp)
+    TranslateModule.forRoot({
+      provide: TranslateLoader,
+      useFactory: translateLoaderFactory,
+      deps: [ Http ]
+    }),
+    IonicModule.forRoot(MyApp, {
+      backButtonText: ''
+     })
   ],
   bootstrap: [ IonicApp ],
   entryComponents: [
@@ -160,6 +173,8 @@ import { VimeoService } from '../providers/vimeo-service';
     { provide: CacheService, useClass: CacheService },
     { provide: LoggerService, useClass: LoggerService },
     { provide: DatabaseService, useClass: DatabaseService },
+    { provide: LanguageService, useClass: LanguageService },
+    { provide: TranslateService, useClass: TranslateService },
     { provide: ErrorHandler, useClass: IonicErrorHandler }
   ]
 })

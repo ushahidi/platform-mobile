@@ -14,13 +14,13 @@
     </video>
   </ion-card>
   <button ion-button margin-left icon-left text-uppercase small color="light" *ngIf="videoPath == null" (click)="captureVideo()">
-    <ion-icon name="videocam"></ion-icon> Take Video
+    <ion-icon name="videocam"></ion-icon> {{'VIDEO_TAKE' | translate}}
   </button>
   <button ion-button margin-left icon-left text-uppercase small color="light" *ngIf="videoPath != null" (click)="captureVideo()">
-    <ion-icon name="videocam"></ion-icon> Replace Video
+    <ion-icon name="videocam"></ion-icon> {{'VIDEO_REPLACE' | translate}}
   </button>
   <button ion-button text-uppercase icon-left small color="red" *ngIf="videoPath != null" (click)="deleteVideo()">
-    <ion-icon name="trash"></ion-icon> Delete Video
+    <ion-icon name="trash"></ion-icon> {{'VIDEO_REMOVE' | translate}}
   </button>
-  <p class="input-error" padding-left *ngIf="attribute.required == true && videoPath == null && submitted == true">Video required</p>
+  <p class="input-error" padding-left *ngIf="attribute.required == true && videoPath == null && submitted == true">{{'VIDEO_REQUIRED' | translate}}</p>
 </div>

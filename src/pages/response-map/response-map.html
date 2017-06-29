@@ -5,7 +5,7 @@
         <ion-icon ios="md-close" md="md-close"></ion-icon>
       </button>
     </ion-buttons>
-    <ion-title>{{title || "Location"}}</ion-title>
+    <ion-title>{{title || "LOCATION" | translate}}</ion-title>
     <ion-buttons end>
       <button #cancel ion-button icon-only *ngIf="modal" (click)="onDone($event)">
         <ion-icon ios="md-checkmark" md="md-checkmark"></ion-icon>
@@ -19,11 +19,11 @@
       <ion-icon ios="ios-map" md="md-map"></ion-icon>
     </button>
   </ion-fab>
-  <ion-searchbar type="search" color="light" placeholder="Search by address..." debounce="500" [(ngModel)]="search" (keypress)="searchAddress($event)" *ngIf="draggable"></ion-searchbar>
+  <ion-searchbar type="search" color="light" [placeholder]="'SEARCH_BY_ADDRESS_' | translate" debounce="500" [(ngModel)]="search" (keypress)="searchAddress($event)" *ngIf="draggable"></ion-searchbar>
   <div #mapOne id="mapOne" [class.draggable]="draggable"></div>
 </ion-content>
 <ion-footer>
   <ion-toolbar color="black" *ngIf="offline">
-    <p color="white" ion-text padding-left tappable (click)="showOfflineAlert()">Offline</p>
+    <p color="white" ion-text padding-left tappable (click)="showOfflineAlert()">{{'OFFLINE' | translate}}</p>
   </ion-toolbar>
 </ion-footer>

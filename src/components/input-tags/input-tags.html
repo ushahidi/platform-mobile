@@ -19,5 +19,5 @@
       </div>
     </div>
   </div>
-  <p class="input-error" padding-left *ngIf="attribute.required == true && hasValue() == false && submitted == true">Selection required</p>
+  <p class="input-error" padding-left *ngIf="attribute.required == true && hasValue() == false && submitted == true">{{'SELECTION_REQUIRED' | translate}}</p>
 </div>

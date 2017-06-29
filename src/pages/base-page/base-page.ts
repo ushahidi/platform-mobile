@@ -8,6 +8,7 @@ import { GoogleAnalytics } from '@ionic-native/google-analytics';
 
 import { LoggerService } from '../../providers/logger-service';
 import { InjectorService } from '../../providers/injector-service';
+import { LanguageService } from '../../providers/language-service';
 
 @Component({
   selector: 'base-page',
@@ -26,6 +27,7 @@ export class BasePage {
   protected inAppBrowser:InAppBrowser;
   protected socialSharing:SocialSharing;
   protected googleAnalytics:GoogleAnalytics;
+  protected language:LanguageService;
 
   @ViewChild(Content)
   content: Content;
@@ -48,6 +50,7 @@ export class BasePage {
     this.inAppBrowser = InjectorService.injector.get(InAppBrowser);
     this.socialSharing = InjectorService.injector.get(SocialSharing);
     this.googleAnalytics = InjectorService.injector.get(GoogleAnalytics);
+    this.language = InjectorService.injector.get(LanguageService);
   }
 
   ionViewDidLoad() {

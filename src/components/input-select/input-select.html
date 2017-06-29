@@ -8,5 +8,5 @@
       <ion-option value="{{option}}" *ngFor="let option of options">{{option}}</ion-option>
     </ion-select>
   </ion-item>
-  <p class="input-error" padding-left *ngIf="attribute.required == true && (text == null || text.length == 0) && submitted == true">Selection required</p>
+  <p class="input-error" padding-left *ngIf="attribute.required == true && (text == null || text.length == 0) && submitted == true">{{'SELECTION_REQUIRED' | translate}}</p>
 </div>

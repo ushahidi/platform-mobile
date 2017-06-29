@@ -5,35 +5,33 @@
         <ion-icon ios="md-close" md="md-close"></ion-icon>
       </button>
     </ion-buttons>
-    <ion-title>Search & filter</ion-title>
+    <ion-title>{{'SEARCH_FILTER' | translate}}</ion-title>
     <ion-buttons end>
-      <button ion-button (click)="onDone($event)">
-        Apply
-      </button>
+      <button ion-button (click)="onDone($event)">{{'APPLY' | translate}}</button>
     </ion-buttons>
   </ion-navbar>
 </ion-header>
 <ion-content class="page-response-search">
   <ion-searchbar #searchbar color="light" placeholder="Search" [(ngModel)]="filter.search_text" (ionInput)="onSearch($event)" *ngIf="filter"></ion-searchbar>
   <ion-list *ngIf="deployment && filter">
-    <ion-list-header>Surveys</ion-list-header>
+    <ion-list-header>{{'SURVEYS' | translate}}</ion-list-header>
     <ion-item *ngFor="let form of deployment.forms">
       <ion-label>{{form.name}}</ion-label>
       <ion-checkbox [color]="form.color" [checked]="filter.showForm(form)" (ionChange)="formChanged($event, form)"></ion-checkbox>
     </ion-item>
   </ion-list>
   <ion-list *ngIf="filter">
-    <ion-list-header>Status</ion-list-header>
+    <ion-list-header>{{'STATUS' | translate}}</ion-list-header>
     <ion-item>
-      <ion-label>Published</ion-label>
+      <ion-label>{{'STATUS_PUBLISHED' | translate}}</ion-label>
       <ion-checkbox color="dark" [(ngModel)]="filter.show_published" (ionChange)="publishedChanged($event)"></ion-checkbox>
     </ion-item>
     <ion-item>
-      <ion-label>Under Review</ion-label>
+      <ion-label>{{'STATUS_UNDER_REVIEW' | translate}}</ion-label>
       <ion-checkbox color="dark" [(ngModel)]="filter.show_inreview" (ionChange)="reviewChanged($event)"></ion-checkbox>
     </ion-item>
     <ion-item>
-      <ion-label>Archived</ion-label>
+      <ion-label>{{'STATUS_ARCHIVED' | translate}}</ion-label>
       <ion-checkbox color="dark" [(ngModel)]="filter.show_archived" (ionChange)="archivedChanged($event)"></ion-checkbox>
     </ion-item>
   </ion-list>

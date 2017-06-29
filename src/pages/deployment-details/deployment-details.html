@@ -29,29 +29,29 @@
     </div>
     <div class="submit" padding-left padding-right [@fadeInOut]="refreshing">
       <button ion-button block margin-top margin-bottom color="primary"
-              *ngIf="deployment.forms && deployment.forms.length > 0" (click)="addResponse($event)">Submit Survey Response</button>
+              *ngIf="deployment.forms && deployment.forms.length > 0" (click)="addResponse($event)">{{'SUBMIT_SURVEY_RESPONSE' | translate}}</button>
     </div>
     <ion-list>
       <ion-item detail-push *ngIf="deployment.forms && deployment.forms.length > 0" (click)="showResponses($event)">
-        Responses
+        {{'RESPONSES' | translate}}
       </ion-item>
       <!-- <ion-item detail-push *ngIf="deployment.collections && deployment.collections.length > 0" (click)="showCollections($event)">
-        Collections
+        {{'COLLECTIONS' | translate}}
       </ion-item> -->
       <ion-item detail-push *ngIf="deployment.username != null && deployment.can_update == true" (click)="showSettings($event)">
-        Settings
+        {{'SETTINGS' | translate}}
       </ion-item>
       <ion-item detail-push *ngIf="offline == false && (login == null || login.username == null || login.username == '')" (click)="userLogin($event)">
-        Log in
+        {{'LOGIN' | translate}}
       </ion-item>
       <ion-item detail-push *ngIf="login && login.username != null && login.username.length > 0" (click)="userLogout($event)">
-        Log out
+        {{'LOGOUT' | translate}}
       </ion-item>
     </ion-list>
   </div>
 </ion-content>
 <ion-footer>
   <ion-toolbar color="black" *ngIf="offline">
-    <p color="white" ion-text padding-left tappable (click)="showOfflineAlert()">Offline</p>
+    <p color="white" ion-text padding-left tappable (click)="showOfflineAlert()">{{'OFFLINE' | translate}}</p>
   </ion-toolbar>
 </ion-footer>

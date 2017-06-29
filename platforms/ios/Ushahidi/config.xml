@@ -98,7 +98,7 @@
     <name>Ushahidi</name>
     <description>Ushahidi Mobile</description>
     <author email="support@ushahidi.com" href="https://www.ushahidi.com/">Ushahidi</author>
-    <content src="index.html" />
+    <content original-src="index.html" src="http://localhost:3000" />
     <access origin="*" subdomains="true" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -119,6 +119,7 @@
     <allow-navigation href="http://localhost:3000" />
     <allow-navigation href="http://192.168.0.12:8100" />
     <icon src="resources/android/icon/drawable-xhdpi-icon.png" />
+    <hook src="hooks/translate.js" type="after_clean" />
     <allow-intent href="itms:*" />
     <allow-intent href="itms-apps:*" />
     <config-file parent="NSLocationWhenInUseUsageDescription" platform="ios" target="*-Info.plist">
