@@ -4,7 +4,7 @@
       <ion-col width-90 tappable (click)="onCardSelected($event)">
         <ion-row>
           <ion-col class="pending" *ngIf="post.pending == true">
-            <ion-badge text-uppercase color="black">{{'PENDING' | translate}}</ion-badge>
+            <ion-badge text-uppercase color="black">{{'STATUS_PENDING' | translate}}</ion-badge>
           </ion-col>
           <ion-col width-10 class="status {{post.status}}">
             <ion-icon ios="ios-globe" md="md-globe" *ngIf="post.status=='published'"></ion-icon>

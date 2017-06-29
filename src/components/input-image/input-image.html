@@ -19,13 +19,13 @@
     </ion-col>
   </ion-row>
   <button ion-button margin-left icon-left text-uppercase small color="light" *ngIf="imagePath == null" (click)="showOptions()">
-    <ion-icon name="camera"></ion-icon> {{'PHOTO_ADD' | translate}}
+    <ion-icon name="camera"></ion-icon> {{'INPUT_IMAGE_ADD' | translate}}
   </button>
   <button ion-button margin-left icon-left text-uppercase small color="light" *ngIf="imagePath != null" (click)="showOptions()">
-    <ion-icon name="camera"></ion-icon> {{'PHOTO_REPLACE' | translate}}
+    <ion-icon name="camera"></ion-icon> {{'INPUT_IMAGE_REPLACE' | translate}}
   </button>
   <button ion-button text-uppercase icon-left small color="red" *ngIf="imagePath != null" (click)="deletePhoto()">
-    <ion-icon name="trash"></ion-icon> {{'PHOTO_REMOVE' | translate}}
+    <ion-icon name="trash"></ion-icon> {{'INPUT_IMAGE_REMOVE' | translate}}
   </button>
-  <p class="input-error" padding-left *ngIf="attribute.required == true && imagePath == null && submitted == true">{{'PHOTO_REQUIRED' | translate}}</p>
+  <p class="input-error" padding-left *ngIf="attribute.required == true && imagePath == null && submitted == true">{{'INPUT_IMAGE_REQUIRED' | translate}}</p>
 </div>

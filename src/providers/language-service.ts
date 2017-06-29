@@ -37,17 +37,26 @@ export class LanguageService {
 
   setLanguage(i18n:string):Promise<string> {
     return new Promise((resolve, reject) => {
-      if (i18n === 'en' || i18n === 'ar' || i18n === 'fa' || i18n === 'fr' || i18n === 'es') {
+      let original = i18n;
+      try {
         this.i18n = i18n;
         this.translate.use(i18n);
         this.translate.setDefaultLang(i18n);
         this.nativeStorage.setItem("i18n", i18n);
         resolve(i18n);
       }
-      else {
+      catch (error) {
+        this.i18n = original;
+        this.translate.use(original);
+        this.translate.setDefaultLang(original);
+        this.nativeStorage.setItem("i18n", original);
         reject(`Language ${i18n} Not Supported`);
       }
     });
+  }
+
+  get(key:string):string {
+    return this.translate.instant(key);
   }
 
   getTranslation(key:string):Promise<string> {

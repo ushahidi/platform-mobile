@@ -128,12 +128,16 @@ export class ResponseListPage extends BasePage {
         }
         this.loading = false;
         this.refreshing = false;
-        if (this.offline) {
-          this.showToast("Internet connection not available");
-        }
-        else {
-          this.showToast("Problem downloading survey responses");
-        }
+        this.language.getTranslations([
+          'RESPONSES_ERROR',
+          'RESPONSES_ERROR_INTERNET']).then((translations:string[]) => {
+            if (this.offline == false) {
+              this.showToast(translations[0]);
+            }
+            else {
+              this.showToast(translations[1]);
+            }
+        });
       });
   }
 
@@ -267,23 +271,30 @@ export class ResponseListPage extends BasePage {
     else {
       this.logger.info(this, "uploadPending", "Pending", this.pending.length);
       return new Promise((resolve, reject) => {
-        let loading = this.showLoading("Posting...");
-        let uploads = [];
-        for (let post of this.pending) {
-          this.logger.info(this, "uploadPending", "Queuing", post.title);
-          uploads.push(this.createPost(post));
-        }
-        Promise.all(uploads).then(
-          (uploaded) => {
-            this.pending = null;
-            loading.dismiss();
-            this.showAlert('Response Posted', 'Your pending responses have been posted!');
-            resolve();
-          },
-          (error) => {
-            loading.dismiss();
-            this.showAlert('Response Failed', 'There was a problem posting your pending responses.');
-            reject(error);
+        this.language.getTranslations([
+          'RESPONSE_POSTING_',
+          'RESPONSE_POST_SUCCESS',
+          'RESPONSE_POST_SUCCESS_DESCRIPTION',
+          'RESPONSE_POST_FAILURE',
+          'RESPONSE_POST_FAILURE_DESCRIPTION']).then((translations:string[]) => {
+          let loading = this.showLoading(translations[0]);
+          let uploads = [];
+          for (let post of this.pending) {
+            this.logger.info(this, "uploadPending", "Queuing", post.title);
+            uploads.push(this.createPost(post));
+          }
+          Promise.all(uploads).then(
+            (uploaded) => {
+              this.pending = null;
+              loading.dismiss();
+              this.showAlert(translations[1], translations[2]);
+              resolve();
+            },
+            (error) => {
+              loading.dismiss();
+              this.showAlert(translations[3], translations[4]);
+              reject(error);
+          });
         });
       });
     }
@@ -361,24 +372,28 @@ export class ResponseListPage extends BasePage {
   }
 
   addResponse(event:any) {
-    this.logger.info(this, "addResponse");
-    let buttons = [];
-    if (this.deployment.forms != null) {
-      for (let form of this.deployment.forms){
-        if (form.canSubmit(this.login)) {
-          buttons.push({
-            text: form.name,
-            handler: () => {
-              this.logger.info(this, "addResponse", "Form", form);
-              this.showResponseAdd(form);
-          }});
+    this.language.getTranslations([
+      'ACTION_CANCEL',
+      'SURVEY_SUBMIT_RESPONSE']).then((translations:string[]) => {
+      this.logger.info(this, "addResponse");
+      let buttons = [];
+      if (this.deployment.forms != null) {
+        for (let form of this.deployment.forms){
+          if (form.canSubmit(this.login)) {
+            buttons.push({
+              text: form.name,
+              handler: () => {
+                this.logger.info(this, "addResponse", "Form", form);
+                this.showResponseAdd(form);
+            }});
+          }
         }
       }
-    }
-    buttons.push({
-      text: 'Cancel',
-      role: 'cancel'});
-    this.showActionSheet('Submit Survey Response', buttons);
+      buttons.push({
+        text: translations[0],
+        role: 'cancel'});
+      this.showActionSheet(translations[1], buttons);
+    });
   }
 
   showResponseAdd(form) {
@@ -392,117 +407,133 @@ export class ResponseListPage extends BasePage {
   }
 
   searchResponses(event:any) {
-    this.logger.info(this, "searchResponses");
-    let modal = this.showModal(ResponseSearchPage,
-      { deployment: this.deployment,
-        filter: this.filter });
-    modal.onDidDismiss((data:any) => {
-      if (data && data.filter) {
-        this.logger.info(this, "searchResponses", "Filter", data.filter);
-        this.filter = data.filter;
-        this.loading = true;
-        if (this.view == 'list') {
-          let loading = this.showLoading("Filtering...");
-          this.loadPosts(false).then((filtered) => {
-            loading.dismiss();
-            this.loading = false;
-          });
+    this.language.getTranslations(['FILTERING_']).then((translations:string[]) => {
+      this.logger.info(this, "searchResponses");
+      let modal = this.showModal(ResponseSearchPage,
+        { deployment: this.deployment,
+          filter: this.filter });
+      modal.onDidDismiss((data:any) => {
+        if (data && data.filter) {
+          this.logger.info(this, "searchResponses", "Filter", data.filter);
+          this.filter = data.filter;
+          this.loading = true;
+          if (this.view == 'list') {
+            let loading = this.showLoading(translations[0]);
+            this.loadPosts(false).then((filtered) => {
+              loading.dismiss();
+              this.loading = false;
+            });
+          }
+          else {
+            this.loadMarkers(false).then((filtered) => {
+              this.loading = false;
+            });
+          }
         }
-        else {
-          this.loadMarkers(false).then((filtered) => {
-            this.loading = false;
-          });
-        }
-      }
-      this.resizeContent(400);
+        this.resizeContent(400);
+      });
     });
   }
 
   shareResponses(event:any) {
-    let subject = this.deployment.name;
-    let message = this.deployment.description
-    let file = this.deployment.image;
-    let url = this.deployment.website;
-    this.logger.info(this, "shareResponses", "Subject", subject, "Message", message, "File", file, "URL", url);
-    this.showShare(subject, message, file, url).then(
-      (shared:boolean) => {
-        if (shared) {
-          this.showToast("Responses Shared");
-        }
-      },
-      (error:any) => {
-        this.showToast(error);
+    this.language.getTranslations(['RESPONSES_SHARED']).then((translations:string[]) => {
+      let subject = this.deployment.name;
+      let message = this.deployment.description
+      let file = this.deployment.image;
+      let url = this.deployment.website;
+      this.logger.info(this, "shareResponses", "Subject", subject, "Message", message, "File", file, "URL", url);
+      this.showShare(subject, message, file, url).then(
+        (shared:boolean) => {
+          if (shared) {
+            this.showToast(translations[0]);
+          }
+        },
+        (error:any) => {
+          this.showToast(error);
+      });
     });
   }
 
   showOptions(post:Post) {
-    this.logger.info(this, "showOptions");
-    let buttons = [];
-    if (post.can_read) {
-      buttons.push({
-        text: 'Share',
-        handler:() => this.shareResponse(post)
-      });
-    }
-    if (this.offline == false && post.can_update) {
-      buttons.push({
-         text: 'Edit',
-         handler:() => this.editResponse(post)
-       });
-      if (this.deployment.collections && this.deployment.collections.length > 0) {
+    this.language.getTranslations([
+      'ACTION_SHARE',
+      'ACTION_EDIT',
+      'ACTION_COLLECTION',
+      'ACTION_ARCHIVE',
+      'ACTION_PUBLISH',
+      'ACTION_DELETE',
+      'ACTION_REMOVE',
+      'ACTION_CANCEL']).then((translations:string[]) => {
+        this.logger.info(this, "showOptions");
+        let buttons = [];
+        if (post.can_read) {
+          buttons.push({
+            text: translations[0],
+            handler:() => this.shareResponse(post)
+          });
+        }
+        if (this.offline == false && post.can_update) {
+          buttons.push({
+             text: translations[1],
+             handler:() => this.editResponse(post)
+           });
+          if (this.deployment.collections && this.deployment.collections.length > 0) {
+            buttons.push({
+              text: translations[2],
+              handler:() => this.addToCollection(post)
+            });
+          }
+          if (post.status == 'published' || post.status == 'draft') {
+           buttons.push({
+             text: translations[3],
+             handler:() => this.archiveResponse(post)
+           });
+          }
+          if (post.status == 'archived' || post.status == 'draft') {
+            buttons.push({
+              text: translations[4],
+              handler:() => this.publishResponse(post)
+            });
+          }
+        }
+        if (this.offline == false && post.can_delete) {
+          buttons.push({
+            text: translations[5],
+            role: 'destructive',
+            handler:() => this.deleteResponse(post)
+          });
+        }
+        if (post.pending == true) {
+          buttons.push({
+            text: translations[6],
+            role: 'destructive',
+            handler:() => this.removeResponse(post)
+          });
+        }
         buttons.push({
-          text: 'Add to Collection',
-          handler:() => this.addToCollection(post)
+          text: translations[7],
+          role: 'cancel'
         });
-      }
-      if (post.status == 'published' || post.status == 'draft') {
-       buttons.push({
-         text: 'Archive',
-         handler:() => this.archiveResponse(post)
-       });
-      }
-      if (post.status == 'archived' || post.status == 'draft') {
-        buttons.push({
-          text: 'Publish',
-          handler:() => this.publishResponse(post)
-        });
-      }
-    }
-    if (this.offline == false && post.can_delete) {
-      buttons.push({
-        text: 'Delete',
-        role: 'destructive',
-        handler:() => this.deleteResponse(post)
-      });
-    }
-    if (post.pending == true) {
-      buttons.push({
-        text: 'Remove',
-        role: 'destructive',
-        handler:() => this.removeResponse(post)
-      });
-    }
-    buttons.push({
-      text: 'Cancel',
-      role: 'cancel'
+       this.showActionSheet(null, buttons);
     });
-   this.showActionSheet(null, buttons);
   }
 
   shareResponse(post:Post) {
-    let subject:string = `${this.deployment.name} | ${post.title}`;
-    let message:string = post.description
-    let file:string = post.image_url;
-    let url:string = post.url;
-    this.logger.info(this, "shareResponse", "Subject", subject, "Message", message, "File", file, "URL", url);
-    this.showShare(subject, message, file, url).then(
-      (shared:boolean) => {
-        if (shared) {
-          this.showToast("Response Shared");
-        }
-      },
-      (error:any) => {
-        this.showToast(error);
+    this.language.getTranslations(['RESPONSE_SHARED']).then((translations:string[]) => {
+      let subject:string = `${this.deployment.name} | ${post.title}`;
+      let message:string = post.description
+      let file:string = post.image_url;
+      let url:string = post.url;
+      this.logger.info(this, "shareResponse", "Subject", subject, "Message", message, "File", file, "URL", url);
+      this.showShare(subject, message, file, url).then(
+        (shared:boolean) => {
+          if (shared) {
+            this.showToast(translations[0]);
+          }
+        },
+        (error:any) => {
+          this.showToast(error);
+      });
     });
   }
 
@@ -527,104 +558,126 @@ export class ResponseListPage extends BasePage {
   }
 
   addToCollection(post:Post, collection:Collection=null) {
-    this.logger.info(this, "addToCollection");
-    if (collection != null) {
-      let loading = this.showLoading("Adding...");
-      this.api.addPostToCollection(this.deployment, post, collection).then(
-        (results:any) => {
-          loading.dismiss();
-          this.showToast("Added To Collection");
-          this.trackEvent("Posts", "collected", post.url);
-        },
-        (error:any) => {
-          loading.dismiss();
-          this.showAlert("Problem Adding To Collection", error);
-      })
-    }
-    else if (this.deployment.collections != null) {
-      let buttons = [];
-      for (let index in this.deployment.collections) {
-        let collection:Collection = this.deployment.collections[index];
-        buttons.push({
-          text: collection.name,
-          handler:() => this.addToCollection(post, collection)
-        });
+    this.language.getTranslations([
+      'COLLECTION_ADDING_',
+      'COLLECTION_ADD_SUCCESS',
+      'COLLECTION_ADD_FAILURE',
+      'ACTION_CANCEL',
+      'COLLECTION_SELECTION']).then((translations:string[]) => {
+      this.logger.info(this, "addToCollection");
+      if (collection != null) {
+        let loading = this.showLoading(translations[0]);
+        this.api.addPostToCollection(this.deployment, post, collection).then(
+          (results:any) => {
+            loading.dismiss();
+            this.showToast(translations[1]);
+            this.trackEvent("Posts", "collected", post.url);
+          },
+          (error:any) => {
+            loading.dismiss();
+            this.showAlert(translations[2], error);
+        })
       }
-      buttons.push({
-        text: 'Cancel',
-        role: 'cancel'
-      });
-      this.showActionSheet("Select Collection", buttons);
-    }
+      else if (this.deployment.collections != null) {
+        let buttons = [];
+        for (let index in this.deployment.collections) {
+          let collection:Collection = this.deployment.collections[index];
+          buttons.push({
+            text: collection.name,
+            handler:() => this.addToCollection(post, collection)
+          });
+        }
+        buttons.push({
+          text: translations[3],
+          role: 'cancel'
+        });
+        this.showActionSheet(translations[4], buttons);
+      }
+    });
   }
 
   archiveResponse(post:Post) {
-    this.logger.info(this, "archiveResponse");
-    let loading = this.showLoading("Archiving...");
-    let changes = { status: "archived" };
-    this.api.updatePost(this.deployment, post, changes).then(
-      (updated:any) => {
-        post.status = "archived";
-        this.database.savePost(this.deployment, post).then(saved => {
+    this.language.getTranslations([
+      'RESPONSE_ARCHIVING_',
+      'RESPONSE_ARCHIVE_SUCCESS',
+      'RESPONSE_ARCHIVE_FAILURE']).then((translations:string[]) => {
+      this.logger.info(this, "archiveResponse");
+      let loading = this.showLoading(translations[0]);
+      let changes = { status: "archived" };
+      this.api.updatePost(this.deployment, post, changes).then(
+        (updated:any) => {
+          post.status = "archived";
+          this.database.savePost(this.deployment, post).then(saved => {
+            loading.dismiss();
+            this.showToast(translations[1]);
+            this.trackEvent("Posts", "archived", post.url);
+          });
+        },
+        (error:any) => {
           loading.dismiss();
-          this.showToast("Responsed archived");
-          this.trackEvent("Posts", "archived", post.url);
+          this.showAlert(translations[2], error);
         });
-      },
-      (error:any) => {
-        loading.dismiss();
-        this.showAlert("Problme Updating Response", error);
-      });
+    });
   }
 
   publishResponse(post:Post) {
-    this.logger.info(this, "publishResponse");
-    let loading = this.showLoading("Publishing...");
-    let changes = { status: "published" };
-    this.api.updatePost(this.deployment, post, changes).then(
-      (updated:any) => {
-        post.status = "published";
-        this.database.savePost(this.deployment, post).then(saved => {
+    this.language.getTranslations([
+      'RESPONSE_PUBLISHING_',
+      'RESPONSE_PUBLISH_SUCCESS',
+      'RESPONSE_PUBLISH_FAILURE']).then((translations:string[]) => {
+      this.logger.info(this, "publishResponse");
+      let loading = this.showLoading(translations[0]);
+      let changes = { status: "published" };
+      this.api.updatePost(this.deployment, post, changes).then(
+        (updated:any) => {
+          post.status = "published";
+          this.database.savePost(this.deployment, post).then(saved => {
+            loading.dismiss();
+            this.showToast(translations[1]);
+            this.trackEvent("Posts", "published", post.url);
+          });
+        },
+        (error:any) => {
           loading.dismiss();
-          this.showToast("Response published");
-          this.trackEvent("Posts", "published", post.url);
+          this.showAlert(translations[2], error);
         });
-      },
-      (error:any) => {
-        loading.dismiss();
-        this.showAlert("Problem Updating Response", error);
-      });
+    });
   }
 
   removeResponse(post:Post) {
-    this.logger.info(this, "removeResponse");
-    let loading = this.showLoading("Removing...");
-    this.database.removeValues(this.deployment, post).then(
-      (values) => {
-        this.database.removePost(this.deployment, post).then(
-          (removed) => {
-            let pendingIndex = this.pending.indexOf(post);
-            if (pendingIndex > -1) {
-              this.pending.splice(pendingIndex, 1);
-              this.logger.info(this, "removeResponse", "Pending Removed");
-            }
-            let postIndex = this.posts.indexOf(post);
-            if (postIndex > -1) {
-              this.posts.splice(postIndex, 1);
-              this.logger.info(this, "removeResponse", "Post Removed")
-            }
-            loading.dismiss();
-            this.showToast("Responsed removed");
-            this.trackEvent("Posts", "removed", post.url);
-          },
-          (error) => {
-            loading.dismiss();
-            this.showAlert("Problem Removing Response", error);
-        });
-      },
-      (error) => {
-        loading.dismiss();
-        this.showAlert("Problem Removing Response", error);
+    this.language.getTranslations([
+      'RESPONSE_REMOVING_',
+      'RESPONSE_REMOVE_SUCCESS',
+      'RESPONSE_REMOVE_FAILURE']).then((translations:string[]) => {
+      this.logger.info(this, "removeResponse");
+      let loading = this.showLoading(translations[0]);
+      this.database.removeValues(this.deployment, post).then(
+        (values) => {
+          this.database.removePost(this.deployment, post).then(
+            (removed) => {
+              let pendingIndex = this.pending.indexOf(post);
+              if (pendingIndex > -1) {
+                this.pending.splice(pendingIndex, 1);
+                this.logger.info(this, "removeResponse", "Pending Removed");
+              }
+              let postIndex = this.posts.indexOf(post);
+              if (postIndex > -1) {
+                this.posts.splice(postIndex, 1);
+                this.logger.info(this, "removeResponse", "Post Removed")
+              }
+              loading.dismiss();
+              this.showToast(translations[1]);
+              this.trackEvent("Posts", "removed", post.url);
+            },
+            (error) => {
+              loading.dismiss();
+              this.showAlert(translations[2], error);
+          });
+        },
+        (error) => {
+          loading.dismiss();
+          this.showAlert(translations[2], error);
+      });
     });
   }
 
@@ -716,13 +769,17 @@ export class ResponseListPage extends BasePage {
                 (error) => {
                   this.logger.error(this, "showMap", "loadMarkers", error);
                   if (error != this.interrupted) {
-                    this.showToast("Problem loading the map markers");
+                    this.language.getTranslation('MAP_ERROR_MARKERS').then((translation:string) => {
+                      this.showToast(translation);
+                    });
                   }
                 });
             },
             (error) => {
               this.logger.error(this, "showMap", "loadMarkers", error);
-              this.showToast("Problem loading the map");
+              this.language.getTranslation('MAP_ERROR').then((translation:string) => {
+                this.showToast(translation);
+              });
             });
       });
     }
@@ -842,38 +899,48 @@ export class ResponseListPage extends BasePage {
   }
 
   showStyles(event) {
-    this.logger.info(this, "showStyles");
-    let buttons = [
-      {
-        text: 'Streets',
-        handler:() => this.changeStyle("streets")
-      },
-      {
-        text: 'Outdoors',
-        handler:() => this.changeStyle("outdoors")
-      },
-      {
-        text: 'Light',
-        handler:() => this.changeStyle("light")
-      },
-      {
-        text: 'Dark',
-        handler:() => this.changeStyle("dark")
-      },
-      {
-        text: 'Satellite',
-        handler:() => this.changeStyle("satellite")
-      },
-      {
-        text: 'Satellite Streets',
-        handler:() => this.changeStyle("satellite-streets")
-      },
-      {
-        text: 'Cancel',
-        role: 'cancel'
-      }
-    ];
-    this.showActionSheet("Change map style", buttons);
+    this.language.getTranslations([
+      'MAP_STYLE_STREETS',
+      'MAP_STYLE_OUTDOORS',
+      'MAP_STYLE_LIGHT',
+      'MAP_STYLE_DARK',
+      'MAP_STYLE_SATELLITE',
+      'MAP_STYLE_SATELLITE_STREETS',
+      'ACTION_CANCEL',
+      'MAP_STYLE']).then((translations:string[]) => {
+      this.logger.info(this, "showStyles");
+      let buttons = [
+        {
+          text: translations[0],
+          handler:() => this.changeStyle("streets")
+        },
+        {
+          text: translations[1],
+          handler:() => this.changeStyle("outdoors")
+        },
+        {
+          text: translations[2],
+          handler:() => this.changeStyle("light")
+        },
+        {
+          text: translations[3],
+          handler:() => this.changeStyle("dark")
+        },
+        {
+          text: translations[4],
+          handler:() => this.changeStyle("satellite")
+        },
+        {
+          text: translations[5],
+          handler:() => this.changeStyle("satellite-streets")
+        },
+        {
+          text: translations[6],
+          role: 'cancel'
+        }
+      ];
+      this.showActionSheet(translations[7], buttons);
+    });
   }
 
   changeStyle(mapStyle:string) {

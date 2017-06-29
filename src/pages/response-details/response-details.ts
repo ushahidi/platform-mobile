@@ -168,66 +168,77 @@ export class ResponseDetailsPage extends BasePage {
 
   showOptions(event:any) {
     this.logger.info(this, "showOptions");
-    let buttons = [];
-    if (this.post.can_read) {
-       buttons.push({
-         text: 'Share',
-         handler:() => this.shareResponse(this.post)
-       });
-    }
-    if (this.offline == false && this.post.can_update) {
-      buttons.push({
-        text: 'Edit',
-        handler:() => this.editResponse(this.post)
-      });
-      if (this.deployment.collections && this.deployment.collections.length > 0) {
+    this.language.getTranslations([
+      'ACTION_SHARE',
+      'ACTION_EDIT',
+      'ACTION_COLLECTION',
+      'ACTION_ARCHIVE',
+      'ACTION_PUBLISH',
+      'ACTION_DELETE',
+      'ACTION_CANCEL']).then((translations:string[]) => {
+        let buttons = [];
+        if (this.post.can_read) {
+           buttons.push({
+             text: translations[0],
+             handler:() => this.shareResponse(this.post)
+           });
+        }
+        if (this.offline == false && this.post.can_update) {
+          buttons.push({
+            text: translations[1],
+            handler:() => this.editResponse(this.post)
+          });
+          if (this.deployment.collections && this.deployment.collections.length > 0) {
+            buttons.push({
+             text: translations[2],
+             handler:() => this.addToCollection(this.post)
+            });
+          }
+          if (this.post.status == 'published' || this.post.status == 'draft') {
+           buttons.push({
+             text: translations[3],
+             handler:() => this.archiveResponse(this.post)
+           });
+          }
+          if (this.post.status == 'archived' || this.post.status == 'draft') {
+            buttons.push({
+              text: translations[4],
+              handler:() => this.publishResponse(this.post)
+            });
+          }
+        }
+        if (this.offline == false && this.post.can_delete) {
+          buttons.push({
+           text: translations[5],
+           role: 'destructive',
+           handler:() => this.deleteResponse(this.post)
+          });
+        }
         buttons.push({
-         text: 'Add to Collection',
-         handler:() => this.addToCollection(this.post)
+          text: translations[6],
+          role: 'cancel'
         });
-      }
-      if (this.post.status == 'published' || this.post.status == 'draft') {
-       buttons.push({
-         text: 'Archive',
-         handler:() => this.archiveResponse(this.post)
-       });
-      }
-      if (this.post.status == 'archived' || this.post.status == 'draft') {
-        buttons.push({
-          text: 'Publish',
-          handler:() => this.publishResponse(this.post)
-        });
-      }
-    }
-    if (this.offline == false && this.post.can_delete) {
-      buttons.push({
-       text: 'Delete',
-       role: 'destructive',
-       handler:() => this.deleteResponse(this.post)
-      });
-    }
-    buttons.push({
-      text: 'Cancel',
-      role: 'cancel'
+        this.showActionSheet(null, buttons);
     });
-   this.showActionSheet(null, buttons);
   }
 
   shareResponse(event:any) {
-    let subject:string = `${this.deployment.name} | ${this.post.title}`;
-    let message:string = this.post.description
-    let file:string = this.post.image_url;
-    let url:string = this.post.url;
-    this.logger.info(this, "shareResponse", "Subject", subject, "Message", message, "File", file, "URL", url);
-    this.showShare(subject, message, file, url).then(
-      (shared:boolean) => {
-        if (shared) {
-          this.showToast("Response Shared");
-          this.trackEvent("Posts", "shared", this.post.url);
-        }
-      },
-      (error:any) => {
-        this.showToast(error);
+    this.language.getTranslations(['RESPONSE_SHARED']).then((translations:string[]) => {
+        let subject:string = `${this.deployment.name} | ${this.post.title}`;
+        let message:string = this.post.description
+        let file:string = this.post.image_url;
+        let url:string = this.post.url;
+        this.logger.info(this, "shareResponse", "Subject", subject, "Message", message, "File", file, "URL", url);
+        this.showShare(subject, message, file, url).then(
+          (shared:boolean) => {
+            if (shared) {
+              this.showToast(translations[0]);
+              this.trackEvent("Posts", "shared", this.post.url);
+            }
+          },
+          (error:any) => {
+            this.showToast(error);
+        });
     });
   }
 

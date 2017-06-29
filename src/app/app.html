@@ -26,13 +26,13 @@
         <ion-item-options side="right">
           <button ion-button color="danger" (click)="removeDeployment($event, _deployment)">
             <ion-icon name="trash"></ion-icon>
-            {{'REMOVE' | translate}}
+            {{'ACTION_REMOVE' | translate}}
           </button>
         </ion-item-options>
       </ion-item-sliding>
       <ion-item tappable *ngIf="offline == false" (click)="addDeployment($event)">
         <div class="name">
-          <ion-icon ios="md-add" md="md-add"></ion-icon> {{'ADD_DEPLOYMENT' | translate}}
+          <ion-icon ios="md-add" md="md-add"></ion-icon> {{'DEPLOYMENT_ADD' | translate}}
         </div>
       </ion-item>
     </ion-list>

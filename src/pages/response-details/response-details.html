@@ -16,7 +16,7 @@
     <ion-item no-lines>
       <ion-row>
         <ion-col class="pending" *ngIf="post.pending == true">
-          <ion-badge text-uppercase color="black">{{'PENDING' | translate}}</ion-badge>
+          <ion-badge text-uppercase color="black">{{'STATUS_PENDING' | translate}}</ion-badge>
         </ion-col>
         <ion-col width-10 class="status {{post.status}}">
           <ion-icon ios="ios-globe" md="md-globe" *ngIf="post.status=='published'"></ion-icon>
@@ -32,11 +32,11 @@
       </ion-row>
     </ion-item>
     <ion-item text-wrap class="post-value" *ngIf="post.title">
-      <div class="value-label">{{'TITLE' | translate}}</div>
+      <div class="value-label">{{'INPUT_TITLE' | translate}}</div>
       <div class="value-text" [innerHTML]="post.title | MarkdownToHtml | htmlParse"></div>
     </ion-item>
     <ion-item text-wrap class="post-value" *ngIf="post.description">
-      <div class="value-label">{{'DESCRIPTION' | translate}}</div>
+      <div class="value-label">{{'INPUT_DESCRIPTION' | translate}}</div>
       <div class="value-text" [innerHTML]="post.description | MarkdownToHtml | htmlParse"></div>
     </ion-item>
     <div *ngFor="let value of post.values">
@@ -46,6 +46,6 @@
 </ion-content>
 <ion-footer>
   <ion-toolbar color="black" *ngIf="offline">
-    <p color="white" ion-text padding-left tappable (click)="showOfflineAlert()">Offline</p>
+    <p color="white" ion-text padding-left tappable (click)="showOfflineAlert()">{{'OFFLINE' | translate}}</p>
   </ion-toolbar>
 </ion-footer>

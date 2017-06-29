@@ -5,18 +5,18 @@
         <ion-icon ios="md-close" md="md-close"></ion-icon>
       </button>
     </ion-buttons>
-    <ion-title>{{'ADD_DEPLOYMENT' | translate}}</ion-title>
+    <ion-title>{{'DEPLOYMENT_ADD' | translate}}</ion-title>
   </ion-navbar>
 </ion-header>
 <ion-content class="deployment-search-page">
-  <ion-searchbar #searchbar color="light" type="search" debounce="500" [placeholder]="'FIND_DEPLOYMENT' | translate"
+  <ion-searchbar #searchbar color="light" type="search" debounce="500" [placeholder]="'DEPLOYMENT_FIND' | translate"
                  autocomplete="off" autocorrect="off" spellcheck="false" (ionInput)="searchDeployments($event)"></ion-searchbar>
   <div class="loading" text-center *ngIf="deployments.length == 0 && loading == true">
     <ion-spinner></ion-spinner>
   </div>
   <ion-list>
     <ion-item tappable menuClose *ngIf="loading == false && domain && domain.length > 0" (click)="registerDeployment($event)">
-      <h2><ion-icon ios="md-add" md="md-add"></ion-icon> {{'ADD_DEPLOYMENT_BY_URL' | translate}}</h2>
+      <h2><ion-icon ios="md-add" md="md-add"></ion-icon> {{'DEPLOYMENT_ADD_BY_URL' | translate}}</h2>
       <p>{{domain}}</p>
     </ion-item>
     <ion-item (click)="addDeployment($event, deployment)" *ngFor="let deployment of deployments">

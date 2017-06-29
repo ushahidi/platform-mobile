@@ -69,10 +69,12 @@ export class DeploymentDetailsPage extends BasePage {
       this.deployment = this.getParameter<Deployment>("deployment");
     }
     if (this.deployment.forms == null || this.deployment.forms.length == 0) {
-      let loading = this.showLoading("Loading...");
-      this.loadUpdates(null, true).then((loaded) => {
-        this.logger.info(this, "ionViewWillEnter", "Loaded");
-        loading.dismiss();
+      this.language.getTranslation("LOADING_").then((text:string) => {
+        let loading = this.showLoading(text);
+        this.loadUpdates(null, true).then((loaded) => {
+          this.logger.info(this, "ionViewWillEnter", "Loaded");
+          loading.dismiss();
+        });
       });
     }
     else {
@@ -249,7 +251,6 @@ export class DeploymentDetailsPage extends BasePage {
 
   showCollections(event:any) {
     this.logger.info(this, "showCollections");
-    this.showToast('Collections Not Implemented');
   }
 
   showSettings(event:any) {
@@ -260,7 +261,9 @@ export class DeploymentDetailsPage extends BasePage {
 
   addResponse(event:any) {
     this.logger.info(this, "addResponse");
-    this.language.getTranslations(['CANCEL', 'SUBMIT_SURVEY_RESPONSE']).then((translations:string[]) => {
+    this.language.getTranslations([
+      'ACTION_CANCEL',
+      'SURVEY_SUBMIT_RESPONSE']).then((translations:string[]) => {
       let buttons = [];
       if (this.deployment.forms) {
         for (let form of this.deployment.forms) {
@@ -293,20 +296,22 @@ export class DeploymentDetailsPage extends BasePage {
   }
 
   shareDeployment(event:any) {
-    let subject = this.deployment.name;
-    let message = this.deployment.description
-    let file = this.deployment.image;
-    let url = this.deployment.website;
-    this.logger.info(this, "shareDeployment", "Subject", subject, "Message", message, "File", file, "URL", url);
-    this.showShare(subject, message, file, url).then(
-      (shared) => {
-        if (shared) {
-          this.showToast("Deployment Shared");
-          this.trackEvent("Deployments", "shared", this.deployment.website);
-        }
-      },
-      (error) => {
-        this.showToast(error);
+    this.language.getTranslations(['DEPLOYMENT_SHARED']).then((translations:string[]) => {
+      let subject = this.deployment.name;
+      let message = this.deployment.description
+      let file = this.deployment.image;
+      let url = this.deployment.website;
+      this.logger.info(this, "shareDeployment", "Subject", subject, "Message", message, "File", file, "URL", url);
+      this.showShare(subject, message, file, url).then(
+        (shared) => {
+          if (shared) {
+            this.showToast(translations[0]);
+            this.trackEvent("Deployments", "shared", this.deployment.website);
+          }
+        },
+        (error) => {
+          this.showToast(error);
+      });
     });
   }
 
@@ -319,26 +324,31 @@ export class DeploymentDetailsPage extends BasePage {
   userLogout(event:any) {
     this.logger.info(this, "userLogout");
     this.trackEvent("Deployments", "logout", this.deployment.website);
-    let loading = this.showLoading("Logging out...");
-    return Promise.all([
-      this.demoteDeployment(),
-      this.demotePosts(),
-      this.demoteForms(),
-      this.demoteStages(),
-      this.demoteAttributes(),
-      this.demoteCollections()]).then(
-        (done:any) => {
-          this.api.clientLogin(this.deployment).then((login:Login) => {
-            this.logger.info(this, "userLogout", "clientLogin", login);
-            this.login = login;
+    this.language.getTranslations([
+      'LOGGING_OUT_',
+      'LOGOUT_SUCCESS',
+      'LOGOUT_FAILURE']).then((translations:string[]) => {
+      let loading = this.showLoading(translations[0]);
+      return Promise.all([
+        this.demoteDeployment(),
+        this.demotePosts(),
+        this.demoteForms(),
+        this.demoteStages(),
+        this.demoteAttributes(),
+        this.demoteCollections()]).then(
+          (done:any) => {
+            this.api.clientLogin(this.deployment).then((login:Login) => {
+              this.logger.info(this, "userLogout", "clientLogin", login);
+              this.login = login;
+              loading.dismiss();
+              this.showToast(translations[1]);
+            });
+          },
+          (error:any) => {
             loading.dismiss();
-            this.showToast('Logout Successful');
+            this.showAlert(translations[2], error);
           });
-        },
-        (error:any) => {
-          loading.dismiss();
-          this.showAlert('Problem Logging Out', error);
-        });
+    });
   }
 
   demoteDeployment() {

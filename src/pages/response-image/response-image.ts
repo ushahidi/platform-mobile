@@ -49,20 +49,22 @@ export class ResponseImagePage extends BasePage {
   }
 
   shareImage(event:any) {
-    let subject = this.deployment.name;
-    let message = this.post.title;
-    let file = this.image;
-    let url = this.post.url;
-    this.logger.info(this, "shareImage", "Subject", subject, "Message", message, "File", file, "URL", url);
-    this.showShare(subject, message, file, url).then(
-      (shared) => {
-        if (shared) {
-          this.showToast("Image Shared");
-          this.trackEvent("Images", "shared", this.image);
-        }
-      },
-      (error) => {
-        this.showToast(error);
+    this.language.getTranslations(['IMAGE_SHARED']).then((translations:string[]) => {
+      let subject = this.deployment.name;
+      let message = this.post.title;
+      let file = this.image;
+      let url = this.post.url;
+      this.logger.info(this, "shareImage", "Subject", subject, "Message", message, "File", file, "URL", url);
+      this.showShare(subject, message, file, url).then(
+        (shared) => {
+          if (shared) {
+            this.showToast(translations[0]);
+            this.trackEvent("Images", "shared", this.image);
+          }
+        },
+        (error) => {
+          this.showToast(error);
+      });
     });
   }
 

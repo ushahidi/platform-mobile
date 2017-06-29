@@ -29,7 +29,7 @@
     </div>
     <div class="submit" padding-left padding-right [@fadeInOut]="refreshing">
       <button ion-button block margin-top margin-bottom color="primary"
-              *ngIf="deployment.forms && deployment.forms.length > 0" (click)="addResponse($event)">{{'SUBMIT_SURVEY_RESPONSE' | translate}}</button>
+              *ngIf="deployment.forms && deployment.forms.length > 0" (click)="addResponse($event)">{{'SURVEY_SUBMIT_RESPONSE' | translate}}</button>
     </div>
     <ion-list>
       <ion-item detail-push *ngIf="deployment.forms && deployment.forms.length > 0" (click)="showResponses($event)">

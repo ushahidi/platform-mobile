@@ -66,36 +66,43 @@ export class DeploymentLoginPage extends BasePage {
     let username = this.username.value.toString();
     let password = this.password.value.toString();
     if (username.length > 0 && password.length > 0) {
-      let loading = this.showLoading("Logging in...");
-      this.api.userLogin(this.deployment, username, password).then(
-        (login:Login) => {
-          this.logger.info(this, "userLogin", "Login", login);
-          if (login != null) {
-            return Promise.resolve()
-              .then(() => { return this.loadDeployment(); })
-              .then(() => { return this.loadForms(); })
-              .then(() => { return this.loadCollections(); })
-              .then(() => { return this.removePosts(); })
-              .then(() => {
-                loading.dismiss();
-                this.events.publish(DEPLOYMENT_UPDATED, this.deployment.id);
-                this.showToast('Login Successful');
-                this.showDeployment(this.deployment);
-              })
-              .catch((error:any) => {
-                loading.dismiss();
-                this.showAlert('Problem Updating Deployment', error);
-              });
-          }
-          else {
+      this.language.getTranslations([
+        'LOGGING_IN_',
+        'LOGIN_SUCCESS',
+        'LOGIN_FAILURE',
+        'LOGIN_INVALID_CREDENTIALS',
+        'LOGIN_INVALID_CREDENTIALS_DESCRIPTION']).then((translations:string[]) => {
+        let loading = this.showLoading(translations[0]);
+        this.api.userLogin(this.deployment, username, password).then(
+          (login:Login) => {
+            this.logger.info(this, "userLogin", "Login", login);
+            if (login != null) {
+              return Promise.resolve()
+                .then(() => { return this.loadDeployment(); })
+                .then(() => { return this.loadForms(); })
+                .then(() => { return this.loadCollections(); })
+                .then(() => { return this.removePosts(); })
+                .then(() => {
+                  loading.dismiss();
+                  this.events.publish(DEPLOYMENT_UPDATED, this.deployment.id);
+                  this.showToast(translations[1]);
+                  this.showDeployment(this.deployment);
+                })
+                .catch((error:any) => {
+                  loading.dismiss();
+                  this.showAlert(translations[2], error);
+                });
+            }
+            else {
+              loading.dismiss();
+              this.showAlert(translations[3], translations[4]);
+            }
+          },
+          (error:any) => {
             loading.dismiss();
-            this.showAlert('Invalid Credentials', 'Please verify your email and password, then try again.');
-          }
-        },
-        (error:any) => {
-          loading.dismiss();
-          this.showAlert('Invalid Credentials', 'Please verify your email and password, then try again.');
-        });
+            this.showAlert(translations[3], translations[4]);
+          });
+      });
     }
   }
 

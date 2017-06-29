@@ -90,79 +90,94 @@ export class DeploymentSearchPage extends BasePage {
 
   registerDeployment(event:any) {
     this.logger.info(this, "registerDeployment", this.search);
-    let loading = this.showLoading("Adding...");
-    let url = `https://${this.domain}`;
-    this.api.registerDeployment(url).then(
-      (deployment:Deployment) => {
-        loading.dismiss();
-        this.loginDeployment(deployment);
-      },
-      (error:any) => {
-        let url = `http://${this.domain}`;
-        this.api.registerDeployment(url).then(
-          (deployment:Deployment) => {
-            loading.dismiss();
-            this.loginDeployment(deployment);
-          },
-          (error:any) => {
-            loading.dismiss();
-            this.showAlert("Problem Adding Deployment", "The deployment does not have the necessary configuration to be added into the app. If you are the deployer, please upgrade your deployment, otherwise please let the deployer know about the problem.");
-          });
-      });
+    this.language.getTranslations([
+      'DEPLOYMENT_ADDING_',
+      'DEPLOYMENT_CONFIG_FAILURE',
+      'DEPLOYMENT_CONFIG_FAILURE_DESCRIPTION']).then((translations:string[]) => {
+      let loading = this.showLoading(translations[0]);
+      let url = `https://${this.domain}`;
+      this.api.registerDeployment(url).then(
+        (deployment:Deployment) => {
+          loading.dismiss();
+          this.loginDeployment(deployment);
+        },
+        (error:any) => {
+          let url = `http://${this.domain}`;
+          this.api.registerDeployment(url).then(
+            (deployment:Deployment) => {
+              loading.dismiss();
+              this.loginDeployment(deployment);
+            },
+            (error:any) => {
+              loading.dismiss();
+              this.showAlert(translations[1], translations[2]);
+            });
+        });
+    });
   }
 
   addDeployment(event:any, deployment:Deployment) {
     this.logger.info(this, "addDeployment");
     this.trackEvent("Deployments", "searched", this.search);
-    let where = { domain: deployment.domain };
-    return this.database.getDeployments(where).then(
-      (deployments:Deployment[]) => {
-        if (deployments && deployments.length > 0) {
-          this.showAlert('Deployment Already Added', 'Looks like that deployment has already been added.');
-        }
-        else {
-          this.trackEvent("Deployments", "added", deployment.website);
-          this.loginDeployment(deployment);
-        }
-      });
+    this.language.getTranslations([
+      'DEPLOYMENT_ADD_EXISTS',
+      'DEPLOYMENT_ADD_EXISTS_DESCRIPTION']).then((translations:string[]) => {
+      let where = { domain: deployment.domain };
+      return this.database.getDeployments(where).then(
+        (deployments:Deployment[]) => {
+          if (deployments && deployments.length > 0) {
+            this.showAlert(translations[0], translations[1]);
+          }
+          else {
+            this.trackEvent("Deployments", "added", deployment.website);
+            this.loginDeployment(deployment);
+          }
+        });
+    });
   }
 
   loginDeployment(deployment:Deployment) {
     this.logger.info(this, "loginDeployment");
-    let loading = this.showLoading("Adding...");
-    return this.api.clientLogin(deployment).then(
-      (login:Login) => {
-        this.logger.info(this, "loginDeployment", "Tokens", login);
-        deployment.copyInto(login);
-        this.api.getDeployment(deployment, false).then((details:Deployment) => {
-          deployment.copyInto(details);
-          this.database.saveDeployment(deployment).then(
-            (id:number) => {
-              this.logger.info(this, "loginDeployment", "ID", id);
-              if (id) {
-                deployment.id = id;
+    this.language.getTranslations([
+      'DEPLOYMENT_ADDING_',
+      'DEPLOYMENT_ADD_FAILURE',
+      'DEPLOYMENT_ADD_FAILURE_DESCRIPTION',
+      'LOGIN_FAILURE']).then((translations:string[]) => {
+      let loading = this.showLoading(translations[0]);
+      return this.api.clientLogin(deployment).then(
+        (login:Login) => {
+          this.logger.info(this, "loginDeployment", "Tokens", login);
+          deployment.copyInto(login);
+          this.api.getDeployment(deployment, false).then((details:Deployment) => {
+            deployment.copyInto(details);
+            this.database.saveDeployment(deployment).then(
+              (id:number) => {
+                this.logger.info(this, "loginDeployment", "ID", id);
+                if (id) {
+                  deployment.id = id;
+                  loading.dismiss();
+                  this.hideModal({
+                    deployment : deployment
+                  });
+                }
+                else {
+                  loading.dismiss();
+                  this.showAlert(translations[1], translations[2]);
+                }
+              },
+              (error:any) => {
+                this.logger.error(this, "loginDeployment", error);
                 loading.dismiss();
-                this.hideModal({
-                  deployment : deployment
-                });
-              }
-              else {
-                loading.dismiss();
-                this.showAlert('Problem Adding Deployment', 'There was a problem adding your deployment.');
-              }
-            },
-            (error:any) => {
-              this.logger.error(this, "loginDeployment", error);
-              loading.dismiss();
-              this.showAlert('Problem Adding Deployment', error);
-            });
+                this.showAlert(translations[1], error);
+              });
+          });
+        },
+        (error:any) => {
+          this.logger.error(this, "loginDeployment", "Client", error);
+          loading.dismiss();
+          this.showAlert(translations[3], error);
         });
-      },
-      (error:any) => {
-        this.logger.error(this, "loginDeployment", "Client", error);
-        loading.dismiss();
-        this.showAlert('Problem Logging In', error);
-      });
+    });
   }
 
 }

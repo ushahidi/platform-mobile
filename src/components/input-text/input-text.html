@@ -6,5 +6,5 @@
     </ion-label>
     <ion-input #input type="text" [formControlName]="attribute.key" [(ngModel)]="text" (keypress)="onKeyPress($event)" (focus)="onFocus($event)" (blur)="onBlur($event)"></ion-input>
   </ion-item>
-  <p class="input-error" padding-left *ngIf="attribute.required == true && (text == null || text.length == 0) && focused == false && submitted == true">{{'TEXT_REQUIRED' | translate}}</p>
+  <p class="input-error" padding-left *ngIf="attribute.required == true && (text == null || text.length == 0) && focused == false && submitted == true">{{'INPUT_TEXT_REQUIRED' | translate}}</p>
 </div>

@@ -118,29 +118,39 @@ export class MyApp {
       },
       (error) => {
         this.splashScreen.hide();
-        this.showAlert("Database Schema Changed", "The database schema has changed, your local database will need to be reset.", [{
-          text: 'Reset Database',
-          handler: (clicked) => {
-            let loading = this.showLoading("Resetting...");
-            this.resetDatabase().then(
-              (reset:any) => {
-                this.loadDatabase(models).then(
-                  (created:any) => {
-                    loading.dismiss();
-                    this.showRootPage();
+        this.language.getTranslations([
+          'DATABASE_SCHEMA_CHANGED',
+          'DATABASE_SCHEMA_CHANGED_DESCRIPTION',
+          'DATABASE_RESET',
+          'DATABASE_RESETTING_',
+          'DATABASE_CREATE_FAILURE',
+          'DATABASE_CREATE_FAILURE_DESCRIPTION',
+          'DATABASE_RESET_FAILURE',
+          'DATABASE_RESET_FAILURE_DESCRIPTION']).then((translations:string[]) => {
+            this.showAlert(translations[0], translations[1], [{
+              text: translations[2],
+              handler: (clicked) => {
+                let loading = this.showLoading(translations[3]);
+                this.resetDatabase().then(
+                  (reset:any) => {
+                    this.loadDatabase(models).then(
+                      (created:any) => {
+                        loading.dismiss();
+                        this.showRootPage();
+                      },
+                      (error:any) => {
+                        loading.dismiss();
+                        this.showAlert(translations[4], translations[5]);
+                      }
+                    );
                   },
                   (error:any) => {
                     loading.dismiss();
-                    this.showAlert("Problem Creating Database", "There was a problem creating the database.");
-                  }
-                );
-              },
-              (error:any) => {
-                loading.dismiss();
-                this.showAlert("Problem Resetting Database", "There was a problem resetting the database.");
-            });
-          }
-        }]);
+                    this.showAlert(translations[6], translations[7]);
+                });
+              }
+            }]);
+        });
     });
   }
 
@@ -288,10 +298,15 @@ export class MyApp {
   }
 
   changeDeployment(deployment:Deployment):Promise<any> {
-    let loading = this.showLoading("Loading...");
-    return this.showDeployment(deployment).then((loaded) => {
-      loading.dismiss();
-    })
+    return new Promise((resolve, reject) => {
+      this.language.getTranslation('LOADING_').then((translation:string) => {
+        let loading = this.showLoading(translation);
+        this.showDeployment(deployment).then((loaded) => {
+          loading.dismiss();
+          resolve();
+        })
+      });
+    });
   }
 
   showDeployment(deployment:Deployment):Promise<any> {
@@ -307,41 +322,46 @@ export class MyApp {
   }
 
   removeDeployment(event:any, deployment:Deployment) {
-    this.logger.info(this, "removeDeployment", deployment.name);
-    this.trackEvent("Deployments", "removed", deployment.website);
-    let loading = this.showLoading("Removing...");
-    let promises = [
-      this.api.removeLogin(deployment),
-      this.database.removeUsers(deployment),
-      this.database.removeAttributes(deployment),
-      this.database.removeStages(deployment),
-      this.database.removeForms(deployment),
-      this.database.removeValues(deployment),
-      this.database.removeImages(deployment),
-      this.database.removePosts(deployment),
-      this.database.removeFilters(deployment),
-      this.database.removeDeployment(deployment)];
-    Promise.all(promises).then(
-      (results) => {
-        this.database.getDeployments().then(results => {
-          loading.dismiss();
-          this.zone.run(() => {
-            this.deployments = <any[]>results;
-            if (this.deployments.length == 0) {
-              this.nav.setRoot(DeploymentNonePage);
-              this.menuController.close();
-            }
-            else if (this.deployment.id == deployment.id){
-              this.showDeployment(this.deployments[0]);
-            }
+    this.language.getTranslations([
+      'DEPLOYMENT_REMOVING_',
+      'DEPLOYMENT_REMOVE_DESCRIPTION']).then((translations:string[]) => {
+      this.logger.info(this, "removeDeployment", deployment.name);
+      this.trackEvent("Deployments", "removed", deployment.website);
+      let loading = this.showLoading(translations[0]);
+      let promises = [
+        this.api.removeLogin(deployment),
+        this.database.removeUsers(deployment),
+        this.database.removeAttributes(deployment),
+        this.database.removeStages(deployment),
+        this.database.removeForms(deployment),
+        this.database.removeValues(deployment),
+        this.database.removeImages(deployment),
+        this.database.removePosts(deployment),
+        this.database.removeFilters(deployment),
+        this.database.removeTags(deployment),
+        this.database.removeDeployment(deployment)];
+      Promise.all(promises).then(
+        (results) => {
+          this.database.getDeployments().then(results => {
+            loading.dismiss();
+            this.zone.run(() => {
+              this.deployments = <any[]>results;
+              if (this.deployments.length == 0) {
+                this.nav.setRoot(DeploymentNonePage);
+                this.menuController.close();
+              }
+              else if (this.deployment.id == deployment.id){
+                this.showDeployment(this.deployments[0]);
+              }
+            });
           });
+        },
+        (error) => {
+          this.logger.error(this, "removeDeployment", error);
+          loading.dismiss();
+          this.showAlert(translations[1], error);
         });
-      },
-      (error) => {
-        this.logger.error(this, "removeDeployment", error);
-        loading.dismiss();
-        this.showAlert('Problem Removing Deployment', error);
-      });
+    });
   }
 
   showLoading(message:string):Loading {

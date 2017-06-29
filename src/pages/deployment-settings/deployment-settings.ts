@@ -61,29 +61,35 @@ export class DeploymentSettingsPage extends BasePage {
 
   onDone(event:any) {
     this.logger.info(this, 'onDone');
-    let loading = this.showLoading("Saving...");
-    let changes = {
-      name: this.deployment.name,
-      email: this.deployment.email,
-      description: this.deployment.description };
-    this.api.updateDeployment(this.deployment, changes).then(
-      (updated:any) => {
-        this.deployment.copyInto(changes);
-        this.database.saveDeployment(this.deployment).then(
-          (saved:any) => {
-            this.events.publish(DEPLOYMENT_UPDATED, this.deployment.id);
-            this.trackEvent("Deployments", "updated", this.deployment.website);
-            loading.dismiss();
-            this.hideModal();
-          },
-          (error:any) => {
-            loading.dismiss();
-            this.showAlert('Problem Saving Settings', error);
-          });
-      },
-      (error:any) => {
-        loading.dismiss();
-        this.showAlert('Problem Saving Settings', error);
+    this.language.getTranslations([
+      'SETTINGS_SAVING_',
+      'SETTINGS_SAVE_SUCCESS',
+      'SETTINGS_SAVE_FAILURE']).then((translations:string[]) => {
+      let loading = this.showLoading(translations[0]);
+      let changes = {
+        name: this.deployment.name,
+        email: this.deployment.email,
+        description: this.deployment.description };
+      this.api.updateDeployment(this.deployment, changes).then(
+        (updated:any) => {
+          this.deployment.copyInto(changes);
+          this.database.saveDeployment(this.deployment).then(
+            (saved:any) => {
+              this.events.publish(DEPLOYMENT_UPDATED, this.deployment.id);
+              this.trackEvent("Deployments", "updated", this.deployment.website);
+              loading.dismiss();
+              this.showToast(translations[1]);
+              this.hideModal();
+            },
+            (error:any) => {
+              loading.dismiss();
+              this.showAlert(translations[2], error);
+            });
+        },
+        (error:any) => {
+          loading.dismiss();
+          this.showAlert(translations[2], error);
+      });
     });
   }
 

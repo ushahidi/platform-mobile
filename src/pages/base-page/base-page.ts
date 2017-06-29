@@ -219,7 +219,11 @@ export class BasePage {
   }
 
   showOfflineAlert() {
-    this.showAlert("Internet Offline", "There currently is no internet connection available.")
+    this.language.getTranslations([
+      'OFFLINE_WARNING',
+      'OFFLINE_WARNING_DESCRIPTION']).then((translations:string[]) => {
+      this.showAlert(translations[0], translations[1]);
+    });
   }
 
   resizeContent(delay:number=100) {

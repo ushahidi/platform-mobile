@@ -100,71 +100,99 @@ export class ResponseAddPage extends BasePage {
     if (this.hasRequiredValues()) {
       this.loadFormValues();
       if (this.offline) {
-        let loading = this.showLoading("Saving...");
-        this.savePost(this.post).then(
-          (saved) => {
-            this.events.publish(POST_UPDATED, this.post.id);
-            loading.dismiss();
-            let buttons = [{
-              text: 'OK',
-              role: 'cancel',
-              handler: () => {
-                this.hideModal();
-              }
-            }];
-            this.showAlert('Response Saved', 'Your response has been saved!', buttons);
-            this.trackEvent("Posts", "saved", this.deployment.website);
-          },
-          (error) => {
-            loading.dismiss();
-            this.showAlert('Save Failed', 'There was a problem saving your response.');
-          });
+        this.language.getTranslations([
+          'ACTION_OK',
+          'RESPONSE_SAVING_',
+          'RESPONSE_SAVE_SUCCESS',
+          'RESPONSE_SAVE_SUCCESS_DESCRIPTION',
+          'RESPONSE_SAVE_FAILURE',
+          'RESPONSE_SAVE_FAILURE_DESCRIPTION']).then((translations:string[]) => {
+          let loading = this.showLoading(translations[1]);
+          this.savePost(this.post).then(
+            (saved) => {
+              this.events.publish(POST_UPDATED, this.post.id);
+              loading.dismiss();
+              let buttons = [{
+                text: translations[0],
+                role: 'cancel',
+                handler: () => {
+                  this.hideModal();
+                }
+              }];
+              this.showAlert(translations[2], translations[3], buttons);
+              this.trackEvent("Posts", "saved", this.deployment.website);
+            },
+            (error) => {
+              loading.dismiss();
+              this.showAlert(translations[4], translations[5]);
+            });
+        });
       }
       else if (this.post.id > 0) {
-        let loading = this.showLoading("Updating...");
-        this.updatePost(this.post).then(
-          (updated) => {
-            this.events.publish(POST_UPDATED, this.post.id);
-            loading.dismiss();
-            let buttons = [{
-              text: 'OK',
-              role: 'cancel',
-              handler: () => {
-                this.hideModal();
-              }
-            }];
-            this.showAlert('Response Updated', 'Your response has been updated!', buttons);
-            this.trackEvent("Posts", "updated", this.post.url);
-          },
-          (error) => {
-            loading.dismiss();
-            this.showAlert('Update Failed', 'There was a problem updating your response.');
+        this.language.getTranslations([
+          'ACTION_OK',
+          'RESPONSE_UPDATING_',
+          'RESPONSE_UPDATE_SUCCESS',
+          'RESPONSE_UPDATE_SUCCESS_DESCRIPTION',
+          'RESPONSE_UPDATE_FAILURE',
+          'RESPONSE_UPDATE_FAILURE_DESCRIPTION']).then((translations:string[]) => {
+            let loading = this.showLoading(translations[1]);
+            this.updatePost(this.post).then(
+              (updated) => {
+                this.events.publish(POST_UPDATED, this.post.id);
+                loading.dismiss();
+                let buttons = [{
+                  text: translations[0],
+                  role: 'cancel',
+                  handler: () => {
+                    this.hideModal();
+                  }
+                }];
+                this.showAlert(translations[2], translations[3], buttons);
+                this.trackEvent("Posts", "updated", this.post.url);
+              },
+              (error) => {
+                loading.dismiss();
+                this.showAlert(translations[4], translations[5]);
+              });
           });
       }
       else {
-        let loading = this.showLoading("Posting...");
-        this.createPost(this.post).then(
-          (updated) => {
-            this.events.publish(POST_UPDATED, this.post.id);
-            loading.dismiss();
-            let buttons = [{
-              text: 'OK',
-              role: 'cancel',
-              handler: () => {
-                this.hideModal();
-              }
-            }];
-            this.showAlert('Response Posted', 'Your response has been posted!', buttons);
-            this.trackEvent("Posts", "added", this.post.url);
-          },
-          (error) => {
-            loading.dismiss();
-            this.showAlert('Post Failed', 'There was a problem posting your response.');
+        this.language.getTranslations([
+          'ACTION_OK',
+          'RESPONSE_POSTING_',
+          'RESPONSE_POST_SUCCESS',
+          'RESPONSE_POST_SUCCESS_DESCRIPTION',
+          'RESPONSE_POST_FAILURE',
+          'RESPONSE_POST_FAILURE_DESCRIPTION']).then((translations:string[]) => {
+            let loading = this.showLoading(translations[1]);
+            this.createPost(this.post).then(
+              (updated) => {
+                this.events.publish(POST_UPDATED, this.post.id);
+                loading.dismiss();
+                let buttons = [{
+                  text: translations[0],
+                  role: 'cancel',
+                  handler: () => {
+                    this.hideModal();
+                  }
+                }];
+                this.showAlert(translations[2], translations[3], buttons);
+                this.trackEvent("Posts", "added", this.post.url);
+              },
+              (error) => {
+                loading.dismiss();
+                this.showAlert(translations[4], translations[5]);
+              });
           });
       }
     }
     else {
-      this.showAlert('Required Fields Missing', 'Please ensure all required fields are entered and try again.');
+      this.language.getTranslations([
+        'RESPONSE_MISSING_FIELDS',
+        'RESPONSE_MISSING_FIELDS_DESCRIPTION']).then((translations:string[]) => {
+          this.showAlert(translations[0], translations[1]);
+        });
     }
   }
 

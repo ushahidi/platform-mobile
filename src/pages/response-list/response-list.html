@@ -42,28 +42,20 @@
       <ion-spinner name="ios"></ion-spinner>
     </div>
     <div class="no-responses" padding-left padding-right *ngIf="loading == false && refreshing == false">
-      <h6 *ngIf="posts == null && offline == false">
-        There was a problem downloading survey responses, please try again later.
-      </h6>
-      <h6 *ngIf="(posts == null || posts.length == 0) && offline == true">
-        Please verify you have an internet connection, then try downloading survey responses again.
-      </h6>
-      <h6 *ngIf="filter == null && posts && posts.length == 0 && offline == false">
-        This deployment doesn't have any<br> survey responses, yet.
-      </h6>
-      <h6 *ngIf="filter != null && posts && posts.length == 0">
-        There are no responses<br> for the current filter.
-      </h6>
+      <h6 *ngIf="filter == null && posts && posts.length == 0 && offline == false">{{'RESPONSES_NONE' | translate}}</h6>
+      <h6 *ngIf="posts == null && offline == false">{{'RESPONSES_NONE_ERROR' | translate}}</h6>
+      <h6 *ngIf="(posts == null || posts.length == 0) && offline == true">{{'RESPONSES_NONE_INTERNET' | translate}}</h6>
+      <h6 *ngIf="filter != null && posts && posts.length == 0">{{'RESPONSES_NONE_FILTER' | translate}}</h6>
       <button ion-button block text-uppercase color="primary" (click)="addResponse($event)"
-              *ngIf="filter == null && posts && posts.length == 0 && offline == false">Submit Survey Response</button>
+              *ngIf="filter == null && posts && posts.length == 0 && offline == false">{{'SURVEY_SUBMIT_RESPONSE' | translate}}</button>
     </div>
     <ion-list *ngIf="posts && posts.length > 0">
       <post-card [post]="post" (cardSelected)="showResponse(post)" (menuSelected)="showOptions(post)" *ngFor="let post of posts"></post-card>
     </ion-list>
     <div class="more" padding-left padding-right padding-bottom *ngIf="refreshing == false && posts && posts.length > 0">
       <button ion-button block color="more" (click)="loadMore($event)">
-        <span *ngIf="loading == true">Loading...</span>
-        <span *ngIf="loading == false">Load More</span>
+        <span *ngIf="loading == true">{{'LOADING_' | translate}}</span>
+        <span *ngIf="loading == false">{{'LOAD_MORE' | translate}}</span>
       </button>
     </div>
     <!-- <ion-infinite-scroll [enabled]="loading == false && refreshing == false" (ionInfinite)="loadMore($event)">
@@ -73,14 +65,12 @@
 </ion-content>
 <ion-footer>
   <ion-toolbar color="black" *ngIf="offline">
-    <p color="white" ion-text padding-left tappable (click)="showOfflineAlert()">Offline</p>
+    <p color="white" ion-text padding-left tappable (click)="showOfflineAlert()">{{'OFFLINE' | translate}}</p>
   </ion-toolbar>
   <ion-toolbar color="dark" *ngIf="offline == false && filter">
-    <p color="white" ion-text padding-left>Filters applied</p>
+    <p color="white" ion-text padding-left>{{'FILTERS_APPLIED' | translate}}</p>
     <ion-buttons end>
-      <button color="white" ion-button text-only text-uppercase (click)="clearFilter($event, filter)">
-        Clear
-      </button>
+      <button color="white" ion-button text-only text-uppercase (click)="clearFilter($event, filter)">{{'FILTERS_CLEAR' | translate}}</button>
     </ion-buttons>
   </ion-toolbar>
 </ion-footer>

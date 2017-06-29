@@ -69,7 +69,9 @@ export class ResponseMapPage extends BasePage {
   ionViewDidEnter() {
     super.ionViewDidEnter();
     if (this.draggable) {
-      this.showToast("Drag the marker to change the location, or search for location by address.", 3000);
+      this.language.getTranslation('MAP_DRAG').then((translation:string) => {
+        this.showToast(translation, 3000);
+      });
     }
   }
 
@@ -117,38 +119,48 @@ export class ResponseMapPage extends BasePage {
   }
 
   showStyles(event) {
-    this.logger.info(this, "showStyles");
-    let buttons = [
-      {
-        text: 'Streets',
-        handler:() => this.changeStyle("streets")
-      },
-      {
-        text: 'Outdoors',
-        handler:() => this.changeStyle("outdoors")
-      },
-      {
-        text: 'Light',
-        handler:() => this.changeStyle("light")
-      },
-      {
-        text: 'Dark',
-        handler:() => this.changeStyle("dark")
-      },
-      {
-        text: 'Satellite',
-        handler:() => this.changeStyle("satellite")
-      },
-      {
-        text: 'Satellite Streets',
-        handler:() => this.changeStyle("satellite-streets")
-      },
-      {
-        text: 'Cancel',
-        role: 'cancel'
-      }
-    ];
-    this.showActionSheet("Change map style", buttons);
+    this.language.getTranslations([
+      'MAP_STYLE_STREETS',
+      'MAP_STYLE_OUTDOORS',
+      'MAP_STYLE_LIGHT',
+      'MAP_STYLE_DARK',
+      'MAP_STYLE_SATELLITE',
+      'MAP_STYLE_SATELLITE_STREETS',
+      'ACTION_CANCEL',
+      'MAP_STYLE']).then((translations:string[]) => {
+      this.logger.info(this, "showStyles");
+      let buttons = [
+        {
+          text: translations[0],
+          handler:() => this.changeStyle("streets")
+        },
+        {
+          text: translations[1],
+          handler:() => this.changeStyle("outdoors")
+        },
+        {
+          text: translations[2],
+          handler:() => this.changeStyle("light")
+        },
+        {
+          text: translations[3],
+          handler:() => this.changeStyle("dark")
+        },
+        {
+          text: translations[4],
+          handler:() => this.changeStyle("satellite")
+        },
+        {
+          text: translations[5],
+          handler:() => this.changeStyle("satellite-streets")
+        },
+        {
+          text: translations[6],
+          role: 'cancel'
+        }
+      ];
+      this.showActionSheet(translations[7], buttons);
+    });
   }
 
   changeStyle(mapStyle:string) {
