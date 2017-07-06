@@ -2,7 +2,8 @@
 
 secrets.ts
 node_modules
-platforms
+platforms/ios
+platforms/android
 .tmp
 .sass-cache
 *.swp
