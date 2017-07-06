@@ -42,13 +42,13 @@
         {{'SETTINGS' | translate}}
       </ion-item>
       <ion-item detail-push *ngIf="offline == false && (login == null || login.username == null || login.username == '')" (click)="userLogin($event)">
-        {{'LOGIN' | translate}}
+        {{'USER_LOGIN' | translate}}
       </ion-item>
       <ion-item detail-push *ngIf="offline == false && (login == null || login.username == null || login.username == '')" (click)="userSignup($event)">
-        {{'SIGNUP' | translate}}
+        {{'USER_SIGNUP' | translate}}
       </ion-item>
       <ion-item detail-push *ngIf="login && login.username != null && login.username.length > 0" (click)="userLogout($event)">
-        {{'LOGOUT' | translate}}
+        {{'USER_LOGOUT' | translate}}
       </ion-item>
     </ion-list>
   </div>

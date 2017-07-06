@@ -15,20 +15,26 @@ import { BasePage } from '../../pages/base-page/base-page';
 import { DEPLOYMENT_UPDATED } from '../../constants/events';
 
 @Component({
-  selector: 'deployment-login-page',
-  templateUrl: 'deployment-login.html',
+  selector: 'user-signup-page',
+  templateUrl: 'user-signup.html',
   providers: [ ApiService, DatabaseService, LoggerService ],
 })
-export class DeploymentLoginPage extends BasePage {
+export class UserSignupPage extends BasePage {
 
   login: Login = null;
   deployment: Deployment = null;
 
-  @ViewChild('username')
-  username: TextInput;
+  @ViewChild('name')
+  name: TextInput;
+
+  @ViewChild('email')
+  email: TextInput;
 
   @ViewChild('password')
   password: TextInput;
+
+  @ViewChild('confirm')
+  confirm: TextInput;
 
   constructor(
     protected zone:NgZone,
@@ -54,60 +60,53 @@ export class DeploymentLoginPage extends BasePage {
     this.deployment = this.getParameter<Deployment>("deployment");
     this.login = this.getParameter<Login>("login");
     if (this.login && this.login.username) {
-      this.username.value = this.login.username;
+      this.email.value = this.login.username;
     }
     if (this.login && this.login.password) {
       this.password.value = this.login.password;
     }
   }
 
-  userLogin(event:any) {
-    this.logger.info(this, "userLogin");
-    let username = this.username.value.toString();
+  userSignup(event:any) {
+    this.logger.info(this, "userSignup");
+    let name = this.name.value.toString();
+    let email = this.email.value.toString();
     let password = this.password.value.toString();
-    if (username.length > 0 && password.length > 0) {
+    if (name.length > 0 && email.length > 0 && password.length > 0) {
       this.language.getTranslations([
-        'LOGGING_IN_',
-        'LOGIN_SUCCESS',
-        'LOGIN_FAILURE',
-        'LOGIN_INVALID_CREDENTIALS',
-        'LOGIN_INVALID_CREDENTIALS_DESCRIPTION']).then((translations:string[]) => {
+        'USER_SIGNING_UP_',
+        'USER_SIGNUP_SUCCESS',
+        'USER_SIGNUP_FAILURE']).then((translations:string[]) => {
         let loading = this.showLoading(translations[0]);
-        this.api.userLogin(this.deployment, username, password).then(
+        this.api.userSignup(this.deployment, email, password, name).then(
           (login:Login) => {
-            this.logger.info(this, "userLogin", "Login", login);
-            if (login != null) {
-              return Promise.resolve()
-                .then(() => { return this.loadDeployment(); })
-                .then(() => { return this.loadForms(); })
-                .then(() => { return this.loadCollections(); })
-                .then(() => { return this.removePosts(); })
-                .then(() => {
-                  loading.dismiss();
-                  this.events.publish(DEPLOYMENT_UPDATED, this.deployment.id);
-                  this.showToast(translations[1]);
-                  this.showDeployment(this.deployment);
-                })
-                .catch((error:any) => {
-                  loading.dismiss();
-                  this.showAlert(translations[2], error);
-                });
-            }
-            else {
-              loading.dismiss();
-              this.showAlert(translations[3], translations[4]);
-            }
+            this.logger.info(this, "userSignup", login);
+            return Promise.resolve()
+              .then(() => { return this.loadDeployment(); })
+              .then(() => { return this.loadForms(); })
+              .then(() => { return this.loadCollections(); })
+              .then(() => { return this.removePosts(); })
+              .then(() => {
+                loading.dismiss();
+                this.events.publish(DEPLOYMENT_UPDATED, this.deployment.id);
+                this.showToast(translations[1]);
+                this.showDeployment(this.deployment);
+              })
+              .catch((error:any) => {
+                loading.dismiss();
+                this.showAlert(translations[2], error);
+              });
           },
           (error:any) => {
             loading.dismiss();
-            this.showAlert(translations[3], translations[4]);
+            this.showAlert(translations[2], error);
           });
       });
     }
   }
 
   showDeployment(deployment:Deployment) {
-    this.trackEvent("Deployments", "login", this.deployment.website);
+    this.trackEvent("Deployments", "signup", this.deployment.website);
     this.closePage({
       deployment: deployment });
   }

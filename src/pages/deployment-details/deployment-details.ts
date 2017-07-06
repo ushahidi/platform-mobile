@@ -16,8 +16,8 @@ import { LoggerService } from '../../providers/logger-service';
 import { DatabaseService } from '../../providers/database-service';
 
 import { BasePage } from '../../pages/base-page/base-page';
-import { DeploymentLoginPage } from '../../pages/deployment-login/deployment-login';
-import { DeploymentSignupPage } from '../../pages/deployment-signup/deployment-signup';
+import { UserLoginPage } from '../../pages/user-login/user-login';
+import { UserSignupPage } from '../../pages/user-signup/user-signup';
 import { DeploymentSettingsPage } from '../../pages/deployment-settings/deployment-settings';
 import { ResponseAddPage } from '../../pages/response-add/response-add';
 import { ResponseListPage } from '../../pages/response-list/response-list';
@@ -26,7 +26,7 @@ import { ResponseListPage } from '../../pages/response-list/response-list';
   selector: 'deployment-details-page',
   templateUrl: 'deployment-details.html',
   providers: [ ApiService, DatabaseService, LoggerService ],
-  entryComponents:[ DeploymentLoginPage, DeploymentSignupPage, DeploymentSettingsPage, ResponseAddPage, ResponseListPage ],
+  entryComponents:[ UserLoginPage, UserSignupPage, DeploymentSettingsPage, ResponseAddPage, ResponseListPage ],
   animations: [
     trigger('fadeInOut', [
       state('true', style({ opacity: 0 })),
@@ -319,13 +319,13 @@ export class DeploymentDetailsPage extends BasePage {
 
   userLogin(event:any) {
     this.logger.info(this, "userLogin");
-    this.showPage(DeploymentLoginPage,
+    this.showPage(UserLoginPage,
       { deployment: this.deployment });
   }
 
   userSignup(event:any) {
     this.logger.info(this, "userSignup");
-    this.showPage(DeploymentSignupPage,
+    this.showPage(UserSignupPage,
       { deployment: this.deployment });
   }
 

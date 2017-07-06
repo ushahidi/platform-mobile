@@ -1,33 +1,33 @@
 <ion-header>
   <ion-navbar color="navbar">
-    <ion-title>{{'SIGNUP' | translate}}</ion-title>
+    <ion-title>{{'USER_SIGNUP' | translate}}</ion-title>
   </ion-navbar>
 </ion-header>
-<ion-content class="deployment-login-page">
+<ion-content class="user-login-page">
   <div *ngIf="deployment && deployment.name">
     <h3 text-left padding-left padding-bottom ion-text color="dark">{{deployment.name}}</h3>
   </div>
   <ion-list>
     <ion-item>
-      <ion-label floating>{{'SIGNUP_NAME' | translate}} <span ion-text color="danger">*</span></ion-label>
+      <ion-label floating>{{'USER_NAME' | translate}} <span ion-text color="danger">*</span></ion-label>
       <ion-input #name type="text" clearInput="true"></ion-input>
     </ion-item>
     <ion-item>
-      <ion-label floating>{{'SIGNUP_EMAIL' | translate}} <span ion-text color="danger">*</span></ion-label>
+      <ion-label floating>{{'USER_EMAIL' | translate}} <span ion-text color="danger">*</span></ion-label>
       <ion-input #email type="email" clearInput="true"></ion-input>
     </ion-item>
     <ion-item>
-      <ion-label floating>{{'SIGNUP_PASSWORD' | translate}} <span ion-text color="danger">*</span></ion-label>
+      <ion-label floating>{{'USER_PASSWORD' | translate}} <span ion-text color="danger">*</span></ion-label>
       <ion-input #password type="password" clearInput="true"></ion-input>
     </ion-item>
     <ion-item>
-      <ion-label floating>{{'SIGNUP_PASSWORD_CONFIRM' | translate}} <span ion-text color="danger">*</span></ion-label>
+      <ion-label floating>{{'USER_PASSWORD_CONFIRM' | translate}} <span ion-text color="danger">*</span></ion-label>
       <ion-input #confirm type="password" clearInput="true"></ion-input>
     </ion-item>
   </ion-list>
   <div text-right padding-right>
     <button #login ion-button text-uppercase color="primary" (click)="userSignup($event)"
-          [disabled]="name.value.length == 0 || email.value.length == 0 || password.value.length == 0 || password.value != confirm.value">{{'SIGNUP' | translate}}</button>
+          [disabled]="name.value.length == 0 || email.value.length == 0 || password.value.length == 0 || password.value != confirm.value">{{'USER_SIGNUP' | translate}}</button>
   </div>
 </ion-content>
 <ion-footer>

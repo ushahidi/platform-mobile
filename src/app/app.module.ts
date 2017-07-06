@@ -32,8 +32,8 @@ import { BasePage } from '../pages/base-page/base-page';
 import { DeploymentNonePage } from '../pages/deployment-none/deployment-none';
 import { DeploymentSearchPage } from '../pages/deployment-search/deployment-search';
 import { DeploymentDetailsPage } from '../pages/deployment-details/deployment-details';
-import { DeploymentLoginPage } from '../pages/deployment-login/deployment-login';
-import { DeploymentSignupPage } from '../pages/deployment-signup/deployment-signup';
+import { UserLoginPage } from '../pages/user-login/user-login';
+import { UserSignupPage } from '../pages/user-signup/user-signup';
 import { DeploymentSettingsPage } from '../pages/deployment-settings/deployment-settings';
 
 import { ResponseListPage } from '../pages/response-list/response-list';
@@ -91,8 +91,8 @@ export function translateLoaderFactory(http: Http) {
     DeploymentSearchPage,
     DeploymentDetailsPage,
     DeploymentSettingsPage,
-    DeploymentLoginPage,
-    DeploymentSignupPage,
+    UserLoginPage,
+    UserSignupPage,
     ResponseListPage,
     ResponseDetailsPage,
     ResponseAddPage,
@@ -145,8 +145,8 @@ export function translateLoaderFactory(http: Http) {
     MyApp,
     DeploymentNonePage,
     DeploymentSearchPage,
-    DeploymentLoginPage,
-    DeploymentSignupPage,
+    UserLoginPage,
+    UserSignupPage,
     DeploymentDetailsPage,
     DeploymentSettingsPage,
     ResponseListPage,
