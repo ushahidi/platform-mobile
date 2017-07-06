@@ -150,6 +150,14 @@
 "SETTINGS_SAVING_": "Économie...",
 "SETTINGS_SAVE_SUCCESS": "paramètres sauvegardés",
 "SETTINGS_SAVE_FAILURE": "Paramètres d'économie de problèmes",
+"SIGNUP": "S'inscrire",
+"SIGNUP_NAME": "prénom",
+"SIGNUP_EMAIL": "Email",
+"SIGNUP_PASSWORD": "Mot de passe",
+"SIGNUP_PASSWORD_CONFIRM": "Confirmation mot de passe",
+"SIGNUP_SUCCESS": "Inscription réussie",
+"SIGNUP_FAILURE": "Problème d'inscription",
+"SIGNING_UP_": "S'enregistrer...",
 "STATUS": "Statut",
 "STATUS_PENDING": "en attendant",
 "STATUS_ARCHIVED": "Archivé",
@@ -160,6 +168,5 @@
 "WHITELABEL_GET_STARTED": "Commencer",
 "WHITELABEL_WELCOME_TO": "Bienvenue à",
 "WHITELABEL_RETRY": "Recharger les paramètres",
-"WHITELABEL_FAILURE": "Paramètres de chargement du problème",
-"WHITELABEL_FAILURE_RETRY": "Il y a eu un problème lors du chargement des paramètres de l'application, vérifiez votre connexion Internet et réessayez."
+"WHITELABEL_FAILURE": "Paramètres de chargement du problème"
 }

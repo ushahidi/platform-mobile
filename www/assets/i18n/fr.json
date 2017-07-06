@@ -156,5 +156,10 @@
 "STATUS_PUBLISHED": "Publié",
 "STATUS_UNDER_REVIEW": "À l'étude",
 "SURVEYS": "Enquêtes",
-"SURVEY_SUBMIT_RESPONSE": "Soumettre une réponse à l'enquête"
+"SURVEY_SUBMIT_RESPONSE": "Soumettre une réponse à l'enquête",
+"WHITELABEL_GET_STARTED": "Commencer",
+"WHITELABEL_WELCOME_TO": "Bienvenue à",
+"WHITELABEL_RETRY": "Recharger les paramètres",
+"WHITELABEL_FAILURE": "Paramètres de chargement du problème",
+"WHITELABEL_FAILURE_RETRY": "Il y a eu un problème lors du chargement des paramètres de l'application, vérifiez votre connexion Internet et réessayez."
 }

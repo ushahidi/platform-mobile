@@ -150,6 +150,14 @@
 "SETTINGS_SAVING_": "إنقاذ...",
 "SETTINGS_SAVE_SUCCESS": "تم حفظ الإعدادات",
 "SETTINGS_SAVE_FAILURE": "إعدادات حفظ المشكلة",
+"SIGNUP": "سجل",
+"SIGNUP_NAME": "اسم",
+"SIGNUP_EMAIL": "البريد الإلكتروني",
+"SIGNUP_PASSWORD": "كلمه السر",
+"SIGNUP_PASSWORD_CONFIRM": "تأكيد كلمة المرور",
+"SIGNUP_SUCCESS": "الاشتراك بنجاح",
+"SIGNUP_FAILURE": "المشكلة الاشتراك",
+"SIGNING_UP_": "توقيع...",
 "STATUS": "الحالة",
 "STATUS_PENDING": "قيد الانتظار",
 "STATUS_ARCHIVED": "أرشفة",
@@ -160,6 +168,5 @@
 "WHITELABEL_GET_STARTED": "البدء",
 "WHITELABEL_WELCOME_TO": "مرحبا بك في",
 "WHITELABEL_RETRY": "إعادة تحميل الإعدادات",
-"WHITELABEL_FAILURE": "إعدادات تحميل المشكلة",
-"WHITELABEL_FAILURE_RETRY": "حدثت مشكلة أثناء تحميل إعدادات التطبيق، يرجى التحقق من اتصالك بالإنترنت وإعادة المحاولة."
+"WHITELABEL_FAILURE": "إعدادات تحميل المشكلة"
 }

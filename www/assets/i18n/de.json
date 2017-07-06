@@ -156,5 +156,10 @@
 "STATUS_PUBLISHED": "Veröffentlicht",
 "STATUS_UNDER_REVIEW": "Unter Überprüfung",
 "SURVEYS": "Umfragen",
-"SURVEY_SUBMIT_RESPONSE": "Senden Sie eine Umfrage Antwort"
+"SURVEY_SUBMIT_RESPONSE": "Senden Sie eine Umfrage Antwort",
+"WHITELABEL_GET_STARTED": "Sich aufmachen",
+"WHITELABEL_WELCOME_TO": "Willkommen zu",
+"WHITELABEL_RETRY": "Einstellungen neu laden",
+"WHITELABEL_FAILURE": "Problem Laden von Einstellungen",
+"WHITELABEL_FAILURE_RETRY": "Es gab ein Problem beim Laden der App-Einstellungen, bitte überprüfen Sie Ihre Internetverbindung und versuchen Sie es erneut."
 }

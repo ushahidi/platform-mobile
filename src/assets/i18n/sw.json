@@ -150,6 +150,14 @@
 "SETTINGS_SAVING_": "Inaokoa ...",
 "SETTINGS_SAVE_SUCCESS": "Mipangilio imehifadhiwa",
 "SETTINGS_SAVE_FAILURE": "Tatizo Kuhifadhi Mipangilio",
+"SIGNUP": "Ingia",
+"SIGNUP_NAME": "Jina",
+"SIGNUP_EMAIL": "Barua pepe",
+"SIGNUP_PASSWORD": "Nenosiri",
+"SIGNUP_PASSWORD_CONFIRM": "Uthibitisho wa nenosiri",
+"SIGNUP_SUCCESS": "Kujiandikisha Imefanikiwa",
+"SIGNUP_FAILURE": "Tatizo la Kujiunga",
+"SIGNING_UP_": "Kujiandikisha ...",
 "STATUS": "Hali",
 "STATUS_PENDING": "Inasubiri",
 "STATUS_ARCHIVED": "Imehifadhiwa",
@@ -160,6 +168,5 @@
 "WHITELABEL_GET_STARTED": "Anza",
 "WHITELABEL_WELCOME_TO": "Karibu",
 "WHITELABEL_RETRY": "Pakia upya Mipangilio",
-"WHITELABEL_FAILURE": "Tatizo Loading Settings",
-"WHITELABEL_FAILURE_RETRY": "Kulikuwa na tatizo kupakia mipangilio ya programu, tafadhali hakikisha uunganisho wako wa mtandao na jaribu tena."
+"WHITELABEL_FAILURE": "Tatizo Loading Settings"
 }

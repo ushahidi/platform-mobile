@@ -150,6 +150,14 @@
 "SETTINGS_SAVING_": "Ahorro...",
 "SETTINGS_SAVE_SUCCESS": "Ajustes guardados",
 "SETTINGS_SAVE_FAILURE": "Configuración del ahorro de problemas",
+"SIGNUP": "Regístrate",
+"SIGNUP_NAME": "Nombre",
+"SIGNUP_EMAIL": "Email",
+"SIGNUP_PASSWORD": "Contraseña",
+"SIGNUP_PASSWORD_CONFIRM": "Confirmación de contraseña",
+"SIGNUP_SUCCESS": "Registro exitoso",
+"SIGNUP_FAILURE": "Problema al registrarse",
+"SIGNING_UP_": "Regístrese ...",
 "STATUS": "Estado",
 "STATUS_PENDING": "Pendiente",
 "STATUS_ARCHIVED": "Archivado",
@@ -160,6 +168,5 @@
 "WHITELABEL_GET_STARTED": "Empezar",
 "WHITELABEL_WELCOME_TO": "Bienvenido a",
 "WHITELABEL_RETRY": "Recargar configuración",
-"WHITELABEL_FAILURE": "Problema al cargar ajustes",
-"WHITELABEL_FAILURE_RETRY": "Se ha producido un error al cargar la configuración de la aplicación. Comprueba tu conexión a Internet y vuelve a intentarlo."
+"WHITELABEL_FAILURE": "Problema al cargar ajustes"
 }

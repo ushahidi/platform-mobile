@@ -121,7 +121,7 @@
 "RESPONSE_POST_SUCCESS": "Respuesta publicada",
 "RESPONSE_POST_SUCCESS_DESCRIPTION": "¡Su respuesta ha sido publicada!",
 "RESPONSE_POST_FAILURE": "Respuesta de publicación de problemas",
-"RESPONSE_POST_FAILURE_DESCRIPTION": "Se ha producido un problema al publicar tu respuesta.",
+"RESPONSE_POST_FAILURE_DESCRIPTION": "Se ha producido un error al publicar tu respuesta.",
 "RESPONSE_UPDATING_": "Actualizando ...",
 "RESPONSE_UPDATE_SUCCESS": "Respuesta actualizada",
 "RESPONSE_UPDATE_SUCCESS_DESCRIPTION": "Su respuesta ha sido actualizada!",
@@ -156,5 +156,10 @@
 "STATUS_PUBLISHED": "Publicado",
 "STATUS_UNDER_REVIEW": "Bajo revisión",
 "SURVEYS": "Encuestas",
-"SURVEY_SUBMIT_RESPONSE": "Enviar respuesta a la encuesta"
+"SURVEY_SUBMIT_RESPONSE": "Enviar respuesta a la encuesta",
+"WHITELABEL_GET_STARTED": "Empezar",
+"WHITELABEL_WELCOME_TO": "Bienvenido a",
+"WHITELABEL_RETRY": "Recargar configuración",
+"WHITELABEL_FAILURE": "Problema al cargar ajustes",
+"WHITELABEL_FAILURE_RETRY": "Se ha producido un error al cargar la configuración de la aplicación. Comprueba tu conexión a Internet y vuelve a intentarlo."
 }

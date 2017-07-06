@@ -7,16 +7,13 @@
   <div *ngIf="deployment && deployment.name">
     <h3 text-left padding-left padding-bottom ion-text color="dark">{{deployment.name}}</h3>
   </div>
-  <div text-center *ngIf="deployment && deployment.image">
-    <image-cache padding [src]="deployment.image"></image-cache>
-  </div>
   <ion-list>
     <ion-item>
-      <ion-label floating>{{'LOGIN_EMAIL' | translate}}</ion-label>
+      <ion-label floating>{{'LOGIN_EMAIL' | translate}} <span ion-text color="danger">*</span></ion-label>
       <ion-input #username type="email" clearInput="true"></ion-input>
     </ion-item>
     <ion-item>
-      <ion-label floating>{{'LOGIN_PASSWORD' | translate}}</ion-label>
+      <ion-label floating>{{'LOGIN_PASSWORD' | translate}} <span ion-text color="danger">*</span></ion-label>
       <ion-input #password type="password" clearInput="true"></ion-input>
     </ion-item>
   </ion-list>

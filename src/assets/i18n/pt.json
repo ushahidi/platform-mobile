@@ -150,6 +150,14 @@
 "SETTINGS_SAVING_": "Salvando ...",
 "SETTINGS_SAVE_SUCCESS": "Configurações salvas",
 "SETTINGS_SAVE_FAILURE": "Configurações de economia de problemas",
+"SIGNUP": "inscrever-se",
+"SIGNUP_NAME": "Nome",
+"SIGNUP_EMAIL": "O email",
+"SIGNUP_PASSWORD": "Senha",
+"SIGNUP_PASSWORD_CONFIRM": "ConfirmaÇão Da Senha",
+"SIGNUP_SUCCESS": "Inscrição Sucedida",
+"SIGNUP_FAILURE": "Problema de inscrição",
+"SIGNING_UP_": "Inscrever-se...",
 "STATUS": "Status",
 "STATUS_PENDING": "Pendente",
 "STATUS_ARCHIVED": "Arquivado",
@@ -160,6 +168,5 @@
 "WHITELABEL_GET_STARTED": "Iniciar",
 "WHITELABEL_WELCOME_TO": "Bem-vindo ao",
 "WHITELABEL_RETRY": "Configurações de Recarga",
-"WHITELABEL_FAILURE": "Configurações de carregamento do problema",
-"WHITELABEL_FAILURE_RETRY": "Ocorreu um problema ao carregar as configurações do aplicativo, verifique sua conexão com a internet e tente novamente."
+"WHITELABEL_FAILURE": "Configurações de carregamento do problema"
 }

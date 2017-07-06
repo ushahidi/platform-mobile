@@ -156,5 +156,10 @@
 "STATUS_PUBLISHED": "نشرت",
 "STATUS_UNDER_REVIEW": "تحت المراجعة",
 "SURVEYS": "الدراسات الاستقصائية",
-"SURVEY_SUBMIT_RESPONSE": "إرسال استجابة المسح"
+"SURVEY_SUBMIT_RESPONSE": "إرسال استجابة المسح",
+"WHITELABEL_GET_STARTED": "البدء",
+"WHITELABEL_WELCOME_TO": "مرحبا بك في",
+"WHITELABEL_RETRY": "إعادة تحميل الإعدادات",
+"WHITELABEL_FAILURE": "إعدادات تحميل المشكلة",
+"WHITELABEL_FAILURE_RETRY": "حدثت مشكلة أثناء تحميل إعدادات التطبيق، يرجى التحقق من اتصالك بالإنترنت وإعادة المحاولة."
 }

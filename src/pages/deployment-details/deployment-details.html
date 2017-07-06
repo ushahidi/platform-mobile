@@ -19,7 +19,7 @@
   </ion-refresher>
   <div *ngIf="deployment">
     <div padding-left padding-right *ngIf="deployment.name">
-      <h3 text-left padding-bottom ion-text color="dark">{{deployment.name}}</h3>
+      <h3 text-left ion-text color="dark">{{deployment.name}}</h3>
     </div>
     <div text-center padding-left padding-right *ngIf="deployment.image">
       <image-cache padding [src]="deployment.image"></image-cache>
@@ -43,6 +43,9 @@
       </ion-item>
       <ion-item detail-push *ngIf="offline == false && (login == null || login.username == null || login.username == '')" (click)="userLogin($event)">
         {{'LOGIN' | translate}}
+      </ion-item>
+      <ion-item detail-push *ngIf="offline == false && (login == null || login.username == null || login.username == '')" (click)="userSignup($event)">
+        {{'SIGNUP' | translate}}
       </ion-item>
       <ion-item detail-push *ngIf="login && login.username != null && login.username.length > 0" (click)="userLogout($event)">
         {{'LOGOUT' | translate}}

@@ -150,6 +150,14 @@
 "SETTINGS_SAVING_": "Сохранение ...",
 "SETTINGS_SAVE_SUCCESS": "Настройки сохранены",
 "SETTINGS_SAVE_FAILURE": "Устранение неполадок",
+"SIGNUP": "зарегистрироваться",
+"SIGNUP_NAME": "имя",
+"SIGNUP_EMAIL": "Эл. адрес",
+"SIGNUP_PASSWORD": "пароль",
+"SIGNUP_PASSWORD_CONFIRM": "Подтверждение пароля",
+"SIGNUP_SUCCESS": "Регистрация успешно",
+"SIGNUP_FAILURE": "Проблема с подписью",
+"SIGNING_UP_": "Подписываясь...",
 "STATUS": "Статус",
 "STATUS_PENDING": "в ожидании",
 "STATUS_ARCHIVED": "Архивировано",
@@ -160,6 +168,5 @@
 "WHITELABEL_GET_STARTED": "Начать",
 "WHITELABEL_WELCOME_TO": "Добро пожаловать в",
 "WHITELABEL_RETRY": "Настройки перезагрузки",
-"WHITELABEL_FAILURE": "Настройки загрузки проблемы",
-"WHITELABEL_FAILURE_RETRY": "Не удалось загрузить настройки приложения, проверьте подключение к Интернету и повторите попытку."
+"WHITELABEL_FAILURE": "Настройки загрузки проблемы"
 }

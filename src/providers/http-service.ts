@@ -59,13 +59,8 @@ export class HttpService {
         .timeout(12000)
         .map(res => res.json())
         .catch((error:any) => {
-          if (error instanceof Response) {
-            return Observable.throw(error.json().error || 'Request Error');
-          }
-          else if (error.name === "TimeoutError") {
-            return Observable.throw("Request Timeout");
-          }
-          return Observable.throw(error || 'Request Error');
+          let message = this.errorMessage(error);
+          return Observable.throw(message || 'Request Error');
         })
         .subscribe(
           (items) => {
@@ -97,13 +92,8 @@ export class HttpService {
           }
         })
         .catch((error:any) => {
-          if (error instanceof Response) {
-            return Observable.throw(error.json().error || 'Request Error');
-          }
-          else if (error.name === "TimeoutError") {
-            return Observable.throw("Request Timeout");
-          }
-          return Observable.throw(error || 'Request Error');
+          let message = this.errorMessage(error);
+          return Observable.throw(message || 'Request Error');
         })
         .subscribe(
           (json) => {
@@ -136,13 +126,8 @@ export class HttpService {
           }
         })
         .catch((error:any) => {
-          if (error instanceof Response) {
-            return Observable.throw(error.json().error || 'Request Error');
-          }
-          else if (error.name === "TimeoutError") {
-            return Observable.throw("Request Timeout");
-          }
-          return Observable.throw(error || 'Request Error');
+          let message = this.errorMessage(error);
+          return Observable.throw(message || 'Request Error');
         })
         .subscribe(
           (json) => {
@@ -175,13 +160,8 @@ export class HttpService {
           }
         })
         .catch((error:any) => {
-          if (error instanceof Response) {
-            return Observable.throw(error.json().error || 'Request Error');
-          }
-          else if (error.name === "TimeoutError") {
-            return Observable.throw("Request Timeout");
-          }
-          return Observable.throw(error || 'Request Error');
+          let message = this.errorMessage(error);
+          return Observable.throw(message || 'Request Error');
         })
         .subscribe(
           (json) => {
@@ -217,13 +197,8 @@ export class HttpService {
           }
         })
         .catch((error:any) => {
-          if (error instanceof Response) {
-            return Observable.throw(error.json().error || 'Request Error');
-          }
-          else if (error.name === "TimeoutError") {
-            return Observable.throw("Request Timeout");
-          }
-          return Observable.throw(error || 'Request Error');
+          let message = this.errorMessage(error);
+          return Observable.throw(message || 'Request Error');
         })
         .subscribe(
           (items) => {
@@ -334,22 +309,35 @@ export class HttpService {
     });
   }
 
-  errorMessage(err): string {
-    try {
-      let json = err.json();
+  errorMessage(error:any):string {
+    this.logger.error(this, "errorMessage", error);
+    if (typeof error === 'string') {
+      return error;
+    }
+    else if (error instanceof Response){
+      let json = error.json();
       if (json['errors']) {
         let errors = json['errors'];
         let messages = [];
-        for (let error of errors) {
-          messages.push(error['message']);
+        for (let key of Object.keys(errors)) {
+          let error = errors[key];
+          if (error) {
+            messages.push(error);
+          }
         }
         return messages.join(", ");
       }
+      else if (json['error']) {
+        return json['error'];
+      }
+      else if (json['message']) {
+        return json['message'];
+      }
     }
-    catch (error) {
-      this.logger.error(this, "errorMessage", error);
+    else if (error.name && error.name === "TimeoutError") {
+      return "Request Timeout";
     }
-    return JSON.stringify(err);
+    return JSON.stringify(error);
   }
 
 }

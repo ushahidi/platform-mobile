@@ -33,6 +33,7 @@ import { DeploymentNonePage } from '../pages/deployment-none/deployment-none';
 import { DeploymentSearchPage } from '../pages/deployment-search/deployment-search';
 import { DeploymentDetailsPage } from '../pages/deployment-details/deployment-details';
 import { DeploymentLoginPage } from '../pages/deployment-login/deployment-login';
+import { DeploymentSignupPage } from '../pages/deployment-signup/deployment-signup';
 import { DeploymentSettingsPage } from '../pages/deployment-settings/deployment-settings';
 
 import { ResponseListPage } from '../pages/response-list/response-list';
@@ -91,6 +92,7 @@ export function translateLoaderFactory(http: Http) {
     DeploymentDetailsPage,
     DeploymentSettingsPage,
     DeploymentLoginPage,
+    DeploymentSignupPage,
     ResponseListPage,
     ResponseDetailsPage,
     ResponseAddPage,
@@ -144,6 +146,7 @@ export function translateLoaderFactory(http: Http) {
     DeploymentNonePage,
     DeploymentSearchPage,
     DeploymentLoginPage,
+    DeploymentSignupPage,
     DeploymentDetailsPage,
     DeploymentSettingsPage,
     ResponseListPage,
