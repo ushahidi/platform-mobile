@@ -4,6 +4,7 @@
   "appDescription": "Fix Our Environment",
   "appIcon": "projects/beatona/icon.png",
   "appSplash": "projects/beatona/splash.png",
+  "appLanguages": "en,ar",
   "colorNavbar": "#3696B4",
   "colorToolbar": "#343434",
   "colorPrimary": "#3696B4",

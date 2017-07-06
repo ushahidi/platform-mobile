@@ -160,6 +160,7 @@
 	"SURVEY_SUBMIT_RESPONSE": "Submit Survey Response",
 	"WHITELABEL_GET_STARTED": "Get Started",
 	"WHITELABEL_WELCOME_TO": "Welcome to",
+	"WHITELABEL_RETRY": "Reload Settings",
 	"WHITELABEL_FAILURE": "Problem Loading Settings",
-	"WHITELABEL_FAILURE_RETRY": "There was a problem loading the app settings, please verify your internet connection and try again."	
+	"WHITELABEL_FAILURE_RETRY": "There was a problem loading the app settings, please verify your internet connection and try again."
 }

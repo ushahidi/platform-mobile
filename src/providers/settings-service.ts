@@ -68,6 +68,17 @@ export class SettingsService {
     return this.get('appDescription');
   }
 
+  getAppLanguages():Promise<string[]> {
+    return new Promise((resolve, reject) => {
+      this.get('appLanguages').then((languages:string) => {
+        if (languages && languages.length > 0) {
+          resolve(languages.split(","));
+        }
+        resolve([]);
+      });
+    });
+  }
+
   getDeploymentUrl():Promise<string> {
     return this.get('deploymentUrl');
   }

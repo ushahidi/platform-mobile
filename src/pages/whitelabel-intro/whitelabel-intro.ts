@@ -51,7 +51,7 @@ export class WhitelabelIntroPage extends BasePage {
 
   loadDeployment() {
     this.logger.info(this, "loadDeployment");
-    this.language.getTranslations(["LOADING_", "WHITELABEL_FAILURE", "WHITELABEL_FAILURE_RETRY"]).then((translations:string[]) => {
+    this.language.getTranslations(["LOADING_", "WHITELABEL_FAILURE", "WHITELABEL_FAILURE_RETRY", "WHITELABEL_RETRY"]).then((translations:string[]) => {
       let loading = this.showLoading(translations[0]);
       this.settings.getDeploymentUrl().then((url:string) => {
         this.logger.info(this, "loadDeployment", "URL", url);
@@ -72,21 +72,21 @@ export class WhitelabelIntroPage extends BasePage {
                   (error:any) => {
                     this.deployment = null;
                     loading.dismiss();
-                    this.showDeploymentAlert(translations[1], translations[2]);
+                    this.showDeploymentAlert(translations[1], translations[2], translations[3]);
                   });
               });
             },
             (error:any) => {
               this.deployment = null;
               loading.dismiss();
-              this.showDeploymentAlert(translations[1], translations[2]);
+              this.showDeploymentAlert(translations[1], translations[2], translations[3]);
             });
         });
       },
       (error:any) => {
         this.deployment = null;
         loading.dismiss();
-        this.showDeploymentAlert(translations[1], translations[2]);
+        this.showDeploymentAlert(translations[1], translations[2], translations[3]);
       });
     });
   }
@@ -99,10 +99,10 @@ export class WhitelabelIntroPage extends BasePage {
         direction: 'forward' });
   }
 
-  showDeploymentAlert(title:string, description:string) {
+  showDeploymentAlert(title:string, description:string, button:string) {
     this.logger.info(this, "showDeploymentAlert", title, description);
     this.showAlert(title, description, [{
-      text: translations[2],
+      text: button,
       handler: (clicked) => {
         this.loadDeployment();
       }

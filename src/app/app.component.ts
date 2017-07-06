@@ -214,6 +214,11 @@ export class MyApp {
       (error) => {
         this.setLanguage("en");
     });
+    this.settings.getAppLanguages().then((appLanguages:string[]) => {
+      if (appLanguages && appLanguages.length > 0) {
+        this.languages = this.languages.filter(language => appLanguages.indexOf(language.code) != -1);
+      }
+    });
   }
 
   setLanguage(i18n:string) {

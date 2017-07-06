@@ -4,6 +4,7 @@
   "appDescription": "Ushahidi Mobile",
   "appIcon": "projects/ushahidi/icon.png",
   "appSplash": "projects/ushahidi/splash.png",
+  "appLanguages": "en,fr,es,de,pt,ru,nl,sw,ar",
   "colorNavbar": "#3f4751",
   "colorToolbar": "#343434",
   "colorPrimary": "#fdc245",
