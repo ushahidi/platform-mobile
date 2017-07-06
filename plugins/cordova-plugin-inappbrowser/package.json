@@ -2,18 +2,18 @@
   "_args": [
     [
       {
-        "raw": "cordova-plugin-inappbrowser@~1.7.0",
+        "raw": "cordova-plugin-inappbrowser@^1.7.1",
         "scope": null,
         "escapedName": "cordova-plugin-inappbrowser",
         "name": "cordova-plugin-inappbrowser",
-        "rawSpec": "~1.7.0",
-        "spec": ">=1.7.0 <1.8.0",
+        "rawSpec": "^1.7.1",
+        "spec": ">=1.7.1 <2.0.0",
         "type": "range"
       },
       "/Users/dalezak/SandBox/Ushahidi_Mobile/node_modules"
     ]
   ],
-  "_from": "cordova-plugin-inappbrowser@>=1.7.0 <1.8.0",
+  "_from": "cordova-plugin-inappbrowser@>=1.7.1 <2.0.0",
   "_id": "cordova-plugin-inappbrowser@1.7.1",
   "_inCache": true,
   "_location": "/cordova-plugin-inappbrowser",
@@ -29,12 +29,12 @@
   "_npmVersion": "3.10.10",
   "_phantomChildren": {},
   "_requested": {
-    "raw": "cordova-plugin-inappbrowser@~1.7.0",
+    "raw": "cordova-plugin-inappbrowser@^1.7.1",
     "scope": null,
     "escapedName": "cordova-plugin-inappbrowser",
     "name": "cordova-plugin-inappbrowser",
-    "rawSpec": "~1.7.0",
-    "spec": ">=1.7.0 <1.8.0",
+    "rawSpec": "^1.7.1",
+    "spec": ">=1.7.1 <2.0.0",
     "type": "range"
   },
   "_requiredBy": [
@@ -44,7 +44,7 @@
   "_resolved": "https://registry.npmjs.org/cordova-plugin-inappbrowser/-/cordova-plugin-inappbrowser-1.7.1.tgz",
   "_shasum": "435b43f591fe7bfa95ea98dbe0004841fe59ba51",
   "_shrinkwrap": null,
-  "_spec": "cordova-plugin-inappbrowser@~1.7.0",
+  "_spec": "cordova-plugin-inappbrowser@^1.7.1",
   "_where": "/Users/dalezak/SandBox/Ushahidi_Mobile/node_modules",
   "author": {
     "name": "Apache Software Foundation"

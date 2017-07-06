@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-navbar color="dark">
+  <ion-navbar color="navbar">
     <ion-title *ngIf="post">{{post.form_name}}</ion-title>
     <ion-buttons end>
       <button ion-button icon-only (click)="showOptions($event)">
@@ -26,7 +26,7 @@
         <ion-col width-10 class="profile">
           <image-cache [src]="post.user_image" [placeholder]="userPlaceholder"></image-cache>
         </ion-col>
-        <ion-col class="name">
+        <ion-col class="name" color="light">
           <p>{{post.user_name || userName}} {{post.created | timeAgo}}</p>
         </ion-col>
       </ion-row>
@@ -45,7 +45,7 @@
   </ion-list>
 </ion-content>
 <ion-footer>
-  <ion-toolbar color="black" *ngIf="offline">
-    <p color="white" ion-text padding-left tappable (click)="showOfflineAlert()">{{'OFFLINE' | translate}}</p>
+  <ion-toolbar color="toolbar" *ngIf="offline">
+    <p padding-left tappable (click)="showOfflineAlert()">{{'OFFLINE' | translate}}</p>
   </ion-toolbar>
 </ion-footer>

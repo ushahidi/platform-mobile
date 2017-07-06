@@ -2,49 +2,49 @@
   "_args": [
     [
       {
-        "raw": "cordova.plugins.diagnostic@~3.4.2",
+        "raw": "cordova.plugins.diagnostic@^3.6.5",
         "scope": null,
         "escapedName": "cordova.plugins.diagnostic",
         "name": "cordova.plugins.diagnostic",
-        "rawSpec": "~3.4.2",
-        "spec": ">=3.4.2 <3.5.0",
+        "rawSpec": "^3.6.5",
+        "spec": ">=3.6.5 <4.0.0",
         "type": "range"
       },
       "/Users/dalezak/SandBox/Ushahidi_Mobile/node_modules"
     ]
   ],
-  "_from": "cordova.plugins.diagnostic@>=3.4.2 <3.5.0",
-  "_id": "cordova.plugins.diagnostic@3.4.2",
+  "_from": "cordova.plugins.diagnostic@>=3.6.5 <4.0.0",
+  "_id": "cordova.plugins.diagnostic@3.6.5",
   "_inCache": true,
   "_location": "/cordova.plugins.diagnostic",
-  "_nodeVersion": "7.3.0",
+  "_nodeVersion": "7.10.0",
   "_npmOperationalInternal": {
-    "host": "packages-18-east.internal.npmjs.com",
-    "tmp": "tmp/cordova.plugins.diagnostic-3.4.2.tgz_1488490108756_0.3365314803086221"
+    "host": "s3://npm-registry-packages",
+    "tmp": "tmp/cordova.plugins.diagnostic-3.6.5.tgz_1496952419113_0.5992798360530287"
   },
   "_npmUser": {
     "name": "davealden",
     "email": "dave@workingedge.co.uk"
   },
-  "_npmVersion": "3.10.10",
+  "_npmVersion": "4.2.0",
   "_phantomChildren": {},
   "_requested": {
-    "raw": "cordova.plugins.diagnostic@~3.4.2",
+    "raw": "cordova.plugins.diagnostic@^3.6.5",
     "scope": null,
     "escapedName": "cordova.plugins.diagnostic",
     "name": "cordova.plugins.diagnostic",
-    "rawSpec": "~3.4.2",
-    "spec": ">=3.4.2 <3.5.0",
+    "rawSpec": "^3.6.5",
+    "spec": ">=3.6.5 <4.0.0",
     "type": "range"
   },
   "_requiredBy": [
     "#USER",
     "/"
   ],
-  "_resolved": "https://registry.npmjs.org/cordova.plugins.diagnostic/-/cordova.plugins.diagnostic-3.4.2.tgz",
-  "_shasum": "67366219bba120a8974d6f4174f803129efe9c39",
+  "_resolved": "https://registry.npmjs.org/cordova.plugins.diagnostic/-/cordova.plugins.diagnostic-3.6.5.tgz",
+  "_shasum": "35d459fb1053490ece26568a2c98588a869f6931",
   "_shrinkwrap": null,
-  "_spec": "cordova.plugins.diagnostic@~3.4.2",
+  "_spec": "cordova.plugins.diagnostic@^3.6.5",
   "_where": "/Users/dalezak/SandBox/Ushahidi_Mobile/node_modules",
   "author": {
     "name": "Dave Alden"
@@ -66,10 +66,10 @@
   "devDependencies": {},
   "directories": {},
   "dist": {
-    "shasum": "67366219bba120a8974d6f4174f803129efe9c39",
-    "tarball": "https://registry.npmjs.org/cordova.plugins.diagnostic/-/cordova.plugins.diagnostic-3.4.2.tgz"
+    "shasum": "35d459fb1053490ece26568a2c98588a869f6931",
+    "tarball": "https://registry.npmjs.org/cordova.plugins.diagnostic/-/cordova.plugins.diagnostic-3.6.5.tgz"
   },
-  "gitHead": "71fe97e44515ca74917745def1d85df1590a4ed6",
+  "gitHead": "29bfb7b8bb18d60e4103b210b0017a1c60f5621a",
   "homepage": "https://github.com/dpa99c/cordova-diagnostic-plugin#readme",
   "issue": "https://github.com/dpa99c/cordova-diagnostic-plugin/issues",
   "keywords": [
@@ -103,5 +103,5 @@
   },
   "scripts": {},
   "types": "./cordova.plugins.diagnostic.d.ts",
-  "version": "3.4.2"
+  "version": "3.6.5"
 }

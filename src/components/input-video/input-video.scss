@@ -1,16 +1,14 @@
 .input-video {
   .input-label {
-    color: #555;
     font-size: 14px;
     margin-bottom: 0;
   }
   .input-error {
-    color: #dd0000;
   }
   ion-card {
     max-width: 90%;
   	position: relative;
-  	padding-bottom: 56.25%; 
+  	padding-bottom: 56.25%;
   	padding-top: 25px;
   	height: 0;
     iframe, video {

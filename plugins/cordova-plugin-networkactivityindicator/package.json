@@ -2,11 +2,11 @@
   "_args": [
     [
       {
-        "raw": "cordova-plugin-networkactivityindicator@~0.1.1",
+        "raw": "cordova-plugin-networkactivityindicator@^0.1.1",
         "scope": null,
         "escapedName": "cordova-plugin-networkactivityindicator",
         "name": "cordova-plugin-networkactivityindicator",
-        "rawSpec": "~0.1.1",
+        "rawSpec": "^0.1.1",
         "spec": ">=0.1.1 <0.2.0",
         "type": "range"
       },
@@ -25,11 +25,11 @@
   "_npmVersion": "2.7.5",
   "_phantomChildren": {},
   "_requested": {
-    "raw": "cordova-plugin-networkactivityindicator@~0.1.1",
+    "raw": "cordova-plugin-networkactivityindicator@^0.1.1",
     "scope": null,
     "escapedName": "cordova-plugin-networkactivityindicator",
     "name": "cordova-plugin-networkactivityindicator",
-    "rawSpec": "~0.1.1",
+    "rawSpec": "^0.1.1",
     "spec": ">=0.1.1 <0.2.0",
     "type": "range"
   },
@@ -40,7 +40,7 @@
   "_resolved": "https://registry.npmjs.org/cordova-plugin-networkactivityindicator/-/cordova-plugin-networkactivityindicator-0.1.1.tgz",
   "_shasum": "483d634171819882f2a8ff092ce431af68fa784d",
   "_shrinkwrap": null,
-  "_spec": "cordova-plugin-networkactivityindicator@~0.1.1",
+  "_spec": "cordova-plugin-networkactivityindicator@^0.1.1",
   "_where": "/Users/dalezak/SandBox/Ushahidi_Mobile/node_modules",
   "author": {
     "name": "ohh2ahh"

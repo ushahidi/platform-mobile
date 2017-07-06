@@ -1,0 +1,20 @@
+<ion-header></ion-header>
+<ion-content class="whitelabel-intro" padding>
+  <div *ngIf="deployment">
+    <h6 text-center padding-top margin-top ion-text color="light">{{'WHITELABEL_WELCOME_TO' | translate}}</h6>
+    <div padding-left padding-right *ngIf="deployment.name">
+      <h3 text-center padding-top padding-bottom ion-text color="dark">{{deployment.name}}</h3>
+    </div>
+    <div padding-left padding-right text-center *ngIf="deployment.image">
+      <image-cache padding [src]="deployment.image"></image-cache>
+    </div>
+    <div padding-left padding-right padding-bottom margin-bottom *ngIf="deployment.description">
+      <p text-center ion-text color="light" [innerHTML]="deployment.description | MarkdownToHtml | htmlParse"></p>
+    </div>
+    <div padding-left padding-right>
+      <button ion-button block margin-top color="primary" (click)="showDeployment()">
+        {{'WHITELABEL_GET_STARTED' | translate}}
+      </button>
+    </div>
+  </div>
+</ion-content>

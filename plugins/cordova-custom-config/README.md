@@ -1,6 +1,6 @@
 
 
-cordova-custom-config plugin [![Build Status](https://travis-ci.org/dpa99c/cordova-custom-config-example.png)](https://travis-ci.org/dpa99c/cordova-custom-config-example) [![Latest Stable Version](https://img.shields.io/npm/v/cordova-custom-config.svg)](https://www.npmjs.com/package/cordova-custom-config) [![Total Downloads](https://img.shields.io/npm/dt/cordova-custom-config.svg)](https://npm-stat.com/charts.html?package=cordova-custom-config)
+cordova-custom-config plugin [![Build Status](https://travis-ci.org/dpa99c/cordova-custom-config-example.svg?branch=master)](https://travis-ci.org/dpa99c/cordova-custom-config-example/branches) [![Latest Stable Version](https://img.shields.io/npm/v/cordova-custom-config.svg)](https://www.npmjs.com/package/cordova-custom-config) [![Total Downloads](https://img.shields.io/npm/dt/cordova-custom-config.svg)](https://npm-stat.com/charts.html?package=cordova-custom-config)
 ============================
 
 
@@ -10,7 +10,7 @@ cordova-custom-config plugin [![Build Status](https://travis-ci.org/dpa99c/cordo
 
 - [Overview](#overview)
   - [Why should I use it?](#why-should-i-use-it)
-  - [Important note for PhoneGap Build / Intel XDK](#important-note-for-phonegap-build--intel-xdk)
+  - [Important note for remote build environments](#important-note-for-remote-build-environments)
 - [Installation](#installation)
 - [Usage](#usage)
   - [Removable preferences via backup/restore](#removable-preferences-via-backuprestore)
@@ -25,8 +25,13 @@ cordova-custom-config plugin [![Build Status](https://travis-ci.org/dpa99c/cordo
   - [iOS](#ios)
     - [iOS preferences](#ios-preferences)
       - [XCBuildConfiguration](#xcbuildconfiguration)
+        - [.xcconfig files](#xcconfig-files)
+        - [CODE\_SIGN\_IDENTITY preferences](#code%5C_sign%5C_identity-preferences)
       - [xcodefunc](#xcodefunc)
     - [iOS config blocks](#ios-config-blocks)
+      - [iOS project plist config blocks](#ios-project-plist-config-blocks)
+      - [iOS Precompile Header config blocks](#ios-precompile-header-config-blocks)
+    - [iOS image resources](#ios-image-resources)
     - [iOS example](#ios-example)
   - [Plugin preferences](#plugin-preferences)
   - [Log output](#log-output)
@@ -64,13 +69,20 @@ and maintained between builds or even if a platform is removed and re-added.
 The plugin is registered on [npm](https://www.npmjs.com/package/cordova-custom-config) (requires Cordova CLI 5.0.0+) as `cordova-custom-config`
 
 
-## Important note for PhoneGap Build / Intel XDK
+## Important note for remote build environments
 
-This plugin **WILL NOT WORK** with [Phonegap Build](https://build.phonegap.com/) because it relies on using [hook scripts](https://cordova.apache.org/docs/en/latest/guide/appdev/hooks/) which are [not supported by Phonegap Build](https://github.com/phonegap/build/issues/425).
+This plugin is intended for the automated application of custom configuration to native platform projects in a **local build environment**.
 
-The same goes for [Intel XDK](https://software.intel.com/en-us/intel-xdk) which also [does not support hook scripts](https://software.intel.com/en-us/xdk/docs/add-manage-project-plugins).
+This plugin **WILL NOT WORK** with remote ("Cloud") build environments that do not support the execution of this plugin's [hook scripts](https://cordova.apache.org/docs/en/latest/guide/appdev/hooks/). This includes:
 
+- [Phonegap Build](https://github.com/phonegap/build/issues/425) 
+- [Intel XDK](https://software.intel.com/en-us/xdk/docs/add-manage-project-plugins)
+- [Telerik Appbuilder](http://docs.telerik.com/platform/appbuilder/cordova/using-plugins/using-custom-plugins/using-custom-plugins)
+- [Ionic Cloud](https://docs.ionic.io/services/package/#hooks)
+ 
 If you are using another cloud-based Cordova/Phonegap build service and find this plugin doesn't work, the reason is probably also the same.
+
+FWIW: if you are professionally developing Cordova/Phonegap apps, you are eventually going to find it preferable to build locally.
 
 # Installation
 
@@ -278,13 +290,15 @@ config.xml:
         <config-file target="AndroidManifest.xml" parent="./" mode="add">
             <application android:name="customApplication"></application>
         </config-file>
+        
     </platform>
 
 ## iOS
 
 - The plugin currently supports custom configuration of:
-    - the project plist (`*-Info.plist`) using config blocks
-    - build settings using preference elements
+    - the project plist (`*-Info.plist`) using `<config-file>` blocks
+    - build settings using `<preference>` elements
+    - image asset catalogs using `<resource>` elements
 - All iOS-specific config should be placed inside the `<platform name="ios">` in `config.xml`.
 
 ### iOS preferences
@@ -476,10 +490,62 @@ will add resource `image.png` from `./src/content` (i.e. `../../src/content/imag
               <string>myapp</string>
                <string>myapp2</string>
           </array>`
+          
+- to delete existing values in the plist, specify the key to delete as the parent and use the attribute `mode="delete"`:
+     - For example, if the plist already contains:
+
+        `<key>LSApplicationQueriesSchemes</key>
+        <array>
+            <string>fbapi</string>
+            <string>fb-messenger-api</string>
+        </array>`
+
+    - Then adding the `<config-file>` block:
+
+        `<config-file parent="LSApplicationQueriesSchemes" target="*-Info.plist" mode="delete"/>`
+
+      - will result in the existing block being removed from the plist
+  
 
 #### iOS Precompile Header config blocks
 
 - the `target` attribute of the `<config-file>` should be set to `*-Prefix.pch`: `<config-file platform="ios" target="*-Prefix.pch">`
+
+### iOS image resources
+
+Purpose:
+- Sometimes it can be necessary to create custom iOS image asset catalogs in Cordova-based iOS apps.
+    - For example, some plugins require that custom images be present in a custom asset catalog in order to make use of them:
+        - [cordova-plugin-themeablebrowser](https://github.com/initialxy/cordova-plugin-themeablebrowser)
+        - [cordova-plugin-3dtouch](https://github.com/EddyVerbruggen/cordova-plugin-3dtouch)
+    - This could be done manually by editing the platform project in XCode, but this is fragile since platform projects are volatile. 
+        - i.e. can be removed when removing/updating the platform via Cordova CLI.
+    - So this plugin provides a mechanism to automate the generation custom asset catalogs.
+
+Usage:
+- Image [asset catalogs](https://developer.apple.com/library/content/documentation/Xcode/Reference/xcode_ref-Asset_Catalog_Format/) can be defined using `<resource>` elements
+- The `<resource>` elements must be places inside of the `<platform name="ios">` element
+- The `<resource>` elements must have the attribute `type="image"`: `<resource type="image" />`
+- The `src` attribute (required) should specify the relative local path to the image file. 
+    - The relative root is the Cordova project root
+    - e.g. `<resource src="resources/custom-catalog/back@1x.png" />`
+        - where the image file is location in `/path/to/project/root/resources/custom-catalog/back@1x.png`
+- The `catalog` attribute (required) specifies the name of the catalog to add the image to
+    - e.g. `<resource catalog="custom-catalog"/>`
+- The `scale` attribute (required) specifies the scale factor of the image
+    - Valid values are: `1x`, `2x`, `3x`
+    - e.g. `<resource scale="1x"/>`
+- The `idiom` attribute (optional) specifies the target device family
+    - Valid values are: 
+        - `universal` - all devices
+        - `iphone` - iPhones only
+        - `ipad` - iPads only
+        - `watch` - Apple Watch only
+    - If not specified, defaults to `universal`
+    - e.g. `<resource idiom="iphone"/>`
+- Full example: 
+
+    `<resource type="image" src="resources/custom-catalog/back@1x.png" catalog="custom-catalog" scale="1x" idiom="iphone" />`
 
 ### iOS example
 
@@ -556,6 +622,11 @@ config.xml:
                 <true/>
             </dict>
         </config-file>
+        
+        <!-- Custom image asset catalog -->
+        <resource type="image" catalog="custom" src="resources/ios/custom-icons/back@1x.png" scale="1x" idiom="universal" />
+        <resource type="image" catalog="custom" src="resources/ios/custom-icons/back@2x.png" scale="2x" idiom="universal" />
+        <resource type="image" catalog="custom" src="resources/ios/custom-icons/back@3x.png" scale="3x" idiom="universal" />
     </platform>
 
 ## Plugin preferences

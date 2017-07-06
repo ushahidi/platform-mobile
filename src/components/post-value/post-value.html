@@ -1,57 +1,57 @@
 <div class="post-value" *ngIf="value && value.type != 'title' && value.type != 'description'">
   <ion-item text-wrap>
-    <div class="value-label">{{value.label}}</div>
-    <div class="value-checkbox" *ngIf="value.input == 'checkbox'">
+    <div class="value-label" ion-text color="dark">{{value.label}}</div>
+    <div class="value-checkbox" ion-text color="light" *ngIf="value.input == 'checkbox'">
       <span *ngIf="value.value">{{value.value}}</span>
     </div>
-    <div class="value-checkboxes" *ngIf="value.input == 'checkboxes'">
+    <div class="value-checkboxes" ion-text color="light" *ngIf="value.input == 'checkboxes'">
       <span *ngIf="value.value">{{value.value}}</span>
     </div>
-    <div class="value-date" *ngIf="value.input == 'date'">
+    <div class="value-date" ion-text color="light" *ngIf="value.input == 'date'">
       <span *ngIf="value.value">{{value.value | dateTime:'MMMM D, YYYY'}}</span>
     </div>
-    <div class="value-datetime" *ngIf="value.input == 'datetime'">
+    <div class="value-datetime" ion-text color="light" *ngIf="value.input == 'datetime'">
       <span *ngIf="value.value">{{value.value | dateTime:'h:mm A, MMMM D, YYYY'}}</span>
     </div>
-    <div class="value-location" *ngIf="value.input == 'location'">
+    <div class="value-location" ion-text color="light" *ngIf="value.input == 'location'">
       <image-cache *ngIf="map" [src]="map" [fallback]="mapPaceholder" tappable (click)="locationClicked(value.value)"></image-cache>
     </div>
-    <div class="value-number" *ngIf="value.input == 'number'">
+    <div class="value-number" ion-text color="light" *ngIf="value.input == 'number'">
       <span *ngIf="value.value">{{value.value}}</span>
     </div>
-    <div class="value-radio" *ngIf="value.input == 'radio'">
+    <div class="value-radio" ion-text color="light" *ngIf="value.input == 'radio'">
       <span *ngIf="value.value">{{value.value}}</span>
     </div>
-    <div class="value-select" *ngIf="value.input == 'select'">
+    <div class="value-select" ion-text color="light" *ngIf="value.input == 'select'">
       <span *ngIf="value.value">{{value.value}}</span>
     </div>
-    <div class="value-text" *ngIf="value.input == 'text'">
+    <div class="value-text" ion-text color="light" *ngIf="value.input == 'text'">
       <div *ngIf="value.value" [innerHTML]="value.value | htmlParse"></div>
     </div>
-    <div class="value-varchar" *ngIf="value.input == 'varchar'">
+    <div class="value-varchar" ion-text color="light" *ngIf="value.input == 'varchar'">
       <div *ngIf="value.value" [innerHTML]="value.value | htmlParse"></div>
     </div>
-    <div class="value-textarea" *ngIf="value.input == 'textarea'">
+    <div class="value-textarea" ion-text color="light" *ngIf="value.input == 'textarea'">
       <div *ngIf="value.value" [innerHTML]="value.value | htmlParse"></div>
     </div>
-    <div class="value-upload" *ngIf="value.input == 'upload'">
+    <div class="value-upload" ion-text color="light" *ngIf="value.input == 'upload'">
       <image-cache *ngIf="value.value" [src]="value.image" [fallback]="photoPaceholder" tappable (click)="imageClicked(value.image)"></image-cache>
       <span *ngIf="value.caption">{{value.caption}}</span>
     </div>
-    <div class="value-video" *ngIf="value.input == 'video'">
+    <div class="value-video" ion-text color="light" *ngIf="value.input == 'video'">
       <div class="video" *ngIf="video">
         <iframe width="560" height="349" [src]="video" frameborder="0" allowfullscreen></iframe>
       </div>
     </div>
-    <div class="value-tags" *ngIf="value.input == 'tags'">
+    <div class="value-tags" ion-text color="light" *ngIf="value.input == 'tags'">
       <div *ngIf="value.tags">
         <div *ngFor="let tag of value.tags">
-          <ion-icon ios="ios-pricetag" md="md-pricetag" color="grey"></ion-icon>
+          <ion-icon ios="ios-pricetag" md="md-pricetag" color="light"></ion-icon>
           <span [innerHTML]="tag.tag"></span>
         </div>
       </div>
     </div>
-    <div class="value-markdown" *ngIf="value.input == 'markdown'">
+    <div class="value-markdown" ion-text color="light" *ngIf="value.input == 'markdown'">
       <div *ngIf="value.value" [innerHTML]="value.value | MarkdownToHtml | htmlParse"></div>
     </div>
   </ion-item>

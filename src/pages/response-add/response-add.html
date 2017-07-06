@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-navbar color="dark">
+  <ion-navbar color="navbar">
     <ion-buttons start>
       <button #cancel ion-button icon-only (click)="onCancel($event)">
         <ion-icon ios="md-close" md="md-close"></ion-icon>
@@ -22,7 +22,7 @@
       <ion-list>
         <div padding-bottom *ngFor="let stage of form.stages">
           <ion-item text-wrap *ngIf="stage.type =='task'">
-            <ion-label class="stage-label">{{stage.label}}</ion-label>
+            <ion-label class="stage-label" color="dark">{{stage.label}}</ion-label>
           </ion-item>
           <div padding-bottom *ngFor="let attribute of stage.attributes">
             <input-checkbox [submitted]="submitted" [value]="values[attribute.key]" [attribute]="attribute" [formGroup]="formGroup" *ngIf="attribute.input == 'checkbox'"></input-checkbox>
@@ -47,7 +47,7 @@
   </div>
 </ion-content>
 <ion-footer>
-  <ion-toolbar color="black" *ngIf="offline">
-    <p color="white" ion-text padding-left tappable (click)="showOfflineAlert()">{{'OFFLINE' | translate}}</p>
+  <ion-toolbar color="toolbar" *ngIf="offline">
+    <p padding-left tappable (click)="showOfflineAlert()">{{'OFFLINE' | translate}}</p>
   </ion-toolbar>
 </ion-footer>

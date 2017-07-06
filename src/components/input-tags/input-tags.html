@@ -1,6 +1,6 @@
 <div class="input-tags" *ngIf="attribute && attribute.tags && attribute.tags.length > 0" [class.invalid]="attribute.required == true && hasValue() == false && submitted == true">
   <ion-item no-lines text-wrap>
-    <ion-label class="input-label">
+    <ion-label class="input-label" color="dark">
       {{attribute.label}}
       <span ion-text color="danger" *ngIf="attribute.required == true">*</span>
     </ion-label>
@@ -10,14 +10,14 @@
       <div *ngFor="let parent of attribute.tags">
         <ion-item text-wrap>
           <ion-label>{{parent.tag}}</ion-label>
-          <ion-checkbox color="blue" [(ngModel)]="values[parent.id]" formControlName="{{parent.id}}" (ionChange)="tagChecked($event,parent)"></ion-checkbox>
+          <ion-checkbox color="active" [(ngModel)]="values[parent.id]" formControlName="{{parent.id}}" (ionChange)="tagChecked($event,parent)"></ion-checkbox>
         </ion-item>
         <ion-item text-wrap class="child" *ngFor="let child of parent.tags">
           <ion-label>{{child.tag}}</ion-label>
-          <ion-checkbox color="blue" [(ngModel)]="values[child.id]" formControlName="{{child.id}}" (ionChange)="tagChecked($event,child)"></ion-checkbox>
+          <ion-checkbox color="active" [(ngModel)]="values[child.id]" formControlName="{{child.id}}" (ionChange)="tagChecked($event,child)"></ion-checkbox>
         </ion-item>
       </div>
     </div>
   </div>
-  <p class="input-error" padding-left *ngIf="attribute.required == true && hasValue() == false && submitted == true">{{'INPUT_SELECTION_REQUIRED' | translate}}</p>
+  <p ion-text color="danger" class="input-error" padding-left *ngIf="attribute.required == true && hasValue() == false && submitted == true">{{'INPUT_SELECTION_REQUIRED' | translate}}</p>
 </div>

@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-navbar color="dark">
+  <ion-navbar color="navbar">
     <ion-buttons>
       <button ion-button icon-only menuToggle>
         <ion-icon name="menu"></ion-icon>
@@ -18,16 +18,16 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   <div *ngIf="deployment">
-    <div class="name" padding-left padding-right *ngIf="deployment.name">
-      <h3 text-left padding-top padding-bottom>{{deployment.name}}</h3>
+    <div padding-left padding-right *ngIf="deployment.name">
+      <h3 text-left padding-bottom ion-text color="dark">{{deployment.name}}</h3>
     </div>
-    <div class="image" padding-left padding-right *ngIf="deployment.image">
+    <div text-center padding-left padding-right *ngIf="deployment.image">
       <image-cache padding [src]="deployment.image"></image-cache>
     </div>
-    <div class="description" padding-left padding-right *ngIf="deployment.description">
-      <p [innerHTML]="deployment.description | MarkdownToHtml | htmlParse"></p>
+    <div padding-left padding-right *ngIf="deployment.description">
+      <p ion-text color="light" [innerHTML]="deployment.description | MarkdownToHtml | htmlParse"></p>
     </div>
-    <div class="submit" padding-left padding-right [@fadeInOut]="refreshing">
+    <div class="fadein" padding-left padding-right [@fadeInOut]="refreshing">
       <button ion-button block margin-top margin-bottom color="primary"
               *ngIf="deployment.forms && deployment.forms.length > 0" (click)="addResponse($event)">{{'SURVEY_SUBMIT_RESPONSE' | translate}}</button>
     </div>
@@ -51,7 +51,7 @@
   </div>
 </ion-content>
 <ion-footer>
-  <ion-toolbar color="black" *ngIf="offline">
-    <p color="white" ion-text padding-left tappable (click)="showOfflineAlert()">{{'OFFLINE' | translate}}</p>
+  <ion-toolbar color="toolbar" *ngIf="offline">
+    <p padding-left tappable (click)="showOfflineAlert()">{{'OFFLINE' | translate}}</p>
   </ion-toolbar>
 </ion-footer>

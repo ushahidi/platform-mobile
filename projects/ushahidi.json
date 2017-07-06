@@ -1,0 +1,16 @@
+{
+  "appId": "com.ushahidi.mobile",
+  "appName": "Ushahidi",
+  "appDescription": "Ushahidi Mobile",
+  "appIcon": "projects/ushahidi/icon.png",
+  "appSplash": "projects/ushahidi/splash.png",
+  "colorNavbar": "#3f4751",
+  "colorToolbar": "#343434",
+  "colorPrimary": "#fdc245",
+  "colorSecondary": "#adb6bf",
+  "colorDark": "#3f4751",
+  "colorLight": "#919ca9",
+  "colorDanger": "#dd0000",
+  "colorActive": "#2f77b0",
+  "colorHighlight": "#f0f2f4"
+}

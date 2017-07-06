@@ -1,13 +1,13 @@
 <ion-header>
-  <ion-navbar color="dark">
+  <ion-navbar color="navbar">
     <ion-title>{{'LOGIN' | translate}}</ion-title>
   </ion-navbar>
 </ion-header>
 <ion-content class="deployment-login-page">
-  <div class="header" *ngIf="deployment && deployment.name">
-    <h3 text-left padding-left padding-top padding-bottom>{{deployment.name}}</h3>
+  <div *ngIf="deployment && deployment.name">
+    <h3 text-left padding-left padding-bottom ion-text color="dark">{{deployment.name}}</h3>
   </div>
-  <div class="image" *ngIf="deployment && deployment.image">
+  <div text-center *ngIf="deployment && deployment.image">
     <image-cache padding [src]="deployment.image"></image-cache>
   </div>
   <ion-list>
@@ -20,13 +20,13 @@
       <ion-input #password type="password" clearInput="true"></ion-input>
     </ion-item>
   </ion-list>
-  <div text-right padding>
+  <div text-right padding-right>
     <button #login ion-button text-uppercase color="primary" (click)="userLogin($event)"
           [disabled]="username.value.length == 0 || password.value.length == 0">{{'LOGIN' | translate}}</button>
   </div>
 </ion-content>
 <ion-footer>
-  <ion-toolbar color="black" *ngIf="offline">
-    <p color="white" ion-text padding-left tappable (click)="showOfflineAlert()">{{'OFFLINE' | translate}}</p>
+  <ion-toolbar color="toolbar" *ngIf="offline">
+    <p padding-left tappable (click)="showOfflineAlert()">{{'OFFLINE' | translate}}</p>
   </ion-toolbar>
 </ion-footer>

@@ -68,6 +68,7 @@ export class DeploymentDetailsPage extends BasePage {
     if (this.deployment == null) {
       this.deployment = this.getParameter<Deployment>("deployment");
     }
+    this.logger.info(this, "ionViewWillEnter", "Deployment", this.deployment);
     if (this.deployment.forms == null || this.deployment.forms.length == 0) {
       this.language.getTranslation("LOADING_").then((text:string) => {
         let loading = this.showLoading(text);

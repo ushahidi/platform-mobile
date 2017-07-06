@@ -2,18 +2,18 @@
   "_args": [
     [
       {
-        "raw": "cordova-plugin-console@~1.0.6",
+        "raw": "cordova-plugin-console@^1.0.7",
         "scope": null,
         "escapedName": "cordova-plugin-console",
         "name": "cordova-plugin-console",
-        "rawSpec": "~1.0.6",
-        "spec": ">=1.0.6 <1.1.0",
+        "rawSpec": "^1.0.7",
+        "spec": ">=1.0.7 <2.0.0",
         "type": "range"
       },
       "/Users/dalezak/SandBox/Ushahidi_Mobile/node_modules"
     ]
   ],
-  "_from": "cordova-plugin-console@>=1.0.6 <1.1.0",
+  "_from": "cordova-plugin-console@>=1.0.7 <2.0.0",
   "_id": "cordova-plugin-console@1.0.7",
   "_inCache": true,
   "_location": "/cordova-plugin-console",
@@ -29,12 +29,12 @@
   "_npmVersion": "3.10.10",
   "_phantomChildren": {},
   "_requested": {
-    "raw": "cordova-plugin-console@~1.0.6",
+    "raw": "cordova-plugin-console@^1.0.7",
     "scope": null,
     "escapedName": "cordova-plugin-console",
     "name": "cordova-plugin-console",
-    "rawSpec": "~1.0.6",
-    "spec": ">=1.0.6 <1.1.0",
+    "rawSpec": "^1.0.7",
+    "spec": ">=1.0.7 <2.0.0",
     "type": "range"
   },
   "_requiredBy": [
@@ -44,7 +44,7 @@
   "_resolved": "https://registry.npmjs.org/cordova-plugin-console/-/cordova-plugin-console-1.0.7.tgz",
   "_shasum": "89b7a92ed1c335888dfc00d902dc417201cf3b0b",
   "_shrinkwrap": null,
-  "_spec": "cordova-plugin-console@~1.0.6",
+  "_spec": "cordova-plugin-console@^1.0.7",
   "_where": "/Users/dalezak/SandBox/Ushahidi_Mobile/node_modules",
   "author": {
     "name": "Apache Software Foundation"

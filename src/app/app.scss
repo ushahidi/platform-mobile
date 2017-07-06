@@ -1,5 +1,5 @@
 ion-menu {
-  background-color: #fafafa;
+  background-color: color($colors, background);
   ion-header {
     ion-toolbar {
       ion-title {
@@ -12,23 +12,24 @@ ion-menu {
   }
   ion-list {
     ion-item {
-      .name {
-        font-weight: 600;
-        font-size: 16px;
-        color: #3c3c3c;
-        padding-bottom: 4px;
-      }
-      .domain {
-        font-weight: 400;
-        font-size: 14px;
-        color: #767676;
-      }
-      &.selected {
-        background-color: #eeeeee;
-        .name {
-          color: #2f77b0;
+      &.active {
+        background-color: color($colors, highlight);
+        ion-label {
+          span {
+            color: color($colors, active);
+          }
         }
       }
+    }
+  }
+}
+ion-footer {
+  ion-toolbar {
+    p {
+      color: white;
+    }
+    button {
+      color: white;
     }
   }
 }

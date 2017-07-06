@@ -2,49 +2,49 @@
   "_args": [
     [
       {
-        "raw": "cordova-custom-config@~3.1.4",
+        "raw": "cordova-custom-config@^3.3.0",
         "scope": null,
         "escapedName": "cordova-custom-config",
         "name": "cordova-custom-config",
-        "rawSpec": "~3.1.4",
-        "spec": ">=3.1.4 <3.2.0",
+        "rawSpec": "^3.3.0",
+        "spec": ">=3.3.0 <4.0.0",
         "type": "range"
       },
       "/Users/dalezak/SandBox/Ushahidi_Mobile/node_modules"
     ]
   ],
-  "_from": "cordova-custom-config@>=3.1.4 <3.2.0",
-  "_id": "cordova-custom-config@3.1.4",
+  "_from": "cordova-custom-config@>=3.3.0 <4.0.0",
+  "_id": "cordova-custom-config@3.3.0",
   "_inCache": true,
   "_location": "/cordova-custom-config",
-  "_nodeVersion": "7.3.0",
+  "_nodeVersion": "7.10.0",
   "_npmOperationalInternal": {
-    "host": "packages-12-west.internal.npmjs.com",
-    "tmp": "tmp/cordova-custom-config-3.1.4.tgz_1491898800204_0.6171986071858555"
+    "host": "s3://npm-registry-packages",
+    "tmp": "tmp/cordova-custom-config-3.3.0.tgz_1497039524990_0.748219107510522"
   },
   "_npmUser": {
     "name": "davealden",
     "email": "dave@workingedge.co.uk"
   },
-  "_npmVersion": "4.0.5",
+  "_npmVersion": "4.2.0",
   "_phantomChildren": {},
   "_requested": {
-    "raw": "cordova-custom-config@~3.1.4",
+    "raw": "cordova-custom-config@^3.3.0",
     "scope": null,
     "escapedName": "cordova-custom-config",
     "name": "cordova-custom-config",
-    "rawSpec": "~3.1.4",
-    "spec": ">=3.1.4 <3.2.0",
+    "rawSpec": "^3.3.0",
+    "spec": ">=3.3.0 <4.0.0",
     "type": "range"
   },
   "_requiredBy": [
     "#USER",
     "/"
   ],
-  "_resolved": "https://registry.npmjs.org/cordova-custom-config/-/cordova-custom-config-3.1.4.tgz",
-  "_shasum": "c43c32dc3b1147def6536721b71391af4828a36d",
+  "_resolved": "https://registry.npmjs.org/cordova-custom-config/-/cordova-custom-config-3.3.0.tgz",
+  "_shasum": "58afda63d4deb8c6d413b38cf0bd9a948ac4060d",
   "_shrinkwrap": null,
-  "_spec": "cordova-custom-config@~3.1.4",
+  "_spec": "cordova-custom-config@^3.3.0",
   "_where": "/Users/dalezak/SandBox/Ushahidi_Mobile/node_modules",
   "author": {
     "name": "Dave Alden"
@@ -76,10 +76,10 @@
   },
   "directories": {},
   "dist": {
-    "shasum": "c43c32dc3b1147def6536721b71391af4828a36d",
-    "tarball": "https://registry.npmjs.org/cordova-custom-config/-/cordova-custom-config-3.1.4.tgz"
+    "shasum": "58afda63d4deb8c6d413b38cf0bd9a948ac4060d",
+    "tarball": "https://registry.npmjs.org/cordova-custom-config/-/cordova-custom-config-3.3.0.tgz"
   },
-  "gitHead": "501e81d01b4fa10bbd481eece94ce83212bfca1f",
+  "gitHead": "6fcf4a5e1b1e7d159ce2f897429505c1702651e9",
   "homepage": "https://github.com/dpa99c/cordova-custom-config#readme",
   "issue": "https://github.com/dpa99c/cordova-custom-config/issues",
   "keywords": [
@@ -110,5 +110,5 @@
   "scripts": {
     "test": "jshint hooks"
   },
-  "version": "3.1.4"
+  "version": "3.3.0"
 }

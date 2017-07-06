@@ -2,18 +2,18 @@
   "_args": [
     [
       {
-        "raw": "cordova-plugin-splashscreen@~4.0.2",
+        "raw": "cordova-plugin-splashscreen@^4.0.3",
         "scope": null,
         "escapedName": "cordova-plugin-splashscreen",
         "name": "cordova-plugin-splashscreen",
-        "rawSpec": "~4.0.2",
-        "spec": ">=4.0.2 <4.1.0",
+        "rawSpec": "^4.0.3",
+        "spec": ">=4.0.3 <5.0.0",
         "type": "range"
       },
       "/Users/dalezak/SandBox/Ushahidi_Mobile/node_modules"
     ]
   ],
-  "_from": "cordova-plugin-splashscreen@>=4.0.2 <4.1.0",
+  "_from": "cordova-plugin-splashscreen@>=4.0.3 <5.0.0",
   "_id": "cordova-plugin-splashscreen@4.0.3",
   "_inCache": true,
   "_location": "/cordova-plugin-splashscreen",
@@ -29,12 +29,12 @@
   "_npmVersion": "3.10.10",
   "_phantomChildren": {},
   "_requested": {
-    "raw": "cordova-plugin-splashscreen@~4.0.2",
+    "raw": "cordova-plugin-splashscreen@^4.0.3",
     "scope": null,
     "escapedName": "cordova-plugin-splashscreen",
     "name": "cordova-plugin-splashscreen",
-    "rawSpec": "~4.0.2",
-    "spec": ">=4.0.2 <4.1.0",
+    "rawSpec": "^4.0.3",
+    "spec": ">=4.0.3 <5.0.0",
     "type": "range"
   },
   "_requiredBy": [
@@ -44,7 +44,7 @@
   "_resolved": "https://registry.npmjs.org/cordova-plugin-splashscreen/-/cordova-plugin-splashscreen-4.0.3.tgz",
   "_shasum": "773cd1363c1f3bacb9901663e9e3793dd3e0a19d",
   "_shrinkwrap": null,
-  "_spec": "cordova-plugin-splashscreen@~4.0.2",
+  "_spec": "cordova-plugin-splashscreen@^4.0.3",
   "_where": "/Users/dalezak/SandBox/Ushahidi_Mobile/node_modules",
   "author": {
     "name": "Apache Software Foundation"

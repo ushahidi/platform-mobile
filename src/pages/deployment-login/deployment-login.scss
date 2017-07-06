@@ -1,21 +1,7 @@
 .deployment-login-page {
-  .header {
-    h3 {
-      color: #212121;
-      margin-top: 0;
-      margin-bottom: 0;
-      text-align: left;
-    }
-  }
-  .image {
-    text-align: center;
-    img {
-      max-width: 50%;
-      border-radius: 50%;
-      transition: all 1s;
-    }
-  }
-  p {
-    color: #666;
+  img {
+    max-width: 50%;
+    border-radius: 50%;
+    transition: all 1s;
   }
 }

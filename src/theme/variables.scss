@@ -10,9 +10,9 @@
 // To view all the possible Ionic variables, see:
 // http://ionicframework.com/docs/v2/theming/overriding-ionic-variables/
 
-$text-color:        #000;
-$background-color:  #fff;
-$refresher-border-color: #cccccc;
+$text-color: #000;
+$background-color: #fff;
+$refresher-border-color: #dddddd;
 $text-input-highlight-color-valid: #2274b4;
 $text-input-highlight-color-invalid: #dd0000;
 
@@ -25,20 +25,16 @@ $text-input-highlight-color-invalid: #dd0000;
 // The "primary" color is the only required color in the map.
 
 $colors: (
-  primary:    #fdc245,
-  secondary:  #8793a2,
-  danger:     #a51a1a,
-  light:      #f0f2f4,
-  dark:       #3f4751,
-  muted:      #aaaaaa,
-  label:      #999999,
-  grey:       #999999,
-  white:      #ffffff,
-  blue:       #2274b4,
-  yellow:     #fdc245,
-  red:        #dd0000,
-  black:      #000000,
-  more:       #d4d8dd
+  navbar: #3f4751,
+  toolbar: #343434,
+  primary: #fdc245,
+  secondary: #adb6bf,
+  dark: #3f4751,
+  light: #919ca9,
+  danger: #dd0000,
+  active: #2f77b0,
+  highlight: #f0f2f4,
+  background: #fafafa
 );
 
 

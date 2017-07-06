@@ -1,6 +1,6 @@
 <div class="input-location" [class.invalid]="attribute.required == true && latitude == null && longitude == null && submitted == true">
   <ion-item no-lines text-wrap [formGroup]="formGroup">
-    <ion-label class="input-label">
+    <ion-label class="input-label" color="dark">
       {{attribute.label}}
       <span ion-text color="danger" *ngIf="attribute.required == true">*</span>
     </ion-label>
@@ -44,12 +44,12 @@
       </ion-select>
     </ion-col>
   </ion-row>
-  <button ion-button margin-left icon-left text-uppercase small color="light" [disabled]="offline" *ngIf="latitude && longitude" (click)="updateLocation($event)">
+  <button ion-button margin-left icon-left text-uppercase small color="secondary" [disabled]="offline" *ngIf="latitude && longitude" (click)="updateLocation($event)">
     <ion-icon ios="ios-pin" md="md-pin"></ion-icon> {{'INPUT_LOCATION_CHANGE' | translate}}
   </button>
-  <button ion-button margin-left icon-left text-uppercase small color="light" *ngIf="error == true" (click)="detectLocation()">
+  <button ion-button margin-left icon-left text-uppercase small color="secondary" *ngIf="error == true" (click)="detectLocation()">
     <ion-icon ios="ios-locate-outline" md="md-locate"></ion-icon> {{'INPUT_LOCATION_DETECT' | translate}}
   </button>
-  <p class="input-error" padding-left *ngIf="attribute.required == true && latitude == null && longitude == null && submitted == true">{{'INPUT_LOCATION_REQUIRED' | translate}}</p>
-  <p class="input-error" padding-left *ngIf="error == true">{{'INPUT_LOCATION_ERROR' | translate}}</p>
+  <p ion-text color="danger" class="input-error" padding-left *ngIf="attribute.required == true && latitude == null && longitude == null && submitted == true">{{'INPUT_LOCATION_REQUIRED' | translate}}</p>
+  <p ion-text color="danger" class="input-error" padding-left *ngIf="error == true">{{'INPUT_LOCATION_ERROR' | translate}}</p>
 </div>

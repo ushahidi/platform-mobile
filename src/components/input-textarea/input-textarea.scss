@@ -1,21 +1,19 @@
 .input-textarea {
   .input-label {
-    color: #555;
   }
   .input-error {
-    color: #dd0000;
   }
   &.invalid {
     ion-input {
-      border-bottom: 1px solid #dd0000 !important;
+      border-bottom-color: color($colors, danger) !important;
     }
   }
   &.focused {
     .input-label {
-      color: #2274b4;
+      color: color($colors, active) !important;
     }
     ion-input {
-      border-bottom: 1px solid #2274b4 !important;
+      border-bottom-color: color($colors, active) !important;
     }
   }
 }

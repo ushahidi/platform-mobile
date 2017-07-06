@@ -1,5 +1,5 @@
 .response-image-page {
-  background-color: #e7e9ec;
+  background-color: color($colors, background);
   img {
     width: 100%;
     &.lazy {

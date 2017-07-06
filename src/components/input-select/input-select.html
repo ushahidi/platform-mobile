@@ -1,6 +1,6 @@
 <div class="input-select" [class.invalid]="attribute.required == true && (text == null || text.length == 0) && submitted == true">
   <ion-item text-wrap [formGroup]="formGroup">
-    <ion-label class="input-label">
+    <ion-label class="input-label" color="dark">
       {{attribute.label}}
       <span ion-text color="danger" *ngIf="attribute.required == true">*</span>
     </ion-label>
@@ -8,5 +8,5 @@
       <ion-option value="{{option}}" *ngFor="let option of options">{{option}}</ion-option>
     </ion-select>
   </ion-item>
-  <p class="input-error" padding-left *ngIf="attribute.required == true && (text == null || text.length == 0) && submitted == true">{{'INPUT_SELECTION_REQUIRED' | translate}}</p>
+  <p ion-text color="danger" class="input-error" padding-left *ngIf="attribute.required == true && (text == null || text.length == 0) && submitted == true">{{'INPUT_SELECTION_REQUIRED' | translate}}</p>
 </div>

@@ -2,18 +2,18 @@
   "_args": [
     [
       {
-        "raw": "cordova-plugin-media-capture@~1.4.2",
+        "raw": "cordova-plugin-media-capture@^1.4.3",
         "scope": null,
         "escapedName": "cordova-plugin-media-capture",
         "name": "cordova-plugin-media-capture",
-        "rawSpec": "~1.4.2",
-        "spec": ">=1.4.2 <1.5.0",
+        "rawSpec": "^1.4.3",
+        "spec": ">=1.4.3 <2.0.0",
         "type": "range"
       },
       "/Users/dalezak/SandBox/Ushahidi_Mobile/node_modules"
     ]
   ],
-  "_from": "cordova-plugin-media-capture@>=1.4.2 <1.5.0",
+  "_from": "cordova-plugin-media-capture@>=1.4.3 <2.0.0",
   "_id": "cordova-plugin-media-capture@1.4.3",
   "_inCache": true,
   "_location": "/cordova-plugin-media-capture",
@@ -29,12 +29,12 @@
   "_npmVersion": "3.10.10",
   "_phantomChildren": {},
   "_requested": {
-    "raw": "cordova-plugin-media-capture@~1.4.2",
+    "raw": "cordova-plugin-media-capture@^1.4.3",
     "scope": null,
     "escapedName": "cordova-plugin-media-capture",
     "name": "cordova-plugin-media-capture",
-    "rawSpec": "~1.4.2",
-    "spec": ">=1.4.2 <1.5.0",
+    "rawSpec": "^1.4.3",
+    "spec": ">=1.4.3 <2.0.0",
     "type": "range"
   },
   "_requiredBy": [
@@ -44,7 +44,7 @@
   "_resolved": "https://registry.npmjs.org/cordova-plugin-media-capture/-/cordova-plugin-media-capture-1.4.3.tgz",
   "_shasum": "20e3bbe334fbb89f624b02188eac5372743920fa",
   "_shrinkwrap": null,
-  "_spec": "cordova-plugin-media-capture@~1.4.2",
+  "_spec": "cordova-plugin-media-capture@^1.4.3",
   "_where": "/Users/dalezak/SandBox/Ushahidi_Mobile/node_modules",
   "author": {
     "name": "Apache Software Foundation"

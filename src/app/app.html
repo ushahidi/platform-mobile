@@ -1,39 +1,38 @@
 <ion-menu #menu [content]="content" side="left" type="reveal" swipeEnabled="false" (ionOpen)="loadDeployments()">
   <ion-header>
-    <ion-toolbar color="dark"></ion-toolbar>
+    <ion-toolbar color="navbar"></ion-toolbar>
   </ion-header>
   <ion-content>
     <ion-refresher (ionRefresh)="loadDeployments($event)">
       <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
-    <ion-list *ngIf="deployments && deployments.length > 0">
-      <ion-list-header>{{'SETTINGS' | translate}}</ion-list-header>
-      <ion-item>
-        <ion-label>{{'LANGUAGE' | translate}}</ion-label>
-        <ion-select [(ngModel)]="i18n" [okText]="'OK' | translate" [cancelText]="'CANCEL' | translate"  (ionChange)="setLanguage(i18n)">
-          <ion-option [value]="_language.code" *ngFor="let _language of languages">{{_language.name}}</ion-option>
-        </ion-select>
-      </ion-item>
-    </ion-list>
-    <ion-list *ngIf="deployments && deployments.length > 0">
+    <ion-list *ngIf="whitelabel == false && deployments && deployments.length > 0">
       <ion-list-header>{{'DEPLOYMENTS' | translate}}</ion-list-header>
-      <ion-item-sliding *ngFor="let _deployment of deployments">
-        <ion-item [class.selected]="deployment != null && deployment.api === _deployment.api"
-                  (click)="changeDeployment(_deployment)">
-          <div class="name">{{_deployment.name}}</div>
-          <div class="domain">{{_deployment.domain}}</div>
+      <ion-item-sliding radio-group [(ngModel)]="deploymentApi" *ngFor="let _deployment of deployments">
+        <ion-item [class.active]="deploymentApi === _deployment.api">
+          <ion-label>
+            <span>{{_deployment.name}}</span>
+            <p>{{_deployment.domain}}</p>
+          </ion-label>
+          <ion-radio color="dark" [value]="_deployment.api" (ionSelect)="changeDeployment(_deployment)"></ion-radio>
         </ion-item>
         <ion-item-options side="right">
-          <button ion-button color="danger" (click)="removeDeployment($event, _deployment)">
-            <ion-icon name="trash"></ion-icon>
-            {{'ACTION_REMOVE' | translate}}
+          <button ion-button color="danger" (click)="removeDeployment(_deployment)">
+            <ion-icon name="trash"></ion-icon> {{'ACTION_REMOVE' | translate}}
           </button>
         </ion-item-options>
       </ion-item-sliding>
       <ion-item tappable *ngIf="offline == false" (click)="addDeployment($event)">
-        <div class="name">
+        <ion-label>
           <ion-icon ios="md-add" md="md-add"></ion-icon> {{'DEPLOYMENT_ADD' | translate}}
-        </div>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+    <ion-list radio-group [(ngModel)]="i18n" *ngIf="deployments && deployments.length > 0">
+      <ion-list-header>{{'LANGUAGES' | translate}}</ion-list-header>
+      <ion-item [class.active]="i18n === _language.code" *ngFor="let _language of languages">
+        <ion-label><span>{{_language.name}}</span></ion-label>
+        <ion-radio color="dark" [value]="_language.code" (ionSelect)="setLanguage(_language.code)"></ion-radio>
       </ion-item>
     </ion-list>
   </ion-content>

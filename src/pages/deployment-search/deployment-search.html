@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-navbar color="dark">
+  <ion-navbar color="navbar">
     <ion-buttons start>
       <button #cancel ion-button icon-only (click)="onCancel($event)">
         <ion-icon ios="md-close" md="md-close"></ion-icon>
@@ -27,7 +27,7 @@
   </ion-list>
 </ion-content>
 <ion-footer>
-  <ion-toolbar color="black" *ngIf="offline">
-    <p color="white" ion-text padding-left tappable (click)="showOfflineAlert()">{{'OFFLINE' | translate}}</p>
+  <ion-toolbar color="toolbar" *ngIf="offline">
+    <p padding-left tappable (click)="showOfflineAlert()">{{'OFFLINE' | translate}}</p>
   </ion-toolbar>
 </ion-footer>

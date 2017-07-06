@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-navbar color="dark">
+  <ion-navbar color="navbar">
     <ion-buttons start>
       <button #cancel ion-button icon-only (click)="onCancel($event)">
         <ion-icon ios="md-close" md="md-close"></ion-icon>
@@ -29,6 +29,6 @@
       <ion-label floating>{{'DEPLOYMENT_EMAIL' | translate}}</ion-label>
       <ion-input #email type="email" [(ngModel)]="deployment.email"></ion-input>
     </ion-item>
-    <p class="hint" padding-left padding-right>{{'DEPLOYMENT_EMAIL_WARNING' | translate}}</p>
+    <p ion-text padding-left padding-right color="light">{{'DEPLOYMENT_EMAIL_WARNING' | translate}}</p>
   </div>
 </ion-content>

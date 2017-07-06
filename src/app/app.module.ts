@@ -42,6 +42,8 @@ import { ResponseMapPage } from '../pages/response-map/response-map';
 import { ResponseSearchPage } from '../pages/response-search/response-search';
 import { ResponseImagePage } from '../pages/response-image/response-image';
 
+import { WhitelabelIntroPage } from '../pages/whitelabel-intro/whitelabel-intro';
+
 import { InputCheckboxComponent } from '../components/input-checkbox/input-checkbox';
 import { InputCheckboxesComponent } from '../components/input-checkboxes/input-checkboxes';
 import { InputDateComponent } from '../components/input-date/input-date';
@@ -74,6 +76,7 @@ import { DatabaseService } from '../providers/database-service';
 import { CacheService } from '../providers/cache-service';
 import { VimeoService } from '../providers/vimeo-service';
 import { LanguageService } from '../providers/language-service';
+import { SettingsService } from '../providers/settings-service';
 
 export function translateLoaderFactory(http: Http) {
   return new TranslateStaticLoader(http, 'assets/i18n', '.json');
@@ -94,6 +97,7 @@ export function translateLoaderFactory(http: Http) {
     ResponseMapPage,
     ResponseImagePage,
     ResponseSearchPage,
+    WhitelabelIntroPage,
     InputCheckboxComponent,
     InputCheckboxesComponent,
     InputDateComponent,
@@ -147,7 +151,8 @@ export function translateLoaderFactory(http: Http) {
     ResponseAddPage,
     ResponseMapPage,
     ResponseImagePage,
-    ResponseSearchPage
+    ResponseSearchPage,
+    WhitelabelIntroPage
   ],
   providers: [
     { provide: File, useClass: File },
@@ -175,6 +180,7 @@ export function translateLoaderFactory(http: Http) {
     { provide: DatabaseService, useClass: DatabaseService },
     { provide: LanguageService, useClass: LanguageService },
     { provide: TranslateService, useClass: TranslateService },
+    { provide: SettingsService, useClass: SettingsService },
     { provide: ErrorHandler, useClass: IonicErrorHandler }
   ]
 })

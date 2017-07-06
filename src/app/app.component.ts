@@ -25,10 +25,13 @@ import { LoggerService } from '../providers/logger-service';
 import { DatabaseService } from '../providers/database-service';
 import { InjectorService } from '../providers/injector-service';
 import { LanguageService } from '../providers/language-service';
+import { SettingsService } from '../providers/settings-service';
 
 import { DeploymentNonePage } from '../pages/deployment-none/deployment-none';
 import { DeploymentSearchPage } from '../pages/deployment-search/deployment-search';
 import { DeploymentDetailsPage } from '../pages/deployment-details/deployment-details';
+
+import { WhitelabelIntroPage } from '../pages/whitelabel-intro/whitelabel-intro';
 
 import { GOOGLE_ANALYTICS_ID } from '../constants/secrets';
 
@@ -37,17 +40,19 @@ declare var cordova:any;
 
 @Component({
   templateUrl: 'app.html',
-  entryComponents:[ DeploymentNonePage, DeploymentSearchPage, DeploymentDetailsPage ]
+  entryComponents:[ DeploymentNonePage, DeploymentSearchPage, DeploymentDetailsPage, WhitelabelIntroPage ]
 })
 export class MyApp {
 
-  zone: NgZone = null;
-  rootPage: any = null;
-  deployment : Deployment = null;
-  deployments: Deployment[] = null;
-  offline: boolean = false;
-  i18n: string = "en";
-  direction: string = "ltr";
+  zone:NgZone = null;
+  rootPage:any = null;
+  deployment:Deployment = null;
+  deployments:Deployment[] = null;
+  offline:boolean = false;
+  whitelabel:boolean = false;
+  i18n:string = "en";
+  deploymentApi:string = null;
+  direction:string = "ltr";
   languages:any[] = [
     { name: 'English', code: 'en' },
     { name: 'Français', code: 'fr' },
@@ -77,6 +82,7 @@ export class MyApp {
     private logger:LoggerService,
     private database:DatabaseService,
     private language:LanguageService,
+    private settings:SettingsService,
     private modalController:ModalController,
     private toastController:ToastController,
     private loadingController:LoadingController,
@@ -86,6 +92,7 @@ export class MyApp {
     InjectorService.injector = injector;
     this.platform.ready().then(() => {
       this.logger.info(this, "Platform Ready", this.platform.platforms());
+      this.loadSettings();
       this.loadLanguages();
       this.loadNetwork();
       this.loadStatusBar();
@@ -102,6 +109,15 @@ export class MyApp {
         new Collection(),
         new Tag(),
         new Filter()]);
+    });
+  }
+
+  loadSettings() {
+    this.settings.getDeploymentUrl().then((url:string) => {
+      this.whitelabel = true;
+    },
+    (error:any) => {
+      this.whitelabel = false;
     });
   }
 
@@ -255,7 +271,7 @@ export class MyApp {
             if (this.deployments.length > 0 && this.deployment == null) {
               this.deployment = this.deployments[0];
             }
-            if (event != null) {
+            if (event) {
               event.complete();
             }
             resolve(deployments);
@@ -274,6 +290,10 @@ export class MyApp {
       this.showDeployment(this.deployment).then((ready) => {
         this.splashScreen.hide();
       });
+    }
+    else if (this.whitelabel) {
+      this.rootPage = WhitelabelIntroPage;
+      this.splashScreen.hide();
     }
     else {
       this.rootPage = DeploymentNonePage;
@@ -312,6 +332,7 @@ export class MyApp {
   showDeployment(deployment:Deployment):Promise<any> {
     this.logger.info(this, "showDeployment", deployment);
     this.deployment = deployment;
+    this.deploymentApi = deployment.api;
     return this.api.userOrClientLogin(deployment, this.offline).then(
       (login:Login) => {
         this.menuController.close();
@@ -321,7 +342,7 @@ export class MyApp {
     });
   }
 
-  removeDeployment(event:any, deployment:Deployment) {
+  removeDeployment(deployment:Deployment) {
     this.language.getTranslations([
       'DEPLOYMENT_REMOVING_',
       'DEPLOYMENT_REMOVE_DESCRIPTION']).then((translations:string[]) => {

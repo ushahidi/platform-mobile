@@ -1,35 +1,18 @@
 .deployment-details-page {
   padding-top: 0;
   margin-top: 0;
-  .name {
-    h3 {
-      color: #212121;
-      margin-top: 0;
-      margin-bottom: 0;
-      text-align: left;
-    }
-  }
-  .image {
-    text-align: center;
-    img {
-      max-width: 50%;
-      border-radius: 50%;
-      transition: all 1s;
-    }
-  }
-  .description {
-    a {
-      color: #777;
-    }
-  }
-  .submit {
+  img {
+    max-width: 50%;
+    border-radius: 50%;
     transition: all 1s;
-    button {
-      transition: all 1s;
-    }
+  }
+  .fadein {
+    transition: all 1s;
   }
   p {
-    color: #666;
     font-size: 16px;
+    a {
+      color: color($colors, dark);
+    }
   }
 }

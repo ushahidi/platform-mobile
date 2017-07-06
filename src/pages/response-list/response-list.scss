@@ -1,26 +1,10 @@
 .page-response-list {
-  background-color: #e7e9ec;
+  background-color: color($colors, background);
   position: relative;
   .list {
     .spinner {
       margin-top: 100px;
       text-align: center;
-    }
-    .no-responses {
-      h6 {
-        color: #888;
-        text-align: center;
-        margin-top: 120px;
-        margin-bottom: 20px;
-      }
-      button {
-      }
-    }
-    .more {
-      text-align: center;
-      button {
-        color: #888;
-      }
     }
   }
   .map {

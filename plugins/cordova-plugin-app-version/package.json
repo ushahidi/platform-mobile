@@ -2,11 +2,11 @@
   "_args": [
     [
       {
-        "raw": "cordova-plugin-app-version@~0.1.9",
+        "raw": "cordova-plugin-app-version@^0.1.9",
         "scope": null,
         "escapedName": "cordova-plugin-app-version",
         "name": "cordova-plugin-app-version",
-        "rawSpec": "~0.1.9",
+        "rawSpec": "^0.1.9",
         "spec": ">=0.1.9 <0.2.0",
         "type": "range"
       },
@@ -29,11 +29,11 @@
   "_npmVersion": "3.7.3",
   "_phantomChildren": {},
   "_requested": {
-    "raw": "cordova-plugin-app-version@~0.1.9",
+    "raw": "cordova-plugin-app-version@^0.1.9",
     "scope": null,
     "escapedName": "cordova-plugin-app-version",
     "name": "cordova-plugin-app-version",
-    "rawSpec": "~0.1.9",
+    "rawSpec": "^0.1.9",
     "spec": ">=0.1.9 <0.2.0",
     "type": "range"
   },
@@ -44,7 +44,7 @@
   "_resolved": "https://registry.npmjs.org/cordova-plugin-app-version/-/cordova-plugin-app-version-0.1.9.tgz",
   "_shasum": "9db0607863337a710489302e5f50a904f1449bdb",
   "_shrinkwrap": null,
-  "_spec": "cordova-plugin-app-version@~0.1.9",
+  "_spec": "cordova-plugin-app-version@^0.1.9",
   "_where": "/Users/dalezak/SandBox/Ushahidi_Mobile/node_modules",
   "author": {
     "name": "whiteoctober"

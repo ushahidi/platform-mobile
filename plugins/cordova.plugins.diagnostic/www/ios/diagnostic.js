@@ -16,6 +16,19 @@ var Diagnostic = (function(){
         }
     }
 
+    function mapFromLegacyCameraApi() {
+        var params;
+        if (typeof arguments[0]  === "function") {
+            params = (arguments.length > 2 && typeof arguments[2]  === "object") ? arguments[2] : {};
+            params.successCallback = arguments[0];
+            if(arguments.length > 1 && typeof arguments[1]  === "function") {
+                params.errorCallback = arguments[1];
+            }
+        }else { // if (typeof arguments[0]  === "object")
+            params = arguments[0];
+        }
+        return params;
+    }
 
 
     /********************
@@ -205,14 +218,18 @@ var Diagnostic = (function(){
      * Checks if camera is enabled for use.
      * On iOS this returns true if both the device has a camera AND the application is authorized to use it.
      *
-     * @param {Function} successCallback - The callback which will be called when operation is successful.
+     * @param {Object} params - (optional) parameters:
+     *  - {Function} successCallback - The callback which will be called when operation is successful.
      * This callback function is passed a single boolean parameter which is TRUE if camera is present and authorized for use.
-     * @param {Function} errorCallback -  The callback which will be called when operation encounters an error.
+     *  - {Function} errorCallback -  The callback which will be called when operation encounters an error.
      * This callback function is passed a single string parameter containing the error message.
      */
-    Diagnostic.isCameraAvailable = function(successCallback, errorCallback) {
-        return cordova.exec(ensureBoolean(successCallback),
-            errorCallback,
+    Diagnostic.isCameraAvailable = function(params) {
+        params = mapFromLegacyCameraApi.apply(this, arguments);
+
+        params.successCallback = params.successCallback || function(){};
+        return cordova.exec(ensureBoolean(params.successCallback),
+            params.errorCallback,
             'Diagnostic',
             'isCameraAvailable',
             []);
@@ -238,14 +255,17 @@ var Diagnostic = (function(){
     /**
      * Checks if the application is authorized to use the camera.
      *
-     * @param {Function} successCallback - The callback which will be called when operation is successful.
+     * @param {Object} params - (optional) parameters:
+     *  - {Function} successCallback - The callback which will be called when operation is successful.
      * This callback function is passed a single boolean parameter which is TRUE if camera is authorized for use.
-     * @param {Function} errorCallback -  The callback which will be called when operation encounters an error.
+     *   - {Function} errorCallback -  The callback which will be called when operation encounters an error.
      * This callback function is passed a single string parameter containing the error message.
      */
-    Diagnostic.isCameraAuthorized = function(successCallback, errorCallback) {
-        return cordova.exec(ensureBoolean(successCallback),
-            errorCallback,
+    Diagnostic.isCameraAuthorized = function(params) {
+        params = mapFromLegacyCameraApi.apply(this, arguments);
+
+        return cordova.exec(ensureBoolean(params.successCallback),
+            params.errorCallback,
             'Diagnostic',
             'isCameraAuthorized',
             []);
@@ -254,14 +274,17 @@ var Diagnostic = (function(){
     /**
      * Returns the camera authorization status for the application.
      *
-     * @param {Function} successCallback - The callback which will be called when operation is successful.
+     * @param {Object} params - (optional) parameters:
+     *  - {Function} successCallback - The callback which will be called when operation is successful.
      * This callback function is passed a single string parameter which indicates the authorization status as a constant in `cordova.plugins.diagnostic.permissionStatus`.
-     * @param {Function} errorCallback -  The callback which will be called when operation encounters an error.
+     *  - {Function} errorCallback -  The callback which will be called when operation encounters an error.
      * This callback function is passed a single string parameter containing the error message.
      */
-    Diagnostic.getCameraAuthorizationStatus = function(successCallback, errorCallback) {
-        return cordova.exec(successCallback,
-            errorCallback,
+    Diagnostic.getCameraAuthorizationStatus = function(params) {
+        params = mapFromLegacyCameraApi.apply(this, arguments);
+
+        return cordova.exec(params.successCallback,
+            params.errorCallback,
             'Diagnostic',
             'getCameraAuthorizationStatus',
             []);
@@ -271,17 +294,21 @@ var Diagnostic = (function(){
      * Requests camera authorization for the application.
      * Should only be called if authorization status is NOT_REQUESTED. Calling it when in any other state will have no effect.
      *
-     * @param {Function} successCallback - The callback which will be called when operation is successful.
+     * @param {Object} params - (optional) parameters:
+     * - {Function} successCallback - The callback which will be called when operation is successful.
      * This callback function is passed a single string parameter indicating whether access to the camera was granted or denied:
      * `cordova.plugins.diagnostic.permissionStatus.GRANTED` or `cordova.plugins.diagnostic.permissionStatus.DENIED`
-     * @param {Function} errorCallback -  The callback which will be called when operation encounters an error.
+     * - {Function} errorCallback -  The callback which will be called when operation encounters an error.
      * This callback function is passed a single string parameter containing the error message.
      */
-    Diagnostic.requestCameraAuthorization = function(successCallback, errorCallback) {
+    Diagnostic.requestCameraAuthorization = function(params){
+        params = mapFromLegacyCameraApi.apply(this, arguments);
+
+        params.successCallback = params.successCallback || function(){};
         return cordova.exec(function(isGranted){
-                successCallback(isGranted ? Diagnostic.permissionStatus.GRANTED : Diagnostic.permissionStatus.DENIED);
+                params.successCallback(isGranted ? Diagnostic.permissionStatus.GRANTED : Diagnostic.permissionStatus.DENIED);
             },
-            errorCallback,
+            params.errorCallback,
             'Diagnostic',
             'requestCameraAuthorization',
             []);
