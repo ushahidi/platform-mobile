@@ -2,6 +2,7 @@
 
 secrets.ts
 node_modules
+platforms
 .tmp
 .sass-cache
 *.swp

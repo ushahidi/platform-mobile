@@ -21,7 +21,10 @@
             "id": "cordova-plugin-camera@^2.4.1"
         },
         "is_top_level": true,
-        "variables": {}
+        "variables": {
+            "CAMERA_USAGE_DESCRIPTION": "Ushahidi would like to access the camera.",
+            "PHOTOLIBRARY_USAGE_DESCRIPTION": "Ushahidi would like to access the photo library."
+        }
     },
     "cordova-plugin-compat": {
         "source": {
@@ -85,7 +88,9 @@
             "id": "cordova-plugin-geolocation@^2.4.3"
         },
         "is_top_level": true,
-        "variables": {}
+        "variables": {
+            "GEOLOCATION_USAGE_DESCRIPTION": "Ushahidi would like to access your location."
+        }
     },
     "cordova-plugin-google-analytics": {
         "source": {
@@ -125,7 +130,11 @@
             "id": "cordova-plugin-media-capture@^1.4.3"
         },
         "is_top_level": true,
-        "variables": {}
+        "variables": {
+            "CAMERA_USAGE_DESCRIPTION": "Ushahidi would like to access the camera.",
+            "MICROPHONE_USAGE_DESCRIPTION": "Ushahidi would like to access the microphone.",
+            "PHOTOLIBRARY_USAGE_DESCRIPTION": "Ushahidi would like to access the photo library."
+        }
     },
     "cordova-plugin-nativegeocoder": {
         "source": {
@@ -234,7 +243,7 @@
     "cordova.plugins.diagnostic": {
         "source": {
             "type": "registry",
-            "id": "cordova.plugins.diagnostic@^3.4.2"
+            "id": "cordova.plugins.diagnostic@^3.6.5"
         },
         "is_top_level": true,
         "variables": {}
@@ -245,7 +254,11 @@
             "id": "ionic-plugin-deeplinks@^1.0.15"
         },
         "is_top_level": true,
-        "variables": {}
+        "variables": {
+            "URL_SCHEME": "ushahidi",
+            "DEEPLINK_SCHEME": "https",
+            "DEEPLINK_HOST": "ushahidi.io"
+        }
     },
     "ionic-plugin-keyboard": {
         "source": {
