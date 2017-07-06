@@ -206,6 +206,22 @@ export class ApiService extends HttpService {
     });
   }
 
+  passwordReset(deployment:Deployment, email:string):Promise<any> {
+    return new Promise((resolve, reject) => {
+      let params = {
+        email: email };
+      this.apiPost(deployment, "/api/v3/passwordreset", params).then(
+        (data:any) => {
+          this.logger.info(this, "passwordReset", data);
+          resolve(data);
+        },
+        (error:any) => {
+          this.logger.error(this, "userSignup", error);
+          reject(error);
+        });
+    });
+  }
+
   authRefresh(deployment:Deployment, refreshToken:string):Promise<Login> {
     return new Promise((resolve, reject) => {
       let url = deployment.api + "/oauth/token";

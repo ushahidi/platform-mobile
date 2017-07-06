@@ -187,4 +187,56 @@ export class UserLoginPage extends BasePage {
       });
   }
 
+  showPasswordReset(event) {
+    this.language.getTranslations([
+      'USER_PASSWORD_FORGOT_QUESTION',
+      'USER_EMAIL',
+      'ACTION_CANCEL',
+      'USER_PASSWORD_RESET']).then((translations:string[]) => {
+        let prompt = this.alertController.create({
+          title: translations[0],
+          inputs: [
+            {
+              name: 'email',
+              type: 'email',
+              value: this.username.value,
+              placeholder: translations[1]
+            },
+          ],
+          buttons: [
+            {
+              text: translations[2]
+            },
+            {
+              text: translations[3],
+              handler: data => {
+                this.passwordReset(data['email']);
+              }
+            }
+          ]
+        });
+        prompt.present();
+    });
+  }
+
+  passwordReset(email:string) {
+    this.logger.info(this, "passwordReset", email);
+    this.language.getTranslations([
+      'USER_PASSWORD_RESETTING_',
+      'USER_PASSWORD_RESET_SUCCESS',
+      'USER_PASSWORD_RESET_FAILURE']).then((translations:string[]) => {
+        let loading = this.showLoading(translations[0]);
+        this.api.passwordReset(this.deployment, email).then((reset:any) => {
+          this.logger.info(this, "passwordReset", email, reset);
+          loading.dismiss();
+          this.showToast(translations[1]);
+        },
+        (error:any) => {
+          this.logger.error(this, "passwordReset", email, error);
+          loading.dismiss();
+          this.showAlert(translations[2], error);
+        });
+    });
+  }
+
 }

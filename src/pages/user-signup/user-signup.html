@@ -25,10 +25,14 @@
       <ion-input #confirm type="password" clearInput="true"></ion-input>
     </ion-item>
   </ion-list>
-  <div text-right padding-right>
-    <button #login ion-button text-uppercase color="primary" (click)="userSignup($event)"
-          [disabled]="name.value.length == 0 || email.value.length == 0 || password.value.length == 0 || password.value != confirm.value">{{'USER_SIGNUP' | translate}}</button>
-  </div>
+  <ion-row>
+    <ion-col text-left>
+    </ion-col>
+    <ion-col text-right padding-right>
+      <button ion-button text-uppercase color="primary" (click)="userSignup($event)"
+            [disabled]="name.value.length == 0 || email.value.length == 0 || password.value.length == 0 || password.value != confirm.value">{{'USER_SIGNUP' | translate}}</button>
+    </ion-col>
+  </ion-row>
 </ion-content>
 <ion-footer>
   <ion-toolbar color="toolbar" *ngIf="offline">

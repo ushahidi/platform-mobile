@@ -17,10 +17,15 @@
       <ion-input #password type="password" clearInput="true"></ion-input>
     </ion-item>
   </ion-list>
-  <div text-right padding-right>
-    <button #login ion-button text-uppercase color="primary" (click)="userLogin($event)"
-          [disabled]="username.value.length == 0 || password.value.length == 0">{{'USER_LOGIN' | translate}}</button>
-  </div>
+  <ion-row>
+    <ion-col text-left>
+      <button ion-button text-uppercase clear color="dark" (click)="showPasswordReset($event)">{{'USER_PASSWORD_FORGOT' | translate}}</button>
+    </ion-col>
+    <ion-col text-right padding-right>
+      <button ion-button text-uppercase color="primary" (click)="userLogin($event)"
+            [disabled]="username.value.length == 0 || password.value.length == 0">{{'USER_LOGIN' | translate}}</button>
+    </ion-col>
+  </ion-row>
 </ion-content>
 <ion-footer>
   <ion-toolbar color="toolbar" *ngIf="offline">
