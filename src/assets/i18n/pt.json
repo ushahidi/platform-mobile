@@ -156,5 +156,10 @@
 "STATUS_PUBLISHED": "Publicados",
 "STATUS_UNDER_REVIEW": "Sob revisão",
 "SURVEYS": "pesquisas",
-"SURVEY_SUBMIT_RESPONSE": "Enviar resposta da pesquisa"
+"SURVEY_SUBMIT_RESPONSE": "Enviar resposta da pesquisa",
+"WHITELABEL_GET_STARTED": "Iniciar",
+"WHITELABEL_WELCOME_TO": "Bem-vindo ao",
+"WHITELABEL_RETRY": "Configurações de Recarga",
+"WHITELABEL_FAILURE": "Configurações de carregamento do problema",
+"WHITELABEL_FAILURE_RETRY": "Ocorreu um problema ao carregar as configurações do aplicativo, verifique sua conexão com a internet e tente novamente."
 }

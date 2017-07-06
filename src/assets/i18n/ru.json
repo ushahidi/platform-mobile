@@ -156,5 +156,10 @@
 "STATUS_PUBLISHED": "опубликованный",
 "STATUS_UNDER_REVIEW": "В обзоре",
 "SURVEYS": "Обзоры",
-"SURVEY_SUBMIT_RESPONSE": "Отправить опрос"
+"SURVEY_SUBMIT_RESPONSE": "Отправить опрос",
+"WHITELABEL_GET_STARTED": "Начать",
+"WHITELABEL_WELCOME_TO": "Добро пожаловать в",
+"WHITELABEL_RETRY": "Настройки перезагрузки",
+"WHITELABEL_FAILURE": "Настройки загрузки проблемы",
+"WHITELABEL_FAILURE_RETRY": "Не удалось загрузить настройки приложения, проверьте подключение к Интернету и повторите попытку."
 }

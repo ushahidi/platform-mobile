@@ -156,5 +156,10 @@
 "STATUS_PUBLISHED": "Ilichapishwa",
 "STATUS_UNDER_REVIEW": "Chini ya Uhakiki",
 "SURVEYS": "Utafiti",
-"SURVEY_SUBMIT_RESPONSE": "Tuma maoni ya Survey"
+"SURVEY_SUBMIT_RESPONSE": "Tuma maoni ya Survey",
+"WHITELABEL_GET_STARTED": "Anza",
+"WHITELABEL_WELCOME_TO": "Karibu",
+"WHITELABEL_RETRY": "Pakia upya Mipangilio",
+"WHITELABEL_FAILURE": "Tatizo Loading Settings",
+"WHITELABEL_FAILURE_RETRY": "Kulikuwa na tatizo kupakia mipangilio ya programu, tafadhali hakikisha uunganisho wako wa mtandao na jaribu tena."
 }

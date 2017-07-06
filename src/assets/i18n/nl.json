@@ -21,7 +21,7 @@
 "DATABASE_RESET_FAILURE": "Probleem opnieuw instellen van de database",
 "DATABASE_RESET_FAILURE_DESCRIPTION": "Er is een probleem om de database te resetten.",
 "DATABASE_CREATE_FAILURE": "Probleem maken van database",
-"DATABASE_CREATE_FAILURE_DESCRIPTION": "Er is een probleem opgetreden met het maken van de database.",
+"DATABASE_CREATE_FAILURE_DESCRIPTION": "Er is een probleem opgetreden bij het maken van de database.",
 "DATABASE_SCHEMA_CHANGED": "Database Schema gewijzigd",
 "DATABASE_SCHEMA_CHANGED_DESCRIPTION": "Het databaseschema is veranderd, uw lokale database moet opnieuw worden ingesteld.",
 "DEPLOYMENTS": "implementaties",
@@ -143,7 +143,7 @@
 "RESPONSES_NONE_ERROR": "Er is een probleem opgetreden bij het downloaden van survey antwoorden, probeer het later nogmaals.",
 "RESPONSES_NONE_INTERNET": "Controleer alstublieft of u een internetverbinding hebt, en probeer het opnieuw downloaden van de vragenlijst.",
 "RESPONSES_NONE_FILTER": "Er zijn geen reacties voor het huidige filter.",
-"RESPONSES_ERROR": "Probleem met het downloaden van survey antwoorden",
+"RESPONSES_ERROR": "Probleem downloaden van onderzoek antwoorden",
 "RESPONSES_ERROR_INTERNET": "Internetverbinding niet beschikbaar",
 "SEARCH_BY_ADDRESS_": "Zoeken op adres ...",
 "SETTINGS": "instellingen",
@@ -156,5 +156,10 @@
 "STATUS_PUBLISHED": "Gepubliceerd",
 "STATUS_UNDER_REVIEW": "Onder beoordeling",
 "SURVEYS": "onderzoeken",
-"SURVEY_SUBMIT_RESPONSE": "Verzend Survey Response"
+"SURVEY_SUBMIT_RESPONSE": "Verzend Survey Response",
+"WHITELABEL_GET_STARTED": "Begin",
+"WHITELABEL_WELCOME_TO": "Welkom bij",
+"WHITELABEL_RETRY": "Instellingen opnieuw laden",
+"WHITELABEL_FAILURE": "Probleem laden instellingen",
+"WHITELABEL_FAILURE_RETRY": "Er is een probleem opgelopen bij het laden van de appinstellingen. Controleer uw internetverbinding en probeer het opnieuw."
 }
