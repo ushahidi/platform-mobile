@@ -41,17 +41,13 @@
     <div class="spinner" margin-top-lg *ngIf="posts == null && loading == true && refreshing == false">
       <ion-spinner name="ios"></ion-spinner>
     </div>
-    <div padding-left padding-right *ngIf="loading == false && refreshing == false">
-      <div padding-top padding-bottom margin-top margin-bottom>
+    <div padding-left padding-right class="no-responses" *ngIf="loading == false && refreshing == false">
         <h6 ion-text text-center color="light" *ngIf="filter == null && posts && posts.length == 0 && offline == false">{{'RESPONSES_NONE' | translate}}</h6>
         <h6 ion-text text-center color="light" *ngIf="posts == null && offline == false">{{'RESPONSES_NONE_ERROR' | translate}}</h6>
         <h6 ion-text text-center color="light" *ngIf="(posts == null || posts.length == 0) && offline == true">{{'RESPONSES_NONE_INTERNET' | translate}}</h6>
         <h6 ion-text text-center color="light" *ngIf="filter != null && posts && posts.length == 0">{{'RESPONSES_NONE_FILTER' | translate}}</h6>
-      </div>
-      <div margin-top>
         <button ion-button block text-uppercase color="primary" (click)="addResponse($event)"
               *ngIf="filter == null && posts && posts.length == 0 && offline == false">{{'SURVEY_SUBMIT_RESPONSE' | translate}}</button>
-      </div>
     </div>
     <ion-list *ngIf="posts && posts.length > 0">
       <post-card [post]="post" (cardSelected)="showResponse(post)" (menuSelected)="showOptions(post)" *ngFor="let post of posts"></post-card>
