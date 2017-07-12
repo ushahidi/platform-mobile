@@ -278,6 +278,12 @@ Run the app in the iOS Simulator or attached iOS device
 ionic run ios --livereload --consolelogs --serverlogs
 ```
 
+If you get the error `Error: Cannot read property 'replace' of undefined` when trying to run the app, try [running the command](https://stackoverflow.com/a/44580372/385730) from the project folder.
+
+```
+cd platforms/ios/cordova && npm install ios-sim
+```
+
 Build the app in release and production mode for archiving
 
 ```

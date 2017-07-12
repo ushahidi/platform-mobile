@@ -14,5 +14,8 @@
   "colorDanger": "#dd0000",
   "colorActive": "#3696B4",
   "colorHighlight": "#e2f1f6",
+  "deepLinkDomainSecure": "https",
+  "deepLinkDomain": "beatona.net",
+  "deepLinkProtocol": "beatona",
   "deploymentUrl": "https://fix-our-environment.ushahidi.com"
 }
