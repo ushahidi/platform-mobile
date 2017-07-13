@@ -121,7 +121,6 @@
     <feature name="SocialSharing">
         <param name="android-package" value="nl.xservices.plugins.SocialSharing" />
     </feature>
-    <plugin name="ionic-plugin-keyboard" spec="^2.2.1" />
     <plugin name="cordova-custom-config" spec="^3.3.0" />
     <plugin name="cordova-plugin-app-version" spec="^0.1.9" />
     <plugin name="cordova-plugin-camera" spec="^2.4.1">
@@ -163,4 +162,5 @@
         <variable name="DEEPLINK_SCHEME" value="https" />
         <variable name="DEEPLINK_HOST" value="ushahidi.io" />
     </plugin>
+    <plugin name="ionic-plugin-keyboard" spec="^2.2.1" />
 </widget>

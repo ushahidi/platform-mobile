@@ -13,5 +13,10 @@
   "colorLight": "#919ca9",
   "colorDanger": "#dd0000",
   "colorActive": "#2f77b0",
-  "colorHighlight": "#f0f2f4"
+  "colorHighlight": "#f0f2f4",
+  "deepLinkSecure": "https",
+  "deepLinkDomain": "ushahidi.io",
+  "deepLinkProtocol": "ushahidi",
+  "iosProvisioningProfile": "5af2ac50-6d87-487b-8858-0ccacc60c9e0",
+  "iosCodeSignIdentity": "iPhone Distribution"
 }

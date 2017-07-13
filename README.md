@@ -184,7 +184,7 @@ npm list --depth=0
 ## Java
 #### Ensure that [Java JDK](https://www.java.com/en) is installed on your machine
 
-Download and install the latest Java JDK
+Download and install the latest [Java JDK](https://support.apple.com/kb/dl1572?locale=en_US)
 
 ```
 https://support.apple.com/kb/dl1572?locale=en_US
@@ -380,39 +380,71 @@ Check outdated NPM dependencies
 npm outdated
 ```
 
-Update all dependencies to latest Ionic2
+Update all dependencies to latest Ionic
 ```
 npm install ionic-angular@latest --save --save-exact
 ```
 
-## InAppBrowser
-#### Customize the color of the InAppBrowser plugin
+## Whitelabel
+#### Instructions for creating a whitelabel version of the app
 
-In Xcode, open the class `Plugins/CDVInAppBrowser.m`.
+Duplicate existing whitelabel project settings
 
-Paste the following code at the bottom of the `createViews` method.
+* copy `/projects/whitelabel.json` and rename file with your project name, for example `/projects/myapp.json`
 
-```
-self.closeButton.tintColor = [UIColor whiteColor];
-self.backButton.tintColor = [UIColor whiteColor];
-self.forwardButton.tintColor = [UIColor whiteColor];
-self.toolbar.translucent = NO;
-self.toolbar.barTintColor = [UIColor colorWithRed:0.25 green:0.28 blue:0.32 alpha:1.0];
-```
+Duplicate existing whitelabel project folder
 
-On line 671, in the `setCloseButtonTitle` method change.
-```
-self.closeButton.tintColor = [UIColor whiteColor];
-```
+* copy `/projects/whitelabel` and rename folder with your project name, for example `/projects/myapp`
+* `icon.png` - replace the image with your own _1024 × 1024_ app icon 
+* `splash.png` - replace the image with your own _2208 × 2208_ splash screen
 
-On line 794, change the preferredStatusBarStyle to `UIStatusBarStyleLightContent`.
-```
-return UIStatusBarStyleLightContent;
-```
+Edit the app id, name, description and images
 
-On line 1060, add the line inside the `viewDidLoad` method.
-```
-bgToolbar.translucent = NO;
-bgToolbar.barStyle = UIBarStyleBlack;
-bgToolbar.barTintColor = [UIColor colorWithRed:0.25 green:0.28 blue:0.32 alpha:1.0];
-```
+* `appId` - bundle id of the app
+* `appName` - display name of the app
+* `appDescription` - description of the app
+* `appIcon` - path to your app icon image
+* `appSplash` - path to your app splash screen image
+* `appLanguages` - subset of languages you want to include
+
+Edit the app color codes
+
+* `colorNavbar` - top navbar color code
+* `colorToolbar` - bottom toolbar color code
+* `colorPrimary` - primary action color
+* `colorSecondary` - secondary action color
+* `colorDark` - title text color
+* `colorLight` - description text color
+* `colorDanger` - error and remove color
+* `colorActive` - text color for active items
+* `colorHighlight` - background color for active items
+
+Edit the deep links configuration for the app
+
+* `deepLinkSecure` - either `http` or `https` depending if your deployment supports SSL
+* `deepLinkDomain` - domain of your deployment without the `http://` or `https://`
+* `deepLinkProtocol` - custom protocol to launch the app, for example `ushahidi://` 
+
+Enter the custom deployment URL
+
+* `deploymentUrl` - URL to your custom deployment
+
+Remove the existing Cordova platforms
+
+* `ionic platform rm ios`
+* `ionic platform rm android`
+
+Add iOS and Android platforms
+
+* `project=myapp ionic platform add ios`
+* `project=myapp ionic platform add android`
+
+Build and compile your apps
+
+* `ionic build ios`
+* `ionic build android`
+
+Run and debug your apps
+
+* `ionic run ios --livereload --consolelogs --serverlogs`
+* `ionic run android --livereload --consolelogs --serverlogs`
