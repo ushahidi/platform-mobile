@@ -38,20 +38,11 @@ function replaceDescriptionInFile(filename, description) {
   fs.writeFileSync(filename, result, 'utf8');
 }
 
-function replaceDeepLinkProtocolInFile(filename, protocol) {
-  if (protocol) {
-    var data = fs.readFileSync(filename, 'utf8');
-    var regex = /<variable name="URL_SCHEME" value="(.*?)" \/>/g;
-    var result = data.replace(regex, '<variable name="URL_SCHEME" value="'+protocol+'" />');
-    fs.writeFileSync(filename, result, 'utf8');
-  }
-}
-
 function replaceDeepLinkSecureInFile(filename, secure) {
   if (secure) {
     var data = fs.readFileSync(filename, 'utf8');
-    var regex = /<variable name="DEEPLINK_SCHEME" value="(.*?)" \/>/g;
-    var result = data.replace(regex, '<variable name="DEEPLINK_SCHEME" value="'+secure+'" />');
+    var regex = /"DEEPLINK_SCHEME": "(.*?)"/g;
+    var result = data.replace(regex, '"DEEPLINK_SCHEME": "'+secure+'"');
     fs.writeFileSync(filename, result, 'utf8');
   }
 }
@@ -59,8 +50,17 @@ function replaceDeepLinkSecureInFile(filename, secure) {
 function replaceDeepLinkDomainInFile(filename, domain) {
   if (domain) {
     var data = fs.readFileSync(filename, 'utf8');
-    var regex = /<variable name="DEEPLINK_HOST" value="(.*?)" \/>/g;
-    var result = data.replace(regex, '<variable name="DEEPLINK_HOST" value="'+domain+'" />');
+    var regex = /"DEEPLINK_HOST": "(.*?)"/g;
+    var result = data.replace(regex, '"DEEPLINK_HOST": "'+domain+'"');
+    fs.writeFileSync(filename, result, 'utf8');
+  }
+}
+
+function replaceDeepLinkProtocolInFile(filename, protocol) {
+  if (protocol) {
+    var data = fs.readFileSync(filename, 'utf8');
+    var regex = /"URL_SCHEME": "(.*?)"/g;
+    var result = data.replace(regex, '"URL_SCHEME": "'+protocol+'"');
     fs.writeFileSync(filename, result, 'utf8');
   }
 }
@@ -141,9 +141,14 @@ function changeConfigFile() {
   replaceIdInFile(configFile, config.appId);
   replaceNameInFile(configFile, config.appName);
   replaceDescriptionInFile(configFile, config.appDescription);
-  replaceDeepLinkSecureInFile(configFile, config.deepLinkSecure);
-  replaceDeepLinkProtocolInFile(configFile, config.deepLinkProtocol);
-  replaceDeepLinkDomainInFile(configFile, config.deepLinkDomain);
+}
+
+function changePackageFile() {
+  process.stdout.write('changePackageFile');
+  var packageFile = path.join(root, 'package.json');
+  replaceDeepLinkSecureInFile(packageFile, config.deepLinkSecure);
+  replaceDeepLinkDomainInFile(packageFile, config.deepLinkDomain);
+  replaceDeepLinkProtocolInFile(packageFile, config.deepLinkProtocol);
 }
 
 function changeThemeVariables() {
@@ -193,12 +198,14 @@ function copyProjectFile() {
 
 if (platform === 'ios') {
   changeConfigFile();
+  changePackageFile();
   changeThemeVariables();
   copyProjectFile();
 }
 
 if (platform === 'android') {
   changeConfigFile();
+  changePackageFile();
   changeThemeVariables();
   copyProjectFile();
 }

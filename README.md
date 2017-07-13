@@ -390,45 +390,45 @@ npm install ionic-angular@latest --save --save-exact
 
 Duplicate existing whitelabel project settings
 
-* copy `/projects/whitelabel.json` and rename file with your project name, for example `/projects/myapp.json`
+* copy `projects/whitelabel.json` and rename file, for example `projects/myapp.json`
 
 Duplicate existing whitelabel project folder
 
-* copy `/projects/whitelabel` and rename folder with your project name, for example `/projects/myapp`
-* `icon.png` - replace the image with your own _1024 × 1024_ app icon 
-* `splash.png` - replace the image with your own _2208 × 2208_ splash screen
+* copy `projects/whitelabel` and rename folder, for example `projects/myapp`
+* replace `projects/myapp/icon.png` with your own _1024 × 1024_ app icon
+* replace  `projects/myapp/splash.png` with your own _2208 × 2208_ splash screen
 
 Edit the app id, name, description and images
 
 * `appId` - bundle id of the app
 * `appName` - display name of the app
 * `appDescription` - description of the app
-* `appIcon` - path to your app icon image
-* `appSplash` - path to your app splash screen image
+* `appIcon` - path to your app icon image, for example `projects/myapp/icon.png`
+* `appSplash` - path to your app splash screen image, for example `projects/myapp/splash.png`
 * `appLanguages` - subset of languages you want to include
 
 Edit the app color codes
 
 * `colorNavbar` - top navbar color code
 * `colorToolbar` - bottom toolbar color code
-* `colorPrimary` - primary action color
-* `colorSecondary` - secondary action color
-* `colorDark` - title text color
-* `colorLight` - description text color
-* `colorDanger` - error and remove color
-* `colorActive` - text color for active items
-* `colorHighlight` - background color for active items
+* `colorPrimary` - button color for primary actions
+* `colorSecondary` - button color for secondary actions
+* `colorDark` - text color for titles and headings
+* `colorLight` - text color for descriptions and paragraphs
+* `colorDanger` - text color for errors or background color remove buttons
+* `colorActive` - text color for active list items
+* `colorHighlight` - background color for active list items
 
-Edit the deep links configuration for the app
+Edit the [deep links](https://github.com/ionic-team/ionic-plugin-deeplinks) configuration for the app
 
 * `deepLinkSecure` - either `http` or `https` depending if your deployment supports SSL
 * `deepLinkDomain` - domain of your deployment without the `http://` or `https://`
-* `deepLinkProtocol` - custom protocol to launch the app, for example `ushahidi://` 
+* `deepLinkProtocol` - custom protocol to launch the app, for example `ushahidi://`
 
-Enter the custom deployment URL
+Enter the [custom deployment](https://www.ushahidi.com) URL
 
 * `deploymentUrl` - URL to your custom deployment
-
+ 
 Remove the existing Cordova platforms
 
 * `ionic platform rm ios`
@@ -439,6 +439,11 @@ Add iOS and Android platforms
 * `project=myapp ionic platform add ios`
 * `project=myapp ionic platform add android`
 
+Good news, your whitelabel app should now be setup!
+
+--- 
+#### Build & Run
+
 Build and compile your apps
 
 * `ionic build ios`
@@ -448,3 +453,42 @@ Run and debug your apps
 
 * `ionic run ios --livereload --consolelogs --serverlogs`
 * `ionic run android --livereload --consolelogs --serverlogs`
+
+--- 
+#### iOS Release
+
+Prepare iOS app for release [using parameters](https://cordova.apache.org/docs/en/latest/guide/platforms/ios/#signing-an-app)
+
+* `ionic build ios --device --prod --release --developmentTeam="ABCD" --codeSignIdentity="iPhone Developer" --provisioningProfile="UUID"`
+
+Or prepare iOS app for release using [build config](https://cordova.apache.org/docs/en/latest/guide/platforms/ios/#using-buildjson)
+
+* `ionic build ios --device --prod --release --buildConfig=projects/myapp/build.json`
+
+Upload your IPA to the App Store
+
+* open `platforms/ios/MyApp.xcworkspace`
+* select `Product` then `Archive`
+* click `Upload to App Store...` button
+* select a Development team if necessary
+* click `Upload` button
+
+--- 
+#### Android Release
+
+Generate a certicate for signing your APK
+
+* `keytool -genkey -v -keystore myapp.keystore -alias myapp -keyalg RSA -keysize 2048 -validity 10000`
+
+Prepare Android app for release [using parameters](https://cordova.apache.org/docs/en/latest/guide/platforms/android/index.html#signing-an-app)
+
+* `ionic build android --device --prod --release --keystore=../myapp.keystore --storePassword=yourpassword --alias=myapp --password=yourpassword`
+
+
+Or prepare Android app for release [using build config](https://cordova.apache.org/docs/en/latest/guide/platforms/android/index.html#using-buildjson)
+
+* `ionic build android --device --prod --release --buildConfig=projects/myapp/build.json`
+
+Upload your APK to the Google Play Console
+
+* [https://play.google.com/apps/publish](https://play.google.com/apps/publish)
