@@ -140,7 +140,7 @@ cordova clean
 ---
 
 ## Ionic
-#### Install the latest [Ionic](http://ionicframework.com/docs/v2/) and necessary dependencies
+#### Install the latest [Ionic](http://ionicframework.com/docs/) and necessary dependencies
 
 Install the latest Ionic
 
@@ -325,14 +325,6 @@ Build the app in release and production mode for archiving
 ionic build android --prod --release
 ```
 
-```
-jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore ushahidi.keystore platforms/android/build/outputs/apk/android-release-unsigned.apk ushahidi
-```
-
-```
-./zipalign -f -v 4 platforms/android/build/outputs/apk/android-release-unsigned.apk platforms/android/build/outputs/apk/Ushahidi.apk
-```
-
 More information on Cordova's [Android Platform Guide](https://cordova.apache.org/docs/en/latest/guide/platforms/android/)
 
 ```
@@ -340,50 +332,6 @@ https://cordova.apache.org/docs/en/latest/guide/platforms/android/
 ```
 
 ---
-
-## Git
-#### Commands for [Git](https://git-scm.com) version control
-
-Check local changes
-
-```
-git status
-```
-
-Revert local changes
-
-```
-git reset --hard
-```
-
-Commit local changes
-
-```
-git add .
-git add -u
-git commit -m "message about the changes"
-git push
-```
-
-Create a tag
-
-```
-git tag 1.0
-git push origin --tags
-```
-
-## NPM
-#### Some handy NPM commands
-
-Check outdated NPM dependencies
-```
-npm outdated
-```
-
-Update all dependencies to latest Ionic
-```
-npm install ionic-angular@latest --save --save-exact
-```
 
 ## Whitelabel
 #### Instructions for creating a whitelabel version of the app
@@ -428,7 +376,7 @@ Edit the [deep links](https://github.com/ionic-team/ionic-plugin-deeplinks) conf
 Enter the [custom deployment](https://www.ushahidi.com) URL
 
 * `deploymentUrl` - URL to your custom deployment
- 
+
 Remove the existing Cordova platforms
 
 * `ionic platform rm ios`
@@ -441,7 +389,7 @@ Add iOS and Android platforms
 
 Good news, your whitelabel app should now be setup!
 
---- 
+---
 #### Build & Run
 
 Build and compile your apps
@@ -454,7 +402,7 @@ Run and debug your apps
 * `ionic run ios --livereload --consolelogs --serverlogs`
 * `ionic run android --livereload --consolelogs --serverlogs`
 
---- 
+---
 #### iOS Release
 
 Prepare iOS app for release [using parameters](https://cordova.apache.org/docs/en/latest/guide/platforms/ios/#signing-an-app)
@@ -473,7 +421,8 @@ Upload your IPA to the App Store
 * select a Development team if necessary
 * click `Upload` button
 
---- 
+---
+
 #### Android Release
 
 Generate a certicate for signing your APK
@@ -482,7 +431,7 @@ Generate a certicate for signing your APK
 
 Prepare Android app for release [using parameters](https://cordova.apache.org/docs/en/latest/guide/platforms/android/index.html#signing-an-app)
 
-* `ionic build android --device --prod --release --keystore=../myapp.keystore --storePassword=yourpassword --alias=myapp --password=yourpassword`
+* `ionic build android --device --prod --release --keystore=myapp.keystore --storePassword=yourpassword --alias=myapp --password=yourpassword`
 
 
 Or prepare Android app for release [using build config](https://cordova.apache.org/docs/en/latest/guide/platforms/android/index.html#using-buildjson)
@@ -491,4 +440,53 @@ Or prepare Android app for release [using build config](https://cordova.apache.o
 
 Upload your APK to the Google Play Console
 
+* `./zipalign -f -v 4 platforms/android/build/outputs/apk/android-release.apk platforms/android/build/outputs/apk/MyApp.apk`
 * [https://play.google.com/apps/publish](https://play.google.com/apps/publish)
+
+---
+
+## Git
+#### Commands for [Git](https://git-scm.com) version control
+
+Check local changes
+
+```
+git status
+```
+
+Revert local changes
+
+```
+git reset --hard
+```
+
+Commit local changes
+
+```
+git add .
+git add -u
+git commit -m "message about the changes"
+git push
+```
+
+Create a tag
+
+```
+git tag 1.0
+git push origin --tags
+```
+
+---
+
+## NPM
+#### Some handy NPM commands
+
+Check outdated NPM dependencies
+```
+npm outdated
+```
+
+Update all dependencies to latest Ionic
+```
+npm install ionic-angular@latest --save --save-exact
+```

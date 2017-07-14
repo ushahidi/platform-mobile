@@ -5,6 +5,7 @@ node_modules
 plugins
 platforms/ios
 platforms/android
+build.json
 .tmp
 .sass-cache
 *.swp
