@@ -6,6 +6,7 @@ plugins
 platforms/ios
 platforms/android
 build.json
+*.keystore
 .tmp
 .sass-cache
 *.swp
