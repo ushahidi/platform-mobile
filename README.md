@@ -400,20 +400,20 @@ Good news, your whitelabel app should now be setup!
 
 Build and compile your apps
 
-* `ionic build ios`
-* `ionic build android`
+* `project=myapp ionic build ios`
+* `project=myapp ionic build android`
 
 Run and debug your apps
 
-* `ionic run ios --livereload --consolelogs --serverlogs`
-* `ionic run android --livereload --consolelogs --serverlogs`
+* `project=myapp ionic run ios --livereload --consolelogs --serverlogs`
+* `project=myapp ionic run android --livereload --consolelogs --serverlogs`
 
 ---
 #### iOS Release
 
 Prepare iOS app for release [using parameters](https://cordova.apache.org/docs/en/latest/guide/platforms/ios/#signing-an-app)
 
-* `ionic build ios --device --prod --release --developmentTeam="ABCD" --codeSignIdentity="iPhone Developer" --provisioningProfile="UUID"`
+* `project=myapp ionic build ios --device --prod --release --developmentTeam="ABCD" --codeSignIdentity="iPhone Developer" --provisioningProfile="UUID"`
 
 Or prepare iOS app for release using [build config](https://cordova.apache.org/docs/en/latest/guide/platforms/ios/#using-buildjson)
 
@@ -437,7 +437,7 @@ Generate a certicate for signing your APK
 
 Prepare Android app for release [using parameters](https://cordova.apache.org/docs/en/latest/guide/platforms/android/index.html#signing-an-app)
 
-* `ionic build android --device --prod --release --keystore=myapp.keystore --storePassword=yourpassword --alias=myapp --password=yourpassword`
+* `project=myapp ionic build android --device --prod --release --keystore=myapp.keystore --storePassword=yourpassword --alias=myapp --password=yourpassword`
 
 
 Or prepare Android app for release [using build config](https://cordova.apache.org/docs/en/latest/guide/platforms/android/index.html#using-buildjson)

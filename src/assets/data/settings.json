@@ -17,5 +17,5 @@
   "deepLinkSecure": "https",
   "deepLinkDomain": "ushahidi.io",
   "deepLinkProtocol": "ushahidi",
-  "userSignupPhone": true
+  "userSignupPhone": false
 }
