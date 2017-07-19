@@ -336,6 +336,8 @@ https://cordova.apache.org/docs/en/latest/guide/platforms/android/
 ## Whitelabel
 #### Instructions for creating a whitelabel version of the app
 
+##### Need help creating a whitelabel app? Contact our [sales team](mailto:sales@ushahidi.com) for help or visit our [enterprise page](https://www.ushahidi.com/enterprise) for more information.
+
 Duplicate existing whitelabel project settings
 
 * copy `projects/whitelabel.json` and rename file, for example `projects/myapp.json`
@@ -440,7 +442,7 @@ Or prepare Android app for release [using build config](https://cordova.apache.o
 
 Upload your APK to the Google Play Console
 
-* `./zipalign -f -v 4 platforms/android/build/outputs/apk/android-release.apk platforms/android/build/outputs/apk/MyApp.apk`
+* `platforms/android/build/outputs/apk/MyApp.apk`
 * [https://play.google.com/apps/publish](https://play.google.com/apps/publish)
 
 ---

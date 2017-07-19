@@ -16,7 +16,6 @@ import { Camera } from '@ionic-native/camera';
 import { MediaCapture } from '@ionic-native/media-capture';
 import { SocialSharing } from '@ionic-native/social-sharing';
 import { Network } from '@ionic-native/network';
-import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { Geolocation } from '@ionic-native/geolocation';
 import { Diagnostic } from '@ionic-native/diagnostic';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -25,6 +24,7 @@ import { Keyboard } from '@ionic-native/keyboard';
 import { GoogleAnalytics } from '@ionic-native/google-analytics';
 import { NativeGeocoder } from '@ionic-native/native-geocoder'
 import { NativeStorage } from '@ionic-native/native-storage';
+import { ThemeableBrowser } from '@ionic-native/themeable-browser';
 
 import { MyApp } from './app.component';
 import { BasePage } from '../pages/base-page/base-page';
@@ -170,7 +170,7 @@ export function translateLoaderFactory(http: Http) {
     { provide: Diagnostic, useClass: Diagnostic },
     { provide: Geolocation, useClass: Geolocation },
     { provide: SplashScreen, useClass: SplashScreen },
-    { provide: InAppBrowser, useClass: InAppBrowser },
+    { provide: ThemeableBrowser, useClass: ThemeableBrowser },
     { provide: MediaCapture, useClass: MediaCapture },
     { provide: SocialSharing, useClass: SocialSharing },
     { provide: NativeGeocoder, useClass: NativeGeocoder },

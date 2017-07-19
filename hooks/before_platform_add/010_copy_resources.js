@@ -22,7 +22,6 @@ function copyResourceImage(source, destination) {
 function copyResourceImages() {
   copyResourceImage(config.appIcon, "resources/icon.png");
   copyResourceImage(config.appSplash, "resources/splash.png");
-  exec("ionic resources");
 }
 
 copyResourceImages();

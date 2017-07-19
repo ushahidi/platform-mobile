@@ -29,10 +29,10 @@ import { ResponseListPage } from '../../pages/response-list/response-list';
   entryComponents:[ UserLoginPage, UserSignupPage, DeploymentSettingsPage, ResponseAddPage, ResponseListPage ],
   animations: [
     trigger('fadeInOut', [
-      state('true', style({ opacity: 0 })),
-      state('false', style({ opacity: 1 })),
+      state('true', style({ opacity: 1 })),
+      state('false', style({ opacity: 0 })),
       transition('0 => 1', animate('900ms')),
-      transition('1 => 0', animate('300ms'))
+      transition('1 => 0', animate('400ms'))
     ])
   ]
 })
@@ -41,7 +41,7 @@ export class DeploymentDetailsPage extends BasePage {
   login: Login = null;
   deployment: Deployment = null;
   placeholder: string = PLACEHOLDER_BLANK;
-  refreshing:boolean = false;
+  loaded:boolean = false;
 
   @ViewChild(Content)
   content: Content;
@@ -63,6 +63,11 @@ export class DeploymentDetailsPage extends BasePage {
     super(zone, platform, navParams, navController, viewController, modalController, toastController, alertController, loadingController, actionController, logger);
   }
 
+  ionViewDidLoad() {
+    super.ionViewDidLoad();
+    this.loaded = false;
+  }
+
   ionViewWillEnter() {
     super.ionViewWillEnter();
     this.loadStatusBar(true);
@@ -70,10 +75,10 @@ export class DeploymentDetailsPage extends BasePage {
       this.deployment = this.getParameter<Deployment>("deployment");
     }
     this.logger.info(this, "ionViewWillEnter", "Deployment", this.deployment);
-    if (this.deployment.forms == null || this.deployment.forms.length == 0) {
+    if (this.deployment.forms == null) {
       this.language.getTranslation("LOADING_").then((text:string) => {
         let loading = this.showLoading(text);
-        this.loadUpdates(null, true).then((loaded) => {
+        this.loadUpdates(null, false).then((loaded) => {
           this.logger.info(this, "ionViewWillEnter", "Loaded");
           loading.dismiss();
         });
@@ -88,7 +93,9 @@ export class DeploymentDetailsPage extends BasePage {
 
   loadUpdates(event:any=null, cache:boolean=false) {
     this.logger.info(this, "loadUpdates", cache);
-    this.refreshing = true;
+    if (cache == false) {
+      this.loaded = false;
+    }
     return Promise.resolve()
       .then(() => { return this.loadLogin(false); })
       .then(() => { return this.loadDeployment(cache); })
@@ -100,14 +107,14 @@ export class DeploymentDetailsPage extends BasePage {
         if (event) {
           event.complete();
         }
-        this.refreshing = false;
+        this.loaded = true;
       })
       .catch((error) => {
         this.logger.error(this, "loadUpdates", "Failed", error);
         if (event) {
           event.complete();
         }
-        this.refreshing = false;
+        this.loaded = true;
       });
   }
 

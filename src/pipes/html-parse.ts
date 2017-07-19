@@ -6,11 +6,13 @@ import { Injectable, Pipe } from '@angular/core';
 @Injectable()
 export class HtmlParsePipe {
   transform(value: string, args: any[]) {
-    if (value.indexOf("<a href") != -1) {
-      return value;
+    if (value.indexOf("href=") != -1) {
+      let regex = /href="(.*?)"/gim;
+      let html = value.replace(regex, 'href="$1" target="_blank"');
+      return html;
     }
     else {
-      let regex1 = /(\b(https?|ftp):\/\/[-A-Z0-9+&#\/%?=~_|!:,.;]*[-A-Z0-9+&#\/%=~_|])/gim;
+      let regex1 = /(\b(http|https):\/\/[-A-Z0-9+&#\/%?=~_|!:,.;]*[-A-Z0-9+&#\/%=~_|])/gim;
       let html = value.replace(regex1, '<a href="$1" target="_blank">$1</a>');
 
       let regex2 = /(^|[^\/])(www\.[\S]+(\b|$))/gim;
@@ -21,4 +23,5 @@ export class HtmlParsePipe {
       return html;
     }
   }
+
 }

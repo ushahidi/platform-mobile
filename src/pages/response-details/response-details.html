@@ -33,14 +33,14 @@
     </ion-item>
     <ion-item text-wrap class="post-value" *ngIf="post.title">
       <div class="value-label">{{'INPUT_TITLE' | translate}}</div>
-      <div class="value-text" [innerHTML]="post.title | MarkdownToHtml | htmlParse"></div>
+      <div class="value-text" (click)="handleLinks($event)" [innerHTML]="post.title | MarkdownToHtml | htmlParse"></div>
     </ion-item>
     <ion-item text-wrap class="post-value" *ngIf="post.description">
       <div class="value-label">{{'INPUT_DESCRIPTION' | translate}}</div>
-      <div class="value-text" [innerHTML]="post.description | MarkdownToHtml | htmlParse"></div>
+      <div class="value-text" (click)="handleLinks($event)" [innerHTML]="post.description | MarkdownToHtml | htmlParse"></div>
     </ion-item>
     <div *ngFor="let value of post.values">
-      <post-value [value]="value" [mapToken]="deployment.mapbox_api_key" (showImage)="showImage(value.label,value.image)" (showLocation)="showLocation(value.label,value.value)"></post-value>
+      <post-value (click)="handleLinks($event)" [value]="value" [mapToken]="deployment.mapbox_api_key" (showImage)="showImage(value.label,value.image)" (showLocation)="showLocation(value.label,value.value)"></post-value>
     </div>
   </ion-list>
 </ion-content>

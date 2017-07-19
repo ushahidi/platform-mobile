@@ -9,7 +9,7 @@
       <image-cache padding [src]="deployment.image"></image-cache>
     </div>
     <div padding-left padding-right padding-bottom margin-bottom *ngIf="deployment.description">
-      <p text-center ion-text color="light" [innerHTML]="deployment.description | MarkdownToHtml | htmlParse"></p>
+      <p text-center ion-text color="light" (click)="handleLinks($event)" [innerHTML]="deployment.description | MarkdownToHtml | htmlParse"></p>
     </div>
     <div padding-left padding-right>
       <button ion-button block margin-top color="primary" (click)="showDeployment()">

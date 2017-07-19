@@ -1,14 +1,16 @@
 import { Component, ViewChild, NgZone } from '@angular/core';
 import { Content, Platform, NavParams, Alert, AlertController, Toast, ToastController, Modal, ModalController, Loading, LoadingController, ActionSheet, ActionSheetController, NavController, ViewController } from 'ionic-angular';
+
 import { StatusBar } from '@ionic-native/status-bar';
-import { InAppBrowser, InAppBrowserObject } from '@ionic-native/in-app-browser';
 import { Network } from '@ionic-native/network';
 import { SocialSharing } from '@ionic-native/social-sharing';
 import { GoogleAnalytics } from '@ionic-native/google-analytics';
+import { ThemeableBrowser, ThemeableBrowserOptions, ThemeableBrowserObject } from '@ionic-native/themeable-browser';
 
 import { LoggerService } from '../../providers/logger-service';
 import { InjectorService } from '../../providers/injector-service';
 import { LanguageService } from '../../providers/language-service';
+import { SettingsService } from '../../providers/settings-service';
 
 @Component({
   selector: 'base-page',
@@ -20,14 +22,16 @@ export class BasePage {
   protected offline: boolean = false;
   protected connection: any = null;
   protected disconnection: any = null;
+  protected colorNavbar: string = "#3f4751";
 
   protected zone:NgZone;
   protected network:Network;
   protected statusBar:StatusBar;
-  protected inAppBrowser:InAppBrowser;
+  protected themeableBrowser:ThemeableBrowser;
   protected socialSharing:SocialSharing;
   protected googleAnalytics:GoogleAnalytics;
   protected language:LanguageService;
+  protected settings:SettingsService;
 
   @ViewChild(Content)
   content: Content;
@@ -47,14 +51,18 @@ export class BasePage {
     this.zone = _zone;
     this.network = InjectorService.injector.get(Network);
     this.statusBar = InjectorService.injector.get(StatusBar);
-    this.inAppBrowser = InjectorService.injector.get(InAppBrowser);
+    this.themeableBrowser = InjectorService.injector.get(ThemeableBrowser);
     this.socialSharing = InjectorService.injector.get(SocialSharing);
     this.googleAnalytics = InjectorService.injector.get(GoogleAnalytics);
     this.language = InjectorService.injector.get(LanguageService);
+    this.settings = InjectorService.injector.get(SettingsService);
   }
 
   ionViewDidLoad() {
     this.logger.info(this, "ionViewDidLoad");
+    this.settings.getColorNavbar().then((colorNavbar:string) => {
+      this.colorNavbar = colorNavbar;
+    });
   }
 
   ionViewWillEnter() {
@@ -64,7 +72,7 @@ export class BasePage {
 
   ionViewDidEnter() {
     this.logger.info(this, "ionViewDidEnter");
-    let screen = this.constructor.name.replace("Page","").replace(/([A-Z])/g," $1").trim();
+    let screen = this.constructor.name.replace("Page", "").replace(/([A-Z])/g," $1").trim();
     this.trackView(screen);
   }
 
@@ -211,10 +219,44 @@ export class BasePage {
     return this.socialSharing.share(message, subject, file, url);
   }
 
-  showUrl(url:string, target:string="_system"):InAppBrowserObject {
+  showUrl(url:string, target:string="_blank"):ThemeableBrowserObject {
     this.logger.info(this, "showUrl", url, target);
-    let browser = this.inAppBrowser.create(url, target);
-    browser.show();
+    let options:ThemeableBrowserOptions = {
+      statusbar: {
+        color: this.colorNavbar
+      },
+        toolbar: {
+        height: 44,
+        color: this.colorNavbar
+      },
+        title: {
+        color: '#ffffff',
+        showPageTitle: true
+      },
+      backButton: {
+        wwwImage: 'assets/images/back.png',
+        wwwImageDensity: 2,
+        align: 'right',
+        event: 'backPressed'
+      },
+      forwardButton: {
+        wwwImage: 'assets/images/forward.png',
+        wwwImageDensity: 2,
+        align: 'right',
+        event: 'forwardPressed'
+      },
+      closeButton: {
+        wwwImage: 'assets/images/close.png',
+        wwwImageDensity: 2,
+        align: 'left',
+        event: 'closePressed'
+      },
+      backButtonCanClose: true
+    };
+    let browser = this.themeableBrowser.create(url, target, options);
+    if (this.platform.is("ios")) {
+      browser.show();
+    }
     return browser;
   }
 
@@ -256,6 +298,21 @@ export class BasePage {
     this.googleAnalytics.trackEvent(category, action, label, value, newSession).then((tracked) => {
       this.logger.info(this, "trackEvent", category, action, label);
     });
+  }
+
+  handleLinks(_event:any) {
+    let event = _event || window.event;
+    let element = event.target || event.srcElement;
+    if (element && element.tagName == 'A') {
+      event.stopPropagation();
+      if (element.target == '_blank') {
+        this.showUrl(element.href, element.target);
+      }
+      else {
+        window.open(element.href, "_system");
+      }
+      return false;
+    }
   }
 
 }
