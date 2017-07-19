@@ -42,7 +42,7 @@ declare var cordova:any;
   templateUrl: 'app.html',
   entryComponents:[ DeploymentNonePage, DeploymentSearchPage, DeploymentDetailsPage, WhitelabelIntroPage ]
 })
-export class MyApp {
+export class UshahidiApp {
 
   zone:NgZone = null;
   rootPage:any = null;

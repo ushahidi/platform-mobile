@@ -26,7 +26,7 @@ import { NativeGeocoder } from '@ionic-native/native-geocoder'
 import { NativeStorage } from '@ionic-native/native-storage';
 import { ThemeableBrowser } from '@ionic-native/themeable-browser';
 
-import { MyApp } from './app.component';
+import { UshahidiApp } from './app.component';
 import { BasePage } from '../pages/base-page/base-page';
 
 import { DeploymentNonePage } from '../pages/deployment-none/deployment-none';
@@ -85,7 +85,7 @@ export function translateLoaderFactory(http: Http) {
 
 @NgModule({
   declarations: [
-    MyApp,
+    UshahidiApp,
     BasePage,
     DeploymentNonePage,
     DeploymentSearchPage,
@@ -136,13 +136,15 @@ export function translateLoaderFactory(http: Http) {
       useFactory: translateLoaderFactory,
       deps: [ Http ]
     }),
-    IonicModule.forRoot(MyApp, {
-      backButtonText: ''
+    IonicModule.forRoot(UshahidiApp, {
+      backButtonText: '',
+      scrollAssist: true,
+      autoFocusAssist: true
      })
   ],
   bootstrap: [ IonicApp ],
   entryComponents: [
-    MyApp,
+    UshahidiApp,
     DeploymentNonePage,
     DeploymentSearchPage,
     UserLoginPage,
