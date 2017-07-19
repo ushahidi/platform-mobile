@@ -375,6 +375,10 @@ Edit the [deep links](https://github.com/ionic-team/ionic-plugin-deeplinks) conf
 * `deepLinkDomain` - domain of your deployment without the `http://` or `https://`
 * `deepLinkProtocol` - custom protocol to launch the app, for example `ushahidi://`
 
+Edit additional app configuration settings
+
+* `userSignupPhone` - `true` or `false` whether you want to show phone number on user signup
+
 Enter the [custom deployment](https://www.ushahidi.com) URL
 
 * `deploymentUrl` - URL to your custom deployment

@@ -16,5 +16,6 @@
   "colorHighlight": "#f0f2f4",
   "deepLinkSecure": "https",
   "deepLinkDomain": "ushahidi.io",
-  "deepLinkProtocol": "ushahidi"
+  "deepLinkProtocol": "ushahidi",
+  "userSignupPhone": true
 }

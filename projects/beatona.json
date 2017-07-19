@@ -17,5 +17,6 @@
   "deepLinkSecure": "https",
   "deepLinkDomain": "beatona.net",
   "deepLinkProtocol": "beatona",
+  "userSignupPhone": true,
   "deploymentUrl": "https://fix-our-environment.ushahidi.com"
 }

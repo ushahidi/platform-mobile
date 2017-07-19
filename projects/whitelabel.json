@@ -17,5 +17,6 @@
   "deepLinkSecure": "https",
   "deepLinkDomain": "dale.ushahidi.io",
   "deepLinkProtocol": "dale",
+  "userSignupPhone": false,
   "deploymentUrl": "https://dale.ushahidi.io"
 }

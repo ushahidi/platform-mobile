@@ -186,26 +186,14 @@ function changeThemeVariables() {
   }
 }
 
-function copyProjectFile() {
-  process.stdout.write('copyProjectFile');
-  var source = path.join(root, 'projects', project + '.json');
-  var destination = path.join(root, 'src', 'assets', 'data', 'settings.json');
-  if (fs.existsSync(source)) {
-    fs.createReadStream(source).pipe(
-      fs.createWriteStream(destination));
-  }
-}
-
 if (platform === 'ios') {
   changeConfigFile();
   changePackageFile();
   changeThemeVariables();
-  copyProjectFile();
 }
 
 if (platform === 'android') {
   changeConfigFile();
   changePackageFile();
   changeThemeVariables();
-  copyProjectFile();
 }

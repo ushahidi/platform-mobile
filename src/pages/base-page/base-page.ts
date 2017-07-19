@@ -60,9 +60,7 @@ export class BasePage {
 
   ionViewDidLoad() {
     this.logger.info(this, "ionViewDidLoad");
-    this.settings.getColorNavbar().then((colorNavbar:string) => {
-      this.colorNavbar = colorNavbar;
-    });
+    this.loadSettings();
   }
 
   ionViewWillEnter() {
@@ -87,6 +85,16 @@ export class BasePage {
 
   ionViewWillUnload() {
     this.logger.info(this, "ionViewWillUnload");
+  }
+
+  loadSettings() {
+    this.logger.info(this, "loadSettings");
+    this.settings.getColorNavbar().then((colorNavbar:string) => {
+      this.colorNavbar = colorNavbar;
+    },
+    (error:any) => {
+      this.colorNavbar = "#3f4751";
+    });
   }
 
   subscribeNetwork() {

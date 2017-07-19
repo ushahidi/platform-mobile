@@ -31,7 +31,7 @@ export class SettingsService {
     });
   }
 
-  get(key:string):Promise<string> {
+  get(key:string):Promise<any> {
     return new Promise((resolve, reject) => {
       if (this.settings) {
         let value = this.settings[key];
@@ -87,4 +87,39 @@ export class SettingsService {
     return this.get('colorNavbar');
   }
 
+  getColorToolbar():Promise<string> {
+    return this.get('colorToolbar');
+  }
+
+  getColorPrimary():Promise<string> {
+    return this.get('colorPrimary');
+  }
+
+  getColorSecondary():Promise<string> {
+    return this.get('colorSecondary');
+  }
+
+  getColorDark():Promise<string> {
+    return this.get('colorDark');
+  }
+
+  getColorLight():Promise<string> {
+    return this.get('colorLight');
+  }
+
+  getColorDanger():Promise<string> {
+    return this.get('colorDanger');
+  }
+
+  getColorActive():Promise<string> {
+    return this.get('colorActive');
+  }
+
+  getColorHighlight():Promise<string> {
+    return this.get('colorHighlight');
+  }
+
+  getUserSignupPhone():Promise<boolean> {
+    return this.get('userSignupPhone');
+  }
 }
