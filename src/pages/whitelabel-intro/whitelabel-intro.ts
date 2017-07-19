@@ -38,6 +38,9 @@ export class WhitelabelIntroPage extends BasePage {
     super(zone, platform, navParams, navController, viewController, modalController, toastController, alertController, loadingController, actionController, logger);
   }
 
+  name:string = null;
+  email:string = null;
+  loading:boolean = false;
   deployment:Deployment = null;
 
   @ViewChild(Content)
@@ -46,48 +49,59 @@ export class WhitelabelIntroPage extends BasePage {
   ionViewWillEnter() {
     super.ionViewWillEnter();
     this.loadStatusBar(false);
+    this.loadAppName();
     this.loadDeployment();
+  }
+
+  loadAppName() {
+    this.logger.info(this, "loadAppName");
+    this.settings.getAppName().then((name:string) => {
+      this.name = name;
+    });
+    this.settings.getDeploymentEmail().then((email:string) => {
+      this.email = email;
+    });
   }
 
   loadDeployment() {
     this.logger.info(this, "loadDeployment");
-    this.language.getTranslations(["LOADING_", "WHITELABEL_FAILURE", "WHITELABEL_FAILURE_RETRY", "WHITELABEL_RETRY"]).then((translations:string[]) => {
-      let loading = this.showLoading(translations[0]);
-      this.settings.getDeploymentUrl().then((url:string) => {
-        this.logger.info(this, "loadDeployment", "URL", url);
-        this.api.registerDeployment(url).then((deployment:Deployment) => {
-          this.logger.info(this, "loadDeployment", "Deployment", deployment);
-          this.api.clientLogin(deployment).then(
-            (login:Login) => {
-              this.logger.info(this, "loadDeployment", "Login", login);
-              deployment.copyInto(login);
-              this.api.getDeployment(deployment, false).then((details:Deployment) => {
-                deployment.copyInto(details);
-                this.database.saveDeployment(deployment).then(
-                  (id:number) => {
-                    this.deployment = deployment
-                    this.deployment.id = id;
-                    loading.dismiss();
-                  },
-                  (error:any) => {
-                    this.deployment = null;
-                    loading.dismiss();
-                    this.showDeploymentAlert(translations[1], translations[2], translations[3]);
-                  });
-              });
-            },
-            (error:any) => {
-              this.deployment = null;
-              loading.dismiss();
-              this.showDeploymentAlert(translations[1], translations[2], translations[3]);
+    this.loading = true;
+    this.settings.getDeploymentUrl().then((url:string) => {
+      this.logger.info(this, "loadDeployment", "URL", url);
+      this.api.registerDeployment(url).then((deployment:Deployment) => {
+        this.logger.info(this, "loadDeployment", "Deployment", deployment);
+        this.api.clientLogin(deployment).then(
+          (login:Login) => {
+            this.logger.info(this, "loadDeployment", "Login", login);
+            deployment.copyInto(login);
+            this.api.getDeployment(deployment, false).then((details:Deployment) => {
+              deployment.copyInto(details);
+              this.database.saveDeployment(deployment).then(
+                (id:number) => {
+                  this.deployment = deployment
+                  this.deployment.id = id;
+                  this.loading = false;
+                  this.showDeployment();
+                },
+                (error:any) => {
+                  this.deployment = null;
+                  this.loading = false;
+                });
             });
-        });
+          },
+          (error:any) => {
+            this.deployment = null;
+            this.loading = false;
+          });
       },
       (error:any) => {
         this.deployment = null;
-        loading.dismiss();
-        this.showDeploymentAlert(translations[1], translations[2], translations[3]);
+        this.loading = false;
       });
+    },
+    (error:any) => {
+      this.deployment = null;
+      this.loading = false;
     });
   }
 
@@ -97,16 +111,6 @@ export class WhitelabelIntroPage extends BasePage {
       { deployment: this.deployment },
       { animate: true,
         direction: 'forward' });
-  }
-
-  showDeploymentAlert(title:string, description:string, button:string) {
-    this.logger.info(this, "showDeploymentAlert", title, description);
-    this.showAlert(title, description, [{
-      text: button,
-      handler: (clicked) => {
-        this.loadDeployment();
-      }
-    }]);
   }
 
 }

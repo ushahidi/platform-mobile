@@ -18,5 +18,6 @@
   "deepLinkDomain": "dale.ushahidi.io",
   "deepLinkProtocol": "dale",
   "userSignupPhone": false,
+  "deploymentEmail": "support@ushahidi.com",
   "deploymentUrl": "https://dale.ushahidi.io"
 }

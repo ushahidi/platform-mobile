@@ -170,8 +170,11 @@
 "STATUS_UNDER_REVIEW": "À l'étude",
 "SURVEYS": "Enquêtes",
 "SURVEY_SUBMIT_RESPONSE": "Soumettre une réponse à l'enquête",
-"WHITELABEL_GET_STARTED": "Commencer",
-"WHITELABEL_WELCOME_TO": "Bienvenue à",
-"WHITELABEL_RETRY": "Recharger les paramètres",
-"WHITELABEL_FAILURE": "Paramètres de chargement du problème"
+"WHITELABEL_LOADED": "Paramètres chargés avec succès",
+"WHITELABEL_LOADING": "Chargement des paramètres ...",
+"WHITELABEL_WELCOME": "Bienvenue à",
+"WHITELABEL_RELOAD": "Recharger les paramètres",
+"WHITELABEL_SUPPORT": "Si le problème persiste, veuillez contacter",
+"WHITELABEL_FAILURE": "Paramètres de chargement du problème",
+"WHITELABEL_FAILURE_DESCRIPTION": "Vérifiez que vous avez une connexion Internet, puis essayez de charger les paramètres à nouveau."
 }

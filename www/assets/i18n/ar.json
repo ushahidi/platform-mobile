@@ -170,8 +170,11 @@
 "STATUS_UNDER_REVIEW": "تحت المراجعة",
 "SURVEYS": "الدراسات الاستقصائية",
 "SURVEY_SUBMIT_RESPONSE": "إرسال استجابة المسح",
-"WHITELABEL_GET_STARTED": "البدء",
-"WHITELABEL_WELCOME_TO": "مرحبا بك في",
-"WHITELABEL_RETRY": "إعادة تحميل الإعدادات",
-"WHITELABEL_FAILURE": "إعدادات تحميل المشكلة"
+"WHITELABEL_LOADED": "تم تحميل الإعدادات بنجاح",
+"WHITELABEL_LOADING": "جار تحميل الإعدادات ...",
+"WHITELABEL_WELCOME": "مرحبا بك في",
+"WHITELABEL_RELOAD": "إعادة تحميل الإعدادات",
+"WHITELABEL_SUPPORT": "إذا استمرت المشكلة، يرجى الاتصال",
+"WHITELABEL_FAILURE": "إعدادات تحميل المشكلة",
+"WHITELABEL_FAILURE_DESCRIPTION": "الرجاء التحقق من وجود اتصال بالإنترنت ثم محاولة تحميل الإعدادات مرة أخرى."
 }

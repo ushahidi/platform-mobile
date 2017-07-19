@@ -170,8 +170,11 @@
 "STATUS_UNDER_REVIEW": "Sob revisão",
 "SURVEYS": "pesquisas",
 "SURVEY_SUBMIT_RESPONSE": "Enviar resposta da pesquisa",
-"WHITELABEL_GET_STARTED": "Iniciar",
-"WHITELABEL_WELCOME_TO": "Bem-vindo ao",
-"WHITELABEL_RETRY": "Configurações de Recarga",
-"WHITELABEL_FAILURE": "Configurações de carregamento do problema"
+"WHITELABEL_LOADED": "Configurações carregadas com sucesso",
+"WHITELABEL_LOADING": "Carregando configurações ...",
+"WHITELABEL_WELCOME": "Bem-vindo ao",
+"WHITELABEL_RELOAD": "Configurações de Recarga",
+"WHITELABEL_SUPPORT": "Se o problema continuar, entre em contato",
+"WHITELABEL_FAILURE": "Configurações de carregamento do problema",
+"WHITELABEL_FAILURE_DESCRIPTION": "Verifique se você possui uma conexão à Internet e tente carregar as configurações novamente."
 }

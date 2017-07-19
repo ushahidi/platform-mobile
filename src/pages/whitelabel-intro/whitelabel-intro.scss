@@ -5,19 +5,15 @@
   -moz-background-size: cover;
   background-size: cover;
   background-image: url('/assets/images/background.png');
-  h3 {
-    margin-top: 0;
-    margin-bottom: 0;
+  ion-spinner * {
+    margin-left: -20px;
+    width: 65px;
+    height: 65px;
   }
-  img {
-    max-width: 50%;
-    border-radius: 50%;
-    transition: all 1s;
+  ion-icon {
+    font-size: 75px;
   }
   p {
-    font-size: 16px;
-    a {
-      color: color($colors, dark);
-    }
+    font-size: 15px;
   }
 }

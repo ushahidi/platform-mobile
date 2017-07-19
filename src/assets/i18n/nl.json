@@ -170,8 +170,11 @@
 "STATUS_UNDER_REVIEW": "Onder beoordeling",
 "SURVEYS": "onderzoeken",
 "SURVEY_SUBMIT_RESPONSE": "Geef Survey Response",
-"WHITELABEL_GET_STARTED": "Begin",
-"WHITELABEL_WELCOME_TO": "Welkom bij",
-"WHITELABEL_RETRY": "Instellingen opnieuw laden",
-"WHITELABEL_FAILURE": "Probleem laden instellingen"
+"WHITELABEL_LOADED": "Instellingen geladen succesvol",
+"WHITELABEL_LOADING": "Instellingen laden ...",
+"WHITELABEL_WELCOME": "Welkom bij",
+"WHITELABEL_RELOAD": "Instellingen opnieuw laden",
+"WHITELABEL_SUPPORT": "Als het probleem doorloopt, neem dan contact op",
+"WHITELABEL_FAILURE": "Probleem laden instellingen",
+"WHITELABEL_FAILURE_DESCRIPTION": "Controleer of u een internetverbinding hebt en probeer het opnieuw te laden."
 }

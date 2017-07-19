@@ -170,8 +170,11 @@
 "STATUS_UNDER_REVIEW": "Chini ya Uhakiki",
 "SURVEYS": "Utafiti",
 "SURVEY_SUBMIT_RESPONSE": "Tuma maoni ya Survey",
-"WHITELABEL_GET_STARTED": "Anza",
-"WHITELABEL_WELCOME_TO": "Karibu",
-"WHITELABEL_RETRY": "Pakia upya mipangilio",
-"WHITELABEL_FAILURE": "Tatizo Loading Settings"
+"WHITELABEL_LOADED": "Mipangilio imefungwa kwa mafanikio",
+"WHITELABEL_LOADING": "Inapakia mipangilio",
+"WHITELABEL_WELCOME": "Karibu",
+"WHITELABEL_RELOAD": "Pakia upya mipangilio",
+"WHITELABEL_SUPPORT": "Ikiwa tatizo linaendelea, tafadhali wasiliana",
+"WHITELABEL_FAILURE": "Tatizo Loading Settings",
+"WHITELABEL_FAILURE_DESCRIPTION": "Tafadhali hakikisha una uhusiano wa mtandao, kisha jaribu kupakia mipangilio tena."
 }

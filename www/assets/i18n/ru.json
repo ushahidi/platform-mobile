@@ -170,8 +170,11 @@
 "STATUS_UNDER_REVIEW": "В обзоре",
 "SURVEYS": "Обзоры",
 "SURVEY_SUBMIT_RESPONSE": "Отправить опрос",
-"WHITELABEL_GET_STARTED": "Начать",
-"WHITELABEL_WELCOME_TO": "Добро пожаловать в",
-"WHITELABEL_RETRY": "Настройки перезагрузки",
-"WHITELABEL_FAILURE": "Проблемы с настройками загрузки"
+"WHITELABEL_LOADED": "Настройки загружены успешно",
+"WHITELABEL_LOADING": "Загрузка настроек ...",
+"WHITELABEL_WELCOME": "Добро пожаловать в",
+"WHITELABEL_RELOAD": "Настройки перезагрузки",
+"WHITELABEL_SUPPORT": "Если проблема не устранена, свяжитесь с нами.",
+"WHITELABEL_FAILURE": "Проблемы с настройками загрузки",
+"WHITELABEL_FAILURE_DESCRIPTION": "Убедитесь, что у вас есть подключение к Интернету, а затем повторите попытку загрузки настроек."
 }

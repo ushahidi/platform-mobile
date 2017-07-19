@@ -170,8 +170,11 @@
 "STATUS_UNDER_REVIEW": "Bajo revisión",
 "SURVEYS": "Encuestas",
 "SURVEY_SUBMIT_RESPONSE": "Envíe la respuesta de la encuesta",
-"WHITELABEL_GET_STARTED": "Empezar",
-"WHITELABEL_WELCOME_TO": "Bienvenido a",
-"WHITELABEL_RETRY": "Recargar configuración",
-"WHITELABEL_FAILURE": "Problema al cargar ajustes"
+"WHITELABEL_LOADED": "Configuración cargada correctamente",
+"WHITELABEL_LOADING": "Cargando configuraciones ...",
+"WHITELABEL_WELCOME": "Bienvenido a",
+"WHITELABEL_RELOAD": "Recargar configuración",
+"WHITELABEL_SUPPORT": "Si el problema continúa, comuníquese con",
+"WHITELABEL_FAILURE": "Problema al cargar ajustes",
+"WHITELABEL_FAILURE_DESCRIPTION": "Comprueba que tienes una conexión a Internet y, a continuación, vuelve a intentar cargar la configuración."
 }

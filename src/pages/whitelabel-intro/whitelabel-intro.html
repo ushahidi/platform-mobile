@@ -1,20 +1,32 @@
 <ion-header></ion-header>
 <ion-content class="whitelabel-intro" padding>
-  <div *ngIf="deployment">
-    <h6 text-center padding-top margin-top ion-text color="light">{{'WHITELABEL_WELCOME_TO' | translate}}</h6>
-    <div padding-left padding-right *ngIf="deployment.name">
-      <h3 text-center padding-top padding-bottom ion-text color="dark">{{deployment.name}}</h3>
-    </div>
-    <div padding-left padding-right text-center *ngIf="deployment.image">
-      <image-cache padding [src]="deployment.image"></image-cache>
-    </div>
-    <div padding-left padding-right padding-bottom margin-bottom *ngIf="deployment.description">
-      <p text-center ion-text color="light" (click)="handleLinks($event)" [innerHTML]="deployment.description | MarkdownToHtml | htmlParse"></p>
-    </div>
-    <div padding-left padding-right>
-      <button ion-button block margin-top color="primary" (click)="showDeployment()">
-        {{'WHITELABEL_GET_STARTED' | translate}}
-      </button>
-    </div>
+  <div padding-top margin-top>
+    <h6 text-center ion-text color="light">{{'WHITELABEL_WELCOME' | translate}}</h6>
+  </div>
+  <div padding-top margin-bottom>
+    <h1 text-center ion-text color="dark">{{name}}</h1>
+  </div>
+  <div margin-top padding-top *ngIf="loading == true && deployment == null">
+    <h5 text-center ion-text color="light">{{'WHITELABEL_LOADING' | translate}}</h5>
+  </div>
+  <div margin-top padding-top *ngIf="loading == false && deployment != null">
+    <h5 text-center ion-text color="light">{{'WHITELABEL_LOADED' | translate}}</h5>
+  </div>
+  <div text-center margin-top padding-top *ngIf="loading == true && deployment == null">
+    <ion-spinner name="ios" color="primary"></ion-spinner>
+  </div>
+  <div text-center margin-top padding-top *ngIf="loading == false && deployment != null">
+    <ion-icon ios="ios-checkmark-circle-outline" md="md-checkmark-circle" color="primary"></ion-icon>
+  </div>
+  <div margin-top padding-top *ngIf="loading == false && deployment == null">
+    <h5 text-center ion-text color="dark">{{'WHITELABEL_FAILURE' | translate}}</h5>
+    <h6 text-center ion-text margin-bottom padding-bottom color="light">{{'WHITELABEL_FAILURE_DESCRIPTION' | translate}}</h6>
+    <button ion-button block color="primary" (click)="loadDeployment()">{{'WHITELABEL_RELOAD' | translate}}</button>
+  </div>
+  <div text-center margin-top padding-top *ngIf="loading == false && deployment == null && email">
+    <p text-center ion-text color="light">
+      {{'WHITELABEL_SUPPORT' | translate}}
+      <strong><a href="mailto:{{email}}" target="_system">{{email}}</a></strong>.
+    </p>
   </div>
 </ion-content>

@@ -382,6 +382,7 @@ Edit additional app configuration settings
 Enter the [custom deployment](https://www.ushahidi.com) URL
 
 * `deploymentUrl` - URL to your custom deployment
+* `deploymentEmail` - support email for the custom deployment
 
 Remove the existing Cordova platforms
 

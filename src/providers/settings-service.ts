@@ -83,6 +83,10 @@ export class SettingsService {
     return this.get('deploymentUrl');
   }
 
+  getDeploymentEmail():Promise<string> {
+    return this.get('deploymentEmail');
+  }
+
   getColorNavbar():Promise<string> {
     return this.get('colorNavbar');
   }

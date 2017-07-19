@@ -171,8 +171,11 @@
   "STATUS_UNDER_REVIEW": "Under Review",
   "SURVEYS": "Surveys",
 	"SURVEY_SUBMIT_RESPONSE": "Submit Survey Response",
-	"WHITELABEL_GET_STARTED": "Get Started",
-	"WHITELABEL_WELCOME_TO": "Welcome to",
-	"WHITELABEL_RETRY": "Reload Settings",
-	"WHITELABEL_FAILURE": "Problem Loading Settings"
+	"WHITELABEL_LOADED": "Settings loaded successfully",
+	"WHITELABEL_LOADING": "Loading settings...",
+	"WHITELABEL_WELCOME": "Welcome to",
+	"WHITELABEL_RELOAD": "Reload Settings",
+	"WHITELABEL_SUPPORT": "If the problem continues, please contact",
+	"WHITELABEL_FAILURE": "Problem Loading Settings",
+	"WHITELABEL_FAILURE_DESCRIPTION": "Please verify you have an internet connection, and then try loading settings again."
 }
