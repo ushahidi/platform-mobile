@@ -10,19 +10,23 @@
   <ion-list>
     <ion-item>
       <ion-label floating>{{'USER_NAME' | translate}} <span ion-text color="danger">*</span></ion-label>
-      <ion-input #name type="text" clearInput="true"></ion-input>
+      <ion-input #name type="text" clearInput="false" autocomplete="off" autocorrect="off"></ion-input>
     </ion-item>
     <ion-item>
       <ion-label floating>{{'USER_EMAIL' | translate}} <span ion-text color="danger">*</span></ion-label>
-      <ion-input #email type="email" clearInput="true"></ion-input>
+      <ion-input #email type="email" clearInput="false" autocomplete="off" autocorrect="off"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label floating>{{'USER_PHONE' | translate}}</ion-label>
+      <ion-input #phone type="phome" clearInput="false" autocomplete="off" autocorrect="off"></ion-input>
     </ion-item>
     <ion-item>
       <ion-label floating>{{'USER_PASSWORD' | translate}} <span ion-text color="danger">*</span></ion-label>
-      <ion-input #password type="password" clearInput="true"></ion-input>
+      <ion-input #password type="password" clearInput="false" clearOnEdit="true" autocomplete="off" autocorrect="off"></ion-input>
     </ion-item>
     <ion-item>
       <ion-label floating>{{'USER_PASSWORD_CONFIRM' | translate}} <span ion-text color="danger">*</span></ion-label>
-      <ion-input #confirm type="password" clearInput="true"></ion-input>
+      <ion-input #confirm type="password" clearInput="false" clearOnEdit="true" autocomplete="off" autocorrect="off"></ion-input>
     </ion-item>
   </ion-list>
   <ion-row>

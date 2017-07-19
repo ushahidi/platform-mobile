@@ -182,12 +182,13 @@ export class ApiService extends HttpService {
     });
   }
 
-  userSignup(deployment:Deployment, email:string, password:string, name:string):Promise<Login> {
+  userSignup(deployment:Deployment, email:string, password:string, name:string, phone:string=null):Promise<Login> {
     return new Promise((resolve, reject) => {
       let params = {
         email: email,
         password: password,
-        realname: name };
+        realname: name,
+        phone: phone };
       this.apiPost(deployment, "/api/v3/register", params).then(
         (data:any) => {
           this.logger.info(this, "userSignup", data);

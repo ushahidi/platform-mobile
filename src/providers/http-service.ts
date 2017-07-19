@@ -317,12 +317,13 @@ export class HttpService {
     else if (error instanceof Response){
       let json = error.json();
       if (json['errors']) {
-        let errors = json['errors'];
         let messages = [];
-        for (let key of Object.keys(errors)) {
-          let error = errors[key];
-          if (error) {
-            messages.push(error);
+        for (let _error of json['errors']) {
+          if (_error['message']) {
+            messages.push(_error['message']);
+          }
+          else if (_error['title']) {
+            messages.push(_error['title']);
           }
         }
         return messages.join(", ");

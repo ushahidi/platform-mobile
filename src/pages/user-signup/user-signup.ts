@@ -30,6 +30,9 @@ export class UserSignupPage extends BasePage {
   @ViewChild('email')
   email: TextInput;
 
+  @ViewChild('phone')
+  phone: TextInput;
+
   @ViewChild('password')
   password: TextInput;
 
@@ -72,13 +75,14 @@ export class UserSignupPage extends BasePage {
     let name = this.name.value.toString();
     let email = this.email.value.toString();
     let password = this.password.value.toString();
+    let phone = this.phone.value.toString();
     if (name.length > 0 && email.length > 0 && password.length > 0) {
       this.language.getTranslations([
         'USER_SIGNING_UP_',
         'USER_SIGNUP_SUCCESS',
         'USER_SIGNUP_FAILURE']).then((translations:string[]) => {
         let loading = this.showLoading(translations[0]);
-        this.api.userSignup(this.deployment, email, password, name).then(
+        this.api.userSignup(this.deployment, email, password, name, phone).then(
           (login:Login) => {
             this.logger.info(this, "userSignup", login);
             return Promise.resolve()

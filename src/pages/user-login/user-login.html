@@ -10,11 +10,11 @@
   <ion-list>
     <ion-item>
       <ion-label floating>{{'USER_EMAIL' | translate}} <span ion-text color="danger">*</span></ion-label>
-      <ion-input #username type="email" clearInput="true"></ion-input>
+      <ion-input #username type="email" clearInput="false" autocomplete="off" autocorrect="off"></ion-input>
     </ion-item>
     <ion-item>
       <ion-label floating>{{'USER_PASSWORD' | translate}} <span ion-text color="danger">*</span></ion-label>
-      <ion-input #password type="password" clearInput="true"></ion-input>
+      <ion-input #password type="password" clearInput="false" clearOnEdit="true" autocomplete="off"></ion-input>
     </ion-item>
   </ion-list>
   <ion-row>

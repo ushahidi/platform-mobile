@@ -15,19 +15,19 @@
   <div margin-bottom>
     <ion-item margin-bottom *ngIf="deployment">
       <ion-label floating>{{'DEPLOYMENT_NAME' | translate}}</ion-label>
-      <ion-input #name type="text" [(ngModel)]="deployment.name"></ion-input>
+      <ion-input #name type="text" clearInput="false" autocomplete="off" autocorrect="off" [(ngModel)]="deployment.name"></ion-input>
     </ion-item>
   </div>
   <div margin-top margin-bottom>
     <ion-item *ngIf="deployment">
       <ion-label floating>{{'DEPLOYMENT_DESCRIPTION' | translate}}</ion-label>
-      <ion-textarea #description type="text" [(ngModel)]="deployment.description"></ion-textarea>
+      <ion-textarea #description type="text" clearInput="false" autocomplete="off" autocorrect="off" [(ngModel)]="deployment.description"></ion-textarea>
     </ion-item>
   </div>
   <div margin-bottom>
     <ion-item *ngIf="deployment">
       <ion-label floating>{{'DEPLOYMENT_EMAIL' | translate}}</ion-label>
-      <ion-input #email type="email" [(ngModel)]="deployment.email"></ion-input>
+      <ion-input #email type="email" clearInput="false" autocomplete="off" autocorrect="off" [(ngModel)]="deployment.email"></ion-input>
     </ion-item>
     <p ion-text padding-left padding-right color="light">{{'DEPLOYMENT_EMAIL_WARNING' | translate}}</p>
   </div>
