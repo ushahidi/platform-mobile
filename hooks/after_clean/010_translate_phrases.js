@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 const translate = require('google-translate-api');
-var languages = ['ar', 'fr', 'es', 'de', 'pt', 'ru', 'nl', 'sw'];
+var languages = ['ar', 'fr', 'es', 'de', 'pt', 'ru', 'nl', 'sw', 'it', 'sq', 'zh', 'ht', 'vi', 'jp'];
 var fs = require('fs');
 var root = process.argv[2];
 var assets = root + "/src/assets/i18n/";

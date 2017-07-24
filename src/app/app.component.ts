@@ -59,10 +59,15 @@ export class UshahidiApp {
     { name: 'Español', code: 'es' },
     { name: 'Deutsche', code: 'de' },
     { name: 'Português', code: 'pt' },
-    { name: 'Pусский', code: 'ru' },
+    { name: 'Italiano', code: 'it' },
     { name: 'Nederlands', code: 'nl' },
+    { name: 'Pусский', code: 'ru' },
     { name: 'Kiswahili', code: 'sw' },
-    { name: 'عربى', code: 'ar' }
+    { name: 'Ayisyen', code: 'ht' },
+    { name: 'Tiếng Việt', code: 'vi' },
+    { name: 'عربى', code: 'ar' },
+    { name: '日本語', code: 'jp' },
+    { name: '中文', code: 'zh' }
   ];
 
   @ViewChild(Nav)

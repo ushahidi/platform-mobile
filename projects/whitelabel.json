@@ -4,7 +4,7 @@
   "appDescription": "Whitelabel App",
   "appIcon": "projects/whitelabel/icon.png",
   "appSplash": "projects/whitelabel/splash.png",
-  "appLanguages": "en,fr,es,de,pt,ru,nl,sw,ar",
+  "appLanguages": "en,fr,es,de,pt,ru,nl,sw,ar,it,ht,jp,zh,vi",
   "colorNavbar": "#555555",
   "colorToolbar": "#343434",
   "colorPrimary": "#888888",
