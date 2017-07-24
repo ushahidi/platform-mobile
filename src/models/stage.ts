@@ -78,6 +78,9 @@ export class Stage extends Model {
   @Column("required", BOOLEAN)
   public required: boolean = null;
 
+  @Column("show_when_published", BOOLEAN)
+  public show_when_published: boolean = null;
+
   @Column("saved", TEXT)
   public saved: Date = null;
 
@@ -100,6 +103,9 @@ export class Stage extends Model {
       let unsorted = [];
       for (let attribute of attributes) {
         if (attribute.form_id == this.form_id && attribute.form_stage_id == this.id) {
+          if (this.show_when_published != null) {
+            attribute.show_when_published = this.show_when_published;  
+          }
           unsorted.push(attribute);
         }
       }

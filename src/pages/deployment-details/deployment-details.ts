@@ -75,7 +75,7 @@ export class DeploymentDetailsPage extends BasePage {
       this.deployment = this.getParameter<Deployment>("deployment");
     }
     this.logger.info(this, "ionViewWillEnter", "Deployment", this.deployment);
-    if (this.deployment.forms == null) {
+    if (this.deployment.forms == null || this.deployment.forms.length == 0) {
       this.language.getTranslation("LOADING_").then((text:string) => {
         let loading = this.showLoading(text);
         this.loadUpdates(null, false).then((loaded) => {
@@ -185,6 +185,11 @@ export class DeploymentDetailsPage extends BasePage {
             }
             else {
               this.logger.info(this, "loadForms", "Loaded", 0);
+            }
+            for (let form of forms) {
+              for (let attribute of form.attributes) {
+                this.logger.info(this, "loadForms", "Form", form.name, "Attribute", attribute.label, "Tags", attribute.tags);
+              }
             }
             this.deployment.forms = forms;
             resolve(forms);

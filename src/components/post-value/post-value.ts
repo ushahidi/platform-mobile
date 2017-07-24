@@ -20,6 +20,7 @@ export class PostValueComponent {
   video: SafeResourceUrl = null;
   mapPaceholder: string = PLACEHOLDER_MAP;
   photoPaceholder: string = PLACEHOLDER_PHOTO;
+  showValue:boolean = true;
 
   @Output()
   showLocation = new EventEmitter();
@@ -34,6 +35,24 @@ export class PostValueComponent {
 
   ngOnInit() {
     this.logger.info(this, "Value", this.value);
+    if (this.value == null) {
+      this.showValue = false;
+    }
+    else if (this.value.type == 'title') {
+      this.showValue = false;
+    }
+    else if (this.value.type == 'description') {
+      this.showValue = false;
+    }
+    else if (this.value.response_private == true) {
+      this.showValue = false;
+    }
+    else if (this.value.show_when_published == true) {
+      this.showValue = true;
+    }
+    else {
+      this.showValue = true;
+    }
     if (this.value && this.value.input == 'location') {
       this.loadMapSrc(this.value.value);
     }

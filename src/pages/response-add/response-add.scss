@@ -1,8 +1,13 @@
 .page-response-add {
   border-left: thick solid #cccccc;
-  .stage-label {
+  ion-list-header {
     font-size: 16px;
     font-weight: 500;
     text-transform: uppercase;
+  }
+  .input-author {
+    ion-input {
+      border-bottom: 1px solid #dddddd;
+    }  
   }
 }

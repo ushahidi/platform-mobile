@@ -11,11 +11,14 @@
             <ion-icon ios="ios-lock" md="md-lock" *ngIf="post.status=='draft'"></ion-icon>
             <ion-icon ios="ios-archive" md="md-archive" *ngIf="post.status=='archived'"></ion-icon>
           </ion-col>
-          <ion-col width-10 class="profile">
+          <ion-col width-10 class="profile" *ngIf="post.hide_author == null || post.hide_author == false">
             <image-cache [src]="post.user_image" [placeholder]="userPlaceholder" *ngIf="userPlaceholder"></image-cache>
           </ion-col>
           <ion-col class="name">
-            <p class="truncate" ion-text color="light">{{post.user_name || userName}} {{post.created | timeAgo}}</p>
+            <p class="truncate" ion-text color="light">
+              <span *ngIf="post.hide_author == null || post.hide_author == false">{{post.user_name || userName}}</span>
+              <span>{{post.created | timeAgo}}</span>
+            </p>
           </ion-col>
         </ion-row>
       </ion-col>
@@ -25,6 +28,16 @@
         </button>
       </ion-col>
     </ion-row>
+    <!-- <ion-row>
+      <ion-col width-10 class="status">
+        <ion-icon ios="ios-leaf" md="md-leaf" *ngIf="post.form_name == 'Land'"></ion-icon>
+        <ion-icon ios="ios-water" md="md-water" *ngIf="post.form_name == 'Water'"></ion-icon>
+        <ion-icon ios="ios-cloud" md="md-cloud" *ngIf="post.form_name == 'Air'"></ion-icon>
+      </ion-col>
+      <ion-col class="form">
+        <p class="truncate" ion-text color="light">{{post.form_name}}</p>
+      </ion-col>
+    </ion-row> -->
   </ion-card-content>
   <ion-card-content class="title" *ngIf="post.title" tappable (click)="onCardSelected($event)">
     <div class="line-clamp-3" ion-text color="dark">{{post.title}}</div>

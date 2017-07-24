@@ -129,6 +129,15 @@ export class Post extends Model {
   @Column("form_name", TEXT)
   public form_name: string = null;
 
+  @Column("hide_author", BOOLEAN)
+  public hide_author: boolean = null;
+
+  @Column("author_realname", TEXT)
+  public author_realname: string = null;
+
+  @Column("author_email", TEXT)
+  public author_email: string = null;
+
   @Column("can_read", BOOLEAN)
   public can_read: boolean = null;
 
@@ -177,6 +186,7 @@ export class Post extends Model {
       if (form.id == this.form_id) {
         this.form = form;
         this.form_name = form.name;
+        this.hide_author = form.hide_author;
         break;
       }
     }

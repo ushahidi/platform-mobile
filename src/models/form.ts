@@ -37,6 +37,9 @@ export class Form extends Model {
       if (data.disabled) {
         this.disabled = data.disabled;
       }
+      if (data.hide_author) {
+        this.hide_author = data.hide_author;
+      }
       if (data.description) {
         this.description = data.description;
       }
@@ -79,6 +82,9 @@ export class Form extends Model {
 
   @Column("disabled", BOOLEAN)
   public disabled: boolean = null;
+
+  @Column("hide_author", BOOLEAN)
+  public hide_author: boolean = null;
 
   @Column("user_roles", TEXT)
   public user_roles: string = null;

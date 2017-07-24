@@ -75,7 +75,6 @@ export class ResponseDetailsPage extends BasePage {
     return Promise.resolve()
       .then(() => { return this.loadForm(cache); })
       .then(() => { return this.loadValues(cache); })
-      .then(() => { return this.loadTags(cache); })
       .then(() => {
         this.logger.info(this, "loadUpdates", "Finished");
         if (event) {
@@ -129,11 +128,13 @@ export class ResponseDetailsPage extends BasePage {
           let images:Image[] = <Image[]>results[1];
           let forms:Form[] = <Form[]>results[2];
           let attributes:Attribute[] = <Attribute[]>results[3];
+          let tags:Tag[] = <Tag[]>results[4];
           this.post.loadUser(users);
           this.post.loadForm(forms);
           let saves = [];
           for (let value of this.post.values) {
             value.loadAttribute(attributes);
+            value.loadTags(tags);
             if (value.input == 'upload') {
               value.loadImage(images);
               this.post.loadImage(images, value.value);
@@ -153,17 +154,6 @@ export class ResponseDetailsPage extends BasePage {
         });
       });
     }
-  }
-
-  loadTags(cache:boolean=true):Promise<any> {
-    return new Promise((resolve, reject) => {
-      this.database.getTags(this.deployment).then((tags:Tag[]) => {
-        for (let value of this.post.values) {
-          value.loadTags(tags);
-        }
-        resolve(true);
-      });
-    });
   }
 
   showOptions(event:any) {

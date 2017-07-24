@@ -17,13 +17,11 @@
   </ion-navbar>
 </ion-header>
 <ion-content [style.border-left-color]="color" class="page-response-add">
-  <div *ngIf="form && formGroup">
+  <div *ngIf="post && form && formGroup">
     <form [formGroup]="formGroup">
-      <ion-list>
-        <div padding-bottom *ngFor="let stage of form.stages">
-          <ion-item text-wrap *ngIf="stage.type =='task'">
-            <ion-label class="stage-label" color="dark">{{stage.label}}</ion-label>
-          </ion-item>
+      <ion-list *ngFor="let stage of form.stages">
+        <ion-list-header *ngIf="stage.type =='task' && login.user_role == 'admin'">{{stage.label}}</ion-list-header>
+        <div *ngIf="stage.type != 'task' || login.user_role == 'admin'">
           <div padding-bottom *ngFor="let attribute of stage.attributes">
             <input-checkbox [submitted]="submitted" [value]="values[attribute.key]" [attribute]="attribute" [formGroup]="formGroup" *ngIf="attribute.input == 'checkbox'"></input-checkbox>
             <input-checkboxes [submitted]="submitted" [value]="values[attribute.key]" [attribute]="attribute" [formGroup]="formGroup" *ngIf="attribute.input == 'checkboxes'"></input-checkboxes>
@@ -42,6 +40,17 @@
             <input-markdown [submitted]="submitted" [value]="values[attribute.key]" [attribute]="attribute" [formGroup]="formGroup" *ngIf="attribute.input == 'markdown'"></input-markdown>
           </div>
         </div>
+      </ion-list>
+      <ion-list *ngIf="showAuthor == true && (login.username == null || login.username.length == 0)">
+        <ion-list-header>{{'AUTHOR'|translate}}</ion-list-header>
+        <ion-item no-lines text-wrap [formGroup]="formGroup" class="input-author">
+          <ion-label floating color="dark">{{'AUTHOR_NAME'|translate}}</ion-label>
+          <ion-input type="text" clearInput="false" autocomplete="off" autocorrect="off" formControlName="author_realname" [(ngModel)]="post.author_realname"></ion-input>
+        </ion-item>
+        <ion-item no-lines text-wrap [formGroup]="formGroup" class="input-author">
+          <ion-label floating color="dark">{{'AUTHOR_EMAIL'|translate}}</ion-label>
+          <ion-input type="email" clearInput="false" autocomplete="off" autocorrect="off" formControlName="author_email" [(ngModel)]="post.author_email"></ion-input>
+        </ion-item>
       </ion-list>
     </form>
   </div>

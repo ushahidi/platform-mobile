@@ -33,6 +33,7 @@ export class ResponseAddPage extends BasePage {
   formGroup: FormGroup = null;
   color: string = "#cccccc";
   submitted: boolean = false;
+  showAuthor:boolean = false;
 
   @ViewChild(Content)
   content: Content;
@@ -62,10 +63,30 @@ export class ResponseAddPage extends BasePage {
     this.login = this.getParameter<Login>("login");
     this.form = this.getParameter<Form>("form");
     this.post = this.getParameter<Post>("post");
+    this.loadColor();
+    this.loadUpdates();
+  }
+
+  ionViewWillEnter() {
+    super.ionViewWillEnter();
+    this.loadSettings();
+  }
+
+  loadColor() {
+    this.logger.info(this, "loadColor");
     if (this.form) {
       this.color = this.form.color;
     }
-    this.loadUpdates();
+  }
+
+  loadSettings() {
+    this.logger.info(this, "loadSettings");
+    this.settings.getSurveyFormAuthor().then((showAuthor:boolean) => {
+      this.showAuthor = showAuthor;
+    },
+    (error:any) => {
+      this.showAuthor = false;
+    });
   }
 
   loadUpdates(event:any=null) {
@@ -350,6 +371,8 @@ export class ResponseAddPage extends BasePage {
   loadFormGroup() {
     this.logger.info(this, "loadFormGroup", "Form", this.form.name);
     this.formGroup = new FormGroup({});
+    this.formGroup.addControl('author_realname', new FormControl(''));
+    this.formGroup.addControl('author_email', new FormControl(''));
     if (this.form && this.form.attributes) {
       for (let stage of this.form.stages) {
         for (let attribute of stage.attributes) {

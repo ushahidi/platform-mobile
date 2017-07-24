@@ -23,12 +23,18 @@
           <ion-icon ios="ios-lock" md="md-lock" *ngIf="post.status=='draft'"></ion-icon>
           <ion-icon ios="ios-archive" md="md-archive" *ngIf="post.status=='archived'"></ion-icon>
         </ion-col>
-        <ion-col width-10 class="profile">
+        <ion-col width-10 class="profile" *ngIf="post.hide_author == null || post.hide_author == false">
           <image-cache [src]="post.user_image" [placeholder]="userPlaceholder"></image-cache>
         </ion-col>
         <ion-col class="name" color="light">
-          <p>{{post.user_name || userName}} {{post.created | timeAgo}}</p>
+          <p>
+            <span *ngIf="post.hide_author == null || post.hide_author == false">{{post.user_name || userName}}</span>
+            <span>{{post.created | timeAgo}}</span>
+          </p>
         </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col class="form">{{post.form_name}}</ion-col>
       </ion-row>
     </ion-item>
     <ion-item text-wrap class="post-value" *ngIf="post.title">
@@ -40,7 +46,11 @@
       <div class="value-text" (click)="handleLinks($event)" [innerHTML]="post.description | MarkdownToHtml | htmlParse"></div>
     </ion-item>
     <div *ngFor="let value of post.values">
-      <post-value (click)="handleLinks($event)" [value]="value" [mapToken]="deployment.mapbox_api_key" (showImage)="showImage(value.label,value.image)" (showLocation)="showLocation(value.label,value.value)"></post-value>
+      <post-value [value]="value"
+                  [mapToken]="deployment.mapbox_api_key"
+                  (click)="handleLinks($event)"
+                  (showImage)="showImage(value.label,value.image)"
+                  (showLocation)="showLocation(value.label,value.value)"></post-value>
     </div>
   </ion-list>
 </ion-content>

@@ -1,4 +1,4 @@
-<div class="post-value" *ngIf="value && value.type != 'title' && value.type != 'description'">
+<div class="post-value" *ngIf="value && showValue">
   <ion-item text-wrap>
     <div class="value-label" ion-text color="dark">{{value.label}}</div>
     <div class="value-checkbox" ion-text color="light" *ngIf="value.input == 'checkbox'">

@@ -378,6 +378,7 @@ Edit the [deep links](https://github.com/ionic-team/ionic-plugin-deeplinks) conf
 Edit additional app configuration settings
 
 * `userSignupPhone` - `true` or `false` whether you want to show phone number on user signup
+* `surveyFormAuthor` - `true` or `false` whether to show the Author fields on survey forms
 
 Enter the [custom deployment](https://www.ushahidi.com) URL
 
@@ -418,7 +419,7 @@ Prepare iOS app for release [using parameters](https://cordova.apache.org/docs/e
 
 Or prepare iOS app for release using [build config](https://cordova.apache.org/docs/en/latest/guide/platforms/ios/#using-buildjson)
 
-* `ionic build ios --device --prod --release --buildConfig=projects/myapp/build.json`
+* `project=myapp ionic build ios --device --prod --release --buildConfig=projects/myapp/build.json`
 
 Upload your IPA to the App Store
 
@@ -443,7 +444,7 @@ Prepare Android app for release [using parameters](https://cordova.apache.org/do
 
 Or prepare Android app for release [using build config](https://cordova.apache.org/docs/en/latest/guide/platforms/android/index.html#using-buildjson)
 
-* `ionic build android --device --prod --release --buildConfig=projects/myapp/build.json`
+* `project=myapp ionic build android --device --prod --release --buildConfig=projects/myapp/build.json`
 
 Upload your APK to the Google Play Console
 

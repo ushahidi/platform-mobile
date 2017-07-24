@@ -93,6 +93,12 @@ export class Attribute extends Model {
   @Column("required", BOOLEAN)
   public required: boolean = null;
 
+  @Column("response_private", BOOLEAN)
+  public response_private: boolean = null;
+
+  @Column("show_when_published", BOOLEAN)
+  public show_when_published: boolean = null;
+
   @Column("priority", INTEGER)
   public priority: number = null;
 
@@ -119,18 +125,6 @@ export class Attribute extends Model {
 
   public tags: Tag[] = [];
 
-  getOptions():string[] {
-    if (this.options == null) {
-      return [];
-    }
-    else if (Array.isArray(this.options)) {
-      return this.options;
-    }
-    else {
-      return this.options.split(',');
-    }
-  }
-
   loadTags(tags:Tag[]) {
     if (this.input == 'tags' && tags && tags.length > 0) {
       let parents = [];
@@ -140,7 +134,7 @@ export class Attribute extends Model {
         if (tag.parent_id) {
           // IGNORE tags with parent_id since they are added as children
         }
-        else if (options.indexOf(tag.id.toString()) != -1) {
+        else if (this.arrayContains(options, tag.id)) {
           parents.push(tag);
         }
       }
@@ -149,6 +143,27 @@ export class Attribute extends Model {
     else {
       this.tags = [];
     }
+  }
+
+  getOptions():string[] {
+    if (this.options == null) {
+      return [];
+    }
+    else if (Array.isArray(this.options)) {
+      return this.options;
+    }
+    else {
+      return this.options.split(",");
+    }
+  }
+
+  arrayContains(items:any[], item:any) {
+    for (let _item of items) {
+      if (_item.toString() === item.toString()) {
+        return true;
+      }
+    }
+    return false;
   }
 
 }

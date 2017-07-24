@@ -641,6 +641,12 @@ export class ApiService extends HttpService {
         title: post.title,
         content: post.description,
         values: post.packageValues() };
+      if (post.author_realname) {
+        params['author_realname'] = post.author_realname;
+      }
+      if (post.author_email) {
+        params['author_email'] = post.author_email;
+      }
       if (post.user_id && post.user_id > 0) {
         params['user'] = { id: post.user_id };
       }
@@ -691,6 +697,12 @@ export class ApiService extends HttpService {
           title: post.title,
           content: post.description,
           values: post.packageValues() };
+      }
+      if (post.author_realname) {
+        changes['author_realname'] = post.author_realname;
+      }
+      if (post.author_email) {
+        changes['author_email'] = post.author_email;
       }
       this.apiPut(deployment, `/api/v3/posts/${post.id}`, changes).then(
         (data:any) => {
@@ -1233,6 +1245,7 @@ export class ApiService extends HttpService {
             }
             for (let attribute of attributes) {
               attribute.loadTags(tags);
+              this.logger.info(this, "getFormsWithAttributes", "Attribute", attribute.label, "Tags", attribute.tags);
             }
             return Promise.all(saves).then((saved) => {
               this.logger.info(this, "getFormsWithAttributes", "Saves", saves.length, "Saved");

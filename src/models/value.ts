@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Table } from '../decorators/table';
 import { Column } from '../decorators/column';
 
-import { Model, TEXT, INTEGER, PRIMARY_KEY } from '../models/model';
+import { Model, TEXT, INTEGER, BOOLEAN, PRIMARY_KEY } from '../models/model';
 import { Image } from '../models/image';
 import { Attribute } from '../models/attribute';
 import { Tag } from '../models/tag';
@@ -51,6 +51,12 @@ export class Value extends Model {
   @Column("caption", TEXT)
   public caption: string = null;
 
+  @Column("show_when_published", BOOLEAN)
+  public show_when_published: boolean = null;
+
+  @Column("response_private", BOOLEAN)
+  public response_private: boolean = null;
+
   @Column("saved", TEXT)
   public saved: Date = null;
 
@@ -67,6 +73,8 @@ export class Value extends Model {
          this.input = attribute.input;
          this.label = attribute.label;
          this.cardinality = attribute.cardinality;
+         this.response_private = attribute.response_private;
+         this.show_when_published = attribute.show_when_published;
          break;
       }
     }
