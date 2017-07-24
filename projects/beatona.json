@@ -19,6 +19,7 @@
   "deepLinkProtocol": "beatona",
   "userSignupPhone": true,
   "surveyFormAuthor": true,
+  "surveyFormTasks": false,
   "deploymentEmail": "support@ushahidi.com",
   "deploymentUrl": "https://fix-our-environment.ushahidi.com"
 }

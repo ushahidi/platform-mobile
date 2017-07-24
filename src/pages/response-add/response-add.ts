@@ -34,6 +34,7 @@ export class ResponseAddPage extends BasePage {
   color: string = "#cccccc";
   submitted: boolean = false;
   showAuthor:boolean = false;
+  showTasks:boolean = true;
 
   @ViewChild(Content)
   content: Content;
@@ -86,6 +87,12 @@ export class ResponseAddPage extends BasePage {
     },
     (error:any) => {
       this.showAuthor = false;
+    });
+    this.settings.getSurveyFormTasks().then((showTasks:boolean) => {
+      this.showTasks = showTasks;
+    },
+    (error:any) => {
+      this.showTasks = true;
     });
   }
 

@@ -20,8 +20,8 @@
   <div *ngIf="post && form && formGroup">
     <form [formGroup]="formGroup">
       <ion-list *ngFor="let stage of form.stages">
-        <ion-list-header *ngIf="stage.type =='task' && login.user_role == 'admin'">{{stage.label}}</ion-list-header>
-        <div *ngIf="stage.type != 'task' || login.user_role == 'admin'">
+        <ion-list-header *ngIf="showTasks == true && stage.type == 'task'">{{stage.label}}</ion-list-header>
+        <div *ngIf="showTasks == true">
           <div padding-bottom *ngFor="let attribute of stage.attributes">
             <input-checkbox [submitted]="submitted" [value]="values[attribute.key]" [attribute]="attribute" [formGroup]="formGroup" *ngIf="attribute.input == 'checkbox'"></input-checkbox>
             <input-checkboxes [submitted]="submitted" [value]="values[attribute.key]" [attribute]="attribute" [formGroup]="formGroup" *ngIf="attribute.input == 'checkboxes'"></input-checkboxes>

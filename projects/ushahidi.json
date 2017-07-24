@@ -18,5 +18,6 @@
   "deepLinkDomain": "ushahidi.io",
   "deepLinkProtocol": "ushahidi",
   "userSignupPhone": false,
-  "surveyFormAuthor": false
+  "surveyFormAuthor": false,
+  "surveyFormTasks": true
 }

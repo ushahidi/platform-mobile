@@ -130,4 +130,8 @@ export class SettingsService {
   getSurveyFormAuthor():Promise<boolean> {
     return this.get('surveyFormAuthor');
   }
+
+  getSurveyFormTasks():Promise<boolean> {
+    return this.get('surveyFormTasks');
+  }
 }

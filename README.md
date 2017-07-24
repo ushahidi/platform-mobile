@@ -379,6 +379,7 @@ Edit additional app configuration settings
 
 * `userSignupPhone` - `true` or `false` whether you want to show phone number on user signup
 * `surveyFormAuthor` - `true` or `false` whether to show the Author fields on survey forms
+* `surveyFormTasks` - `true` or `false` whether to show Tasks on survey forms
 
 Enter the [custom deployment](https://www.ushahidi.com) URL
 

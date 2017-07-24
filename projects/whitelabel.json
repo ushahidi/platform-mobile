@@ -19,6 +19,7 @@
   "deepLinkProtocol": "dale",
   "userSignupPhone": false,
   "surveyFormAuthor": false,
+  "surveyFormTasks": true,
   "deploymentEmail": "support@ushahidi.com",
   "deploymentUrl": "https://dale.ushahidi.io"
 }
