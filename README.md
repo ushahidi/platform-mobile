@@ -3,6 +3,12 @@
 
 ---
 
+## Whitelabel
+
+#### Interested in a whitelabel version of our app? Contact our [sales team](mailto:sales@ushahidi.com) for help or visit our [enterprise page](https://www.ushahidi.com/enterprise) for more information.
+
+---
+
 ## GitHub
 #### Clone the [Ushahidi](https://github.com/ushahidi/platform-mobile) repo
 
@@ -330,127 +336,6 @@ More information on Cordova's [Android Platform Guide](https://cordova.apache.or
 ```
 https://cordova.apache.org/docs/en/latest/guide/platforms/android/
 ```
-
----
-
-## Whitelabel
-#### Instructions for creating a whitelabel version of the app
-
-##### Need help creating a whitelabel app? Contact our [sales team](mailto:sales@ushahidi.com) for help or visit our [enterprise page](https://www.ushahidi.com/enterprise) for more information.
-
-Duplicate existing whitelabel project settings
-
-* copy `projects/whitelabel.json` and rename file, for example `projects/myapp.json`
-
-Duplicate existing whitelabel project folder
-
-* copy `projects/whitelabel` and rename folder, for example `projects/myapp`
-* replace `projects/myapp/icon.png` with your own _1024 × 1024_ app icon
-* replace  `projects/myapp/splash.png` with your own _2208 × 2208_ splash screen
-
-Edit the app id, name, description and images
-
-* `appId` - bundle id of the app
-* `appName` - display name of the app
-* `appDescription` - description of the app
-* `appIcon` - path to your app icon image, for example `projects/myapp/icon.png`
-* `appSplash` - path to your app splash screen image, for example `projects/myapp/splash.png`
-* `appLanguages` - subset of languages you want to include
-
-Edit the app color codes
-
-* `colorNavbar` - top navbar color code
-* `colorToolbar` - bottom toolbar color code
-* `colorPrimary` - button color for primary actions
-* `colorSecondary` - button color for secondary actions
-* `colorDark` - text color for titles and headings
-* `colorLight` - text color for descriptions and paragraphs
-* `colorDanger` - text color for errors or background color remove buttons
-* `colorActive` - text color for active list items
-* `colorHighlight` - background color for active list items
-
-Edit the [deep links](https://github.com/ionic-team/ionic-plugin-deeplinks) configuration for the app
-
-* `deepLinkSecure` - either `http` or `https` depending if your deployment supports SSL
-* `deepLinkDomain` - domain of your deployment without the `http://` or `https://`
-* `deepLinkProtocol` - custom protocol to launch the app, for example `ushahidi://`
-
-Edit additional app configuration settings
-
-* `userSignupPhone` - `true` or `false` whether you want to show phone number on user signup
-* `surveyFormAuthor` - `true` or `false` whether to show the Author fields on survey forms
-* `surveyFormTasks` - `true` or `false` whether to show Tasks on survey forms
-
-Enter the [custom deployment](https://www.ushahidi.com) URL
-
-* `deploymentUrl` - URL to your custom deployment
-* `deploymentEmail` - support email for the custom deployment
-
-Remove the existing Cordova platforms
-
-* `ionic platform rm ios`
-* `ionic platform rm android`
-
-Add iOS and Android platforms
-
-* `project=myapp ionic platform add ios`
-* `project=myapp ionic platform add android`
-
-Good news, your whitelabel app should now be setup!
-
----
-#### Build & Run
-
-Build and compile your apps
-
-* `project=myapp ionic build ios`
-* `project=myapp ionic build android`
-
-Run and debug your apps
-
-* `project=myapp ionic run ios --livereload --consolelogs --serverlogs`
-* `project=myapp ionic run android --livereload --consolelogs --serverlogs`
-
----
-#### iOS Release
-
-Prepare iOS app for release [using parameters](https://cordova.apache.org/docs/en/latest/guide/platforms/ios/#signing-an-app)
-
-* `project=myapp ionic build ios --device --prod --release --developmentTeam="ABCD" --codeSignIdentity="iPhone Developer" --provisioningProfile="UUID"`
-
-Or prepare iOS app for release using [build config](https://cordova.apache.org/docs/en/latest/guide/platforms/ios/#using-buildjson)
-
-* `project=myapp ionic build ios --device --prod --release --buildConfig=projects/myapp/build.json`
-
-Upload your IPA to the App Store
-
-* open `platforms/ios/MyApp.xcworkspace`
-* select `Product` then `Archive`
-* click `Upload to App Store...` button
-* select a Development team if necessary
-* click `Upload` button
-
----
-
-#### Android Release
-
-Generate a certicate for signing your APK
-
-* `keytool -genkey -v -keystore myapp.keystore -alias myapp -keyalg RSA -keysize 2048 -validity 10000`
-
-Prepare Android app for release [using parameters](https://cordova.apache.org/docs/en/latest/guide/platforms/android/index.html#signing-an-app)
-
-* `project=myapp ionic build android --device --prod --release --keystore=myapp.keystore --storePassword=yourpassword --alias=myapp --password=yourpassword`
-
-
-Or prepare Android app for release [using build config](https://cordova.apache.org/docs/en/latest/guide/platforms/android/index.html#using-buildjson)
-
-* `project=myapp ionic build android --device --prod --release --buildConfig=projects/myapp/build.json`
-
-Upload your APK to the Google Play Console
-
-* `platforms/android/build/outputs/apk/MyApp.apk`
-* [https://play.google.com/apps/publish](https://play.google.com/apps/publish)
 
 ---
 

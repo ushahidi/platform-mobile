@@ -13,19 +13,19 @@
     </ion-buttons>
   </ion-navbar>
 </ion-header>
-<ion-content class="deployment-details-page">
+<ion-content class="deployment-details-page" dir="{{direction}}">
   <ion-refresher [enabled]="deployment != null" (ionRefresh)="loadUpdates($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   <div *ngIf="deployment">
-    <div padding-left padding-right *ngIf="deployment.name">
-      <h3 text-left ion-text color="dark">{{deployment.name}}</h3>
+    <div padding-left padding-right class="title" *ngIf="deployment.name">
+      <h3 ion-text color="dark" dir="{{direction}}">{{deployment.name}}</h3>
     </div>
     <div text-center padding-left padding-right *ngIf="deployment.image">
       <image-cache padding [src]="deployment.image"></image-cache>
     </div>
-    <div padding-left padding-right *ngIf="deployment.description">
-      <p ion-text color="light" (click)="handleLinks($event)" [innerHTML]="deployment.description | MarkdownToHtml | htmlParse"></p>
+    <div padding-left padding-right class="description" *ngIf="deployment.description">
+      <p ion-text color="light" dir="{{direction}}" (click)="handleLinks($event)" [innerHTML]="deployment.description | MarkdownToHtml | htmlParse"></p>
     </div>
     <div class="fadein" padding-left padding-right [@fadeInOut]="loaded">
       <button ion-button block margin-top margin-bottom color="primary" *ngIf="deployment.forms && deployment.forms.length > 0" (click)="addResponse($event)">{{'SURVEY_SUBMIT_RESPONSE' | translate}}</button>

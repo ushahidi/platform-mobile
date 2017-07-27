@@ -17,7 +17,7 @@
     </ion-buttons>
   </ion-navbar>
 </ion-header>
-<ion-content class="page-response-list" [class.has-footer]="filter">
+<ion-content class="page-response-list" [class.has-footer]="filter" dir="{{direction}}">
   <ion-refresher [enabled]="view == 'list'" (ionRefresh)="loadUpdates($event, false)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>

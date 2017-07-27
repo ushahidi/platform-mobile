@@ -11,7 +11,7 @@
     </ion-buttons>
   </ion-navbar>
 </ion-header>
-<ion-content class="page-response-search">
+<ion-content class="page-response-search" dir="{{direction}}">
   <ion-searchbar #searchbar color="light" placeholder="Search" [(ngModel)]="filter.search_text" (ionInput)="onSearch($event)" *ngIf="filter"></ion-searchbar>
   <ion-list *ngIf="deployment && filter">
     <ion-list-header>{{'SURVEYS' | translate}}</ion-list-header>

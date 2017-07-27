@@ -3,7 +3,7 @@
     <ion-title>{{'USER_LOGIN' | translate}}</ion-title>
   </ion-navbar>
 </ion-header>
-<ion-content class="user-login-page">
+<ion-content class="user-login-page" dir="{{direction}}">
   <div *ngIf="deployment && deployment.name">
     <h3 text-left padding-left padding-bottom ion-text color="dark">{{deployment.name}}</h3>
   </div>

@@ -1,5 +1,5 @@
 import { Component, ViewChild, NgZone } from '@angular/core';
-import { Content, Platform, NavParams, Alert, AlertController, Toast, ToastController, Modal, ModalController, Loading, LoadingController, ActionSheet, ActionSheetController, NavController, ViewController } from 'ionic-angular';
+import { Content, Platform, Events, NavParams, Alert, AlertController, Toast, ToastController, Modal, ModalController, Loading, LoadingController, ActionSheet, ActionSheetController, NavController, ViewController } from 'ionic-angular';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { Network } from '@ionic-native/network';
@@ -9,7 +9,7 @@ import { ThemeableBrowser, ThemeableBrowserOptions, ThemeableBrowserObject } fro
 
 import { LoggerService } from '../../providers/logger-service';
 import { InjectorService } from '../../providers/injector-service';
-import { LanguageService } from '../../providers/language-service';
+import { LanguageService, LanguageChanged } from '../../providers/language-service';
 import { SettingsService } from '../../providers/settings-service';
 
 @Component({
@@ -23,8 +23,11 @@ export class BasePage {
   protected connection: any = null;
   protected disconnection: any = null;
   protected colorNavbar: string = "#3f4751";
+  protected direction:string = "lrt";
+  protected languageChanged: any = null;
 
   protected zone:NgZone;
+  protected events:Events;
   protected network:Network;
   protected statusBar:StatusBar;
   protected themeableBrowser:ThemeableBrowser;
@@ -49,6 +52,7 @@ export class BasePage {
     protected actionController:ActionSheetController,
     protected logger:LoggerService) {
     this.zone = _zone;
+    this.events = InjectorService.injector.get(Events);
     this.network = InjectorService.injector.get(Network);
     this.statusBar = InjectorService.injector.get(StatusBar);
     this.themeableBrowser = InjectorService.injector.get(ThemeableBrowser);
@@ -60,6 +64,7 @@ export class BasePage {
 
   ionViewDidLoad() {
     this.logger.info(this, "ionViewDidLoad");
+    this.loadLanguage();
     this.loadSettings();
   }
 
@@ -76,6 +81,7 @@ export class BasePage {
 
   ionViewWillLeave() {
     this.logger.info(this, "ionViewWillLeave");
+    this.unloadLanguage();
     this.unsubscribeNetwork();
   }
 
@@ -85,6 +91,22 @@ export class BasePage {
 
   ionViewWillUnload() {
     this.logger.info(this, "ionViewWillUnload");
+  }
+
+  loadLanguage() {
+    this.logger.info(this, "loadLanguage");
+    this.direction = this.language.getDirection();
+    this.languageChanged = this.events.subscribe(LanguageChanged, (i18n:string) => {
+      this.logger.info(this, "loadLanguage", LanguageChanged, i18n);
+      this.direction = this.language.getDirection();
+    });
+  }
+
+  unloadLanguage() {
+    if (this.languageChanged) {
+      this.languageChanged.unsubscribe();
+      this.languageChanged = null;
+    }
   }
 
   loadSettings() {

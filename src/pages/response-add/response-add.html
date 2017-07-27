@@ -16,7 +16,7 @@
     </ion-buttons>
   </ion-navbar>
 </ion-header>
-<ion-content [style.border-left-color]="color" class="page-response-add">
+<ion-content [style.border-left-color]="color" class="page-response-add" dir="{{direction}}">
   <div *ngIf="post && form && formGroup">
     <form [formGroup]="formGroup">
       <ion-list *ngFor="let stage of form.stages">

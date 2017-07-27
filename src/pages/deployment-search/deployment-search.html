@@ -8,7 +8,7 @@
     <ion-title>{{'DEPLOYMENT_ADD' | translate}}</ion-title>
   </ion-navbar>
 </ion-header>
-<ion-content class="deployment-search-page">
+<ion-content class="deployment-search-page" dir="{{direction}}">
   <ion-searchbar #searchbar color="light" type="search" debounce="500" [placeholder]="'DEPLOYMENT_FIND' | translate"
                  autocomplete="off" autocorrect="off" spellcheck="false" (ionInput)="searchDeployments($event)"></ion-searchbar>
   <div class="loading" text-center *ngIf="deployments.length == 0 && loading == true">

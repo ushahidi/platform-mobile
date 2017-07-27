@@ -51,8 +51,8 @@ export class UshahidiApp {
   offline:boolean = false;
   whitelabel:boolean = false;
   i18n:string = "en";
-  deploymentApi:string = null;
   direction:string = "ltr";
+  deploymentApi:string = null;
   languages:any[] = [
     { name: 'English', code: 'en' },
     { name: 'Français', code: 'fr' },
@@ -230,12 +230,7 @@ export class UshahidiApp {
     this.logger.info(this, "setLanguage", i18n);
     this.i18n = i18n;
     this.language.setLanguage(i18n);
-    if (i18n == 'ar' || i18n == 'fa') {
-      this.direction = 'rtl';
-    }
-    else {
-      this.direction = 'ltr';
-    }
+    this.direction = this.language.getDirection();
   }
 
   loadDatabase(models:Model[]):Promise<any> {
@@ -427,4 +422,5 @@ export class UshahidiApp {
       this.logger.info(this, "trackEvent", category, action, label);
     });
   }
+
 }

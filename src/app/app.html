@@ -2,7 +2,7 @@
   <ion-header>
     <ion-toolbar color="navbar"></ion-toolbar>
   </ion-header>
-  <ion-content>
+  <ion-content dir="{{direction}}">
     <ion-refresher (ionRefresh)="loadDeployments($event)">
       <ion-refresher-content></ion-refresher-content>
     </ion-refresher>

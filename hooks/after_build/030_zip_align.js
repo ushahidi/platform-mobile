@@ -11,6 +11,10 @@ if (process.env.project) {
 }
 var config = require(root + '/projects/' + project + '.json');
 
+function puts(error, stdout, stderr) {
+  console.log(stdout);
+}
+
 function runZipAlign() {
   process.stdout.write('runZipAlign');
   var input = "platforms/android/build/outputs/apk/android-release.apk";
@@ -18,11 +22,11 @@ function runZipAlign() {
   if (fs.existsSync(root + "/" + input)) {
     var command = "./zipalign -f -v 4 " + input + " " + output;
     process.stdout.write(command);
-    exec(command);
-    process.stdout.write("APK file " + output + " aligned");
+    exec(command, puts);
+    process.stdout.write("runZipAlign APK " + output + " aligned");
   }
   else {
-    process.stdout.write("APK file " + input + " does not exist");
+    process.stdout.write("runZipAlign APK " + input + " does not exist");
   }
 }
 
