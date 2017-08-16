@@ -21,7 +21,7 @@
     <div padding-left padding-right class="title" *ngIf="deployment.name">
       <h3 ion-text color="dark" dir="{{direction}}">{{deployment.name}}</h3>
     </div>
-    <div text-center padding-left padding-right *ngIf="deployment.image">
+    <div text-center padding-left padding-right class="image" *ngIf="deployment.image">
       <image-cache padding [src]="deployment.image"></image-cache>
     </div>
     <div padding-left padding-right class="description" *ngIf="deployment.description">

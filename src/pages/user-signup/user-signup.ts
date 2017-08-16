@@ -23,7 +23,6 @@ export class UserSignupPage extends BasePage {
 
   login: Login = null;
   deployment: Deployment = null;
-  userSignupPhone:boolean = false;
 
   @ViewChild('name')
   name: TextInput;
@@ -58,11 +57,6 @@ export class UserSignupPage extends BasePage {
     super(zone, platform, navParams, navController, viewController, modalController, toastController, alertController, loadingController, actionController, logger);
   }
 
-  ionViewDidLoad() {
-    super.ionViewDidLoad();
-    this.loadSettings();
-  }
-
   ionViewWillEnter() {
     super.ionViewWillEnter();
     this.loadStatusBar(true);
@@ -74,16 +68,6 @@ export class UserSignupPage extends BasePage {
     if (this.login && this.login.password) {
       this.password.value = this.login.password;
     }
-  }
-
-  loadSettings() {
-    this.logger.info(this, "loadSettings");
-    this.settings.getUserSignupPhone().then((userSignupPhone:boolean) => {
-      this.userSignupPhone = userSignupPhone;
-    },
-    (error:any) => {
-      this.userSignupPhone = false;
-    });
   }
 
   userSignup(event:any) {

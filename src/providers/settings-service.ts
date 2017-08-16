@@ -123,10 +123,6 @@ export class SettingsService {
     return this.get('colorHighlight');
   }
 
-  getUserSignupPhone():Promise<boolean> {
-    return this.get('userSignupPhone');
-  }
-
   getSurveyFormAuthor():Promise<boolean> {
     return this.get('surveyFormAuthor');
   }

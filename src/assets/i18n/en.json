@@ -148,7 +148,6 @@
 	"USER_LOGOUT_SUCCESS": "Log out successful",
 	"USER_LOGOUT_FAILURE": "Problem Logging Out",
 	"USER_NAME": "Display Name",
-	"USER_PHONE": "Phone Number",
 	"USER_EMAIL": "Email Address",
   "USER_EMAIL_REQUIRED": "Email is required",
 	"USER_PASSWORD": "Password",
