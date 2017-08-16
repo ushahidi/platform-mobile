@@ -2,8 +2,10 @@ import { Component, Output, EventEmitter } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { Http } from '@angular/http';
 import { AlertController } from 'ionic-angular';
-import { Geolocation, GeolocationOptions, Geoposition } from '@ionic-native/geolocation';
+
+import { Device } from '@ionic-native/device';
 import { Diagnostic } from '@ionic-native/diagnostic';
+import { Geolocation, GeolocationOptions, Geoposition } from '@ionic-native/geolocation';
 
 import { StaticMap } from '../../maps/static-map';
 
@@ -62,6 +64,7 @@ export class InputLocationComponent {
 
   constructor(
     private http:Http,
+    private device:Device,
     private logger:LoggerService,
     private diagnostic:Diagnostic,
     private geolocation:Geolocation,
@@ -205,7 +208,7 @@ export class InputLocationComponent {
         this.loadMapSrc(this.latitude, this.longitude);
       },
       (error:any) => {
-        this.logger.error(this, "detectLocation", "Error", error);
+        this.logger.error(this, "detectLocation", "Error", error.message);
         this.latitude = null;
         this.longitude = null;
         this.error = true;
