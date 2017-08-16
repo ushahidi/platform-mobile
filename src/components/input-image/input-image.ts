@@ -4,6 +4,8 @@ import { Camera, CameraOptions } from '@ionic-native/camera';
 import { File, Entry, FileEntry, FileError } from '@ionic-native/file';
 import { SafeResourceUrl, DomSanitizer } from '@angular/platform-browser';
 import { FormGroup } from '@angular/forms';
+
+import { Device } from '@ionic-native/device';
 import { Diagnostic } from '@ionic-native/diagnostic';
 
 import { Value } from '../../models/value';
@@ -23,7 +25,9 @@ export class InputImageComponent {
 
   PERMISSION_GRANTED:string = "granted";
   PERMISSION_AUTHORIZED:string = "authorized";
-  ERROR_NO_IMAGE_SELECTED:string = "no image selected";
+  NO_IMAGE_SELECTED:string = "no image selected";
+  CAMERA_CANCELLED:string = "Camera cancelled.";
+  SELECTION_CANCELLED:string = "Selection cancelled.";
   formGroup: FormGroup;
   attribute: Attribute = null;
   value: Value = null;
@@ -36,6 +40,7 @@ export class InputImageComponent {
   constructor(
     private file:File,
     private camera:Camera,
+    private device:Device,
     private platform:Platform,
     private sanitizer:DomSanitizer,
     private logger:LoggerService,
@@ -99,36 +104,41 @@ export class InputImageComponent {
   authorizeCamera():Promise<boolean> {
     return new Promise((resolve, reject) => {
       this.logger.info(this, "authorizeCamera");
-      this.diagnostic.isCameraAuthorized().then(
-        (authorized:boolean) => {
-          this.logger.info(this, "authorizeCamera", "isCameraAuthorized", authorized);
-          if (authorized) {
-            resolve(true);
-          }
-          else {
-            this.diagnostic.requestCameraAuthorization().then(
-              (status:string) => {
-                this.logger.info(this, "authorizeCamera", "requestCameraAuthorization", status);
-                if (status == this.PERMISSION_GRANTED) {
-                  resolve(true);
-                }
-                else if (status == this.PERMISSION_AUTHORIZED) {
-                  resolve(true);
-                }
-                else {
-                  reject();
-                }
-              },
-              (error:any) => {
-                this.logger.error(this, "authorizeCamera", "requestCameraAuthorization", error);
-                reject(error);
-              });
-          }
-        },
-        (error:any) => {
-          this.logger.error(this, "authorizeCamera", "isCameraAuthorized", error);
-          reject(error);
-        });
+      if (this.device.platform == 'ios') {
+        this.diagnostic.isCameraAuthorized().then(
+          (authorized:boolean) => {
+            this.logger.info(this, "authorizeCamera", "isCameraAuthorized", authorized);
+            if (authorized) {
+              resolve(true);
+            }
+            else {
+              this.diagnostic.requestCameraAuthorization().then(
+                (status:string) => {
+                  this.logger.info(this, "authorizeCamera", "requestCameraAuthorization", status);
+                  if (status == this.PERMISSION_GRANTED) {
+                    resolve(true);
+                  }
+                  else if (status == this.PERMISSION_AUTHORIZED) {
+                    resolve(true);
+                  }
+                  else {
+                    reject();
+                  }
+                },
+                (error:any) => {
+                  this.logger.error(this, "authorizeCamera", "requestCameraAuthorization", error);
+                  reject(error);
+                });
+            }
+          },
+          (error:any) => {
+            this.logger.error(this, "authorizeCamera", "isCameraAuthorized", error);
+            reject(error);
+          });
+      }
+      else {
+        resolve(true);
+      }
     });
   }
 
@@ -166,7 +176,13 @@ export class InputImageComponent {
         this.logger.error(this, "showCamera", error);
         this.imagePath = null;
         this.imageThumbnail = null;
-        if (error != this.ERROR_NO_IMAGE_SELECTED) {
+        if (error == this.NO_IMAGE_SELECTED) {
+          //IGNORE NO_IMAGE_SELECTED
+        }
+        else if (error == this.CAMERA_CANCELLED) {
+            //IGNORE CAMERA_CANCELLED
+        }
+        else {
           this.language.getTranslations([
             'IMAGE_TAKE_PHOTO_ERROR',
             'IMAGE_TAKE_PHOTO_PROBLEM',
@@ -212,36 +228,41 @@ export class InputImageComponent {
   authorizeCameraRoll() {
     return new Promise((resolve, reject) => {
       this.logger.info(this, "authorizeCameraRoll");
-      this.diagnostic.isCameraRollAuthorized().then(
-        (authorized:boolean) => {
-          this.logger.info(this, "authorizeCameraRoll", "isCameraRollAuthorized", authorized);
-          if (authorized) {
-            resolve(true);
-          }
-          else {
-            this.diagnostic.requestCameraRollAuthorization().then(
-              (status:string) => {
-                this.logger.info(this, "authorizeCameraRoll", "requestCameraRollAuthorization", status);
-                if (status == this.PERMISSION_GRANTED) {
-                  resolve(true);
-                }
-                else if (status == this.PERMISSION_AUTHORIZED) {
-                  resolve(true);
-                }
-                else {
-                  reject();
-                }
-              },
-              (error:any) => {
-                this.logger.error(this, "authorizeCameraRoll", "requestCameraRollAuthorization", error);
-                reject(error);
-              });
-          }
-        },
-        (error:any) => {
-          this.logger.error(this, "authorizeCamera", "isCameraRollAuthorized", error);
-          reject(error);
-        });
+      if (this.device.platform == 'ios') {
+        this.diagnostic.isCameraRollAuthorized().then(
+          (authorized:boolean) => {
+            this.logger.info(this, "authorizeCameraRoll", "isCameraRollAuthorized", authorized);
+            if (authorized) {
+              resolve(true);
+            }
+            else {
+              this.diagnostic.requestCameraRollAuthorization().then(
+                (status:string) => {
+                  this.logger.info(this, "authorizeCameraRoll", "requestCameraRollAuthorization", status);
+                  if (status == this.PERMISSION_GRANTED) {
+                    resolve(true);
+                  }
+                  else if (status == this.PERMISSION_AUTHORIZED) {
+                    resolve(true);
+                  }
+                  else {
+                    reject();
+                  }
+                },
+                (error:any) => {
+                  this.logger.error(this, "authorizeCameraRoll", "requestCameraRollAuthorization", error);
+                  reject(error);
+                });
+            }
+          },
+          (error:any) => {
+            this.logger.error(this, "authorizeCamera", "isCameraRollAuthorized", error);
+            reject(error);
+          });
+      }
+      else {
+        resolve(true);
+      }
     });
   }
 
@@ -279,7 +300,13 @@ export class InputImageComponent {
         this.logger.error(this, "showCameraRoll", error);
         this.imagePath = null;
         this.imageThumbnail = null;
-        if (error != this.ERROR_NO_IMAGE_SELECTED) {
+        if (error == this.NO_IMAGE_SELECTED) {
+          //IGNORE NO_IMAGE_SELECTED
+        }
+        else if (error == this.SELECTION_CANCELLED) {
+            //IGNORE SELECTION_CANCELLED
+        }
+        else {
           this.language.getTranslations([
             'IMAGE_PHOTO_LIBRARY_ERROR',
             'IMAGE_PHOTO_LIBRARY_PROBLEM',

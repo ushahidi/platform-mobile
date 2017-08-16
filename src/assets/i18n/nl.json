@@ -23,7 +23,7 @@
 "DATABASE_RESET": "Database Reset",
 "DATABASE_RESETTING_": "Opnieuw instellen ...",
 "DATABASE_RESET_FAILURE": "Probleem opnieuw instellen van de database",
-"DATABASE_RESET_FAILURE_DESCRIPTION": "Er is een probleem om de database te resetten.",
+"DATABASE_RESET_FAILURE_DESCRIPTION": "Er is een probleem om de database te herstellen.",
 "DATABASE_CREATE_FAILURE": "Probleem maken van database",
 "DATABASE_CREATE_FAILURE_DESCRIPTION": "Er is een probleem opgetreden met het maken van de database.",
 "DATABASE_SCHEMA_CHANGED": "Database Schema gewijzigd",

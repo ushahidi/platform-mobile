@@ -12,6 +12,7 @@ import { IsDebug } from '@ionic-native/is-debug';
 import { StatusBar } from '@ionic-native/status-bar';
 import { Transfer } from '@ionic-native/transfer';
 import { File } from '@ionic-native/file';
+import { Device } from '@ionic-native/device';
 import { Camera } from '@ionic-native/camera';
 import { MediaCapture } from '@ionic-native/media-capture';
 import { SocialSharing } from '@ionic-native/social-sharing';
@@ -163,6 +164,7 @@ export function translateLoaderFactory(http: Http) {
     { provide: File, useClass: File },
     { provide: SQLite, useClass: SQLite },
     { provide: Camera, useClass: Camera },
+    { provide: Device, useClass: Device },
     { provide: IsDebug, useClass: IsDebug },
     { provide: Network, useClass: Network },
     { provide: Keyboard, useClass: Keyboard },
