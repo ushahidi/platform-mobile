@@ -10,6 +10,7 @@ import { Value } from '../../models/value';
 import { Attribute } from '../../models/attribute';
 
 import { LoggerService } from '../../providers/logger-service';
+import { LanguageService } from '../../providers/language-service';
 
 declare var cordova:any;
 
@@ -39,6 +40,7 @@ export class InputImageComponent {
     private sanitizer:DomSanitizer,
     private logger:LoggerService,
     private diagnostic:Diagnostic,
+    private language:LanguageService,
     private alertController:AlertController,
     private actionController:ActionSheetController) {
   }
@@ -52,41 +54,46 @@ export class InputImageComponent {
   }
 
   showOptions() {
-    let buttons = [];
-    if (this.cameraPresent) {
-      buttons.push({
-        text: 'Take Photo',
-        handler: () => {
-          this.authorizeCamera().then(
-            (authorized:boolean) => {
-              this.showCamera()
-            },
-            (error:any) => {
-              this.showCameraError()
-            });
-        }
-      });
-    }
-    buttons.push({
-      text: 'Photo Library',
-      handler: () => {
-        this.authorizeCameraRoll().then(
-          (authorized:boolean) => {
-            this.showCameraRoll()
-          },
-          (error:any) => {
-            this.showCameraRollError()
+    this.language.getTranslations([
+      'IMAGE_TAKE_PHOTO',
+      'IMAGE_PHOTO_LIBRARY',
+      'ACTION_CANCEL']).then((translations:string[]) => {
+        let buttons = [];
+        if (this.cameraPresent) {
+          buttons.push({
+            text: translations[0],
+            handler: () => {
+              this.authorizeCamera().then(
+                (authorized:boolean) => {
+                  this.showCamera()
+                },
+                (error:any) => {
+                  this.showCameraError()
+                });
+            }
           });
-      }
+        }
+        buttons.push({
+          text: translations[1],
+          handler: () => {
+            this.authorizeCameraRoll().then(
+              (authorized:boolean) => {
+                this.showCameraRoll()
+              },
+              (error:any) => {
+                this.showCameraRollError()
+              });
+          }
+        });
+        buttons.push({
+          text: translations[2],
+          role: 'cancel'
+        });
+        let actionSheet = this.actionController.create({
+          buttons: buttons
+        });
+        actionSheet.present();
     });
-    buttons.push({
-      text: 'Cancel',
-      role: 'cancel'
-    });
-    let actionSheet = this.actionController.create({
-      buttons: buttons
-    });
-    actionSheet.present();
   }
 
   authorizeCamera():Promise<boolean> {
@@ -160,33 +167,46 @@ export class InputImageComponent {
         this.imagePath = null;
         this.imageThumbnail = null;
         if (error != this.ERROR_NO_IMAGE_SELECTED) {
-          let alert = this.alertController.create({
-            title: 'Problem Taking Photo',
-            subTitle: "There was a problem trying to take a photo.",
-            buttons: ['OK']
+          this.language.getTranslations([
+            'IMAGE_TAKE_PHOTO_ERROR',
+            'IMAGE_TAKE_PHOTO_PROBLEM',
+            'ACTION_OK']).then((translations:string[]) => {
+              let alert = this.alertController.create({
+                title: translations[0],
+                subTitle: translations[1],
+                buttons: [translations[2]]
+              });
+              alert.present();
           });
-          alert.present();
         }
       });
   }
 
   showCameraError() {
-    let alert = this.alertController.create({
-      title: 'Camera Not Authorized',
-      subTitle: "Please check your Settings to ensure Camera is authorized.",
-      buttons: [
-        {
-          text: 'Settings',
-          handler: () => {
-            this.diagnostic.switchToSettings();
-          }
-        },
-        {
-          text: 'OK',
-          role: 'cancel'
-        }]
+    this.language.getTranslations([
+      'IMAGE_TAKE_PHOTO_AUTHORIZE',
+      'IMAGE_TAKE_PHOTO_AUTHORIZE_DESCRIPTION',
+      'ACTION_SETTINGS',
+      'ACTION_OK']).then((translations:string[]) => {
+        let alert = this.alertController.create({
+          title: translations[0],
+          subTitle: translations[1],
+          buttons: [
+            {
+              text: translations[2],
+              handler: () => {
+                this.diagnostic.switchToSettings().then(() => {
+                  this.logger.info(this, "showCameraError", "switchToSettings");
+                });
+              }
+            },
+            {
+              text: translations[3],
+              role: 'cancel'
+            }]
+        });
+        alert.present();
     });
-    alert.present();
   }
 
   authorizeCameraRoll() {
@@ -260,33 +280,46 @@ export class InputImageComponent {
         this.imagePath = null;
         this.imageThumbnail = null;
         if (error != this.ERROR_NO_IMAGE_SELECTED) {
-          let alert = this.alertController.create({
-            title: 'Problem Choosing Photo',
-            subTitle: "There was a problem trying to choose photo from the library.",
-            buttons: ['OK']
+          this.language.getTranslations([
+            'IMAGE_PHOTO_LIBRARY_ERROR',
+            'IMAGE_PHOTO_LIBRARY_PROBLEM',
+            'ACTION_OK']).then((translations:string[]) => {
+              let alert = this.alertController.create({
+                title: translations[0],
+                subTitle: translations[1],
+                buttons: [translations[2]]
+              });
+              alert.present();
           });
-          alert.present();
         }
       });
   }
 
   showCameraRollError() {
-    let alert = this.alertController.create({
-      title: 'Photos Not Authorized',
-      subTitle: "Please check your Settings to ensure Photos is authorized.",
-      buttons: [
-        {
-          text: 'Settings',
-          handler: () => {
-            this.diagnostic.switchToSettings();
-          }
-        },
-        {
-          text: 'OK',
-          role: 'cancel'
-        }]
+    this.language.getTranslations([
+      'IMAGE_PHOTO_LIBRARY_AUTHORIZE',
+      'IMAGE_PHOTO_LIBRARY_AUTHORIZE_DESCRIPTION',
+      'ACTION_SETTINGS',
+      'ACTION_OK']).then((translations:string[]) => {
+        let alert = this.alertController.create({
+          title: translations[0],
+          subTitle: translations[1],
+          buttons: [
+            {
+              text: translations[2],
+              handler: () => {
+                this.diagnostic.switchToSettings().then(() => {
+                  this.logger.info(this, "showCameraError", "switchToSettings");
+                });
+              }
+            },
+            {
+              text: translations[3],
+              role: 'cancel'
+            }]
+        });
+        alert.present();
     });
-    alert.present();
   }
 
   deletePhoto() {
