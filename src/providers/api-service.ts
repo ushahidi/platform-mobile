@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
-import { Transfer} from '@ionic-native/transfer';
+import { FileTransfer } from '@ionic-native/file-transfer';
 import { File } from '@ionic-native/file';
 import { NativeGeocoder, NativeGeocoderForwardResult } from '@ionic-native/native-geocoder';
 import { NativeStorage } from '@ionic-native/native-storage';
@@ -39,7 +39,7 @@ export class ApiService extends HttpService {
   constructor(
     protected http: Http,
     protected file:File,
-    protected transfer:Transfer,
+    protected transfer:FileTransfer,
     protected vimeo:VimeoService,
     protected logger:LoggerService,
     protected storage: NativeStorage,

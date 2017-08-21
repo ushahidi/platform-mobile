@@ -31,22 +31,19 @@
       <button ion-button block margin-top margin-bottom color="primary" *ngIf="deployment.forms && deployment.forms.length > 0" (click)="addResponse($event)">{{'SURVEY_SUBMIT_RESPONSE' | translate}}</button>
     </div>
     <ion-list>
-      <ion-item detail-push *ngIf="deployment.forms && deployment.forms.length > 0" (click)="showResponses($event)">
+      <ion-item detail-push tappable *ngIf="deployment.forms && deployment.forms.length > 0" (click)="showResponses($event)">
         {{'RESPONSES' | translate}}
       </ion-item>
-      <!-- <ion-item detail-push *ngIf="deployment.collections && deployment.collections.length > 0" (click)="showCollections($event)">
-        {{'COLLECTIONS' | translate}}
-      </ion-item> -->
-      <ion-item detail-push *ngIf="deployment.username != null && deployment.can_update == true" (click)="showSettings($event)">
+      <ion-item detail-push tappable *ngIf="deployment.username != null && deployment.can_update == true" (click)="showSettings($event)">
         {{'SETTINGS' | translate}}
       </ion-item>
-      <ion-item detail-push *ngIf="offline == false && (login == null || login.username == null || login.username == '')" (click)="userLogin($event)">
+      <ion-item detail-push tappable *ngIf="offline == false && (login == null || login.username == null || login.username == '')" (click)="userLogin($event)">
         {{'USER_LOGIN' | translate}}
       </ion-item>
-      <ion-item detail-push *ngIf="offline == false && (login == null || login.username == null || login.username == '')" (click)="userSignup($event)">
+      <ion-item detail-push tappable *ngIf="offline == false && (login == null || login.username == null || login.username == '')" (click)="userSignup($event)">
         {{'USER_SIGNUP' | translate}}
       </ion-item>
-      <ion-item detail-push *ngIf="login && login.username != null && login.username.length > 0" (click)="userLogout($event)">
+      <ion-item detail-push tappable *ngIf="login && login.username != null && login.username.length > 0" (click)="userLogout($event)">
         {{'USER_LOGOUT' | translate}}
       </ion-item>
     </ion-list>

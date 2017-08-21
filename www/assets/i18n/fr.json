@@ -188,6 +188,6 @@
 "WHITELABEL_WELCOME": "Bienvenue à",
 "WHITELABEL_RELOAD": "Recharger les paramètres",
 "WHITELABEL_SUPPORT": "Si le problème persiste, veuillez contacter",
-"WHITELABEL_FAILURE": "Paramètres de chargement du problème",
+"WHITELABEL_FAILURE": "Problème de paramètres de chargement",
 "WHITELABEL_FAILURE_DESCRIPTION": "Vérifiez que vous avez une connexion Internet, puis essayez de charger les paramètres à nouveau."
 }

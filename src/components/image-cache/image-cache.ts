@@ -2,7 +2,7 @@ import { Injectable, Component, Input, OnInit, OnChanges, AfterContentChecked } 
 import { SafeUrl, DomSanitizer } from '@angular/platform-browser';
 import { Md5 } from 'ts-md5/dist/md5';
 
-import { Transfer, TransferObject } from '@ionic-native/transfer';
+import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer';
 import { File, Entry, FileEntry, FileError, Metadata } from '@ionic-native/file';
 
 import { LoggerService } from '../../providers/logger-service';
@@ -31,7 +31,7 @@ export class ImageCacheComponent implements OnInit, OnChanges, AfterContentCheck
 
   constructor(
     private file:File,
-    private transfer:Transfer,
+    private transfer:FileTransfer,
     private sanitizer:DomSanitizer,
     private logger:LoggerService) {
   }
@@ -139,8 +139,8 @@ export class ImageCacheComponent implements OnInit, OnChanges, AfterContentCheck
   downloadCacheImage(image:string, directory:string, cache:string):Promise<string> {
     return new Promise((resolve, reject) => {
       let url = directory + cache;
-      let fileTransfer:TransferObject = this.transfer.create();
-      fileTransfer.download(image, url, true).then(
+      let fileFileTransfer:FileTransferObject = this.transfer.create();
+      fileFileTransfer.download(image, url, true).then(
         (entry:Entry) => {
           this.logger.info(this, "downloadCacheImage", image, url, entry.toURL());
           resolve(entry.toURL());

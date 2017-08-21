@@ -2,6 +2,7 @@ import { NgModule, ErrorHandler } from '@angular/core';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { HttpModule, Http } from '@angular/http';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule, TranslateService, TranslateLoader, TranslateStaticLoader } from 'ng2-translate/ng2-translate';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -10,7 +11,7 @@ import { MarkdownToHtmlModule } from 'markdown-to-html-pipe';
 import { AppVersion } from '@ionic-native/app-version';
 import { IsDebug } from '@ionic-native/is-debug';
 import { StatusBar } from '@ionic-native/status-bar';
-import { Transfer } from '@ionic-native/transfer';
+import { FileTransfer } from '@ionic-native/file-transfer';
 import { File } from '@ionic-native/file';
 import { Device } from '@ionic-native/device';
 import { Camera } from '@ionic-native/camera';
@@ -129,6 +130,7 @@ export function translateLoaderFactory(http: Http) {
   imports: [
     HttpModule,
     BrowserModule,
+    BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
     MarkdownToHtmlModule,
@@ -168,7 +170,7 @@ export function translateLoaderFactory(http: Http) {
     { provide: IsDebug, useClass: IsDebug },
     { provide: Network, useClass: Network },
     { provide: Keyboard, useClass: Keyboard },
-    { provide: Transfer, useClass: Transfer },
+    { provide: FileTransfer, useClass: FileTransfer },
     { provide: StatusBar, useClass: StatusBar },
     { provide: AppVersion, useClass: AppVersion },
     { provide: Diagnostic, useClass: Diagnostic },

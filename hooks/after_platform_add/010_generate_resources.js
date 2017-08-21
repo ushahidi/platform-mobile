@@ -16,12 +16,12 @@ function puts(error, stdout, stderr) {
 }
 
 function generateResourceImages() {
-  process.stdout.write("generateResourceImages");
-  exec("ionic resources", puts);
+  process.stdout.write("generateResourceImages" + "\n");
+  exec("ionic cordova resources", puts);
 }
 
 function installCordovaIosSim() {
-  process.stdout.write("installCordovaIosSim");
+  process.stdout.write("installCordovaIosSim" + "\n");
   exec("cd platforms/ios/cordova && npm install ios-sim", puts)
 }
 

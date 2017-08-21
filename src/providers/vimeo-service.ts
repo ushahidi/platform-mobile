@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
-import { Transfer} from '@ionic-native/transfer';
+import { FileTransfer } from '@ionic-native/file-transfer';
 import { File } from '@ionic-native/file';
 
 import { HttpService } from '../providers/http-service';
@@ -19,7 +19,7 @@ export class VimeoService extends HttpService {
   constructor(
     protected http: Http,
     protected file:File,
-    protected transfer:Transfer,
+    protected transfer:FileTransfer,
     protected logger:LoggerService) {
     super(http, file, transfer, logger);
   }

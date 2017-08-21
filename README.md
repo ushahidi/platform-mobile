@@ -185,6 +185,13 @@ List the root level NPM packages
 npm list --depth=0
 ```
 
+To update the version of the ionic-angular package
+
+```
+npm install ionic-angular@latest --save --save-exact
+npm install @ionic/app-scripts@latest --save-dev
+```
+
 ---
 
 ## Java
@@ -275,25 +282,19 @@ cordova requirements ios
 Build the project for iOS
 
 ```
-ionic build ios
+ionic cordova build ios
 ```
 
 Run the app in the iOS Simulator or attached iOS device
 
 ```
-ionic run ios --livereload --consolelogs --serverlogs
-```
-
-If you get the error `Error: Cannot read property 'replace' of undefined` when trying to run the app, try [running the command](https://stackoverflow.com/a/44580372/385730) from the project folder.
-
-```
-cd platforms/ios/cordova && npm install ios-sim
+ionic cordova run ios --livereload --consolelogs --serverlogs
 ```
 
 Build the app in release and production mode for archiving
 
 ```
-ionic build ios --prod --release
+ionic cordova build ios --prod --release
 ```
 
 More information on Cordova's [iOS Platform Guide](https://cordova.apache.org/docs/en/latest/guide/platforms/ios/)
@@ -316,19 +317,19 @@ cordova requirements android
 Build the project for Android
 
 ```
-ionic build android
+ionic cordova build android
 ```
 
 Run the app in the Android Emulator or attached Android device
 
 ```
-ionic run android --livereload --consolelogs --serverlogs
+ionic cordova run android --livereload --consolelogs --serverlogs
 ```
 
 Build the app in release and production mode for archiving
 
 ```
-ionic build android --prod --release
+ionic cordova build android --prod --release
 ```
 
 More information on Cordova's [Android Platform Guide](https://cordova.apache.org/docs/en/latest/guide/platforms/android/)
@@ -383,4 +384,115 @@ npm outdated
 Update all dependencies to latest Ionic
 ```
 npm install ionic-angular@latest --save --save-exact
+```
+
+
+---
+
+## Plugins
+#### List of [Ionic Native plugins](http://ionicframework.com/docs/native/) used
+
+```
+ionic cordova plugin add cordova-plugin-app-version
+npm install --save @ionic-native/app-version
+```
+
+```
+ionic cordova plugin add cordova-plugin-camera
+npm install --save @ionic-native/camera
+```
+
+```
+ionic cordova plugin add cordova-plugin-device
+npm install --save @ionic-native/device
+```
+
+```
+ionic cordova plugin add cordova.plugins.diagnostic
+npm install --save @ionic-native/diagnostic
+```
+
+```
+ionic cordova plugin add cordova-plugin-file
+npm install --save @ionic-native/file
+```
+
+```
+ionic cordova plugin add cordova-plugin-filepath
+npm install --save @ionic-native/file-path
+```
+
+```
+ionic cordova plugin add cordova-plugin-file-transfer
+npm install --save @ionic-native/file-transfer
+```
+
+```
+ionic cordova plugin add cordova-plugin-geolocation
+npm install --save @ionic-native/geolocation
+```
+
+```
+ionic cordova plugin add cordova-plugin-google-analytics
+npm install --save @ionic-native/google-analytics
+```
+
+```
+ionic cordova plugin add cordova-plugin-is-debug
+npm install --save @ionic-native/is-debug
+```
+
+```
+ionic cordova plugin add cordova-plugin-media-capture
+npm install --save @ionic-native/media-capture
+```
+
+```
+ionic cordova plugin add cordova-plugin-nativegeocoder
+npm install --save @ionic-native/native-geocoder
+```
+
+```
+ionic cordova plugin add cordova-plugin-nativestorage
+npm install --save @ionic-native/native-storage
+```
+
+```
+ionic cordova plugin add cordova-plugin-network-information
+npm install --save @ionic-native/network
+```
+
+```
+ionic cordova plugin add cordova-plugin-x-socialsharing
+npm install --save @ionic-native/social-sharing
+```
+
+```
+ionic cordova plugin add cordova-plugin-splashscreen
+npm install --save @ionic-native/splash-screen
+```
+
+```
+ionic cordova plugin add cordova-sqlite-storage
+npm install --save @ionic-native/sqlite
+```
+
+```
+ionic cordova plugin add cordova-plugin-statusbar
+npm install --save @ionic-native/status-bar
+```
+
+```
+ionic cordova plugin add cordova-plugin-themeablebrowser
+npm install --save @ionic-native/themeable-browser
+```
+
+```
+ionic cordova plugin add ionic-plugin-deeplinks --variable URL_SCHEME=ushahidi --variable DEEPLINK_SCHEME=https --variable DEEPLINK_HOST=ushahidi.io --variable ANDROID_PATH_PREFIX=/
+npm install --save @ionic-native/deeplinks
+```
+
+```
+ionic cordova plugin add ionic-plugin-keyboard
+npm install --save @ionic-native/keyboard
 ```

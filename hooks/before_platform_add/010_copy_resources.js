@@ -12,7 +12,7 @@ if (process.env.project) {
 var config = require(root + '/projects/' + project + '.json');
 
 function copyResourceImage(source, destination) {
-  process.stdout.write('copyResourceImage ' + source + ' to ' + destination);
+  process.stdout.write('copyResourceImage ' + source + ' to ' + destination + "\n");
   if (fs.existsSync(source)) {
     fs.createReadStream(source).pipe(
       fs.createWriteStream(destination));

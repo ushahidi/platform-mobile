@@ -30,7 +30,7 @@ function removeDirectory(dirPath) {
 }
 
 function removePluginsDirectory(srcFile, destFile) {
-  process.stdout.write('removePluginsDirectory');
+  process.stdout.write('removePluginsDirectory' + "\n");
   var pluginsFolder = path.join(root, 'plugins');
   removeDirectory(pluginsFolder);
 }
