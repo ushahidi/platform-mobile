@@ -1,4 +1,5 @@
-import { Component, NgZone, ViewChild, state, style, animate, transition, trigger } from '@angular/core';
+import { Component, NgZone, ViewChild } from '@angular/core';
+import { trigger, state, style, animate, transition } from '@angular/animations';
 import { Platform, Content, NavParams, NavController, ViewController, ModalController, ToastController, AlertController, LoadingController, ActionSheetController } from 'ionic-angular';
 
 import { PLACEHOLDER_BLANK } from '../../constants/placeholders';
@@ -29,10 +30,10 @@ import { ResponseListPage } from '../../pages/response-list/response-list';
   entryComponents:[ UserLoginPage, UserSignupPage, DeploymentSettingsPage, ResponseAddPage, ResponseListPage ],
   animations: [
     trigger('fadeInOut', [
-      state('true', style({ opacity: 1 })),
-      state('false', style({ opacity: 0 })),
-      transition('0 => 1', animate('900ms')),
-      transition('1 => 0', animate('400ms'))
+      state('1', style({ opacity: 1 })),
+      state('0', style({ opacity: 0 })),
+      transition('0 => 1', animate('900ms ease-in')),
+      transition('1 => 0', animate('300ms ease-out'))
     ])
   ]
 })
