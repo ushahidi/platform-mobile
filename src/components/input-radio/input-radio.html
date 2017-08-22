@@ -1,4 +1,4 @@
-<div class="input-radio" [class.invalid]="attribute.required == true && text.length == 0 && submitted == true">
+<div class="input-radio" [class.invalid]="attribute.required == true && hasValue() == false && submitted == true">
   <ion-item no-lines text-wrap>
     <ion-label class="input-label" color="dark">
       {{attribute.label}}
@@ -13,5 +13,5 @@
       </ion-item>
     </ion-list>
   </div>
-  <p ion-text color="danger" class="input-error" padding-left *ngIf="attribute.required == true && text.length == 0 && submitted == true">{{'INPUT_SELECTION_REQUIRED' | translate}}</p>
+  <p ion-text color="danger" class="input-error" padding-left *ngIf="attribute.required == true && hasValue() == false && submitted == true">{{'INPUT_SELECTION_REQUIRED' | translate}}</p>
 </div>

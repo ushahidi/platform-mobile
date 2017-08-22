@@ -47,7 +47,7 @@
         "@ionic/storage": "2.0.1",
         "@types/leaflet": "^1.0.60",
         "cordova-android": "^6.2.3",
-        "cordova-custom-config": "^3.3.0",
+        "cordova-custom-config": "^4.0.2",
         "cordova-ios": "^4.4.0",
         "cordova-plugin-add-swift-support": "^1.6.0",
         "cordova-plugin-app-version": "^0.1.9",

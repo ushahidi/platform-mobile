@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="10503" id="com.ushahidi.mobile" ios-CFBundleVersion="1.5.3" version="1.5" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-versionCode="10504" id="com.ushahidi.mobile" ios-CFBundleVersion="1.5.4" version="1.5" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Ushahidi</name>
     <description>Ushahidi Mobile</description>
     <author email="support@ushahidi.com" href="https://www.ushahidi.com/">Ushahidi</author>
-    <content original-src="index.html" src="http://192.168.0.13:8100" />
+    <content original-src="index.html" src="http://localhost:3000" />
     <access origin="*" subdomains="true" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -133,7 +133,7 @@
     </feature>
     <engine name="android" spec="^6.2.3" />
     <engine name="ios" spec="^4.4.0" />
-    <plugin name="cordova-custom-config" spec="^3.3.0" />
+    <plugin name="cordova-custom-config" spec="^4.0.2" />
     <plugin name="cordova-plugin-app-version" spec="^0.1.9" />
     <plugin name="cordova-plugin-camera" spec="^2.4.1">
         <variable name="CAMERA_USAGE_DESCRIPTION" value="This app would like to access the camera." />

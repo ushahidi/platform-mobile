@@ -50,4 +50,8 @@ export class InputRadioComponent {
     this.selection = event.toString();
   }
 
+  hasValue() {
+    return this.selection && this.selection.length > 0;
+  }
+
 }
