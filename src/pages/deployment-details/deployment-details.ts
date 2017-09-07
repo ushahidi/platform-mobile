@@ -346,9 +346,9 @@ export class DeploymentDetailsPage extends BasePage {
     this.logger.info(this, "userLogout");
     this.trackEvent("Deployments", "logout", this.deployment.website);
     this.language.getTranslations([
-      'LOGGING_OUT_',
-      'LOGOUT_SUCCESS',
-      'LOGOUT_FAILURE']).then((translations:string[]) => {
+      'USER_LOGGING_OUT_',
+      'USER_LOGOUT_SUCCESS',
+      'USER_LOGOUT_FAILURE']).then((translations:string[]) => {
       let loading = this.showLoading(translations[0]);
       return Promise.all([
         this.demoteDeployment(),
