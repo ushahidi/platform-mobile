@@ -156,59 +156,74 @@ export class ResponseDetailsPage extends BasePage {
     }
   }
 
-  showOptions(event:any) {
-    this.logger.info(this, "showOptions");
+  showOptions(post:Post) {
     this.language.getTranslations([
       'ACTION_SHARE',
       'ACTION_EDIT',
       'ACTION_COLLECTION',
+      'ACTION_REVIEW',
       'ACTION_ARCHIVE',
       'ACTION_PUBLISH',
       'ACTION_DELETE',
+      'ACTION_REMOVE',
       'ACTION_CANCEL']).then((translations:string[]) => {
+        this.logger.info(this, "showOptions");
         let buttons = [];
-        if (this.post.can_read) {
-           buttons.push({
-             text: translations[0],
-             handler:() => this.shareResponse(this.post)
-           });
-        }
-        if (this.offline == false && this.post.can_update) {
+        if (post.can_read) {
           buttons.push({
-            text: translations[1],
-            handler:() => this.editResponse(this.post)
+            text: translations[0],
+            handler:() => this.shareResponse(post)
           });
+        }
+        if (this.offline == false && post.can_update) {
+          buttons.push({
+             text: translations[1],
+             handler:() => this.editResponse(post)
+           });
           if (this.deployment.collections && this.deployment.collections.length > 0) {
             buttons.push({
-             text: translations[2],
-             handler:() => this.addToCollection(this.post)
+              text: translations[2],
+              handler:() => this.addToCollection(post)
             });
           }
-          if (this.post.status == 'published' || this.post.status == 'draft') {
+          if (post.status == 'published' || post.status == 'archived') {
            buttons.push({
              text: translations[3],
-             handler:() => this.archiveResponse(this.post)
+             handler:() => this.draftResponse(post)
            });
           }
-          if (this.post.status == 'archived' || this.post.status == 'draft') {
+          if (post.status == 'published' || post.status == 'draft') {
+           buttons.push({
+             text: translations[4],
+             handler:() => this.archiveResponse(post)
+           });
+          }
+          if (post.status == 'archived' || post.status == 'draft') {
             buttons.push({
-              text: translations[4],
-              handler:() => this.publishResponse(this.post)
+              text: translations[5],
+              handler:() => this.publishResponse(post)
             });
           }
         }
-        if (this.offline == false && this.post.can_delete) {
+        if (this.offline == false && post.can_delete) {
           buttons.push({
-           text: translations[5],
-           role: 'destructive',
-           handler:() => this.deleteResponse(this.post)
+            text: translations[6],
+            role: 'destructive',
+            handler:() => this.deleteResponse(post)
+          });
+        }
+        if (post.pending == true) {
+          buttons.push({
+            text: translations[7],
+            role: 'destructive',
+            handler:() => this.removeResponse(post)
           });
         }
         buttons.push({
-          text: translations[6],
+          text: translations[8],
           role: 'cancel'
         });
-        this.showActionSheet(null, buttons);
+       this.showActionSheet(null, buttons);
     });
   }
 
@@ -324,77 +339,122 @@ export class ResponseDetailsPage extends BasePage {
 
   archiveResponse(post:Post) {
     this.logger.info(this, "archiveResponse");
-    let loading = this.showLoading("Archiving...");
-    let changes = { status: "archived" };
-    this.api.updatePost(this.deployment, post, changes).then(
-      (updated:any) => {
-        post.status = "archived";
-        this.database.savePost(this.deployment, post).then(saved => {
+    this.language.getTranslations([
+      'RESPONSE_ARCHIVING_',
+      'RESPONSE_ARCHIVE_SUCCESS',
+      'RESPONSE_ARCHIVE_FAILURE']).then((translations:string[]) => {
+      let loading = this.showLoading(translations[0]);
+      let changes = { status: "archived" };
+      this.api.updatePost(this.deployment, post, changes).then(
+        (updated:any) => {
+          post.status = "archived";
+          this.database.savePost(this.deployment, post).then(saved => {
+            loading.dismiss();
+            this.events.publish(POST_UPDATED, post.id);
+            this.showToast(translations[1]);
+            this.trackEvent("Posts", "archived", this.post.url);
+          });
+        },
+        (error:any) => {
           loading.dismiss();
-          this.events.publish(POST_UPDATED, post.id);
-          this.showToast("Response archived");
-          this.trackEvent("Posts", "archived", this.post.url);
+          this.showAlert(translations[2], error);
         });
-      },
-      (error:any) => {
-        loading.dismiss();
-        this.showAlert("Problem Updating Response", error);
-      });
+    });
   }
 
   publishResponse(post:Post) {
     this.logger.info(this, "publishResponse");
-    let loading = this.showLoading("Publishing...");
-    let changes = { status: "published" };
-    this.api.updatePost(this.deployment, post, changes).then(
-      (updated:any) => {
-        post.status = "published";
-        this.database.savePost(this.deployment, post).then(saved => {
+    this.language.getTranslations([
+      'RESPONSE_PUBLISHING_',
+      'RESPONSE_PUBLISH_SUCCESS',
+      'RESPONSE_PUBLISH_FAILURE']).then((translations:string[]) => {
+      let loading = this.showLoading(translations[0]);
+      let changes = { status: "published" };
+      this.api.updatePost(this.deployment, post, changes).then(
+        (updated:any) => {
+          post.status = "published";
+          this.database.savePost(this.deployment, post).then(saved => {
+            loading.dismiss();
+            this.events.publish('post:updated', post.id);
+            this.showToast(translations[1]);
+            this.trackEvent("Posts", "published", this.post.url);
+          });
+        },
+        (error:any) => {
           loading.dismiss();
-          this.events.publish('post:updated', post.id);
-          this.showToast("Response published");
-          this.trackEvent("Posts", "published", this.post.url);
+          this.showAlert(translations[2], error);
         });
-      },
-      (error:any) => {
-        loading.dismiss();
-        this.showAlert("Problem Updating Response", error);
+    });
+  }
+
+  removeResponse(post:Post) {
+    this.language.getTranslations([
+      'RESPONSE_REMOVING_',
+      'RESPONSE_REMOVE_SUCCESS',
+      'RESPONSE_REMOVE_FAILURE']).then((translations:string[]) => {
+      this.logger.info(this, "removeResponse");
+      let loading = this.showLoading(translations[0]);
+      this.database.removeValues(this.deployment, post).then(
+        (values) => {
+          this.database.removePost(this.deployment, post).then(
+            (removed) => {
+              loading.dismiss();
+              this.showToast(translations[1]);
+              this.trackEvent("Posts", "removed", post.url);
+              this.closePage();
+            },
+            (error) => {
+              loading.dismiss();
+              this.showAlert(translations[2], error);
+          });
+        },
+        (error) => {
+          loading.dismiss();
+          this.showAlert(translations[2], error);
       });
+    });
   }
 
   deleteResponse(post:Post) {
-    let buttons = [
-       {
-         text: 'Delete',
-         role: 'destructive',
-         handler: () => {
-           this.logger.info(this, "deleteResponse", 'Delete');
-           let loading = this.showLoading("Deleting...");
-           this.api.deletePost(this.deployment, post).then(
-             (results:any) => {
-               loading.dismiss();
-               this.database.removePost(this.deployment, post).then(removed => {
-                 this.showToast("Response deleted");
-                 this.events.publish(POST_DELETED, post.id);
-                 this.trackEvent("Posts", "deleted", this.post.url);
-                 this.closePage();
-              });
-             },
-             (error:any) => {
-               loading.dismiss();
-               this.showAlert("Problem Deleting Response", error);
-             });
-         }
-       },
-       {
-         text: 'Cancel',
-         role: 'cancel',
-         handler: () => {
-           this.logger.info(this, "deleteResponse", 'Cancel');
-         }
-       }
-     ];
-     this.showConfirm("Delete Response", "Are you sure you want to delete this response?", buttons);
+    this.language.getTranslations([
+      'ACTION_DELETE',
+      'RESPONSE_DELETING_',
+      'RESPONSE_DELETE_SUCCESS',
+      'RESPONSE_DELETE_FAILURE',
+      'RESPONSE_DELETE_CONFIRM',
+      'RESPONSE_DELETE_CONFIRM_DESCRIPTION']).then((translations:string[]) => {
+        let buttons = [
+           {
+             text: translations[0],
+             role: 'destructive',
+             handler: () => {
+               this.logger.info(this, "deleteResponse", 'Delete');
+               let loading = this.showLoading(translations[1]);
+               this.api.deletePost(this.deployment, post).then(
+                 (results:any) => {
+                   loading.dismiss();
+                   this.database.removePost(this.deployment, post).then(removed => {
+                     this.showToast(translations[2]);
+                     this.trackEvent("Posts", "deleted", post.url);
+                     this.closePage();
+                  });
+                 },
+                 (error:any) => {
+                   loading.dismiss();
+                   this.showAlert(translations[3], error);
+                 });
+             }
+           },
+           {
+             text: 'Cancel',
+             role: 'cancel',
+             handler: () => {
+               this.logger.info(this, "deleteResponse", 'Cancel');
+             }
+           }
+         ];
+         this.showConfirm(translations[4], translations[5], buttons);
+    });
   }
 
 }

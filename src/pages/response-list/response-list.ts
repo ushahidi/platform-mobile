@@ -459,6 +459,7 @@ export class ResponseListPage extends BasePage {
       'ACTION_SHARE',
       'ACTION_EDIT',
       'ACTION_COLLECTION',
+      'ACTION_REVIEW',
       'ACTION_ARCHIVE',
       'ACTION_PUBLISH',
       'ACTION_DELETE',
@@ -483,35 +484,41 @@ export class ResponseListPage extends BasePage {
               handler:() => this.addToCollection(post)
             });
           }
-          if (post.status == 'published' || post.status == 'draft') {
+          if (post.status == 'published' || post.status == 'archived') {
            buttons.push({
              text: translations[3],
+             handler:() => this.draftResponse(post)
+           });
+          }
+          if (post.status == 'published' || post.status == 'draft') {
+           buttons.push({
+             text: translations[4],
              handler:() => this.archiveResponse(post)
            });
           }
           if (post.status == 'archived' || post.status == 'draft') {
             buttons.push({
-              text: translations[4],
+              text: translations[5],
               handler:() => this.publishResponse(post)
             });
           }
         }
         if (this.offline == false && post.can_delete) {
           buttons.push({
-            text: translations[5],
+            text: translations[6],
             role: 'destructive',
             handler:() => this.deleteResponse(post)
           });
         }
         if (post.pending == true) {
           buttons.push({
-            text: translations[6],
+            text: translations[7],
             role: 'destructive',
             handler:() => this.removeResponse(post)
           });
         }
         buttons.push({
-          text: translations[7],
+          text: translations[8],
           role: 'cancel'
         });
        this.showActionSheet(null, buttons);
@@ -593,6 +600,31 @@ export class ResponseListPage extends BasePage {
         });
         this.showActionSheet(translations[4], buttons);
       }
+    });
+  }
+
+  draftResponse(post:Post) {
+    this.logger.info(this, "draftResponse");
+    this.language.getTranslations([
+      'RESPONSE_UPDATING_',
+      'RESPONSE_UPDATE_SUCCESS',
+      'RESPONSE_UPDATE_FAILURE']).then((translations:string[]) => {
+      let loading = this.showLoading(translations[0]);
+      let changes = { status: "draft" };
+      this.api.updatePost(this.deployment, post, changes).then(
+        (updated:any) => {
+          post.status = "draft";
+          this.database.savePost(this.deployment, post).then(saved => {
+            loading.dismiss();
+            this.events.publish(POST_UPDATED, post.id);
+            this.showToast(translations[1]);
+            this.trackEvent("Posts", "drafted", post.url);
+          });
+        },
+        (error:any) => {
+          loading.dismiss();
+          this.showAlert(translations[2], error);
+        });
     });
   }
 
@@ -682,44 +714,52 @@ export class ResponseListPage extends BasePage {
   }
 
   deleteResponse(post:Post) {
-    let buttons = [
-       {
-         text: 'Delete',
-         role: 'destructive',
-         handler: () => {
-           this.logger.info(this, "deleteResponse", 'Delete');
-           let loading = this.showLoading("Deleting...");
-           this.api.deletePost(this.deployment, post).then(
-             (results:any) => {
-               loading.dismiss();
-               this.database.removePost(this.deployment, post).then(removed => {
-                 let postIndex = this.posts.indexOf(post, 0);
-                 if (postIndex > -1) {
-                   this.posts.splice(postIndex, 1);
-                 }
-                 let pendingIndex = this.pending.indexOf(post, 0);
-                 if (pendingIndex > -1) {
-                   this.pending.splice(pendingIndex, 1);
-                 }
-                 this.showToast("Response deleted");
-                 this.trackEvent("Posts", "deleted", post.url);
-              });
-             },
-             (error:any) => {
-               loading.dismiss();
-               this.showAlert("Problem Deleting Response", error);
-             });
-         }
-       },
-       {
-         text: 'Cancel',
-         role: 'cancel',
-         handler: () => {
-           this.logger.info(this, "deleteResponse", 'Cancel');
-         }
-       }
-     ];
-     this.showConfirm("Delete Response", "Are you sure you want to delete this response?", buttons);
+    this.language.getTranslations([
+      'ACTION_DELETE',
+      'RESPONSE_DELETING_',
+      'RESPONSE_DELETE_SUCCESS',
+      'RESPONSE_DELETE_FAILURE',
+      'RESPONSE_DELETE_CONFIRM',
+      'RESPONSE_DELETE_CONFIRM_DESCRIPTION']).then((translations:string[]) => {
+        let buttons = [
+           {
+             text: translations[0],
+             role: 'destructive',
+             handler: () => {
+               this.logger.info(this, "deleteResponse", 'Delete');
+               let loading = this.showLoading(translations[1]);
+               this.api.deletePost(this.deployment, post).then(
+                 (results:any) => {
+                   loading.dismiss();
+                   this.database.removePost(this.deployment, post).then(removed => {
+                     let postIndex = this.posts.indexOf(post, 0);
+                     if (postIndex > -1) {
+                       this.posts.splice(postIndex, 1);
+                     }
+                     let pendingIndex = this.pending.indexOf(post, 0);
+                     if (pendingIndex > -1) {
+                       this.pending.splice(pendingIndex, 1);
+                     }
+                     this.showToast(translations[2]);
+                     this.trackEvent("Posts", "deleted", post.url);
+                  });
+                 },
+                 (error:any) => {
+                   loading.dismiss();
+                   this.showAlert(translations[3], error);
+                 });
+             }
+           },
+           {
+             text: 'Cancel',
+             role: 'cancel',
+             handler: () => {
+               this.logger.info(this, "deleteResponse", 'Cancel');
+             }
+           }
+         ];
+         this.showConfirm(translations[4], translations[5], buttons);
+    });
   }
 
   clearFilter(event:any, filter:Filter) {

@@ -2,7 +2,7 @@
   <ion-navbar color="navbar">
     <ion-title *ngIf="post">{{post.form_name}}</ion-title>
     <ion-buttons end>
-      <button ion-button icon-only (click)="showOptions($event)">
+      <button ion-button icon-only (click)="showOptions(post)">
         <ion-icon ios="ios-more" md="md-more"></ion-icon>
       </button>
     </ion-buttons>
@@ -14,27 +14,24 @@
   </ion-refresher>
   <ion-list *ngIf="deployment && post">
     <ion-item no-lines>
-      <ion-row>
-        <ion-col class="pending" *ngIf="post.pending == true">
+      <ion-row align-items-center>
+        <ion-col col-auto class="pending" *ngIf="post.pending == true">
           <ion-badge text-uppercase color="black">{{'STATUS_PENDING' | translate}}</ion-badge>
         </ion-col>
-        <ion-col width-10 class="status {{post.status}}">
+        <ion-col col-auto class="status {{post.status}}">
           <ion-icon ios="ios-globe" md="md-globe" *ngIf="post.status=='published'"></ion-icon>
           <ion-icon ios="ios-lock" md="md-lock" *ngIf="post.status=='draft'"></ion-icon>
           <ion-icon ios="ios-archive" md="md-archive" *ngIf="post.status=='archived'"></ion-icon>
         </ion-col>
-        <ion-col width-10 class="profile" *ngIf="post.hide_author == null || post.hide_author == false">
+        <ion-col col-auto class="profile" *ngIf="post.hide_author == null || post.hide_author == false">
           <image-cache [src]="post.user_image" [placeholder]="userPlaceholder"></image-cache>
         </ion-col>
-        <ion-col class="name" color="light">
+        <ion-col class="name">
           <p>
             <span *ngIf="post.hide_author == null || post.hide_author == false">{{post.user_name || userName}}</span>
             <span>{{post.created | timeAgo}}</span>
           </p>
         </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col class="form">{{post.form_name}}</ion-col>
       </ion-row>
     </ion-item>
     <ion-item text-wrap class="post-value" *ngIf="post.title">
