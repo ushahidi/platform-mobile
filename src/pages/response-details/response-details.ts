@@ -251,6 +251,7 @@ export class ResponseDetailsPage extends BasePage {
     this.logger.info(this, "editResponse");
     let modal = this.showModal(ResponseAddPage,
       { deployment: this.deployment,
+        login: this.login,
         post: this.post,
         form: this.form });
     modal.onDidDismiss(data => {

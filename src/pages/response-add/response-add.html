@@ -10,8 +10,11 @@
       <button #submit ion-button icon-only *ngIf="offline == true" (click)="onSubmit($event)">
         <ion-icon ios="ios-send" md="md-send"></ion-icon>
       </button>
-      <button #submit ion-button icon-only *ngIf="offline == false" (click)="onSubmit($event)">
+      <button #submit ion-button icon-only *ngIf="offline == false && post && post.saved == null" (click)="onSubmit($event)">
         <ion-icon ios="ios-send" md="md-send"></ion-icon>
+      </button>
+      <button #submit ion-button icon-only *ngIf="offline == false && post && post.saved != null" (click)="onSubmit($event)">
+        <ion-icon ios="md-checkmark" md="md-checkmark"></ion-icon>
       </button>
     </ion-buttons>
   </ion-navbar>
@@ -41,7 +44,7 @@
           </div>
         </div>
       </ion-list>
-      <ion-list *ngIf="showAuthor == true && (login.username == null || login.username.length == 0)">
+      <ion-list *ngIf="showAuthor == true && (login == null || login.username == null || login.username.length == 0)">
         <ion-list-header>{{'AUTHOR'|translate}}</ion-list-header>
         <ion-item no-lines text-wrap [formGroup]="formGroup" class="input-author">
           <ion-label floating color="dark">{{'AUTHOR_NAME'|translate}}</ion-label>
