@@ -2,6 +2,7 @@ import { Component, NgZone, ViewChild } from '@angular/core';
 import { Platform, Content, NavParams, NavController, ViewController, ModalController, ToastController, AlertController, LoadingController, ActionSheetController } from 'ionic-angular';
 
 import { Keyboard } from '@ionic-native/keyboard';
+import { Geolocation, GeolocationOptions, Geoposition } from '@ionic-native/geolocation';
 import { NativeGeocoder, NativeGeocoderForwardResult } from '@ionic-native/native-geocoder';
 
 import { TileLayer } from '../../maps/tile-layer';
@@ -49,6 +50,7 @@ export class ResponseMapPage extends BasePage {
     protected actionController:ActionSheetController,
     protected logger:LoggerService,
     protected nativeGeocoder:NativeGeocoder,
+    protected geolocation:Geolocation,
     protected keyboard:Keyboard) {
     super(zone, platform, navParams, navController, viewController, modalController, toastController, alertController, loadingController, actionController, logger);
   }
@@ -61,8 +63,17 @@ export class ResponseMapPage extends BasePage {
     this.latitude = this.getParameter<number>("latitude");
     this.longitude = this.getParameter<number>("longitude");
     this.draggable = this.getParameter<boolean>("draggable");
-    this.loadMap(this.latitude, this.longitude).then((map) => {
-      this.loadMarker(this.latitude, this.longitude).addTo(map);
+    this.loadMap(this.latitude, this.longitude).then((map:any) => {
+      this.loadLocation().then((location:any) => {
+        if (location) {
+          location.addTo(map);
+        }
+        this.loadMarker(this.latitude, this.longitude).then((marker:any) => {
+          if (marker) {
+            marker.addTo(map);
+          }
+        });
+      });
     });
   }
 
@@ -98,24 +109,54 @@ export class ResponseMapPage extends BasePage {
     });
   }
 
-  loadMarker(latitude:number, longitude:number):L.Marker {
+  loadMarker(latitude:number, longitude:number):Promise<any> {
     this.logger.info(this, "loadMarker", latitude, longitude);
-    let iconUrl = new MapMarker(this.deployment.mapbox_api_key).getUrl();
-    let icon = L.icon({
-      iconUrl: iconUrl,
-      iconSize: [30, 70],
-      popupAnchor: [0, -26]
+    return new Promise((resolve, reject) => {
+      let iconUrl = new MapMarker(this.deployment.mapbox_api_key).getUrl();
+      let icon = L.icon({
+        iconUrl: iconUrl,
+        iconSize: [30, 70],
+        popupAnchor: [0, -26]
+      });
+      this.marker = L.marker([latitude, longitude], {
+        icon: icon,
+        draggable: this.draggable });
+      this.marker.on("dragend", (event) => {
+        let coordinates = event.target.getLatLng();
+        this.latitude = coordinates.lat;
+        this.longitude = coordinates.lng;
+        this.logger.info(this, "dragEnd", this.latitude, this.longitude);
+      });
+      resolve(this.marker);
     });
-    this.marker = L.marker([latitude, longitude], {
-      icon: icon,
-      draggable: this.draggable });
-    this.marker.on("dragend", (event) => {
-      let coordinates = event.target.getLatLng();
-      this.latitude = coordinates.lat;
-      this.longitude = coordinates.lng;
-      this.logger.info(this, "dragEnd", this.latitude, this.longitude);
+  }
+
+  loadLocation():Promise<any> {
+    this.logger.info(this, "loadLocation");
+    return new Promise((resolve, reject) => {
+      let options:GeolocationOptions = {
+        timeout: 12000,
+        enableHighAccuracy: true };
+      this.geolocation.getCurrentPosition(options).then(
+        (position:Geoposition) => {
+          this.logger.info(this, "loadLocation", "Position", position);
+          if (position && position.coords) {
+            var icon = L.divIcon({
+              className: 'css-icon',
+              html: '<div class="gps-ring"></div>',
+              iconSize: [22,22]
+            });
+            let marker = L.marker([position.coords.latitude, position.coords.longitude], {
+              icon: icon,
+              draggable: false });
+            resolve(marker);
+          }
+        },
+        (error:any) => {
+          this.logger.error(this, "loadLocation", "Error", error.message);
+          resolve(null);
+        });
     });
-    return this.marker;
   }
 
   showStyles(event) {
