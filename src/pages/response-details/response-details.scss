@@ -18,44 +18,48 @@
     &.status {
       margin-right: 5px;
       border-radius: 50%;
-      width: 22px;
-      height: 22px;
       text-align: center;
+      width: 18px;
+      height: 18px;
       ion-icon {
         margin:0;
         padding:0;
         color: #888;
-        width: 22px;
-        height: 22px;
-        font-size: 22px;
+        width: 18px;
+        height: 18px;
+        line-height: 18px;
+        font-size: 20px;
+        vertical-align: top;
       }
     }
     &.draft {
-      margin-top: 0;
       background-color: #ffc334;
+      width: 18px;
+      height: 18px;
       ion-icon {
         color: #555;
-        font-size: 16px;
-        line-height: 16px;
+        font-size: 15px;
+        line-height: 18px;
         vertical-align: top;
       }
     }
     &.profile {
       margin-right: 5px;
+      width: 18px;
+      height: 18px;
       img {
         width: 18px;
         height: 18px;
         min-width: 18px;
+        min-height: 18px;
         border-radius: 50%;
-        vertical-align: middle;
       }
     }
     &.name {
-      p {
-        margin-top: 3px;
-        width: 100%;
+      div {
         color: #888;
         font-size: 13px;
+        margin-top: 1px;
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;

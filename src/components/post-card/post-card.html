@@ -32,7 +32,7 @@
   <ion-card-content class="title" *ngIf="post.title" tappable (click)="onCardSelected($event)">
     <div class="line-clamp-3" ion-text color="dark">{{post.title}}</div>
   </ion-card-content>
-  <ion-card-content class="description" *ngIf="post.description" tappable (click)="onCardSelected($event)">
+  <ion-card-content class="description" *ngIf="post.description && post.description != post.title" tappable (click)="onCardSelected($event)">
     <p class="line-clamp-5" ion-text color="light">{{post.description | truncate:25}}</p>
   </ion-card-content>
   <ion-card-content class="image" *ngIf="post.image_url" tappable (click)="onCardSelected($event)">
