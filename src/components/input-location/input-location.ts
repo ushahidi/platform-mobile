@@ -7,6 +7,7 @@ import { Device } from '@ionic-native/device';
 import { Diagnostic } from '@ionic-native/diagnostic';
 import { Geolocation, GeolocationOptions, Geoposition } from '@ionic-native/geolocation';
 
+import { BaseMap } from '../../maps/base-map';
 import { StaticMap } from '../../maps/static-map';
 
 import { Value } from '../../models/value';
@@ -19,7 +20,7 @@ import { LoggerService } from '../../providers/logger-service';
 @Component({
   selector: 'input-location',
   templateUrl: 'input-location.html',
-  inputs: ['value', 'attribute', 'formGroup', 'submitted', 'offline', 'mapToken']
+  inputs: ['value', 'attribute', 'formGroup', 'submitted', 'offline', 'mapToken', 'mapLatitude', 'mapLongitude']
 })
 export class InputLocationComponent {
 
@@ -34,6 +35,8 @@ export class InputLocationComponent {
   value: Value = null;
   map:string = null;
   mapToken:string;
+  mapLatitude:number;
+  mapLongitude:number;
 
   latitude:number = null;
   longitude:number = null;
@@ -102,11 +105,9 @@ export class InputLocationComponent {
           this.showLocationError();
         });
     }
-    if (this.offline) {
-      this.loadCountries().then((countries:Country[]) => {
-        this.countries = countries;
-      });
-    }
+    this.loadCountries().then((countries:Country[]) => {
+      this.countries = countries;
+    });
   }
 
   ngAfterContentChecked() {
@@ -122,7 +123,7 @@ export class InputLocationComponent {
           if (this.latitude != latitude || this.longitude != longitude) {
             this.latitude = latitude;
             this.longitude = longitude;
-            this.loadMapSrc(latitude, longitude);
+            this.loadStaticMap(latitude, longitude);
           }
         }
       }
@@ -205,14 +206,14 @@ export class InputLocationComponent {
         this.latitude = position.coords.latitude;
         this.longitude = position.coords.longitude;
         this.error = false;
-        this.loadMapSrc(this.latitude, this.longitude);
+        this.loadStaticMap(this.latitude, this.longitude);
       },
       (error:any) => {
         this.logger.error(this, "detectLocation", "Error", error.message);
         this.latitude = null;
         this.longitude = null;
         this.error = true;
-        this.loadMapSrc(null, null);
+        this.loadBaseMap(this.mapLatitude, this.mapLongitude);
       });
   }
 
@@ -243,9 +244,18 @@ export class InputLocationComponent {
       longitude: this.longitude});
   }
 
-  loadMapSrc(latitude, longitude) {
+  loadStaticMap(latitude, longitude) {
     if (latitude && longitude) {
       this.map = new StaticMap(this.mapToken, latitude, longitude).getUrl();
+    }
+    else {
+      this.map = null;
+    }
+  }
+
+  loadBaseMap(latitude, longitude) {
+    if (latitude && longitude) {
+      this.map = new BaseMap(this.mapToken, latitude, longitude).getUrl();
     }
     else {
       this.map = null;

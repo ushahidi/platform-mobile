@@ -372,31 +372,38 @@ export class ResponseListPage extends BasePage {
   }
 
   addResponse(event:any) {
-    this.language.getTranslations([
-      'ACTION_CANCEL',
-      'SURVEY_SUBMIT_RESPONSE']).then((translations:string[]) => {
-      this.logger.info(this, "addResponse");
-      let buttons = [];
-      if (this.deployment.forms != null) {
-        for (let form of this.deployment.forms){
-          if (form.canSubmit(this.login)) {
-            buttons.push({
-              text: form.name,
-              handler: () => {
-                this.logger.info(this, "addResponse", "Form", form);
-                this.showResponseAdd(form);
-            }});
+    this.logger.info(this, "addResponse");
+    if (this.deployment.forms.length == 1) {
+      let form = this.deployment.forms[0];
+      this.showResponseAdd(form);
+    }
+    else if (this.deployment.forms.length > 1) {
+      this.language.getTranslations([
+        'ACTION_CANCEL',
+        'SURVEY_SUBMIT_RESPONSE']).then((translations:string[]) => {
+        this.logger.info(this, "addResponse");
+        let buttons = [];
+        if (this.deployment.forms != null) {
+          for (let form of this.deployment.forms){
+            if (form.canSubmit(this.login)) {
+              buttons.push({
+                text: form.name,
+                handler: () => {
+                  this.logger.info(this, "addResponse", "Form", form);
+                  this.showResponseAdd(form);
+              }});
+            }
           }
         }
-      }
-      buttons.push({
-        text: translations[0],
-        role: 'cancel'});
-      this.showActionSheet(translations[1], buttons);
-    });
+        buttons.push({
+          text: translations[0],
+          role: 'cancel'});
+        this.showActionSheet(translations[1], buttons);
+      });
+    }
   }
 
-  showResponseAdd(form) {
+  showResponseAdd(form:Form) {
     let modal = this.showModal(ResponseAddPage,
       { deployment: this.deployment,
         login: this.login,

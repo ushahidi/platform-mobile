@@ -276,27 +276,33 @@ export class DeploymentDetailsPage extends BasePage {
 
   addResponse(event:any) {
     this.logger.info(this, "addResponse");
-    this.language.getTranslations([
-      'ACTION_CANCEL',
-      'SURVEY_SUBMIT_RESPONSE']).then((translations:string[]) => {
-      let buttons = [];
-      if (this.deployment.forms) {
-        for (let form of this.deployment.forms) {
-          if (form.canSubmit(this.login)) {
-            buttons.push({
-              text: form.name,
-              handler: () => {
-                this.logger.info(this, "addResponse", "Form", form.name);
-                this.showResponseAdd(form);
-            }});
+    if (this.deployment.forms.length == 1) {
+      let form = this.deployment.forms[0];
+      this.showResponseAdd(form);
+    }
+    else if (this.deployment.forms.length > 1) {
+      this.language.getTranslations([
+        'ACTION_CANCEL',
+        'SURVEY_SUBMIT_RESPONSE']).then((translations:string[]) => {
+        let buttons = [];
+        if (this.deployment.forms) {
+          for (let form of this.deployment.forms) {
+            if (form.canSubmit(this.login)) {
+              buttons.push({
+                text: form.name,
+                handler: () => {
+                  this.logger.info(this, "addResponse", "Form", form.name);
+                  this.showResponseAdd(form);
+              }});
+            }
           }
         }
-      }
-      buttons.push({
-        text: translations[0],
-        role: 'cancel' });
-      this.showActionSheet(translations[1], buttons);
-    });
+        buttons.push({
+          text: translations[0],
+          role: 'cancel' });
+        this.showActionSheet(translations[1], buttons);
+      });
+    }
   }
 
   showResponseAdd(form:Form) {

@@ -13,33 +13,36 @@
       <ion-input hidden type="text" formControlName="country" [(ngModel)]="country"></ion-input>
     </div>
   </ion-item>
+  <p class="detecting" padding-left *ngIf="error == false && (latitude == null || longitude == null)">{{'INPUT_LOCATION_DETECTING_' | translate}}</p>
   <ion-card margin-left margin-right *ngIf="map">
     <image-cache full [src]="map"></image-cache>
   </ion-card>
   <ion-row margin-left margin-right margin-top margin-bottom *ngIf="latitude && longitude">
-    <ion-col width-50 class="latitude">
-      <ion-input type="text" readonly="true" disabled="true" placeholder="Latitude" [(ngModel)]="latitude"></ion-input>
+    <ion-col col-6 class="latitude">
+      <ion-input type="text" readonly="true" disabled="true" [placeholder]="'INPUT_LOCATION_LATITUDE' | translate" [(ngModel)]="latitude"></ion-input>
     </ion-col>
-    <ion-col width-50 class="longitude">
-      <ion-input type="text" readonly="true" disabled="true" placeholder="Longitude" [(ngModel)]="longitude"></ion-input>
-    </ion-col>
-  </ion-row>
-  <ion-row margin-left margin-right margin-top margin-bottom *ngIf="offline && (latitude == null || longitude == null)">
-    <ion-col width-150 class="street">
-      <ion-input type="text" placeholder="Street" [(ngModel)]="street"></ion-input>
-    </ion-col>
-    <ion-col width-50 class="city">
-      <ion-input type="text" placeholder="City" [(ngModel)]="city"></ion-input>
+    <ion-col col-6 class="longitude">
+      <ion-input type="text" readonly="true" disabled="true" [placeholder]="'INPUT_LOCATION_LONGITUDE' | translate" [(ngModel)]="longitude"></ion-input>
     </ion-col>
   </ion-row>
-  <ion-row margin-left margin-right margin-bottom *ngIf="offline && (latitude == null || longitude == null)">
-    <ion-col width-50 class="province">
-      <ion-select placeholder="Province" [disabled]="provinces == null || provinces.length == 0" [selectOptions]="provincesOptions" [(ngModel)]="province">
+  <ion-row margin-left margin-right margin-top margin-bottom *ngIf="(offline || error) && (latitude == null || longitude == null)">
+    <ion-col col-12 class="street">
+      <ion-input type="text" [placeholder]="'INPUT_LOCATION_STREET' | translate" [(ngModel)]="street"></ion-input>
+    </ion-col>
+  </ion-row>
+  <ion-row margin-left margin-right margin-top margin-bottom *ngIf="(offline || error) && (latitude == null || longitude == null)">
+    <ion-col col-12 class="city">
+      <ion-input type="text" [placeholder]="'INPUT_LOCATION_CITY' | translate" [(ngModel)]="city"></ion-input>
+    </ion-col>
+  </ion-row>
+  <ion-row margin-left margin-right margin-bottom *ngIf="(offline || error) && (latitude == null || longitude == null)">
+    <ion-col col-6 class="province">
+      <ion-select [placeholder]="'INPUT_LOCATION_PROVINCE' | translate" [disabled]="provinces == null || provinces.length == 0" [selectOptions]="provincesOptions" [(ngModel)]="province">
         <ion-option [value]="_province.name" *ngFor="let _province of provinces">{{_province.name}}</ion-option>
       </ion-select>
     </ion-col>
-    <ion-col width-50 class="country">
-      <ion-select placeholder="Country" [selectOptions]="countriesOptions" [(ngModel)]="country" (ionChange)="countryChanged($event)">
+    <ion-col col-6 class="country">
+      <ion-select [placeholder]="'INPUT_LOCATION_COUNTRY' | translate" [selectOptions]="countriesOptions" [(ngModel)]="country" (ionChange)="countryChanged($event)">
         <ion-option [value]="_country.name" *ngFor="let _country of countries">{{_country.name}}</ion-option>
       </ion-select>
     </ion-col>
@@ -47,9 +50,5 @@
   <button ion-button margin-left icon-left text-uppercase small color="secondary" [disabled]="offline" *ngIf="latitude && longitude" (click)="updateLocation($event)">
     <ion-icon ios="ios-pin" md="md-pin"></ion-icon> {{'INPUT_LOCATION_CHANGE' | translate}}
   </button>
-  <button ion-button margin-left icon-left text-uppercase small color="secondary" *ngIf="error == true" (click)="detectLocation()">
-    <ion-icon ios="ios-locate-outline" md="md-locate"></ion-icon> {{'INPUT_LOCATION_DETECT' | translate}}
-  </button>
   <p ion-text color="danger" class="input-error" padding-left *ngIf="attribute.required == true && latitude == null && longitude == null && submitted == true">{{'INPUT_LOCATION_REQUIRED' | translate}}</p>
-  <p ion-text color="danger" class="input-error" padding-left *ngIf="error == true">{{'INPUT_LOCATION_ERROR' | translate}}</p>
 </div>
