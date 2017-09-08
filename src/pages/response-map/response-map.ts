@@ -141,7 +141,7 @@ export class ResponseMapPage extends BasePage {
         (position:Geoposition) => {
           this.logger.info(this, "loadLocation", "Position", position);
           if (position && position.coords) {
-            var icon = L.divIcon({
+            let icon = L.divIcon({
               className: 'css-icon',
               html: '<div class="gps-ring"></div>',
               iconSize: [22,22]
