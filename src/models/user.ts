@@ -1,11 +1,8 @@
-import { Injectable } from '@angular/core';
-
 import { Table } from '../decorators/table';
 import { Column } from '../decorators/column';
 
 import { Model, TEXT, INTEGER, PRIMARY_KEY } from '../models/model';
 
-@Injectable()
 @Table("users")
 export class User extends Model {
 

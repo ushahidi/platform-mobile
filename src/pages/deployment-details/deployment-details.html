@@ -30,7 +30,7 @@
     <div class="fadein" padding-left padding-right [@fadeInOut]="loaded">
       <button ion-button block margin-top margin-bottom color="primary" *ngIf="deployment.forms && deployment.forms.length > 0" (click)="addResponse($event)">{{'SURVEY_SUBMIT_RESPONSE' | translate}}</button>
     </div>
-    <ion-list>
+    <ion-list *ngIf="loaded == true">
       <ion-item detail-push tappable *ngIf="deployment.forms && deployment.forms.length > 0" (click)="showResponses($event)">
         {{'RESPONSES' | translate}}
       </ion-item>

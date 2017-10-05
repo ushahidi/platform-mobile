@@ -1,5 +1,3 @@
-import { Injectable } from '@angular/core';
-
 import { Table } from '../decorators/table';
 import { Column } from '../decorators/column';
 
@@ -8,7 +6,6 @@ import { Image } from '../models/image';
 import { Attribute } from '../models/attribute';
 import { Tag } from '../models/tag';
 
-@Injectable()
 @Table("values_")
 export class Value extends Model {
 

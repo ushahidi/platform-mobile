@@ -1,12 +1,9 @@
-import { Injectable } from '@angular/core';
-
 import { Table } from '../decorators/table';
 import { Column } from '../decorators/column';
 
 import { Model, TEXT, INTEGER, BOOLEAN, PRIMARY_KEY } from '../models/model';
 import { Tag } from '../models/tag';
 
-@Injectable()
 @Table("attributes")
 export class Attribute extends Model {
 

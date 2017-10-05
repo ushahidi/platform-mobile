@@ -1,5 +1,3 @@
-import { Injectable } from '@angular/core';
-
 import { Table } from '../decorators/table';
 import { Column } from '../decorators/column';
 
@@ -8,7 +6,6 @@ import { Login } from '../models/login';
 import { Stage } from '../models/stage';
 import { Attribute } from '../models/attribute';
 
-@Injectable()
 @Table("forms")
 export class Form extends Model {
 

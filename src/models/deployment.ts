@@ -1,5 +1,3 @@
-import { Injectable } from '@angular/core';
-
 import { Table } from '../decorators/table';
 import { Column } from '../decorators/column';
 
@@ -11,7 +9,6 @@ import { Post } from '../models/post';
 import { Tag } from '../models/tag';
 import { Collection } from '../models/collection';
 
-@Injectable()
 @Table("deployments")
 export class Deployment extends Model {
 

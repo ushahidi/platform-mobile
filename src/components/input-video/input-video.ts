@@ -11,6 +11,8 @@ import { Attribute } from '../../models/attribute';
 
 import { LoggerService } from '../../providers/logger-service';
 
+import { PLACEHOLDER_VIDEO } from '../../constants/placeholders';
+
 declare var cordova:any;
 
 @Component({
@@ -27,6 +29,7 @@ export class InputVideoComponent {
   value: Value = null;
   videoPath: string = null;
   videoPreview: SafeResourceUrl = null;
+  videoPaceholder: string = PLACEHOLDER_VIDEO;
   submitted: boolean = false;
   mimeType:string = "video/mov";
 

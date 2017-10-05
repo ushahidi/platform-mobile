@@ -1,6 +1,8 @@
 import { Component, NgZone, ViewChild } from '@angular/core';
 import { Platform, Content, NavParams, NavController, ViewController, ModalController, ToastController, AlertController, LoadingController, ActionSheetController } from 'ionic-angular';
 
+import * as L from 'leaflet';
+
 import { Keyboard } from '@ionic-native/keyboard';
 import { Geolocation, GeolocationOptions, Geoposition } from '@ionic-native/geolocation';
 import { NativeGeocoder, NativeGeocoderForwardResult } from '@ionic-native/native-geocoder';
@@ -223,7 +225,7 @@ export class ResponseMapPage extends BasePage {
             if (coordinates && coordinates.latitude && coordinates.longitude) {
               this.latitude = Number(coordinates.latitude);
               this.longitude = Number(coordinates.longitude);
-              let latLng:L.LatLngLiteral = {
+              let latLng:any = {
                 lat: this.latitude,
                 lng: this.longitude
               };

@@ -1,4 +1,4 @@
-import { NgModule, ErrorHandler } from '@angular/core';
+import { NgModule, Injectable, ErrorHandler } from '@angular/core';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { HttpModule, Http } from '@angular/http';
 import { BrowserModule } from '@angular/platform-browser';
@@ -80,9 +80,61 @@ import { CacheService } from '../providers/cache-service';
 import { VimeoService } from '../providers/vimeo-service';
 import { LanguageService } from '../providers/language-service';
 import { SettingsService } from '../providers/settings-service';
+import { GithubService } from '../providers/github-service';
 
 export function translateLoaderFactory(http: Http) {
   return new TranslateStaticLoader(http, 'assets/i18n', '.json');
+}
+
+@Injectable()
+export class GithubErrorHandler extends IonicErrorHandler implements ErrorHandler {
+  constructor(private device:Device, private logger:LoggerService, private githubService:GithubService) {
+    super();
+  }
+
+  handleError(error:any): void {
+    this.logger.error(this, "handleError", "Error", error.name, "Message", error.message, "Stack", error.stack);
+    // try {
+    //   let title = [];
+    //   let source = [];
+    //   let body = [];
+    //   if (error.name) {
+    //     title.push(error.name);
+    //   }
+    //   if (error.message) {
+    //     title.push(error.message);
+    //   }
+    //   if (this.device.manufacturer) {
+    //     source.push(this.device.manufacturer);
+    //   }
+    //   if (this.device.platform) {
+    //     source.push(this.device.platform);
+    //   }
+    //   if (this.device.version) {
+    //     source.push(this.device.version);
+    //   }
+    //   if (this.device.model) {
+    //     source.push(this.device.model);
+    //   }
+    //   if (source.length > 0) {
+    //     body.push(source.join(" "));
+    //   }
+    //   if (error.stack) {
+    //     body.push(" ");
+    //     body.push(error.stack);
+    //   }
+    //   this.githubService.createIssueOrComment(title.join(" "), body.join("\n")).then((response:any) => {
+    //     console.error("GithubErrorHandler Response " + response);
+    //   },
+    //   (error:any) => {
+    //     console.error("GithubErrorHandler Error " + error);
+    //   });
+    // }
+    // catch (err) {
+    //   console.error("GithubErrorHandler Error " + err);
+    // }
+    super.handleError(error);
+  }
 }
 
 @NgModule({
@@ -190,7 +242,8 @@ export function translateLoaderFactory(http: Http) {
     { provide: LanguageService, useClass: LanguageService },
     { provide: TranslateService, useClass: TranslateService },
     { provide: SettingsService, useClass: SettingsService },
-    { provide: ErrorHandler, useClass: IonicErrorHandler }
+    { provide: GithubService, useClass: GithubService },
+    { provide: ErrorHandler, useClass: GithubErrorHandler }
   ]
 })
 export class AppModule {}

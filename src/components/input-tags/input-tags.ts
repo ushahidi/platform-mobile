@@ -29,20 +29,29 @@ export class InputTagsComponent {
 
   ngOnInit() {
     this.logger.info(this, "Attribute", this.attribute, "Value", this.value);
-    for (let tag of this.attribute.tags) {
-      if (this.value.value) {
-        for (let value of this.value.value.split(",")) {
-          if (value == tag.id.toString()) {
-            this.values[tag.id] = true;
-          }
-          else {
-            this.values[tag.id] = false;
-          }
+    for (let parent of this.attribute.tags) {
+      this.loadValues(parent);
+      if (parent.tags) {
+        for (let child of parent.tags) {
+          this.loadValues(child);
         }
       }
-      else {
-        this.values[tag.id] = false;
+    }
+  }
+
+  loadValues(tag:Tag) {
+    if (this.value.value) {
+      for (let value of this.value.value.split(",")) {
+        if (value == tag.id.toString()) {
+          this.values[tag.id] = true;
+        }
+        else {
+          this.values[tag.id] = false;
+        }
       }
+    }
+    else {
+      this.values[tag.id] = false;
     }
   }
 
@@ -56,6 +65,7 @@ export class InputTagsComponent {
   }
 
   tagChecked(event:any, tag:Tag) {
+    this.logger.info(this, "tagChecked", tag.id, event.checked);
     if (event.checked && tag.parent_id) {
       this.values[tag.parent_id] = true;
     }

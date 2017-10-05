@@ -2,7 +2,7 @@ import { Component, NgZone, ViewChild } from '@angular/core';
 import { Platform, Events, Content, NavParams, NavController, ViewController, ModalController, ToastController, AlertController, LoadingController, ActionSheetController } from 'ionic-angular';
 import { Geolocation, GeolocationOptions, Geoposition } from '@ionic-native/geolocation';
 
-import 'leaflet';
+import * as L from 'leaflet';
 
 import { TileLayer } from '../../maps/tile-layer';
 import { MapMarker } from '../../maps/map-marker';
@@ -924,7 +924,7 @@ export class ResponseListPage extends BasePage {
     });
   }
 
-  loadMarker(post:Post):L.Marker {
+  loadMarker(post:Post):any {
     this.logger.info(this, "loadMarker", post.title, post.latitude, post.longitude);
     let iconUrl =  new MapMarker(this.deployment.mapbox_api_key, post.color).getUrl();
     let icon = L.icon({

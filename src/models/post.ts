@@ -1,5 +1,3 @@
-import { Injectable } from '@angular/core';
-
 import { Table } from '../decorators/table';
 import { Column } from '../decorators/column';
 
@@ -9,7 +7,6 @@ import { Form } from '../models/form';
 import { User } from '../models/user';
 import { Image } from '../models/image';
 
-@Injectable()
 @Table("posts")
 export class Post extends Model {
 

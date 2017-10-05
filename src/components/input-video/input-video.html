@@ -7,11 +7,12 @@
     <ion-input type="text" hidden [(ngModel)]="videoPath" [formControlName]="attribute.key"></ion-input>
   </ion-item>
   <ion-card margin-left margin-right *ngIf="videoPreview">
+    <img full [src]="videoPaceholder"/>
     <!-- <iframe [src]="videoPreview" width="100%" frameborder="0" webkitallowfullscreen allowfullscreen webkit-playsinline></iframe> -->
     <!-- <video #videoPlayer controls="controls" autoplay="false" width="100%" webkit-playsinline></video> -->
-    <video controls="controls" autoplay="false" width="100%" webkit-playsinline>
+    <!-- <video controls="controls" autoplay="false" width="100%" webkit-playsinline>
       <source [src]="videoPreview" [type]="mimeType" />
-    </video>
+    </video> -->
   </ion-card>
   <button ion-button margin-left icon-left text-uppercase small color="secondary" *ngIf="videoPath == null" (click)="captureVideo()">
     <ion-icon name="videocam"></ion-icon> {{'INPUT_VIDEO_TAKE' | translate}}

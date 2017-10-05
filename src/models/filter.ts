@@ -1,12 +1,9 @@
-import { Injectable } from '@angular/core';
-
 import { Table } from '../decorators/table';
 import { Column } from '../decorators/column';
 
 import { Model, TEXT, INTEGER, BOOLEAN, PRIMARY_KEY } from '../models/model';
 import { Form } from '../models/form';
 
-@Injectable()
 @Table("filters")
 export class Filter extends Model {
 

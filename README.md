@@ -114,6 +114,13 @@ Check the version of NPM
 npm --version
 ```
 
+Remove, Clean, Install
+```
+rm -rf node_modules/
+npm cache clean
+npm install
+```
+
 ---
 
 ## Cordova
@@ -190,6 +197,13 @@ To update the version of the ionic-angular package
 ```
 npm install ionic-angular@latest --save --save-exact
 npm install @ionic/app-scripts@latest --save-dev
+```
+
+Remove, Clean, Install
+```
+rm -rf node_modules/
+npm cache clean
+npm install
 ```
 
 ---
