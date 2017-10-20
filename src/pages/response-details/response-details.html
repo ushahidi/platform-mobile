@@ -34,11 +34,11 @@
         </ion-col>
       </ion-row>
     </ion-item>
-    <ion-item text-wrap class="post-value" *ngIf="post.title">
+    <ion-item text-wrap class="post-value selectable" *ngIf="post.title">
       <div class="value-label">{{'INPUT_TITLE' | translate}}</div>
       <div class="value-text" (click)="handleLinks($event)" [innerHTML]="post.title | MarkdownToHtml | htmlParse"></div>
     </ion-item>
-    <ion-item text-wrap class="post-value" *ngIf="post.description">
+    <ion-item text-wrap class="post-value selectable" *ngIf="post.description">
       <div class="value-label">{{'INPUT_DESCRIPTION' | translate}}</div>
       <div class="value-text" (click)="handleLinks($event)" [innerHTML]="post.description | MarkdownToHtml | htmlParse"></div>
     </ion-item>

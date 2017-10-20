@@ -41,6 +41,12 @@ img {
     max-width: 100px;
   }
 }
+.selectable {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
 .disabled {
   opacity: .4;
   pointer-events: none;
