@@ -1,0 +1,21 @@
+page-privacy-policy {
+  .page-privacy-policy {
+    background-repeat: no-repeat;
+    background-size: center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    background-image: url('/assets/images/background.png');
+  }
+  h3 {
+  }
+  h6 {
+  }
+  ion-label {
+    font-size: 15px;
+    color: #444 !important;
+  }
+  ion-item {
+    background-color: transparent !important;
+  }
+}

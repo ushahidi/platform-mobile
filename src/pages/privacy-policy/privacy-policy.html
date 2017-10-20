@@ -1,0 +1,15 @@
+<ion-header></ion-header>
+<ion-content class="page-privacy-policy" padding dir="{{direction}}">
+  <h3 ion-text margin-top padding-top color="dark">Ushahidi Terms of Service</h3>
+  <h6 ion-text color="light" margin-top padding-top>
+    We have updated our
+    <a blank="_blank" href="#" (click)="showUrl(termsOfService, '_blank', $event)">Terms and Conditions</a> and
+    <a blank="_blank" href="#" (click)="showUrl(privacyPolicy, '_blank', $event)">Privacy Policy</a>.
+    Please review these documents carefully and accept the terms in order to continue to use Ushahidi's services.
+  </h6>
+  <ion-item text-wrap no-padding no-margin no-lines>
+    <ion-label color="light">I agree to Ushahidi's Terms of Service.</ion-label>
+    <ion-checkbox item-left color="primary" [(ngModel)]="acceptedTerms"></ion-checkbox>
+  </ion-item>
+  <button ion-button block margin-top margin-bottom [disabled]="acceptedTerms == false" color="primary" (click)="showNext($event)">Accept and Continue</button>
+</ion-content>

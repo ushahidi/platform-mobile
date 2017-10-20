@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { Platform } from 'ionic-angular';
 import { Http } from '@angular/http';
 
+import { NativeStorage } from '@ionic-native/native-storage';
+
 import { Settings } from '../models/settings';
 
 import { LoggerService } from '../providers/logger-service';
@@ -14,7 +16,8 @@ export class SettingsService {
   constructor(
     protected http:Http,
     protected platform:Platform,
-    protected logger:LoggerService) {
+    protected logger:LoggerService,
+    protected storage:NativeStorage) {
 
   }
 
@@ -28,6 +31,35 @@ export class SettingsService {
           this.settings = <Settings>data
           resolve(this.settings);
         });
+    });
+  }
+
+  getAcceptedTerms():Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      this.storage.getItem("AcceptedTerms").then((data:any) => {
+        this.logger.info(this, "getAcceptedTerms", data);
+        if (data == true || data == 'true') {
+          resolve(true);
+        }
+        else {
+          resolve(false);
+        }
+      },
+      (error:any) => {
+        resolve(false);
+      });
+    });
+  }
+
+  setAcceptedTerms(accepted:boolean):Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      this.logger.info(this, "setAcceptedTerms", accepted);
+      this.storage.setItem("AcceptedTerms", accepted).then((data:any) => {
+        resolve(true);
+      },
+      (error:any) => {
+        resolve(false);
+      });
     });
   }
 

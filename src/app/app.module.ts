@@ -45,6 +45,7 @@ import { ResponseMapPage } from '../pages/response-map/response-map';
 import { ResponseSearchPage } from '../pages/response-search/response-search';
 import { ResponseImagePage } from '../pages/response-image/response-image';
 
+import { PrivacyPolicyPage } from '../pages/privacy-policy/privacy-policy';
 import { WhitelabelIntroPage } from '../pages/whitelabel-intro/whitelabel-intro';
 
 import { InputCheckboxComponent } from '../components/input-checkbox/input-checkbox';
@@ -153,6 +154,7 @@ export class GithubErrorHandler extends IonicErrorHandler implements ErrorHandle
     ResponseMapPage,
     ResponseImagePage,
     ResponseSearchPage,
+    PrivacyPolicyPage,
     WhitelabelIntroPage,
     InputCheckboxComponent,
     InputCheckboxesComponent,
@@ -212,7 +214,8 @@ export class GithubErrorHandler extends IonicErrorHandler implements ErrorHandle
     ResponseMapPage,
     ResponseImagePage,
     ResponseSearchPage,
-    WhitelabelIntroPage
+    WhitelabelIntroPage,
+    PrivacyPolicyPage
   ],
   providers: [
     { provide: File, useClass: File },

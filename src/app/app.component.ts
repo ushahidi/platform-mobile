@@ -31,6 +31,7 @@ import { DeploymentNonePage } from '../pages/deployment-none/deployment-none';
 import { DeploymentSearchPage } from '../pages/deployment-search/deployment-search';
 import { DeploymentDetailsPage } from '../pages/deployment-details/deployment-details';
 
+import { PrivacyPolicyPage } from '../pages/privacy-policy/privacy-policy';
 import { WhitelabelIntroPage } from '../pages/whitelabel-intro/whitelabel-intro';
 
 import { GOOGLE_ANALYTICS_ID } from '../constants/secrets';
@@ -50,6 +51,7 @@ export class UshahidiApp {
   deployments:Deployment[] = null;
   offline:boolean = false;
   whitelabel:boolean = false;
+  acceptedTerms:boolean = false;
   i18n:string = "en";
   direction:string = "ltr";
   deploymentApi:string = null;
@@ -123,6 +125,12 @@ export class UshahidiApp {
     },
     (error:any) => {
       this.whitelabel = false;
+    });
+    this.settings.getAcceptedTerms().then((acceptedTerms:boolean) => {
+      this.acceptedTerms = acceptedTerms;
+    },
+    (error:any) => {
+      this.acceptedTerms = false;
     });
   }
 
@@ -291,12 +299,16 @@ export class UshahidiApp {
 
   showRootPage(deployments:Deployment[]=null) {
     this.logger.info(this, "showRootPage");
-    if (deployments && deployments.length > 0) {
+    if (this.acceptedTerms == false && this.whitelabel == false) {
+      this.rootPage = PrivacyPolicyPage;
+      this.splashScreen.hide();
+    }
+    else if (deployments && deployments.length > 0) {
       this.showDeployment(this.deployment).then((ready) => {
         this.splashScreen.hide();
       });
     }
-    else if (this.whitelabel) {
+    else if (this.whitelabel == true) {
       this.rootPage = WhitelabelIntroPage;
       this.splashScreen.hide();
     }

@@ -38,20 +38,26 @@ export class VimeoService extends HttpService {
               this.completeVideo(completeUrl).then(
                 (completed:any) => {
                   this.logger.info(this, "uploadVideo", "completeVideo", completed);
-                  let location = completed['Location'][0];
-                  let identifier = location.substr(location.lastIndexOf('/') + 1);
-                  this.logger.info(this, "uploadVideo", "completeVideo", identifier);
-                  this.updateVideo(identifier, title, description).then(
-                    (updated:any) => {
-                      this.logger.info(this, "uploadVideo", "updateVideo", updated);
-                      let videoUrl = `https://player.vimeo.com/video/${identifier}/`;
-                      this.logger.info(this, "uploadVideo", "updateVideo", videoUrl);
-                      resolve(videoUrl);
-                    },
-                    (error) => {
-                      this.logger.error(this, "uploadVideo", "updateVideo", error);
-                      reject(error);
-                    });
+                  let location = completed['location'] || completed['Location'];
+                  if (location) {
+                    let address = location[0];
+                    let identifier = address.substr(address.lastIndexOf('/') + 1);
+                    this.logger.info(this, "uploadVideo", "completeVideo", identifier);
+                    this.updateVideo(identifier, title, description).then(
+                      (updated:any) => {
+                        this.logger.info(this, "uploadVideo", "updateVideo", updated);
+                        let videoUrl = `https://player.vimeo.com/video/${identifier}/`;
+                        this.logger.info(this, "uploadVideo", "updateVideo", videoUrl);
+                        resolve(videoUrl);
+                      },
+                      (error) => {
+                        this.logger.error(this, "uploadVideo", "updateVideo", error);
+                        reject(error);
+                      });
+                  }
+                  else {
+                    reject("Location Not Found");
+                  }
                 },
                 (error) => {
                   this.logger.error(this, "uploadVideo", "completeVideo", error);
