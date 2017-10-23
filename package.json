@@ -1,6 +1,6 @@
 {
   "name": "ushahidi",
-  "version": "1.5.31",
+  "version": "1.5.32",
   "author": "Ushahidi",
   "homepage": "https://www.ushahidi.com",
   "private": true,
@@ -57,7 +57,6 @@
     "cordova-plugin-filepath": "^1.1.0",
     "cordova-plugin-geolocation": "^2.4.3",
     "cordova-plugin-google-analytics": "^1.8.3",
-    "cordova-plugin-ios-longpress-fix": "^1.1.0",
     "cordova-plugin-is-debug": "^1.0.0",
     "cordova-plugin-media-capture": "^1.4.3",
     "cordova-plugin-nativegeocoder": "^1.0.2",
@@ -67,7 +66,7 @@
     "cordova-plugin-secure-storage": "^2.6.8",
     "cordova-plugin-spinner-dialog": "^1.3.1",
     "cordova-plugin-splashscreen": "^4.0.3",
-    "cordova-plugin-statusbar": "^2.2.3",
+    "cordova-plugin-statusbar": "git+https://github.com/apache/cordova-plugin-statusbar.git",
     "cordova-plugin-themeablebrowser": "^0.2.17",
     "cordova-plugin-whitelist": "^1.3.2",
     "cordova-plugin-x-socialsharing": "^5.2.1",
@@ -86,9 +85,7 @@
     "rxjs": "5.4.3",
     "sw-toolbox": "^3.6.0",
     "ts-md5": "^1.2.2",
-    "zone.js": "^0.8.17",
-    "cordova-ios": "~4.5.2",
-    "cordova-android": "~6.3.0"
+    "zone.js": "^0.8.17"
   },
   "devDependencies": {
     "@ionic/app-scripts": "^3.0.0",
@@ -120,7 +117,6 @@
         "GEOLOCATION_USAGE_DESCRIPTION": "This app would like to access your location."
       },
       "cordova-plugin-google-analytics": {},
-      "cordova-plugin-ios-longpress-fix": {},
       "cordova-plugin-is-debug": {},
       "cordova-plugin-media-capture": {
         "CAMERA_USAGE_DESCRIPTION": "This app would like to access the camera.",
@@ -142,9 +138,6 @@
       "cordova-plugin-themeablebrowser": {},
       "cordova-plugin-statusbar": {}
     },
-    "platforms": [
-      "ios",
-      "android"
-    ]
+    "platforms": []
   }
 }

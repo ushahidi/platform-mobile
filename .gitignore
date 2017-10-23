@@ -15,6 +15,7 @@ build.json
 *.swo
 *.log
 *.DS_Store
+.sourcemaps/
 
 # ANDROID
 *.apk
