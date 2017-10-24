@@ -8,7 +8,7 @@
     </ion-buttons>
   </ion-navbar>
 </ion-header>
-<ion-content [style.border-left-color]="color" class="page-response-details" dir="{{direction}}">
+<ion-content [style.border-left-color]="color" class="page-response-details" overflow-scroll="true" dir="{{direction}}">
   <ion-refresher (ionRefresh)="loadUpdates($event, false)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>

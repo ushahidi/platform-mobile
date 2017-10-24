@@ -13,7 +13,7 @@
     </ion-buttons>
   </ion-navbar>
 </ion-header>
-<ion-content class="deployment-details-page" dir="{{direction}}">
+<ion-content class="deployment-details-page" dir="{{direction}}" overflow-scroll="true">
   <ion-refresher [enabled]="deployment != null" (ionRefresh)="loadUpdates($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>

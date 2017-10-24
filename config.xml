@@ -136,8 +136,8 @@
     </feature>
     <allow-navigation href="http://192.168.0.15:8100" />
     <allow-navigation href="http://192.168.0.12:8100" />
-    <plugin name="cordova-plugin-themeablebrowser" spec="^0.2.17" />
-    <plugin name="cordova-plugin-statusbar" spec="git+https://github.com/apache/cordova-plugin-statusbar.git" />
+    <engine name="ios" spec="~4.5.2" />
+    <engine name="android" spec="~6.3.0" />
     <plugin name="cordova-custom-config" spec="^4.0.2" />
     <plugin name="cordova-plugin-app-version" spec="^0.1.9" />
     <plugin name="cordova-plugin-camera" spec="^2.4.1">
@@ -171,4 +171,6 @@
     <plugin name="cordova.plugins.diagnostic" spec="^3.7.1" />
     <plugin name="ionic-plugin-keyboard" spec="^2.2.1" />
     <plugin name="cordova-plugin-secure-storage" spec="^2.6.8" />
+    <plugin name="cordova-plugin-themeablebrowser" spec="^0.2.17" />
+    <plugin name="cordova-plugin-statusbar" spec="git+https://github.com/apache/cordova-plugin-statusbar.git" />
 </widget>

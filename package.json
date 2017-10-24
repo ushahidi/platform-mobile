@@ -45,7 +45,9 @@
     "@ionic-native/themeable-browser": "^3.14.0",
     "@ionic/storage": "^2.0.1",
     "@types/leaflet": "^1.0.60",
+    "cordova-android": "~6.3.0",
     "cordova-custom-config": "^4.0.2",
+    "cordova-ios": "~4.5.2",
     "cordova-plugin-add-swift-support": "^1.6.0",
     "cordova-plugin-app-version": "^0.1.9",
     "cordova-plugin-camera": "^2.4.1",
@@ -138,6 +140,9 @@
       "cordova-plugin-themeablebrowser": {},
       "cordova-plugin-statusbar": {}
     },
-    "platforms": []
+    "platforms": [
+      "ios",
+      "android"
+    ]
   }
 }
