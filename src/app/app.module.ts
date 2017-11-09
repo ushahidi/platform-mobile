@@ -27,6 +27,7 @@ import { GoogleAnalytics } from '@ionic-native/google-analytics';
 import { NativeGeocoder } from '@ionic-native/native-geocoder'
 import { NativeStorage } from '@ionic-native/native-storage';
 import { ThemeableBrowser } from '@ionic-native/themeable-browser';
+import { ScreenOrientation } from '@ionic-native/screen-orientation';
 
 import { UshahidiApp } from './app.component';
 import { BasePage } from '../pages/base-page/base-page';
@@ -237,6 +238,7 @@ export class GithubErrorHandler extends IonicErrorHandler implements ErrorHandle
     { provide: NativeGeocoder, useClass: NativeGeocoder },
     { provide: GoogleAnalytics, useClass: GoogleAnalytics },
     { provide: NativeStorage, useClass: NativeStorage },
+    { provide: ScreenOrientation, useClass: ScreenOrientation },
     { provide: ApiService, useClass: ApiService },
     { provide: VimeoService, useClass: VimeoService },
     { provide: CacheService, useClass: CacheService },

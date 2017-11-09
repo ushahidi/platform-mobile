@@ -1,6 +1,7 @@
 import { Injectable, Component, Input, OnInit, OnChanges, AfterContentChecked } from '@angular/core';
 import { SafeUrl, DomSanitizer } from '@angular/platform-browser';
 import { Md5 } from 'ts-md5/dist/md5';
+import { normalizeURL } from 'ionic-angular';
 
 import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer';
 import { File, Entry, FileEntry, FileError, Metadata } from '@ionic-native/file';

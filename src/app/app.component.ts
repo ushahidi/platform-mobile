@@ -1,10 +1,12 @@
 import { Component, Injector, ViewChild, NgZone } from '@angular/core';
 import { Alert, Toast, Loading, Events, Nav, Platform, ModalController, LoadingController, ToastController, AlertController, MenuController } from 'ionic-angular';
+
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { GoogleAnalytics } from '@ionic-native/google-analytics';
 import { AppVersion } from '@ionic-native/app-version';
 import { Network } from '@ionic-native/network';
+import { ScreenOrientation } from '@ionic-native/screen-orientation';
 
 import { Model } from '../models/model';
 import { Login } from '../models/login';
@@ -55,6 +57,8 @@ export class UshahidiApp {
   i18n:string = "en";
   direction:string = "ltr";
   deploymentApi:string = null;
+  tablet:boolean = false;
+  orientation:string = "portrait";
   languages:any[] = [
     { name: 'English', code: 'en' },
     { name: 'Français', code: 'fr' },
@@ -81,8 +85,9 @@ export class UshahidiApp {
     private network:Network,
     private appVersion:AppVersion,
     private googleAnalytics:GoogleAnalytics,
-    private statusBar: StatusBar,
-    private splashScreen: SplashScreen,
+    private statusBar:StatusBar,
+    private splashScreen:SplashScreen,
+    private screenOrientation:ScreenOrientation,
     private events:Events,
     private platform: Platform,
     private api:ApiService,
@@ -103,6 +108,8 @@ export class UshahidiApp {
       this.loadLanguages();
       this.loadNetwork();
       this.loadStatusBar();
+      this.loadOrientation();
+      this.loadSplitPane();
       this.loadAnalytics();
       this.loadApplication([
         new Deployment(),
@@ -182,6 +189,27 @@ export class UshahidiApp {
         });
     });
   }
+
+  private loadSplitPane() {
+    if (this.platform.is('tablet')) {
+      this.logger.info(this, "loadSplitPane", "YES");
+      this.tablet = true;
+    }
+    else {
+      this.logger.info(this, "loadSplitPane", "NO");
+      this.tablet = false;
+    }
+  }
+
+  private loadOrientation() {
+  this.logger.info(this, "loadOrientation", this.screenOrientation.type);
+  this.screenOrientation.unlock();
+  this.orientation = this.screenOrientation.type.replace('-primary','').replace('-secondary','');
+  this.screenOrientation.onChange().subscribe(() => {
+    this.logger.info(this, "Orientation", this.screenOrientation.type);
+    this.orientation = this.screenOrientation.type.replace('-primary','').replace('-secondary','');
+ });
+}
 
   loadNetwork() {
     this.logger.info(this, "Network", this.network.type);
