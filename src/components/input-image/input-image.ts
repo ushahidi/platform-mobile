@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Platform, ActionSheetController, AlertController } from 'ionic-angular';
+import { Platform, ActionSheetController, AlertController, normalizeURL } from 'ionic-angular';
 import { Camera, CameraOptions } from '@ionic-native/camera';
 import { File, Entry, FileEntry, FileError } from '@ionic-native/file';
 import { SafeResourceUrl, DomSanitizer } from '@angular/platform-browser';
@@ -367,30 +367,29 @@ export class InputImageComponent {
       let targetName = new Date().toISOString().replace(/\D/g,'') + sourceExtension;
       let targetDirectory = this.platform.is('ios') ? cordova.file.documentsDirectory : cordova.file.dataDirectory;
       this.logger.info(this, "copyFile", filePath, "sourceDirectory", sourceDirectory, "sourceName", sourceName, "targetDirectory", targetDirectory, "targetName", targetName);
-      this.file.copyFile(sourceDirectory, sourceName, targetDirectory, targetName).then(
-        (entry:Entry) => {
-          this.logger.info(this, "copyFile", entry.nativeURL);
-          resolve(entry.nativeURL);
-        },
-        (error:FileError) => {
-          this.logger.error(this, "copyFile", error);
-          reject(error.message);
-        });
+      this.file.copyFile(sourceDirectory, sourceName, targetDirectory, targetName).then((entry:Entry) => {
+        this.logger.info(this, "copyFile", entry.nativeURL);
+        resolve(entry.nativeURL);
+      },
+      (error:FileError) => {
+        this.logger.error(this, "copyFile", error);
+        reject(error.message);
+      });
     });
   }
 
   resolveFile(filePath:string):Promise<string> {
     this.logger.info(this, "resolveFile", filePath);
     return new Promise((resolve, reject) => {
-      this.file.resolveLocalFilesystemUrl(filePath).then(
-        (fileEntry:FileEntry) => {
-          this.logger.info(this, "resolveFile", filePath, fileEntry.toInternalURL());
-          resolve(fileEntry.toInternalURL());
-        },
-        (error:FileError) => {
-          this.logger.error(this, "resolveFile", filePath, error);
-          reject(error.message);
-        });
+      this.file.resolveLocalFilesystemUrl(filePath).then((fileEntry:FileEntry) => {
+        let normalizedURL = normalizeURL(fileEntry.toURL());
+        this.logger.info(this, "resolveFile", filePath, normalizedURL);
+        resolve(normalizedURL);
+      },
+      (error:FileError) => {
+        this.logger.error(this, "resolveFile", filePath, error);
+        reject(error.message);
+      });
     });
   }
 
