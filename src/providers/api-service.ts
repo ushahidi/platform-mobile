@@ -206,33 +206,26 @@ export class ApiService extends HttpService {
     });
   }
 
-  userRefresh(deployment:Deployment, username:string, refreshToken:string):Promise<Login> {
+  userRefresh(deployment:Deployment, login:Login):Promise<Login> {
     return new Promise((resolve, reject) => {
-      this.logger.info(this, "userRefresh", deployment.website, "refresh_token", refreshToken);
+      this.logger.info(this, "userRefresh", deployment.website, login);
       let url = deployment.api + "/oauth/token";
       let params = {
         grant_type: "refresh_token",
-        refresh_token: refreshToken,
+        refresh_token: login.refresh_token,
         client_id: deployment.client_id || this.clientId,
         client_secret: deployment.client_secret || this.clientSecret };
       this.httpPost(url, null, params).then(
         (data:any) => {
           this.logger.info(this, "userRefresh", data);
-          let login:Login = <Login> {
-            username: username,
-            access_token: data.access_token,
-            refresh_token: data.refresh_token || refreshToken };
-          this.getUser(deployment, "me").then((user:User) => {
-            login.user_id = user.id;
-            login.user_role = user.role;
-            this.storage.setItem(deployment.website, JSON.stringify(login)).then(
-              (data:any) => {
-                resolve(login);
-              },
-              (error:any) => {
-                reject(error);
-              });
-          });  
+          login.access_token = data.access_token;
+          this.storage.setItem(deployment.website, JSON.stringify(login)).then(
+            (data:any) => {
+              resolve(login);
+            },
+            (error:any) => {
+              reject(error);
+            });
         },
         (error:any) => {
           reject(error);
@@ -266,7 +259,7 @@ export class ApiService extends HttpService {
               resolve(login);
             }
             else if (login.username && login.refresh_token) {
-              this.userRefresh(deployment, login.username, login.refresh_token).then(
+              this.userRefresh(deployment, login).then(
                 (_login:Login) => {
                   resolve(_login);
                 },
