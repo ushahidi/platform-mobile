@@ -1,7 +1,9 @@
-import { Injectable } from '@angular/core';
+import { Injectable, ErrorHandler } from '@angular/core';
+import { IonicErrorHandler } from 'ionic-angular';
 import { Http } from '@angular/http';
 
 import { File } from '@ionic-native/file';
+import { Device } from '@ionic-native/device';
 import { FileTransfer } from '@ionic-native/file-transfer';
 
 import { HttpService } from '../providers/http-service';
@@ -195,4 +197,54 @@ export class GithubService extends HttpService {
     });
   }
 
+}
+
+@Injectable()
+export class GithubErrorHandler extends IonicErrorHandler implements ErrorHandler {
+  constructor(private device:Device, private logger:LoggerService, private githubService:GithubService) {
+    super();
+  }
+
+  handleError(error:any): void {
+    try {
+      let title = [];
+      let source = [];
+      let body = [];
+      if (error.name) {
+        title.push(error.name);
+      }
+      if (error.message) {
+        title.push(error.message);
+      }
+      if (this.device.manufacturer) {
+        source.push(this.device.manufacturer);
+      }
+      if (this.device.platform) {
+        source.push(this.device.platform);
+      }
+      if (this.device.version) {
+        source.push(this.device.version);
+      }
+      if (this.device.model) {
+        source.push(this.device.model);
+      }
+      if (source.length > 0) {
+        body.push(source.join(" "));
+      }
+      if (error.stack) {
+        body.push(" ");
+        body.push(error.stack);
+      }
+      this.githubService.createIssueOrComment(title.join(" "), body.join("\n")).then((response:any) => {
+        this.logger.info(this, "handleError", "Response", response);
+      },
+      (error:any) => {
+        this.logger.error(this, "handleError", "Error", error);
+      });
+    }
+    catch (err) {
+      this.logger.error(this, "handleError", "Error", err);
+    }
+    super.handleError(error);
+  }
 }

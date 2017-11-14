@@ -201,7 +201,6 @@ npm install @ionic/app-scripts@latest --save-dev
 Remove, Clean, Install
 ```
 rm -rf node_modules/
-npm cache clean
 npm install
 ```
 
@@ -302,6 +301,7 @@ Run the app in the iOS Simulator or attached iOS device
 
 ```
 ionic cordova run ios --livereload --consolelogs --serverlogs
+ionic cordova run ios --livereload --consolelogs --serverlogs --target "iPhone-SE"
 ```
 
 Build the app in release and production mode for archiving

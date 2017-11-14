@@ -3,7 +3,11 @@ import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { HttpModule, Http } from '@angular/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { TranslateModule, TranslateService, TranslateLoader, TranslateStaticLoader } from 'ng2-translate/ng2-translate';
+
+import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core'
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { TranslateService } from '@ngx-translate/core'
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MarkdownToHtmlModule } from 'markdown-to-html-pipe';
@@ -84,59 +88,8 @@ import { LanguageService } from '../providers/language-service';
 import { SettingsService } from '../providers/settings-service';
 import { GithubService } from '../providers/github-service';
 
-export function translateLoaderFactory(http: Http) {
-  return new TranslateStaticLoader(http, 'assets/i18n', '.json');
-}
-
-@Injectable()
-export class GithubErrorHandler extends IonicErrorHandler implements ErrorHandler {
-  constructor(private device:Device, private logger:LoggerService, private githubService:GithubService) {
-    super();
-  }
-
-  handleError(error:any): void {
-    this.logger.error(this, "handleError", "Error", error.name, "Message", error.message, "Stack", error.stack);
-    // try {
-    //   let title = [];
-    //   let source = [];
-    //   let body = [];
-    //   if (error.name) {
-    //     title.push(error.name);
-    //   }
-    //   if (error.message) {
-    //     title.push(error.message);
-    //   }
-    //   if (this.device.manufacturer) {
-    //     source.push(this.device.manufacturer);
-    //   }
-    //   if (this.device.platform) {
-    //     source.push(this.device.platform);
-    //   }
-    //   if (this.device.version) {
-    //     source.push(this.device.version);
-    //   }
-    //   if (this.device.model) {
-    //     source.push(this.device.model);
-    //   }
-    //   if (source.length > 0) {
-    //     body.push(source.join(" "));
-    //   }
-    //   if (error.stack) {
-    //     body.push(" ");
-    //     body.push(error.stack);
-    //   }
-    //   this.githubService.createIssueOrComment(title.join(" "), body.join("\n")).then((response:any) => {
-    //     console.error("GithubErrorHandler Response " + response);
-    //   },
-    //   (error:any) => {
-    //     console.error("GithubErrorHandler Error " + error);
-    //   });
-    // }
-    // catch (err) {
-    //   console.error("GithubErrorHandler Error " + err);
-    // }
-    super.handleError(error);
-  }
+export function translateHttpLoader(http: HttpClient) {
+    return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
 }
 
 @NgModule({
@@ -184,15 +137,18 @@ export class GithubErrorHandler extends IonicErrorHandler implements ErrorHandle
   ],
   imports: [
     HttpModule,
+    HttpClientModule,
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
     MarkdownToHtmlModule,
     TranslateModule.forRoot({
-      provide: TranslateLoader,
-      useFactory: translateLoaderFactory,
-      deps: [ Http ]
+      loader: {
+        provide: TranslateLoader,
+        useFactory: (translateHttpLoader),
+        deps: [HttpClient]
+      }
     }),
     IonicModule.forRoot(UshahidiApp, {
       backButtonText: '',
@@ -248,7 +204,7 @@ export class GithubErrorHandler extends IonicErrorHandler implements ErrorHandle
     { provide: TranslateService, useClass: TranslateService },
     { provide: SettingsService, useClass: SettingsService },
     { provide: GithubService, useClass: GithubService },
-    { provide: ErrorHandler, useClass: GithubErrorHandler }
+    { provide: ErrorHandler, useClass: IonicErrorHandler }
   ]
 })
 export class AppModule {}
