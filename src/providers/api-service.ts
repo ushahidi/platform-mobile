@@ -153,9 +153,9 @@ export class ApiService extends HttpService {
         client_secret: deployment.client_secret || this.clientSecret };
       this.httpPost(url, null, params).then(
         (data:any) => {
+          this.logger.info(this, "userLogin", data);
           let login:Login = <Login> {
             username: username,
-            password: password,
             access_token: data.access_token,
             refresh_token: data.refresh_token };
           this.storage.setItem(deployment.website, JSON.stringify(login)).then(
@@ -206,6 +206,40 @@ export class ApiService extends HttpService {
     });
   }
 
+  userRefresh(deployment:Deployment, username:string, refreshToken:string):Promise<Login> {
+    return new Promise((resolve, reject) => {
+      this.logger.info(this, "userRefresh", deployment.website, "refresh_token", refreshToken);
+      let url = deployment.api + "/oauth/token";
+      let params = {
+        grant_type: "refresh_token",
+        refresh_token: refreshToken,
+        client_id: deployment.client_id || this.clientId,
+        client_secret: deployment.client_secret || this.clientSecret };
+      this.httpPost(url, null, params).then(
+        (data:any) => {
+          this.logger.info(this, "userRefresh", data);
+          let login:Login = <Login> {
+            username: username,
+            access_token: data.access_token,
+            refresh_token: data.refresh_token || refreshToken };
+          this.getUser(deployment, "me").then((user:User) => {
+            login.user_id = user.id;
+            login.user_role = user.role;
+            this.storage.setItem(deployment.website, JSON.stringify(login)).then(
+              (data:any) => {
+                resolve(login);
+              },
+              (error:any) => {
+                reject(error);
+              });
+          });  
+        },
+        (error:any) => {
+          reject(error);
+        })
+    });
+  }
+
   passwordReset(deployment:Deployment, email:string):Promise<any> {
     return new Promise((resolve, reject) => {
       let params = {
@@ -222,44 +256,17 @@ export class ApiService extends HttpService {
     });
   }
 
-  authRefresh(deployment:Deployment, refreshToken:string):Promise<Login> {
-    return new Promise((resolve, reject) => {
-      let url = deployment.api + "/oauth/token";
-      let params = {
-        grant_type: "refresh_token",
-        scope: this.scope,
-        refresh_token: refreshToken,
-        client_id: deployment.client_id || this.clientId,
-        client_secret: deployment.client_secret || this.clientSecret };
-      this.httpPost(url, null, params).then(
-        (data:any) => {
-          let login:Login = <Login> {
-            access_token: data.access_token,
-            refresh_token: data.refresh_token };
-          this.storage.setItem(deployment.website, JSON.stringify(login)).then(
-            (data:any) => {
-              resolve(login);
-            },
-            (error:any) => {
-              reject(error);
-            });
-        },
-        (error:any) => {
-          reject(error);
-        })
-    });
-  }
-
   userOrClientLogin(deployment:Deployment, offline:boolean=false):Promise<Login> {
     return new Promise((resolve, reject) => {
       this.logger.info(this, "userOrClientLogin", deployment.website, "Offline", offline);
       this.getLogin(deployment).then(
         (login:Login) => {
+          this.logger.info(this, "userOrClientLogin", deployment.website, "Login", login);
             if (offline) {
               resolve(login);
             }
-            else if (login.username && login.password) {
-              this.userLogin(deployment, login.username, login.password).then(
+            else if (login.username && login.refresh_token) {
+              this.userRefresh(deployment, login.username, login.refresh_token).then(
                 (_login:Login) => {
                   resolve(_login);
                 },
@@ -311,6 +318,7 @@ export class ApiService extends HttpService {
 
   removeLogin(deployment:Deployment):Promise<boolean> {
     return new Promise((resolve, reject) => {
+      this.logger.info(this, "removeLogin", deployment.website);
       this.storage.remove(deployment.website).then(
         (removed:any) => {
           resolve(true);

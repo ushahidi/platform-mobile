@@ -62,9 +62,6 @@ export class UserSignupPage extends BasePage {
     if (this.login && this.login.username) {
       this.email.value = this.login.username;
     }
-    if (this.login && this.login.password) {
-      this.password.value = this.login.password;
-    }
   }
 
   userSignup(event:any) {
