@@ -48,7 +48,7 @@ export class PrivacyPolicyPage extends BasePage {
 
   ionViewWillEnter() {
     super.ionViewWillEnter();
-    this.loadStatusBar(false);
+    this.loadStatusBar(false, true);
     this.loadDeployment();
   }
 

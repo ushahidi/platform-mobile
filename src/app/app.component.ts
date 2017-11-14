@@ -306,6 +306,7 @@ export class UshahidiApp {
             this.deployments = deployments;
             if (this.deployments.length > 0 && this.deployment == null) {
               this.deployment = this.deployments[0];
+              this.deploymentApi = this.deployment.api;
             }
             if (event) {
               event.complete();
@@ -403,10 +404,10 @@ export class UshahidiApp {
         this.database.removeDeployment(deployment)];
       Promise.all(promises).then(
         (results) => {
-          this.database.getDeployments().then(results => {
+          this.database.getDeployments().then(_deployments => {
             loading.dismiss();
             this.zone.run(() => {
-              this.deployments = <any[]>results;
+              this.deployments = <any[]>_deployments;
               if (this.deployments.length == 0) {
                 this.nav.setRoot(DeploymentNonePage);
                 this.menuController.close();
