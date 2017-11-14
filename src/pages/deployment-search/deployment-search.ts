@@ -51,6 +51,11 @@ export class DeploymentSearchPage extends BasePage {
     this.loadStatusBar(true);
   }
 
+  ionViewDidEnter() {
+    super.ionViewDidEnter();
+    this.loadStatusBar(true);
+  }
+
   onCancel(event:any) {
     this.logger.info(this, "onCancel");
     this.hideModal();

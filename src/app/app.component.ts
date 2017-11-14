@@ -107,7 +107,6 @@ export class UshahidiApp {
       this.loadSettings();
       this.loadLanguages();
       this.loadNetwork();
-      this.loadStatusBar();
       this.loadOrientation();
       this.loadSplitPane();
       this.loadAnalytics();
@@ -227,10 +226,6 @@ export class UshahidiApp {
       this.logger.info(this, "Network Disconnected", this.network.type);
       this.offline = true;
     });
-  }
-
-  loadStatusBar() {
-    this.statusBar.styleDefault();
   }
 
   loadAnalytics() {

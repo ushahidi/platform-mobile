@@ -48,7 +48,7 @@ export class WhitelabelIntroPage extends BasePage {
 
   ionViewWillEnter() {
     super.ionViewWillEnter();
-    this.loadStatusBar(false);
+    this.loadStatusBar(false, true);
     this.loadAppName();
     this.loadDeployment();
   }

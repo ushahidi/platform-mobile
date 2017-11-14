@@ -37,14 +37,14 @@ export class DeploymentNonePage extends BasePage {
 
   ionViewWillEnter() {
     super.ionViewWillEnter();
-    this.loadStatusBar(false);
+    this.loadStatusBar(false, true);
   }
 
   showSearch() {
     this.logger.info(this, "showSearch");
     let modal = this.showModal(DeploymentSearchPage, {});
     modal.onDidDismiss((data:any) => {
-      this.loadStatusBar(false);
+      this.loadStatusBar(false, true);
       if (data) {
         this.logger.info(this, "showSearch", data);
         let deployment:Deployment = data.deployment;

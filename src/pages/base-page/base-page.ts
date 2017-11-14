@@ -160,16 +160,16 @@ export class BasePage {
     }
   }
 
-  loadStatusBar(lightContent:boolean=true) {
+  loadStatusBar(lightContent:boolean=true, overlaysWebView:boolean=false) {
     this.platform.ready().then(() => {
       if (lightContent) {
         this.statusBar.styleLightContent();
-        this.statusBar.backgroundColorByHexString('#3f4751');
       }
       else {
         this.statusBar.styleDefault();
-        this.statusBar.backgroundColorByHexString('#f9f9f8');
       }
+      this.statusBar.overlaysWebView(overlaysWebView);
+      this.statusBar.backgroundColorByHexString(this.colorNavbar);
     });
   }
 
