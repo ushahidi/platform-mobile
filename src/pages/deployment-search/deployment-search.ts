@@ -48,12 +48,16 @@ export class DeploymentSearchPage extends BasePage {
 
   ionViewWillEnter() {
     super.ionViewWillEnter();
-    this.loadStatusBar(true);
+    if (this.tablet == false) {
+      this.loadStatusBar(true);
+    }
   }
 
   ionViewDidEnter() {
     super.ionViewDidEnter();
-    this.loadStatusBar(true);
+    if (this.tablet == false) {
+      this.loadStatusBar(true);
+    }
   }
 
   onCancel(event:any) {

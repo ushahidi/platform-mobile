@@ -25,6 +25,7 @@ export class BasePage {
   protected colorNavbar: string = "#3f4751";
   protected direction:string = "lrt";
   protected languageChanged: any = null;
+  protected tablet:boolean = false;
 
   protected zone:NgZone;
   protected events:Events;
@@ -111,6 +112,14 @@ export class BasePage {
 
   loadSettings() {
     this.logger.info(this, "loadSettings");
+    if (this.platform.is('tablet')) {
+      this.logger.info(this, "loadSettings", "Tablet");
+      this.tablet = true;
+    }
+    else {
+      this.logger.info(this, "loadSettings", "Phone");
+      this.tablet = false;
+    }
     this.settings.getColorNavbar().then((colorNavbar:string) => {
       this.colorNavbar = colorNavbar;
     },

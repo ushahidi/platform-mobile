@@ -1,4 +1,4 @@
-<ion-split-pane #splitPane [when]="orientation == 'landscape'" [enabled]="tablet == true">
+<ion-split-pane #splitPane [when]="orientation == 'landscape'" [enabled]="deployment != null && tablet == true">
   <ion-menu #menu [content]="content" side="left" type="reveal" swipeEnabled="false" (ionOpen)="loadDeployments()">
     <ion-header>
       <ion-toolbar color="navbar"></ion-toolbar>

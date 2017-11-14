@@ -302,6 +302,7 @@ Run the app in the iOS Simulator or attached iOS device
 ```
 ionic cordova run ios --livereload --consolelogs --serverlogs
 ionic cordova run ios --livereload --consolelogs --serverlogs --target "iPhone-SE"
+ionic cordova run ios --livereload --consolelogs --serverlogs --target "iPad-Air-2"
 ```
 
 Build the app in release and production mode for archiving
