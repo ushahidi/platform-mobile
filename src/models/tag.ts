@@ -27,65 +27,62 @@ export class Tag extends Model {
   }
 
   @Column("id", INTEGER, PRIMARY_KEY)
-  public id: number = null;
+  public id:number = null;
 
   @Column("deployment_id", INTEGER, PRIMARY_KEY)
-  public deployment_id: number = null;
+  public deployment_id:number = null;
 
   @Column("form_id", INTEGER)
-  public form_id: number = null;
+  public form_id:number = null;
 
   @Column("parent_id", INTEGER)
-  public parent_id: number = null;
+  public parent_id:number = null;
 
   @Column("tag", TEXT)
-  public tag: string = null;
+  public tag:string = null;
 
   @Column("slug", TEXT)
-  public slug: string = null;
+  public slug:string = null;
 
   @Column("type", TEXT)
-  public type: string = null;
+  public type:string = null;
 
   @Column("color", TEXT)
-  public color: string = null;
+  public color:string = null;
 
   @Column("icon", TEXT)
-  public icon: string = null;
+  public icon:string = null;
 
   @Column("description", TEXT)
-  public description: string = null;
+  public description:string = null;
 
   @Column("priority", INTEGER)
-  public priority: number = null;
+  public priority:number = null;
 
   @Column("role", TEXT)
-  public role: string = null;
+  public role:string = null;
 
   @Column("children", TEXT)
-  public children: string = null;
+  public children:string = null;
 
   @Column("created", TEXT)
-  public created: Date = null;
+  public created:Date = null;
 
   @Column("updated", TEXT)
-  public updated: Date = null;
-
-  @Column("saved", TEXT)
-  public saved: Date = null;
+  public updated:Date = null;
 
   @Column("can_read", BOOLEAN)
-  public can_read: boolean = null;
+  public can_read:boolean = null;
 
   @Column("can_create", BOOLEAN)
-  public can_create: boolean = null;
+  public can_create:boolean = null;
 
   @Column("can_update", BOOLEAN)
-  public can_update: boolean = null;
+  public can_update:boolean = null;
 
   @Column("can_delete", BOOLEAN)
-  public can_delete: boolean = null;
+  public can_delete:boolean = null;
 
-  public tags: Tag[] = [];
+  public tags:Tag[] = [];
 
 }

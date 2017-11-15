@@ -19,47 +19,44 @@ export class Value extends Model {
   }
 
   @Column("deployment_id", INTEGER, PRIMARY_KEY)
-  public deployment_id: number = null;
+  public deployment_id:number = null;
 
   @Column("post_id", INTEGER, PRIMARY_KEY)
-  public post_id: number = null;
+  public post_id:number = null;
 
   @Column("key", TEXT, PRIMARY_KEY)
-  public key: string = null;
+  public key:string = null;
 
   @Column("value", TEXT)
-  public value: string = null;
+  public value:string = null;
 
   @Column("label", TEXT)
-  public label: string = null;
+  public label:string = null;
 
   @Column("input", TEXT)
-  public input: string = null;
+  public input:string = null;
 
   @Column("type", TEXT)
-  public type: string = null;
+  public type:string = null;
 
   @Column("cardinality", INTEGER)
-  public cardinality: number = null;
+  public cardinality:number = null;
 
   @Column("image", TEXT)
-  public image: string = null;
+  public image:string = null;
 
   @Column("caption", TEXT)
-  public caption: string = null;
+  public caption:string = null;
 
   @Column("show_when_published", BOOLEAN)
-  public show_when_published: boolean = null;
+  public show_when_published:boolean = null;
 
   @Column("response_private", BOOLEAN)
-  public response_private: boolean = null;
+  public response_private:boolean = null;
 
-  @Column("saved", TEXT)
-  public saved: Date = null;
+  public attribute:Attribute = null;
 
-  public attribute: Attribute = null;
-
-  public tags: Tag[] = [];
+  public tags:Tag[] = [];
 
   loadAttribute(attributes:Attribute[]) {
     for (var i = 0; i < attributes.length; i++) {

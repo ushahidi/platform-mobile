@@ -27,64 +27,65 @@ export class DatabaseService extends SqlService {
       super(sqlite, platform, logger);
   }
 
-  saveDeployment(deployment:Deployment) {
+  public saveDeployment(deployment:Deployment):Promise<boolean> {
     return this.saveModel(deployment);
   }
 
-  getDeployments(where:{}=null, order:{}=null):Promise<Deployment[]> {
+  public getDeployments(where:{}=null, order:{}=null):Promise<Deployment[]> {
     return this.getModels<Deployment>(new Deployment(), where, order);
   }
 
-  getDeployment(id:number):Promise<Deployment> {
+  public getDeployment(id:number):Promise<Deployment> {
     let where = { id: id };
     return this.getModel<Deployment>(new Deployment(), where);
   }
 
-  removeDeployment(deployment:Deployment) {
+  public removeDeployment(deployment:Deployment):Promise<boolean> {
     let where = { id: deployment.id };
     return this.removeModel<Deployment>(new Deployment(), where);
   }
 
-  getForms(deployment:Deployment):Promise<Form[]> {
+  public getForms(deployment:Deployment):Promise<Form[]> {
     let where = { deployment_id: deployment.id };
     let order = { name: "ASC" };
     return this.getModels<Form>(new Form(), where, order);
   }
 
-  getForm(deployment:Deployment, id:number):Promise<Form> {
+  public getForm(deployment:Deployment, id:number):Promise<Form> {
     let where = {
       deployment_id: deployment.id,
-      id: id };
+      id: id
+    };
     return this.getModel<Form>(new Form(), where);
   }
 
-  saveForm(deployment:Deployment, form:Form) {
+  public saveForm(deployment:Deployment, form:Form):Promise<boolean>  {
     form.deployment_id = deployment.id;
     return this.saveModel(form);
   }
 
-  removeForms(deployment:Deployment) {
+  public removeForms(deployment:Deployment):Promise<boolean> {
     let where = { deployment_id: deployment.id };
     return this.removeModel<Form>(new Form(), where);
   }
 
-  getUsers(deployment:Deployment):Promise<User[]> {
+  public getUsers(deployment:Deployment):Promise<User[]> {
     let where = { deployment_id: deployment.id };
     let order = {};
     return this.getModels<User>(new User(), where, order);
   }
 
-  saveUser(deployment:Deployment, user:User) {
+  public saveUser(deployment:Deployment, user:User):Promise<boolean>  {
     user.deployment_id = deployment.id;
     return this.saveModel(user);
   }
 
-  removeUsers(deployment:Deployment) {
+  public removeUsers(deployment:Deployment):Promise<boolean> {
     let where = { deployment_id: deployment.id };
     return this.removeModel<User>(new User(), where);
   }
 
-  getPosts(deployment:Deployment, filter:Filter=null, limit:number=null, offset:number=null):Promise<Post[]> {
+  public getPosts(deployment:Deployment, filter:Filter=null, limit:number=null, offset:number=null):Promise<Post[]> {
     let postsWhere = { deployment_id: deployment.id };
     let valuesWhere = { deployment_id: deployment.id };
     let statuses = [];
@@ -120,62 +121,62 @@ export class DatabaseService extends SqlService {
       });
   }
 
-  getPostsPending(deployment:Deployment):Promise<Post[]> {
+  public getPostsPending(deployment:Deployment):Promise<Post[]> {
     let where = { deployment_id: deployment.id, pending: true };
     let order = { created: "DESC" };
     return this.getModels<Post>(new Post(), where, order);
   }
 
-  getPost(deployment:Deployment, id:number):Promise<Post> {
+  public getPost(deployment:Deployment, id:number):Promise<Post> {
     let where = {
       deployment_id: deployment.id,
       id: id };
     return this.getModel<Post>(new Post(), where);
   }
 
-  savePost(deployment:Deployment, post:Post) {
+  public savePost(deployment:Deployment, post:Post):Promise<boolean>  {
     post.deployment_id = deployment.id;
     return this.saveModel(post);
   }
 
-  removePosts(deployment:Deployment) {
+  public removePosts(deployment:Deployment):Promise<boolean> {
     let where = { deployment_id: deployment.id };
     return this.removeModel<Post>(new Post(), where);
   }
 
-  removePost(deployment:Deployment, post:Post) {
+  public removePost(deployment:Deployment, post:Post):Promise<boolean> {
     let where = {
       deployment_id: deployment.id,
       id: post.id };
     return this.removeModel<Post>(new Post(), where);
   }
 
-  getPostsLowestID():Promise<number> {
+  public getPostsLowestID():Promise<number> {
     return this.getMinium<Post>(new Post(), "id");
   }
 
-  getImages(deployment:Deployment, limit:number=null, offset:number=null):Promise<Image[]> {
+  public getImages(deployment:Deployment, limit:number=null, offset:number=null):Promise<Image[]> {
     let where = { deployment_id: deployment.id };
     let order = { created: "DESC" };
     return this.getModels<Image>(new Image(), where, order, limit, offset);
   }
 
-  getImage(deployment:Deployment, id:number):Promise<Image> {
+  public getImage(deployment:Deployment, id:number):Promise<Image> {
     let where = { deployment_id: deployment.id, id: id };
     return this.getModel<Image>(new Image(), where);
   }
 
-  saveImage(deployment:Deployment, image:Image) {
+  public saveImage(deployment:Deployment, image:Image):Promise<boolean>  {
     image.deployment_id = deployment.id;
     return this.saveModel(image);
   }
 
-  removeImages(deployment:Deployment) {
+  public removeImages(deployment:Deployment):Promise<boolean> {
     let where = { deployment_id: deployment.id };
     return this.removeModel<Image>(new Image(), where);
   }
 
-  getPostsWithValues(deployment:Deployment):Promise<Post[]> {
+  public getPostsWithValues(deployment:Deployment):Promise<Post[]> {
     return new Promise((resolve, reject) => {
       Promise.all([
         this.getPosts(deployment),
@@ -200,7 +201,7 @@ export class DatabaseService extends SqlService {
     });
   }
 
-  getAttributes(deployment:Deployment, form_id:number=null):Promise<Attribute[]> {
+  public getAttributes(deployment:Deployment, form_id:number=null):Promise<Attribute[]> {
     let where = { deployment_id: deployment.id };
     if (form_id != null) {
       where['form_id'] = form_id;
@@ -209,17 +210,17 @@ export class DatabaseService extends SqlService {
     return this.getModels<Attribute>(new Attribute(), where, order);
   }
 
-  saveAttribute(deployment:Deployment, attribute:Attribute) {
+  public saveAttribute(deployment:Deployment, attribute:Attribute) {
     attribute.deployment_id = deployment.id;
     return this.saveModel(attribute);
   }
 
-  removeAttributes(deployment:Deployment) {
+  public removeAttributes(deployment:Deployment):Promise<boolean> {
     let where = { deployment_id: deployment.id };
     return this.removeModel<Attribute>(new Attribute(), where);
   }
 
-  getFormsWithAttributes(deployment:Deployment):Promise<Form[]> {
+  public getFormsWithAttributes(deployment:Deployment):Promise<Form[]> {
     return new Promise((resolve, reject) => {
       Promise.all([
         this.getForms(deployment),
@@ -249,7 +250,7 @@ export class DatabaseService extends SqlService {
     });
   }
 
-  getFormWithAttributes(deployment:Deployment, id:number):Promise<Form> {
+  public getFormWithAttributes(deployment:Deployment, id:number):Promise<Form> {
     return new Promise((resolve, reject) => {
       Promise.all([
         this.getForm(deployment, id),
@@ -277,7 +278,7 @@ export class DatabaseService extends SqlService {
     });
   }
 
-  getStages(deployment:Deployment, form_id:number=null):Promise<Stage[]> {
+  public getStages(deployment:Deployment, form_id:number=null):Promise<Stage[]> {
     let where = { deployment_id: deployment.id };
     if (form_id != null) {
       where['form_id'] = form_id;
@@ -286,17 +287,17 @@ export class DatabaseService extends SqlService {
     return this.getModels<Stage>(new Stage(), where, order);
   }
 
-  saveStage(deployment:Deployment, stage:Stage) {
+  public saveStage(deployment:Deployment, stage:Stage):Promise<boolean>  {
     stage.deployment_id = deployment.id;
     return this.saveModel(stage);
   }
 
-  removeStages(deployment:Deployment) {
+  public removeStages(deployment:Deployment):Promise<boolean> {
     let where = { deployment_id: deployment.id };
     return this.removeModel<Stage>(new Stage(), where);
   }
 
-  getValues(deployment:Deployment, post:Post=null):Promise<Value[]> {
+  public getValues(deployment:Deployment, post:Post=null):Promise<Value[]> {
     let where:any = { deployment_id: deployment.id };
     if (post != null) {
       where['post_id'] = post.id;
@@ -305,12 +306,12 @@ export class DatabaseService extends SqlService {
     return this.getModels<Value>(new Value(), where, order);
   }
 
-  saveValue(deployment:Deployment, value:Value) {
+  public saveValue(deployment:Deployment, value:Value):Promise<boolean>  {
     value.deployment_id = deployment.id;
     return this.saveModel(value);
   }
 
-  removeValues(deployment:Deployment, post:Post=null) {
+  public removeValues(deployment:Deployment, post:Post=null):Promise<boolean> {
     let where = { deployment_id: deployment.id };
     if (post != null) {
       where['post_id'] = post.id;
@@ -318,38 +319,38 @@ export class DatabaseService extends SqlService {
     return this.removeModel<Value>(new Value(), where);
   }
 
-  getFilter(deployment:Deployment):Promise<Filter> {
+  public getFilter(deployment:Deployment):Promise<Filter> {
     let where:any = { deployment_id: deployment.id };
     return this.getModel<Filter>(new Filter(), where);
   }
 
-  saveFilter(deployment:Deployment, filter:Filter) {
+  public saveFilter(deployment:Deployment, filter:Filter):Promise<boolean>  {
     filter.deployment_id = deployment.id;
     return this.saveModel(filter);
   }
 
-  removeFilters(deployment:Deployment) {
+  public removeFilters(deployment:Deployment):Promise<boolean> {
     let where = { deployment_id: deployment.id };
     return this.removeModel<Filter>(new Filter(), where);
   }
 
-  getCollections(deployment:Deployment):Promise<Collection[]> {
+  public getCollections(deployment:Deployment):Promise<Collection[]> {
     let where:any = { deployment_id: deployment.id };
     let order = { name: "ASC" };
     return this.getModels<Collection>(new Collection(), where, order);
   }
 
-  saveCollection(deployment:Deployment, collection:Collection) {
+  public saveCollection(deployment:Deployment, collection:Collection):Promise<boolean> {
     collection.deployment_id = deployment.id;
     return this.saveModel(collection);
   }
 
-  removeCollections(deployment:Deployment) {
+  public removeCollections(deployment:Deployment):Promise<boolean> {
     let where = { deployment_id: deployment.id };
     return this.removeModel<Collection>(new Collection(), where);
   }
 
-  getTags(deployment:Deployment, form_id:number=null):Promise<Tag[]> {
+  public getTags(deployment:Deployment, form_id:number=null):Promise<Tag[]> {
     let where = { deployment_id: deployment.id };
     if (form_id != null) {
       where['form_id'] = form_id;
@@ -358,12 +359,12 @@ export class DatabaseService extends SqlService {
     return this.getModels<Tag>(new Tag(), where, order);
   }
 
-  saveTag(deployment:Deployment, tag:Tag) {
+  public saveTag(deployment:Deployment, tag:Tag):Promise<boolean> {
     tag.deployment_id = deployment.id;
     return this.saveModel(tag);
   }
 
-  removeTags(deployment:Deployment) {
+  public removeTags(deployment:Deployment):Promise<boolean> {
     let where = { deployment_id: deployment.id };
     return this.removeModel<Tag>(new Tag(), where);
   }

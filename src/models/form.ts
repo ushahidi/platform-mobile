@@ -13,33 +13,6 @@ export class Form extends Model {
     super(data);
     this.copyInto(data);
     if (data) {
-      if (data.id) {
-        this.id = data.id;
-      }
-      if (data.type) {
-        this.type = data.type;
-      }
-      if (data.name) {
-        this.name = data.name;
-      }
-      if (data.color) {
-        this.color = data.color;
-      }
-      if (data.created) {
-        this.created = data.created;
-      }
-      if (data.updated) {
-        this.updated = data.updated;
-      }
-      if (data.disabled) {
-        this.disabled = data.disabled;
-      }
-      if (data.hide_author) {
-        this.hide_author = data.hide_author;
-      }
-      if (data.description) {
-        this.description = data.description;
-      }
       if (data.everyone_can_create) {
         this.can_submit = data.everyone_can_create;
       }
@@ -60,55 +33,52 @@ export class Form extends Model {
   }
 
   @Column("id", INTEGER, PRIMARY_KEY)
-  public id: number = null;
+  public id:number = null;
 
   @Column("deployment_id", INTEGER, PRIMARY_KEY)
-  public deployment_id: number = null;
+  public deployment_id:number = null;
 
   @Column("name", TEXT)
-  public name: string = null;
+  public name:string = null;
 
   @Column("description", TEXT)
-  public description: string = null;
+  public description:string = null;
 
   @Column("type", TEXT)
-  public type: string = null;
+  public type:string = null;
 
   @Column("color", TEXT)
-  public color: string = null;
+  public color:string = null;
 
   @Column("disabled", BOOLEAN)
-  public disabled: boolean = null;
+  public disabled:boolean = null;
 
   @Column("hide_author", BOOLEAN)
-  public hide_author: boolean = null;
+  public hide_author:boolean = null;
 
   @Column("user_roles", TEXT)
-  public user_roles: string = null;
+  public user_roles:string = null;
 
   @Column("created", TEXT)
-  public created: Date = null;
+  public created:Date = null;
 
   @Column("updated", TEXT)
-  public updated: Date = null;
-
-  @Column("saved", TEXT)
-  public saved: Date = null;
+  public updated:Date = null;
 
   @Column("can_submit", BOOLEAN)
-  public can_submit: boolean = null;
+  public can_submit:boolean = null;
 
   @Column("can_read", BOOLEAN)
-  public can_read: boolean = null;
+  public can_read:boolean = null;
 
   @Column("can_create", BOOLEAN)
-  public can_create: boolean = null;
+  public can_create:boolean = null;
 
   @Column("can_update", BOOLEAN)
-  public can_update: boolean = null;
+  public can_update:boolean = null;
 
   @Column("can_delete", BOOLEAN)
-  public can_delete: boolean = null;
+  public can_delete:boolean = null;
 
   public stages: Stage[] = [];
 

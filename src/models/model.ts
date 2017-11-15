@@ -9,7 +9,7 @@ export let PRIMARY_KEY:boolean = true;
 
 export class Model {
 
-  public saved: Date = null;
+  public id:any = null;
 
   constructor(data:any=null) {
     this.copyInto(data);
@@ -59,10 +59,6 @@ export class Model {
       }
     }
     return this;
-  }
-
-  public isPersisted() : boolean {
-    return this.saved != null;
   }
 
 }

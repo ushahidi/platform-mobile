@@ -17,30 +17,27 @@ export class Filter extends Model {
   }
 
   @Column("id", INTEGER, PRIMARY_KEY)
-  public id: number = null;
+  public id:number = null;
 
   @Column("deployment_id", INTEGER, PRIMARY_KEY)
-  public deployment_id: number = null;
+  public deployment_id:number = null;
 
   @Column("search_text", TEXT)
-  public search_text: string = null;
+  public search_text:string = null;
 
   @Column("show_inreview", BOOLEAN)
-  public show_inreview: boolean = null;
+  public show_inreview:boolean = null;
 
   @Column("show_published", BOOLEAN)
-  public show_published: boolean = null;
+  public show_published:boolean = null;
 
   @Column("show_archived", BOOLEAN)
-  public show_archived: boolean = null;
+  public show_archived:boolean = null;
 
   @Column("show_forms", TEXT)
-  public show_forms: string = null;
+  public show_forms:string = null;
 
-  @Column("saved", TEXT)
-  public saved: Date = null;
-
-  public showForm(form:Form) : boolean {
+  public showForm(form:Form) :boolean {
     if (this.show_forms != null && this.show_forms.length > 0) {
       let forms:string[] = this.show_forms.split(",");
       return forms.indexOf(form.id.toString()) > -1;

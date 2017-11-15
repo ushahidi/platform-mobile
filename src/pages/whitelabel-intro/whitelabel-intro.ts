@@ -70,29 +70,27 @@ export class WhitelabelIntroPage extends BasePage {
       this.logger.info(this, "loadDeployment", "URL", url);
       this.api.registerDeployment(url).then((deployment:Deployment) => {
         this.logger.info(this, "loadDeployment", "Deployment", deployment);
-        this.api.clientLogin(deployment).then(
-          (login:Login) => {
-            this.logger.info(this, "loadDeployment", "Login", login);
-            deployment.copyInto(login);
-            this.api.getDeployment(deployment, false).then((details:Deployment) => {
-              deployment.copyInto(details);
-              this.database.saveDeployment(deployment).then(
-                (id:number) => {
-                  this.deployment = deployment
-                  this.deployment.id = id;
-                  this.loading = false;
-                  this.showDeployment();
-                },
-                (error:any) => {
-                  this.deployment = null;
-                  this.loading = false;
-                });
+        this.api.clientLogin(deployment).then((login:Login) => {
+          this.logger.info(this, "loadDeployment", "Login", login);
+          deployment.copyInto(login);
+          this.api.getDeployment(deployment, false).then((details:Deployment) => {
+            deployment.copyInto(details);
+            this.database.saveDeployment(deployment).then((saved:boolean) => {
+              this.logger.info(this, "loadDeployment", "Saved", saved);
+              this.deployment = deployment;
+              this.loading = false;
+              this.showDeployment();
+            },
+            (error:any) => {
+              this.deployment = null;
+              this.loading = false;
             });
-          },
-          (error:any) => {
-            this.deployment = null;
-            this.loading = false;
           });
+        },
+        (error:any) => {
+          this.deployment = null;
+          this.loading = false;
+        });
       },
       (error:any) => {
         this.deployment = null;

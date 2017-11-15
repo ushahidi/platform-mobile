@@ -14,29 +14,8 @@ export class Post extends Model {
     super(data);
     this.copyInto(data);
     if (data) {
-      if (data.id) {
-        this.id = data.id;
-      }
-      if (data.slug) {
-        this.slug = data.slug;
-      }
-      if (data.title) {
-        this.title = data.title;
-      }
       if (data.content) {
         this.description = data.content;
-      }
-      if (data.color) {
-        this.color = data.color;
-      }
-      if (data.status) {
-        this.status = data.status;
-      }
-      if (data.created) {
-        this.created = data.created;
-      }
-      if (data.updated) {
-        this.updated = data.updated;
       }
       if (data.post_date) {
         this.posted = data.post_date;
@@ -61,91 +40,88 @@ export class Post extends Model {
   }
 
   @Column("id", INTEGER, PRIMARY_KEY)
-  public id: number = null;
+  public id:number = null;
 
   @Column("deployment_id", INTEGER, PRIMARY_KEY)
-  public deployment_id: number = null;
+  public deployment_id:number = null;
 
   @Column("form_id", INTEGER)
-  public form_id: number = null;
+  public form_id:number = null;
 
   @Column("user_id", INTEGER)
-  public user_id: number = null;
+  public user_id:number = null;
 
   @Column("title", TEXT)
-  public title: string = null;
+  public title:string = null;
 
   @Column("description", TEXT)
-  public description: string = null;
+  public description:string = null;
 
   @Column("url", TEXT)
-  public url: string = null;
+  public url:string = null;
 
   @Column("slug", TEXT)
-  public slug: string = null;
+  public slug:string = null;
 
   @Column("type", TEXT)
-  public type: string = null;
+  public type:string = null;
 
   @Column("status", TEXT)
-  public status: string = null;
+  public status:string = null;
 
   @Column("color", TEXT)
-  public color: string = null;
+  public color:string = null;
 
   @Column("image_url", TEXT)
-  public image_url: string = null;
+  public image_url:string = null;
 
   @Column("pending", BOOLEAN)
-  public pending: boolean = null;
+  public pending:boolean = null;
 
   @Column("latitude", DOUBLE)
-  public latitude: number = null;
+  public latitude:number = null;
 
   @Column("longitude", DOUBLE)
-  public longitude: number = null;
+  public longitude:number = null;
 
   @Column("posted", TEXT)
-  public posted: Date = null;
+  public posted:Date = null;
 
   @Column("created", TEXT)
-  public created: Date = null;
+  public created:Date = null;
 
   @Column("updated", TEXT)
-  public updated: Date = null;
-
-  @Column("saved", TEXT)
-  public saved: Date = null;
+  public updated:Date = null;
 
   @Column("user_name", TEXT)
-  public user_name: string = null;
+  public user_name:string = null;
 
   @Column("user_image", TEXT)
-  public user_image: string = null;
+  public user_image:string = null;
 
   @Column("form_name", TEXT)
-  public form_name: string = null;
+  public form_name:string = null;
 
   @Column("hide_author", BOOLEAN)
-  public hide_author: boolean = null;
+  public hide_author:boolean = null;
 
   @Column("author_realname", TEXT)
-  public author_realname: string = null;
+  public author_realname:string = null;
 
   @Column("author_email", TEXT)
-  public author_email: string = null;
+  public author_email:string = null;
 
   @Column("can_read", BOOLEAN)
-  public can_read: boolean = null;
+  public can_read:boolean = null;
 
   @Column("can_create", BOOLEAN)
-  public can_create: boolean = null;
+  public can_create:boolean = null;
 
   @Column("can_update", BOOLEAN)
-  public can_update: boolean = null;
+  public can_update:boolean = null;
 
   @Column("can_delete", BOOLEAN)
-  public can_delete: boolean = null;
+  public can_delete:boolean = null;
 
   public form: Form = null;
 

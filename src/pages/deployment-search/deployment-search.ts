@@ -81,15 +81,14 @@ export class DeploymentSearchPage extends BasePage {
     else if (this.search.length > 0) {
       this.loading = true;
       this.domain = null;
-      this.api.searchDeployments(this.search).then(
-        (deployments:Deployment[]) => {
-          this.deployments = deployments;
-          this.loading = false;
-        },
-        (error:any) => {
-          this.loading = false;
-          this.showToast(error);
-        });
+      this.api.searchDeployments(this.search).then((deployments:Deployment[]) => {
+        this.deployments = deployments;
+        this.loading = false;
+      },
+      (error:any) => {
+        this.loading = false;
+        this.showToast(error);
+      });
     }
     else {
       this.loading = false;
@@ -105,23 +104,21 @@ export class DeploymentSearchPage extends BasePage {
       'DEPLOYMENT_CONFIG_FAILURE_DESCRIPTION']).then((translations:string[]) => {
       let loading = this.showLoading(translations[0]);
       let url = `https://${this.domain}`;
-      this.api.registerDeployment(url).then(
-        (deployment:Deployment) => {
+      this.api.registerDeployment(url).then((deployment:Deployment) => {
+        loading.dismiss();
+        this.loginDeployment(deployment);
+      },
+      (error:any) => {
+        let url = `http://${this.domain}`;
+        this.api.registerDeployment(url).then((deployment:Deployment) => {
           loading.dismiss();
           this.loginDeployment(deployment);
         },
         (error:any) => {
-          let url = `http://${this.domain}`;
-          this.api.registerDeployment(url).then(
-            (deployment:Deployment) => {
-              loading.dismiss();
-              this.loginDeployment(deployment);
-            },
-            (error:any) => {
-              loading.dismiss();
-              this.showAlert(translations[1], translations[2]);
-            });
+          loading.dismiss();
+          this.showAlert(translations[1], translations[2]);
         });
+      });
     });
   }
 
@@ -132,16 +129,15 @@ export class DeploymentSearchPage extends BasePage {
       'DEPLOYMENT_ADD_EXISTS',
       'DEPLOYMENT_ADD_EXISTS_DESCRIPTION']).then((translations:string[]) => {
       let where = { domain: deployment.domain };
-      return this.database.getDeployments(where).then(
-        (deployments:Deployment[]) => {
-          if (deployments && deployments.length > 0) {
-            this.showAlert(translations[0], translations[1]);
-          }
-          else {
-            this.trackEvent("Deployments", "added", deployment.website);
-            this.loginDeployment(deployment);
-          }
-        });
+      return this.database.getDeployments(where).then((deployments:Deployment[]) => {
+        if (deployments && deployments.length > 0) {
+          this.showAlert(translations[0], translations[1]);
+        }
+        else {
+          this.trackEvent("Deployments", "added", deployment.website);
+          this.loginDeployment(deployment);
+        }
+      });
     });
   }
 
@@ -153,39 +149,36 @@ export class DeploymentSearchPage extends BasePage {
       'DEPLOYMENT_ADD_FAILURE_DESCRIPTION',
       'LOGIN_FAILURE']).then((translations:string[]) => {
       let loading = this.showLoading(translations[0]);
-      return this.api.clientLogin(deployment).then(
-        (login:Login) => {
-          this.logger.info(this, "loginDeployment", "Tokens", login);
-          deployment.copyInto(login);
-          this.api.getDeployment(deployment, false).then((details:Deployment) => {
-            deployment.copyInto(details);
-            this.database.saveDeployment(deployment).then(
-              (id:number) => {
-                this.logger.info(this, "loginDeployment", "ID", id);
-                if (id) {
-                  deployment.id = id;
-                  loading.dismiss();
-                  this.hideModal({
-                    deployment : deployment
-                  });
-                }
-                else {
-                  loading.dismiss();
-                  this.showAlert(translations[1], translations[2]);
-                }
-              },
-              (error:any) => {
-                this.logger.error(this, "loginDeployment", error);
-                loading.dismiss();
-                this.showAlert(translations[1], error);
+      return this.api.clientLogin(deployment).then((login:Login) => {
+        this.logger.info(this, "loginDeployment", "Tokens", login);
+        deployment.copyInto(login);
+        this.api.getDeployment(deployment, false).then((details:Deployment) => {
+          deployment.copyInto(details);
+          this.database.saveDeployment(deployment).then((saved:boolean) => {
+            this.logger.info(this, "loginDeployment", "Saved", saved);
+            if (saved) {
+              loading.dismiss();
+              this.hideModal({
+                deployment : deployment
               });
+            }
+            else {
+              loading.dismiss();
+              this.showAlert(translations[1], translations[2]);
+            }
+          },
+          (error:any) => {
+            this.logger.error(this, "loginDeployment", error);
+            loading.dismiss();
+            this.showAlert(translations[1], error);
           });
-        },
-        (error:any) => {
-          this.logger.error(this, "loginDeployment", "Client", error);
-          loading.dismiss();
-          this.showAlert(translations[3], error);
         });
+      },
+      (error:any) => {
+        this.logger.error(this, "loginDeployment", "Client", error);
+        loading.dismiss();
+        this.showAlert(translations[3], error);
+      });
     });
   }
 

@@ -36,54 +36,51 @@ export class Image extends Model {
   }
 
   @Column("id", INTEGER, PRIMARY_KEY)
-  public id: number = null;
+  public id:number = null;
 
   @Column("deployment_id", INTEGER, PRIMARY_KEY)
-  public deployment_id: number = null;
+  public deployment_id:number = null;
 
   @Column("post_id", INTEGER)
-  public post_id: number = null;
+  public post_id:number = null;
 
   @Column("user_id", INTEGER)
-  public user_id: number = null;
+  public user_id:number = null;
 
   @Column("url", TEXT)
-  public url: string = null;
+  public url:string = null;
 
   @Column("mime", TEXT)
-  public mime: string = null;
+  public mime:string = null;
 
   @Column("caption", TEXT)
-  public caption: string = null;
+  public caption:string = null;
 
   @Column("filesize", INTEGER)
-  public filesize: number = null;
+  public filesize:number = null;
 
   @Column("width", INTEGER)
-  public width: number = null;
+  public width:number = null;
 
   @Column("height", INTEGER)
-  public height: number = null;
+  public height:number = null;
 
   @Column("created", TEXT)
-  public created: Date = null;
+  public created:Date = null;
 
   @Column("updated", TEXT)
-  public updated: Date = null;
-
-  @Column("saved", TEXT)
-  public saved: Date = null;
+  public updated:Date = null;
 
   @Column("can_read", BOOLEAN)
-  public can_read: boolean = null;
+  public can_read:boolean = null;
 
   @Column("can_create", BOOLEAN)
-  public can_create: boolean = null;
+  public can_create:boolean = null;
 
   @Column("can_update", BOOLEAN)
-  public can_update: boolean = null;
+  public can_update:boolean = null;
 
   @Column("can_delete", BOOLEAN)
-  public can_delete: boolean = null;
+  public can_delete:boolean = null;
 
 }

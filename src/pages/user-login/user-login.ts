@@ -121,14 +121,13 @@ export class UserLoginPage extends BasePage {
         (deployment:Deployment) => {
           this.logger.info(this, "loadDeployment", "Loaded", deployment);
           this.deployment.copyInto(deployment);
-          this.database.saveModel(this.deployment).then(
-            (saved:any) => {
-              this.logger.info(this, "loadDeployment", "Saved", saved);
-              resolve();
-            },
-            (error:any) => {
-              this.logger.error(this, "loadDeployment", "Failed", error);
-              reject(error);
+          this.database.saveDeployment(this.deployment).then((saved:boolean) => {
+            this.logger.info(this, "loadDeployment", "Saved", saved);
+            resolve();
+          },
+          (error:any) => {
+            this.logger.error(this, "loadDeployment", "Failed", error);
+            reject(error);
           });
         },
         (error:any) => {

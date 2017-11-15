@@ -10,37 +10,11 @@ export class Stage extends Model {
   constructor(data:any=null) {
     super(data);
     this.copyInto(data);
-    if (data) {
-      if (data.id) {
-        this.id = data.id;
-      }
-      if (data.form_id) {
-        this.form_id = data.form_id;
-      }
-      if (data.label) {
-        this.label = data.label;
-      }
-      if (data.description) {
-        this.description = data.description;
-      }
-      if (data.priority) {
-        this.priority = data.priority;
-      }
-      if (data.type) {
-        this.type = data.type;
-      }
-      if (data.icon) {
-        this.icon = data.icon;
-      }
-      if (data.required) {
-        this.required = data.required;
-      }
-      if (data.allowed_privileges) {
-        this.can_read = data.allowed_privileges.indexOf("read") > -1;
-        this.can_create = data.allowed_privileges.indexOf("create") > -1;
-        this.can_update = data.allowed_privileges.indexOf("update") > -1;
-        this.can_delete = data.allowed_privileges.indexOf("delete") > -1;
-      }
+    if (data && data.allowed_privileges) {
+      this.can_read = data.allowed_privileges.indexOf("read") > -1;
+      this.can_create = data.allowed_privileges.indexOf("create") > -1;
+      this.can_update = data.allowed_privileges.indexOf("update") > -1;
+      this.can_delete = data.allowed_privileges.indexOf("delete") > -1;
     }
   }
 
@@ -49,51 +23,48 @@ export class Stage extends Model {
   }
 
   @Column("id", INTEGER, PRIMARY_KEY)
-  public id: number = null;
+  public id:number = null;
 
   @Column("deployment_id", INTEGER, PRIMARY_KEY)
-  public deployment_id: number = null;
+  public deployment_id:number = null;
 
   @Column("form_id", INTEGER)
-  public form_id: number = null;
+  public form_id:number = null;
 
   @Column("label", TEXT)
-  public label: string = null;
+  public label:string = null;
 
   @Column("description", TEXT)
-  public description: string = null;
+  public description:string = null;
 
   @Column("priority", INTEGER)
-  public priority: number = null;
+  public priority:number = null;
 
   @Column("type", TEXT)
-  public type: string = null;
+  public type:string = null;
 
   @Column("icon", TEXT)
-  public icon: string = null;
+  public icon:string = null;
 
   @Column("required", BOOLEAN)
-  public required: boolean = null;
+  public required:boolean = null;
 
   @Column("show_when_published", BOOLEAN)
-  public show_when_published: boolean = null;
-
-  @Column("saved", TEXT)
-  public saved: Date = null;
+  public show_when_published:boolean = null;
 
   @Column("can_read", BOOLEAN)
-  public can_read: boolean = null;
+  public can_read:boolean = null;
 
   @Column("can_create", BOOLEAN)
-  public can_create: boolean = null;
+  public can_create:boolean = null;
 
   @Column("can_update", BOOLEAN)
-  public can_update: boolean = null;
+  public can_update:boolean = null;
 
   @Column("can_delete", BOOLEAN)
-  public can_delete: boolean = null;
+  public can_delete:boolean = null;
 
-  public attributes: Attribute[] = [];
+  public attributes:Attribute[] = [];
 
   loadAttributes(attributes:Attribute[]) {
     if (attributes) {

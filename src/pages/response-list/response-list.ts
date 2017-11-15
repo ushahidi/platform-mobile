@@ -317,10 +317,7 @@ export class ResponseListPage extends BasePage {
               let saves = [];
               post.pending = false;
               if (posted.id != null && posted.id > 0) {
-                post.saved = null;
-                post.id = posted.id;
                 for (let value of post.values) {
-                  value.saved = null;
                   value.post_id = posted.id;
                   saves.push(this.database.saveValue(this.deployment, value));
                 }

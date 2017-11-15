@@ -151,7 +151,7 @@ export class UshahidiApp {
             this.showRootPage();
           });
       },
-      (error) => {
+      (error:any) => {
         this.splashScreen.hide();
         this.language.getTranslations([
           'DATABASE_SCHEMA_CHANGED',
@@ -265,30 +265,8 @@ export class UshahidiApp {
   }
 
   loadDatabase(models:Model[]):Promise<any> {
-    return new Promise((resolve, reject) => {
-      this.logger.info(this, "loadDatabase");
-      this.database.createTables(models).then(
-        (created:any) => {
-          this.logger.info(this, "loadDatabase", "Created");
-          let tests = [];
-          for (let model of models) {
-            tests.push(this.database.testModel(model));
-          }
-          Promise.all(tests).then(
-            (passed) => {
-              this.logger.info(this, "loadDatabase", "Tested");
-              resolve();
-            },
-            (error) => {
-              this.logger.error(this, "loadDatabase", "Failed", error);
-              reject(error);
-            });
-        },
-        (error:any) => {
-          this.logger.error(this, "loadDatabase", "Failed", error);
-          reject(error);
-        });
-    });
+    this.logger.info(this, "loadDatabase");
+    return this.database.loadDatabase(models);
   }
 
   resetDatabase():Promise<any> {

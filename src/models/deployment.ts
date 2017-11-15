@@ -16,29 +16,8 @@ export class Deployment extends Model {
     super(data);
     this.copyInto(data);
     if (data) {
-      if (data.name) {
-        this.name = data.name;
-      }
       if (data.deployment_name) {
         this.name = data.deployment_name;
-      }
-      if (data.tier) {
-        this.tier = data.tier;
-      }
-      if (data.status) {
-        this.status = data.status;
-      }
-      if (data.email) {
-        this.email = data.email;
-      }
-      if (data.timezone) {
-        this.timezone = data.timezone;
-      }
-      if (data.language) {
-        this.language = data.language;
-      }
-      if (data.description) {
-        this.description = data.description;
       }
       if (data.image) {
         if (data.image.indexOf(" ") != -1) {
@@ -82,21 +61,6 @@ export class Deployment extends Model {
         this.map_latitude = data.default_view.lat;
         this.map_longitude = data.default_view.lon;
       }
-      if (data.client_id) {
-        this.client_id = data.client_id;
-      }
-      if (data.client_secret) {
-        this.client_secret = data.client_secret;
-      }
-      if (data.google_analytics_id) {
-        this.google_analytics_id = data.google_analytics_id;
-      }
-      if (data.intercom_app_id) {
-        this.intercom_app_id = data.intercom_app_id;
-      }
-      if (data.mapbox_api_key) {
-        this.mapbox_api_key = data.mapbox_api_key;
-      }
       if (data.allowed_privileges) {
         this.can_read = data.allowed_privileges.indexOf("read") > -1;
         this.can_create = data.allowed_privileges.indexOf("create") > -1;
@@ -111,97 +75,94 @@ export class Deployment extends Model {
   }
 
   @Column("id", INTEGER, PRIMARY_KEY)
-  public id: number = null;
+  public id:number = null;
 
   @Column("name", TEXT)
-  public name: string = null;
+  public name:string = null;
 
   @Column("api", TEXT)
-  public api: string = null;
+  public api:string = null;
 
   @Column("website", TEXT)
-  public website: string = null;
+  public website:string = null;
 
   @Column("domain", TEXT)
-  public domain: string = null;
+  public domain:string = null;
 
   @Column("status", TEXT)
-  public status: string = null;
+  public status:string = null;
 
   @Column("tier", TEXT)
-  public tier: string = null;
+  public tier:string = null;
 
   @Column("description", TEXT)
-  public description: string = null;
+  public description:string = null;
 
   @Column("timezone", TEXT)
-  public timezone: string = null;
+  public timezone:string = null;
 
   @Column("language", TEXT)
-  public language: string = null;
+  public language:string = null;
 
   @Column("email", TEXT)
-  public email: string = null;
+  public email:string = null;
 
   @Column("image", TEXT)
-  public image: string = null;
+  public image:string = null;
 
   @Column("users_count", INTEGER)
-  public users_count: number = null;
+  public users_count:number = null;
 
   @Column("posts_count", INTEGER)
-  public posts_count: number = null;
+  public posts_count:number = null;
 
   @Column("forms_count", INTEGER)
-  public forms_count: number = null;
+  public forms_count:number = null;
 
   @Column("collections_count", INTEGER)
-  public collections_count: number = null;
+  public collections_count:number = null;
 
   @Column("images_count", INTEGER)
-  public images_count: number = null;
+  public images_count:number = null;
 
   @Column("map_zoom", INTEGER)
-  public map_zoom: number = null;
+  public map_zoom:number = null;
 
   @Column("map_style", TEXT)
-  public map_style: string = null;
+  public map_style:string = null;
 
   @Column("map_latitude", DOUBLE)
-  public map_latitude: number = null;
+  public map_latitude:number = null;
 
   @Column("map_longitude", DOUBLE)
-  public map_longitude: number = null;
+  public map_longitude:number = null;
 
   @Column("client_id", TEXT)
-  public client_id: string = null;
+  public client_id:string = null;
 
   @Column("client_secret", TEXT)
-  public client_secret: string = null;
+  public client_secret:string = null;
 
   @Column("google_analytics_id", TEXT)
-  public google_analytics_id: string = null;
+  public google_analytics_id:string = null;
 
   @Column("intercom_app_id", TEXT)
-  public intercom_app_id: string = null;
+  public intercom_app_id:string = null;
 
   @Column("mapbox_api_key", TEXT)
-  public mapbox_api_key: string = null;
-
-  @Column("saved", TEXT)
-  public saved: Date = null;
+  public mapbox_api_key:string = null;
 
   @Column("can_read", BOOLEAN)
-  public can_read: boolean = null;
+  public can_read:boolean = null;
 
   @Column("can_create", BOOLEAN)
-  public can_create: boolean = null;
+  public can_create:boolean = null;
 
   @Column("can_update", BOOLEAN)
-  public can_update: boolean = null;
+  public can_update:boolean = null;
 
   @Column("can_delete", BOOLEAN)
-  public can_delete: boolean = null;
+  public can_delete:boolean = null;
 
   public users: User[] = [];
 

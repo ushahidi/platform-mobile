@@ -1310,7 +1310,7 @@ export class ApiService extends HttpService {
           post.longitude = Number(coordinates.longitude);
           value.value = `${coordinates.latitude},${coordinates.longitude}`;
           let saves = [];
-          if (post.isPersisted()) {
+          if (post.id != null) {
             saves.push(this.database.savePost(deployment, post));
           }
           saves.push(this.database.saveValue(deployment, value));
