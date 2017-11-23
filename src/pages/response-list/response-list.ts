@@ -461,7 +461,6 @@ export class ResponseListPage extends BasePage {
   showOptions(post:Post) {
     this.language.getTranslations([
       'ACTION_SHARE',
-      'ACTION_EDIT',
       'ACTION_COLLECTION',
       'ACTION_REVIEW',
       'ACTION_ARCHIVE',
@@ -478,51 +477,47 @@ export class ResponseListPage extends BasePage {
           });
         }
         if (this.offline == false && post.can_update) {
-          buttons.push({
-             text: translations[1],
-             handler:() => this.editResponse(post)
-           });
           if (this.deployment.collections && this.deployment.collections.length > 0) {
             buttons.push({
-              text: translations[2],
+              text: translations[1],
               handler:() => this.addToCollection(post)
             });
           }
           if (post.status == 'published' || post.status == 'archived') {
            buttons.push({
-             text: translations[3],
+             text: translations[2],
              handler:() => this.draftResponse(post)
            });
           }
           if (post.status == 'published' || post.status == 'draft') {
            buttons.push({
-             text: translations[4],
+             text: translations[3],
              handler:() => this.archiveResponse(post)
            });
           }
           if (post.status == 'archived' || post.status == 'draft') {
             buttons.push({
-              text: translations[5],
+              text: translations[4],
               handler:() => this.publishResponse(post)
             });
           }
         }
         if (this.offline == false && post.can_delete) {
           buttons.push({
-            text: translations[6],
+            text: translations[5],
             role: 'destructive',
             handler:() => this.deleteResponse(post)
           });
         }
         if (post.pending == true) {
           buttons.push({
-            text: translations[7],
+            text: translations[6],
             role: 'destructive',
             handler:() => this.removeResponse(post)
           });
         }
         buttons.push({
-          text: translations[8],
+          text: translations[7],
           role: 'cancel'
         });
        this.showActionSheet(null, buttons);

@@ -346,28 +346,30 @@ export class ResponseAddPage extends BasePage {
         this.post.values.push(value);
       }
     }
-    for (let attribute of this.form.attributes) {
-      if (attribute.type == "title") {
-        let title:Value = new Value();
-        title.post_id = this.post.id;
-        title.deployment_id = this.deployment.id;
-        title.key = attribute.key;
-        title.input = attribute.input;
-        title.label = attribute.label;
-        title.cardinality = attribute.cardinality;
-        title.value = this.post.title;
-        this.values[title.key] = title;
-      }
-      else if (attribute.type == "description") {
-        let description:Value = new Value();
-        description.post_id = this.post.id;
-        description.deployment_id = this.deployment.id;
-        description.key = attribute.key;
-        description.input = attribute.input;
-        description.label = attribute.label;
-        description.cardinality = attribute.cardinality;
-        description.value = this.post.description;
-        this.values[attribute.key] = description;
+    if (this.form && this.form.attributes) {
+      for (let attribute of this.form.attributes) {
+        if (attribute.type == "title") {
+          let title:Value = new Value();
+          title.post_id = this.post.id;
+          title.deployment_id = this.deployment.id;
+          title.key = attribute.key;
+          title.input = attribute.input;
+          title.label = attribute.label;
+          title.cardinality = attribute.cardinality;
+          title.value = this.post.title;
+          this.values[title.key] = title;
+        }
+        else if (attribute.type == "description") {
+          let description:Value = new Value();
+          description.post_id = this.post.id;
+          description.deployment_id = this.deployment.id;
+          description.key = attribute.key;
+          description.input = attribute.input;
+          description.label = attribute.label;
+          description.cardinality = attribute.cardinality;
+          description.value = this.post.description;
+          this.values[attribute.key] = description;
+        }
       }
     }
     for (let value of this.post.values) {

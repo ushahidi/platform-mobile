@@ -158,6 +158,7 @@ export class Post extends Model {
       let form:Form = forms[i];
       if (form.id == this.form_id) {
         this.form = form;
+        this.color = form.color;
         this.form_name = form.name;
         this.hide_author = form.hide_author;
         break;

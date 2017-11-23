@@ -50,7 +50,8 @@
               *ngIf="filter == null && posts && posts.length == 0 && offline == false">{{'SURVEY_SUBMIT_RESPONSE' | translate}}</button>
     </div>
     <ion-list *ngIf="posts && posts.length > 0">
-      <post-card [post]="post" (cardSelected)="showResponse(post)" (menuSelected)="showOptions(post)" *ngFor="let post of posts"></post-card>
+      <post-card [post]="post" (cardSelected)="showResponse(post)" (menuSelected)="showOptions(post)"
+         (editSelected)="editResponse(post)" *ngFor="let post of posts"></post-card>
     </ion-list>
     <div padding-left padding-right padding-bottom *ngIf="refreshing == false && posts && posts.length > 0">
       <button ion-button block color="secondary" (click)="loadMore($event)">
@@ -58,9 +59,6 @@
         <span *ngIf="loading == false">{{'LOAD_MORE' | translate}}</span>
       </button>
     </div>
-    <!-- <ion-infinite-scroll [enabled]="loading == false && refreshing == false" (ionInfinite)="loadMore($event)">
-      <ion-infinite-scroll-content></ion-infinite-scroll-content>
-    </ion-infinite-scroll> -->
   </div>
 </ion-content>
 <ion-footer>

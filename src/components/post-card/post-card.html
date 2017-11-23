@@ -1,7 +1,7 @@
 <ion-card class="post-card" [style.border-left-color]="post.color">
   <ion-card-content>
     <ion-row align-items-center>
-      <ion-col col-10 tappable (click)="onCardSelected($event)">
+      <ion-col tappable (click)="onCardSelected($event)">
         <ion-row align-items-center>
           <ion-col col-auto class="pending" *ngIf="post.pending == true">
             <ion-badge text-uppercase>{{'STATUS_PENDING' | translate}}</ion-badge>
@@ -22,9 +22,14 @@
           </ion-col>
         </ion-row>
       </ion-col>
-      <ion-col col-2 class="more">
+      <ion-col col-auto class="edit" *ngIf="post.can_update == true && post.form">
+        <button icon-only clear tappable (click)="onEditSelected($event)">
+          <ion-icon ios="md-create" md="md-create"></ion-icon>
+        </button>
+      </ion-col>
+      <ion-col col-auto class="more">
         <button icon-only clear tappable (click)="onMenuSelected($event)">
-          <ion-icon ios="ios-more" md="ios-more"></ion-icon>
+          <ion-icon ios="ios-more" md="md-more"></ion-icon>
         </button>
       </ion-col>
     </ion-row>

@@ -17,6 +17,9 @@ export class PostCardComponent {
   @Output()
   menuSelected = new EventEmitter();
 
+  @Output()
+  editSelected = new EventEmitter();
+
   post:any = {};
 
   userName:string = PLACEHOLDER_NAME;
@@ -28,14 +31,19 @@ export class PostCardComponent {
   ngOnInit() {
   }
 
-  onCardSelected(event) {
+  onCardSelected(event:any) {
     this.logger.info(this, "onCardSelected");
     this.cardSelected.emit();
   }
 
-  onMenuSelected(event) {
+  onMenuSelected(event:any) {
     this.logger.info(this, "onMenuSelected");
     this.menuSelected.emit();
+  }
+
+  onEditSelected(event:any) {
+    this.logger.info(this, "onEditSelected");
+    this.editSelected.emit();
   }
 
 }
