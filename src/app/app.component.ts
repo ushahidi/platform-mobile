@@ -38,6 +38,8 @@ import { WhitelabelIntroPage } from '../pages/whitelabel-intro/whitelabel-intro'
 
 import { GOOGLE_ANALYTICS_ID } from '../constants/secrets';
 
+import { DEPLOYMENT_ADDED, DEPLOYMENT_DELETED } from '../constants/events';
+
 declare var window:any;
 declare var cordova:any;
 
@@ -110,6 +112,7 @@ export class UshahidiApp {
       this.loadOrientation();
       this.loadSplitPane();
       this.loadAnalytics();
+      this.loadEvents();
       this.loadApplication([
         new Deployment(),
         new User(),
@@ -137,6 +140,18 @@ export class UshahidiApp {
     },
     (error:any) => {
       this.acceptedTerms = false;
+    });
+  }
+
+  loadEvents() {
+    this.events.subscribe(DEPLOYMENT_ADDED, (deployment_id:number) => {
+      this.logger.info(this, 'Events', DEPLOYMENT_ADDED, deployment_id);
+      this.loadDeployments().then((deployments:Deployment[]) => {
+        this.logger.info(this, 'Events', DEPLOYMENT_ADDED, "loadDeployments");
+      },
+      (error:any) => {
+        this.logger.info(this, 'Events', DEPLOYMENT_ADDED, error);
+      })
     });
   }
 
@@ -201,16 +216,16 @@ export class UshahidiApp {
   }
 
   private loadOrientation() {
-  this.logger.info(this, "loadOrientation", this.screenOrientation.type);
-  this.screenOrientation.unlock();
-  this.orientation = this.screenOrientation.type.replace('-primary','').replace('-secondary','');
-  this.screenOrientation.onChange().subscribe(() => {
-    this.logger.info(this, "Orientation", this.screenOrientation.type);
+    this.logger.info(this, "loadOrientation", this.screenOrientation.type);
+    this.screenOrientation.unlock();
     this.orientation = this.screenOrientation.type.replace('-primary','').replace('-secondary','');
- });
-}
+    this.screenOrientation.onChange().subscribe(() => {
+      this.logger.info(this, "Orientation", this.screenOrientation.type);
+      this.orientation = this.screenOrientation.type.replace('-primary','').replace('-secondary','');
+   });
+  }
 
-  loadNetwork() {
+  private loadNetwork() {
     this.logger.info(this, "Network", this.network.type);
     if (this.network.type == 'none') {
       this.offline = true;
@@ -228,7 +243,7 @@ export class UshahidiApp {
     });
   }
 
-  loadAnalytics() {
+  private loadAnalytics() {
     this.appVersion.getVersionCode().then((appVersion) => {
       this.logger.info(this, "loadAnalytics", "App Version", appVersion);
       this.googleAnalytics.setAppVersion(appVersion);
@@ -242,7 +257,7 @@ export class UshahidiApp {
       });
   }
 
-  loadLanguages() {
+  private loadLanguages() {
     this.language.getLanguage().then(
       (i18n) => {
         this.setLanguage(i18n);
@@ -257,24 +272,24 @@ export class UshahidiApp {
     });
   }
 
-  setLanguage(i18n:string) {
+  private setLanguage(i18n:string) {
     this.logger.info(this, "setLanguage", i18n);
     this.i18n = i18n;
     this.language.setLanguage(i18n);
     this.direction = this.language.getDirection();
   }
 
-  loadDatabase(models:Model[]):Promise<any> {
+  private loadDatabase(models:Model[]):Promise<any> {
     this.logger.info(this, "loadDatabase");
     return this.database.loadDatabase(models);
   }
 
-  resetDatabase():Promise<any> {
+  private resetDatabase():Promise<any> {
     this.logger.info(this, "resetDatabase");
     return this.database.deleteDatabase();
   }
 
-  loadDeployments(event:any=null):Promise<Deployment[]> {
+  private loadDeployments(event:any=null):Promise<Deployment[]> {
     return new Promise((resolve, reject) => {
       this.logger.info(this, "loadDeployments");
       this.database.getDeployments().then(
@@ -299,7 +314,7 @@ export class UshahidiApp {
     });
   }
 
-  showRootPage(deployments:Deployment[]=null) {
+  private showRootPage(deployments:Deployment[]=null) {
     this.logger.info(this, "showRootPage");
     if (this.acceptedTerms == false && this.whitelabel == false) {
       this.rootPage = PrivacyPolicyPage;
@@ -320,7 +335,7 @@ export class UshahidiApp {
     }
   }
 
-  addDeployment(event:any) {
+  private addDeployment(event:any) {
     this.logger.info(this, "addDeployment");
     this.menuController.close();
     let modal = this.modalController.create(
@@ -336,7 +351,7 @@ export class UshahidiApp {
     });
   }
 
-  changeDeployment(deployment:Deployment):Promise<any> {
+  private changeDeployment(deployment:Deployment):Promise<any> {
     return new Promise((resolve, reject) => {
       this.language.getTranslation('LOADING_').then((translation:string) => {
         let loading = this.showLoading(translation);
@@ -348,7 +363,7 @@ export class UshahidiApp {
     });
   }
 
-  showDeployment(deployment:Deployment):Promise<any> {
+  private showDeployment(deployment:Deployment):Promise<any> {
     this.logger.info(this, "showDeployment", deployment);
     this.deployment = deployment;
     this.deploymentApi = deployment.api;
@@ -361,7 +376,7 @@ export class UshahidiApp {
     });
   }
 
-  removeDeployment(deployment:Deployment) {
+  private removeDeployment(deployment:Deployment) {
     this.language.getTranslations([
       'DEPLOYMENT_REMOVING_',
       'DEPLOYMENT_REMOVE_DESCRIPTION']).then((translations:string[]) => {
@@ -382,11 +397,14 @@ export class UshahidiApp {
         this.database.removeDeployment(deployment)];
       Promise.all(promises).then(
         (results) => {
+          this.events.publish(DEPLOYMENT_DELETED, deployment.id);
           this.database.getDeployments().then(_deployments => {
             loading.dismiss();
             this.zone.run(() => {
               this.deployments = <any[]>_deployments;
               if (this.deployments.length == 0) {
+                this.deployment = null;
+                this.deploymentApi = null;
                 this.nav.setRoot(DeploymentNonePage);
                 this.menuController.close();
               }
@@ -404,7 +422,7 @@ export class UshahidiApp {
     });
   }
 
-  showLoading(message:string):Loading {
+  private showLoading(message:string):Loading {
     let loading = this.loadingController.create({
       content: message
     });
@@ -412,7 +430,7 @@ export class UshahidiApp {
     return loading;
   }
 
-  showAlert(title:string, subTitle:string, buttons:any=['OK']):Alert {
+  private showAlert(title:string, subTitle:string, buttons:any=['OK']):Alert {
     let alert = this.alertController.create({
       title: title,
       subTitle: subTitle,
@@ -422,7 +440,7 @@ export class UshahidiApp {
     return alert;
   }
 
-  showToast(message:string, duration:number=1500):Toast {
+  private showToast(message:string, duration:number=1500):Toast {
     let toast = this.toastController.create({
       message: message,
       duration: duration
@@ -431,7 +449,7 @@ export class UshahidiApp {
     return toast;
   }
 
-  trackEvent(category:string, action:string, label:string, value:number=0, newSession:boolean=false) {
+  private trackEvent(category:string, action:string, label:string, value:number=0, newSession:boolean=false) {
     this.googleAnalytics.trackEvent(category, action, label, value, newSession).then((tracked) => {
       this.logger.info(this, "trackEvent", category, action, label);
     });

@@ -43,7 +43,7 @@ export class DeploymentDetailsPage extends BasePage {
   deployment: Deployment = null;
   placeholder: string = PLACEHOLDER_BLANK;
   loaded:boolean = false;
-
+  
   @ViewChild(Content)
   content: Content;
 

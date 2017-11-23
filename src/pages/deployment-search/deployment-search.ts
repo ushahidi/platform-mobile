@@ -1,5 +1,5 @@
 import { Component, ViewChild, NgZone } from '@angular/core';
-import { Platform, Searchbar, Content, NavParams, NavController, ViewController, ModalController, ToastController, AlertController, LoadingController, ActionSheetController } from 'ionic-angular';
+import { Platform, Events, Searchbar, Content, NavParams, NavController, ViewController, ModalController, ToastController, AlertController, LoadingController, ActionSheetController } from 'ionic-angular';
 
 import { Login } from '../../models/login';
 import { Deployment } from '../../models/deployment';
@@ -9,6 +9,8 @@ import { LoggerService } from '../../providers/logger-service';
 import { DatabaseService } from '../../providers/database-service';
 
 import { BasePage } from '../../pages/base-page/base-page';
+
+import { DEPLOYMENT_ADDED } from '../../constants/events';
 
 @Component({
   selector: 'deployment-search-page',
@@ -31,6 +33,7 @@ export class DeploymentSearchPage extends BasePage {
 
   constructor(
     protected zone:NgZone,
+    protected events:Events,
     protected platform:Platform,
     protected navParams:NavParams,
     protected navController:NavController,
@@ -157,6 +160,7 @@ export class DeploymentSearchPage extends BasePage {
           this.database.saveDeployment(deployment).then((saved:boolean) => {
             this.logger.info(this, "loginDeployment", "Saved", saved);
             if (saved) {
+              this.events.publish(DEPLOYMENT_ADDED, deployment.id);
               loading.dismiss();
               this.hideModal({
                 deployment : deployment

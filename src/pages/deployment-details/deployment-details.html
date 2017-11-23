@@ -18,15 +18,42 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   <div *ngIf="deployment">
-    <div padding-left padding-right class="title selectable" *ngIf="deployment.name">
-      <h3 ion-text color="dark" dir="{{direction}}">{{deployment.name}}</h3>
-    </div>
-    <div text-center padding-left padding-right class="image" *ngIf="deployment.image">
-      <image-cache padding [src]="deployment.image"></image-cache>
-    </div>
-    <div padding-left padding-right class="description selectable" *ngIf="deployment.description">
-      <p ion-text color="light" dir="{{direction}}" (click)="handleLinks($event)" [innerHTML]="deployment.description | MarkdownToHtml | htmlParse"></p>
-    </div>
+    <ion-grid [hidden]="landscape == true || tablet == true">
+      <ion-row>
+        <ion-col col-12>
+          <div padding-left padding-right class="title selectable" *ngIf="deployment.name">
+            <h3 ion-text color="dark" dir="{{direction}}">{{deployment.name}}</h3>
+          </div>
+        </ion-col>
+        <ion-col col-12>
+          <div text-center padding-left padding-right class="image" *ngIf="deployment.image">
+            <image-cache padding [src]="deployment.image"></image-cache>
+          </div>
+        </ion-col>
+        <ion-col col-12>
+          <div padding-left padding-right class="description selectable" *ngIf="deployment.description">
+            <p ion-text color="light" dir="{{direction}}" (click)="handleLinks($event)" [innerHTML]="deployment.description | MarkdownToHtml | htmlParse"></p>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <ion-grid [hidden]="landscape == false && tablet == false">
+      <ion-row>
+        <ion-col col-6>
+          <div padding-left margin-bottom class="title selectable" *ngIf="deployment.name">
+            <h3 ion-text color="dark" dir="{{direction}}">{{deployment.name}}</h3>
+          </div>
+          <div padding-left margin-top class="description selectable" *ngIf="deployment.description">
+            <p ion-text color="light" dir="{{direction}}" (click)="handleLinks($event)" [innerHTML]="deployment.description | MarkdownToHtml | htmlParse"></p>
+          </div>
+        </ion-col>
+        <ion-col col-6>
+          <div text-center padding-left padding-right class="image" *ngIf="deployment.image">
+            <image-cache padding [src]="deployment.image"></image-cache>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
     <div class="fadein" padding-left padding-right [@fadeInOut]="loaded">
       <button ion-button block margin-top margin-bottom color="primary" *ngIf="deployment.forms && deployment.forms.length > 0" (click)="addResponse($event)">{{'SURVEY_SUBMIT_RESPONSE' | translate}}</button>
     </div>

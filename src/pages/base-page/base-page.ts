@@ -6,6 +6,7 @@ import { Network } from '@ionic-native/network';
 import { SocialSharing } from '@ionic-native/social-sharing';
 import { GoogleAnalytics } from '@ionic-native/google-analytics';
 import { ThemeableBrowser, ThemeableBrowserOptions, ThemeableBrowserObject } from '@ionic-native/themeable-browser';
+import { ScreenOrientation } from '@ionic-native/screen-orientation';
 
 import { LoggerService } from '../../providers/logger-service';
 import { InjectorService } from '../../providers/injector-service';
@@ -26,6 +27,7 @@ export class BasePage {
   protected direction:string = "lrt";
   protected languageChanged: any = null;
   protected tablet:boolean = false;
+  protected landscape:boolean = false;
 
   protected zone:NgZone;
   protected events:Events;
@@ -36,6 +38,7 @@ export class BasePage {
   protected googleAnalytics:GoogleAnalytics;
   protected language:LanguageService;
   protected settings:SettingsService;
+  protected screenOrientation:ScreenOrientation;
 
   @ViewChild(Content)
   content: Content;
@@ -61,12 +64,14 @@ export class BasePage {
     this.googleAnalytics = InjectorService.injector.get(GoogleAnalytics);
     this.language = InjectorService.injector.get(LanguageService);
     this.settings = InjectorService.injector.get(SettingsService);
+    this.screenOrientation = InjectorService.injector.get(ScreenOrientation);
   }
 
   ionViewDidLoad() {
     this.logger.info(this, "ionViewDidLoad");
     this.loadLanguage();
     this.loadSettings();
+    this.loadOrientation();
   }
 
   ionViewWillEnter() {
@@ -126,6 +131,30 @@ export class BasePage {
     (error:any) => {
       this.colorNavbar = "#3f4751";
     });
+  }
+
+  loadOrientation() {
+    this.logger.info(this, "loadOrientation", this.screenOrientation.type);
+    if (this.platform.isLandscape()) {
+      this.logger.info(this, "loadSettings", "Landscape");
+      this.landscape = true;
+    }
+    else {
+      this.logger.info(this, "loadSettings", "Portrait");
+      this.landscape = false;
+    }
+    this.screenOrientation.onChange().subscribe(() => {
+      this.logger.info(this, "Orientation", this.screenOrientation.type);
+      let orientation = this.screenOrientation.type.replace('-primary','').replace('-secondary','');
+      if (orientation == 'landscape') {
+        this.logger.info(this, "Orientation", "Landscape");
+        this.landscape = true;
+      }
+      else {
+        this.logger.info(this, "Orientation", "Portrait");
+        this.landscape = false;
+      }
+   });
   }
 
   subscribeNetwork() {
