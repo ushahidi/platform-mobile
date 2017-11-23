@@ -68,10 +68,12 @@
       text-align: right;
       button {
         margin:0;
-        padding:0;
+        padding:0 5px 0 5px;
         text-align: right;
         background-color: white;
         ion-icon {
+          margin:0;
+          padding:0 2px 0 2px;
           font-size: 18px;
           font-weight: bold;
         }
@@ -81,10 +83,12 @@
       text-align: right;
       button {
         margin:0;
-        padding:0;
+        padding:0 0 0 5px;
         text-align: right;
         background-color: white;
         ion-icon {
+          margin:0;
+          padding:0 0 0 2px;
           font-size: 24px;
           font-weight: bold;
         }
