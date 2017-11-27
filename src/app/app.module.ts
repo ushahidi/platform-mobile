@@ -70,6 +70,7 @@ import { InputMarkdownComponent } from '../components/input-markdown/input-markd
 import { ImageCacheComponent } from '../components/image-cache/image-cache';
 import { PostCardComponent } from '../components/post-card/post-card';
 import { PostValueComponent } from '../components/post-value/post-value';
+import { TextMoreComponent } from '../components/text-more/text-more';
 
 import { DateTimePipe } from '../pipes/date-time';
 import { TimeAgoPipe } from '../pipes/time-ago';
@@ -127,6 +128,7 @@ export function translateHttpLoader(http: HttpClient) {
     PostCardComponent,
     PostValueComponent,
     ImageCacheComponent,
+    TextMoreComponent,
     DateTimePipe,
     TimeAgoPipe,
     TitleizePipe,

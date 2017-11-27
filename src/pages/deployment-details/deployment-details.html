@@ -32,7 +32,7 @@
         </ion-col>
         <ion-col col-12>
           <div padding-left padding-right class="description selectable" *ngIf="deployment.description">
-            <p ion-text color="light" dir="{{direction}}" (click)="handleLinks($event)" [innerHTML]="deployment.description | MarkdownToHtml | htmlParse"></p>
+            <text-more truncate="20" [text]="deployment.description" [direction]="direction" (handleLinks)="handleLinks($event)"></text-more>
           </div>
         </ion-col>
       </ion-row>
@@ -44,7 +44,7 @@
             <h3 ion-text color="dark" dir="{{direction}}">{{deployment.name}}</h3>
           </div>
           <div padding-left margin-top class="description selectable" *ngIf="deployment.description">
-            <p ion-text color="light" dir="{{direction}}" (click)="handleLinks($event)" [innerHTML]="deployment.description | MarkdownToHtml | htmlParse"></p>
+            <text-more truncate="20" [text]="deployment.description" [direction]="direction" (handleLinks)="handleLinks($event)"></text-more>
           </div>
         </ion-col>
         <ion-col col-6>

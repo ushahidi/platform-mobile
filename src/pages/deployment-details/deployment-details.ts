@@ -43,7 +43,8 @@ export class DeploymentDetailsPage extends BasePage {
   deployment: Deployment = null;
   placeholder: string = PLACEHOLDER_BLANK;
   loaded:boolean = false;
-  
+  truncated:boolean = true;
+
   @ViewChild(Content)
   content: Content;
 
@@ -71,6 +72,7 @@ export class DeploymentDetailsPage extends BasePage {
 
   ionViewWillEnter() {
     super.ionViewWillEnter();
+    this.truncated = true;
     this.loadStatusBar(true);
     if (this.deployment == null) {
       this.deployment = this.getParameter<Deployment>("deployment");
@@ -474,6 +476,11 @@ export class DeploymentDetailsPage extends BasePage {
           });
       });
     });
+  }
+
+  readMore(event:any) {
+    this.logger.info(this, "readMore");
+    this.truncated = false;
   }
 
 }
