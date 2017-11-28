@@ -4,10 +4,12 @@ import { MarkdownToHtmlPipe } from 'markdown-to-html-pipe';
 import { TruncatePipe } from '../../pipes/truncate';
 import { HtmlParsePipe } from '../../pipes/html-parse';
 
+import { LanguageService } from '../../providers/language-service';
+
 @Component({
   selector: 'text-more',
   templateUrl: 'text-more.html',
-  providers: [ MarkdownToHtmlPipe, TruncatePipe, HtmlParsePipe ],
+  providers: [ MarkdownToHtmlPipe, TruncatePipe, HtmlParsePipe, LanguageService ],
 })
 export class TextMoreComponent {
 
@@ -24,39 +26,41 @@ export class TextMoreComponent {
   handleLinks = new EventEmitter();
 
   truncated:boolean = false;
-  
+
   html:string = "";
 
   constructor(
     private markdownPipe:MarkdownToHtmlPipe,
     private truncatePipe:TruncatePipe,
-    private htmlPipe:HtmlParsePipe) {
+    private htmlPipe:HtmlParsePipe,
+    private language:LanguageService) {
   }
 
   ngOnInit() {
-    if (this.text && this.text.length > 0) {
-      let words = this.text.split(" ");
-      if (words.length > this.truncate) {
-        let markdown = this.markdownPipe.transform(this.text);
-        let html = this.htmlPipe.transform(markdown, []);
-        let truncated = this.truncatePipe.transform(html, 20);
-        this.html = truncated + `<a class="more" ion-text color="dark" tappable (click)="readMore($event)">...Read More</a>`;
-        this.truncated = true;
+    this.language.getTranslation('READ_MORE').then((translation:string) => {
+      if (this.text && this.text.length > 0) {
+        let words = this.text.split(" ");
+        if (words.length > this.truncate) {
+          let markdown = this.markdownPipe.transform(this.text);
+          let html = this.htmlPipe.transform(markdown, []);
+          let truncated = this.truncatePipe.transform(html, 20);
+          this.html = truncated + `<a class="more" ion-text color="dark" tappable (click)="readMore($event)">...${translation}</a>`;
+          this.truncated = true;
+        }
+        else {
+          let markdown = this.markdownPipe.transform(this.text);
+          this.html = this.htmlPipe.transform(markdown, []);
+          this.truncated = false;
+        }
       }
       else {
-        let markdown = this.markdownPipe.transform(this.text);
-        this.html = this.htmlPipe.transform(markdown, []);
+        this.html = "";
         this.truncated = false;
       }
-    }
-    else {
-      this.html = "";
-      this.truncated = false;
-    }
+    });
   }
 
   readMore(event:any) {
-    console.log(`TextMoreComponent readMore`);
     if (this.truncated) {
       let markdown = this.markdownPipe.transform(this.text);
       this.html = this.htmlPipe.transform(markdown, []);
