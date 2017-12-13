@@ -63,12 +63,15 @@ export class SettingsService {
     });
   }
 
-  get(key:string):Promise<any> {
+  get(key:string, fallback:any=null):Promise<any> {
     return new Promise((resolve, reject) => {
       if (this.settings) {
         let value = this.settings[key];
         if (value) {
           resolve(value);
+        }
+        else if (fallback != null) {
+          resolve(fallback);
         }
         else {
           reject(`Settings ${key} Not Found`);
@@ -80,6 +83,9 @@ export class SettingsService {
           if (value) {
             resolve(value);
           }
+          else if (fallback != null) {
+            resolve(fallback);
+          }
           else {
             reject(`Settings ${key} Not Found`);
           }
@@ -89,20 +95,20 @@ export class SettingsService {
   }
 
   getAppId():Promise<string> {
-    return this.get('appId');
+    return this.get('appId', 'com.ushahidi.mobile');
   }
 
   getAppName():Promise<string> {
-    return this.get('appName');
+    return this.get('appName', 'Ushahidi');
   }
 
   getAppDescription():Promise<string> {
-    return this.get('appDescription');
+    return this.get('appDescription', 'Ushahidi Mobile');
   }
 
   getAppLanguages():Promise<string[]> {
     return new Promise((resolve, reject) => {
-      this.get('appLanguages').then((languages:string) => {
+      this.get('appLanguages', 'en,fr,es,de').then((languages:string) => {
         if (languages && languages.length > 0) {
           resolve(languages.split(","));
         }
@@ -120,46 +126,46 @@ export class SettingsService {
   }
 
   getColorNavbar():Promise<string> {
-    return this.get('colorNavbar');
+    return this.get('colorNavbar', '#3F4751');
   }
 
   getColorToolbar():Promise<string> {
-    return this.get('colorToolbar');
+    return this.get('colorToolbar', '#343434');
   }
 
   getColorPrimary():Promise<string> {
-    return this.get('colorPrimary');
+    return this.get('colorPrimary', '#FDC245');
   }
 
   getColorSecondary():Promise<string> {
-    return this.get('colorSecondary');
+    return this.get('colorSecondary', '#ADB6BF');
   }
 
   getColorDark():Promise<string> {
-    return this.get('colorDark');
+    return this.get('colorDark', '#3F4751');
   }
 
   getColorLight():Promise<string> {
-    return this.get('colorLight');
+    return this.get('colorLight', '#8793A2');
   }
 
   getColorDanger():Promise<string> {
-    return this.get('colorDanger');
+    return this.get('colorDanger', '#DD0000');
   }
 
   getColorActive():Promise<string> {
-    return this.get('colorActive');
+    return this.get('colorActive', '#2F77B0');
   }
 
   getColorHighlight():Promise<string> {
-    return this.get('colorHighlight');
+    return this.get('colorHighlight', '#F0F2F4');
   }
 
   getSurveyFormAuthor():Promise<boolean> {
-    return this.get('surveyFormAuthor');
+    return this.get('surveyFormAuthor', false);
   }
 
   getSurveyFormTasks():Promise<boolean> {
-    return this.get('surveyFormTasks');
+    return this.get('surveyFormTasks', true);
   }
 }

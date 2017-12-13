@@ -5,11 +5,12 @@ var path = require('path');
 var exec = require('child_process').exec;
 var root = process.argv[2];
 var platform = process.env.CORDOVA_PLATFORMS;
-var project = 'ushahidi';
+var project = null;
+var config = null;
 if (process.env.project) {
   project = process.env.project;
+  config = require(root + '/projects/' + project + '.json');
 }
-var config = require(root + '/projects/' + project + '.json');
 
 function replaceStringInFile(filename, to_replace, replace_with) {
   var data = fs.readFileSync(filename, 'utf8');
@@ -81,5 +82,7 @@ function changePackageFile() {
   replaceDeepLinkProtocolInFile(packageFile, config.deepLinkProtocol);
 }
 
-changeConfigFile();
-changePackageFile();
+if (project != null && config != null) {
+  changeConfigFile();
+  changePackageFile();
+}

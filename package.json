@@ -91,7 +91,8 @@
     "sw-toolbox": "3.6.0",
     "ts-md5": "^1.2.2",
     "zone.js": "0.8.18",
-    "cordova-ios": "~4.5.4"
+    "cordova-ios": "~4.5.4",
+    "cordova-android": "~6.3.0"
   },
   "devDependencies": {
     "@ionic/app-scripts": "3.1.0",
