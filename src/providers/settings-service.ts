@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Platform } from 'ionic-angular';
 import { Http } from '@angular/http';
 
+import { File, Entry, FileEntry, FileError, Metadata } from '@ionic-native/file';
 import { NativeStorage } from '@ionic-native/native-storage';
 
 import { Settings } from '../models/settings';
@@ -14,6 +15,7 @@ export class SettingsService {
   settings: Settings = null;
 
   constructor(
+    protected file:File,
     protected http:Http,
     protected platform:Platform,
     protected logger:LoggerService,
@@ -24,13 +26,27 @@ export class SettingsService {
   loadSettings():Promise<Settings> {
     return new Promise((resolve, reject) => {
       this.logger.info(this, "loadSettings");
-      this.http.get("assets/data/settings.json")
-        .map((res) => res.json())
-        .subscribe((data) => {
-          this.logger.info(this, "loadSettings", data);
-          this.settings = <Settings>data
-          resolve(this.settings);
-        });
+      let directory = "assets/data";
+      let settings = "settings.json";
+      this.file.checkFile(directory, settings).then((exists:boolean) => {
+        if (exists) {
+          this.http.get(directory + "/" + settings)
+            .map((res) => res.json())
+            .subscribe((data) => {
+              this.logger.info(this, "loadSettings", data);
+              this.settings = <Settings>data
+              resolve(this.settings);
+            });
+        }
+        else {
+          this.logger.error(this, "No Settings");
+          reject("No Settings");
+        }
+      },
+      (error:any) => {
+        this.logger.error(this, "No Settings", error);
+        reject("No Settings");
+      });
     });
   }
 
@@ -84,6 +100,14 @@ export class SettingsService {
             resolve(value);
           }
           else if (fallback != null) {
+            resolve(fallback);
+          }
+          else {
+            reject(`Settings ${key} Not Found`);
+          }
+        },
+        (error:any) => {
+          if (fallback != null) {
             resolve(fallback);
           }
           else {

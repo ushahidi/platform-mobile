@@ -268,7 +268,13 @@ export class ApiService extends HttpService {
                   resolve(_login);
                 },
                 (error:any) => {
-                  reject(error);
+                  this.clientLogin(deployment).then(
+                    (_login:Login) => {
+                      resolve(_login);
+                    },
+                    (error:any) => {
+                      reject(error);
+                    });
                 });
             }
             else {
