@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, URLSearchParams, RequestOptions, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
+
 import { File, Entry, Metadata } from '@ionic-native/file';
 import { FileTransfer, FileTransferObject, FileUploadOptions, FileUploadResult, FileTransferError } from '@ionic-native/file-transfer';
 
@@ -59,6 +60,7 @@ export class HttpService {
         .timeout(12000)
         .map(res => res.json())
         .catch((error:any) => {
+          this.logger.error(this, "httpGet", error);
           let message = this.errorMessage(error);
           return Observable.throw(message || 'Request Error');
         })

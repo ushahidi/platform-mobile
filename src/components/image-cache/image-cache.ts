@@ -12,7 +12,7 @@ declare var cordova:any;
 
 @Component({
   selector: 'image-cache',
-  template: `<div class="image-cache"><img [src]="placeholder" *ngIf="placeholder"><img class="fadein" [src]="safeUrl" *ngIf="safeUrl" /></div>`
+  templateUrl: 'image-cache.html'
 })
 @Injectable()
 export class ImageCacheComponent implements OnInit, OnChanges, AfterContentChecked {
@@ -51,20 +51,30 @@ export class ImageCacheComponent implements OnInit, OnChanges, AfterContentCheck
 
   loadCacheImage(url:string) {
     if (url && url.length > 0) {
-      this.logger.info(this, "loadCacheImage", url);
-      this.fetchCacheImage(url).then((cache:string) => {
+      let file = this.getCacheFile(url);
+      let directory = this.getCacheDirectory();
+      this.downloadCacheImage(url, directory, file).then((cache:string) => {
         this.useCacheImage(cache).then((file:any) => {
-            this.logger.info(this, "loadCacheImage", url, file);
-          },
-          (error:any) => {
-            this.logger.error(this, "loadCacheImage", url, error);
-            this.useFallback();
+          this.logger.info(this, "loadCacheImage", url, file);
+        },
+        (error:any) => {
+          this.logger.error(this, "loadCacheImage", url, error);
+          this.useFallback();
         });
-      },
-      (error:any) => {
-        this.logger.error(this, "loadCacheImage", url, error);
-        this.useFallback();
       });
+      // this.fetchCacheImage(url).then((cache:string) => {
+        // this.useCacheImage(cache).then((file:any) => {
+        //   this.logger.info(this, "loadCacheImage", url, file);
+        // },
+        // (error:any) => {
+        //   this.logger.error(this, "loadCacheImage", url, error);
+        //   this.useFallback();
+        // });
+      // },
+      // (error:any) => {
+      //   this.logger.error(this, "loadCacheImage", url, error);
+      //   this.useFallback();
+      // });
     }
     else {
       this.useFallback();
@@ -100,14 +110,13 @@ export class ImageCacheComponent implements OnInit, OnChanges, AfterContentCheck
 
   hasCacheImage(image:string, directory:string, cache:string):Promise<string> {
     return new Promise((resolve, reject) => {
-      this.logger.info(this, "hasCacheImage", directory, image);
       this.file.checkFile(directory, cache).then((exists:boolean) => {
         if (exists) {
           let url = directory + cache;
           this.file.resolveLocalFilesystemUrl(url).then((entry:FileEntry) => {
             entry.getMetadata((metadata:Metadata) => {
-              this.logger.info(this, "hasCacheImage", directory, image, "Yes", cache);
               if (metadata.size > 0) {
+                this.logger.info(this, "hasCacheImage", image, "Yes", entry.toURL());
                 resolve(entry.toURL());
               }
               else {
@@ -116,17 +125,17 @@ export class ImageCacheComponent implements OnInit, OnChanges, AfterContentCheck
             });
           },
           (error:FileError) => {
-            this.logger.error(this, "hasCacheImage", directory, image, "Yes", cache, error);
+            this.logger.error(this, "hasCacheImage", image, "No", error);
             reject(error);
           });
         }
         else {
-          this.logger.info(this, "hasCacheImage", directory, image, "No", cache);
+          this.logger.info(this, "hasCacheImage", image, "No");
           reject("No Cache");
         }
       },
       (error:FileError) => {
-        this.logger.info(this, "hasCacheImage", "No", cache);
+        this.logger.info(this, "hasCacheImage", image, "No", error);
         reject(error);
       });
     });
@@ -137,11 +146,11 @@ export class ImageCacheComponent implements OnInit, OnChanges, AfterContentCheck
       let url = directory + cache;
       let fileFileTransfer:FileTransferObject = this.transfer.create();
       fileFileTransfer.download(image, url, true).then((entry:Entry) => {
-        this.logger.info(this, "downloadCacheImage", image, url, entry.toURL());
+        this.logger.info(this, "downloadCacheImage", image, entry.toURL());
         resolve(entry.toURL());
       },
       (error:any) => {
-        this.logger.error(this, "downloadCacheImage", image, url, error);
+        this.logger.error(this, "downloadCacheImage", image, error);
         reject(error);
       });
     });
@@ -150,8 +159,8 @@ export class ImageCacheComponent implements OnInit, OnChanges, AfterContentCheck
   useCacheImage(url:string):Promise<string> {
     return new Promise((resolve, reject) => {
       this.file.resolveLocalFilesystemUrl(url).then((entry:FileEntry) => {
-        this.logger.info(this, "useCacheImage", url, entry.toURL());
         let normalizedURL = normalizeURL(entry.toURL());
+        this.logger.info(this, "useCacheImage", url, normalizedURL);
         this.cacheUrl = normalizedURL;
         this.safeUrl = this.sanitizer.bypassSecurityTrustUrl(normalizedURL);
         resolve(normalizedURL);

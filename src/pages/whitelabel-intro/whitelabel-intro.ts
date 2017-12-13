@@ -15,7 +15,7 @@ import { SettingsService } from '../../providers/settings-service';
 @Component({
   selector: 'whitelabel-intro',
   templateUrl: 'whitelabel-intro.html',
-  providers: [ LoggerService,DatabaseService, ApiService ],
+  providers: [ LoggerService, DatabaseService, ApiService ],
   entryComponents:[ DeploymentDetailsPage ]
 })
 export class WhitelabelIntroPage extends BasePage {
@@ -50,6 +50,10 @@ export class WhitelabelIntroPage extends BasePage {
     super.ionViewWillEnter();
     this.loadStatusBar(false, true);
     this.loadAppName();
+  }
+
+  ionViewDidEnter() {
+    super.ionViewDidEnter();
     this.loadDeployment();
   }
 

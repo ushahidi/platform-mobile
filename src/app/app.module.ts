@@ -16,6 +16,7 @@ import { AppVersion } from '@ionic-native/app-version';
 import { IsDebug } from '@ionic-native/is-debug';
 import { StatusBar } from '@ionic-native/status-bar';
 import { FileTransfer } from '@ionic-native/file-transfer';
+import { HTTP } from '@ionic-native/http';
 import { File } from '@ionic-native/file';
 import { Device } from '@ionic-native/device';
 import { Camera } from '@ionic-native/camera';
@@ -178,6 +179,7 @@ export function translateHttpLoader(http: HttpClient) {
   ],
   providers: [
     { provide: File, useClass: File },
+    { provide: HTTP, useClass: HTTP },
     { provide: SQLite, useClass: SQLite },
     { provide: Camera, useClass: Camera },
     { provide: Device, useClass: Device },

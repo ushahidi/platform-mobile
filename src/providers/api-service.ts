@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
+
+import { HTTP, HTTPResponse } from '@ionic-native/http';
 import { FileTransfer } from '@ionic-native/file-transfer';
 import { File } from '@ionic-native/file';
 import { NativeGeocoder, NativeGeocoderForwardResult } from '@ionic-native/native-geocoder';
@@ -37,7 +39,8 @@ export class ApiService extends HttpService {
   // config messages notifications contacts roles permissions csv
 
   constructor(
-    protected http: Http,
+    protected http:Http,
+    protected httpNative:HTTP,
     protected file:File,
     protected transfer:FileTransfer,
     protected vimeo:VimeoService,
@@ -74,44 +77,45 @@ export class ApiService extends HttpService {
   registerDeployment(website:string):Promise<Deployment> {
     return new Promise((resolve, reject) => {
       let url = `${website}/config.json`;
-      this.httpGet(url).then(
-        (config:Config) => {
-          if (config) {
-            let deployment:Deployment = new Deployment(config);
-            deployment.website = website;
-            deployment.domain = website.replace("https://","").replace("http://","");
-            if (config.backend_url && config.backend_url.length > 0) {
-              deployment.api = config.backend_url;
-              resolve(deployment);
-            }
-            else if (config.backend_domain && config.backend_domain.length > 0) {
-              if (config.backend_domain.indexOf("https://") != -1) {
-                deployment.api = config.backend_domain;
-                resolve(deployment);
-              }
-              else if (config.backend_domain.indexOf("http://") != -1) {
-                deployment.api = config.backend_domain;
-                resolve(deployment);
-              }
-              else {
-                let link = document.createElement('a');
-                link.setAttribute('href', website);
-                let domain = link.hostname.substring(link.hostname.indexOf(".") + 1);
-                deployment.api = website.replace(domain, config.backend_domain);
-                resolve(deployment);
-              }
-            }
-            else {
-              reject("Invalid Deployment Config");
-            }
+      this.logger.info(this, "registerDeployment", url);
+      this.httpNative.setDataSerializer("json");
+      this.httpNative.setHeader("Accept", "application/json");
+      this.httpNative.setHeader("Content-Type", "application/json");
+      this.httpNative.get(url, {}, {}).then((response:HTTPResponse) => {
+        this.logger.info(this, "registerDeployment", url, response.data);
+        let json = JSON.parse(response.data);
+        let config:Config = <Config>json;
+        let deployment:Deployment = new Deployment(config);
+        deployment.website = website;
+        deployment.domain = website.replace("https://","").replace("http://","");
+        if (config.backend_url && config.backend_url.length > 0) {
+          deployment.api = config.backend_url;
+          resolve(deployment);
+        }
+        else if (config.backend_domain && config.backend_domain.length > 0) {
+          if (config.backend_domain.indexOf("https://") != -1) {
+            deployment.api = config.backend_domain;
+            resolve(deployment);
+          }
+          else if (config.backend_domain.indexOf("http://") != -1) {
+            deployment.api = config.backend_domain;
+            resolve(deployment);
           }
           else {
-            reject("Invalid Deployment Config");
+            let link = document.createElement('a');
+            link.setAttribute('href', website);
+            let domain = link.hostname.substring(link.hostname.indexOf(".") + 1);
+            deployment.api = website.replace(domain, config.backend_domain);
+            resolve(deployment);
           }
-        },
-        (error:any) => {
-          reject(error);
-        });
+        }
+        else {
+          reject("Invalid Deployment Config");
+        }
+      }).catch((error:any) => {
+        this.logger.error(this, "registerDeployment", error.error);
+        reject(error.error);
+      });
     });
   }
 
