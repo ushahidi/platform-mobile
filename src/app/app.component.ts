@@ -104,41 +104,43 @@ export class UshahidiApp {
     private menuController: MenuController) {
     this.zone = _zone;
     InjectorService.injector = injector;
-    this.platform.ready().then(() => {
-      this.logger.info(this, "Platform Ready", this.platform.platforms());
-      this.loadSettings();
-      this.loadLanguages();
-      this.loadNetwork();
-      this.loadOrientation();
-      this.loadSplitPane();
-      this.loadAnalytics();
-      this.loadEvents();
-      this.loadApplication([
-        new Deployment(),
-        new User(),
-        new Form(),
-        new Stage(),
-        new Attribute(),
-        new Post(),
-        new Value(),
-        new Image(),
-        new Collection(),
-        new Tag(),
-        new Filter()]);
-    });
+    this.platform.ready()
+      .then(() => this.loadSettings())
+      .then(() => this.loadLanguages())
+      .then(() => this.loadNetwork())
+      .then(() => this.loadOrientation())
+      .then(() => this.loadSplitPane())
+      .then(() => this.loadAnalytics())
+      .then(() => this.loadEvents())
+      .then(() => this.loadApplication([
+                    new Deployment(),
+                    new User(),
+                    new Form(),
+                    new Stage(),
+                    new Attribute(),
+                    new Post(),
+                    new Value(),
+                    new Image(),
+                    new Collection(),
+                    new Tag(),
+                    new Filter()]));
   }
 
   loadSettings() {
     this.settings.getDeploymentUrl().then((url:string) => {
+      this.logger.info(this, 'loadSettings', "getDeploymentUrl", url);
       this.whitelabel = true;
     },
     (error:any) => {
+      this.logger.error(this, 'loadSettings', "getDeploymentUrl", error);
       this.whitelabel = false;
     });
     this.settings.getAcceptedTerms().then((acceptedTerms:boolean) => {
+      this.logger.info(this, 'loadSettings', "getAcceptedTerms", acceptedTerms);
       this.acceptedTerms = acceptedTerms;
     },
     (error:any) => {
+      this.logger.error(this, 'loadSettings', "getAcceptedTerms", error);
       this.acceptedTerms = false;
     });
   }
@@ -315,21 +317,24 @@ export class UshahidiApp {
   }
 
   private showRootPage(deployments:Deployment[]=null) {
-    this.logger.info(this, "showRootPage");
     if (this.acceptedTerms == false && this.whitelabel == false) {
+      this.logger.info(this, "showRootPage", "PrivacyPolicyPage");
       this.rootPage = PrivacyPolicyPage;
       this.splashScreen.hide();
     }
     else if (deployments && deployments.length > 0) {
+      this.logger.info(this, "showRootPage", "showDeployment");
       this.showDeployment(this.deployment).then((ready) => {
         this.splashScreen.hide();
       });
     }
     else if (this.whitelabel == true) {
+      this.logger.info(this, "showRootPage", "WhitelabelIntroPage");
       this.rootPage = WhitelabelIntroPage;
       this.splashScreen.hide();
     }
     else {
+      this.logger.info(this, "showRootPage", "DeploymentNonePage");
       this.rootPage = DeploymentNonePage;
       this.splashScreen.hide();
     }

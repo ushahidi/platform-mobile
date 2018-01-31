@@ -25,28 +25,36 @@ export class SettingsService {
 
   loadSettings():Promise<Settings> {
     return new Promise((resolve, reject) => {
-      this.logger.info(this, "loadSettings");
-      let directory = "assets/data";
+      let directory = "/assets/data";
       let settings = "settings.json";
-      this.file.checkFile(directory, settings).then((exists:boolean) => {
-        if (exists) {
-          this.http.get(directory + "/" + settings)
-            .map((res) => res.json())
-            .subscribe((data) => {
-              this.logger.info(this, "loadSettings", data);
-              this.settings = <Settings>data
-              resolve(this.settings);
-            });
-        }
-        else {
-          this.logger.error(this, "No Settings");
-          reject("No Settings");
-        }
-      },
-      (error:any) => {
-        this.logger.error(this, "No Settings", error);
-        reject("No Settings");
-      });
+      this.logger.info(this, "loadSettings", directory, settings);
+      this.http.get(directory + "/" + settings)
+        .map((res) => res.json())
+        .subscribe((data) => {
+          this.logger.info(this, "loadSettings", data);
+          this.settings = <Settings>data
+          resolve(this.settings);
+        });
+      // this.file.checkFile(directory, settings).then((exists:boolean) => {
+      //   this.logger.info(this, "loadSettings", "Exists", exists);
+      //   if (exists) {
+      //     this.http.get(directory + "/" + settings)
+      //       .map((res) => res.json())
+      //       .subscribe((data) => {
+      //         this.logger.info(this, "loadSettings", data);
+      //         this.settings = <Settings>data
+      //         resolve(this.settings);
+      //       });
+      //   }
+      //   else {
+      //     this.logger.error(this, "No Settings");
+      //     reject("No Settings");
+      //   }
+      // },
+      // (error:any) => {
+      //   this.logger.error(this, "No Settings", error);
+      //   reject("No Settings");
+      // });
     });
   }
 
