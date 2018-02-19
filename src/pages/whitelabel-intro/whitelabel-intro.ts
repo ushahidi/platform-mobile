@@ -41,6 +41,7 @@ export class WhitelabelIntroPage extends BasePage {
   name:string = null;
   email:string = null;
   loading:boolean = false;
+  failure:boolean = false;
   deployment:Deployment = null;
 
   @ViewChild(Content)
@@ -70,6 +71,7 @@ export class WhitelabelIntroPage extends BasePage {
   loadDeployment() {
     this.logger.info(this, "loadDeployment");
     this.loading = true;
+    this.failure = false;
     this.settings.getDeploymentUrl().then((url:string) => {
       this.logger.info(this, "loadDeployment", "URL", url);
       this.api.registerDeployment(url).then((deployment:Deployment) => {
@@ -83,36 +85,43 @@ export class WhitelabelIntroPage extends BasePage {
               this.logger.info(this, "loadDeployment", "Saved", saved);
               this.deployment = deployment;
               this.loading = false;
+              this.failure = false;
               this.showDeployment();
             },
             (error:any) => {
               this.deployment = null;
               this.loading = false;
+              this.failure = true;
             });
           });
         },
         (error:any) => {
           this.deployment = null;
           this.loading = false;
+          this.failure = true;
         });
       },
       (error:any) => {
         this.deployment = null;
         this.loading = false;
+        this.failure = true;
       });
     },
     (error:any) => {
       this.deployment = null;
       this.loading = false;
+      this.failure = true;
     });
   }
 
   showDeployment() {
     this.logger.info(this, "showDeployment", this.deployment);
-    this.showRootPage(DeploymentDetailsPage,
-      { deployment: this.deployment },
-      { animate: true,
-        direction: 'forward' });
+    setTimeout(() => {
+      this.showRootPage(DeploymentDetailsPage,
+        { deployment: this.deployment },
+        { animate: true,
+          direction: 'forward' });
+    }, 2000);
   }
 
 }

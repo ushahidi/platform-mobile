@@ -14,8 +14,6 @@ import { Attribute } from '../../models/attribute';
 import { LoggerService } from '../../providers/logger-service';
 import { LanguageService } from '../../providers/language-service';
 
-declare var cordova:any;
-
 @Component({
   selector: 'input-image',
   templateUrl: 'input-image.html',
@@ -28,13 +26,13 @@ export class InputImageComponent {
   NO_IMAGE_SELECTED:string = "no image selected";
   CAMERA_CANCELLED:string = "Camera cancelled.";
   SELECTION_CANCELLED:string = "Selection cancelled.";
-  formGroup: FormGroup;
-  attribute: Attribute = null;
-  value: Value = null;
-  imagePath: string = null;
-  imageThumbnail: SafeResourceUrl = null;
-  submitted: boolean = false;
-  cameraPresent: boolean = true;
+  formGroup:FormGroup;
+  attribute:Attribute = null;
+  value:Value = null;
+  imagePath:string = null;
+  imageThumbnail:SafeResourceUrl = null;
+  submitted:boolean = false;
+  cameraPresent:boolean = true;
   caption:string = null;
 
   constructor(
@@ -365,7 +363,7 @@ export class InputImageComponent {
         sourceDirectory = "file://" + sourceDirectory;
       }
       let targetName = new Date().toISOString().replace(/\D/g,'') + sourceExtension;
-      let targetDirectory = this.platform.is('ios') ? cordova.file.documentsDirectory : cordova.file.dataDirectory;
+      let targetDirectory = this.platform.is('ios') ? this.file.documentsDirectory : this.file.dataDirectory;
       this.logger.info(this, "copyFile", filePath, "sourceDirectory", sourceDirectory, "sourceName", sourceName, "targetDirectory", targetDirectory, "targetName", targetName);
       this.file.copyFile(sourceDirectory, sourceName, targetDirectory, targetName).then((entry:Entry) => {
         this.logger.info(this, "copyFile", entry.nativeURL);
@@ -382,7 +380,9 @@ export class InputImageComponent {
     this.logger.info(this, "resolveFile", filePath);
     return new Promise((resolve, reject) => {
       this.file.resolveLocalFilesystemUrl(filePath).then((fileEntry:FileEntry) => {
-        let normalizedURL = normalizeURL(fileEntry.toURL());
+        let normalizedURL = this.platform.is("ios")
+          ? normalizeURL(fileEntry.toURL())
+          : normalizeURL(fileEntry.toInternalURL());
         this.logger.info(this, "resolveFile", filePath, normalizedURL);
         resolve(normalizedURL);
       },

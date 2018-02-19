@@ -13,8 +13,6 @@ import { LoggerService } from '../../providers/logger-service';
 
 import { PLACEHOLDER_VIDEO } from '../../constants/placeholders';
 
-declare var cordova:any;
-
 @Component({
   selector: 'input-video',
   templateUrl: 'input-video.html',
@@ -180,7 +178,7 @@ export class InputVideoComponent {
         sourceDirectory = "file://" + sourceDirectory;
       }
       let targetName = new Date().toISOString().replace(/\D/g,'') + sourceExtension;
-      let targetDirectory = this.platform.is('ios') ? cordova.file.documentsDirectory : cordova.file.dataDirectory;
+      let targetDirectory = this.platform.is('ios') ? this.file.documentsDirectory : this.file.dataDirectory;
       this.logger.info(this, "copyFile", filePath, "sourceDirectory", sourceDirectory, "sourceName", sourceName, "targetDirectory", targetDirectory, "targetName", targetName);
       this.file.copyFile(sourceDirectory, sourceName, targetDirectory, targetName).then((entry:Entry) => {
         this.logger.info(this, "copyFile", entry.nativeURL);
@@ -197,7 +195,9 @@ export class InputVideoComponent {
     this.logger.info(this, "resolveFile", filePath);
     return new Promise((resolve, reject) => {
       this.file.resolveLocalFilesystemUrl(filePath).then((fileEntry:FileEntry) => {
-        let normalizedURL = normalizeURL(fileEntry.toURL());
+        let normalizedURL = this.platform.is("ios")
+          ? normalizeURL(fileEntry.toURL())
+          : normalizeURL(fileEntry.toInternalURL());
         this.logger.info(this, "resolveFile", filePath, normalizedURL);
         resolve(normalizedURL);
       },

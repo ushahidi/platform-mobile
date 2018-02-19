@@ -18,12 +18,12 @@
   <div text-center margin-top padding-top *ngIf="loading == false && deployment != null">
     <ion-icon ios="ios-checkmark-circle-outline" md="md-checkmark-circle" color="primary"></ion-icon>
   </div>
-  <div margin-top padding-top *ngIf="loading == false && deployment == null">
+  <div margin-top padding-top *ngIf="loading == false && failure == true">
     <h5 text-center ion-text color="dark">{{'WHITELABEL_FAILURE' | translate}}</h5>
     <h6 text-center ion-text margin-bottom padding-bottom color="light">{{'WHITELABEL_FAILURE_DESCRIPTION' | translate}}</h6>
     <button ion-button block color="primary" (click)="loadDeployment()">{{'WHITELABEL_RELOAD' | translate}}</button>
   </div>
-  <div text-center margin-top padding-top *ngIf="loading == false && deployment == null && email">
+  <div text-center margin-top padding-top *ngIf="loading == false && failure == true && email">
     <p text-center ion-text color="light">
       {{'WHITELABEL_SUPPORT' | translate}}
       <strong><a href="mailto:{{email}}" target="_system">{{email}}</a></strong>.

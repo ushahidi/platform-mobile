@@ -1,4 +1,4 @@
-import { NgModule, Injectable, ErrorHandler } from '@angular/core';
+import { NgModule, ErrorHandler } from '@angular/core';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { HttpModule, Http } from '@angular/http';
 import { BrowserModule } from '@angular/platform-browser';
@@ -18,6 +18,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { FileTransfer } from '@ionic-native/file-transfer';
 import { HTTP } from '@ionic-native/http';
 import { File } from '@ionic-native/file';
+import { FilePath } from '@ionic-native/file-path';
 import { Device } from '@ionic-native/device';
 import { Camera } from '@ionic-native/camera';
 import { MediaCapture } from '@ionic-native/media-capture';
@@ -186,6 +187,7 @@ export function translateHttpLoader(http: HttpClient) {
     { provide: IsDebug, useClass: IsDebug },
     { provide: Network, useClass: Network },
     { provide: Keyboard, useClass: Keyboard },
+    { provide: FilePath, useClass: FilePath },
     { provide: FileTransfer, useClass: FileTransfer },
     { provide: StatusBar, useClass: StatusBar },
     { provide: AppVersion, useClass: AppVersion },

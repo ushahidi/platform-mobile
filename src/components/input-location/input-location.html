@@ -23,31 +23,31 @@
   <button ion-button margin-left icon-left text-uppercase small color="secondary" *ngIf="authorized == false" (click)="showSettings($event)">
     <ion-icon ios="ios-cog" md="md-cog"></ion-icon> {{'INPUT_LOCATION_SETTINGS' | translate}}
   </button>
-  <ion-card margin-left margin-right *ngIf="map">
-    <image-cache full [src]="map"></image-cache>
-  </ion-card>
-  <ion-row margin-left margin-right margin-top margin-bottom *ngIf="authorized == false && defaulted == false && map == null">
+  <ion-row margin-left margin-right margin-top margin-bottom *ngIf="(authorized == false || located == false) && defaulted == false">
     <ion-col col-12 class="street">
       <ion-input type="text" [placeholder]="'INPUT_LOCATION_STREET' | translate" [(ngModel)]="street" (blur)="streetChanged($event)"></ion-input>
     </ion-col>
   </ion-row>
-  <ion-row margin-left margin-right margin-top margin-bottom *ngIf="authorized == false && defaulted == false && map == null">
+  <ion-row margin-left margin-right margin-top margin-bottom *ngIf="(authorized == false || located == false) && defaulted == false">
     <ion-col col-12 class="city">
       <ion-input type="text" [placeholder]="'INPUT_LOCATION_CITY' | translate" [(ngModel)]="city" (blur)="cityChanged($event)"></ion-input>
     </ion-col>
   </ion-row>
-  <ion-row margin-left margin-right margin-bottom *ngIf="authorized == false && defaulted == false && map == null">
-    <ion-col col-6 class="province">
-      <ion-select [placeholder]="'INPUT_LOCATION_PROVINCE' | translate" [disabled]="provinces == null || provinces.length == 0" [selectOptions]="provincesOptions" [(ngModel)]="province" (ionChange)="provinceChanged($event)">
-        <ion-option [value]="_province.name" *ngFor="let _province of provinces">{{_province.name}}</ion-option>
-      </ion-select>
-    </ion-col>
+  <ion-row margin-left margin-right margin-bottom *ngIf="(authorized == false || located == false) && defaulted == false">
     <ion-col col-6 class="country">
       <ion-select [placeholder]="'INPUT_LOCATION_COUNTRY' | translate" [selectOptions]="countriesOptions" [(ngModel)]="country" (ionChange)="countryChanged($event)">
         <ion-option [value]="_country.name" *ngFor="let _country of countries">{{_country.name}}</ion-option>
       </ion-select>
     </ion-col>
+    <ion-col col-6 class="province">
+      <ion-select [placeholder]="'INPUT_LOCATION_PROVINCE' | translate" [disabled]="provinces == null || provinces.length == 0" [selectOptions]="provincesOptions" [(ngModel)]="province" (ionChange)="provinceChanged($event)">
+        <ion-option [value]="_province.name" *ngFor="let _province of provinces">{{_province.name}}</ion-option>
+      </ion-select>
+    </ion-col>
   </ion-row>
+  <ion-card margin-left margin-right *ngIf="map">
+    <image-cache full [src]="map"></image-cache>
+  </ion-card>
   <ion-row margin-left margin-right margin-top>
     <ion-col col-6 class="latitude">
       <ion-input type="text" readonly="true" disabled="true" [placeholder]="'INPUT_LOCATION_LATITUDE' | translate" [(ngModel)]="latitude"></ion-input>

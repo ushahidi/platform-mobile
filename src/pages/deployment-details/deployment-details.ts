@@ -73,7 +73,7 @@ export class DeploymentDetailsPage extends BasePage {
   ionViewWillEnter() {
     super.ionViewWillEnter();
     this.truncated = true;
-    this.loadStatusBar(true);
+    this.loadStatusBar(true, false);
     if (this.deployment == null) {
       this.deployment = this.getParameter<Deployment>("deployment");
     }

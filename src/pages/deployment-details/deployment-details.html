@@ -59,7 +59,7 @@
     </div>
     <ion-list *ngIf="loaded == true">
       <ion-item detail-push tappable *ngIf="deployment.forms && deployment.forms.length > 0" (click)="showResponses($event)">
-        {{'RESPONSES' | translate}}
+        {{'RESPONSES_VIEW' | translate}}
       </ion-item>
       <ion-item detail-push tappable *ngIf="deployment.can_update == true" (click)="showSettings($event)">
         {{'SETTINGS' | translate}}

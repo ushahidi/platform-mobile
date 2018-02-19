@@ -18,7 +18,7 @@ function puts(error, stdout, stderr) {
 
 function generateResourceImages() {
   process.stdout.write("generateResourceImages" + "\n");
-  exec("ionic cordova resources", puts);
+  exec("ionic cordova resources --force", puts);
 }
 
 function installCordovaIosSim() {

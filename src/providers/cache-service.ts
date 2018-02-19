@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
+import { Platform } from 'ionic-angular';
 
 import { File } from '@ionic-native/file';
+import { FilePath } from '@ionic-native/file-path';
 import { FileTransfer } from '@ionic-native/file-transfer';
 
 import { StaticMap } from '../maps/static-map';
@@ -18,11 +20,13 @@ export class CacheService {
   private imageCache:ImageCacheComponent = null;
 
   constructor(
+    private platform:Platform,
     private file:File,
+    private filePath:FilePath,
     private transfer:FileTransfer,
     private sanitizer:DomSanitizer,
     private logger:LoggerService) {
-    this.imageCache = new ImageCacheComponent(file, transfer, sanitizer, logger);
+    this.imageCache = new ImageCacheComponent(platform, file, filePath, transfer, sanitizer, logger);
   }
 
   fetchImage(url:string) {

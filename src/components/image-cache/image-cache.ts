@@ -1,14 +1,13 @@
 import { Injectable, Component, Input, OnInit, OnChanges, AfterContentChecked } from '@angular/core';
 import { SafeUrl, DomSanitizer } from '@angular/platform-browser';
 import { Md5 } from 'ts-md5/dist/md5';
-import { normalizeURL } from 'ionic-angular';
+import { Platform, normalizeURL } from 'ionic-angular';
 
+import { FilePath } from '@ionic-native/file-path';
 import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer';
 import { File, Entry, FileEntry, FileError, Metadata } from '@ionic-native/file';
 
 import { LoggerService } from '../../providers/logger-service';
-
-declare var cordova:any;
 
 @Component({
   selector: 'image-cache',
@@ -26,12 +25,16 @@ export class ImageCacheComponent implements OnInit, OnChanges, AfterContentCheck
   @Input('placeholder')
   placeholder:string = null;
 
+  original:string = null;
+
   cacheUrl:string = null;
 
-  safeUrl:SafeUrl = null;
+  safeUrl:SafeUrl|string = null;
 
   constructor(
+    private platform:Platform,
     private file:File,
+    private filePath:FilePath,
     private transfer:FileTransfer,
     private sanitizer:DomSanitizer,
     private logger:LoggerService) {
@@ -50,31 +53,24 @@ export class ImageCacheComponent implements OnInit, OnChanges, AfterContentCheck
   }
 
   loadCacheImage(url:string) {
-    if (url && url.length > 0) {
+    if (url && url.length > 0 && url !== this.original) {
+      this.original = url;
       let file = this.getCacheFile(url);
       let directory = this.getCacheDirectory();
-      this.downloadCacheImage(url, directory, file).then((cache:string) => {
+      this.fetchCacheImage(url).then((cache:string) => {
+        this.logger.info(this, "loadCacheImage", url, "Cache", cache);
         this.useCacheImage(cache).then((file:any) => {
-          this.logger.info(this, "loadCacheImage", url, file);
+          this.logger.info(this, "loadCacheImage", url, "Cache", cache, "File", file);
         },
         (error:any) => {
-          this.logger.error(this, "loadCacheImage", url, error);
+          this.logger.error(this, "loadCacheImage", url, "Cache", cache, "Error", error);
           this.useFallback();
         });
+      },
+      (error:any) => {
+        this.logger.error(this, "loadCacheImage", url, "Error", error);
+        this.useFallback();
       });
-      // this.fetchCacheImage(url).then((cache:string) => {
-        // this.useCacheImage(cache).then((file:any) => {
-        //   this.logger.info(this, "loadCacheImage", url, file);
-        // },
-        // (error:any) => {
-        //   this.logger.error(this, "loadCacheImage", url, error);
-        //   this.useFallback();
-        // });
-      // },
-      // (error:any) => {
-      //   this.logger.error(this, "loadCacheImage", url, error);
-      //   this.useFallback();
-      // });
     }
     else {
       this.useFallback();
@@ -120,8 +116,13 @@ export class ImageCacheComponent implements OnInit, OnChanges, AfterContentCheck
                 resolve(entry.toURL());
               }
               else {
+                this.logger.error(this, "hasCacheImage", image, "No");
                 reject("Cache Empty");
               }
+            },
+            (error:any) => {
+              this.logger.error(this, "hasCacheImage", image, "No", error);
+              reject("No Cache");
             });
           },
           (error:FileError) => {
@@ -130,12 +131,12 @@ export class ImageCacheComponent implements OnInit, OnChanges, AfterContentCheck
           });
         }
         else {
-          this.logger.info(this, "hasCacheImage", image, "No");
+          this.logger.error(this, "hasCacheImage", image, "No");
           reject("No Cache");
         }
       },
       (error:FileError) => {
-        this.logger.info(this, "hasCacheImage", image, "No", error);
+        this.logger.error(this, "hasCacheImage", image, "No", error);
         reject(error);
       });
     });
@@ -158,12 +159,11 @@ export class ImageCacheComponent implements OnInit, OnChanges, AfterContentCheck
 
   useCacheImage(url:string):Promise<string> {
     return new Promise((resolve, reject) => {
-      this.file.resolveLocalFilesystemUrl(url).then((entry:FileEntry) => {
-        let normalizedURL = normalizeURL(entry.toURL());
-        this.logger.info(this, "useCacheImage", url, normalizedURL);
-        this.cacheUrl = normalizedURL;
-        this.safeUrl = this.sanitizer.bypassSecurityTrustUrl(normalizedURL);
-        resolve(normalizedURL);
+      this.resolveFilePath(url).then((file:string) => {
+        this.logger.info(this, "useCacheImage", url, file);
+        this.cacheUrl = file;
+        this.safeUrl = this.sanitizer.bypassSecurityTrustUrl(file);
+        resolve(file);
       },
       (error:any) => {
         this.logger.error(this, "useCacheImage", url, error);
@@ -172,11 +172,32 @@ export class ImageCacheComponent implements OnInit, OnChanges, AfterContentCheck
     });
   }
 
+  resolveFilePath(url:string):Promise<string> {
+    return new Promise((resolve, reject) => {
+      this.file.resolveLocalFilesystemUrl(url).then((fileEntry:FileEntry) => {
+        let normalizedURL = this.platform.is("ios")
+          ? normalizeURL(fileEntry.toURL())
+          : normalizeURL(fileEntry.toInternalURL());
+        this.logger.info(this, "resolveFilePath", url, "resolveLocalFilesystemUrl", normalizedURL);
+        resolve(normalizedURL);
+      },
+      (error:any) => {
+        this.logger.error(this, "resolveFilePath", url, "resolveLocalFilesystemUrl", error);
+        reject(error);
+      });
+    });
+  }
+
   useFallback() {
     if (this.fallback && this.fallback.length > 0) {
-      this.logger.info(this, "useFallback", this.fallback);
+      this.logger.info(this, "useFallback", "Fallback", this.fallback);
       this.cacheUrl = normalizeURL(this.fallback);
       this.safeUrl = this.sanitizer.bypassSecurityTrustUrl(this.fallback);
+    }
+    else if (this.original && this.original.length > 0) {
+      this.logger.info(this, "useFallback", "Original", this.original);
+      this.cacheUrl = this.original;
+      this.safeUrl = this.original;
     }
   }
 
@@ -198,7 +219,13 @@ export class ImageCacheComponent implements OnInit, OnChanges, AfterContentCheck
   }
 
   getCacheDirectory():string {
-    return cordova.file.cacheDirectory;
+    if (this.platform.is("ios")) {
+      return this.file.cacheDirectory;
+    }
+    else if (this.platform.is("android")) {
+      return this.file.dataDirectory;
+    }
+    return this.file.cacheDirectory;
   }
 
 }

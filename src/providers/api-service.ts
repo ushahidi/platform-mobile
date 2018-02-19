@@ -132,12 +132,14 @@ export class ApiService extends HttpService {
           let login:Login = <Login> {
             access_token: data.access_token };
           this.storage.setItem(deployment.website, JSON.stringify(login)).then(
-              (data:any) => {
-                resolve(login);
-              },
-              (error:any) => {
-                reject(error);
-              });
+            (data:any) => {
+              this.logger.info(this, "clientLogin", login, "Saved", data);
+              resolve(login);
+            },
+            (error:any) => {
+              this.logger.error(this, "clientLogin", login, "Failed", error);
+              reject(error);
+            });
         },
         (error:any) => {
           reject(error);

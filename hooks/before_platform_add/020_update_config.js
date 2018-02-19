@@ -39,6 +39,13 @@ function replaceDescriptionInFile(filename, description) {
   fs.writeFileSync(filename, result, 'utf8');
 }
 
+function replaceStatusBarColorInFile(filename, color) {
+  var data = fs.readFileSync(filename, 'utf8');
+  var regex = /<preference name="StatusBarBackgroundColor" value="(.*?)" \/>/g;
+  var result = data.replace(regex, '<preference name="StatusBarBackgroundColor" value="'+color+'" />');
+  fs.writeFileSync(filename, result, 'utf8');
+}
+
 function replaceDeepLinkSecureInFile(filename, secure) {
   if (secure) {
     var data = fs.readFileSync(filename, 'utf8');
@@ -72,6 +79,7 @@ function changeConfigFile() {
   replaceIdInFile(configFile, config.appId);
   replaceNameInFile(configFile, config.appName);
   replaceDescriptionInFile(configFile, config.appDescription);
+  replaceStatusBarColorInFile(configFile, config.colorNavbar);
 }
 
 function changePackageFile() {

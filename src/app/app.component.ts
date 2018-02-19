@@ -129,7 +129,7 @@ export class UshahidiApp {
   loadSettings() {
     this.settings.getDeploymentUrl().then((url:string) => {
       this.logger.info(this, 'loadSettings', "getDeploymentUrl", url);
-      this.whitelabel = true;
+      this.whitelabel = (url && url.length > 0);
     },
     (error:any) => {
       this.logger.error(this, 'loadSettings', "getDeploymentUrl", error);
@@ -317,19 +317,19 @@ export class UshahidiApp {
   }
 
   private showRootPage(deployments:Deployment[]=null) {
-    if (this.acceptedTerms == false && this.whitelabel == false) {
-      this.logger.info(this, "showRootPage", "PrivacyPolicyPage");
+    if (this.acceptedTerms == false) {
+      this.logger.info(this, "showRootPage", "PrivacyPolicyPage", this.acceptedTerms);
       this.rootPage = PrivacyPolicyPage;
       this.splashScreen.hide();
     }
     else if (deployments && deployments.length > 0) {
-      this.logger.info(this, "showRootPage", "showDeployment");
+      this.logger.info(this, "showRootPage", "showDeployment", deployments.length);
       this.showDeployment(this.deployment).then((ready) => {
         this.splashScreen.hide();
       });
     }
     else if (this.whitelabel == true) {
-      this.logger.info(this, "showRootPage", "WhitelabelIntroPage");
+      this.logger.info(this, "showRootPage", "WhitelabelIntroPage", this.whitelabel);
       this.rootPage = WhitelabelIntroPage;
       this.splashScreen.hide();
     }
@@ -374,6 +374,13 @@ export class UshahidiApp {
     this.deploymentApi = deployment.api;
     return this.api.userOrClientLogin(deployment, this.offline).then(
       (login:Login) => {
+        this.menuController.close();
+        this.nav.setRoot(
+          DeploymentDetailsPage,
+          { deployment: deployment });
+      },
+      (error:any) => {
+        this.logger.error(this, "showDeployment", error);
         this.menuController.close();
         this.nav.setRoot(
           DeploymentDetailsPage,
