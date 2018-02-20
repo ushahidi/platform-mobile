@@ -20,7 +20,7 @@ export class GithubService extends HttpService {
   private server:string = "https://api.github.com";
 
   constructor(
-    protected http: Http,
+    protected http:Http,
     protected file:File,
     protected transfer:FileTransfer,
     protected logger:LoggerService) {

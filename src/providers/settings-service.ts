@@ -25,17 +25,18 @@ export class SettingsService {
 
   public loadSettings():Promise<Settings> {
     return new Promise((resolve, reject) => {
-      let directory = this.file.applicationDirectory;
-      let filename =  "www/assets/data/settings.json";
-      this.http.get(directory + filename)
+      let filepath = this.platform.is("ios")
+        ? this.file.applicationDirectory + "www/assets/data/settings.json"
+        : "../assets/data/settings.json";
+      this.http.get(filepath)
         .map((res) => res.json())
         .subscribe((data) => {
-          this.logger.info(this, "loadSettings", filename, "Data", data);
+          this.logger.info(this, "loadSettings", filepath, "Data", data);
           this.settings = <Settings>data
           resolve(this.settings);
         },
         (error) => {
-          this.logger.error(this, "loadSettings", filename, "Error", error);
+          this.logger.error(this, "loadSettings", filepath, "Error", error);
           this.settings = null;
           reject("No Settings");
         });
