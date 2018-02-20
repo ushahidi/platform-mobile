@@ -138,7 +138,7 @@ export class ApiService extends HttpService {
             },
             (error:any) => {
               this.logger.error(this, "clientLogin", login, "Failed", error);
-              reject(error);
+              reject("There was a problem storing client login.");
             });
         },
         (error:any) => {
@@ -174,7 +174,7 @@ export class ApiService extends HttpService {
                     resolve(login);
                   },
                   (error:any) => {
-                    reject(error);
+                    reject("There was a problem storing user login.");
                   });
               });
             },
@@ -230,7 +230,7 @@ export class ApiService extends HttpService {
               resolve(login);
             },
             (error:any) => {
-              reject(error);
+              reject("There was a problem storing user login.");
             });
         },
         (error:any) => {

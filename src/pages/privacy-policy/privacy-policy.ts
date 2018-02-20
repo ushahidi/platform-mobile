@@ -93,6 +93,7 @@ export class PrivacyPolicyPage extends BasePage {
   showNext(event:any=null) {
     this.logger.info(this, "showNext", this.acceptedTerms)
     this.settings.setAcceptedTerms(this.acceptedTerms).then(saved => {
+      this.logger.info(this, "showNext", "acceptedTerms", this.acceptedTerms, saved)
       if (this.whitelabel == true) {
         this.showRootPage(WhitelabelIntroPage,
           {  },

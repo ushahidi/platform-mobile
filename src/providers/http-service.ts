@@ -340,6 +340,9 @@ export class HttpService {
     else if (error.name && error.name === "TimeoutError") {
       return "Request Timeout";
     }
+    else if (error['exception']) {
+      return error['exception'];
+    }
     return JSON.stringify(error);
   }
 

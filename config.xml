@@ -166,7 +166,6 @@
         <variable name="PHOTOLIBRARY_USAGE_DESCRIPTION" value="This app would like to access the photo library." />
     </plugin>
     <plugin name="cordova-plugin-nativegeocoder" spec="^1.0.2" />
-    <plugin name="cordova-plugin-nativestorage" spec="^2.3.0" />
     <plugin name="cordova-plugin-network-information" spec="^1.3.4" />
     <plugin name="cordova-plugin-networkactivityindicator" spec="^0.1.1" />
     <plugin name="cordova-plugin-spinner-dialog" spec="^1.3.1" />
@@ -181,4 +180,5 @@
     <plugin name="cordova-plugin-ionic-webview" spec="^1.1.16" />
     <plugin name="cordova-plugin-screen-orientation" spec="^2.0.2" />
     <plugin name="cordova-plugin-advanced-http" spec="^1.10.1" />
+    <plugin name="cordova-plugin-nativestorage" spec="^2.2.2" />
 </widget>

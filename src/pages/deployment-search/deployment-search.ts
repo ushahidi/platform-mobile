@@ -150,7 +150,7 @@ export class DeploymentSearchPage extends BasePage {
       'DEPLOYMENT_ADDING_',
       'DEPLOYMENT_ADD_FAILURE',
       'DEPLOYMENT_ADD_FAILURE_DESCRIPTION',
-      'LOGIN_FAILURE']).then((translations:string[]) => {
+      'USER_LOGIN_FAILURE']).then((translations:string[]) => {
       let loading = this.showLoading(translations[0]);
       return this.api.clientLogin(deployment).then((login:Login) => {
         this.logger.info(this, "loginDeployment", "Tokens", login);
