@@ -25,9 +25,9 @@ export class SettingsService {
 
   public loadSettings():Promise<Settings> {
     return new Promise((resolve, reject) => {
-      let filepath = this.platform.is("ios")
-        ? this.file.applicationDirectory + "www/assets/data/settings.json"
-        : "../assets/data/settings.json";
+      let filepath = this.platform.is("android")
+        ? "../assets/data/settings.json"
+        : this.file.applicationDirectory + "www/assets/data/settings.json";
       this.http.get(filepath)
         .map((res) => res.json())
         .subscribe((data) => {
