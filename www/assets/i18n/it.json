@@ -172,6 +172,7 @@
 "SETTINGS_SAVING_": "Salvataggio...",
 "SETTINGS_SAVE_SUCCESS": "impostazioni salvate",
 "SETTINGS_SAVE_FAILURE": "Problema durante il salvataggio delle impostazioni",
+"SETTINGS_SAVE_FAILURE_DESCRIPTION": "Si è verificato un problema durante il salvataggio delle impostazioni.",
 "TOS_TITLE": "Termini di servizio",
 "TOS_DESCRIPTION": "Abbiamo aggiornato il nostro",
 "TOS_TERMS_CONDITIONS": "Termini e condizioni",

@@ -92,25 +92,34 @@ export class PrivacyPolicyPage extends BasePage {
 
   showNext(event:any=null) {
     this.logger.info(this, "showNext", this.acceptedTerms)
-    this.settings.setAcceptedTerms(this.acceptedTerms).then(saved => {
-      this.logger.info(this, "showNext", "acceptedTerms", this.acceptedTerms, saved)
-      if (this.whitelabel == true) {
-        this.showRootPage(WhitelabelIntroPage,
-          {  },
-          { animate: true,
-            direction: 'forward' });
-      }
-      else if (this.deployment != null) {
-        this.showRootPage(DeploymentDetailsPage,
-          { deployment: this.deployment },
-          { animate: true,
-            direction: 'forward' });
+    this.settings.setAcceptedTerms(this.acceptedTerms).then((saved:boolean) => {
+      this.logger.info(this, "showNext", "acceptedTerms", this.acceptedTerms, "Saved", saved);
+      if (saved) {
+        if (this.whitelabel == true) {
+          this.showRootPage(WhitelabelIntroPage,
+            {  },
+            { animate: true,
+              direction: 'forward' });
+        }
+        else if (this.deployment != null) {
+          this.showRootPage(DeploymentDetailsPage,
+            { deployment: this.deployment },
+            { animate: true,
+              direction: 'forward' });
+        }
+        else {
+          this.showRootPage(DeploymentNonePage,
+            { },
+            { animate: true,
+              direction: 'forward' });
+        }
       }
       else {
-        this.showRootPage(DeploymentNonePage,
-          { },
-          { animate: true,
-            direction: 'forward' });
+        this.language.getTranslations([
+          'SETTINGS_SAVE_FAILURE',
+          'SETTINGS_SAVE_FAILURE_DESCRIPTION']).then((translations:string[]) => {
+          this.showAlert(translations[0], translations[1]);
+        });
       }
     });
   }

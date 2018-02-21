@@ -142,8 +142,6 @@
     </feature>
     <allow-navigation href="http://192.168.0.12:8100" />
     <allow-navigation href="http://192.168.0.14:8100" />
-    <engine name="ios" spec="~4.5.4" />
-    <engine name="android" spec="~6.4.0" />
     <plugin name="cordova-custom-config" spec="^4.0.2" />
     <plugin name="cordova-plugin-app-version" spec="^0.1.9" />
     <plugin name="cordova-plugin-camera" spec="^2.4.1">
@@ -180,5 +178,7 @@
     <plugin name="cordova-plugin-ionic-webview" spec="^1.1.16" />
     <plugin name="cordova-plugin-screen-orientation" spec="^2.0.2" />
     <plugin name="cordova-plugin-advanced-http" spec="^1.10.1" />
-    <plugin name="cordova-plugin-nativestorage" spec="^2.2.2" />
+    <plugin name="cordova-plugin-nativestorage" spec="^2.3.1" />
+    <engine name="ios" spec="~4.5.4" />
+    <engine name="android" spec="~6.4.0" />
 </widget>

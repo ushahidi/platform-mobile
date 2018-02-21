@@ -172,6 +172,7 @@
 "SETTINGS_SAVING_": "Ahorro...",
 "SETTINGS_SAVE_SUCCESS": "Ajustes guardados",
 "SETTINGS_SAVE_FAILURE": "Configuración de ahorro de problemas",
+"SETTINGS_SAVE_FAILURE_DESCRIPTION": "Hubo un problema al guardar la configuración.",
 "TOS_TITLE": "Términos de servicio",
 "TOS_DESCRIPTION": "Hemos actualizado nuestra",
 "TOS_TERMS_CONDITIONS": "Términos y Condiciones",

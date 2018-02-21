@@ -63,12 +63,12 @@ export class SettingsService {
 
   public setAcceptedTerms(accepted:boolean):Promise<boolean> {
     return new Promise((resolve, reject) => {
-      this.storage.setItem("AcceptedTerms", accepted).then((data:any) => {
+      this.storage.setItem("AcceptedTerms", accepted).then(() => {
         this.logger.info(this, "setAcceptedTerms", accepted, "Saved");
         resolve(true);
       },
       (error:any) => {
-        this.logger.error(this, "setAcceptedTerms", accepted, error);
+        this.logger.error(this, "setAcceptedTerms", accepted, "Failed", error);
         resolve(false);
       });
     });
