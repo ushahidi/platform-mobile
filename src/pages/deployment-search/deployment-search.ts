@@ -52,14 +52,14 @@ export class DeploymentSearchPage extends BasePage {
   ionViewWillEnter() {
     super.ionViewWillEnter();
     if (this.tablet == false) {
-      this.loadStatusBar(true);
+      this.loadStatusBar(true, true);
     }
   }
 
   ionViewDidEnter() {
     super.ionViewDidEnter();
     if (this.tablet == false) {
-      this.loadStatusBar(true);
+      this.loadStatusBar(true, true);
     }
   }
 

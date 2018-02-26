@@ -111,6 +111,7 @@ export class ResponseListPage extends BasePage {
     return Promise.resolve()
       .then(() => { return this.loadFilters(cache); })
       .then(() => { return this.loadPosts(cache); })
+      .then(() => { return this.loadUsers(cache); })
       .then(() => { return this.loadImages(cache); })
       .then(() => { return this.uploadPending(cache); })
       .then(() => {
@@ -189,13 +190,29 @@ export class ResponseListPage extends BasePage {
     }
   }
 
+  loadUsers(cache:boolean=true):Promise<any> {
+    this.logger.info(this, "loadUsers");
+    let users = [];
+    // for (let post of this.posts) {
+    //   for (let value of post.values) {
+    //     if (value.hasMissingImage()) {
+    //       images.push(this.loadImage(post, value));
+    //     }
+    //   }
+    //   this.cache.fetchMap(this.deployment.mapbox_api_key, post.latitude, post.longitude);
+    // }
+    return Promise.all(users).then((saved) => {
+      this.logger.info(this, "loadUsers", "Done");
+    });
+  }
+
   loadImages(cache:boolean=true):Promise<any> {
     this.logger.info(this, "loadImages");
     let images = [];
     for (let post of this.posts) {
       for (let value of post.values) {
         if (value.hasMissingImage()) {
-          images.push(this.loadImage(post, value));
+          // images.push(this.loadImage(post, value));
         }
       }
       this.cache.fetchMap(this.deployment.mapbox_api_key, post.latitude, post.longitude);

@@ -50,7 +50,7 @@ export class UserLoginPage extends BasePage {
 
   ionViewWillEnter() {
     super.ionViewWillEnter();
-    this.loadStatusBar(true);
+    this.loadStatusBar(true, true);
     this.deployment = this.getParameter<Deployment>("deployment");
     this.login = this.getParameter<Login>("login");
     if (this.login && this.login.username) {

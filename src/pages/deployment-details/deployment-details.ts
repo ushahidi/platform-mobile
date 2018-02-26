@@ -73,7 +73,7 @@ export class DeploymentDetailsPage extends BasePage {
   ionViewWillEnter() {
     super.ionViewWillEnter();
     this.truncated = true;
-    this.loadStatusBar(true, false);
+    this.loadStatusBar(true, true);
     if (this.deployment == null) {
       this.deployment = this.getParameter<Deployment>("deployment");
     }
@@ -339,13 +339,13 @@ export class DeploymentDetailsPage extends BasePage {
 
   userLogin(event:any) {
     this.logger.info(this, "userLogin");
-    this.showPage(UserLoginPage,
+    this.showModal(UserLoginPage,
       { deployment: this.deployment });
   }
 
   userSignup(event:any) {
     this.logger.info(this, "userSignup");
-    this.showPage(UserSignupPage,
+    this.showModal(UserSignupPage,
       { deployment: this.deployment });
   }
 
