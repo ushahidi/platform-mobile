@@ -17,6 +17,7 @@ import { Filter } from '../../models/filter';
 import { Collection } from '../../models/collection';
 import { Value } from '../../models/value';
 import { Image } from '../../models/image';
+import { User } from '../../models/user';
 
 import { ApiService } from '../../providers/api-service';
 import { LoggerService } from '../../providers/logger-service';
@@ -193,16 +194,31 @@ export class ResponseListPage extends BasePage {
   loadUsers(cache:boolean=true):Promise<any> {
     this.logger.info(this, "loadUsers");
     let users = [];
-    // for (let post of this.posts) {
-    //   for (let value of post.values) {
-    //     if (value.hasMissingImage()) {
-    //       images.push(this.loadImage(post, value));
-    //     }
-    //   }
-    //   this.cache.fetchMap(this.deployment.mapbox_api_key, post.latitude, post.longitude);
-    // }
-    return Promise.all(users).then((saved) => {
+    for (let post of this.posts) {
+      if (post.user == null && post.user_id != null) {
+        users.push(this.loadUser(post));
+      }
+    }
+    return Promise.all(users).then((loaded) => {
       this.logger.info(this, "loadUsers", "Done");
+    });
+  }
+
+  loadUser(post:Post):Promise<User> {
+    return new Promise((resolve, reject) => {
+      this.logger.info(this, "loadUser", post.title);
+      this.api.getUser(this.deployment, post.user_id, true).then((user:User) => {
+        this.logger.info(this, "loadUser", post.title, "User", user, "Downloaded", user);
+        post.user = user;
+        let saves = [
+          this.database.saveUser(this.deployment, user),
+          this.database.savePost(this.deployment, post)
+        ];
+        Promise.all(saves).then((saved) => {
+          this.logger.info(this, "loadImage", post.title, "User", user, "Saved", user);
+          resolve(user);
+        });
+      });
     });
   }
 
@@ -212,7 +228,7 @@ export class ResponseListPage extends BasePage {
     for (let post of this.posts) {
       for (let value of post.values) {
         if (value.hasMissingImage()) {
-          // images.push(this.loadImage(post, value));
+          images.push(this.loadImage(post, value));
         }
       }
       this.cache.fetchMap(this.deployment.mapbox_api_key, post.latitude, post.longitude);

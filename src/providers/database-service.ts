@@ -75,6 +75,14 @@ export class DatabaseService extends SqlService {
     return this.getModels<User>(new User(), where, order);
   }
 
+  public getUser(deployment:Deployment, id:number):Promise<User> {
+    let where = {
+      deployment_id: deployment.id,
+      id: id
+    };
+    return this.getModel<User>(new User(), where);
+  }
+
   public saveUser(deployment:Deployment, user:User):Promise<boolean>  {
     user.deployment_id = deployment.id;
     return this.saveModel(user);

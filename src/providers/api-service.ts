@@ -463,14 +463,34 @@ export class ApiService extends HttpService {
 
   getUser(deployment:Deployment, user:any="me", cache:boolean=false, offline:boolean=false):Promise<User>  {
     return new Promise((resolve, reject) => {
-      this.apiGet(deployment, `/api/v3/users/${user}`).then(
-        (data:any) => {
-          let user:User = new User(data);
-          resolve(user);
-        },
-        (error:any) => {
-          reject(error);
+      if (cache || offline) {
+        this.database.getUser(deployment, user).then((user:User) => {
+          if (user) {
+            resolve(user);
+          }
+          else if (offline) {
+            reject("User Not Found");
+          }
+          else {
+            this.getUser(deployment, user, false, offline).then((user:User) => {
+              resolve(user);
+            },
+            (error:any) => {
+              reject(error);
+            });
+          }
         });
+      }
+      else {
+        this.apiGet(deployment, `/api/v3/users/${user}`).then(
+          (data:any) => {
+            let user:User = new User(data);
+            resolve(user);
+          },
+          (error:any) => {
+            reject(error);
+          });
+      }
     });
   }
 
