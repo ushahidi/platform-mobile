@@ -62,22 +62,24 @@ var googleTranslate = function(path, language, key, value, comma) {
       });
   });
 };
-for (let language of languages) {
-  let path = assets + language + ".json";
-  openFile(path).then((fd) => {
-    startFile(path).then(() => {
-      let promise = Promise.resolve(false);
-      for (let key in english) {
-        let value = english[key];
-        promise = promise.then((comma) => {
-          return googleTranslate(path, language, key, value, comma);
-        }).then((line) => {
-          return writeFile(path, line);
+if (process.env.translate) {
+  for (let language of languages) {
+    let path = assets + language + ".json";
+    openFile(path).then((fd) => {
+      startFile(path).then(() => {
+        let promise = Promise.resolve(false);
+        for (let key in english) {
+          let value = english[key];
+          promise = promise.then((comma) => {
+            return googleTranslate(path, language, key, value, comma);
+          }).then((line) => {
+            return writeFile(path, line);
+          });
+        }
+        promise.then((done)=> {
+          return closeFile(path, fd);
         });
-      }
-      promise.then((done)=> {
-        return closeFile(path, fd);
       });
     });
-  });
+  }
 }

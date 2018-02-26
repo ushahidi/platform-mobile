@@ -58,11 +58,12 @@ export class PrivacyPolicyPage extends BasePage {
   loadSettings() {
     this.logger.info(this, "loadDeployment");
     this.settings.getDeploymentUrl().then((url:string) => {
-      this.logger.info(this, 'loadSettings', "getDeploymentUrl", url);
-      this.whitelabel = (url && url.length > 0);
+      let whitelabel = (url && url.length > 0);
+      this.logger.info(this, 'loadSettings', "Whitelabel", whitelabel);
+      this.whitelabel = whitelabel;
     },
     (error:any) => {
-      this.logger.error(this, 'loadSettings', "getDeploymentUrl", error);
+      this.logger.info(this, 'loadSettings', "Whitelabel", "No");
       this.whitelabel = false;
     });
   }
@@ -93,11 +94,11 @@ export class PrivacyPolicyPage extends BasePage {
   showNext(event:any=null) {
     this.logger.info(this, "showNext", this.acceptedTerms)
     this.settings.setAcceptedTerms(this.acceptedTerms).then((saved:boolean) => {
-      this.logger.info(this, "showNext", "acceptedTerms", this.acceptedTerms, "Saved", saved);
+      this.logger.info(this, "showNext", "Accepted Terms", this.acceptedTerms, "Saved", saved);
       if (saved) {
         if (this.whitelabel == true) {
           this.showRootPage(WhitelabelIntroPage,
-            {  },
+            { deployment: this.deployment },
             { animate: true,
               direction: 'forward' });
         }

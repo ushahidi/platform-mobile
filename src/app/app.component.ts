@@ -1,11 +1,11 @@
 import { Component, Injector, ViewChild, NgZone } from '@angular/core';
 import { Alert, Toast, Loading, Events, Nav, Platform, ModalController, LoadingController, ToastController, AlertController, MenuController } from 'ionic-angular';
 
+import { Network } from '@ionic-native/network';
 import { StatusBar } from '@ionic-native/status-bar';
+import { AppVersion } from '@ionic-native/app-version';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { GoogleAnalytics } from '@ionic-native/google-analytics';
-import { AppVersion } from '@ionic-native/app-version';
-import { Network } from '@ionic-native/network';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
 
 import { Model } from '../models/model';
@@ -128,19 +128,20 @@ export class UshahidiApp {
 
   loadSettings() {
     this.settings.getDeploymentUrl().then((url:string) => {
-      this.logger.info(this, 'loadSettings', "getDeploymentUrl", url);
-      this.whitelabel = (url && url.length > 0);
+      let whitelabel = (url && url.length > 0);
+      this.logger.info(this, 'loadSettings', "Whitelabel", whitelabel);
+      this.whitelabel = whitelabel;
     },
     (error:any) => {
-      this.logger.error(this, 'loadSettings', "getDeploymentUrl", error);
+      this.logger.info(this, 'loadSettings', "Whitelabel", "False");
       this.whitelabel = false;
     });
     this.settings.getAcceptedTerms().then((acceptedTerms:boolean) => {
-      this.logger.info(this, 'loadSettings', "getAcceptedTerms", acceptedTerms);
+      this.logger.info(this, 'loadSettings', "Accepted Terms", acceptedTerms);
       this.acceptedTerms = acceptedTerms;
     },
     (error:any) => {
-      this.logger.error(this, 'loadSettings', "getAcceptedTerms", error);
+      this.logger.info(this, 'loadSettings', "Accepted Terms", "False");
       this.acceptedTerms = false;
     });
   }
