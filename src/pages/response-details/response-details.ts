@@ -254,6 +254,15 @@ export class ResponseDetailsPage extends BasePage {
     });
   }
 
+  showResponse(event:any) {
+    this.logger.info(this, "showResponse", event.post);
+    this.showPage(ResponseDetailsPage, {
+      deployment: this.deployment,
+      login: this.login,
+      post: event.post
+    });
+  }
+
   showImage(title:string, image:string) {
     this.logger.info(this, "showImage", title, image);
     this.showPage(ResponseImagePage, {

@@ -68,6 +68,7 @@ import { InputTextComponent } from '../components/input-text/input-text';
 import { InputTextAreaComponent } from '../components/input-textarea/input-textarea';
 import { InputVideoComponent } from '../components/input-video/input-video';
 import { InputTagsComponent } from '../components/input-tags/input-tags';
+import { InputRelationComponent } from '../components/input-relation/input-relation';
 import { InputMarkdownComponent } from '../components/input-markdown/input-markdown';
 import { ImageCacheComponent } from '../components/image-cache/image-cache';
 import { PostCardComponent } from '../components/post-card/post-card';
@@ -126,6 +127,7 @@ export function translateHttpLoader(http: HttpClient) {
     InputTextAreaComponent,
     InputVideoComponent,
     InputTagsComponent,
+    InputRelationComponent,
     InputMarkdownComponent,
     PostCardComponent,
     PostValueComponent,

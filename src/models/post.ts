@@ -235,6 +235,9 @@ export class Post extends Model {
       else if (value.isTags()) {
         values[value.key] = value.value.split(",")
       }
+      else if (value.isRelation()) {
+        values[value.key] = [Number(value.value)];
+      }
       else {
         values[value.key] = [value.value];
       }

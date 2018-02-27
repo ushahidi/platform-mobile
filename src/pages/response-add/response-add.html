@@ -41,6 +41,7 @@
             <input-video [submitted]="submitted" [value]="values[attribute.key]" [attribute]="attribute" [formGroup]="formGroup" *ngIf="attribute.input == 'video'"></input-video>
             <input-tags [submitted]="submitted" [value]="values[attribute.key]" [attribute]="attribute" [formGroup]="formGroup" *ngIf="attribute.input == 'tags'"></input-tags>
             <input-markdown [submitted]="submitted" [value]="values[attribute.key]" [attribute]="attribute" [formGroup]="formGroup" *ngIf="attribute.input == 'markdown'"></input-markdown>
+            <input-relation [deployment]="deployment" [submitted]="submitted" [value]="values[attribute.key]" [attribute]="attribute" [formGroup]="formGroup" *ngIf="attribute.input == 'relation'"></input-relation>
           </div>
         </div>
       </ion-list>

@@ -37,7 +37,7 @@ export class TextMoreComponent {
   }
 
   ngOnInit() {
-    this.language.getTranslation('READ_MORE').then((translation:string) => {
+    this.language.getTranslation('ACTION_READ_MORE').then((translation:string) => {
       if (this.text && this.text.length > 0) {
         let words = this.text.split(" ");
         if (words.length > this.truncate) {

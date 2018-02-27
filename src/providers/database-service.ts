@@ -113,7 +113,7 @@ export class DatabaseService extends SqlService {
       postsWhere['form_id'] = filter.show_forms.split(",");
     }
     if (filter && filter.search_text && filter.search_text.length > 0) {
-      postsWhere['title'] = `%${ filter.search_text}%`;
+      postsWhere['title'] = `%${filter.search_text}%`;
     }
     return Promise.all([
       this.getModels<Post>(new Post(), postsWhere, { created: "DESC" }, limit, offset),
@@ -125,6 +125,28 @@ export class DatabaseService extends SqlService {
           post.loadValues(values);
         }
         this.logger.info(this, "getPosts", posts.length);
+        return posts;
+      });
+  }
+
+  public getPostsByIDs(deployment:Deployment, ids:number[]):Promise<Post[]> {
+    let postsWhere = {
+      deployment_id: deployment.id,
+      id: ids };
+    let valuesWhere = {
+      deployment_id: deployment.id
+    };
+    let order = { created: "DESC" };
+    return Promise.all([
+      this.getModels<Post>(new Post(), postsWhere, { created: "DESC" }),
+      this.getModels<Value>(new Value(), valuesWhere, { cardinality: "ASC" })]).
+      then((results:any[]) => {
+        let posts = <Post[]>results[0];
+        let values = <Value[]>results[1];
+        for (let post of posts) {
+          post.loadValues(values);
+        }
+        this.logger.info(this, "getPostsByIDs", posts.length);
         return posts;
       });
   }

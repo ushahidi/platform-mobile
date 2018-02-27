@@ -49,6 +49,7 @@
       <post-value [value]="value"
                   [mapToken]="deployment.mapbox_api_key"
                   (click)="handleLinks($event)"
+                  (showResponse)="showResponse($event)"
                   (showImage)="showImage(value.label,value.image)"
                   (showLocation)="showLocation(value.label,value.value)"></post-value>
     </div>

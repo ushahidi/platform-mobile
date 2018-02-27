@@ -14,7 +14,7 @@
       <span *ngIf="value.value">{{value.value | dateTime:'h:mm A, MMMM D, YYYY'}}</span>
     </div>
     <div class="value-location selectable" ion-text color="light" *ngIf="value.input == 'location'">
-      <image-cache *ngIf="map" [src]="map" [fallback]="mapPaceholder" tappable (click)="locationClicked(value.value)"></image-cache>
+      <image-cache *ngIf="map" [src]="map" [fallback]="mapPlaceholder" tappable (click)="locationClicked(value.value)"></image-cache>
     </div>
     <div class="value-number selectable" ion-text color="light" *ngIf="value.input == 'number'">
       <span *ngIf="value.value">{{value.value}}</span>
@@ -35,7 +35,7 @@
       <div *ngIf="value.value" [innerHTML]="value.value | htmlParse"></div>
     </div>
     <div class="value-upload selectable" ion-text color="light" *ngIf="value.input == 'upload'">
-      <image-cache *ngIf="value.value" [src]="value.image" [fallback]="photoPaceholder" tappable (click)="imageClicked(value.image)"></image-cache>
+      <image-cache *ngIf="value.value" [src]="value.image" [fallback]="photoPlaceholder" tappable (click)="imageClicked(value.image)"></image-cache>
       <span *ngIf="value.caption">{{value.caption}}</span>
     </div>
     <div class="value-video selectable" ion-text color="light" *ngIf="value.input == 'video'">
@@ -53,6 +53,14 @@
     </div>
     <div class="value-markdown selectable" ion-text color="light" *ngIf="value.input == 'markdown'">
       <div *ngIf="value.value" [innerHTML]="value.value | MarkdownToHtml | htmlParse"></div>
+    </div>
+    <div class="value-relation" ion-text color="light" *ngIf="value.input == 'relation'">
+      <ion-list no-lines *ngIf="value.posts">
+        <ion-item detail-push text-wrap tappable *ngFor="let related of value.posts" (click)="postClicked(related)">
+          <div ion-text color="light">{{related.title}}</div>
+          <small ion-text color="light">{{related.user_name || namePlaceholder}}, {{related.created | timeAgo}}</small>
+        </ion-item>
+      </ion-list>
     </div>
   </ion-item>
 </div>

@@ -3,9 +3,12 @@ import { SafeResourceUrl, DomSanitizer } from '@angular/platform-browser';
 
 import { StaticMap } from '../../maps/static-map';
 
-import { LoggerService } from '../../providers/logger-service';
+import { Post } from '../../models/post';
 
-import { PLACEHOLDER_PHOTO, PLACEHOLDER_MAP } from '../../constants/placeholders';
+import { LoggerService } from '../../providers/logger-service';
+import { DatabaseService } from '../../providers/database-service';
+
+import { PLACEHOLDER_NAME, PLACEHOLDER_PHOTO, PLACEHOLDER_MAP } from '../../constants/placeholders';
 
 @Component({
   selector: 'post-value',
@@ -14,13 +17,15 @@ import { PLACEHOLDER_PHOTO, PLACEHOLDER_MAP } from '../../constants/placeholders
 })
 export class PostValueComponent {
 
-  value: any;
-  map: string = null;
+  value:any = null;
+  map:string = null;
   mapToken:string;
-  video: SafeResourceUrl = null;
-  mapPaceholder: string = PLACEHOLDER_MAP;
-  photoPaceholder: string = PLACEHOLDER_PHOTO;
+  video:SafeResourceUrl = null;
+  mapPlaceholder:string = PLACEHOLDER_MAP;
+  photoPlaceholder:string = PLACEHOLDER_PHOTO;
+  namePlaceholder:string = PLACEHOLDER_NAME;
   showValue:boolean = true;
+  posts:Post[] = [];
 
   @Output()
   showLocation = new EventEmitter();
@@ -28,9 +33,13 @@ export class PostValueComponent {
   @Output()
   showImage = new EventEmitter();
 
+  @Output()
+  showResponse = new EventEmitter();
+
   constructor(
-    public logger:LoggerService,
-    public sanitizer:DomSanitizer) {
+    private logger:LoggerService,
+    private database:DatabaseService,
+    private sanitizer:DomSanitizer) {
   }
 
   ngOnInit() {
@@ -58,6 +67,9 @@ export class PostValueComponent {
     }
     else if (this.value && this.value.input == 'video') {
       this.loadVideoSrc(this.value.value);
+    }
+    else if (this.value && this.value.input == 'relation') {
+
     }
   }
 
@@ -116,6 +128,14 @@ export class PostValueComponent {
     if (url) {
       this.showImage.emit({
         url: url });
+    }
+  }
+
+  postClicked(post:Post) {
+    this.logger.info(this, "postClicked", post);
+    if (post) {
+      this.showResponse.emit({
+        post: post });
     }
   }
 

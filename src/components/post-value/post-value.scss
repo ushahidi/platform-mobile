@@ -20,7 +20,8 @@
   .value-varchar,
   .value-video,
   .value-tags,
-  .value-markdown {
+  .value-markdown,
+  .value-relation {
     font-weight: 400;
     font-size: 15px;
     padding-top: 5px;
@@ -39,7 +40,8 @@
   .value-text,
   .value-varchar,
   .value-textarea,
-  .value-markdown {
+  .value-markdown,
+  .value-relation {
     a {
       color: #777;
     }
@@ -62,6 +64,20 @@
   .value-tags {
     ion-icon {
       margin-right: 5px;
+    }
+  }
+  .value-relation {
+    ion-list {
+      margin:0;
+      padding:0;
+      ion-item {
+        font-weight: 400;
+        font-size: 15px;
+        margin-left: 0px;
+        margin-right: 0px;
+        padding-left: 0px;
+        padding-right: 0px;
+      }
     }
   }
 }

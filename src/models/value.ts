@@ -5,6 +5,7 @@ import { Model, TEXT, INTEGER, BOOLEAN, PRIMARY_KEY } from '../models/model';
 import { Image } from '../models/image';
 import { Attribute } from '../models/attribute';
 import { Tag } from '../models/tag';
+import { Post } from '../models/post';
 
 @Table("values_")
 export class Value extends Model {
@@ -58,6 +59,8 @@ export class Value extends Model {
 
   public tags:Tag[] = [];
 
+  public posts:Post[] = [];
+
   loadAttribute(attributes:Attribute[]) {
     for (var i = 0; i < attributes.length; i++) {
       let attribute:Attribute = attributes[i];
@@ -103,6 +106,17 @@ export class Value extends Model {
     }
   }
 
+  loadPosts(posts:Post[]) {
+    this.posts = [];
+    let values = this.value.split(",");
+    for (let value of values) {
+      let post = posts.find(t => t.id.toString() === value.toString());
+      if (post) {
+        this.posts.push(post);
+      }
+    }
+  }
+
   isNumber() {
     return this.input == 'number';
   }
@@ -121,6 +135,10 @@ export class Value extends Model {
 
   isTags() {
     return this.input == 'tags';
+  }
+
+  isRelation() {
+    return this.input == 'relation';
   }
 
   isCheckboxes() {

@@ -1331,6 +1331,9 @@ export class ApiService extends HttpService {
                   value.loadImage(images);
                   post.loadImage(images, value.value);
                 }
+                else if (value.isRelation()) {
+                  saves.push(this.getRelatedPosts(deployment, value));
+                }
                 saves.push(this.database.saveValue(deployment, value));
               }
               saves.push(this.database.savePost(deployment, post));
@@ -1344,6 +1347,32 @@ export class ApiService extends HttpService {
             this.logger.error(this, "getPostsWithValues", "Failed", error);
             reject(error);
           });
+    });
+  }
+
+  getRelatedPosts(deployment:Deployment, value:Value):Promise<Post[]> {
+    return new Promise((resolve, reject) => {
+      let ids:number[] = [];
+      if (value.value) {
+        for (let id of value.value.split(",")) {
+          ids.push(Number(id));
+        }
+        this.database.getPostsByIDs(deployment, ids).then((posts:Post[]) => {
+          this.logger.info(this, "getRelatedPosts", ids, posts);
+          value.posts = posts;
+          resolve(posts);
+        },
+        (error:any) => {
+          value.posts = [];
+          this.logger.error(this, "getRelatedPosts", ids, error);
+          resolve(<Post[]>[]);
+        });
+      }
+      else {
+        this.logger.error(this, "getRelatedPosts", ids, []);
+        value.posts = [];
+        resolve(<Post[]>[]);
+      }
     });
   }
 
