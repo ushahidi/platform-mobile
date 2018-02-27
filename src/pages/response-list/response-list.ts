@@ -191,23 +191,30 @@ export class ResponseListPage extends BasePage {
     }
   }
 
-  loadUsers(cache:boolean=true):Promise<any> {
-    this.logger.info(this, "loadUsers");
-    let users = [];
-    for (let post of this.posts) {
-      if (post.user == null && post.user_id != null) {
-        users.push(this.loadUser(post));
+  loadUsers(cache:boolean=true):Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      this.logger.info(this, "loadUsers");
+      let users = [];
+      for (let post of this.posts) {
+        if (post.user == null && post.user_id != null) {
+          users.push(this.loadUser(post));
+        }
       }
-    }
-    return Promise.all(users).then((loaded) => {
-      this.logger.info(this, "loadUsers", "Done");
+      Promise.all(users).then((loaded) => {
+        this.logger.info(this, "loadUsers", "Loaded");
+        resolve(true);
+      },
+      (error) => {
+        this.logger.error(this, "loadUsers", "Failed", error);
+        resolve(false);
+      });
     });
   }
 
   loadUser(post:Post):Promise<User> {
     return new Promise((resolve, reject) => {
       this.logger.info(this, "loadUser", post.title);
-      this.api.getUser(this.deployment, post.user_id, true).then((user:User) => {
+      this.api.getUser(this.deployment, post.user_id, true, this.offline).then((user:User) => {
         this.logger.info(this, "loadUser", post.title, "User", user, "Downloaded", user);
         post.user = user;
         let saves = [
@@ -218,23 +225,33 @@ export class ResponseListPage extends BasePage {
           this.logger.info(this, "loadImage", post.title, "User", user, "Saved", user);
           resolve(user);
         });
+      },
+      (error:any) => {
+        resolve(null);
       });
     });
   }
 
-  loadImages(cache:boolean=true):Promise<any> {
-    this.logger.info(this, "loadImages");
-    let images = [];
-    for (let post of this.posts) {
-      for (let value of post.values) {
-        if (value.hasMissingImage()) {
-          images.push(this.loadImage(post, value));
+  loadImages(cache:boolean=true):Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      this.logger.info(this, "loadImages");
+      let images = [];
+      for (let post of this.posts) {
+        for (let value of post.values) {
+          if (value.hasMissingImage()) {
+            images.push(this.loadImage(post, value));
+          }
         }
+        this.cache.fetchMap(this.deployment.mapbox_api_key, post.latitude, post.longitude);
       }
-      this.cache.fetchMap(this.deployment.mapbox_api_key, post.latitude, post.longitude);
-    }
-    return Promise.all(images).then((saved) => {
-      this.logger.info(this, "loadImages", "Done");
+      Promise.all(images).then((saved) => {
+        this.logger.info(this, "loadImages", "Loaded");
+        resolve(true);
+      },
+      (error) => {
+        this.logger.error(this, "loadImages", "Failed", error);
+        resolve(false);
+      });
     });
   }
 
@@ -242,7 +259,7 @@ export class ResponseListPage extends BasePage {
     return new Promise((resolve, reject) => {
       this.logger.info(this, "loadImage", post.title, "Value", value.value);
       let id = Number(value.value);
-      this.api.getImage(this.deployment, id, true).then((image:Image) => {
+      this.api.getImage(this.deployment, id, true, this.offline).then((image:Image) => {
         this.logger.info(this, "loadImage", post.title, "Value", value.value, "Downloaded", image);
         image.post_id = post.id;
         value.image = image.url;
@@ -258,6 +275,9 @@ export class ResponseListPage extends BasePage {
           this.cache.fetchImage(image.url);
           resolve(image);
         });
+      },
+      (error:any) => {
+        resolve(null);
       });
     });
   }

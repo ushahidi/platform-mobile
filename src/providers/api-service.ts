@@ -463,6 +463,7 @@ export class ApiService extends HttpService {
 
   getUser(deployment:Deployment, user:any="me", cache:boolean=false, offline:boolean=false):Promise<User>  {
     return new Promise((resolve, reject) => {
+      this.logger.info(this, "getUser", user);
       if (cache || offline) {
         this.database.getUser(deployment, user).then((user:User) => {
           if (user) {
@@ -479,13 +480,28 @@ export class ApiService extends HttpService {
               reject(error);
             });
           }
+        },
+        (error:any) => {
+          if (offline) {
+            reject("User Not Found");
+          }
+          else {
+            this.getUser(deployment, user, false, offline).then((user:User) => {
+              resolve(user);
+            },
+            (error:any) => {
+              reject(error);
+            });
+          }
         });
       }
       else {
         this.apiGet(deployment, `/api/v3/users/${user}`).then(
           (data:any) => {
             let user:User = new User(data);
-            resolve(user);
+            this.database.saveUser(deployment, user).then((saved) => {
+              resolve(user);
+            });
           },
           (error:any) => {
             reject(error);
@@ -1294,17 +1310,17 @@ export class ApiService extends HttpService {
       this.logger.info(this, "getPostsWithValues", "Filter", filter, "Cache", cache, "Offline", offline, "Limit", limit, "Offset", offset);
       Promise.all([
         this.getPosts(deployment, filter, cache, offline, limit, offset),
-        this.getImages(deployment, true, offline, limit, offset),
         this.getForms(deployment, true, offline),
-        this.getUsers(deployment, true, offline),
-        this.getAttributes(deployment, true, offline)]).then(
+        this.getAttributes(deployment, true, offline),
+        this.database.getUsers(deployment),
+        this.database.getImages(deployment)]).then(
           (results:any[]) => {
             this.logger.info(this, "getPostsWithValues", "Filter", filter, "Cache", cache, "Offline", offline, "Limit", limit, "Offset", offset);
             let posts = <Post[]>results[0];
-            let images = <Image[]>results[1];
-            let forms = <Form[]>results[2];
+            let forms = <Form[]>results[1];
+            let attributes = <Attribute[]>results[2];
             let users = <User[]>results[3];
-            let attributes = <Attribute[]>results[4];
+            let images = <Image[]>results[4];
             let saves = [];
             for (let post of posts) {
               post.loadUser(users);

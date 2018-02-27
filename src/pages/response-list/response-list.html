@@ -2,16 +2,16 @@
   <ion-navbar color="navbar">
     <ion-title>{{'RESPONSES' | translate}}</ion-title>
     <ion-buttons end>
-      <button ion-button icon-only [disabled]="offline" (click)="searchResponses($event)">
+      <button ion-button icon-only tappable [disabled]="offline" (click)="searchResponses($event)">
         <ion-icon ios="ios-search" md="md-search"></ion-icon>
       </button>
-      <button ion-button icon-only [disabled]="offline" (click)="showMap($event)" *ngIf="view == 'list'">
+      <button ion-button icon-only tappable [disabled]="offline" (click)="showMap($event)" *ngIf="view == 'list'">
         <ion-icon ios="ios-map-outline" md="md-map"></ion-icon>
       </button>
-      <button ion-button icon-only (click)="showList($event)" *ngIf="view == 'map'">
+      <button ion-button icon-only tappable (click)="showList($event)" *ngIf="view == 'map'">
         <ion-icon ios="ios-list-box-outline" md="md-list-box"></ion-icon>
       </button>
-      <button ion-button icon-only (click)="shareResponses($event)">
+      <button ion-button icon-only tappable (click)="shareResponses($event)">
         <ion-icon ios="ios-share-outline" md="md-share"></ion-icon>
       </button>
     </ion-buttons>
