@@ -1,4 +1,4 @@
-import { NgModule, ErrorHandler } from '@angular/core';
+import { NgModule, Injectable, ErrorHandler } from '@angular/core';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
 import { HttpModule } from '@angular/http';
 import { BrowserModule } from '@angular/platform-browser';
@@ -95,6 +95,7 @@ export function translateHttpLoader(http: HttpClient) {
     return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
 }
 
+@Injectable()
 export class CustomErrorHandler extends IonicErrorHandler implements ErrorHandler {
   constructor(private logger:LoggerService) {
     super();

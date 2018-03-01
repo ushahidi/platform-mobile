@@ -5,6 +5,8 @@ import { Device } from '@ionic-native/device';
 import { IsDebug } from '@ionic-native/is-debug';
 import { GoogleAnalytics } from '@ionic-native/google-analytics';
 
+import { SettingsService } from '../providers/settings-service';
+
 @Injectable()
 export class LoggerService {
 
@@ -15,6 +17,7 @@ export class LoggerService {
     private device:Device,
     private isDebug:IsDebug,
     private platform:Platform,
+    private settings:SettingsService,
     private googleAnalytics:GoogleAnalytics) {
     this.platform.ready().then(() => {
       this.isDebug.getIsDebug().then((development:boolean) => {
@@ -23,6 +26,12 @@ export class LoggerService {
       (error:any) => {
         this.development = false;
       });
+      this.settings.getGoogleAnalytics().then((id:string) => {
+        this.analytics = id && id.length > 0;
+      },
+      (error:any) => {
+        this.analytics = false;
+      })
     });
   }
 

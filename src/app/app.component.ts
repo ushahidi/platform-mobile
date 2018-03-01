@@ -283,12 +283,11 @@ export class UshahidiApp {
   }
 
   private loadLanguages() {
-    this.language.getLanguage().then(
-      (i18n) => {
-        this.setLanguage(i18n);
-      },
-      (error) => {
-        this.setLanguage("en");
+    this.language.getLanguage().then((i18n) => {
+      this.setLanguage(i18n);
+    },
+    (error) => {
+      this.setLanguage("en");
     });
     this.settings.getAppLanguages().then((appLanguages:string[]) => {
       if (appLanguages && appLanguages.length > 0) {
