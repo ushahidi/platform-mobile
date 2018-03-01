@@ -59,7 +59,7 @@ export class ResponseImagePage extends BasePage {
         (shared) => {
           if (shared) {
             this.showToast(translations[0]);
-            this.trackEvent("Images", "shared", this.image);
+            this.logger.event(this, "Images", "shared", this.image);
           }
         },
         (error) => {

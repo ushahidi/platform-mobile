@@ -233,7 +233,7 @@ export class ResponseDetailsPage extends BasePage {
           (shared:boolean) => {
             if (shared) {
               this.showToast(translations[0]);
-              this.trackEvent("Posts", "shared", this.post.url);
+              this.logger.event(this, "Posts", "shared", this.post.url);
             }
           },
           (error:any) => {
@@ -298,7 +298,7 @@ export class ResponseDetailsPage extends BasePage {
         (results:any) => {
           loading.dismiss();
           this.showToast("Added To Collection");
-          this.trackEvent("Posts", "collected", post.url);
+          this.logger.event(this, "Posts", "collected", post.url);
         },
         (error:any) => {
           loading.dismiss();
@@ -333,7 +333,7 @@ export class ResponseDetailsPage extends BasePage {
           loading.dismiss();
           this.events.publish(POST_UPDATED, post.id);
           this.showToast("Responsed put under review");
-          this.trackEvent("Posts", "drafted", this.post.url);
+          this.logger.event(this, "Posts", "drafted", this.post.url);
         });
       },
       (error:any) => {
@@ -357,7 +357,7 @@ export class ResponseDetailsPage extends BasePage {
             loading.dismiss();
             this.events.publish(POST_UPDATED, post.id);
             this.showToast(translations[1]);
-            this.trackEvent("Posts", "archived", this.post.url);
+            this.logger.event(this, "Posts", "archived", this.post.url);
           });
         },
         (error:any) => {
@@ -382,7 +382,7 @@ export class ResponseDetailsPage extends BasePage {
             loading.dismiss();
             this.events.publish('post:updated', post.id);
             this.showToast(translations[1]);
-            this.trackEvent("Posts", "published", this.post.url);
+            this.logger.event(this, "Posts", "published", this.post.url);
           });
         },
         (error:any) => {
@@ -405,7 +405,7 @@ export class ResponseDetailsPage extends BasePage {
             (removed) => {
               loading.dismiss();
               this.showToast(translations[1]);
-              this.trackEvent("Posts", "removed", post.url);
+              this.logger.event(this, "Posts", "removed", post.url);
               this.closePage();
             },
             (error) => {
@@ -440,7 +440,7 @@ export class ResponseDetailsPage extends BasePage {
                    loading.dismiss();
                    this.database.removePost(this.deployment, post).then(removed => {
                      this.showToast(translations[2]);
-                     this.trackEvent("Posts", "deleted", post.url);
+                     this.logger.event(this, "Posts", "deleted", post.url);
                      this.closePage();
                   });
                  },

@@ -631,7 +631,7 @@ export class ResponseListPage extends BasePage {
           (results:any) => {
             loading.dismiss();
             this.showToast(translations[1]);
-            this.trackEvent("Posts", "collected", post.url);
+            this.logger.event(this, "Posts", "collected", post.url);
           },
           (error:any) => {
             loading.dismiss();
@@ -671,7 +671,7 @@ export class ResponseListPage extends BasePage {
             loading.dismiss();
             this.events.publish(POST_UPDATED, post.id);
             this.showToast(translations[1]);
-            this.trackEvent("Posts", "drafted", post.url);
+            this.logger.event(this, "Posts", "drafted", post.url);
           });
         },
         (error:any) => {
@@ -695,7 +695,7 @@ export class ResponseListPage extends BasePage {
           this.database.savePost(this.deployment, post).then(saved => {
             loading.dismiss();
             this.showToast(translations[1]);
-            this.trackEvent("Posts", "archived", post.url);
+            this.logger.event(this, "Posts", "archived", post.url);
           });
         },
         (error:any) => {
@@ -719,7 +719,7 @@ export class ResponseListPage extends BasePage {
           this.database.savePost(this.deployment, post).then(saved => {
             loading.dismiss();
             this.showToast(translations[1]);
-            this.trackEvent("Posts", "published", post.url);
+            this.logger.event(this, "Posts", "published", post.url);
           });
         },
         (error:any) => {
@@ -752,7 +752,7 @@ export class ResponseListPage extends BasePage {
               }
               loading.dismiss();
               this.showToast(translations[1]);
-              this.trackEvent("Posts", "removed", post.url);
+              this.logger.event(this, "Posts", "removed", post.url);
             },
             (error) => {
               loading.dismiss();
@@ -794,7 +794,7 @@ export class ResponseListPage extends BasePage {
                        this.pending.splice(pendingIndex, 1);
                      }
                      this.showToast(translations[2]);
-                     this.trackEvent("Posts", "deleted", post.url);
+                     this.logger.event(this, "Posts", "deleted", post.url);
                   });
                  },
                  (error:any) => {

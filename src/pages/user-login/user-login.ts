@@ -104,7 +104,7 @@ export class UserLoginPage extends BasePage {
   }
 
   showDeployment(deployment:Deployment) {
-    this.trackEvent("Deployments", "login", this.deployment.website);
+    this.logger.event(this, "Deployments", "login", this.deployment.website);
     this.closePage({
       deployment: deployment });
   }

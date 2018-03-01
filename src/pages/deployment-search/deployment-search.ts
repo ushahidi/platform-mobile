@@ -127,7 +127,7 @@ export class DeploymentSearchPage extends BasePage {
 
   addDeployment(event:any, deployment:Deployment) {
     this.logger.info(this, "addDeployment");
-    this.trackEvent("Deployments", "searched", this.search);
+    this.logger.event(this, "Deployments", "searched", this.search);
     this.language.getTranslations([
       'DEPLOYMENT_ADD_EXISTS',
       'DEPLOYMENT_ADD_EXISTS_DESCRIPTION']).then((translations:string[]) => {
@@ -137,7 +137,7 @@ export class DeploymentSearchPage extends BasePage {
           this.showAlert(translations[0], translations[1]);
         }
         else {
-          this.trackEvent("Deployments", "added", deployment.website);
+          this.logger.event(this, "Deployments", "added", deployment.website);
           this.loginDeployment(deployment);
         }
       });

@@ -7,8 +7,6 @@ import { NativeStorage } from '@ionic-native/native-storage';
 
 import { Settings } from '../models/settings';
 
-import { LoggerService } from '../providers/logger-service';
-
 @Injectable()
 export class SettingsService {
 
@@ -18,7 +16,6 @@ export class SettingsService {
     protected file:File,
     protected http:Http,
     protected platform:Platform,
-    protected logger:LoggerService,
     protected storage:NativeStorage) {
 
   }
@@ -31,12 +28,10 @@ export class SettingsService {
       this.http.get(filepath)
         .map((res) => res.json())
         .subscribe((data) => {
-          this.logger.info(this, "loadSettings", filepath, "Data", data);
           this.settings = <Settings>data
           resolve(this.settings);
         },
         (error) => {
-          this.logger.error(this, "loadSettings", filepath, "Error", error);
           this.settings = null;
           reject("No Settings");
         });
@@ -46,7 +41,6 @@ export class SettingsService {
   public getAcceptedTerms():Promise<boolean> {
     return new Promise((resolve, reject) => {
       this.storage.getItem("AcceptedTerms").then((data:any) => {
-        this.logger.info(this, "getAcceptedTerms", data);
         if (data === true || data === 'true') {
           resolve(true);
         }
@@ -55,7 +49,6 @@ export class SettingsService {
         }
       },
       (error:any) => {
-        this.logger.error(this, "getAcceptedTerms", error);
         resolve(false);
       });
     });
@@ -64,11 +57,9 @@ export class SettingsService {
   public setAcceptedTerms(accepted:boolean):Promise<boolean> {
     return new Promise((resolve, reject) => {
       this.storage.setItem("AcceptedTerms", accepted).then(() => {
-        this.logger.info(this, "setAcceptedTerms", accepted, "Saved");
         resolve(true);
       },
       (error:any) => {
-        this.logger.error(this, "setAcceptedTerms", accepted, "Failed", error);
         resolve(false);
       });
     });
@@ -147,6 +138,10 @@ export class SettingsService {
 
   public getSurveyFormTasks():Promise<boolean> {
     return this.get('surveyFormTasks', true);
+  }
+
+  public getGoogleAnalytics():Promise<string> {
+    return this.get('googleAnalytics', '');
   }
 
   private get(key:string, fallback:any=null):Promise<any> {

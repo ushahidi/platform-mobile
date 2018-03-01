@@ -76,7 +76,7 @@ export class DeploymentSettingsPage extends BasePage {
           this.database.saveDeployment(this.deployment).then(
             (saved:any) => {
               this.events.publish(DEPLOYMENT_UPDATED, this.deployment.id);
-              this.trackEvent("Deployments", "updated", this.deployment.website);
+              this.logger.event(this, "Deployments", "updated", this.deployment.website);
               loading.dismiss();
               this.showToast(translations[1]);
               this.hideModal();

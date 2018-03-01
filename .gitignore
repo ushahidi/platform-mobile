@@ -4,8 +4,7 @@ projects
 secrets.ts
 node_modules
 plugins
-platforms/ios
-platforms/android
+platforms
 build.json
 *.keystore
 .tmp

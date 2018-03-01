@@ -136,7 +136,6 @@ export class DatabaseService extends SqlService {
     let valuesWhere = {
       deployment_id: deployment.id
     };
-    let order = { created: "DESC" };
     return Promise.all([
       this.getModels<Post>(new Post(), postsWhere, { created: "DESC" }),
       this.getModels<Value>(new Value(), valuesWhere, { cardinality: "ASC" })]).

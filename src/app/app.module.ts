@@ -90,10 +90,27 @@ import { CacheService } from '../providers/cache-service';
 import { VimeoService } from '../providers/vimeo-service';
 import { LanguageService } from '../providers/language-service';
 import { SettingsService } from '../providers/settings-service';
-import { GithubService } from '../providers/github-service';
 
 export function translateHttpLoader(http: HttpClient) {
     return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
+}
+
+export class CustomErrorHandler extends IonicErrorHandler implements ErrorHandler {
+  constructor(private logger:LoggerService) {
+    super();
+  }
+
+  handleError(error:any):void {
+    let message = [];
+    if (error.message) {
+      message.push(error.message);
+    }
+    if (error.stack) {
+      message.push(error.stack);
+    }
+    this.logger.crash(this, error.name, message);
+    super.handleError(error);
+  }
 }
 
 @NgModule({
@@ -211,8 +228,7 @@ export function translateHttpLoader(http: HttpClient) {
     { provide: LanguageService, useClass: LanguageService },
     { provide: TranslateService, useClass: TranslateService },
     { provide: SettingsService, useClass: SettingsService },
-    { provide: GithubService, useClass: GithubService },
-    { provide: ErrorHandler, useClass: IonicErrorHandler }
+    { provide: ErrorHandler, useClass: CustomErrorHandler }
   ]
 })
 export class AppModule {}

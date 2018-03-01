@@ -36,8 +36,6 @@ import { DeploymentDetailsPage } from '../pages/deployment-details/deployment-de
 import { PrivacyPolicyPage } from '../pages/privacy-policy/privacy-policy';
 import { WhitelabelIntroPage } from '../pages/whitelabel-intro/whitelabel-intro';
 
-import { GOOGLE_ANALYTICS_ID } from '../constants/secrets';
-
 import { DEPLOYMENT_ADDED, DEPLOYMENT_DELETED } from '../constants/events';
 
 declare var window:any;
@@ -113,17 +111,17 @@ export class UshahidiApp {
       .then(() => this.loadAnalytics())
       .then(() => this.loadEvents())
       .then(() => this.loadApplication([
-                    new Deployment(),
-                    new User(),
-                    new Form(),
-                    new Stage(),
-                    new Attribute(),
-                    new Post(),
-                    new Value(),
-                    new Image(),
-                    new Collection(),
-                    new Tag(),
-                    new Filter()]));
+          new Deployment(),
+          new User(),
+          new Form(),
+          new Stage(),
+          new Attribute(),
+          new Post(),
+          new Value(),
+          new Image(),
+          new Collection(),
+          new Tag(),
+          new Filter()]));
   }
 
   loadSettings() {
@@ -247,17 +245,41 @@ export class UshahidiApp {
   }
 
   private loadAnalytics() {
-    this.appVersion.getVersionCode().then((appVersion) => {
-      this.logger.info(this, "loadAnalytics", "App Version", appVersion);
-      this.googleAnalytics.setAppVersion(appVersion);
+    this.settings.getGoogleAnalytics().then((id:string) => {
+      if (id && id.length > 0) {
+        this.appVersion.getVersionCode().then((appVersion) => {
+          this.logger.info(this, "loadAnalytics", "App Version", appVersion);
+          this.googleAnalytics.setAppVersion(appVersion);
+        },
+        (error:any) => {
+          this.logger.error(this, "loadAnalytics", "App Version", error);
+        });
+        this.googleAnalytics.startTrackerWithId(id).then(() => {
+          this.logger.info(this, "loadAnalytics", "Google Analytics", id, "Loaded");
+        })
+        .catch((error) => {
+          this.logger.error(this, "loadAnalytics", "Google Analytics", id, "Failed", error);
+        });
+        this.googleAnalytics.setAllowIDFACollection(false).then((enabled:any) => {
+          this.logger.info(this, "loadAnalytics", "Google Analytics", id, "AllowIDFACollection", false);
+        },
+        (error:any) => {
+          this.logger.error(this, "loadAnalytics", "Google Analytics", id, "AllowIDFACollection", error);
+        });
+        this.googleAnalytics.enableUncaughtExceptionReporting(true).then((enabled:any) => {
+          this.logger.info(this, "loadAnalytics", "Google Analytics", id, "EnableUncaughtExceptionReporting", true);
+        },
+        (error:any) => {
+          this.logger.error(this, "loadAnalytics", "Google Analytics", id, "EnableUncaughtExceptionReporting", error);
+        });
+      }
+      else {
+        this.logger.info(this, "loadAnalytics", "Google Analytics", "Disabled");
+      }
+    },
+    (error:any) => {
+      this.logger.error(this, "loadAnalytics", "Google Analytics", "Disabled", error);
     });
-    this.googleAnalytics.startTrackerWithId(GOOGLE_ANALYTICS_ID)
-      .then(() => {
-        this.logger.info(this, "loadAnalytics", "Google Analytics", "Ready");
-      })
-      .catch((error) => {
-        this.logger.error(this, "loadAnalytics", "Google Analytics", error);
-      });
   }
 
   private loadLanguages() {
@@ -394,7 +416,7 @@ export class UshahidiApp {
       'DEPLOYMENT_REMOVING_',
       'DEPLOYMENT_REMOVE_DESCRIPTION']).then((translations:string[]) => {
       this.logger.info(this, "removeDeployment", deployment.name);
-      this.trackEvent("Deployments", "removed", deployment.website);
+      this.logger.event(this, "Deployments", "removed", deployment.website);
       let loading = this.showLoading(translations[0]);
       let promises = [
         this.api.removeLogin(deployment),
@@ -460,12 +482,6 @@ export class UshahidiApp {
     });
     toast.present();
     return toast;
-  }
-
-  private trackEvent(category:string, action:string, label:string, value:number=0, newSession:boolean=false) {
-    this.googleAnalytics.trackEvent(category, action, label, value, newSession).then((tracked) => {
-      this.logger.info(this, "trackEvent", category, action, label);
-    });
   }
 
 }

@@ -328,7 +328,7 @@ export class DeploymentDetailsPage extends BasePage {
         (shared) => {
           if (shared) {
             this.showToast(translations[0]);
-            this.trackEvent("Deployments", "shared", this.deployment.website);
+            this.logger.event(this, "Deployments", "shared", this.deployment.website);
           }
         },
         (error) => {
@@ -351,7 +351,7 @@ export class DeploymentDetailsPage extends BasePage {
 
   userLogout(event:any) {
     this.logger.info(this, "userLogout");
-    this.trackEvent("Deployments", "logout", this.deployment.website);
+    this.logger.event(this, "Deployments", "logout", this.deployment.website);
     this.language.getTranslations([
       'USER_LOGGING_OUT_',
       'USER_LOGOUT_SUCCESS',

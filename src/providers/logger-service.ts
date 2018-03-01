@@ -1,57 +1,135 @@
 import { Injectable } from '@angular/core';
 import { Platform } from 'ionic-angular';
+
+import { Device } from '@ionic-native/device';
 import { IsDebug } from '@ionic-native/is-debug';
+import { GoogleAnalytics } from '@ionic-native/google-analytics';
 
 @Injectable()
 export class LoggerService {
 
-  private enabled:boolean = true;
+  private development:boolean = true;
+  private analytics:boolean = true;
 
   constructor(
+    private device:Device,
     private isDebug:IsDebug,
-    protected platform: Platform) {
+    private platform:Platform,
+    private googleAnalytics:GoogleAnalytics) {
     this.platform.ready().then(() => {
-      this.isDebug.getIsDebug().then(
-        (isDebug:boolean) => {
-          this.enabled = isDebug;
-        },
-        (error:any) => {
-          this.enabled = false;
-        });
+      this.isDebug.getIsDebug().then((development:boolean) => {
+        this.development = development;
+      },
+      (error:any) => {
+        this.development = false;
+      });
     });
   }
 
-  log(instance:any, method:string, ...objects:any[]) {
-    if (this.enabled) {
+  public log(instance:any, method:string, ...objects:any[]) {
+    if (this.development) {
       console.log(this.message(instance, method, objects));
     }
   }
 
-  info(instance:any, method:string, ...objects:any[]) {
-    if (this.enabled) {
+  public info(instance:any, method:string, ...objects:any[]) {
+    if (this.development) {
       console.info(this.message(instance, method, objects));
     }
   }
 
-  debug(instance:any, method:string, ...objects:any[]) {
-    if (this.enabled) {
+  public debug(instance:any, method:string, ...objects:any[]) {
+    if (this.development) {
       console.debug(this.message(instance, method, objects));
     }
   }
 
-  warn(instance:any, method:string, ...objects:any[]) {
-    if (this.enabled) {
+  public warn(instance:any, method:string, ...objects:any[]) {
+    if (this.development) {
       console.warn(this.message(instance, method, objects));
     }
   }
 
-  error(instance:any, method:string, ...objects:any[]) {
-    if (this.enabled) {
-      console.error(this.message(instance, method, objects));
+  public view(instance:any, screen:string, campaign:string=null, session:boolean=false) {
+    if (this.development) {
+      console.log(this.message(instance, "view", [screen, campaign, session]));
+    }
+    else if (this.analytics) {
+      this.googleAnalytics.trackView(screen, campaign, session).then((tracked) => {
+        //Google Analytics view tracked
+      },
+      (error:any) => {
+        //Google Analytics view failed
+      });
     }
   }
 
-  message(instance:any, method:string, objects:any[]) {
+  public event(instance:any, category:string, action:string, label:string, value:number=0, newSession:boolean=false) {
+    if (this.development) {
+      console.log(this.message(instance, "event", [category, action, label]));
+    }
+    else if (this.analytics) {
+      this.googleAnalytics.trackEvent(category, action, label, value, newSession).then((tracked) => {
+        //Google Analytics event tracked
+      },
+      (error:any) => {
+        //Google Analytics event failed
+      });
+    }
+  }
+
+  public error(instance:any, method:string, ...objects:any[]) {
+    if (this.development) {
+      console.error(this.message(instance, method, objects));
+    }
+    else if (this.analytics) {
+      let description = [];
+      description.push(this.message(instance, method, objects));
+      description.push(this.information());
+      this.googleAnalytics.trackException(description.join("\n\n"), false).then((logged:any) => {
+        //Google Analytics error tracked
+      },
+      (error:any) => {
+        //Google Analytics error failed
+      });
+    }
+  }
+
+  public crash(instance:any, method:string, ...objects:any[]) {
+    if (this.development) {
+      console.error(this.message(instance, method, objects));
+    }
+    else if (this.analytics) {
+      let description = [];
+      description.push(this.message(instance, method, objects));
+      description.push(this.information());
+      this.googleAnalytics.trackException(description.join("\n\n"), true).then((logged:any) => {
+        //Google Analytics crash tracked
+      },
+      (error:any) => {
+        //Google Analytics crash failed
+      });
+    }
+  }
+
+  private information():string {
+    let info = []
+    if (this.device.manufacturer) {
+      info.push(this.device.manufacturer);
+    }
+    if (this.device.platform) {
+      info.push(this.device.platform);
+    }
+    if (this.device.version) {
+      info.push(this.device.version);
+    }
+    if (this.device.model) {
+      info.push(this.device.model);
+    }
+    return info.join(" ");
+  }
+
+  private message(instance:any, method:string, objects:any[]):string {
     let messages = [];
     if (instance != null) {
       messages.push(instance.constructor.name);

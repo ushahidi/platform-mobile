@@ -4,7 +4,6 @@ import { Content, Platform, Events, NavParams, Alert, AlertController, Toast, To
 import { StatusBar } from '@ionic-native/status-bar';
 import { Network } from '@ionic-native/network';
 import { SocialSharing } from '@ionic-native/social-sharing';
-import { GoogleAnalytics } from '@ionic-native/google-analytics';
 import { ThemeableBrowser, ThemeableBrowserOptions, ThemeableBrowserObject } from '@ionic-native/themeable-browser';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
 
@@ -35,7 +34,6 @@ export class BasePage {
   protected statusBar:StatusBar;
   protected themeableBrowser:ThemeableBrowser;
   protected socialSharing:SocialSharing;
-  protected googleAnalytics:GoogleAnalytics;
   protected language:LanguageService;
   protected settings:SettingsService;
   protected screenOrientation:ScreenOrientation;
@@ -61,7 +59,6 @@ export class BasePage {
     this.statusBar = InjectorService.injector.get(StatusBar);
     this.themeableBrowser = InjectorService.injector.get(ThemeableBrowser);
     this.socialSharing = InjectorService.injector.get(SocialSharing);
-    this.googleAnalytics = InjectorService.injector.get(GoogleAnalytics);
     this.language = InjectorService.injector.get(LanguageService);
     this.settings = InjectorService.injector.get(SettingsService);
     this.screenOrientation = InjectorService.injector.get(ScreenOrientation);
@@ -82,7 +79,7 @@ export class BasePage {
   ionViewDidEnter() {
     this.logger.info(this, "ionViewDidEnter");
     let screen = this.constructor.name.replace("Page", "").replace(/([A-Z])/g," $1").trim();
-    this.trackView(screen);
+    this.logger.view(this, screen);
   }
 
   ionViewWillLeave() {
@@ -351,26 +348,6 @@ export class BasePage {
     }, delay);
   }
 
-  runSequentially(tasks):Promise<any> {
-    var result = Promise.resolve();
-    tasks.forEach(task => {
-      result = result.then(() => task());
-    });
-    return result;
-  }
-
-  trackView(screen:string, campaign:string=null, session:boolean=false) {
-    this.googleAnalytics.trackView(screen, campaign, session).then((tracked) => {
-      this.logger.info(this, "trackView", screen);
-    });
-  }
-
-  trackEvent(category:string, action:string, label:string, value:number=0, newSession:boolean=false) {
-    this.googleAnalytics.trackEvent(category, action, label, value, newSession).then((tracked) => {
-      this.logger.info(this, "trackEvent", category, action, label);
-    });
-  }
-
   handleLinks(_event:any) {
     let event = _event || window.event;
     let element = event.target || event.srcElement;
@@ -384,6 +361,14 @@ export class BasePage {
       }
       return false;
     }
+  }
+
+  runSequentially(tasks):Promise<any> {
+    var result = Promise.resolve();
+    tasks.forEach(task => {
+      result = result.then(() => task());
+    });
+    return result;
   }
 
 }
