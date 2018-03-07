@@ -56,7 +56,7 @@ export class UserSignupPage extends BasePage {
 
   ionViewWillEnter() {
     super.ionViewWillEnter();
-    this.loadStatusBar(true, true);
+    this.loadStatusBar(true, false);
     this.deployment = this.getParameter<Deployment>("deployment");
     this.login = this.getParameter<Login>("login");
     if (this.login && this.login.username) {
@@ -64,7 +64,7 @@ export class UserSignupPage extends BasePage {
     }
   }
 
-  userSignup(event:any) {
+  private userSignup(event:any) {
     this.logger.info(this, "userSignup");
     let name = this.name.value.toString();
     let email = this.email.value.toString();
@@ -102,18 +102,18 @@ export class UserSignupPage extends BasePage {
     }
   }
 
-  showDeployment(deployment:Deployment) {
+  private showDeployment(deployment:Deployment) {
     this.logger.event(this, "Deployments", "signup", this.deployment.website);
     this.closePage({
       deployment: deployment });
   }
 
-  onCancel(event:any=null) {
+  private onCancel(event:any=null) {
     this.logger.info(this, "onCancel");
     this.closePage();
   }
 
-  loadDeployment():Promise<any> {
+  private loadDeployment():Promise<any> {
     this.logger.info(this, "loadDeployment");
     return new Promise((resolve, reject) => {
       this.api.getDeployment(this.deployment, false, this.offline).then(
@@ -136,7 +136,7 @@ export class UserSignupPage extends BasePage {
     });
   }
 
-  loadForms():Promise<any> {
+  private loadForms():Promise<any> {
     this.logger.info(this, "loadForms");
     return new Promise((resolve, reject) => {
       this.api.getFormsWithAttributes(this.deployment, false, this.offline).then(
@@ -152,7 +152,7 @@ export class UserSignupPage extends BasePage {
     });
   }
 
-  loadCollections():Promise<any> {
+  private loadCollections():Promise<any> {
     this.logger.info(this, "loadCollections");
     return new Promise((resolve, reject) => {
       this.api.getCollections(this.deployment, false, this.offline).then(
@@ -168,7 +168,7 @@ export class UserSignupPage extends BasePage {
     });
   }
 
-  removePosts():Promise<any> {
+  private removePosts():Promise<any> {
     return new Promise((resolve, reject) => {
       this.database.removePosts(this.deployment).then(
         (removed:any) => {

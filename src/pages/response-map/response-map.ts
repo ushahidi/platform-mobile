@@ -88,19 +88,19 @@ export class ResponseMapPage extends BasePage {
     }
   }
 
-  onCancel(event:any) {
+  private onCancel(event:any) {
     this.logger.info(this, 'onCancel');
     this.hideModal();
   }
 
-  onDone(event:any) {
+  private onDone(event:any) {
     this.logger.info(this, 'onDone');
     this.hideModal({
       latitude: this.latitude,
       longitude: this.longitude });
   }
 
-  loadMap(latitude:number, longitude:number):Promise<any> {
+  private loadMap(latitude:number, longitude:number):Promise<any> {
     return new Promise((resolve, reject) => {
       this.logger.info(this, "loadMap");
       let tileLayerUrl = new TileLayer(this.deployment.mapbox_api_key, this.mapStyle).getUrl();
@@ -111,7 +111,7 @@ export class ResponseMapPage extends BasePage {
     });
   }
 
-  loadMarker(latitude:number, longitude:number):Promise<any> {
+  private loadMarker(latitude:number, longitude:number):Promise<any> {
     this.logger.info(this, "loadMarker", latitude, longitude);
     return new Promise((resolve, reject) => {
       let iconUrl = new MapMarker(this.deployment.mapbox_api_key).getUrl();
@@ -133,7 +133,7 @@ export class ResponseMapPage extends BasePage {
     });
   }
 
-  loadLocation():Promise<any> {
+  private loadLocation():Promise<any> {
     this.logger.info(this, "loadLocation");
     return new Promise((resolve, reject) => {
       let options:GeolocationOptions = {
@@ -161,7 +161,7 @@ export class ResponseMapPage extends BasePage {
     });
   }
 
-  showStyles(event) {
+  private showStyles(event) {
     this.language.getTranslations([
       'MAP_STYLE_STREETS',
       'MAP_STYLE_OUTDOORS',
@@ -206,7 +206,7 @@ export class ResponseMapPage extends BasePage {
     });
   }
 
-  changeStyle(mapStyle:string) {
+  private changeStyle(mapStyle:string) {
     this.logger.info(this, "changeStyle", mapStyle);
     this.mapStyle = mapStyle;
     this.map.removeLayer(this.mapLayer);
@@ -214,7 +214,7 @@ export class ResponseMapPage extends BasePage {
     this.mapLayer.addTo(this.map);
   }
 
-  searchAddress(event:any) {
+  private searchAddress(event:any) {
     this.logger.info(this, "searchAddress", event.keyCode);
     if (event.keyCode == 13 || event.keyCode == 176) {
       this.keyboard.close();

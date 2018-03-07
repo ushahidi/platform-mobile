@@ -148,7 +148,7 @@ export class SettingsService {
     return new Promise((resolve, reject) => {
       if (this.settings) {
         let value = this.settings[key];
-        if (value) {
+        if (value != null) {
           resolve(value);
         }
         else if (fallback != null) {
@@ -161,7 +161,7 @@ export class SettingsService {
       else {
         this.loadSettings().then((settings:Settings) => {
           let value = settings[key];
-          if (value) {
+          if (value != null) {
             resolve(value);
           }
           else if (fallback != null) {

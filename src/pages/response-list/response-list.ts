@@ -105,7 +105,7 @@ export class ResponseListPage extends BasePage {
     this.loadUpdates(null, true);
   }
 
-  loadUpdates(event:any=null, cache:boolean=false) {
+  private loadUpdates(event:any=null, cache:boolean=false) {
     this.logger.info(this, "loadUpdates", cache);
     this.loading = true;
     this.refreshing = event != null;
@@ -143,7 +143,7 @@ export class ResponseListPage extends BasePage {
       });
   }
 
-  loadFilters(cache:boolean=true):Promise<any> {
+  private loadFilters(cache:boolean=true):Promise<any> {
     if (cache && this.filter) {
       this.logger.info(this, "loadFilters", "Cached", this.filter);
       this.resizeContent();
@@ -167,7 +167,7 @@ export class ResponseListPage extends BasePage {
     }
   }
 
-  loadPosts(cache:boolean=true):Promise<any> {
+  private loadPosts(cache:boolean=true):Promise<any> {
     if (cache && this.posts != null && this.posts.length >= this.limit) {
       this.logger.info(this, "loadPosts", "Cached", this.posts.length);
       return Promise.resolve();
@@ -191,7 +191,7 @@ export class ResponseListPage extends BasePage {
     }
   }
 
-  loadUsers(cache:boolean=true):Promise<boolean> {
+  private loadUsers(cache:boolean=true):Promise<boolean> {
     return new Promise((resolve, reject) => {
       this.logger.info(this, "loadUsers");
       let users = [];
@@ -211,7 +211,7 @@ export class ResponseListPage extends BasePage {
     });
   }
 
-  loadUser(post:Post):Promise<User> {
+  private loadUser(post:Post):Promise<User> {
     return new Promise((resolve, reject) => {
       this.logger.info(this, "loadUser", post.title);
       this.api.getUser(this.deployment, post.user_id, true, this.offline).then((user:User) => {
@@ -232,7 +232,7 @@ export class ResponseListPage extends BasePage {
     });
   }
 
-  loadImages(cache:boolean=true):Promise<boolean> {
+  private loadImages(cache:boolean=true):Promise<boolean> {
     return new Promise((resolve, reject) => {
       this.logger.info(this, "loadImages");
       let images = [];
@@ -255,7 +255,7 @@ export class ResponseListPage extends BasePage {
     });
   }
 
-  loadImage(post:Post, value:Value):Promise<Image> {
+  private loadImage(post:Post, value:Value):Promise<Image> {
     return new Promise((resolve, reject) => {
       this.logger.info(this, "loadImage", post.title, "Value", value.value);
       let id = Number(value.value);
@@ -282,7 +282,7 @@ export class ResponseListPage extends BasePage {
     });
   }
 
-  loadMore(event, cache:boolean=true) {
+  private loadMore(event, cache:boolean=true) {
     this.logger.info(this, "loadMore", cache);
     this.loading = true;
     this.offset = this.offset + this.limit;
@@ -312,7 +312,7 @@ export class ResponseListPage extends BasePage {
       });
   }
 
-  uploadPending(cache:boolean=true):Promise<any> {
+  private uploadPending(cache:boolean=true):Promise<any> {
     if (cache || this.offline) {
       this.logger.info(this, "uploadPending", "Skipping");
       return Promise.resolve();
@@ -353,7 +353,7 @@ export class ResponseListPage extends BasePage {
     }
   }
 
-  createPost(post:Post):Promise<any> {
+  private createPost(post:Post):Promise<any> {
     this.logger.info(this, "createPost", post.title);
     return new Promise((resolve, reject) => {
       this.logger.info(this, "createPost", "Posting...");
@@ -401,7 +401,7 @@ export class ResponseListPage extends BasePage {
     });
   }
 
-  getPending(posts:Post[]): Post[] {
+  private getPending(posts:Post[]): Post[] {
     let pending: Post[] = [];
     if (posts) {
       for (let post of posts) {
@@ -413,7 +413,7 @@ export class ResponseListPage extends BasePage {
     return pending;
   }
 
-  showResponse(post:Post) {
+  private showResponse(post:Post) {
     this.logger.info(this, "showResponse", post);
     this.showPage(ResponseDetailsPage,
       { deployment: this.deployment,
@@ -421,7 +421,7 @@ export class ResponseListPage extends BasePage {
         post: post });
   }
 
-  addResponse(event:any) {
+  private addResponse(event:any) {
     this.logger.info(this, "addResponse");
     if (this.deployment.forms.length == 1) {
       let form = this.deployment.forms[0];
@@ -453,7 +453,7 @@ export class ResponseListPage extends BasePage {
     }
   }
 
-  showResponseAdd(form:Form) {
+  private showResponseAdd(form:Form) {
     let modal = this.showModal(ResponseAddPage,
       { deployment: this.deployment,
         login: this.login,
@@ -463,7 +463,7 @@ export class ResponseListPage extends BasePage {
     });
   }
 
-  searchResponses(event:any) {
+  private searchResponses(event:any) {
     this.language.getTranslations(['FILTERING_']).then((translations:string[]) => {
       this.logger.info(this, "searchResponses");
       let modal = this.showModal(ResponseSearchPage,
@@ -492,7 +492,7 @@ export class ResponseListPage extends BasePage {
     });
   }
 
-  shareResponses(event:any) {
+  private shareResponses(event:any) {
     this.language.getTranslations(['RESPONSES_SHARED']).then((translations:string[]) => {
       let subject = this.deployment.name;
       let message = this.deployment.description
@@ -511,7 +511,7 @@ export class ResponseListPage extends BasePage {
     });
   }
 
-  showOptions(post:Post) {
+  private showOptions(post:Post) {
     this.language.getTranslations([
       'ACTION_SHARE',
       'ACTION_COLLECTION',
@@ -577,7 +577,7 @@ export class ResponseListPage extends BasePage {
     });
   }
 
-  shareResponse(post:Post) {
+  private shareResponse(post:Post) {
     this.language.getTranslations(['RESPONSE_SHARED']).then((translations:string[]) => {
       let subject:string = `${this.deployment.name} | ${post.title}`;
       let message:string = post.description
@@ -596,7 +596,7 @@ export class ResponseListPage extends BasePage {
     });
   }
 
-  editResponse(post:Post) {
+  private editResponse(post:Post) {
     this.logger.info(this, "editResponse", "Post", post);
     let modal = this.showModal(ResponseAddPage,
       { deployment: this.deployment,
@@ -608,7 +608,7 @@ export class ResponseListPage extends BasePage {
     });
   }
 
-  getForm(id:number) : Form {
+  private getForm(id:number) : Form {
     for (let form of this.deployment.forms) {
       if (form.id == id) {
         return form;
@@ -617,7 +617,7 @@ export class ResponseListPage extends BasePage {
     return null;
   }
 
-  addToCollection(post:Post, collection:Collection=null) {
+  private addToCollection(post:Post, collection:Collection=null) {
     this.language.getTranslations([
       'COLLECTION_ADDING_',
       'COLLECTION_ADD_SUCCESS',
@@ -656,7 +656,7 @@ export class ResponseListPage extends BasePage {
     });
   }
 
-  draftResponse(post:Post) {
+  private draftResponse(post:Post) {
     this.logger.info(this, "draftResponse");
     this.language.getTranslations([
       'RESPONSE_UPDATING_',
@@ -681,7 +681,7 @@ export class ResponseListPage extends BasePage {
     });
   }
 
-  archiveResponse(post:Post) {
+  private archiveResponse(post:Post) {
     this.language.getTranslations([
       'RESPONSE_ARCHIVING_',
       'RESPONSE_ARCHIVE_SUCCESS',
@@ -705,7 +705,7 @@ export class ResponseListPage extends BasePage {
     });
   }
 
-  publishResponse(post:Post) {
+  private publishResponse(post:Post) {
     this.language.getTranslations([
       'RESPONSE_PUBLISHING_',
       'RESPONSE_PUBLISH_SUCCESS',
@@ -729,7 +729,7 @@ export class ResponseListPage extends BasePage {
     });
   }
 
-  removeResponse(post:Post) {
+  private removeResponse(post:Post) {
     this.language.getTranslations([
       'RESPONSE_REMOVING_',
       'RESPONSE_REMOVE_SUCCESS',
@@ -766,7 +766,7 @@ export class ResponseListPage extends BasePage {
     });
   }
 
-  deleteResponse(post:Post) {
+  private deleteResponse(post:Post) {
     this.language.getTranslations([
       'ACTION_DELETE',
       'RESPONSE_DELETING_',
@@ -815,7 +815,7 @@ export class ResponseListPage extends BasePage {
     });
   }
 
-  clearFilter(event:any, filter:Filter) {
+  private clearFilter(event:any, filter:Filter) {
     this.logger.info(this, "clearFilter", filter);
     this.database.removeFilters(this.deployment).then(
       (results:any) => {
@@ -840,12 +840,12 @@ export class ResponseListPage extends BasePage {
       });
   }
 
-  showList(event:any) {
+  private showList(event:any) {
     this.logger.info(this, "showList");
     this.view = 'list';
   }
 
-  showMap(event:any, attempts:number=0) {
+  private showMap(event:any, attempts:number=0) {
     this.logger.info(this, "showMap", attempts);
     this.view = 'map';
     let element: HTMLElement = document.getElementById('mapMany');
@@ -883,7 +883,7 @@ export class ResponseListPage extends BasePage {
     }
   }
 
-  loadCenter():Promise<any> {
+  private loadCenter():Promise<any> {
     this.logger.info(this, "loadCenter");
     return new Promise((resolve, reject) => {
       if (this.deployment.map_latitude && this.deployment.map_longitude) {
@@ -915,7 +915,7 @@ export class ResponseListPage extends BasePage {
     });
   }
 
-  loadMap():Promise<any> {
+  private loadMap():Promise<any> {
     return new Promise((resolve, reject) => {
       this.logger.info(this, "loadMap");
       this.map = L.map("mapMany").setView([this.mapLatitude, this.mapLongitude], this.mapZoom);
@@ -925,7 +925,7 @@ export class ResponseListPage extends BasePage {
     });
   }
 
-  loadMarkers(cache:boolean=true, offset:number=0, limit:number=10):Promise<any> {
+  private loadMarkers(cache:boolean=true, offset:number=0, limit:number=10):Promise<any> {
     return new Promise((resolve, reject) => {
       if (this.view == 'map') {
         this.loading = true;
@@ -969,7 +969,7 @@ export class ResponseListPage extends BasePage {
     });
   }
 
-  loadMarker(post:Post):any {
+  private loadMarker(post:Post):any {
     this.logger.info(this, "loadMarker", post.title, post.latitude, post.longitude);
     let iconUrl =  new MapMarker(this.deployment.mapbox_api_key, post.color).getUrl();
     let icon = L.icon({
@@ -991,7 +991,7 @@ export class ResponseListPage extends BasePage {
     return marker;
   }
 
-  showStyles(event) {
+  private showStyles(event) {
     this.language.getTranslations([
       'MAP_STYLE_STREETS',
       'MAP_STYLE_OUTDOORS',
@@ -1036,7 +1036,7 @@ export class ResponseListPage extends BasePage {
     });
   }
 
-  changeStyle(mapStyle:string) {
+  private changeStyle(mapStyle:string) {
     this.logger.info(this, "changeStyle", mapStyle);
     this.mapStyle = mapStyle;
     this.map.removeLayer(this.mapLayer);

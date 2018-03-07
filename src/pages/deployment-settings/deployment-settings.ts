@@ -54,12 +54,12 @@ export class DeploymentSettingsPage extends BasePage {
     this.deployment = this.getParameter<Deployment>("deployment");
   }
 
-  onCancel(event:any) {
+  private onCancel(event:any) {
     this.logger.info(this, 'onCancel');
     this.hideModal();
   }
 
-  onDone(event:any) {
+  private onDone(event:any) {
     this.logger.info(this, 'onDone');
     this.language.getTranslations([
       'SETTINGS_SAVING_',

@@ -60,12 +60,12 @@ export class ResponseSearchPage extends BasePage {
     this.logger.info(this, "ionViewWillEnter", "Filter", this.filter);
   }
 
-  onCancel(event:any) {
+  private onCancel(event:any) {
     this.logger.info(this, "onCancel");
     this.hideModal();
   }
 
-  onDone(event:any) {
+  private onDone(event:any) {
     this.logger.info(this, "onDone");
     this.database.saveFilter(this.deployment, this.filter).then(results => {
       this.hideModal({
@@ -73,11 +73,11 @@ export class ResponseSearchPage extends BasePage {
     });
   }
 
-  onSearch(event:any) {
+  private onSearch(event:any) {
     this.logger.info(this, "onSearch", event);
   }
 
-  formChanged(event:any, form:Form) {
+  private formChanged(event:any, form:Form) {
     if (event.checked) {
       this.logger.info(this, "formChanged", "Checked", form.id);
       this.filter.addForm(form);
@@ -88,15 +88,15 @@ export class ResponseSearchPage extends BasePage {
     }
   }
 
-  publishedChanged(event:any) {
+  private publishedChanged(event:any) {
     this.logger.info(this, "publishedChanged");
   }
 
-  reviewChanged(event:any) {
+  private reviewChanged(event:any) {
     this.logger.info(this, "reviewChanged");
   }
 
-  archivedChanged(event:any) {
+  private archivedChanged(event:any) {
     this.logger.info(this, "archivedChanged");
   }
 }

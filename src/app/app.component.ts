@@ -89,7 +89,7 @@ export class UshahidiApp {
     private splashScreen:SplashScreen,
     private screenOrientation:ScreenOrientation,
     private events:Events,
-    private platform: Platform,
+    private platform:Platform,
     private api:ApiService,
     private logger:LoggerService,
     private database:DatabaseService,
@@ -98,8 +98,8 @@ export class UshahidiApp {
     private modalController:ModalController,
     private toastController:ToastController,
     private loadingController:LoadingController,
-    private alertController: AlertController,
-    private menuController: MenuController) {
+    private alertController:AlertController,
+    private menuController:MenuController) {
     this.zone = _zone;
     InjectorService.injector = injector;
     this.platform.ready()
@@ -124,7 +124,7 @@ export class UshahidiApp {
           new Filter()]));
   }
 
-  loadSettings() {
+  private loadSettings() {
     this.settings.getDeploymentUrl().then((url:string) => {
       let whitelabel = (url && url.length > 0);
       this.logger.info(this, 'loadSettings', "Whitelabel", whitelabel);
@@ -144,7 +144,7 @@ export class UshahidiApp {
     });
   }
 
-  loadEvents() {
+  private loadEvents() {
     this.events.subscribe(DEPLOYMENT_ADDED, (deployment_id:number) => {
       this.logger.info(this, 'Events', DEPLOYMENT_ADDED, deployment_id);
       this.loadDeployments().then((deployments:Deployment[]) => {
@@ -156,7 +156,7 @@ export class UshahidiApp {
     });
   }
 
-  loadApplication(models:Model[]) {
+  private loadApplication(models:Model[]) {
     this.loadDatabase(models).then(
       (loaded:any) => {
         this.loadDeployments().then(

@@ -21,15 +21,14 @@ import { SettingsService } from '../../providers/settings-service';
 })
 export class PrivacyPolicyPage extends BasePage {
 
+  @ViewChild(Content)
+  content: Content;
+
+  whitelabel:boolean = false;
+  deployment:Deployment = null;
   acceptedTerms:boolean = false;
   privacyPolicy:string = "https://www.ushahidi.com/privacy-policy";
   termsOfService:string = "https://www.ushahidi.com/terms-of-service";
-  whitelabel:boolean = false;
-
-  deployment:Deployment = null;
-
-  @ViewChild(Content)
-  content: Content;
 
   constructor(
     protected zone:NgZone,
@@ -55,7 +54,8 @@ export class PrivacyPolicyPage extends BasePage {
     this.loadDeployment();
   }
 
-  loadSettings() {
+  protected loadSettings() {
+    super.loadSettings();
     this.logger.info(this, "loadDeployment");
     this.settings.getDeploymentUrl().then((url:string) => {
       let whitelabel = (url && url.length > 0);
@@ -68,7 +68,7 @@ export class PrivacyPolicyPage extends BasePage {
     });
   }
 
-  loadDeployment():Promise<boolean> {
+  protected loadDeployment():Promise<boolean> {
     return new Promise((resolve, reject) => {
       this.logger.info(this, "loadDeployment");
       this.database.getDeployments().then(
@@ -91,7 +91,7 @@ export class PrivacyPolicyPage extends BasePage {
     });
   }
 
-  showNext(event:any=null) {
+  protected showNext(event:any=null) {
     this.logger.info(this, "showNext", this.acceptedTerms)
     this.settings.setAcceptedTerms(this.acceptedTerms).then((saved:boolean) => {
       this.logger.info(this, "showNext", "Accepted Terms", this.acceptedTerms, "Saved", saved);

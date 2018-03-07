@@ -70,7 +70,7 @@ export class ResponseDetailsPage extends BasePage {
     this.loadUpdates();
   }
 
-  loadUpdates(event:any=null, cache:boolean=true) {
+  private loadUpdates(event:any=null, cache:boolean=true) {
     this.logger.info(this, "loadUpdates");
     return Promise.resolve()
       .then(() => { return this.loadForm(cache); })
@@ -89,7 +89,7 @@ export class ResponseDetailsPage extends BasePage {
       });
   }
 
-  loadForm(cache:boolean=true):Promise<any> {
+  private loadForm(cache:boolean=true):Promise<any> {
     if (cache && this.form && this.form.attributes) {
       this.logger.info(this, "loadForm", "Cache", this.form);
       return Promise.resolve();
@@ -110,7 +110,7 @@ export class ResponseDetailsPage extends BasePage {
     }
   }
 
-  loadValues(cache:boolean=true):Promise<any> {
+  private loadValues(cache:boolean=true):Promise<any> {
     this.logger.info(this, "loadValues", "Cache", cache);
     if (cache && this.post.hasValues()) {
       this.logger.info(this, "loadValues", "Cached");
@@ -156,7 +156,7 @@ export class ResponseDetailsPage extends BasePage {
     }
   }
 
-  showOptions(post:Post) {
+  private showOptions(post:Post) {
     this.language.getTranslations([
       'ACTION_SHARE',
       'ACTION_COLLECTION',
@@ -222,7 +222,7 @@ export class ResponseDetailsPage extends BasePage {
     });
   }
 
-  shareResponse(event:any) {
+  private shareResponse(event:any) {
     this.language.getTranslations(['RESPONSE_SHARED']).then((translations:string[]) => {
         let subject:string = `${this.deployment.name} | ${this.post.title}`;
         let message:string = this.post.description
@@ -242,7 +242,7 @@ export class ResponseDetailsPage extends BasePage {
     });
   }
 
-  editResponse(event:any) {
+  private editResponse(event:any) {
     this.logger.info(this, "editResponse");
     let modal = this.showModal(ResponseAddPage,
       { deployment: this.deployment,
@@ -254,7 +254,7 @@ export class ResponseDetailsPage extends BasePage {
     });
   }
 
-  showResponse(event:any) {
+  private showResponse(event:any) {
     this.logger.info(this, "showResponse", event.post);
     this.showPage(ResponseDetailsPage, {
       deployment: this.deployment,
@@ -263,7 +263,7 @@ export class ResponseDetailsPage extends BasePage {
     });
   }
 
-  showImage(title:string, image:string) {
+  private showImage(title:string, image:string) {
     this.logger.info(this, "showImage", title, image);
     this.showPage(ResponseImagePage, {
       deployment: this.deployment,
@@ -273,7 +273,7 @@ export class ResponseDetailsPage extends BasePage {
     });
   }
 
-  showLocation(title:string, coordinates:string) {
+  private showLocation(title:string, coordinates:string) {
     this.logger.info(this, "showLocation", title, coordinates);
     if (coordinates && coordinates.length > 0) {
       let location = coordinates.split(",");
@@ -290,7 +290,7 @@ export class ResponseDetailsPage extends BasePage {
     }
   }
 
-  addToCollection(post:Post, collection:Collection=null) {
+  private addToCollection(post:Post, collection:Collection=null) {
     this.logger.info(this, "addToCollection");
     if (collection != null) {
       let loading = this.showLoading("Adding...");
@@ -322,7 +322,7 @@ export class ResponseDetailsPage extends BasePage {
     }
   }
 
-  draftResponse(post:Post) {
+  private draftResponse(post:Post) {
     this.logger.info(this, "draftResponse");
     let loading = this.showLoading("Updating...");
     let changes = { status: "draft" };
@@ -342,7 +342,7 @@ export class ResponseDetailsPage extends BasePage {
       });
   }
 
-  archiveResponse(post:Post) {
+  private archiveResponse(post:Post) {
     this.logger.info(this, "archiveResponse");
     this.language.getTranslations([
       'RESPONSE_ARCHIVING_',
@@ -367,7 +367,7 @@ export class ResponseDetailsPage extends BasePage {
     });
   }
 
-  publishResponse(post:Post) {
+  private publishResponse(post:Post) {
     this.logger.info(this, "publishResponse");
     this.language.getTranslations([
       'RESPONSE_PUBLISHING_',
@@ -392,7 +392,7 @@ export class ResponseDetailsPage extends BasePage {
     });
   }
 
-  removeResponse(post:Post) {
+  private removeResponse(post:Post) {
     this.language.getTranslations([
       'RESPONSE_REMOVING_',
       'RESPONSE_REMOVE_SUCCESS',
@@ -420,7 +420,7 @@ export class ResponseDetailsPage extends BasePage {
     });
   }
 
-  deleteResponse(post:Post) {
+  private deleteResponse(post:Post) {
     this.language.getTranslations([
       'ACTION_DELETE',
       'RESPONSE_DELETING_',

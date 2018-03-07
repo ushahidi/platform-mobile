@@ -58,17 +58,14 @@ export class DeploymentSearchPage extends BasePage {
 
   ionViewDidEnter() {
     super.ionViewDidEnter();
-    if (this.tablet == false) {
-      this.loadStatusBar(true, true);
-    }
   }
 
-  onCancel(event:any) {
+  private onCancel(event:any) {
     this.logger.info(this, "onCancel");
     this.hideModal();
   }
 
-  searchDeployments(event:any) {
+  private searchDeployments(event:any) {
     this.logger.info(this, "searchDeployments", event.target.value);
     this.search = event.target.value;
     if (this.search == null) {
@@ -99,7 +96,7 @@ export class DeploymentSearchPage extends BasePage {
     }
   }
 
-  registerDeployment(event:any) {
+  private registerDeployment(event:any) {
     this.logger.info(this, "registerDeployment", this.search);
     this.language.getTranslations([
       'DEPLOYMENT_ADDING_',
@@ -125,7 +122,7 @@ export class DeploymentSearchPage extends BasePage {
     });
   }
 
-  addDeployment(event:any, deployment:Deployment) {
+  private addDeployment(event:any, deployment:Deployment) {
     this.logger.info(this, "addDeployment");
     this.logger.event(this, "Deployments", "searched", this.search);
     this.language.getTranslations([
@@ -144,7 +141,7 @@ export class DeploymentSearchPage extends BasePage {
     });
   }
 
-  loginDeployment(deployment:Deployment) {
+  private loginDeployment(deployment:Deployment) {
     this.logger.info(this, "loginDeployment");
     this.language.getTranslations([
       'DEPLOYMENT_ADDING_',

@@ -48,7 +48,7 @@ export class ResponseImagePage extends BasePage {
     this.title = this.getParameter<string>("title");
   }
 
-  shareImage(event:any) {
+  private shareImage(event:any) {
     this.language.getTranslations(['IMAGE_SHARED']).then((translations:string[]) => {
       let subject = this.deployment.name;
       let message = this.post.title;

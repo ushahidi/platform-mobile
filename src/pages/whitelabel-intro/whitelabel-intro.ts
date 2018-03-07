@@ -15,7 +15,7 @@ import { SettingsService } from '../../providers/settings-service';
 @Component({
   selector: 'whitelabel-intro',
   templateUrl: 'whitelabel-intro.html',
-  providers: [ LoggerService, DatabaseService, ApiService ],
+  providers: [ LoggerService, DatabaseService, ApiService, SettingsService ],
   entryComponents:[ DeploymentDetailsPage ]
 })
 export class WhitelabelIntroPage extends BasePage {
@@ -58,7 +58,7 @@ export class WhitelabelIntroPage extends BasePage {
     this.loadDeployment();
   }
 
-  loadAppName() {
+  private loadAppName() {
     this.logger.info(this, "loadAppName");
     this.settings.getAppName().then((name:string) => {
       this.name = name;
@@ -68,7 +68,7 @@ export class WhitelabelIntroPage extends BasePage {
     });
   }
 
-  loadDeployment() {
+  private loadDeployment() {
     this.logger.info(this, "loadDeployment");
     this.loading = true;
     this.failure = false;
@@ -114,7 +114,7 @@ export class WhitelabelIntroPage extends BasePage {
     });
   }
 
-  showDeployment() {
+  protected showDeployment() {
     this.logger.info(this, "showDeployment", this.deployment);
     setTimeout(() => {
       this.showRootPage(DeploymentDetailsPage,

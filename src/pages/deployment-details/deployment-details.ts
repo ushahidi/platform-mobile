@@ -73,7 +73,7 @@ export class DeploymentDetailsPage extends BasePage {
   ionViewWillEnter() {
     super.ionViewWillEnter();
     this.truncated = true;
-    this.loadStatusBar(true, true);
+    this.loadStatusBar(true, false);
     if (this.deployment == null) {
       this.deployment = this.getParameter<Deployment>("deployment");
     }
@@ -94,7 +94,7 @@ export class DeploymentDetailsPage extends BasePage {
     }
   }
 
-  loadUpdates(event:any=null, cache:boolean=false) {
+  private loadUpdates(event:any=null, cache:boolean=false) {
     this.logger.info(this, "loadUpdates", cache);
     if (cache == false) {
       this.loaded = false;
@@ -121,7 +121,7 @@ export class DeploymentDetailsPage extends BasePage {
       });
   }
 
-  loadLogin(cache:boolean=true):Promise<Login> {
+  private loadLogin(cache:boolean=true):Promise<Login> {
     this.logger.info(this, "loadLogin", cache);
     if (cache && this.login) {
       this.logger.info(this, "loadLogin", "Cached", this.login);
@@ -143,7 +143,7 @@ export class DeploymentDetailsPage extends BasePage {
     }
   }
 
-  loadDeployment(cache:boolean=true):Promise<Deployment> {
+  private loadDeployment(cache:boolean=true):Promise<Deployment> {
     this.logger.info(this, "loadDeployment", cache);
     if (cache && (this.deployment.image || this.deployment.description)) {
       this.logger.info(this, "loadDeployment", "Cached");
@@ -172,7 +172,7 @@ export class DeploymentDetailsPage extends BasePage {
     }
   }
 
-  loadForms(cache:boolean=true):Promise<Form[]> {
+  private loadForms(cache:boolean=true):Promise<Form[]> {
     this.logger.info(this, "loadForms", cache);
     if (cache && this.deployment.hasForms()) {
       this.logger.info(this, "loadForms", "Cached");
@@ -204,7 +204,7 @@ export class DeploymentDetailsPage extends BasePage {
     }
   }
 
-  loadTags(cache:boolean=true):Promise<Tag[]> {
+  private loadTags(cache:boolean=true):Promise<Tag[]> {
     this.logger.info(this, "loadTags", cache);
     if (cache && this.deployment.hasTags()) {
       this.logger.info(this, "loadTags", "Cached");
@@ -231,7 +231,7 @@ export class DeploymentDetailsPage extends BasePage {
     }
   }
 
-  loadCollections(cache:boolean=true):Promise<Collection[]> {
+  private loadCollections(cache:boolean=true):Promise<Collection[]> {
     this.logger.info(this, "loadCollections", cache);
     if (cache && this.deployment.hasCollections()) {
       this.logger.info(this, "loadCollections", "Cached");
@@ -258,24 +258,24 @@ export class DeploymentDetailsPage extends BasePage {
     }
   }
 
-  showResponses(event:any) {
+  private showResponses(event:any) {
     this.logger.info(this, "showResponses");
     this.showPage(ResponseListPage,
       { deployment: this.deployment,
         login: this.login });
   }
 
-  showCollections(event:any) {
+  private showCollections(event:any) {
     this.logger.info(this, "showCollections");
   }
 
-  showSettings(event:any) {
+  private showSettings(event:any) {
     this.logger.info(this, "showSettings");
     this.showModal(DeploymentSettingsPage,
       { deployment: this.deployment });
   }
 
-  addResponse(event:any) {
+  private addResponse(event:any) {
     this.logger.info(this, "addResponse");
     if (this.deployment.forms.length == 1) {
       let form = this.deployment.forms[0];
@@ -306,7 +306,7 @@ export class DeploymentDetailsPage extends BasePage {
     }
   }
 
-  showResponseAdd(form:Form) {
+  private showResponseAdd(form:Form) {
     this.logger.info(this, "showResponseAdd", form.name);
     let modal = this.showModal(ResponseAddPage,
       { deployment: this.deployment,
@@ -317,7 +317,7 @@ export class DeploymentDetailsPage extends BasePage {
     });
   }
 
-  shareDeployment(event:any) {
+  private shareDeployment(event:any) {
     this.language.getTranslations(['DEPLOYMENT_SHARED']).then((translations:string[]) => {
       let subject = this.deployment.name;
       let message = this.deployment.description
@@ -337,19 +337,19 @@ export class DeploymentDetailsPage extends BasePage {
     });
   }
 
-  userLogin(event:any) {
+  private userLogin(event:any) {
     this.logger.info(this, "userLogin");
     this.showModal(UserLoginPage,
       { deployment: this.deployment });
   }
 
-  userSignup(event:any) {
+  private userSignup(event:any) {
     this.logger.info(this, "userSignup");
     this.showModal(UserSignupPage,
       { deployment: this.deployment });
   }
 
-  userLogout(event:any) {
+  private userLogout(event:any) {
     this.logger.info(this, "userLogout");
     this.logger.event(this, "Deployments", "logout", this.deployment.website);
     this.language.getTranslations([
@@ -379,14 +379,14 @@ export class DeploymentDetailsPage extends BasePage {
     });
   }
 
-  demoteDeployment() {
+  private demoteDeployment() {
     this.deployment.can_create = false;
     this.deployment.can_update = false;
     this.deployment.can_delete = false;
     return this.database.saveDeployment(this.deployment);
   }
 
-  demotePosts() {
+  private demotePosts() {
     return new Promise((resolve, reject) => {
       this.database.removePosts(this.deployment).then((removed:any) => {
         resolve(removed);
@@ -394,7 +394,7 @@ export class DeploymentDetailsPage extends BasePage {
     });
   }
 
-  demoteForms() {
+  private demoteForms() {
     return new Promise((resolve, reject) => {
       this.database.getForms(this.deployment).then((forms:Form[]) => {
         let updates = [];
@@ -415,7 +415,7 @@ export class DeploymentDetailsPage extends BasePage {
     });
   }
 
-  demoteStages() {
+  private demoteStages() {
     return new Promise((resolve, reject) => {
       this.database.getStages(this.deployment).then((stages:Stage[]) => {
         let updates = [];
@@ -436,7 +436,7 @@ export class DeploymentDetailsPage extends BasePage {
     });
   }
 
-  demoteAttributes() {
+  private demoteAttributes() {
     return new Promise((resolve, reject) => {
       this.database.getAttributes(this.deployment).then((attributes:Attribute[]) => {
         let updates = [];
@@ -457,7 +457,7 @@ export class DeploymentDetailsPage extends BasePage {
     });
   }
 
-  demoteCollections() {
+  private demoteCollections() {
     return new Promise((resolve, reject) => {
       this.database.getCollections(this.deployment).then((collections:Collection[]) => {
         let updates = [];
@@ -478,7 +478,7 @@ export class DeploymentDetailsPage extends BasePage {
     });
   }
 
-  readMore(event:any) {
+  private readMore(event:any) {
     this.logger.info(this, "readMore");
     this.truncated = false;
   }

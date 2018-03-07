@@ -73,14 +73,15 @@ export class ResponseAddPage extends BasePage {
     this.loadSettings();
   }
 
-  loadColor() {
+  private loadColor() {
     this.logger.info(this, "loadColor");
     if (this.form) {
       this.color = this.form.color;
     }
   }
 
-  loadSettings() {
+  protected loadSettings() {
+    super.loadSettings();
     this.logger.info(this, "loadSettings");
     this.settings.getSurveyFormAuthor().then((showAuthor:boolean) => {
       this.showAuthor = showAuthor;
@@ -96,7 +97,7 @@ export class ResponseAddPage extends BasePage {
     });
   }
 
-  loadUpdates(event:any=null) {
+  private loadUpdates(event:any=null) {
     this.logger.info(this, "loadUpdates");
     return Promise.resolve()
       .then(() => { return this.loadPostValues(); })
@@ -115,14 +116,14 @@ export class ResponseAddPage extends BasePage {
       });
   }
 
-  onCancel(event:any=null) {
+  private onCancel(event:any=null) {
     this.logger.info(this, "onCancel");
     this.post = null;
     this.hideModal();
     this.logger.event(this, "Posts", "cancelled", this.deployment.website);
   }
 
-  onSubmit(event:any=null) {
+  private onSubmit(event:any=null) {
     this.logger.info(this, "onSubmit");
     this.submitted = true;
     if (this.hasRequiredValues()) {
@@ -224,7 +225,7 @@ export class ResponseAddPage extends BasePage {
     }
   }
 
-  savePost(post:Post) {
+  private savePost(post:Post) {
     this.logger.info(this, "savePost", post);
     return new Promise((resolve, reject) => {
       this.logger.info(this, "savePost", "Saving...");
@@ -248,7 +249,7 @@ export class ResponseAddPage extends BasePage {
     });
   }
 
-  createPost(post:Post):Promise<Post> {
+  private createPost(post:Post):Promise<Post> {
     this.logger.info(this, "createPost", post);
     return new Promise((resolve, reject) => {
       this.logger.info(this, "createPost", "Posting...");
@@ -285,7 +286,7 @@ export class ResponseAddPage extends BasePage {
     });
   }
 
-  updatePost(post:Post):Promise<Post> {
+  private updatePost(post:Post):Promise<Post> {
     this.logger.info(this, "updatePost", post);
     return new Promise((resolve, reject) => {
       this.logger.info(this, "updatePost", "Updating...");
@@ -315,7 +316,7 @@ export class ResponseAddPage extends BasePage {
     });
   }
 
-  loadPostValues() {
+  private loadPostValues() {
     this.logger.info(this, "loadPostValues");
     if (this.post == null) {
       this.post = new Post();
@@ -377,7 +378,7 @@ export class ResponseAddPage extends BasePage {
     }
   }
 
-  loadFormGroup() {
+  private loadFormGroup() {
     this.logger.info(this, "loadFormGroup", "Form", this.form.name);
     this.formGroup = new FormGroup({});
     this.formGroup.addControl('author_realname', new FormControl(''));
@@ -427,7 +428,7 @@ export class ResponseAddPage extends BasePage {
     }
   }
 
-  loadFormValues() {
+  private loadFormValues() {
     let formValues = this.formGroup.value;
     this.logger.info(this, "loadFormValues", formValues);
     for (let stage of this.form.stages) {
@@ -494,7 +495,7 @@ export class ResponseAddPage extends BasePage {
     this.logger.info(this, "loadFormValues", "Post", this.post);
   }
 
-  changeLocation(event, key) {
+  private changeLocation(event, key) {
     this.logger.info(this, "changeLocation", event);
     let modal = this.showModal(ResponseMapPage,
       { deployment: this.deployment,
@@ -515,11 +516,11 @@ export class ResponseAddPage extends BasePage {
     });
   }
 
-  hasRequiredValues():boolean {
+  private hasRequiredValues():boolean {
     return this.formGroup.valid == true;
   }
 
-  getVideos():string[] {
+  private getVideos():string[] {
     let videos:string[] = [];
     let values = this.formGroup.value;
     for (let attribute of this.form.attributes) {
@@ -533,7 +534,7 @@ export class ResponseAddPage extends BasePage {
     return videos;
   }
 
-  getImages():string[] {
+  private getImages():string[] {
     let images:string[] = [];
     let values = this.formGroup.value;
     for (let attribute of this.form.attributes) {

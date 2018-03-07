@@ -15,18 +15,19 @@ import { SettingsService } from '../../providers/settings-service';
 @Component({
   selector: 'base-page',
   templateUrl: 'base-page.html',
-  providers: [ LoggerService ],
+  providers: [ LoggerService, SettingsService, LanguageService ],
 })
 export class BasePage {
 
-  protected offline: boolean = false;
-  protected connection: any = null;
-  protected disconnection: any = null;
-  protected colorNavbar: string = "#3f4751";
+  protected offline:boolean = false;
+  protected connection:any = null;
+  protected disconnection:any = null;
+  protected colorNavbar:string = "#3f4751";
   protected direction:string = "lrt";
   protected languageChanged: any = null;
   protected tablet:boolean = false;
   protected landscape:boolean = false;
+  protected android:boolean = false;
 
   protected zone:NgZone;
   protected events:Events;
@@ -96,7 +97,7 @@ export class BasePage {
     this.logger.info(this, "ionViewWillUnload");
   }
 
-  loadLanguage() {
+  protected loadLanguage() {
     this.logger.info(this, "loadLanguage");
     this.direction = this.language.getDirection();
     this.languageChanged = this.events.subscribe(LanguageChanged, (i18n:string) => {
@@ -105,15 +106,24 @@ export class BasePage {
     });
   }
 
-  unloadLanguage() {
+  protected unloadLanguage() {
+    this.logger.info(this, "unloadLanguage");
     if (this.languageChanged) {
       this.languageChanged.unsubscribe();
       this.languageChanged = null;
     }
   }
 
-  loadSettings() {
+  protected loadSettings() {
     this.logger.info(this, "loadSettings");
+    if (this.platform.is('android')) {
+      this.logger.info(this, "loadSettings", "Android");
+      this.android = true;
+    }
+    else {
+      this.logger.info(this, "loadSettings", "Apple");
+      this.android = false;
+    }
     if (this.platform.is('tablet')) {
       this.logger.info(this, "loadSettings", "Tablet");
       this.tablet = true;
@@ -130,7 +140,7 @@ export class BasePage {
     });
   }
 
-  loadOrientation() {
+  protected loadOrientation() {
     this.logger.info(this, "loadOrientation", this.screenOrientation.type);
     if (this.platform.isLandscape()) {
       this.logger.info(this, "loadSettings", "Landscape");
@@ -154,7 +164,7 @@ export class BasePage {
    });
   }
 
-  subscribeNetwork() {
+  protected subscribeNetwork() {
     this.logger.info(this, "subscribeNetwork", "Network", this.network.type);
     if (this.network.type == 'none') {
       this.zone.run(() => {
@@ -183,7 +193,7 @@ export class BasePage {
     });
   }
 
-  unsubscribeNetwork() {
+  protected unsubscribeNetwork() {
     this.logger.info(this, "unsubscribeNetwork", "Network", this.network.type);
     if (this.connection) {
       this.connection.unsubscribe();
@@ -195,7 +205,7 @@ export class BasePage {
     }
   }
 
-  loadStatusBar(lightContent:boolean=true, overlaysWebView:boolean=false) {
+  protected loadStatusBar(lightContent:boolean=true, overlaysWebView:boolean=true) {
     this.platform.ready().then(() => {
       if (lightContent) {
         this.statusBar.styleLightContent();
@@ -203,16 +213,21 @@ export class BasePage {
       else {
         this.statusBar.styleDefault();
       }
-      this.statusBar.overlaysWebView(overlaysWebView);
+      if (overlaysWebView) {
+        this.statusBar.overlaysWebView(true);
+      }
+      else {
+        this.statusBar.overlaysWebView(false);
+      }
       this.statusBar.backgroundColorByHexString(this.colorNavbar);
     });
   }
 
-  getParameter<T extends Object>(param:string):T {
+  protected getParameter<T extends Object>(param:string):T {
     return <T>this.navParams.get(param);
   }
 
-  showLoading(message:string):Loading {
+  protected showLoading(message:string):Loading {
     let loading = this.loadingController.create({
       content: message
     });
@@ -220,7 +235,7 @@ export class BasePage {
     return loading;
   }
 
-  showToast(message:string, duration:number=3000):Toast {
+  protected showToast(message:string, duration:number=3000):Toast {
     let toast = this.toastController.create({
       message: message,
       duration: duration
@@ -229,7 +244,7 @@ export class BasePage {
     return toast;
   }
 
-  showAlert(title:string, subTitle:string, buttons:any=['OK']):Alert {
+  protected showAlert(title:string, subTitle:string, buttons:any=['OK']):Alert {
     let alert = this.alertController.create({
       title: title,
       subTitle: subTitle,
@@ -239,7 +254,7 @@ export class BasePage {
     return alert;
   }
 
-  showConfirm(title:string, subTitle:string, buttons:any=['OK']):Alert {
+  protected showConfirm(title:string, subTitle:string, buttons:any=['OK']):Alert {
     let alert = this.alertController.create({
       title: title,
       subTitle: subTitle,
@@ -249,7 +264,7 @@ export class BasePage {
     return alert;
   }
 
-  showActionSheet(title:string, buttons:any):ActionSheet {
+  protected showActionSheet(title:string, buttons:any):ActionSheet {
     let actionSheet = this.actionController.create({
       title: title,
       buttons: buttons
@@ -258,33 +273,33 @@ export class BasePage {
     return actionSheet;
   }
 
-  showModal(page:any, params:any={}, options:any={}):Modal {
+  protected showModal(page:any, params:any={}, options:any={}):Modal {
     let modal = this.modalController.create(page, params, options);
     modal.present();
     return modal;
   }
 
-  hideModal(data:any=null, options:any={}) {
+  protected hideModal(data:any=null, options:any={}) {
     return this.viewController.dismiss(data, options);
   }
 
-  showPage(page:any, params:any={}, options:any={}) {
+  protected showPage(page:any, params:any={}, options:any={}) {
     return this.navController.push(page, params, options);
   }
 
-  showRootPage(page:any, params:any={}, options:any={}) {
+  protected showRootPage(page:any, params:any={}, options:any={}) {
     return this.navController.setRoot(page, params, options);
   }
 
-  closePage(data:any=null, options:any={}) {
+  protected closePage(data:any=null, options:any={}) {
     return this.viewController.dismiss(data, options);
   }
 
-  showShare(subject:string, message:string=null, file:string=null, url:string=null) {
+  protected showShare(subject:string, message:string=null, file:string=null, url:string=null) {
     return this.socialSharing.share(message, subject, file, url);
   }
 
-  showUrl(url:string, target:string="_blank", event:any=null):ThemeableBrowserObject {
+  protected showUrl(url:string, target:string="_blank", event:any=null):ThemeableBrowserObject {
     this.logger.info(this, "showUrl", url, target);
     let options:ThemeableBrowserOptions = {
       statusbar: {
@@ -328,7 +343,7 @@ export class BasePage {
     return browser;
   }
 
-  showOfflineAlert() {
+  protected showOfflineAlert() {
     this.language.getTranslations([
       'OFFLINE_WARNING',
       'OFFLINE_WARNING_DESCRIPTION']).then((translations:string[]) => {
@@ -336,7 +351,7 @@ export class BasePage {
     });
   }
 
-  resizeContent(delay:number=100) {
+  protected resizeContent(delay:number=100) {
     setTimeout(() => {
       if (this.content) {
         this.logger.info(this, "resizeContent");
@@ -348,7 +363,7 @@ export class BasePage {
     }, delay);
   }
 
-  handleLinks(_event:any) {
+  protected handleLinks(_event:any) {
     let event = _event || window.event;
     let element = event.target || event.srcElement;
     if (element && element.tagName == 'A') {
@@ -363,7 +378,7 @@ export class BasePage {
     }
   }
 
-  runSequentially(tasks):Promise<any> {
+  protected runSequentially(tasks):Promise<any> {
     var result = Promise.resolve();
     tasks.forEach(task => {
       result = result.then(() => task());
