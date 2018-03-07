@@ -1,6 +1,6 @@
 import { Component, NgZone, ViewChild } from '@angular/core';
 import { trigger, state, style, animate, transition } from '@angular/animations';
-import { Platform, Content, NavParams, NavController, ViewController, ModalController, ToastController, AlertController, LoadingController, ActionSheetController } from 'ionic-angular';
+import { Platform, Content, NavParams, NavController, ViewController, ModalController, ToastController, AlertController, LoadingController, ActionSheetController, Loading } from 'ionic-angular';
 
 import { PLACEHOLDER_BLANK } from '../../constants/placeholders';
 
@@ -81,30 +81,35 @@ export class DeploymentDetailsPage extends BasePage {
     if (this.deployment.forms == null || this.deployment.forms.length == 0) {
       this.language.getTranslation("LOADING_").then((text:string) => {
         let loading = this.showLoading(text);
-        this.loadUpdates(null, false).then((loaded) => {
+        this.loadUpdates(false, null, loading).then((loaded) => {
           this.logger.info(this, "ionViewWillEnter", "Loaded");
           loading.dismiss();
         });
       });
     }
     else {
-      this.loadUpdates(null, true).then((loaded) => {
+      this.loadUpdates(true).then((loaded) => {
         this.logger.info(this, "ionViewWillEnter", "Loaded");
       });
     }
   }
 
-  private loadUpdates(event:any=null, cache:boolean=false) {
+  ionViewDidEnter() {
+    super.ionViewDidEnter();
+    this.loadStatusBar(true, false);
+  }
+
+  private loadUpdates(cache:boolean=false, event:any=null, loading:Loading=null) {
     this.logger.info(this, "loadUpdates", cache);
     if (cache == false) {
       this.loaded = false;
     }
     return Promise.resolve()
-      .then(() => { return this.loadLogin(false); })
-      .then(() => { return this.loadDeployment(cache); })
-      .then(() => { return this.loadForms(cache); })
-      .then(() => { return this.loadTags(cache); })
-      .then(() => { return this.loadCollections(cache); })
+      .then(() => { return this.loadLogin(false, loading); })
+      .then(() => { return this.loadDeployment(cache, loading); })
+      .then(() => { return this.loadForms(cache, loading); })
+      .then(() => { return this.loadTags(cache, loading); })
+      .then(() => { return this.loadCollections(cache, loading); })
       .then(() => {
         this.logger.info(this, "loadUpdates", "Finished");
         if (event) {
@@ -121,8 +126,13 @@ export class DeploymentDetailsPage extends BasePage {
       });
   }
 
-  private loadLogin(cache:boolean=true):Promise<Login> {
+  private loadLogin(cache:boolean=true, loading:Loading=null):Promise<Login> {
     this.logger.info(this, "loadLogin", cache);
+    if (loading) {
+      this.language.getTranslation('USER_').then((translation:string) => {
+        loading.setContent(translation);
+      });
+    }
     if (cache && this.login) {
       this.logger.info(this, "loadLogin", "Cached", this.login);
       return Promise.resolve(this.login);
@@ -143,8 +153,13 @@ export class DeploymentDetailsPage extends BasePage {
     }
   }
 
-  private loadDeployment(cache:boolean=true):Promise<Deployment> {
+  private loadDeployment(cache:boolean=true, loading:Loading=null):Promise<Deployment> {
     this.logger.info(this, "loadDeployment", cache);
+    if (loading) {
+      this.language.getTranslation('DEPLOYMENT_').then((translation:string) => {
+        loading.setContent(translation);
+      });
+    }
     if (cache && (this.deployment.image || this.deployment.description)) {
       this.logger.info(this, "loadDeployment", "Cached");
       return Promise.resolve(this.deployment);
@@ -172,8 +187,13 @@ export class DeploymentDetailsPage extends BasePage {
     }
   }
 
-  private loadForms(cache:boolean=true):Promise<Form[]> {
+  private loadForms(cache:boolean=true, loading:Loading=null):Promise<Form[]> {
     this.logger.info(this, "loadForms", cache);
+    if (loading) {
+      this.language.getTranslation('SURVEYS_').then((translation:string) => {
+        loading.setContent(translation);
+      });
+    }
     if (cache && this.deployment.hasForms()) {
       this.logger.info(this, "loadForms", "Cached");
       return Promise.resolve(this.deployment.forms);
@@ -204,8 +224,13 @@ export class DeploymentDetailsPage extends BasePage {
     }
   }
 
-  private loadTags(cache:boolean=true):Promise<Tag[]> {
+  private loadTags(cache:boolean=true, loading:Loading=null):Promise<Tag[]> {
     this.logger.info(this, "loadTags", cache);
+    if (loading) {
+      this.language.getTranslation('CATEGORIES_').then((translation:string) => {
+        loading.setContent(translation);
+      });
+    }
     if (cache && this.deployment.hasTags()) {
       this.logger.info(this, "loadTags", "Cached");
       return Promise.resolve(this.deployment.tags);
@@ -231,8 +256,13 @@ export class DeploymentDetailsPage extends BasePage {
     }
   }
 
-  private loadCollections(cache:boolean=true):Promise<Collection[]> {
+  private loadCollections(cache:boolean=true, loading:Loading=null):Promise<Collection[]> {
     this.logger.info(this, "loadCollections", cache);
+    if (loading) {
+      this.language.getTranslation('COLLECTIONS_').then((translation:string) => {
+        loading.setContent(translation);
+      });
+    }
     if (cache && this.deployment.hasCollections()) {
       this.logger.info(this, "loadCollections", "Cached");
       return Promise.resolve(this.deployment.collections);

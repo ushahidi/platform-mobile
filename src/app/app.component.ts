@@ -144,6 +144,26 @@ export class UshahidiApp {
     });
   }
 
+  private loadStatusBar(lightContent:boolean=true, overlaysWebView:boolean=true) {
+    this.platform.ready().then(() => {
+      if (lightContent) {
+        this.statusBar.styleLightContent();
+      }
+      else {
+        this.statusBar.styleDefault();
+      }
+      if (overlaysWebView) {
+        this.statusBar.overlaysWebView(true);
+      }
+      else {
+        this.statusBar.overlaysWebView(false);
+      }
+      this.settings.getColorNavbar().then((colorNavbar:string) => {
+        this.statusBar.backgroundColorByHexString(colorNavbar);
+      });
+    });
+  }
+
   private loadEvents() {
     this.events.subscribe(DEPLOYMENT_ADDED, (deployment_id:number) => {
       this.logger.info(this, 'Events', DEPLOYMENT_ADDED, deployment_id);
@@ -344,7 +364,7 @@ export class UshahidiApp {
       this.rootPage = PrivacyPolicyPage;
       this.splashScreen.hide();
     }
-    else if (deployments && deployments.length > 0) {
+    else if (this.deployment != null) {
       this.logger.info(this, "showRootPage", "showDeployment", deployments.length);
       this.showDeployment(this.deployment).then((ready) => {
         this.splashScreen.hide();

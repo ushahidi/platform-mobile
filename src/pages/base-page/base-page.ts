@@ -26,8 +26,8 @@ export class BasePage {
   protected direction:string = "lrt";
   protected languageChanged: any = null;
   protected tablet:boolean = false;
-  protected landscape:boolean = false;
   protected android:boolean = false;
+  protected landscape:boolean = false;
 
   protected zone:NgZone;
   protected events:Events;
