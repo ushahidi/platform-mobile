@@ -22,10 +22,8 @@ import { SettingsService } from '../../providers/settings-service';
 export class PrivacyPolicyPage extends BasePage {
 
   @ViewChild(Content)
-  content: Content;
+  content:Content;
 
-  whitelabel:boolean = false;
-  deployment:Deployment = null;
   acceptedTerms:boolean = false;
   privacyPolicy:string = "https://www.ushahidi.com/privacy-policy";
   termsOfService:string = "https://www.ushahidi.com/terms-of-service";
@@ -50,43 +48,38 @@ export class PrivacyPolicyPage extends BasePage {
   ionViewWillEnter() {
     super.ionViewWillEnter();
     this.loadStatusBar(false, true);
-    this.loadSettings();
-    this.loadDeployment();
   }
 
-  protected loadSettings() {
-    super.loadSettings();
-    this.logger.info(this, "loadDeployment");
-    this.settings.getDeploymentUrl().then((url:string) => {
-      let whitelabel = (url && url.length > 0);
-      this.logger.info(this, 'loadSettings', "Whitelabel", whitelabel);
-      this.whitelabel = whitelabel;
-    },
-    (error:any) => {
-      this.logger.info(this, 'loadSettings', "Whitelabel", "No");
-      this.whitelabel = false;
+  private loadWhitelabel():Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      this.settings.getDeploymentUrl().then((url:string) => {
+        let whitelabel = (url && url.length > 0);
+        this.logger.info(this, 'loadWhitelabel', "Whitelabel", whitelabel);
+        resolve(whitelabel);
+      },
+      (error:any) => {
+        this.logger.info(this, 'loadWhitelabel', "Whitelabel", "No");
+        resolve(false);
+      });
     });
   }
 
-  protected loadDeployment():Promise<boolean> {
+  private loadDeployment():Promise<Deployment> {
     return new Promise((resolve, reject) => {
-      this.logger.info(this, "loadDeployment");
       this.database.getDeployments().then(
         (deployments:Deployment[]) => {
-          this.logger.info(this, "loadDeployment", deployments);
           if (deployments.length > 0) {
-            this.deployment = deployments[0];
-            resolve(true);
+            this.logger.info(this, "loadDeployment", deployments.length);
+            resolve(deployments[0]);
           }
           else {
-            this.deployment = null;
-            resolve(false);
+            this.logger.info(this, "loadDeployment", "None");
+            resolve(null);
           }
         },
         (error:any) => {
           this.logger.error(this, "loadDeployment", error);
-          this.deployment = null;
-          reject(error);
+          resolve(null);
         });
     });
   }
@@ -96,24 +89,30 @@ export class PrivacyPolicyPage extends BasePage {
     this.settings.setAcceptedTerms(this.acceptedTerms).then((saved:boolean) => {
       this.logger.info(this, "showNext", "Accepted Terms", this.acceptedTerms, "Saved", saved);
       if (saved) {
-        if (this.whitelabel == true) {
-          this.showRootPage(WhitelabelIntroPage,
-            { deployment: this.deployment },
-            { animate: true,
-              direction: 'forward' });
-        }
-        else if (this.deployment != null) {
-          this.showRootPage(DeploymentDetailsPage,
-            { deployment: this.deployment },
-            { animate: true,
-              direction: 'forward' });
-        }
-        else {
-          this.showRootPage(DeploymentNonePage,
-            { },
-            { animate: true,
-              direction: 'forward' });
-        }
+        this.loadWhitelabel().then((whitelabel:boolean) => {
+          if (whitelabel) {
+            this.showRootPage(WhitelabelIntroPage,
+              { },
+              { animate: true,
+                direction: 'forward' });
+          }
+          else {
+            this.loadDeployment().then((deployment:Deployment) => {
+              if (deployment != null) {
+                this.showRootPage(DeploymentDetailsPage,
+                  { deployment: deployment },
+                  { animate: true,
+                    direction: 'forward' });
+              }
+              else {
+                this.showRootPage(DeploymentNonePage,
+                  { },
+                  { animate: true,
+                    direction: 'forward' });
+              }
+            });
+          }
+        });
       }
       else {
         this.language.getTranslations([

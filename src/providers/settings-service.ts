@@ -1,41 +1,21 @@
 import { Injectable } from '@angular/core';
 import { Platform } from 'ionic-angular';
-import { Http } from '@angular/http';
 
-import { File } from '@ionic-native/file';
 import { NativeStorage } from '@ionic-native/native-storage';
 
 import { Settings } from '../models/settings';
 
+import * as SETTINGS from "../assets/data/settings.json";
+
 @Injectable()
 export class SettingsService {
 
-  settings: Settings = null;
+  private settings: Settings = null;
 
   constructor(
-    protected file:File,
-    protected http:Http,
     protected platform:Platform,
     protected storage:NativeStorage) {
 
-  }
-
-  public loadSettings():Promise<Settings> {
-    return new Promise((resolve, reject) => {
-      let filepath = this.platform.is("android")
-        ? "../assets/data/settings.json"
-        : this.file.applicationDirectory + "www/assets/data/settings.json";
-      this.http.get(filepath)
-        .map((res) => res.json())
-        .subscribe((data) => {
-          this.settings = <Settings>data
-          resolve(this.settings);
-        },
-        (error) => {
-          this.settings = null;
-          reject("No Settings");
-        });
-    });
   }
 
   public getAcceptedTerms():Promise<boolean> {
@@ -146,39 +126,18 @@ export class SettingsService {
 
   private get(key:string, fallback:any=null):Promise<any> {
     return new Promise((resolve, reject) => {
-      if (this.settings) {
-        let value = this.settings[key];
-        if (value != null) {
-          resolve(value);
-        }
-        else if (fallback != null) {
-          resolve(fallback);
-        }
-        else {
-          reject(`Settings ${key} Not Found`);
-        }
+      if (this.settings == null) {
+        this.settings = <Settings>SETTINGS;
+      }
+      let value = this.settings[key];
+      if (value != null) {
+        resolve(value);
+      }
+      else if (fallback != null) {
+        resolve(fallback);
       }
       else {
-        this.loadSettings().then((settings:Settings) => {
-          let value = settings[key];
-          if (value != null) {
-            resolve(value);
-          }
-          else if (fallback != null) {
-            resolve(fallback);
-          }
-          else {
-            reject(`Settings ${key} Not Found`);
-          }
-        },
-        (error:any) => {
-          if (fallback != null) {
-            resolve(fallback);
-          }
-          else {
-            reject(`Settings ${key} Not Found`);
-          }
-        });
+        reject(`Settings ${key} Not Found`);
       }
     });
   }

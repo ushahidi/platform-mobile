@@ -52,7 +52,7 @@ export class ImageCacheComponent implements OnInit, OnChanges, AfterContentCheck
     this.reloadCacheImage(this.src);
   }
 
-  loadCacheImage(url:string) {
+  public loadCacheImage(url:string) {
     if (url && url.length > 0 && url !== this.original) {
       this.original = url;
       let file = this.getCacheFile(url);
@@ -77,13 +77,18 @@ export class ImageCacheComponent implements OnInit, OnChanges, AfterContentCheck
     }
   }
 
-  reloadCacheImage(url:string) {
+  public reloadCacheImage(url:string) {
     if (this.cacheUrl && this.cacheUrl.length > 0) {
-      this.safeUrl = this.sanitizer.bypassSecurityTrustUrl(this.cacheUrl);
+      if (this.cacheUrl === this.original) {
+        this.safeUrl = this.original;
+      }
+      else {
+        this.safeUrl = this.sanitizer.bypassSecurityTrustUrl(this.cacheUrl);
+      }
     }
   }
 
-  fetchCacheImage(url:string) {
+  public fetchCacheImage(url:string) {
     return new Promise((resolve, reject) => {
       let file = this.getCacheFile(url);
       let directory = this.getCacheDirectory();
@@ -104,7 +109,7 @@ export class ImageCacheComponent implements OnInit, OnChanges, AfterContentCheck
     });
   }
 
-  hasCacheImage(image:string, directory:string, cache:string):Promise<string> {
+  public hasCacheImage(image:string, directory:string, cache:string):Promise<string> {
     return new Promise((resolve, reject) => {
       this.file.checkFile(directory, cache).then((exists:boolean) => {
         if (exists) {
@@ -112,7 +117,7 @@ export class ImageCacheComponent implements OnInit, OnChanges, AfterContentCheck
           this.file.resolveLocalFilesystemUrl(url).then((entry:FileEntry) => {
             entry.getMetadata((metadata:Metadata) => {
               if (metadata.size > 0) {
-                this.logger.info(this, "hasCacheImage", image, "Yes", entry.toURL());
+                this.logger.info(this, "hasCacheImage", image, "Yes", entry.toURL(), "Size", metadata.size);
                 resolve(entry.toURL());
               }
               else {
@@ -142,7 +147,7 @@ export class ImageCacheComponent implements OnInit, OnChanges, AfterContentCheck
     });
   }
 
-  downloadCacheImage(image:string, directory:string, cache:string):Promise<string> {
+  public downloadCacheImage(image:string, directory:string, cache:string):Promise<string> {
     return new Promise((resolve, reject) => {
       let url = directory + cache;
       let fileFileTransfer:FileTransferObject = this.transfer.create();
@@ -157,7 +162,7 @@ export class ImageCacheComponent implements OnInit, OnChanges, AfterContentCheck
     });
   }
 
-  useCacheImage(url:string):Promise<string> {
+  private useCacheImage(url:string):Promise<string> {
     return new Promise((resolve, reject) => {
       this.resolveFilePath(url).then((file:string) => {
         this.logger.info(this, "useCacheImage", url, file);
@@ -172,7 +177,7 @@ export class ImageCacheComponent implements OnInit, OnChanges, AfterContentCheck
     });
   }
 
-  resolveFilePath(url:string):Promise<string> {
+  private resolveFilePath(url:string):Promise<string> {
     return new Promise((resolve, reject) => {
       this.file.resolveLocalFilesystemUrl(url).then((fileEntry:FileEntry) => {
         let normalizedURL = this.platform.is("ios")
@@ -188,7 +193,7 @@ export class ImageCacheComponent implements OnInit, OnChanges, AfterContentCheck
     });
   }
 
-  useFallback() {
+  private useFallback() {
     if (this.fallback && this.fallback.length > 0) {
       this.logger.info(this, "useFallback", "Fallback", this.fallback);
       this.cacheUrl = normalizeURL(this.fallback);
@@ -201,7 +206,7 @@ export class ImageCacheComponent implements OnInit, OnChanges, AfterContentCheck
     }
   }
 
-  getCacheFile(url:string):string {
+  private getCacheFile(url:string):string {
     let hash = Md5.hashStr(url);
     if (url.indexOf(".jpg") != -1) {
       return hash.toString() + ".jpg";
@@ -218,7 +223,7 @@ export class ImageCacheComponent implements OnInit, OnChanges, AfterContentCheck
     return hash.toString() + ".jpg";
   }
 
-  getCacheDirectory():string {
+  private getCacheDirectory():string {
     if (this.platform.is("ios")) {
       return this.file.cacheDirectory;
     }
