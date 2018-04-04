@@ -10,6 +10,7 @@ import { StaticMap } from '../maps/static-map';
 import { ImageCacheComponent } from '../components/image-cache/image-cache';
 
 import { LoggerService } from '../providers/logger-service';
+import { SettingsService } from '../providers/settings-service';
 
 @Injectable()
 export class CacheService {
@@ -18,6 +19,7 @@ export class CacheService {
   private promise:Promise<any> = null;
   private promises:Promise<any>[] = [];
   private imageCache:ImageCacheComponent = null;
+  private mapPins:boolean = true;
 
   constructor(
     private platform:Platform,
@@ -25,8 +27,12 @@ export class CacheService {
     private filePath:FilePath,
     private transfer:FileTransfer,
     private sanitizer:DomSanitizer,
-    private logger:LoggerService) {
+    private logger:LoggerService,
+    private settings:SettingsService) {
     this.imageCache = new ImageCacheComponent(platform, file, filePath, transfer, sanitizer, logger);
+    this.settings.getMapMarkerPins().then((mapPins:boolean) => {
+      this.mapPins = mapPins;
+    });
   }
 
   fetchImage(url:string) {
@@ -46,7 +52,7 @@ export class CacheService {
     if (latitude != null && longitude != null) {
       this.logger.info(this, "fetchMap", mapToken, latitude, longitude);
       let staticMap = new StaticMap(mapToken, latitude, longitude);
-      let url = staticMap.getUrl();
+      let url = staticMap.getUrl(this.mapPins);
       if (this.broken[url]) {
         this.logger.info(this, "fetchMap", url, "Map Broken");
       }

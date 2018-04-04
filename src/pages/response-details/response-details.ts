@@ -39,6 +39,7 @@ export class ResponseDetailsPage extends BasePage {
   userName:string = PLACEHOLDER_NAME;
   userImage:string = PLACEHOLDER_USER;
   userPlaceholder:string = PLACEHOLDER_USER;
+  mapPins:boolean = true;
 
   @ViewChild(Content)
   content:Content;
@@ -59,6 +60,13 @@ export class ResponseDetailsPage extends BasePage {
     protected database:DatabaseService,
     protected events:Events) {
     super(zone, platform, navParams, navController, viewController, modalController, toastController, alertController, loadingController, actionController, logger);
+  }
+
+  ionViewDidLoad() {
+    super.ionViewDidLoad();
+    this.settings.getMapMarkerPins().then((mapPins:boolean) => {
+      this.mapPins = mapPins;
+    });
   }
 
   ionViewWillEnter() {

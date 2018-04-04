@@ -50,6 +50,7 @@ export class ResponseListPage extends BasePage {
   mapOptions:string= null;
   mapStyle:string = "streets";
   mapLayer:any = null;
+  mapPins:boolean = true;
   mapLatitude:number = PLACEHOLDER_LATITUDE;
   mapLongitude:number = PLACEHOLDER_LONGITUDE;
   limit:number = 5;
@@ -93,6 +94,9 @@ export class ResponseListPage extends BasePage {
       this.logger.info(this, 'Events', POST_UPDATED, post_id);
       this.posts = null;
       this.loadPosts(true);
+    });
+    this.settings.getMapMarkerPins().then((mapPins:boolean) => {
+      this.mapPins = mapPins;
     });
   }
 
@@ -935,8 +939,14 @@ export class ResponseListPage extends BasePage {
             this.logger.info(this, "loadMarkers", "Limit", limit, "Offset", offset, "Loaded");
             for (let post of posts) {
               if (post.latitude && post.longitude) {
-                let marker = this.loadMarker(post);
-                marker.addTo(this.map);
+                if (this.mapPins) {
+                  let marker = this.loadPinMarker(post);
+                  marker.addTo(this.map);
+                }
+                else {
+                  let marker = this.loadCircleMarker(post);
+                  marker.addTo(this.map);
+                }
               }
             }
             if (posts.length == limit) {
@@ -969,8 +979,8 @@ export class ResponseListPage extends BasePage {
     });
   }
 
-  private loadMarker(post:Post):any {
-    this.logger.info(this, "loadMarker", post.title, post.latitude, post.longitude);
+  private loadPinMarker(post:Post):any {
+    this.logger.info(this, "loadPinMarker", post.title, post.latitude, post.longitude);
     let iconUrl =  new MapMarker(this.deployment.mapbox_api_key, post.color).getUrl();
     let icon = L.icon({
       iconUrl: iconUrl,
@@ -989,6 +999,26 @@ export class ResponseListPage extends BasePage {
     let popup = L.popup().setContent(content);
     marker.bindPopup(popup);
     return marker;
+  }
+
+  private loadCircleMarker(post:Post):any {
+    this.logger.info(this, "loadCircleMarker", post.title, post.latitude, post.longitude);
+    var circle = L.circle([post.latitude, post.longitude], {
+      color: post.color,
+      radius: 12000,
+      fillColor: post.color,
+      fillOpacity: 0.5
+     });
+    let truncate = new TruncatePipe();
+    let content = document.createElement('div');
+    content.className = "popup";
+    content.innerHTML = `<h4>${truncate.transform(post.title,20)}</h4><p>${truncate.transform(post.description,20)}</p>`;
+    content.onclick = () => {
+      this.showResponse(post);
+    };
+    let popup = L.popup().setContent(content);
+    circle.bindPopup(popup);
+    return circle;
   }
 
   private showStyles(event) {

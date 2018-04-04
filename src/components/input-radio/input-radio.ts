@@ -8,35 +8,33 @@ import { Attribute } from '../../models/attribute';
 import { LoggerService } from '../../providers/logger-service';
 
 @Component({
-  selector: 'input-radio',
-  templateUrl: 'input-radio.html',
-  inputs: ['value', 'attribute', 'formGroup', 'submitted']
+  selector:'input-radio',
+  templateUrl:'input-radio.html',
+  inputs:['value', 'attribute', 'formGroup', 'submitted']
 })
 export class InputRadioComponent {
 
-  formGroup: FormGroup = null;
-  attribute: Attribute = null;
-  value: Value = null;
-  options: string[] = [];
-  submitted: boolean = false;
-  selection: string = "";
+  formGroup:FormGroup = null;
+  attribute:Attribute = null;
+  value:Value = null;
+  options:string[] = [];
+  submitted:boolean = false;
+  selection:string = "";
 
   @ViewChild('radioGroup')
-  radioGroup: RadioGroup;
+  radioGroup:RadioGroup;
 
   constructor(public logger:LoggerService) {
 
   }
 
   ngOnInit() {
-    this.logger.info(this, "Attribute", this.attribute);
+    this.logger.info(this, "Attribute", this.attribute.label);
     this.options = this.attribute.getOptions();
-    if (this.value) {
-      this.logger.info(this, "Value", this.value.value);
+    if (this.value && this.value.value) {
       this.selection = this.value.value;
     }
     else {
-      this.logger.info(this, "Value", "[Blank]");
       this.selection = "";
     }
   }

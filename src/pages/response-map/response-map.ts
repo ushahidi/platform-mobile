@@ -27,8 +27,9 @@ export class ResponseMapPage extends BasePage {
   map:any = null;
   mapZoom:number = 17;
   mapLayer:any = null;
-  marker:any = null;
+  mapPins:boolean = true;
   mapStyle:string = "streets";
+  marker:any = null;
   draggable:boolean = false;
   latitude:number = null;
   longitude:number = null;
@@ -57,6 +58,13 @@ export class ResponseMapPage extends BasePage {
     super(zone, platform, navParams, navController, viewController, modalController, toastController, alertController, loadingController, actionController, logger);
   }
 
+  ionViewDidLoad() {
+    super.ionViewDidLoad();
+    this.settings.getMapMarkerPins().then((mapPins:boolean) => {
+      this.mapPins = mapPins;
+    });
+  }
+
   ionViewWillEnter() {
     super.ionViewWillEnter();
     this.deployment = this.getParameter<Deployment>("deployment");
@@ -70,11 +78,20 @@ export class ResponseMapPage extends BasePage {
         if (location) {
           location.addTo(map);
         }
-        this.loadMarker(this.latitude, this.longitude).then((marker:any) => {
-          if (marker) {
-            marker.addTo(map);
-          }
-        });
+        if (this.mapPins) {
+          this.loadPinMarker(this.latitude, this.longitude).then((marker:any) => {
+            if (marker) {
+              marker.addTo(map);
+            }
+          });
+        }
+        else {
+          this.loadCircleMarker(this.latitude, this.longitude).then((marker:any) => {
+            if (marker) {
+              marker.addTo(map);
+            }
+          });
+        }
       });
     });
   }
@@ -111,8 +128,8 @@ export class ResponseMapPage extends BasePage {
     });
   }
 
-  private loadMarker(latitude:number, longitude:number):Promise<any> {
-    this.logger.info(this, "loadMarker", latitude, longitude);
+  private loadPinMarker(latitude:number, longitude:number):Promise<any> {
+    this.logger.info(this, "loadPinMarker", latitude, longitude);
     return new Promise((resolve, reject) => {
       let iconUrl = new MapMarker(this.deployment.mapbox_api_key).getUrl();
       let icon = L.icon({
@@ -129,6 +146,22 @@ export class ResponseMapPage extends BasePage {
         this.longitude = coordinates.lng;
         this.logger.info(this, "dragEnd", this.latitude, this.longitude);
       });
+      resolve(this.marker);
+    });
+  }
+
+  private loadCircleMarker(latitude:number, longitude:number):any {
+    return new Promise((resolve, reject) => {
+      this.logger.info(this, "loadCircleMarker", latitude, longitude);
+      this.latitude = latitude;
+      this.longitude = longitude;
+      this.marker = L.circle([latitude, longitude], {
+        color: "#207AC9",
+        radius: 125,
+        fillColor: "#207AC9",
+        fillOpacity: 0.5
+      });
+      this.map.panTo(new L.LatLng(latitude, longitude), 13);
       resolve(this.marker);
     });
   }

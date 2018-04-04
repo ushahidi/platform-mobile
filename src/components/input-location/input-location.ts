@@ -303,7 +303,8 @@ export class InputLocationComponent {
   loadStaticMap(latitude:number, longitude:number) {
     this.logger.info(this, "loadStaticMap", latitude, longitude);
     if (latitude && longitude) {
-      this.map = new StaticMap(this.mapToken, latitude, longitude).getUrl();
+      let staticMap = new StaticMap(this.mapToken, latitude, longitude);
+      this.map = staticMap.getUrl();
     }
     else {
       this.map = null;

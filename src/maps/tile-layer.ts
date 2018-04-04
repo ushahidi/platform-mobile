@@ -14,7 +14,7 @@ export class TileLayer {
     this.version = version;
   }
 
-  getUrl() {
+  public getUrl() {
     let url = `https://api.mapbox.com/styles/v1/mapbox/${this.style}${this.version}/tiles/${this.size}/{z}/{x}/{y}?access_token=${this.mapToken}`;
     console.log(`TileLayer ${url}`);
     return url;

@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 
+import { File } from '@ionic-native/file';
 import { HTTP, HTTPResponse } from '@ionic-native/http';
 import { FileTransfer } from '@ionic-native/file-transfer';
-import { File } from '@ionic-native/file';
 import { NativeGeocoder, NativeGeocoderForwardResult } from '@ionic-native/native-geocoder';
 import { NativeStorage } from '@ionic-native/native-storage';
 
@@ -51,7 +51,7 @@ export class ApiService extends HttpService {
     super(http, file, transfer, logger);
   }
 
-  searchDeployments(search:string):Promise<Deployment[]> {
+  public searchDeployments(search:string):Promise<Deployment[]> {
     return new Promise((resolve, reject) => {
       let params = {
         q: search
@@ -74,7 +74,7 @@ export class ApiService extends HttpService {
     });
   }
 
-  registerDeployment(website:string):Promise<Deployment> {
+  public registerDeployment(website:string):Promise<Deployment> {
     return new Promise((resolve, reject) => {
       let url = `${website}/config.json`;
       this.logger.info(this, "registerDeployment", url);
@@ -119,7 +119,7 @@ export class ApiService extends HttpService {
     });
   }
 
-  clientLogin(deployment:Deployment):Promise<Login> {
+  public clientLogin(deployment:Deployment):Promise<Login> {
     return new Promise((resolve, reject) => {
       let url = deployment.api + "/oauth/token";
       let params = {
@@ -147,7 +147,7 @@ export class ApiService extends HttpService {
     });
   }
 
-  userLogin(deployment:Deployment, username:string, password:string):Promise<Login> {
+  public userLogin(deployment:Deployment, username:string, password:string):Promise<Login> {
     return new Promise((resolve, reject) => {
       let url = deployment.api + "/oauth/token";
       let params = {
@@ -188,7 +188,7 @@ export class ApiService extends HttpService {
     });
   }
 
-  userSignup(deployment:Deployment, email:string, password:string, name:string):Promise<Login> {
+  public userSignup(deployment:Deployment, email:string, password:string, name:string):Promise<Login> {
     return new Promise((resolve, reject) => {
       let params = {
         email: email,
@@ -212,7 +212,7 @@ export class ApiService extends HttpService {
     });
   }
 
-  userRefresh(deployment:Deployment, login:Login):Promise<Login> {
+  public userRefresh(deployment:Deployment, login:Login):Promise<Login> {
     return new Promise((resolve, reject) => {
       this.logger.info(this, "userRefresh", deployment.website, login);
       let url = deployment.api + "/oauth/token";
@@ -239,7 +239,7 @@ export class ApiService extends HttpService {
     });
   }
 
-  passwordReset(deployment:Deployment, email:string):Promise<any> {
+  public passwordReset(deployment:Deployment, email:string):Promise<any> {
     return new Promise((resolve, reject) => {
       let params = {
         email: email };
@@ -255,7 +255,7 @@ export class ApiService extends HttpService {
     });
   }
 
-  userOrClientLogin(deployment:Deployment, offline:boolean=false):Promise<Login> {
+  public userOrClientLogin(deployment:Deployment, offline:boolean=false):Promise<Login> {
     return new Promise((resolve, reject) => {
       this.logger.info(this, "userOrClientLogin", deployment.website, "Offline", offline);
       this.getLogin(deployment).then(
@@ -301,7 +301,7 @@ export class ApiService extends HttpService {
     });
   }
 
-  getLogin(deployment:Deployment):Promise<Login> {
+  public getLogin(deployment:Deployment):Promise<Login> {
     return new Promise((resolve, reject) => {
       this.storage.getItem(deployment.website).then(
           (data:any) => {
@@ -321,7 +321,7 @@ export class ApiService extends HttpService {
     });
   }
 
-  removeLogin(deployment:Deployment):Promise<boolean> {
+  public removeLogin(deployment:Deployment):Promise<boolean> {
     return new Promise((resolve, reject) => {
       this.logger.info(this, "removeLogin", deployment.website);
       this.storage.remove(deployment.website).then(
@@ -334,7 +334,7 @@ export class ApiService extends HttpService {
     });
   }
 
-  apiGet(deployment:Deployment, endpoint:string, params:any=null):Promise<any> {
+  protected apiGet(deployment:Deployment, endpoint:string, params:any=null):Promise<any> {
     return new Promise((resolve, reject) => {
       this.getLogin(deployment).then((login:Login) => {
         let url = deployment.api + endpoint;
@@ -349,7 +349,7 @@ export class ApiService extends HttpService {
     });
   }
 
-  apiPost(deployment:Deployment, endpoint:string, params:any=null):Promise<any> {
+  protected apiPost(deployment:Deployment, endpoint:string, params:any=null):Promise<any> {
     return new Promise((resolve, reject) => {
       this.getLogin(deployment).then((login:Login) => {
         let url = deployment.api + endpoint;
@@ -364,7 +364,7 @@ export class ApiService extends HttpService {
     });
   }
 
-  apiPut(deployment:Deployment, endpoint:string, params:any=null):Promise<any> {
+  protected apiPut(deployment:Deployment, endpoint:string, params:any=null):Promise<any> {
     return new Promise((resolve, reject) => {
       this.getLogin(deployment).then((login:Login) => {
         let url = deployment.api + endpoint;
@@ -379,7 +379,7 @@ export class ApiService extends HttpService {
     });
   }
 
-  apiDelete(deployment:Deployment, endpoint:string):Promise<any> {
+  protected apiDelete(deployment:Deployment, endpoint:string):Promise<any> {
     return new Promise((resolve, reject) => {
       this.getLogin(deployment).then((login:Login) => {
         let url = deployment.api + endpoint;
@@ -394,7 +394,7 @@ export class ApiService extends HttpService {
     });
   }
 
-  apiUpload(deployment:Deployment, endpoint:string, file:string, caption:string, mimeType:string):Promise<any> {
+  protected apiUpload(deployment:Deployment, endpoint:string, file:string, caption:string, mimeType:string):Promise<any> {
     return new Promise((resolve, reject) => {
       this.getLogin(deployment).then((login:Login) => {
         let url = deployment.api + endpoint;
@@ -409,7 +409,7 @@ export class ApiService extends HttpService {
     });
   }
 
-  getUsers(deployment:Deployment, cache:boolean=false, offline:boolean=false):Promise<User[]> {
+  public getUsers(deployment:Deployment, cache:boolean=false, offline:boolean=false):Promise<User[]> {
     return new Promise((resolve, reject) => {
       if (cache || offline) {
         this.database.getUsers(deployment).then(
@@ -461,7 +461,7 @@ export class ApiService extends HttpService {
     });
   }
 
-  getUser(deployment:Deployment, user:any="me", cache:boolean=false, offline:boolean=false):Promise<User>  {
+  public getUser(deployment:Deployment, user:any="me", cache:boolean=false, offline:boolean=false):Promise<User>  {
     return new Promise((resolve, reject) => {
       this.logger.info(this, "getUser", user);
       if (cache || offline) {
@@ -510,7 +510,7 @@ export class ApiService extends HttpService {
     });
   }
 
-  getDeployment(deployment:Deployment, cache:boolean=false, offline:boolean=false):Promise<Deployment> {
+  public getDeployment(deployment:Deployment, cache:boolean=false, offline:boolean=false):Promise<Deployment> {
     return new Promise((resolve, reject) => {
       if (cache || offline) {
         this.database.getDeployment(deployment.id).then(
@@ -563,7 +563,7 @@ export class ApiService extends HttpService {
     });
   }
 
-  updateDeployment(deployment:Deployment, changes:{}=null):Promise<any> {
+  public updateDeployment(deployment:Deployment, changes:{}=null):Promise<any> {
     return new Promise((resolve, reject) => {
       if (changes == null) {
         changes = {
@@ -581,7 +581,7 @@ export class ApiService extends HttpService {
     });
   }
 
-  getPosts(deployment:Deployment, filter:Filter=null, cache:boolean=false, offline:boolean=false, limit:number=10, offset:number=0):Promise<Post[]> {
+  public getPosts(deployment:Deployment, filter:Filter=null, cache:boolean=false, offline:boolean=false, limit:number=10, offset:number=0):Promise<Post[]> {
     return new Promise((resolve, reject) => {
       if (cache || offline) {
         this.database.getPosts(deployment, filter, limit, offset).then(
@@ -679,7 +679,7 @@ export class ApiService extends HttpService {
     });
   }
 
-  createPost(deployment:Deployment, post:Post):Promise<any> {
+  public createPost(deployment:Deployment, post:Post):Promise<any> {
     return new Promise((resolve, reject) => {
       let params = {
         source: this.source,
@@ -706,7 +706,7 @@ export class ApiService extends HttpService {
     });
   }
 
-  createPostWithMedia(deployment:Deployment, post:Post) {
+  public createPostWithMedia(deployment:Deployment, post:Post) {
     return new Promise((resolve, reject) => {
       let uploads = [];
       for (let value of post.values) {
@@ -736,7 +736,7 @@ export class ApiService extends HttpService {
       });
   }
 
-  updatePost(deployment:Deployment, post:Post, changes:{}=null) {
+  public updatePost(deployment:Deployment, post:Post, changes:{}=null) {
     return new Promise((resolve, reject) => {
       if (changes == null) {
         changes = {
@@ -760,7 +760,7 @@ export class ApiService extends HttpService {
     });
   }
 
-  updatePostWithMedia(deployment:Deployment, post:Post) {
+  public updatePostWithMedia(deployment:Deployment, post:Post) {
     return new Promise((resolve, reject) => {
       let uploads = [];
       for (let value of post.values) {
@@ -790,7 +790,7 @@ export class ApiService extends HttpService {
       });
   }
 
-  deletePost(deployment:Deployment, post:Post):Promise<any> {
+  public deletePost(deployment:Deployment, post:Post):Promise<any> {
     return new Promise((resolve, reject) => {
       this.apiDelete(deployment, `/api/v3/posts/${post.id}`).then(
         (data:any) => {
@@ -802,7 +802,7 @@ export class ApiService extends HttpService {
     });
   }
 
-  uploadVideo(deployment:Deployment, post:Post, value:Value):Promise<string> {
+  public uploadVideo(deployment:Deployment, post:Post, value:Value):Promise<string> {
     return new Promise((resolve, reject) => {
       let file:string = value.value;
       this.logger.info(this, "uploadVideo", file);
@@ -825,7 +825,7 @@ export class ApiService extends HttpService {
     });
   }
 
-  getImages(deployment:Deployment, cache:boolean=false, offline:boolean=false, limit:number=10, offset:number=0):Promise<Image[]> {
+  public getImages(deployment:Deployment, cache:boolean=false, offline:boolean=false, limit:number=10, offset:number=0):Promise<Image[]> {
     return new Promise((resolve, reject) => {
       if (cache || offline) {
         this.database.getImages(deployment, limit, offset).then(
@@ -888,7 +888,7 @@ export class ApiService extends HttpService {
     });
   }
 
-  getImage(deployment:Deployment, id:number, cache:boolean=false, offline:boolean=false):Promise<Image> {
+  public getImage(deployment:Deployment, id:number, cache:boolean=false, offline:boolean=false):Promise<Image> {
     return new Promise((resolve, reject) => {
       if (cache || offline) {
         this.database.getImage(deployment, id).then(
@@ -935,7 +935,7 @@ export class ApiService extends HttpService {
     });
   }
 
-  uploadImage(deployment:Deployment, post:Post, value:Value):Promise<Image> {
+  public uploadImage(deployment:Deployment, post:Post, value:Value):Promise<Image> {
     return new Promise((resolve, reject) => {
       let file = value.value;
       let mimeType = this.mimeType(file);
@@ -966,7 +966,7 @@ export class ApiService extends HttpService {
     });
   }
 
-  getForms(deployment:Deployment, cache:boolean=false, offline:boolean=false):Promise<Form[]> {
+  public getForms(deployment:Deployment, cache:boolean=false, offline:boolean=false):Promise<Form[]> {
     return new Promise((resolve, reject) => {
       if (cache || offline) {
         this.database.getForms(deployment).then(
@@ -1019,7 +1019,7 @@ export class ApiService extends HttpService {
     });
   }
 
-  getStages(deployment:Deployment, cache:boolean=false, offline:boolean=false):Promise<Stage[]> {
+  public getStages(deployment:Deployment, cache:boolean=false, offline:boolean=false):Promise<Stage[]> {
     return new Promise((resolve, reject) => {
       if (cache || offline) {
         this.database.getStages(deployment).then(
@@ -1071,7 +1071,7 @@ export class ApiService extends HttpService {
     });
   }
 
-  getAttributes(deployment:Deployment, cache:boolean=false, offline:boolean=false):Promise<Attribute[]> {
+  public getAttributes(deployment:Deployment, cache:boolean=false, offline:boolean=false):Promise<Attribute[]> {
     return new Promise((resolve, reject) => {
       if (cache || offline) {
         this.database.getAttributes(deployment).then(
@@ -1124,7 +1124,7 @@ export class ApiService extends HttpService {
     });
   }
 
-  getCollections(deployment:Deployment, cache:boolean=false, offline:boolean=false):Promise<Collection[]> {
+  public getCollections(deployment:Deployment, cache:boolean=false, offline:boolean=false):Promise<Collection[]> {
     return new Promise((resolve, reject) => {
       if (cache || offline) {
         this.database.getCollections(deployment).then(
@@ -1177,7 +1177,7 @@ export class ApiService extends HttpService {
     });
   }
 
-  getTags(deployment:Deployment, cache:boolean=false, offline:boolean=false):Promise<Tag[]> {
+  public getTags(deployment:Deployment, cache:boolean=false, offline:boolean=false):Promise<Tag[]> {
     return new Promise((resolve, reject) => {
       if (cache || offline) {
         this.database.getTags(deployment).then(
@@ -1230,7 +1230,7 @@ export class ApiService extends HttpService {
     });
   }
 
-  addPostToCollection(deployment:Deployment, post:Post, collection:Collection) {
+  public addPostToCollection(deployment:Deployment, post:Post, collection:Collection) {
     return new Promise((resolve, reject) => {
       let params = {
         id: post.id };
@@ -1244,7 +1244,7 @@ export class ApiService extends HttpService {
     });
   }
 
-  removePostToCollection(deployment:Deployment, post:Post, collection:Collection) {
+  public removePostToCollection(deployment:Deployment, post:Post, collection:Collection) {
     return new Promise((resolve, reject) => {
       this.apiDelete(deployment, `/api/v3/collections/${collection.id}/posts/${post.id}`).then(
         (data:any) => {
@@ -1256,7 +1256,7 @@ export class ApiService extends HttpService {
     });
   }
 
-  getFormsWithAttributes(deployment:Deployment, cache:boolean=false, offline:boolean=false):Promise<Form[]> {
+  public getFormsWithAttributes(deployment:Deployment, cache:boolean=false, offline:boolean=false):Promise<Form[]> {
     return new Promise((resolve, reject) => {
       this.logger.info(this, "getFormsWithAttributes", cache);
       Promise.all([
@@ -1305,7 +1305,7 @@ export class ApiService extends HttpService {
     });
   }
 
-  getPostsWithValues(deployment:Deployment, filter:Filter=null, cache:boolean=false, offline:boolean=false, limit:number=10, offset:number=0):Promise<Post[]> {
+  public getPostsWithValues(deployment:Deployment, filter:Filter=null, cache:boolean=false, offline:boolean=false, limit:number=10, offset:number=0):Promise<Post[]> {
     return new Promise((resolve, reject) => {
       this.logger.info(this, "getPostsWithValues", "Filter", filter, "Cache", cache, "Offline", offline, "Limit", limit, "Offset", offset);
       Promise.all([
@@ -1350,7 +1350,7 @@ export class ApiService extends HttpService {
     });
   }
 
-  getRelatedPosts(deployment:Deployment, value:Value):Promise<Post[]> {
+  public getRelatedPosts(deployment:Deployment, value:Value):Promise<Post[]> {
     return new Promise((resolve, reject) => {
       let ids:number[] = [];
       if (value.value) {
@@ -1376,7 +1376,7 @@ export class ApiService extends HttpService {
     });
   }
 
-  geocodeAddress(deployment:Deployment, post:Post, value:Value):Promise<boolean> {
+  public geocodeAddress(deployment:Deployment, post:Post, value:Value):Promise<boolean> {
     return new Promise((resolve, reject) => {
       let address:string = value.value;
       this.logger.info(this, "geocodeAddress", address);

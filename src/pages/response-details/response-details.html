@@ -47,6 +47,7 @@
     </ion-item>
     <div *ngFor="let value of post.values">
       <post-value [value]="value"
+                  [mapPins]="mapPins"
                   [mapToken]="deployment.mapbox_api_key"
                   (click)="handleLinks($event)"
                   (showResponse)="showResponse($event)"

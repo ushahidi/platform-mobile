@@ -1,23 +1,29 @@
 export interface Settings {
 
- appId: string;
+ appId:string;
 
- appName: string;
+ appName:string;
 
- appDescription: string;
+ appDescription:string;
 
- appIcon: string;
+ appIcon:string;
 
- appSplash: string;
+ appSplash:string;
 
- colorPrimary: string;
+ colorPrimary:string;
 
- colorSecondary: string;
+ colorSecondary:string;
 
- colorDark: string;
+ colorDark:string;
 
- colorLight: string;
+ colorLight:string;
 
- deploymentUrl: string;
+ deploymentUrl:string;
+
+ surveyFormAuthor:boolean;
+
+ surveyFormTasks:boolean;
+
+ mapMarkerPins:boolean;
 
 }

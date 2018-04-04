@@ -12,7 +12,7 @@ export class MapMarker {
     this.pin = pin;
   }
 
-  getUrl() {
+  public getUrl() {
     let url = `https://api.mapbox.com/v4/marker/${this.pin}+${this.color}.png?access_token=${this.mapToken}`;
     console.log(`MapMarker ${url}`);
     return url;

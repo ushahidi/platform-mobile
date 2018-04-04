@@ -120,6 +120,10 @@ export class SettingsService {
     return this.get('surveyFormTasks', true);
   }
 
+  public getMapMarkerPins():Promise<boolean> {
+    return this.get('mapMarkerPins', true);
+  }
+
   public getGoogleAnalytics():Promise<string> {
     return this.get('googleAnalytics', '');
   }

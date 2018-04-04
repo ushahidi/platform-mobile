@@ -13,13 +13,14 @@ import { PLACEHOLDER_NAME, PLACEHOLDER_PHOTO, PLACEHOLDER_MAP } from '../../cons
 @Component({
   selector: 'post-value',
   templateUrl: 'post-value.html',
-  inputs: ['value', 'mapToken']
+  inputs: ['value', 'mapToken', 'mapPins']
 })
 export class PostValueComponent {
 
   value:any = null;
   map:string = null;
-  mapToken:string;
+  mapPins:boolean = true;
+  mapToken:string = null;
   video:SafeResourceUrl = null;
   mapPlaceholder:string = PLACEHOLDER_MAP;
   photoPlaceholder:string = PLACEHOLDER_PHOTO;
@@ -88,7 +89,8 @@ export class PostValueComponent {
       if (location && location.length > 1) {
         let latitude = Number(location[0]);
         let longitude = Number(location[1]);
-        this.map = new StaticMap(this.mapToken, latitude, longitude).getUrl();
+        let staticMap = new StaticMap(this.mapToken, latitude, longitude);
+        this.map = staticMap.getUrl(this.mapPins);
       }
       else {
         this.map = null;

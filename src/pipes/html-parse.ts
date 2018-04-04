@@ -11,6 +11,9 @@ export class HtmlParsePipe {
       let html = value.replace(regex, 'href="$1" target="_blank"');
       return html;
     }
+    else if (value.indexOf("src=") != -1) {
+      return value;
+    }
     else {
       let regex1 = /(\b(http|https):\/\/[-A-Z0-9+&#\/%?=~_|!:,.;]*[-A-Z0-9+&#\/%=~_|])/gim;
       let html = value.replace(regex1, '<a href="$1" target="_blank">$1</a>');

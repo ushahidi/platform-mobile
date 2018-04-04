@@ -23,7 +23,7 @@ export class BaseMap {
     this.style = style;
   }
 
-  getUrl() {
+  public getUrl() {
     let url = `https://api.mapbox.com/styles/v1/mapbox/${this.style}${this.version}/static/` +
               `${this.longitude},${this.latitude},${this.zoom}/`+
               `${this.width}x${this.height}?access_token=${this.mapToken}`;
