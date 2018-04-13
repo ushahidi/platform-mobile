@@ -8,7 +8,7 @@
   <div [formGroup]="formGroup">
     <ion-list #radioGroup no-lines radio-group [formControlName]="attribute.key" *ngIf="options">
       <ion-item text-wrap *ngFor="let option of options">
-        <ion-label>{{option}}</ion-label>
+        <ion-label text-wrap>{{option}}</ion-label>
         <ion-radio color="active" mode="md" [value]="option" (ionSelect)="radioChanged($event)"></ion-radio>
       </ion-item>
     </ion-list>

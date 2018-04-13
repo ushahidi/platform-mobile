@@ -9,11 +9,11 @@
     <div [formGroupName]="attribute.key">
       <div *ngFor="let parent of attribute.tags">
         <ion-item text-wrap>
-          <ion-label>{{parent.tag}}</ion-label>
+          <ion-label text-wrap>{{parent.tag}}</ion-label>
           <ion-checkbox color="active" [(ngModel)]="values[parent.id]" formControlName="{{parent.id}}" (ionChange)="tagChecked($event,parent)"></ion-checkbox>
         </ion-item>
         <ion-item text-wrap class="child" *ngFor="let child of parent.tags">
-          <ion-label>{{child.tag}}</ion-label>
+          <ion-label text-wrap>{{child.tag}}</ion-label>
           <ion-checkbox color="active" [(ngModel)]="values[child.id]" formControlName="{{child.id}}" (ionChange)="tagChecked($event,child)"></ion-checkbox>
         </ion-item>
       </div>

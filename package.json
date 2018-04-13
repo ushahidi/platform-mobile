@@ -94,7 +94,8 @@
     "rxjs": "^5.5.2",
     "sw-toolbox": "3.6.0",
     "ts-md5": "^1.2.2",
-    "zone.js": "^0.8.18"
+    "zone.js": "^0.8.18",
+    "cordova-android": "~6.4.0"
   },
   "devDependencies": {
     "@ionic/app-scripts": "3.1.8",

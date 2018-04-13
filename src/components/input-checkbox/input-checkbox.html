@@ -8,7 +8,7 @@
   <div [formGroup]="formGroup" *ngIf="formGroup">
     <div [formGroupName]="attribute.key">
       <ion-item text-wrap *ngFor="let option of options">
-        <ion-label>{{option}}</ion-label>
+        <ion-label text-wrap>{{option}}</ion-label>
         <ion-checkbox color="active" [(ngModel)]="values[option]" formControlName="{{option}}"></ion-checkbox>
       </ion-item>
     </div>
