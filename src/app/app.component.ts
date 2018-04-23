@@ -71,6 +71,7 @@ export class UshahidiApp {
     { name: 'Kiswahili', code: 'sw' },
     { name: 'Ayisyen', code: 'ht' },
     { name: 'Tiếng Việt', code: 'vi' },
+    { name: 'မြန်မာ', code: 'my' },
     { name: 'عربى', code: 'ar' },
     { name: '日本語', code: 'jp' },
     { name: '中文', code: 'zh' }

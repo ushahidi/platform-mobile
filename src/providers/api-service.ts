@@ -687,6 +687,7 @@ export class ApiService extends HttpService {
         title: post.title,
         content: post.description,
         values: post.packageValues() };
+      this.logger.info(this, "createPost", "Values", post.packageValues());
       if (post.author_realname) {
         params['author_realname'] = post.author_realname;
       }
