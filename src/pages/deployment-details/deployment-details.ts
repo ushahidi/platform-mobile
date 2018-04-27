@@ -39,9 +39,9 @@ import { ResponseListPage } from '../../pages/response-list/response-list';
 })
 export class DeploymentDetailsPage extends BasePage {
 
-  login: Login = null;
-  deployment: Deployment = null;
-  placeholder: string = PLACEHOLDER_BLANK;
+  login:Login = null;
+  deployment:Deployment = null;
+  placeholder:string = PLACEHOLDER_BLANK;
   loaded:boolean = false;
   truncated:boolean = true;
 
@@ -194,7 +194,10 @@ export class DeploymentDetailsPage extends BasePage {
         loading.setContent(translation);
       });
     }
-    if (cache && this.deployment.hasForms()) {
+    if (this.deployment.privacy == true && (this.login.username == null || this.login.username.length == 0)) {
+      return Promise.resolve([]);
+    }
+    else if (cache && this.deployment.hasForms()) {
       this.logger.info(this, "loadForms", "Cached");
       return Promise.resolve(this.deployment.forms);
     }
@@ -231,7 +234,10 @@ export class DeploymentDetailsPage extends BasePage {
         loading.setContent(translation);
       });
     }
-    if (cache && this.deployment.hasTags()) {
+    if (this.deployment.privacy == true && (this.login.username == null || this.login.username.length == 0)) {
+      return Promise.resolve([]);
+    }
+    else if (cache && this.deployment.hasTags()) {
       this.logger.info(this, "loadTags", "Cached");
       return Promise.resolve(this.deployment.tags);
     }
@@ -263,27 +269,29 @@ export class DeploymentDetailsPage extends BasePage {
         loading.setContent(translation);
       });
     }
-    if (cache && this.deployment.hasCollections()) {
+    if (this.deployment.privacy == true && (this.login.username == null || this.login.username.length == 0)) {
+      return Promise.resolve([]);
+    }
+    else if (cache && this.deployment.hasCollections()) {
       this.logger.info(this, "loadCollections", "Cached");
       return Promise.resolve(this.deployment.collections);
     }
     else {
       return new Promise((resolve, reject) => {
-        this.api.getCollections(this.deployment, cache, this.offline).then(
-          (collections:Collection[]) => {
-            if (collections) {
-              this.logger.info(this, "loadCollections", "Loaded", collections.length);
-            }
-            else {
-              this.logger.info(this, "loadCollections", "Loaded", 0);
-            }
-            this.deployment.collections = collections;
-            resolve(collections);
-          },
-          (error:any) => {
-            this.logger.error(this, "loadCollections", "Failed", error);
-            reject(error);
-          });
+        this.api.getCollections(this.deployment, cache, this.offline).then((collections:Collection[]) => {
+          if (collections) {
+            this.logger.info(this, "loadCollections", "Loaded", collections.length);
+          }
+          else {
+            this.logger.info(this, "loadCollections", "Loaded", 0);
+          }
+          this.deployment.collections = collections;
+          resolve(collections);
+        },
+        (error:any) => {
+          this.logger.error(this, "loadCollections", "Failed", error);
+          reject(error);
+        });
       });
     }
   }

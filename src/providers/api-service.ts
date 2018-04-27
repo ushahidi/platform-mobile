@@ -78,10 +78,12 @@ export class ApiService extends HttpService {
     return new Promise((resolve, reject) => {
       let url = `${website}/config.json`;
       this.logger.info(this, "registerDeployment", url);
+      let headers = {
+        "Accept": "application/json",
+        "Content-Type": "application/json"
+      };
       this.httpNative.setDataSerializer("json");
-      this.httpNative.setHeader("Accept", "application/json");
-      this.httpNative.setHeader("Content-Type", "application/json");
-      this.httpNative.get(url, {}, {}).then((response:HTTPResponse) => {
+      this.httpNative.get(url, {}, headers).then((response:HTTPResponse) => {
         this.logger.info(this, "registerDeployment", url, response.data);
         let json = JSON.parse(response.data);
         let config:Config = <Config>json;
@@ -544,8 +546,10 @@ export class ApiService extends HttpService {
                 config.default_view = result.default_view;
               }
               else if (result.id == 'site') {
+                config.tier = result.tier;
                 config.name = result.name;
                 config.email = result.email;
+                config.privacy = result.private;
                 config.timezone = result.timezone;
                 config.language = result.language;
                 config.image = result.image_header;

@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 
+import * as moment from 'moment';
+
 import { Value } from '../../models/value';
 import { Attribute } from '../../models/attribute';
 
@@ -19,12 +21,15 @@ export class InputDateComponent {
   datetime: string = null;
   date: string = null;
   submitted: boolean = false;
+  today:string = null;
 
   constructor(public logger:LoggerService) {
+    this.today = moment().format();
   }
 
   ngOnInit() {
     this.logger.info(this, "Attribute", this.attribute, "Value", this.value);
+    this.today = moment().format();
     if (this.value && this.value.value) {
       this.datetime = this.value.value;
       let components = this.value.value.split(" ");

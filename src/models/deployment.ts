@@ -101,6 +101,9 @@ export class Deployment extends Model {
   @Column("timezone", TEXT)
   public timezone:string = null;
 
+  @Column("privacy", BOOLEAN)
+  public privacy:boolean = null;
+
   @Column("language", TEXT)
   public language:string = null;
 

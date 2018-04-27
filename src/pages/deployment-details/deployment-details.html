@@ -67,7 +67,7 @@
       <ion-item detail-push tappable *ngIf="offline == false && (login == null || login.username == null || login.username.length == 0)" (click)="userLogin($event)">
         {{'USER_LOGIN' | translate}}
       </ion-item>
-      <ion-item detail-push tappable *ngIf="offline == false && (login == null || login.username == null || login.username.length == 0)" (click)="userSignup($event)">
+      <ion-item detail-push tappable *ngIf="offline == false && (login == null || login.username == null || login.username.length == 0) && deployment.privacy == false" (click)="userSignup($event)">
         {{'USER_SIGNUP' | translate}}
       </ion-item>
       <ion-item detail-push tappable *ngIf="login && login.username != null && login.username.length > 0" (click)="userLogout($event)">
