@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="10809" id="com.ushahidi.mobile" ios-CFBundleVersion="1.8.9" version="1.8" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>Ushahidi</name>
-    <description>Ushahidi Mobile</description>
+<widget android-versionCode="10811" id="com.ushahidi.mobile.sivico" ios-CFBundleVersion="1.8.11" version="1.8" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>SIVICO</name>
+    <description>Gathers reports of security issues</description>
     <author email="support@ushahidi.com" href="https://www.ushahidi.com/">Ushahidi</author>
     <content src="index.html" />
     <access origin="*" subdomains="true" />
@@ -118,7 +118,7 @@
     <preference name="FadeSplashScreenDuration" value="500" />
     <preference name="StatusBarStyle" value="default" />
     <preference name="StatusBarOverlaysWebView" value="false" />
-    <preference name="StatusBarBackgroundColor" value="#3F4751" />
+    <preference name="StatusBarBackgroundColor" value="#1D2C5A" />
     <preference name="ShowSplashScreenSpinner" value="true" />
     <preference name="android-build-tool" value="gradle" />
     <preference name="android-targetSdkVersion" value="26" />
@@ -159,6 +159,7 @@
     <allow-navigation href="http://192.168.0.16:8100" />
     <allow-navigation href="http://192.168.0.21:8100" />
     <allow-navigation href="http://172.20.0.146:8100" />
+    <allow-navigation href="http://192.168.178.192:8100" />
     <engine name="ios" spec="~4.5.4" />
     <engine name="android" spec="~6.4.0" />
     <plugin name="cordova-custom-config" spec="^4.0.2" />
