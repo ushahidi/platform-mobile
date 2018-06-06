@@ -4,6 +4,8 @@ import { HttpModule } from '@angular/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+import { Observable } from 'rxjs/Observable';
+
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core'
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
@@ -91,8 +93,30 @@ import { VimeoService } from '../providers/vimeo-service';
 import { LanguageService } from '../providers/language-service';
 import { SettingsService } from '../providers/settings-service';
 
-export function translateHttpLoader(http: HttpClient) {
-    return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
+export function fallbackTranslateLoader(http:HttpClient):TranslateLoader {
+    return new FallbackTranslateLoader(http, 'assets/i18n/', '.json');
+}
+
+export class FallbackTranslateLoader implements TranslateLoader  {
+  constructor(private http:HttpClient, public prefix:string="assets/i18n/", public suffix:string=".json") {}
+
+  getTranslation(lang:string):Observable<any> {
+    let base = `${this.prefix}${lang}${this.suffix}`;
+    let override = `${this.prefix}${lang}_${this.suffix}`;
+    return Observable.create(observer => {
+      this.http.get(base).subscribe((baseResponse:Response) => {
+        this.http.get(override).subscribe((overrideResponse:Response) => {
+          let mergedResponse = Object.assign({}, baseResponse, overrideResponse);
+          observer.next(mergedResponse);
+          observer.complete();
+        },
+        (error:any) => {
+          observer.next(baseResponse);
+          observer.complete();
+        });
+      });
+    });
+  }
 }
 
 @Injectable()
@@ -170,7 +194,7 @@ export class CustomErrorHandler extends IonicErrorHandler implements ErrorHandle
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
-        useFactory: (translateHttpLoader),
+        useFactory: (fallbackTranslateLoader),
         deps: [HttpClient]
       }
     }),

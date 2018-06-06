@@ -16,6 +16,7 @@ build.json
 .sourcemaps/
 src/assets/data/settings.json
 www/assets/data/settings.json
+www/assets/i18n/*_.json
 
 # ANDROID
 *.apk

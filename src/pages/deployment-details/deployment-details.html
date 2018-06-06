@@ -56,14 +56,12 @@
     </ion-grid>
     <div class="fadein" padding-left padding-right [@fadeInOut]="loaded">
       <button ion-button margin-bottom block color="primary" *ngIf="deployment.forms && deployment.forms.length > 0" (click)="addResponse($event)">
-        <!-- {{'SURVEY_SUBMIT_RESPONSE' | translate}} -->
-        {{'SURVEY_SUBMIT_REPORT' | translate}}
+        {{'SURVEY_SUBMIT_RESPONSE' | translate}}
       </button>
     </div>
     <ion-list *ngIf="loaded == true">
       <ion-item detail-push tappable *ngIf="deployment.forms && deployment.forms.length > 0" (click)="showResponses($event)">
-        <!-- {{'RESPONSES_VIEW' | translate}} -->
-        {{'REPORTS_VIEW' | translate}}
+        {{'RESPONSES_VIEW' | translate}}
       </ion-item>
       <ion-item detail-push tappable *ngIf="deployment.can_update == true" (click)="showSettings($event)">
         {{'SETTINGS' | translate}}
