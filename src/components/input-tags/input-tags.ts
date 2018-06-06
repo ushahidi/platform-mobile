@@ -40,7 +40,7 @@ export class InputTagsComponent {
   }
 
   loadValues(tag:Tag) {
-    if (this.value.value) {
+    if (this.value && this.value.value) {
       for (let value of this.value.value.split(",")) {
         if (value == tag.id.toString()) {
           this.values[tag.id] = true;

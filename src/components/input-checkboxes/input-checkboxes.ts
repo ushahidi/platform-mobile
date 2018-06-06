@@ -28,7 +28,7 @@ export class InputCheckboxesComponent {
     this.options = this.attribute.getOptions();
     for (let index in this.options) {
       let option = this.options[index];
-      if (this.value.value == option) {
+      if (this.value && this.value.value == option) {
         this.values[option] = true;
       }
       else {

@@ -111,6 +111,7 @@ export class InputLocationComponent {
       let coordinate:any = this.value.value.split(",");
       this.latitude = Number(coordinate[0]);
       this.longitude = Number(coordinate[1]);
+      this.located = true;
       this.loadStaticMap(this.latitude, this.longitude);
     }
     this.loadCountries().then((countries:Country[]) => {
@@ -133,6 +134,7 @@ export class InputLocationComponent {
         if (this.latitude != latitude || this.longitude != longitude) {
           this.latitude = latitude;
           this.longitude = longitude;
+          this.located = true;
           this.loadStaticMap(latitude, longitude);
         }
       }
