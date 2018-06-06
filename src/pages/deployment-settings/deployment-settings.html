@@ -1,12 +1,12 @@
 <ion-header>
   <ion-navbar color="navbar">
-    <ion-buttons start>
+    <ion-buttons left>
       <button #cancel ion-button icon-only (click)="onCancel($event)">
         <ion-icon ios="md-close" md="md-close"></ion-icon>
       </button>
     </ion-buttons>
     <ion-title>{{'SETTINGS' | translate}}</ion-title>
-    <ion-buttons end>
+    <ion-buttons right>
       <button #cancel ion-button text-only (click)="onDone($event)">{{'ACTION_SAVE' | translate}}</button>
     </ion-buttons>
   </ion-navbar>

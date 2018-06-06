@@ -63,12 +63,12 @@ export class ImageCacheComponent implements OnInit, OnChanges, AfterContentCheck
           this.logger.info(this, "loadCacheImage", url, "Cache", cache, "File", file);
         },
         (error:any) => {
-          this.logger.error(this, "loadCacheImage", url, "Cache", cache, "Error", error);
+          this.logger.info(this, "loadCacheImage", url, "Cache", cache, "Error", error);
           this.useFallback();
         });
       },
       (error:any) => {
-        this.logger.error(this, "loadCacheImage", url, "Error", error);
+        this.logger.info(this, "loadCacheImage", url, "Error", error);
         this.useFallback();
       });
     }
@@ -102,7 +102,7 @@ export class ImageCacheComponent implements OnInit, OnChanges, AfterContentCheck
           resolve(cache);
         },
         (error:any) => {
-          this.logger.error(this, "fetchCacheImage", url, error);
+          this.logger.info(this, "fetchCacheImage", url, error);
           reject(error);
         });
       });
@@ -121,27 +121,27 @@ export class ImageCacheComponent implements OnInit, OnChanges, AfterContentCheck
                 resolve(entry.toURL());
               }
               else {
-                this.logger.error(this, "hasCacheImage", image, "No");
+                this.logger.info(this, "hasCacheImage", image, "No");
                 reject("Cache Empty");
               }
             },
             (error:any) => {
-              this.logger.error(this, "hasCacheImage", image, "No", error);
+              this.logger.info(this, "hasCacheImage", image, "No", error);
               reject("No Cache");
             });
           },
           (error:FileError) => {
-            this.logger.error(this, "hasCacheImage", image, "No", error);
+            this.logger.info(this, "hasCacheImage", image, "No", error);
             reject(error);
           });
         }
         else {
-          this.logger.error(this, "hasCacheImage", image, "No");
+          this.logger.info(this, "hasCacheImage", image, "No");
           reject("No Cache");
         }
       },
       (error:FileError) => {
-        this.logger.error(this, "hasCacheImage", image, "No", error);
+        this.logger.info(this, "hasCacheImage", image, "No", error);
         reject(error);
       });
     });
@@ -156,7 +156,7 @@ export class ImageCacheComponent implements OnInit, OnChanges, AfterContentCheck
         resolve(entry.toURL());
       },
       (error:any) => {
-        this.logger.error(this, "downloadCacheImage", image, error);
+        this.logger.info(this, "downloadCacheImage", image, error);
         reject(error);
       });
     });
@@ -171,7 +171,7 @@ export class ImageCacheComponent implements OnInit, OnChanges, AfterContentCheck
         resolve(file);
       },
       (error:any) => {
-        this.logger.error(this, "useCacheImage", url, error);
+        this.logger.info(this, "useCacheImage", url, error);
         reject(error);
       });
     });
@@ -187,7 +187,7 @@ export class ImageCacheComponent implements OnInit, OnChanges, AfterContentCheck
         resolve(normalizedURL);
       },
       (error:any) => {
-        this.logger.error(this, "resolveFilePath", url, "resolveLocalFilesystemUrl", error);
+        this.logger.info(this, "resolveFilePath", url, "resolveLocalFilesystemUrl", error);
         reject(error);
       });
     });

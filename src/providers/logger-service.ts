@@ -64,7 +64,7 @@ export class LoggerService {
       console.log(this.message(instance, "view", [screen, campaign, session]));
     }
     else if (this.analytics) {
-      this.googleAnalytics.trackView(screen, campaign, session).then((tracked) => {
+      this.googleAnalytics.trackView(screen, campaign, session).then((tracked:any) => {
         //Google Analytics view tracked
       },
       (error:any) => {
@@ -78,7 +78,7 @@ export class LoggerService {
       console.log(this.message(instance, "event", [category, action, label]));
     }
     else if (this.analytics) {
-      this.googleAnalytics.trackEvent(category, action, label, value, newSession).then((tracked) => {
+      this.googleAnalytics.trackEvent(category, action, label, value, newSession).then((tracked:any) => {
         //Google Analytics event tracked
       },
       (error:any) => {
@@ -95,7 +95,7 @@ export class LoggerService {
       let description = [];
       description.push(this.message(instance, method, objects));
       description.push(this.information());
-      this.googleAnalytics.trackException(description.join("\n\n"), false).then((logged:any) => {
+      this.googleAnalytics.trackException(description.join("\n\n"), false).then((tracked:any) => {
         //Google Analytics error tracked
       },
       (error:any) => {
@@ -112,7 +112,7 @@ export class LoggerService {
       let description = [];
       description.push(this.message(instance, method, objects));
       description.push(this.information());
-      this.googleAnalytics.trackException(description.join("\n\n"), true).then((logged:any) => {
+      this.googleAnalytics.trackException(description.join("\n\n"), true).then((tracked:any) => {
         //Google Analytics crash tracked
       },
       (error:any) => {
@@ -123,24 +123,26 @@ export class LoggerService {
 
   private information():string {
     let info = []
-    if (this.device.manufacturer) {
-      info.push(this.device.manufacturer);
-    }
-    if (this.device.platform) {
-      info.push(this.device.platform);
-    }
-    if (this.device.version) {
-      info.push(this.device.version);
-    }
-    if (this.device.model) {
-      info.push(this.device.model);
+    if (this.device != null) {
+      if (this.device.manufacturer) {
+        info.push(this.device.manufacturer);
+      }
+      if (this.device.platform) {
+        info.push(this.device.platform);
+      }
+      if (this.device.version) {
+        info.push(this.device.version);
+      }
+      if (this.device.model) {
+        info.push(this.device.model);
+      }
     }
     return info.join(" ");
   }
 
   private message(instance:any, method:string, objects:any[]):string {
     let messages = [];
-    if (instance != null) {
+    if (instance != null && instance.constructor != null) {
       messages.push(instance.constructor.name);
     }
     if (method != null) {
@@ -150,7 +152,10 @@ export class LoggerService {
       for (let index in objects) {
         let object = objects[index];
         try {
-          if (typeof object === 'string' || object instanceof String) {
+          if (object == null) {
+            //ignore null values
+          }
+          else if (typeof object === 'string' || object instanceof String) {
             messages.push(object);
           }
           else {
@@ -158,7 +163,9 @@ export class LoggerService {
           }
         }
         catch(error) {
-          messages.push(object);
+          if (object != null) {
+            messages.push(object);
+          }
         }
       }
     }

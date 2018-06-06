@@ -120,29 +120,34 @@ export class InputLocationComponent {
   }
 
   ngAfterContentChecked() {
-    if (this.value == null || this.value.value == null || this.value.value.length == 0) {
-      // IGNORE BLANK VALUE
-    }
-    else if (this.value.value.indexOf(", ") > -1) {
-      // IGNORE ADDRESS STRING
-    }
-    else if (this.value.value.indexOf(",") > -1) {
-      let coordinate:any = this.value.value.split(",");
-      if (coordinate && coordinate.length > 0) {
-        let latitude = Number(coordinate[0]);
-        let longitude = Number(coordinate[1]);
-        if (this.latitude != latitude || this.longitude != longitude) {
-          this.latitude = latitude;
-          this.longitude = longitude;
-          this.located = true;
-          this.loadStaticMap(latitude, longitude);
+    try {
+      if (this.value == null || this.value.value == null || this.value.value.length == 0) {
+        // IGNORE BLANK VALUE
+      }
+      else if (this.value.value.indexOf(", ") > -1) {
+        // IGNORE ADDRESS STRING
+      }
+      else if (this.value.value.indexOf(",") > -1) {
+        let coordinate:any = this.value.value.split(",");
+        if (coordinate && coordinate.length > 0) {
+          let latitude = Number(coordinate[0]);
+          let longitude = Number(coordinate[1]);
+          if (this.latitude != latitude || this.longitude != longitude) {
+            this.latitude = latitude;
+            this.longitude = longitude;
+            this.located = true;
+            this.loadStaticMap(latitude, longitude);
+          }
         }
       }
+      if (this.countries == null || this.countries.length == 0) {
+        this.loadCountries().then((countries:Country[]) => {
+          this.countries = countries;
+        });
+      }
     }
-    if (this.countries == null || this.countries.length == 0) {
-      this.loadCountries().then((countries:Country[]) => {
-        this.countries = countries;
-      });
+    catch (error) {
+      this.logger.info(this, "ngAfterContentChecked", error);
     }
   }
 

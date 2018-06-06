@@ -291,28 +291,25 @@ export class HttpService {
   fileSize(filePath:any):Promise<number> {
     return new Promise((resolve, reject) => {
       this.logger.info(this, "fileSize", filePath);
-      this.file.resolveLocalFilesystemUrl(filePath).then(
-        (entry:Entry) => {
-          this.logger.info(this, "fileSize", filePath, "Entry", entry.fullPath);
-          entry.getMetadata(
-            (metadata:Metadata) => {
-              this.logger.info(this, "fileSize", filePath, "Metadata", metadata);
-              resolve(metadata.size);
-            },
-            (error:any) => {
-              this.logger.error(this, "fileSize", filePath, "Metadata", error);
-              reject(error);
-            });
+      this.file.resolveLocalFilesystemUrl(filePath).then((entry:Entry) => {
+        this.logger.info(this, "fileSize", filePath, "Entry", entry.fullPath);
+        entry.getMetadata((metadata:Metadata) => {
+          this.logger.info(this, "fileSize", filePath, "Metadata", metadata);
+          resolve(metadata.size);
         },
-        (error) => {
-          this.logger.error(this, "fileSize", filePath, "Error", error);
+        (error:any) => {
+          this.logger.error(this, "fileSize", filePath, "Metadata", error);
           reject(error);
         });
+      },
+      (error) => {
+        this.logger.error(this, "fileSize", filePath, "Error", error);
+        reject(error);
+      });
     });
   }
 
   errorMessage(error:any):string {
-    this.logger.error(this, "errorMessage", error);
     if (typeof error === 'string') {
       return error;
     }

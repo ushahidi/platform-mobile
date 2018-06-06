@@ -73,13 +73,14 @@ export class BasePage {
   }
 
   ionViewWillEnter() {
-    this.logger.info(this, "ionViewWillEnter", "Network", this.network.type);
+    let network = this.networkType();
+    this.logger.info(this, "ionViewWillEnter", "Network", network);
     this.subscribeNetwork();
   }
 
   ionViewDidEnter() {
-    this.logger.info(this, "ionViewDidEnter");
-    let screen = this.constructor.name.replace("Page", "").replace(/([A-Z])/g," $1").trim();
+    let screen = this.screenName();
+    this.logger.info(this, "ionViewDidEnter", "Screen", screen);
     this.logger.view(this, screen);
   }
 
@@ -384,6 +385,20 @@ export class BasePage {
       result = result.then(() => task());
     });
     return result;
+  }
+
+  protected screenName() {
+    if (this.constructor) {
+        return this.constructor.name.replace("Page", "").replace(/([A-Z])/g," $1").trim();
+    }
+    return "";
+  }
+
+  protected networkType() {
+    if (this.network && this.network.type) {
+      return this.network.type;
+    }
+    return "";
   }
 
 }

@@ -1,10 +1,10 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="10811" id="com.ushahidi.mobile" ios-CFBundleVersion="1.8.11" version="1.8" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-versionCode="10901" id="com.ushahidi.mobile" ios-CFBundleVersion="1.9.1" version="1.9" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Ushahidi</name>
     <description>Ushahidi Mobile</description>
     <author email="support@ushahidi.com" href="https://www.ushahidi.com/">Ushahidi</author>
     <content src="index.html" />
-    <access origin="*" subdomains="true" />
+    <access origin="https://*.ushahidi.*" subdomains="true" />
     <access origin="file://*" subdomains="true" />
     <access origin="cdvfile://*" subdomains="true" />
     <allow-intent href="http://*/*" />
@@ -13,17 +13,19 @@
     <allow-intent href="sms:*" />
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
-    <allow-navigation href="*" />
     <allow-navigation href="file://*" />
     <allow-navigation href="cdvfile://*" />
-    <allow-navigation href="http://*/*" />
-    <allow-navigation href="https://*/*" />
+    <allow-navigation href="*://*.ushahidi.*/*" />
     <allow-navigation href="*://*.youtube.com/*" />
-    <allow-navigation href="*youtube*" />
     <allow-navigation href="*://*.vimeo.com/*" />
-    <allow-navigation href="*ytimg*" />
+    <allow-navigation href="*://*.rackcdn.com/*" />
+    <allow-navigation href="*://s3.amazonaws.com/*" />
+    <allow-navigation href="*://*.s3.amazonaws.com/*" />
+    <allow-navigation href="*://*.ytimg.com/*" />
+    <allow-navigation href="*://*.twimg.com/*" />
+    <allow-navigation href="*://*.mapbox.com/*" />
     <allow-navigation href="http://ionic.local/*" />
-    <allow-navigation href="http://localhost:3000" />
+    <allow-navigation href="http://localhost:3000/*" />
     <allow-navigation href="http://localhost:8080/*" />
     <platform name="android">
         <allow-intent href="market:*" />

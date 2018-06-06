@@ -273,25 +273,25 @@ export class UshahidiApp {
           this.googleAnalytics.setAppVersion(appVersion);
         },
         (error:any) => {
-          this.logger.error(this, "loadAnalytics", "App Version", error);
+          this.logger.info(this, "loadAnalytics", "App Version", error);
         });
         this.googleAnalytics.startTrackerWithId(id).then(() => {
           this.logger.info(this, "loadAnalytics", "Google Analytics", id, "Loaded");
         })
         .catch((error) => {
-          this.logger.error(this, "loadAnalytics", "Google Analytics", id, "Failed", error);
+          this.logger.info(this, "loadAnalytics", "Google Analytics", id, "Failed", error);
         });
         this.googleAnalytics.setAllowIDFACollection(false).then((enabled:any) => {
           this.logger.info(this, "loadAnalytics", "Google Analytics", id, "AllowIDFACollection", false);
         },
         (error:any) => {
-          this.logger.error(this, "loadAnalytics", "Google Analytics", id, "AllowIDFACollection", error);
+          this.logger.info(this, "loadAnalytics", "Google Analytics", id, "AllowIDFACollection", error);
         });
         this.googleAnalytics.enableUncaughtExceptionReporting(true).then((enabled:any) => {
           this.logger.info(this, "loadAnalytics", "Google Analytics", id, "EnableUncaughtExceptionReporting", true);
         },
         (error:any) => {
-          this.logger.error(this, "loadAnalytics", "Google Analytics", id, "EnableUncaughtExceptionReporting", error);
+          this.logger.info(this, "loadAnalytics", "Google Analytics", id, "EnableUncaughtExceptionReporting", error);
         });
       }
       else {
@@ -299,7 +299,7 @@ export class UshahidiApp {
       }
     },
     (error:any) => {
-      this.logger.error(this, "loadAnalytics", "Google Analytics", "Disabled", error);
+      this.logger.info(this, "loadAnalytics", "Google Analytics", "Disabled", error);
     });
   }
 
