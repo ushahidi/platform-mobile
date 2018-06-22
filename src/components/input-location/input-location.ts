@@ -202,7 +202,12 @@ export class InputLocationComponent {
         if (this.isAuthorized(status)) {
           if (this.authorized == false && this.latitude == null && this.longitude == null) {
             this.logger.info(this, "requestLocation", "requestLocationAuthorization", "AUTHORIZATION CHANGED");
-            this.detectLocation();
+            this.detectLocation().then((detected:boolean) => {
+              this.logger.info(this, "requestLocation", "detectLocation", detected);
+            },
+            (error:any) => {
+              this.logger.error(this, "requestLocation", "detectLocation", error);
+            });
           }
           this.authorized = true;
           resolve(true);

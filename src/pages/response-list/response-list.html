@@ -1,7 +1,7 @@
 <ion-header>
   <ion-navbar color="navbar">
     <ion-title>{{'RESPONSES' | translate}}</ion-title>
-    <ion-buttons end>
+    <ion-buttons right>
       <button ion-button icon-only tappable [disabled]="offline" (click)="searchResponses($event)">
         <ion-icon ios="ios-search" md="md-search"></ion-icon>
       </button>
@@ -46,8 +46,7 @@
         <h6 ion-text text-center color="light" *ngIf="posts == null && offline == false">{{'RESPONSES_NONE_ERROR' | translate}}</h6>
         <h6 ion-text text-center color="light" *ngIf="(posts == null || posts.length == 0) && offline == true">{{'RESPONSES_NONE_INTERNET' | translate}}</h6>
         <h6 ion-text text-center color="light" *ngIf="filter != null && posts && posts.length == 0">{{'RESPONSES_NONE_FILTER' | translate}}</h6>
-        <button ion-button block text-uppercase color="primary" (click)="addResponse($event)"
-              *ngIf="filter == null && posts && posts.length == 0 && offline == false">{{'SURVEY_SUBMIT_RESPONSE' | translate}}</button>
+        <button ion-button block color="primary" (click)="addResponse($event)" *ngIf="filter == null && posts && posts.length == 0 && offline == false">{{'SURVEY_SUBMIT_RESPONSE' | translate}}</button>
     </div>
     <ion-list *ngIf="posts && posts.length > 0">
       <post-card [post]="post" (cardSelected)="showResponse(post)" (menuSelected)="showOptions(post)"
@@ -67,7 +66,7 @@
   </ion-toolbar>
   <ion-toolbar color="toolbar" *ngIf="offline == false && filter">
     <p padding-left>{{'FILTERS_APPLIED' | translate}}</p>
-    <ion-buttons end>
+    <ion-buttons right>
       <button ion-button text-only text-uppercase (click)="clearFilter($event, filter)">{{'FILTERS_CLEAR' | translate}}</button>
     </ion-buttons>
   </ion-toolbar>

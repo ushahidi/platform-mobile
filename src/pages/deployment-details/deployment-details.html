@@ -1,12 +1,12 @@
 <ion-header>
   <ion-navbar color="navbar">
-    <ion-buttons>
+    <ion-buttons left>
       <button ion-button icon-only menuToggle>
         <ion-icon name="menu"></ion-icon>
       </button>
     </ion-buttons>
-    <ion-title></ion-title>
-    <ion-buttons end>
+    <ion-title *ngIf="deployment">{{deployment.name}}</ion-title>
+    <ion-buttons right>
       <button ion-button icon-only (click)="shareDeployment($event)">
         <ion-icon ios="ios-share-outline" md="md-share"></ion-icon>
       </button>
@@ -21,13 +21,8 @@
     <ion-grid [hidden]="landscape == true || tablet == true">
       <ion-row>
         <ion-col col-12 no-padding>
-          <div padding-left padding-right class="title selectable" *ngIf="deployment.name">
-            <h3 ion-text color="dark" dir="{{direction}}">{{deployment.name}}</h3>
-          </div>
-        </ion-col>
-        <ion-col col-12 no-padding>
-          <div text-center padding-left padding-right class="image" *ngIf="deployment.image">
-            <image-cache padding [src]="deployment.image"></image-cache>
+          <div text-center padding-top padding-left padding-right class="image" *ngIf="deployment.image">
+            <image-cache [src]="deployment.image"></image-cache>
           </div>
         </ion-col>
         <ion-col col-12 no-padding>
@@ -40,16 +35,13 @@
     <ion-grid [hidden]="landscape == false && tablet == false">
       <ion-row>
         <ion-col col-6 no-padding>
-          <div padding-left margin-bottom class="title selectable" *ngIf="deployment.name">
-            <h3 ion-text color="dark" dir="{{direction}}">{{deployment.name}}</h3>
-          </div>
           <div padding-left margin-top class="description selectable" *ngIf="deployment.description">
             <text-more truncate="20" [text]="deployment.description" [direction]="direction" (handleLinks)="handleLinks($event)"></text-more>
           </div>
         </ion-col>
         <ion-col col-6 no-padding>
-          <div text-center padding-left padding-right class="image" *ngIf="deployment.image">
-            <image-cache padding [src]="deployment.image"></image-cache>
+          <div text-center padding-top padding-left padding-right class="image" *ngIf="deployment.image">
+            <image-cache [src]="deployment.image"></image-cache>
           </div>
         </ion-col>
       </ion-row>

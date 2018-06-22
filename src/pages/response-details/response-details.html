@@ -1,7 +1,7 @@
 <ion-header>
   <ion-navbar color="navbar">
     <ion-title *ngIf="post">{{post.form_name}}</ion-title>
-    <ion-buttons end>
+    <ion-buttons right>
       <button ion-button icon-only (click)="editResponse(post)" *ngIf="post && post.can_update == true && post.form">
         <ion-icon ios="ios-create-outline" md="md-create"></ion-icon>
       </button>

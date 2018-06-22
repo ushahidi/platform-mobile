@@ -1,17 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers, URLSearchParams, RequestOptions, Response } from '@angular/http';
-import { Observable } from 'rxjs/Observable';
 
+import { HTTP, HTTPResponse } from '@ionic-native/http';
 import { File, Entry, Metadata } from '@ionic-native/file';
 import { FileTransfer, FileTransferObject, FileUploadOptions, FileUploadResult, FileTransferError } from '@ionic-native/file-transfer';
-
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/retry';
-import 'rxjs/add/operator/delay';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/timeout';
-import 'rxjs/add/operator/mergeMap';
-import 'rxjs/add/observable/throw';
 
 import { LoggerService } from '../providers/logger-service';
 
@@ -19,202 +10,182 @@ import { LoggerService } from '../providers/logger-service';
 export class HttpService {
 
   constructor(
-    protected http:Http,
+    protected http:HTTP,
     protected file:File,
     protected transfer:FileTransfer,
     protected logger:LoggerService) {
   }
 
-  httpHeaders(accessToken:string=null, otherHeaders:any=null): Headers {
-    let headers = new Headers();
-    headers.set('Accept', 'application/json');
-    headers.set('Content-Type', 'application/json');
-    if (accessToken != null) {
-      headers.set("Authorization", `Bearer ${accessToken}`);
+  private httpHeaders(accessToken:string=null, contentType:string=null):{} {
+    let headers = {
+      Accept: "application/json",
+    };
+    if (accessToken && accessToken.length > 0) {
+      headers["Authorization"] = `Bearer ${accessToken}`;
     }
-    if (otherHeaders) {
-      for (let key of otherHeaders) {
-        headers.set(key, otherHeaders[key]);
-      }
+    if (contentType && contentType.length > 0) {
+      headers["Content-Type"] = contentType;
     }
     return headers;
   }
 
-  httpGet(url:string, token:string=null, params:any=null, otherHeaders:any=null) {
+  protected httpGet(url:string, token:string=null, params:any={}) {
     return new Promise((resolve, reject) => {
-      let search = new URLSearchParams();
-      if (params) {
-        for (let key in params) {
-          search.set(key, params[key])
+      let headers = this.httpHeaders(token);
+      let parameters = this.httpParameters(params);
+      this.logger.info(this, "GET", url, parameters, headers);
+      this.http.setRequestTimeout(30);
+      this.http.setDataSerializer("json");
+      this.http.get(url, parameters, headers).then((response:any) => {
+        if (response.data) {
+          if (response.headers['content-type'].indexOf("application/json") != -1) {
+            let data = JSON.parse(response.data);
+            this.logger.info(this, "GET", url, response.status, data);
+            resolve(data);
+          }
+          else {
+            this.logger.info(this, "GET", url, response.status, response.data);
+            resolve(response.data);
+          }
         }
-      }
-      else {
-        params = "";
-      }
-      let headers = this.httpHeaders(token, otherHeaders);
-      let options = new RequestOptions({
-        headers: headers,
-        search: search });
-      this.logger.info(this, "GET", url, params);
-      this.http.get(url, options)
-        .timeout(12000)
-        .map(res => res.json())
-        .catch((error:any) => {
-          this.logger.error(this, "httpGet", error);
-          let message = this.errorMessage(error);
-          return Observable.throw(message || 'Request Error');
-        })
-        .subscribe(
-          (items) => {
-            this.logger.info(this, "GET", url, items);
-            resolve(items);
-          },
-          (error) => {
-            this.logger.error(this, "GET", url, error);
-            reject(this.errorMessage(error));
-          });
+        else {
+          this.logger.error(this, "GET", url, response.status, "No Data");
+          reject("No Response Data");
+        }
+      },
+      (error:any) => {
+        this.logger.error(this, "GET", url, error.status, error.error);
+        reject(this.httpError(error));
+      });
     });
   }
 
-  httpPost(url:string, token:string=null, params:any=null, otherHeaders:any=null) {
+  protected httpPost(url:string, token:string=null, params:any=null) {
     return new Promise((resolve, reject) => {
-      let body = (params != null) ? JSON.stringify(params) : "";
-      let headers = this.httpHeaders(token, otherHeaders);
-      let options = new RequestOptions({
-        headers: headers });
-      this.logger.info(this, "POST", url, body);
-      this.http.post(url, body, options)
-        .timeout(12000)
-        .map(res => {
-          if (res.status == 204) {
-            return {}
+      let headers = this.httpHeaders(token, "application/json");
+      let parameters = this.httpParameters(params);
+      this.logger.info(this, "POST", url, parameters, headers);
+      this.http.setRequestTimeout(30);
+      this.http.setDataSerializer("json");
+      this.http.post(url, parameters, headers).then((response:any) => {
+        if (response.data) {
+          this.logger.info(this, "POST", url, response.status, response.headers, response.data);
+          if (response.headers['content-type'].indexOf("application/json") != -1) {
+            let data = JSON.parse(response.data);
+            this.logger.info(this, "POST", url, response.status, data);
+            resolve(data);
           }
           else {
-            return res.json();
+            this.logger.info(this, "POST", url, response.status, response.data);
+            resolve(response.data);
           }
-        })
-        .catch((error:any) => {
-          let message = this.errorMessage(error);
-          return Observable.throw(message || 'Request Error');
-        })
-        .subscribe(
-          (json) => {
-            this.logger.info(this, "POST", url, json);
-            resolve(json);
-          },
-          (error) => {
-            this.logger.error(this, "POST", url, error);
-            reject(this.errorMessage(error));
-          }
-        );
+        }
+        else {
+          this.logger.error(this, "POST", url, response.status, "No Data");
+          reject("No Response Data");
+        }
+      },
+      (error:any) => {
+        this.logger.error(this, "POST", url, error.status, error.error);
+        reject(this.httpError(error));
+      });
     });
   }
 
-  httpPut(url:string, token:string=null, params:any=null, otherHeaders:any=null) {
+  protected httpPut(url:string, token:string=null, params:any=null) {
     return new Promise((resolve, reject) => {
-      let body = JSON.stringify(params);
-      let headers = this.httpHeaders(token, otherHeaders);
-      let options = new RequestOptions({
-        headers: headers });
-      this.logger.info(this, "PUT", url, body);
-      this.http.put(url, body, options)
-        .timeout(12000)
-        .map(res => {
-          if (res.status == 204) {
-            return {}
+      let headers = this.httpHeaders(token, "application/json");
+      let parameters = this.httpParameters(params);
+      this.logger.info(this, "PUT", url, parameters, headers);
+      this.http.setRequestTimeout(30);
+      this.http.setDataSerializer("json");
+      this.http.put(url, parameters, headers).then((response:any) => {
+        if (response.data) {
+          if (response.headers['content-type'].indexOf("application/json") != -1) {
+            let data = JSON.parse(response.data);
+            this.logger.info(this, "PUT", url, response.status, data);
+            resolve(data);
           }
           else {
-            return res.json();
+            this.logger.info(this, "PUT", url, response.status, response.data);
+            resolve(response.data);
           }
-        })
-        .catch((error:any) => {
-          let message = this.errorMessage(error);
-          return Observable.throw(message || 'Request Error');
-        })
-        .subscribe(
-          (json) => {
-            this.logger.info(this, "PUT", url, json);
-            resolve(json);
-          },
-          (error) => {
-            this.logger.error(this, "PUT", url, error);
-            reject(this.errorMessage(error));
-          }
-        );
+        }
+        else {
+          this.logger.error(this, "PUT", url, response.status, "No Data");
+          reject("No Response Data");
+        }
+      },
+      (error:any) => {
+        this.logger.error(this, "PUT", url, error.status, error.error);
+        reject(this.httpError(error));
+      });
     });
   }
 
-  httpPatch(url:string, token:string=null, params:any=null, otherHeaders:any=null) {
+  protected httpPatch(url:string, token:string=null, params:any=null) {
     return new Promise((resolve, reject) => {
-      let body = JSON.stringify(params);
-      let headers = this.httpHeaders(token, otherHeaders);
-      let options = new RequestOptions({
-        headers: headers });
-      this.logger.info(this, "PATCH", url, body);
-      this.http.patch(url, body, options)
-        .timeout(12000)
-        .map(res => {
-          if (res.status == 204) {
-            return {}
+      let headers = this.httpHeaders(token, "application/json");
+      let parameters = this.httpParameters(params);
+      this.logger.info(this, "PATCH", url, parameters, headers);
+      this.http.setRequestTimeout(30);
+      this.http.setDataSerializer("json");
+      this.http.patch(url, parameters, headers).then((response:any) => {
+        if (response.data) {
+          if (response.headers['content-type'].indexOf("application/json") != -1) {
+            let data = JSON.parse(response.data);
+            this.logger.info(this, "PATCH", url, response.status, data);
+            resolve(data);
           }
           else {
-            return res.json();
+            this.logger.info(this, "PATCH", url, response.status, response.data);
+            resolve(response.data);
           }
-        })
-        .catch((error:any) => {
-          let message = this.errorMessage(error);
-          return Observable.throw(message || 'Request Error');
-        })
-        .subscribe(
-          (json) => {
-            this.logger.info(this, "PATCH", url, json);
-            resolve(json);
-          },
-          (error) => {
-            this.logger.error(this, "PATCH", url, error);
-            reject(this.errorMessage(error));
-          }
-        );
+        }
+        else {
+          this.logger.error(this, "PATCH", url, response.status, "No Data");
+          reject("No Response Data");
+        }
+      },
+      (error:any) => {
+        this.logger.error(this, "PATCH", url, error.status, error.error);
+        reject(this.httpError(error));
+      });
     });
   }
 
-  httpDelete(url:string, token:string=null, otherHeaders:any=null) {
+  protected httpDelete(url:string, token:string=null, params:any={}) {
     return new Promise((resolve, reject) => {
-      let headers = this.httpHeaders(token, otherHeaders);
-      let options = new RequestOptions({
-        headers: headers });
-      this.logger.info(this, "DELETE", url);
-      this.http.delete(url, options)
-        .timeout(12000)
-        .map(res => {
-          this.logger.info(this, "DELETE", url, res);
-          if (res.status == 201) {
-            return res.headers.toJSON();
-          }
-          else if (res.status == 204) {
-            return res.headers.toJSON();
+      let headers = this.httpHeaders(token);
+      let parameters = this.httpParameters(params);
+      this.logger.info(this, "DELETE", url, parameters, headers);
+      this.http.setRequestTimeout(30);
+      this.http.setDataSerializer("json");
+      this.http.delete(url, parameters, headers).then((response:any) => {
+        if (response.data) {
+          if (response.headers['content-type'].indexOf("application/json") != -1) {
+            let data = JSON.parse(response.data);
+            this.logger.info(this, "DELETE", url, response.status, data);
+            resolve(data);
           }
           else {
-            return res.json();
+            this.logger.info(this, "DELETE", url, response.status, response.data);
+            resolve(response.data);
           }
-        })
-        .catch((error:any) => {
-          let message = this.errorMessage(error);
-          return Observable.throw(message || 'Request Error');
-        })
-        .subscribe(
-          (items) => {
-            this.logger.info(this, "DELETE", url, items);
-            resolve(items);
-          },
-          (error) => {
-            this.logger.error(this, "DELETE", url, error);
-            reject(this.errorMessage(error));
-          });
+        }
+        else {
+          this.logger.error(this, "DELETE", url, response.status, "No Data");
+          reject("No Response Data");
+        }
+      },
+      (error:any) => {
+        this.logger.error(this, "DELETE", url, error.status, error.error);
+        reject(this.httpError(error));
+      });
     });
   }
 
-  fileUpload(url:string, token:string, file:string, caption:string,
+  protected fileUpload(url:string, token:string, file:string, caption:string,
              httpMethod:string="POST",
              mimeType:string='application/binary',
              acceptType:string="application/json",
@@ -248,24 +219,23 @@ export class HttpService {
       };
       this.logger.info(this, "UPLOAD", url, file, options);
       let fileTransfer:FileTransferObject = this.transfer.create();
-      fileTransfer.upload(file, url, options, true).then(
-        (data:FileUploadResult) => {
-          this.logger.info(this, "UPLOAD", url, file, data);
-          resolve(data);
-        },
-        (error:FileTransferError) => {
-          this.logger.error(this, "UPLOAD", url, file,
-            "Code", error.code,
-            "Source", error.source,
-            "Target", error.target,
-            "Body", error.body,
-            "Exception", error.exception);
-          reject(error.body || error.exception);
-       });
+      fileTransfer.upload(file, url, options, true).then((data:FileUploadResult) => {
+        this.logger.info(this, "UPLOAD", url, file, data);
+        resolve(data);
+      },
+      (error:FileTransferError) => {
+        this.logger.error(this, "UPLOAD", url, file,
+          "Code", error.code,
+          "Source", error.source,
+          "Target", error.target,
+          "Body", error.body,
+          "Exception", error.exception);
+        reject(error.body || error.exception);
+     });
     });
   }
 
-  mimeType(file:string):string {
+  protected mimeType(file:string):string {
     let extension = file.toLowerCase().substr(file.lastIndexOf('.')+1);
     if (extension == "mov") {
       return "video/quicktime";
@@ -288,7 +258,7 @@ export class HttpService {
     return "application/binary"
   }
 
-  fileSize(filePath:any):Promise<number> {
+  protected fileSize(filePath:any):Promise<number> {
     return new Promise((resolve, reject) => {
       this.logger.info(this, "fileSize", filePath);
       this.file.resolveLocalFilesystemUrl(filePath).then((entry:Entry) => {
@@ -309,38 +279,73 @@ export class HttpService {
     });
   }
 
-  errorMessage(error:any):string {
-    if (typeof error === 'string') {
-      return error;
-    }
-    else if (error instanceof Response){
-      let json = error.json();
-      if (json['errors']) {
-        let messages = [];
-        for (let _error of json['errors']) {
-          if (_error['message']) {
-            messages.push(_error['message']);
-          }
-          else if (_error['title']) {
-            messages.push(_error['title']);
-          }
+  private httpError(error:any):string {
+    try {
+      if (error == null) {
+        this.logger.error(this, "httpError", "Unknown", error);
+        return "Unknown error";
+      }
+      else if (typeof error === 'string') {
+        return error['error'] || error;
+      }
+      else if (typeof error === 'object') {
+        if (error['status'] == 409) {
+          return "Conflict";
         }
-        return messages.join(", ");
-      }
-      else if (json['error']) {
-        return json['error'];
-      }
-      else if (json['message']) {
-        return json['message'];
+        else if (error['message']) {
+          return error['message'];
+        }
+        else if (error['error']) {
+          if (error['error'].toString().indexOf("The host could not be resolved") != -1) {
+            return "The internet connection appears to be offline";
+          }
+          else if (error['error'].toString().indexOf("The Internet connection appears to be offline") != -1) {
+            return "The internet connection appears to be offline";
+          }
+          else if (error.headers['content-type'] == "application/json") {
+            let json = JSON.parse(error['error']);
+            if (json['errors']) {
+              let errors = json['errors'];
+              let messages = [];
+              for (let key of Object.keys(errors)) {
+                let error = errors[key];
+                if (error) {
+                  messages.push(error);
+                }
+              }
+              return messages.join(", ");
+            }
+            else if (json['error']) {
+              return json['error'];
+            }
+            else if (json['message']) {
+              return json['message'];
+            }
+          }
+          return JSON.stringify(error['error']);
+        }
       }
     }
-    else if (error.name && error.name === "TimeoutError") {
-      return "Request Timeout";
-    }
-    else if (error['exception']) {
-      return error['exception'];
+    catch (err) {
+      this.logger.error(this, "httpError", error, "Error", err);
     }
     return JSON.stringify(error);
+  }
+
+  private httpParameters(params:any=null):any {
+    let paramaters = {};
+    if (params) {
+      for (let key of Object.keys(params)) {
+        let value = params[key];
+        if (typeof value == 'number') {
+          paramaters[key] = "" + value;
+        }
+        else {
+          paramaters[key] = value;
+        }
+      }
+    }
+    return paramaters;
   }
 
 }
