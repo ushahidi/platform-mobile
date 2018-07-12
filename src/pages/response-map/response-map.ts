@@ -253,17 +253,20 @@ export class ResponseMapPage extends BasePage {
       this.keyboard.close();
       if (this.search && this.search.length > 0) {
         this.nativeGeocoder.forwardGeocode(this.search).then(
-          (coordinates:NativeGeocoderForwardResult) => {
-            this.logger.info(this, "searchAddress", coordinates);
-            if (coordinates && coordinates.latitude && coordinates.longitude) {
-              this.latitude = Number(coordinates.latitude);
-              this.longitude = Number(coordinates.longitude);
-              let latLng:any = {
-                lat: this.latitude,
-                lng: this.longitude
-              };
-              this.marker.setLatLng(latLng);
-              this.map.flyTo(latLng);
+          (results:NativeGeocoderForwardResult[]) => {
+            this.logger.info(this, "searchAddress", results);
+            if (results && results.length > 0) {
+              let coordinates = results[0];
+              if (coordinates && coordinates.latitude && coordinates.longitude) {
+                this.latitude = Number(coordinates.latitude);
+                this.longitude = Number(coordinates.longitude);
+                let latLng:any = {
+                  lat: this.latitude,
+                  lng: this.longitude
+                };
+                this.marker.setLatLng(latLng);
+                this.map.flyTo(latLng);
+              }
             }
           },
           (error:any) => {

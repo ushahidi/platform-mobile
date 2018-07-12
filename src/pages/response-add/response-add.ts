@@ -481,7 +481,7 @@ export class ResponseAddPage extends BasePage {
           postValue.value = address.join(", ");
         }
         else {
-          postValue.value = formValue;
+          postValue.value = null;
         }
       }
       else if (postValue.input == 'upload') {

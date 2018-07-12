@@ -1351,23 +1351,28 @@ export class ApiService extends HttpService {
     return new Promise((resolve, reject) => {
       let address:string = value.value;
       this.logger.info(this, "geocodeAddress", address);
-      this.nativeGeocoder.forwardGeocode(address).then((coordinates:NativeGeocoderForwardResult) => {
-        this.logger.info(this, "geocodeAddress", address, coordinates);
-        post.latitude = Number(coordinates.latitude);
-        post.longitude = Number(coordinates.longitude);
-        value.value = `${coordinates.latitude},${coordinates.longitude}`;
-        let saves = [];
-        if (post.id != null) {
-          saves.push(this.database.savePost(deployment, post));
-        }
-        saves.push(this.database.saveValue(deployment, value));
-        Promise.all(saves).then(
-          (saved:any) => {
+      this.nativeGeocoder.forwardGeocode(address).then((results:NativeGeocoderForwardResult[]) => {
+        this.logger.info(this, "geocodeAddress", address, results);
+        if (results && results.length > 0) {
+          let coordinates = results[0];
+          post.latitude = Number(coordinates.latitude);
+          post.longitude = Number(coordinates.longitude);
+          value.value = `${coordinates.latitude},${coordinates.longitude}`;
+          let saves = [];
+          if (post.id != null) {
+            saves.push(this.database.savePost(deployment, post));
+          }
+          saves.push(this.database.saveValue(deployment, value));
+          Promise.all(saves).then((saved:any) => {
             resolve(true);
           },
           (error:any) => {
             reject(error);
           });
+        }
+        else {
+          reject("No results");
+        }
       })
       .catch((error:any) => {
         this.logger.error(this, "geocodeAddress", address, error);

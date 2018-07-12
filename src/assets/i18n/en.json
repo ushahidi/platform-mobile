@@ -43,7 +43,7 @@
   "DEPLOYMENT_ADD_FIRST": "Let's add your first deployment.",
 	"DEPLOYMENT_FIND": "Find deployment by name or URL",
   "DEPLOYMENT_DESCRIPTION": "Describe your site",
-  "DEPLOYMENT_EMAIL": "Describe your site",
+  "DEPLOYMENT_EMAIL": "Contact email address",
   "DEPLOYMENT_EMAIL_WARNING": "Use caution, as this will be visible to anyone on your site.",
   "DEPLOYMENT_NAME": "Deployment name",
 	"DEPLOYMENT_ADDING_": "Adding...",

@@ -268,7 +268,7 @@ export class UshahidiApp {
   private loadAnalytics() {
     this.settings.getGoogleAnalytics().then((id:string) => {
       if (id && id.length > 0) {
-        this.appVersion.getVersionCode().then((appVersion) => {
+        this.appVersion.getVersionCode().then((appVersion:string) => {
           this.logger.info(this, "loadAnalytics", "App Version", appVersion);
           this.googleAnalytics.setAppVersion(appVersion);
         },

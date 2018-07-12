@@ -419,12 +419,18 @@ export class InputLocationComponent {
       }
       this.logger.info(this, "geocodeAddress", address.join(", "));
       this.nativeGeocoder.forwardGeocode(address.join(", "))
-        .then((coordinates:NativeGeocoderForwardResult) => {
-          this.logger.info(this, "geocodeAddress", address, coordinates);
-          this.latitude = Number(coordinates.latitude);
-          this.longitude = Number(coordinates.longitude);
-          this.loadStaticMap(this.latitude, this.longitude);
-          resolve(true);
+        .then((results:NativeGeocoderForwardResult[]) => {
+          if (results && results.length > 0) {
+            let coordinates = results[0];
+            this.logger.info(this, "geocodeAddress", address, coordinates);
+            this.latitude = Number(coordinates.latitude);
+            this.longitude = Number(coordinates.longitude);
+            this.loadStaticMap(this.latitude, this.longitude);
+            resolve(true);
+          }
+          else {
+            reject("No results");
+          }
         })
         .catch((error:any) => {
           this.logger.error(this, "geocodeAddress", address, error);
