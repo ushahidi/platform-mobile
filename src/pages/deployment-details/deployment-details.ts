@@ -377,14 +377,30 @@ export class DeploymentDetailsPage extends BasePage {
 
   private userLogin(event:any) {
     this.logger.info(this, "userLogin");
-    this.showModal(UserLoginPage,
+    let modal = this.showModal(UserLoginPage,
       { deployment: this.deployment });
+    modal.onDidDismiss((data:any) => {
+      if (data) {
+        let loading = this.showLoading(text);
+        this.loadUpdates(true, null, loading).then((loaded) => {
+          loading.dismiss();
+        });
+      }
+    });
   }
 
   private userSignup(event:any) {
     this.logger.info(this, "userSignup");
-    this.showModal(UserSignupPage,
+    let modal = this.showModal(UserSignupPage,
       { deployment: this.deployment });
+    modal.onDidDismiss((data:any) => {
+      if (data) {
+        let loading = this.showLoading(text);
+        this.loadUpdates(true, null, loading).then((loaded) => {
+          loading.dismiss();
+        });
+      }
+    });
   }
 
   private userLogout(event:any) {

@@ -10,7 +10,7 @@ import { SettingsService } from '../providers/settings-service';
 @Injectable()
 export class LoggerService {
 
-  private development:boolean = true;
+  private enabled:boolean = true;
   private analytics:boolean = true;
 
   constructor(
@@ -20,47 +20,52 @@ export class LoggerService {
     private settings:SettingsService,
     private googleAnalytics:GoogleAnalytics) {
     this.platform.ready().then(() => {
-      this.isDebug.getIsDebug().then((development:boolean) => {
-        this.development = development;
-      },
-      (error:any) => {
-        this.development = false;
-      });
-      this.settings.getGoogleAnalytics().then((id:string) => {
-        this.analytics = id && id.length > 0;
-      },
-      (error:any) => {
-        this.analytics = false;
-      })
+      if (this.device.isVirtual) {
+        this.enabled = true;
+      }
+      else {
+        this.isDebug.getIsDebug().then((isDebug:boolean) => {
+          this.enabled = isDebug;
+        },
+        (error:any) => {
+          this.enabled = false;
+        });
+        this.settings.getGoogleAnalytics().then((id:string) => {
+          this.analytics = id && id.length > 0;
+        },
+        (error:any) => {
+          this.analytics = false;
+        });
+      }
     });
   }
 
   public log(instance:any, method:string, ...objects:any[]) {
-    if (this.development) {
+    if (this.enabled) {
       console.log(this.message(instance, method, objects));
     }
   }
 
   public info(instance:any, method:string, ...objects:any[]) {
-    if (this.development) {
+    if (this.enabled) {
       console.info(this.message(instance, method, objects));
     }
   }
 
   public debug(instance:any, method:string, ...objects:any[]) {
-    if (this.development) {
+    if (this.enabled) {
       console.debug(this.message(instance, method, objects));
     }
   }
 
   public warn(instance:any, method:string, ...objects:any[]) {
-    if (this.development) {
+    if (this.enabled) {
       console.warn(this.message(instance, method, objects));
     }
   }
 
   public view(instance:any, screen:string, campaign:string=null, session:boolean=false) {
-    if (this.development) {
+    if (this.enabled) {
       console.log(this.message(instance, "view", [screen, campaign, session]));
     }
     else if (this.analytics) {
@@ -74,7 +79,7 @@ export class LoggerService {
   }
 
   public event(instance:any, category:string, action:string, label:string, value:number=0, newSession:boolean=false) {
-    if (this.development) {
+    if (this.enabled) {
       console.log(this.message(instance, "event", [category, action, label]));
     }
     else if (this.analytics) {
@@ -88,7 +93,7 @@ export class LoggerService {
   }
 
   public error(instance:any, method:string, ...objects:any[]) {
-    if (this.development) {
+    if (this.enabled) {
       console.error(this.message(instance, method, objects));
     }
     else if (this.analytics) {
@@ -105,7 +110,7 @@ export class LoggerService {
   }
 
   public crash(instance:any, method:string, ...objects:any[]) {
-    if (this.development) {
+    if (this.enabled) {
       console.error(this.message(instance, method, objects));
     }
     else if (this.analytics) {

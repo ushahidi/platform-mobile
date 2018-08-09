@@ -333,19 +333,19 @@ export class HttpService {
   }
 
   private httpParameters(params:any=null):any {
-    let paramaters = {};
+    let parameters = {};
     if (params) {
       for (let key of Object.keys(params)) {
         let value = params[key];
         if (typeof value == 'number') {
-          paramaters[key] = "" + value;
+          parameters[key] = "" + value;
         }
         else {
-          paramaters[key] = value;
+          parameters[key] = value;
         }
       }
     }
-    return paramaters;
+    return parameters;
   }
 
 }
