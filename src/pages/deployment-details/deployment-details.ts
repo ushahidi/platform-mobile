@@ -381,9 +381,11 @@ export class DeploymentDetailsPage extends BasePage {
       { deployment: this.deployment });
     modal.onDidDismiss((data:any) => {
       if (data) {
-        let loading = this.showLoading(text);
-        this.loadUpdates(true, null, loading).then((loaded) => {
-          loading.dismiss();
+        this.language.getTranslation("LOADING_").then((text:string) => {
+          let loading = this.showLoading(text);
+          this.loadUpdates(true, null, loading).then((loaded) => {
+            loading.dismiss();
+          });
         });
       }
     });
@@ -395,9 +397,11 @@ export class DeploymentDetailsPage extends BasePage {
       { deployment: this.deployment });
     modal.onDidDismiss((data:any) => {
       if (data) {
-        let loading = this.showLoading(text);
-        this.loadUpdates(true, null, loading).then((loaded) => {
-          loading.dismiss();
+        this.language.getTranslation("LOADING_").then((text:string) => {
+          let loading = this.showLoading(text);
+          this.loadUpdates(true, null, loading).then((loaded) => {
+            loading.dismiss();
+          });
         });
       }
     });
