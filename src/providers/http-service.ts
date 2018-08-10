@@ -80,6 +80,10 @@ export class HttpService {
             resolve(response.data);
           }
         }
+        else if (response.status == 204) {
+          this.logger.info(this, "POST", url, response.status, "Posted");
+          resolve("");
+        }
         else {
           this.logger.error(this, "POST", url, response.status, "No Data");
           reject("No Response Data");
@@ -110,6 +114,10 @@ export class HttpService {
             this.logger.info(this, "PUT", url, response.status, response.data);
             resolve(response.data);
           }
+        }
+        else if (response.status == 204) {
+          this.logger.info(this, "PUT", url, response.status, "Posted");
+          resolve("");
         }
         else {
           this.logger.error(this, "PUT", url, response.status, "No Data");
@@ -142,6 +150,10 @@ export class HttpService {
             resolve(response.data);
           }
         }
+        else if (response.status == 204) {
+          this.logger.info(this, "PATCH", url, response.status, "Posted");
+          resolve("");
+        }
         else {
           this.logger.error(this, "PATCH", url, response.status, "No Data");
           reject("No Response Data");
@@ -172,6 +184,10 @@ export class HttpService {
             this.logger.info(this, "DELETE", url, response.status, response.data);
             resolve(response.data);
           }
+        }
+        else if (response.status == 204) {
+          this.logger.info(this, "DELETE", url, response.status, "Posted");
+          resolve("");
         }
         else {
           this.logger.error(this, "DELETE", url, response.status, "No Data");
