@@ -153,7 +153,10 @@ export class UshahidiApp {
       else {
         this.statusBar.styleDefault();
       }
-      if (overlaysWebView) {
+      if (this.platform.is("android")) {
+        this.statusBar.overlaysWebView(false);
+      }
+      else if (overlaysWebView) {
         this.statusBar.overlaysWebView(true);
       }
       else {
