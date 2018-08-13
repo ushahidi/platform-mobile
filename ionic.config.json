@@ -1,6 +1,5 @@
 {
   "name": "ushahidi",
-  "app_id": "",
   "integrations": {
     "cordova": {}
   },
