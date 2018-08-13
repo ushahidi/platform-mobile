@@ -87,13 +87,25 @@ export class ResponseListPage extends BasePage {
     super.ionViewDidLoad();
     this.events.subscribe(POST_DELETED, (post_id:number) => {
       this.logger.info(this, 'Events', POST_DELETED, post_id);
+      this.loading = true;
       this.posts = null;
-      this.loadPosts(true);
+      this.loadPosts(true).then((loaded:any) => {
+        this.logger.info(this, 'Events', POST_DELETED, post_id, "Loaded");
+      },
+      (error:any) => {
+        this.logger.error(this, 'Events', POST_DELETED, post_id, "Failed", error);
+      });
     });
     this.events.subscribe(POST_UPDATED, (post_id:number) => {
       this.logger.info(this, 'Events', POST_UPDATED, post_id);
+      this.loading = true;
       this.posts = null;
-      this.loadPosts(true);
+      this.loadPosts(true).then((loaded:any) => {
+        this.logger.info(this, 'Events', POST_UPDATED, post_id, "Loaded");
+      },
+      (error:any) => {
+        this.logger.error(this, 'Events', POST_UPDATED, post_id, "Failed", error);
+      });
     });
     this.settings.getMapMarkerPins().then((mapPins:boolean) => {
       this.mapPins = mapPins;
@@ -673,9 +685,12 @@ export class ResponseListPage extends BasePage {
           post.status = "draft";
           this.database.savePost(this.deployment, post).then(saved => {
             loading.dismiss();
-            this.events.publish(POST_UPDATED, post.id);
             this.showToast(translations[1]);
             this.logger.event(this, "Posts", "drafted", post.url);
+          },
+          (error:any) => {
+            loading.dismiss();
+            this.showAlert(translations[2], error);
           });
         },
         (error:any) => {
@@ -700,6 +715,10 @@ export class ResponseListPage extends BasePage {
             loading.dismiss();
             this.showToast(translations[1]);
             this.logger.event(this, "Posts", "archived", post.url);
+          },
+          (error:any) => {
+            loading.dismiss();
+            this.showAlert(translations[2], error);
           });
         },
         (error:any) => {
@@ -724,6 +743,10 @@ export class ResponseListPage extends BasePage {
             loading.dismiss();
             this.showToast(translations[1]);
             this.logger.event(this, "Posts", "published", post.url);
+          },
+          (error:any) => {
+            loading.dismiss();
+            this.showAlert(translations[2], error);
           });
         },
         (error:any) => {
