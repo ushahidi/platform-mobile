@@ -50,7 +50,7 @@ export class InputVideoComponent {
   captureVideo() {
     this.logger.info(this, "captureVideo");
     this.authorizeVideo().then(
-      (authorixed:boolean) => {
+      (authorized:boolean) => {
         this.showVideo()
       },
       (error:any) => {

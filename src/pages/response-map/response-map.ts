@@ -62,6 +62,9 @@ export class ResponseMapPage extends BasePage {
     super.ionViewDidLoad();
     this.settings.getMapMarkerPins().then((mapPins:boolean) => {
       this.mapPins = mapPins;
+    },
+    (error:any) => {
+      this.mapPins = true;
     });
   }
 
@@ -83,6 +86,9 @@ export class ResponseMapPage extends BasePage {
             if (marker) {
               marker.addTo(map);
             }
+          },
+          (error:any) => {
+            this.logger.error(this, "ionViewWillEnter", "loadPinMarker", error);
           });
         }
         else {
@@ -90,9 +96,18 @@ export class ResponseMapPage extends BasePage {
             if (marker) {
               marker.addTo(map);
             }
+          },
+          (error:any) => {
+            this.logger.error(this, "ionViewWillEnter", "loadCircleMarker", error);
           });
         }
+      },
+      (error:any) => {
+        this.logger.error(this, "ionViewWillEnter", "loadLocation", error);
       });
+    },
+    (error:any) => {
+      this.logger.error(this, "ionViewWillEnter", "loadMap", error);
     });
   }
 

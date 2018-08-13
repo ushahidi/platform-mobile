@@ -85,28 +85,6 @@ export class ResponseListPage extends BasePage {
 
   ionViewDidLoad() {
     super.ionViewDidLoad();
-    this.events.subscribe(POST_DELETED, (post_id:number) => {
-      this.logger.info(this, 'Events', POST_DELETED, post_id);
-      this.loading = true;
-      this.posts = null;
-      this.loadPosts(true).then((loaded:any) => {
-        this.logger.info(this, 'Events', POST_DELETED, post_id, "Loaded");
-      },
-      (error:any) => {
-        this.logger.error(this, 'Events', POST_DELETED, post_id, "Failed", error);
-      });
-    });
-    this.events.subscribe(POST_UPDATED, (post_id:number) => {
-      this.logger.info(this, 'Events', POST_UPDATED, post_id);
-      this.loading = true;
-      this.posts = null;
-      this.loadPosts(true).then((loaded:any) => {
-        this.logger.info(this, 'Events', POST_UPDATED, post_id, "Loaded");
-      },
-      (error:any) => {
-        this.logger.error(this, 'Events', POST_UPDATED, post_id, "Failed", error);
-      });
-    });
     this.settings.getMapMarkerPins().then((mapPins:boolean) => {
       this.mapPins = mapPins;
     });
@@ -118,7 +96,44 @@ export class ResponseListPage extends BasePage {
       this.deployment = this.getParameter<Deployment>("deployment");
     }
     this.login = this.getParameter<Login>("login");
-    this.loadUpdates(null, true);
+    this.loadUpdates(null, true).then((loaded:any) => {
+      this.logger.info(this, 'ionViewWillEnter', POST_UPDATED, post_id, "Loaded");
+    },
+    (error:any) => {
+      this.logger.error(this, 'ionViewWillEnter', POST_UPDATED, post_id, "Failed", error);
+    });
+  }
+
+  ionViewDidEnter() {
+    super.ionViewDidEnter();
+    this.events.subscribe(POST_DELETED, (post_id:number) => {
+      this.logger.info(this, 'ionViewDidLoad', POST_DELETED, post_id);
+      this.loading = true;
+      this.posts = null;
+      this.loadPosts(true).then((loaded:any) => {
+        this.logger.info(this, 'ionViewDidLoad', POST_DELETED, post_id, "Loaded");
+      },
+      (error:any) => {
+        this.logger.error(this, 'ionViewDidLoad', POST_DELETED, post_id, "Failed", error);
+      });
+    });
+    this.events.subscribe(POST_UPDATED, (post_id:number) => {
+      this.logger.info(this, 'ionViewDidLoad', POST_UPDATED, post_id);
+      this.loading = true;
+      this.posts = null;
+      this.loadPosts(true).then((loaded:any) => {
+        this.logger.info(this, 'ionViewDidLoad', POST_UPDATED, post_id, "Loaded");
+      },
+      (error:any) => {
+        this.logger.error(this, 'ionViewDidLoad', POST_UPDATED, post_id, "Failed", error);
+      });
+    });
+  }
+
+  ionViewWillLeave() {
+    super.ionViewWillLeave();
+    this.events.unsubscribe(POST_DELETED);
+    this.events.unsubscribe(POST_UPDATED);
   }
 
   private loadUpdates(event:any=null, cache:boolean=false) {
@@ -183,7 +198,7 @@ export class ResponseListPage extends BasePage {
     }
   }
 
-  private loadPosts(cache:boolean=true):Promise<any> {
+  private loadPosts(cache:boolean=true):Promise<boolean> {
     if (cache && this.posts != null && this.posts.length >= this.limit) {
       this.logger.info(this, "loadPosts", "Cached", this.posts.length);
       return Promise.resolve();
@@ -197,7 +212,7 @@ export class ResponseListPage extends BasePage {
             this.posts = posts;
             this.pending = this.getPending(posts);
             this.logger.info(this, "loadPosts", "Posts", posts.length, "Pending", this.pending.length);
-            resolve();
+            resolve(true);
           },
           (error:any) => {
             this.logger.error(this, "loadPosts", "Failed", error);
@@ -495,11 +510,20 @@ export class ResponseListPage extends BasePage {
             this.loadPosts(false).then((filtered) => {
               loading.dismiss();
               this.loading = false;
+            },
+            (error:any) => {
+              loading.dismiss();
+              this.showToast(error);
+              this.loading = false;
             });
           }
           else {
             this.loadMarkers(false).then((filtered) => {
               this.loading = false;
+            },
+            (error:any) => {
+              this.loading = false;
+              this.showToast(error);
             });
           }
         }
@@ -854,11 +878,20 @@ export class ResponseListPage extends BasePage {
           this.loadPosts(true).then((cleared) => {
             loading.dismiss();
             this.loading = false;
+          },
+          (error:any) => {
+            loading.dismiss();
+            this.loading = false;
+            this.showToast(error);
           });
         }
         else {
           this.loadMarkers(true).then((cleared) => {
             this.loading = false;
+          },
+          (error:any) => {
+            this.loading = false;
+            this.showToast(error);
           });
         }
       },

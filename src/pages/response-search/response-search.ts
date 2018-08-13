@@ -70,6 +70,10 @@ export class ResponseSearchPage extends BasePage {
     this.database.saveFilter(this.deployment, this.filter).then(results => {
       this.hideModal({
         filter: this.filter });
+    },
+    (error:any) => {
+      this.logger.error(this, "onDone", error);
+      this.showToast(error);
     });
   }
 

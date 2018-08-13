@@ -116,6 +116,9 @@ export class InputLocationComponent {
     }
     this.loadCountries().then((countries:Country[]) => {
       this.countries = countries;
+    },
+    (error:any) => {
+      this.countries = [];
     });
   }
 
@@ -143,6 +146,9 @@ export class InputLocationComponent {
       if (this.countries == null || this.countries.length == 0) {
         this.loadCountries().then((countries:Country[]) => {
           this.countries = countries;
+        },
+        (error:any) => {
+          this.countries = [];
         });
       }
     }

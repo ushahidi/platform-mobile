@@ -129,7 +129,7 @@ export class DeploymentSearchPage extends BasePage {
       'DEPLOYMENT_ADD_EXISTS',
       'DEPLOYMENT_ADD_EXISTS_DESCRIPTION']).then((translations:string[]) => {
       let where = { domain: deployment.domain };
-      return this.database.getDeployments(where).then((deployments:Deployment[]) => {
+      this.database.getDeployments(where).then((deployments:Deployment[]) => {
         if (deployments && deployments.length > 0) {
           this.showAlert(translations[0], translations[1]);
         }
@@ -149,7 +149,7 @@ export class DeploymentSearchPage extends BasePage {
       'DEPLOYMENT_ADD_FAILURE_DESCRIPTION',
       'USER_LOGIN_FAILURE']).then((translations:string[]) => {
       let loading = this.showLoading(translations[0]);
-      return this.api.clientLogin(deployment).then((login:Login) => {
+      this.api.clientLogin(deployment).then((login:Login) => {
         this.logger.info(this, "loginDeployment", "Tokens", login);
         deployment.copyInto(login);
         this.api.getDeployment(deployment, false).then((details:Deployment) => {
