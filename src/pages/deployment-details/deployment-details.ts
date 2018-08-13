@@ -84,12 +84,19 @@ export class DeploymentDetailsPage extends BasePage {
         this.loadUpdates(false, null, loading).then((loaded) => {
           this.logger.info(this, "ionViewWillEnter", "Loaded");
           loading.dismiss();
+        },
+        (error:any) => {
+          this.logger.error(this, "ionViewWillEnter", "Failed", error);
+          loading.dismiss();
         });
       });
     }
     else {
       this.loadUpdates(true).then((loaded) => {
         this.logger.info(this, "ionViewWillEnter", "Loaded");
+      },
+      (error:any) => {
+        this.logger.error(this, "ionViewWillEnter", "Failed", error);
       });
     }
   }
@@ -117,7 +124,7 @@ export class DeploymentDetailsPage extends BasePage {
         }
         this.loaded = true;
       })
-      .catch((error) => {
+      .catch((error:any) => {
         this.logger.error(this, "loadUpdates", "Failed", error);
         if (event) {
           event.complete();
@@ -369,7 +376,7 @@ export class DeploymentDetailsPage extends BasePage {
             this.logger.event(this, "Deployments", "shared", this.deployment.website);
           }
         },
-        (error) => {
+        (error:any) => {
           this.showToast(error);
       });
     });
@@ -384,6 +391,10 @@ export class DeploymentDetailsPage extends BasePage {
         this.language.getTranslation("LOADING_").then((text:string) => {
           let loading = this.showLoading(text);
           this.loadUpdates(true, null, loading).then((loaded) => {
+            loading.dismiss();
+          },
+          (error:any) => {
+            this.logger.error(this, "userLogin", error);
             loading.dismiss();
           });
         });
@@ -400,6 +411,10 @@ export class DeploymentDetailsPage extends BasePage {
         this.language.getTranslation("LOADING_").then((text:string) => {
           let loading = this.showLoading(text);
           this.loadUpdates(true, null, loading).then((loaded) => {
+            loading.dismiss();
+          },
+          (error:any) => {
+            this.logger.error(this, "userSignup", error);
             loading.dismiss();
           });
         });
@@ -431,6 +446,7 @@ export class DeploymentDetailsPage extends BasePage {
             });
           },
           (error:any) => {
+            this.logger.error(this, "userLogout", "clientLogin", error);
             loading.dismiss();
             this.showAlert(translations[2], error);
           });
@@ -448,6 +464,9 @@ export class DeploymentDetailsPage extends BasePage {
     return new Promise((resolve, reject) => {
       this.database.removePosts(this.deployment).then((removed:any) => {
         resolve(removed);
+      },
+      (error:any) => {
+        reject(error);
       });
     });
   }
@@ -463,10 +482,10 @@ export class DeploymentDetailsPage extends BasePage {
           updates.push(this.database.saveForm(this.deployment, form));
         }
         Promise.all(updates).then(
-          (updated) => {
+          (updated:any) => {
             resolve(updated);
           },
-          (error) => {
+          (error:any) => {
             reject(error);
           });
       });
@@ -484,10 +503,10 @@ export class DeploymentDetailsPage extends BasePage {
           updates.push(this.database.saveStage(this.deployment, stage));
         }
         Promise.all(updates).then(
-          (updated) => {
+          (updated:any) => {
             resolve(updated);
           },
-          (error) => {
+          (error:any) => {
             reject(error);
           });
       });
@@ -505,10 +524,10 @@ export class DeploymentDetailsPage extends BasePage {
           updates.push(this.database.saveAttribute(this.deployment, attribute));
         }
         Promise.all(updates).then(
-          (updated) => {
+          (updated:any) => {
             resolve(updated);
           },
-          (error) => {
+          (error:any) => {
             reject(error);
           });
       });
@@ -526,10 +545,10 @@ export class DeploymentDetailsPage extends BasePage {
           updates.push(this.database.saveCollection(this.deployment, collection));
         }
         Promise.all(updates).then(
-          (updated) => {
+          (updated:any) => {
             resolve(updated);
           },
-          (error) => {
+          (error:any) => {
             reject(error);
           });
       });
