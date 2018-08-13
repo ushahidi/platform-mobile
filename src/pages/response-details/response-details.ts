@@ -300,54 +300,70 @@ export class ResponseDetailsPage extends BasePage {
 
   private addToCollection(post:Post, collection:Collection=null) {
     this.logger.info(this, "addToCollection");
-    if (collection != null) {
-      let loading = this.showLoading("Adding...");
-      this.api.addPostToCollection(this.deployment, post, collection).then(
-        (results:any) => {
-          loading.dismiss();
-          this.showToast("Added To Collection");
-          this.logger.event(this, "Posts", "collected", post.url);
-        },
-        (error:any) => {
-          loading.dismiss();
-          this.showAlert("Problem Adding To Collection", error);
-      })
-    }
-    else if (this.deployment.collections != null) {
-      let buttons = [];
-      for (let index in this.deployment.collections) {
-        let collection:Collection = this.deployment.collections[index];
-        buttons.push({
-          text: collection.name,
-          handler:() => this.addToCollection(post, collection)
-        });
-      }
-      buttons.push({
-        text: 'Cancel',
-        role: 'cancel'
-      });
-      this.showActionSheet("Select Collection", buttons);
-    }
+    this.language.getTranslations([
+      'COLLECTION_ADDING_',
+      'COLLECTION_ADD_SUCCESS',
+      'COLLECTION_ADD_FAILURE',
+      'ACTION_CANCEL',
+      'COLLECTION_SELECTION']).then((translations:string[]) => {
+        if (collection != null) {
+          let loading = this.showLoading(translations[0]);
+          this.api.addPostToCollection(this.deployment, post, collection).then(
+            (results:any) => {
+              loading.dismiss();
+              this.showToast(translations[1]);
+              this.logger.event(this, "Posts", "collected", post.url);
+            },
+            (error:any) => {
+              loading.dismiss();
+              this.showAlert(translations[2], error);
+          })
+        }
+        else if (this.deployment.collections != null) {
+          let buttons = [];
+          for (let index in this.deployment.collections) {
+            let collection:Collection = this.deployment.collections[index];
+            buttons.push({
+              text: collection.name,
+              handler:() => this.addToCollection(post, collection)
+            });
+          }
+          buttons.push({
+            text: translations[3],
+            role: 'cancel'
+          });
+          this.showActionSheet(translations[4], buttons);
+        }
+    });
   }
 
   private draftResponse(post:Post) {
     this.logger.info(this, "draftResponse");
-    let loading = this.showLoading("Updating...");
-    let changes = { status: "draft" };
-    this.api.updatePost(this.deployment, post, changes).then(
-      (updated:any) => {
-        post.status = "draft";
-        this.database.savePost(this.deployment, post).then(saved => {
-          loading.dismiss();
-          this.events.publish(POST_UPDATED, post.id);
-          this.showToast("Responsed put under review");
-          this.logger.event(this, "Posts", "drafted", this.post.url);
-        });
-      },
-      (error:any) => {
-        loading.dismiss();
-        this.showAlert("Problem Updating Response", error);
-      });
+    this.language.getTranslations([
+      'RESPONSE_UPDATING_',
+      'RESPONSE_UPDATE_SUCCESS',
+      'RESPONSE_UPDATE_FAILURE']).then((translations:string[]) => {
+        let loading = this.showLoading(translations[0]);
+        let changes = { status: "draft" };
+        this.api.updatePost(this.deployment, post, changes).then(
+          (updated:any) => {
+            post.status = "draft";
+            this.database.savePost(this.deployment, post).then(saved => {
+              loading.dismiss();
+              this.events.publish(POST_UPDATED, post.id);
+              this.showToast(translations[1]);
+              this.logger.event(this, "Posts", "drafted", post.url);
+            },
+            (error:any) => {
+              loading.dismiss();
+              this.showAlert(translations[2], error);
+            });
+          },
+          (error:any) => {
+            loading.dismiss();
+            this.showAlert(translations[2], error);
+          });
+    });
   }
 
   private archiveResponse(post:Post) {
@@ -366,6 +382,10 @@ export class ResponseDetailsPage extends BasePage {
             this.events.publish(POST_UPDATED, post.id);
             this.showToast(translations[1]);
             this.logger.event(this, "Posts", "archived", this.post.url);
+          },
+          (error:any) => {
+            loading.dismiss();
+            this.showAlert(translations[2], error);
           });
         },
         (error:any) => {
@@ -388,9 +408,13 @@ export class ResponseDetailsPage extends BasePage {
           post.status = "published";
           this.database.savePost(this.deployment, post).then(saved => {
             loading.dismiss();
-            this.events.publish('post:updated', post.id);
+            this.events.publish(POST_UPDATED, post.id);
             this.showToast(translations[1]);
             this.logger.event(this, "Posts", "published", this.post.url);
+          },
+          (error:any) => {
+            loading.dismiss();
+            this.showAlert(translations[2], error);
           });
         },
         (error:any) => {
@@ -435,7 +459,8 @@ export class ResponseDetailsPage extends BasePage {
       'RESPONSE_DELETE_SUCCESS',
       'RESPONSE_DELETE_FAILURE',
       'RESPONSE_DELETE_CONFIRM',
-      'RESPONSE_DELETE_CONFIRM_DESCRIPTION']).then((translations:string[]) => {
+      'RESPONSE_DELETE_CONFIRM_DESCRIPTION',
+      'ACTION_CANCEL']).then((translations:string[]) => {
         let buttons = [
            {
              text: translations[0],
@@ -459,7 +484,7 @@ export class ResponseDetailsPage extends BasePage {
              }
            },
            {
-             text: 'Cancel',
+             text: translations[6],
              role: 'cancel',
              handler: () => {
                this.logger.info(this, "deleteResponse", 'Cancel');
