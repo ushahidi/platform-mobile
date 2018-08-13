@@ -25,12 +25,12 @@
   </button>
   <ion-row margin-left margin-right margin-top margin-bottom *ngIf="(authorized == false || located == false) && defaulted == false">
     <ion-col col-12 class="street">
-      <ion-input type="text" [placeholder]="'INPUT_LOCATION_STREET' | translate" [(ngModel)]="street" (blur)="streetChanged($event)"></ion-input>
+      <ion-input type="text" [placeholder]="'INPUT_LOCATION_STREET' | translate" [(ngModel)]="street" (ionBlur)="streetChanged($event)"></ion-input>
     </ion-col>
   </ion-row>
   <ion-row margin-left margin-right margin-top margin-bottom *ngIf="(authorized == false || located == false) && defaulted == false">
     <ion-col col-12 class="city">
-      <ion-input type="text" [placeholder]="'INPUT_LOCATION_CITY' | translate" [(ngModel)]="city" (blur)="cityChanged($event)"></ion-input>
+      <ion-input type="text" [placeholder]="'INPUT_LOCATION_CITY' | translate" [(ngModel)]="city" (ionBlur)="cityChanged($event)"></ion-input>
     </ion-col>
   </ion-row>
   <ion-row margin-left margin-right margin-bottom *ngIf="(authorized == false || located == false) && defaulted == false">
