@@ -97,10 +97,10 @@ export class ResponseListPage extends BasePage {
     }
     this.login = this.getParameter<Login>("login");
     this.loadUpdates(null, true).then((loaded:any) => {
-      this.logger.info(this, 'ionViewWillEnter', POST_UPDATED, post_id, "Loaded");
+      this.logger.info(this, 'ionViewWillEnter', "loadUpdates", "Loaded");
     },
     (error:any) => {
-      this.logger.error(this, 'ionViewWillEnter', POST_UPDATED, post_id, "Failed", error);
+      this.logger.error(this, 'ionViewWillEnter', "loadUpdates", "Failed", error);
     });
   }
 
@@ -201,7 +201,7 @@ export class ResponseListPage extends BasePage {
   private loadPosts(cache:boolean=true):Promise<boolean> {
     if (cache && this.posts != null && this.posts.length >= this.limit) {
       this.logger.info(this, "loadPosts", "Cached", this.posts.length);
-      return Promise.resolve();
+      return Promise.resolve(true);
     }
     else {
       this.logger.info(this, "loadPosts", "Cache", cache);
