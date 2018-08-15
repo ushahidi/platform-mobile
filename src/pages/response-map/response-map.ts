@@ -70,6 +70,7 @@ export class ResponseMapPage extends BasePage {
 
   ionViewWillEnter() {
     super.ionViewWillEnter();
+    this.loadStatusBar(true, false);
     this.deployment = this.getParameter<Deployment>("deployment");
     this.modal = this.getParameter<boolean>("modal");
     this.title = this.getParameter<string>("title");

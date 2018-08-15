@@ -51,6 +51,7 @@ export class DeploymentSettingsPage extends BasePage {
 
   ionViewWillEnter() {
     super.ionViewWillEnter();
+    this.loadStatusBar(true, false);
     this.deployment = this.getParameter<Deployment>("deployment");
   }
 

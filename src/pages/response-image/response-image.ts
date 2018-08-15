@@ -42,6 +42,7 @@ export class ResponseImagePage extends BasePage {
 
   ionViewWillEnter() {
     super.ionViewWillEnter();
+    this.loadStatusBar(true, false);
     this.deployment = this.getParameter<Deployment>("deployment");
     this.post = this.getParameter<Post>("post");
     this.image = this.getParameter<string>("image");

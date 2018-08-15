@@ -46,6 +46,7 @@ export class ResponseSearchPage extends BasePage {
 
   ionViewWillEnter() {
     super.ionViewWillEnter();
+    this.loadStatusBar(true, false);
     this.deployment = this.getParameter<Deployment>("deployment");
     this.filter = this.getParameter<Filter>("filter");
     if (this.filter == null) {

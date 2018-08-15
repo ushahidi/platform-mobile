@@ -70,6 +70,7 @@ export class ResponseAddPage extends BasePage {
 
   ionViewWillEnter() {
     super.ionViewWillEnter();
+    this.loadStatusBar(true, false);
     this.loadSettings();
   }
 
@@ -253,36 +254,42 @@ export class ResponseAddPage extends BasePage {
     this.logger.info(this, "createPost", post);
     return new Promise((resolve, reject) => {
       this.logger.info(this, "createPost", "Posting...");
-      this.api.createPostWithMedia(this.deployment, post).then(
-        (posted:any) => {
-          this.logger.info(this, "createPost", "Posted", posted);
-          let saves = [];
-          post.pending = false;
-          if (posted.id && posted.id > 0) {
-            post.id = posted.id;
-          }
-          if (posted.status && posted.status.length > 0) {
-            post.status = posted.status;
-          }
-          saves.push(this.database.savePost(this.deployment, post));
-          for (let value of post.values) {
-            value.post_id = post.id;
-            saves.push(this.database.saveValue(this.deployment, value));
-          }
-          Promise.all(saves).then(
-            (saved:any) => {
-              this.logger.info(this, "createPost", "Saved", saved);
-              resolve(post);
-            },
-            (error:any) => {
-              this.logger.error(this, "createPost", "Failed", error);
-              reject(error);
-            });
-        },
-        (error:any) => {
-          this.logger.error(this, "createPost", "Failed", error);
-          reject(error);
-        });
+      this.api.userOrClientLogin(this.deployment, this.offline).then((login:Login) => {
+        this.api.createPostWithMedia(this.deployment, post).then(
+          (posted:any) => {
+            this.logger.info(this, "createPost", "Posted", posted);
+            let saves = [];
+            post.pending = false;
+            if (posted.id && posted.id > 0) {
+              post.id = posted.id;
+            }
+            if (posted.status && posted.status.length > 0) {
+              post.status = posted.status;
+            }
+            saves.push(this.database.savePost(this.deployment, post));
+            for (let value of post.values) {
+              value.post_id = post.id;
+              saves.push(this.database.saveValue(this.deployment, value));
+            }
+            Promise.all(saves).then(
+              (saved:any) => {
+                this.logger.info(this, "createPost", "Saved", saved);
+                resolve(post);
+              },
+              (error:any) => {
+                this.logger.error(this, "createPost", "Failed", error);
+                reject(error);
+              });
+          },
+          (error:any) => {
+            this.logger.error(this, "createPost", "Failed", error);
+            reject(error);
+          });
+      },
+      (error:any) => {
+        this.logger.error(this, "createPost", "Failed", error);
+        reject(error);
+      });
     });
   }
 
@@ -290,29 +297,35 @@ export class ResponseAddPage extends BasePage {
     this.logger.info(this, "updatePost", post);
     return new Promise((resolve, reject) => {
       this.logger.info(this, "updatePost", "Updating...");
-      this.api.updatePostWithMedia(this.deployment, post).then(
-        (updated:any) => {
-          this.logger.info(this, "updatePost", "Updated", updated);
-          let saves = [
-            this.database.savePost(this.deployment, post)
-          ];
-          for (let value of post.values) {
-            saves.push(this.database.saveValue(this.deployment, value));
-          }
-          Promise.all(saves).then(
-            (saved:any) => {
-              this.logger.info(this, "updatePost", "Saved", saved);
-              resolve(post);
-            },
-            (error:any) => {
-              this.logger.error(this, "updatePost", "Failed", error);
-              reject(error);
-            });
-        },
-        (error:any) => {
-          this.logger.error(this, "updatePost", "Failed", error);
-          reject(error);
-        });
+      this.api.userOrClientLogin(this.deployment, this.offline).then((login:Login) => {
+        this.api.updatePostWithMedia(this.deployment, post).then(
+          (updated:any) => {
+            this.logger.info(this, "updatePost", "Updated", updated);
+            let saves = [
+              this.database.savePost(this.deployment, post)
+            ];
+            for (let value of post.values) {
+              saves.push(this.database.saveValue(this.deployment, value));
+            }
+            Promise.all(saves).then(
+              (saved:any) => {
+                this.logger.info(this, "updatePost", "Saved", saved);
+                resolve(post);
+              },
+              (error:any) => {
+                this.logger.error(this, "updatePost", "Failed", error);
+                reject(error);
+              });
+          },
+          (error:any) => {
+            this.logger.error(this, "updatePost", "Failed", error);
+            reject(error);
+          });
+      },
+      (error:any) => {
+        this.logger.error(this, "updatePost", "Failed", error);
+        reject(error);
+      });
     });
   }
 

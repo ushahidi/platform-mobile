@@ -141,6 +141,7 @@ export class ResponseListPage extends BasePage {
     this.loading = true;
     this.refreshing = event != null;
     return Promise.resolve()
+      .then(() => { return this.loadLogin(cache); })
       .then(() => { return this.loadFilters(cache); })
       .then(() => { return this.loadPosts(cache); })
       .then(() => { return this.loadUsers(cache); })
@@ -172,6 +173,28 @@ export class ResponseListPage extends BasePage {
             }
         });
       });
+  }
+
+  private loadLogin(cache:boolean=true):Promise<Login> {
+    this.logger.info(this, "loadLogin", cache);
+    if (cache && this.login) {
+      this.logger.info(this, "loadLogin", "Cached", this.login);
+      return Promise.resolve(this.login);
+    }
+    else {
+      return new Promise((resolve, reject) => {
+        this.api.userOrClientLogin(this.deployment, this.offline).then(
+          (login:Login) => {
+            this.logger.info(this, "loadLogin", "Loaded", login);
+            this.login = login;
+            resolve(login);
+          },
+          (error:any) => {
+            this.logger.error(this, "loadLogin", "Failed", error);
+            reject(error);
+          });
+      });
+    }
   }
 
   private loadFilters(cache:boolean=true):Promise<any> {
@@ -667,16 +690,22 @@ export class ResponseListPage extends BasePage {
       this.logger.info(this, "addToCollection");
       if (collection != null) {
         let loading = this.showLoading(translations[0]);
-        this.api.addPostToCollection(this.deployment, post, collection).then(
-          (results:any) => {
-            loading.dismiss();
-            this.showToast(translations[1]);
-            this.logger.event(this, "Posts", "collected", post.url);
-          },
-          (error:any) => {
-            loading.dismiss();
-            this.showAlert(translations[2], error);
-        })
+        this.api.userOrClientLogin(this.deployment, this.offline).then((login:Login) => {
+          this.api.addPostToCollection(this.deployment, post, collection).then(
+            (results:any) => {
+              loading.dismiss();
+              this.showToast(translations[1]);
+              this.logger.event(this, "Posts", "collected", post.url);
+            },
+            (error:any) => {
+              loading.dismiss();
+              this.showAlert(translations[2], error);
+            });
+        },
+        (error:any) => {
+          loading.dismiss();
+          this.showAlert(translations[2], error);
+        });
       }
       else if (this.deployment.collections != null) {
         let buttons = [];
@@ -704,23 +733,29 @@ export class ResponseListPage extends BasePage {
       'RESPONSE_UPDATE_FAILURE']).then((translations:string[]) => {
       let loading = this.showLoading(translations[0]);
       let changes = { status: "draft" };
-      this.api.updatePost(this.deployment, post, changes).then(
-        (updated:any) => {
-          post.status = "draft";
-          this.database.savePost(this.deployment, post).then(saved => {
-            loading.dismiss();
-            this.showToast(translations[1]);
-            this.logger.event(this, "Posts", "drafted", post.url);
+      this.api.userOrClientLogin(this.deployment, this.offline).then((login:Login) => {
+        this.api.updatePost(this.deployment, post, changes).then(
+          (updated:any) => {
+            post.status = "draft";
+            this.database.savePost(this.deployment, post).then(saved => {
+              loading.dismiss();
+              this.showToast(translations[1]);
+              this.logger.event(this, "Posts", "drafted", post.url);
+            },
+            (error:any) => {
+              loading.dismiss();
+              this.showAlert(translations[2], error);
+            });
           },
           (error:any) => {
             loading.dismiss();
             this.showAlert(translations[2], error);
           });
-        },
-        (error:any) => {
-          loading.dismiss();
-          this.showAlert(translations[2], error);
-        });
+      },
+      (error:any) => {
+        loading.dismiss();
+        this.showAlert(translations[2], error);
+      });
     });
   }
 
@@ -732,23 +767,29 @@ export class ResponseListPage extends BasePage {
       this.logger.info(this, "archiveResponse");
       let loading = this.showLoading(translations[0]);
       let changes = { status: "archived" };
-      this.api.updatePost(this.deployment, post, changes).then(
-        (updated:any) => {
-          post.status = "archived";
-          this.database.savePost(this.deployment, post).then(saved => {
-            loading.dismiss();
-            this.showToast(translations[1]);
-            this.logger.event(this, "Posts", "archived", post.url);
+      this.api.userOrClientLogin(this.deployment, this.offline).then((login:Login) => {
+        this.api.updatePost(this.deployment, post, changes).then(
+          (updated:any) => {
+            post.status = "archived";
+            this.database.savePost(this.deployment, post).then(saved => {
+              loading.dismiss();
+              this.showToast(translations[1]);
+              this.logger.event(this, "Posts", "archived", post.url);
+            },
+            (error:any) => {
+              loading.dismiss();
+              this.showAlert(translations[2], error);
+            });
           },
           (error:any) => {
             loading.dismiss();
             this.showAlert(translations[2], error);
           });
-        },
-        (error:any) => {
-          loading.dismiss();
-          this.showAlert(translations[2], error);
-        });
+      },
+      (error:any) => {
+        loading.dismiss();
+        this.showAlert(translations[2], error);
+      });
     });
   }
 
@@ -760,23 +801,29 @@ export class ResponseListPage extends BasePage {
       this.logger.info(this, "publishResponse");
       let loading = this.showLoading(translations[0]);
       let changes = { status: "published" };
-      this.api.updatePost(this.deployment, post, changes).then(
-        (updated:any) => {
-          post.status = "published";
-          this.database.savePost(this.deployment, post).then(saved => {
-            loading.dismiss();
-            this.showToast(translations[1]);
-            this.logger.event(this, "Posts", "published", post.url);
+      this.api.userOrClientLogin(this.deployment, this.offline).then((login:Login) => {
+        this.api.updatePost(this.deployment, post, changes).then(
+          (updated:any) => {
+            post.status = "published";
+            this.database.savePost(this.deployment, post).then(saved => {
+              loading.dismiss();
+              this.showToast(translations[1]);
+              this.logger.event(this, "Posts", "published", post.url);
+            },
+            (error:any) => {
+              loading.dismiss();
+              this.showAlert(translations[2], error);
+            });
           },
           (error:any) => {
             loading.dismiss();
             this.showAlert(translations[2], error);
           });
-        },
-        (error:any) => {
-          loading.dismiss();
-          this.showAlert(translations[2], error);
-        });
+      },
+      (error:any) => {
+        loading.dismiss();
+        this.showAlert(translations[2], error);
+      });
     });
   }
 
@@ -832,26 +879,32 @@ export class ResponseListPage extends BasePage {
              handler: () => {
                this.logger.info(this, "deleteResponse", 'Delete');
                let loading = this.showLoading(translations[1]);
-               this.api.deletePost(this.deployment, post).then(
-                 (results:any) => {
-                   loading.dismiss();
-                   this.database.removePost(this.deployment, post).then(removed => {
-                     let postIndex = this.posts.indexOf(post, 0);
-                     if (postIndex > -1) {
-                       this.posts.splice(postIndex, 1);
-                     }
-                     let pendingIndex = this.pending.indexOf(post, 0);
-                     if (pendingIndex > -1) {
-                       this.pending.splice(pendingIndex, 1);
-                     }
-                     this.showToast(translations[2]);
-                     this.logger.event(this, "Posts", "deleted", post.url);
-                  });
-                 },
-                 (error:any) => {
-                   loading.dismiss();
-                   this.showAlert(translations[3], error);
-                 });
+               this.api.userOrClientLogin(this.deployment, this.offline).then((login:Login) => {
+                 this.api.deletePost(this.deployment, post).then(
+                   (results:any) => {
+                     loading.dismiss();
+                     this.database.removePost(this.deployment, post).then(removed => {
+                       let postIndex = this.posts.indexOf(post, 0);
+                       if (postIndex > -1) {
+                         this.posts.splice(postIndex, 1);
+                       }
+                       let pendingIndex = this.pending.indexOf(post, 0);
+                       if (pendingIndex > -1) {
+                         this.pending.splice(pendingIndex, 1);
+                       }
+                       this.showToast(translations[2]);
+                       this.logger.event(this, "Posts", "deleted", post.url);
+                    });
+                   },
+                   (error:any) => {
+                     loading.dismiss();
+                     this.showAlert(translations[3], error);
+                   });
+               },
+               (error:any) => {
+                 loading.dismiss();
+                 this.showAlert(translations[3], error);
+               });
              }
            },
            {

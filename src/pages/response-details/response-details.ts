@@ -308,16 +308,22 @@ export class ResponseDetailsPage extends BasePage {
       'COLLECTION_SELECTION']).then((translations:string[]) => {
         if (collection != null) {
           let loading = this.showLoading(translations[0]);
-          this.api.addPostToCollection(this.deployment, post, collection).then(
-            (results:any) => {
-              loading.dismiss();
-              this.showToast(translations[1]);
-              this.logger.event(this, "Posts", "collected", post.url);
-            },
-            (error:any) => {
-              loading.dismiss();
-              this.showAlert(translations[2], error);
-          })
+          this.api.userOrClientLogin(this.deployment, this.offline).then((login:Login) => {
+            this.api.addPostToCollection(this.deployment, post, collection).then(
+              (results:any) => {
+                loading.dismiss();
+                this.showToast(translations[1]);
+                this.logger.event(this, "Posts", "collected", post.url);
+              },
+              (error:any) => {
+                loading.dismiss();
+                this.showAlert(translations[2], error);
+              });
+          },
+          (error:any) => {
+            loading.dismiss();
+            this.showAlert(translations[2], error);
+          });
         }
         else if (this.deployment.collections != null) {
           let buttons = [];
@@ -345,24 +351,30 @@ export class ResponseDetailsPage extends BasePage {
       'RESPONSE_UPDATE_FAILURE']).then((translations:string[]) => {
         let loading = this.showLoading(translations[0]);
         let changes = { status: "draft" };
-        this.api.updatePost(this.deployment, post, changes).then(
-          (updated:any) => {
-            post.status = "draft";
-            this.database.savePost(this.deployment, post).then(saved => {
-              loading.dismiss();
-              this.events.publish(POST_UPDATED, post.id);
-              this.showToast(translations[1]);
-              this.logger.event(this, "Posts", "drafted", post.url);
+        this.api.userOrClientLogin(this.deployment, this.offline).then((login:Login) => {
+          this.api.updatePost(this.deployment, post, changes).then(
+            (updated:any) => {
+              post.status = "draft";
+              this.database.savePost(this.deployment, post).then(saved => {
+                loading.dismiss();
+                this.events.publish(POST_UPDATED, post.id);
+                this.showToast(translations[1]);
+                this.logger.event(this, "Posts", "drafted", post.url);
+              },
+              (error:any) => {
+                loading.dismiss();
+                this.showAlert(translations[2], error);
+              });
             },
             (error:any) => {
               loading.dismiss();
               this.showAlert(translations[2], error);
             });
-          },
-          (error:any) => {
-            loading.dismiss();
-            this.showAlert(translations[2], error);
-          });
+        },
+        (error:any) => {
+          loading.dismiss();
+          this.showAlert(translations[2], error);
+        });
     });
   }
 
@@ -374,24 +386,30 @@ export class ResponseDetailsPage extends BasePage {
       'RESPONSE_ARCHIVE_FAILURE']).then((translations:string[]) => {
       let loading = this.showLoading(translations[0]);
       let changes = { status: "archived" };
-      this.api.updatePost(this.deployment, post, changes).then(
-        (updated:any) => {
-          post.status = "archived";
-          this.database.savePost(this.deployment, post).then(saved => {
-            loading.dismiss();
-            this.events.publish(POST_UPDATED, post.id);
-            this.showToast(translations[1]);
-            this.logger.event(this, "Posts", "archived", this.post.url);
+      this.api.userOrClientLogin(this.deployment, this.offline).then((login:Login) => {
+        this.api.updatePost(this.deployment, post, changes).then(
+          (updated:any) => {
+            post.status = "archived";
+            this.database.savePost(this.deployment, post).then(saved => {
+              loading.dismiss();
+              this.events.publish(POST_UPDATED, post.id);
+              this.showToast(translations[1]);
+              this.logger.event(this, "Posts", "archived", this.post.url);
+            },
+            (error:any) => {
+              loading.dismiss();
+              this.showAlert(translations[2], error);
+            });
           },
           (error:any) => {
             loading.dismiss();
             this.showAlert(translations[2], error);
           });
-        },
-        (error:any) => {
-          loading.dismiss();
-          this.showAlert(translations[2], error);
-        });
+      },
+      (error:any) => {
+        loading.dismiss();
+        this.showAlert(translations[2], error);
+      });
     });
   }
 
@@ -403,24 +421,30 @@ export class ResponseDetailsPage extends BasePage {
       'RESPONSE_PUBLISH_FAILURE']).then((translations:string[]) => {
       let loading = this.showLoading(translations[0]);
       let changes = { status: "published" };
-      this.api.updatePost(this.deployment, post, changes).then(
-        (updated:any) => {
-          post.status = "published";
-          this.database.savePost(this.deployment, post).then(saved => {
-            loading.dismiss();
-            this.events.publish(POST_UPDATED, post.id);
-            this.showToast(translations[1]);
-            this.logger.event(this, "Posts", "published", this.post.url);
+      this.api.userOrClientLogin(this.deployment, this.offline).then((login:Login) => {
+        this.api.updatePost(this.deployment, post, changes).then(
+          (updated:any) => {
+            post.status = "published";
+            this.database.savePost(this.deployment, post).then(saved => {
+              loading.dismiss();
+              this.events.publish(POST_UPDATED, post.id);
+              this.showToast(translations[1]);
+              this.logger.event(this, "Posts", "published", this.post.url);
+            },
+            (error:any) => {
+              loading.dismiss();
+              this.showAlert(translations[2], error);
+            });
           },
           (error:any) => {
             loading.dismiss();
             this.showAlert(translations[2], error);
           });
-        },
-        (error:any) => {
-          loading.dismiss();
-          this.showAlert(translations[2], error);
-        });
+      },
+      (error:any) => {
+        loading.dismiss();
+        this.showAlert(translations[2], error);
+      });
     });
   }
 
@@ -468,19 +492,25 @@ export class ResponseDetailsPage extends BasePage {
              handler: () => {
                this.logger.info(this, "deleteResponse", 'Delete');
                let loading = this.showLoading(translations[1]);
-               this.api.deletePost(this.deployment, post).then(
-                 (results:any) => {
-                   loading.dismiss();
-                   this.database.removePost(this.deployment, post).then(removed => {
-                     this.showToast(translations[2]);
-                     this.logger.event(this, "Posts", "deleted", post.url);
-                     this.closePage();
-                  });
-                 },
-                 (error:any) => {
-                   loading.dismiss();
-                   this.showAlert(translations[3], error);
-                 });
+               this.api.userOrClientLogin(this.deployment, this.offline).then((login:Login) => {
+                 this.api.deletePost(this.deployment, post).then(
+                   (results:any) => {
+                     loading.dismiss();
+                     this.database.removePost(this.deployment, post).then(removed => {
+                       this.showToast(translations[2]);
+                       this.logger.event(this, "Posts", "deleted", post.url);
+                       this.closePage();
+                    });
+                   },
+                   (error:any) => {
+                     loading.dismiss();
+                     this.showAlert(translations[3], error);
+                   });
+               },
+               (error:any) => {
+                 loading.dismiss();
+                 this.showAlert(translations[3], error);
+               });
              }
            },
            {
