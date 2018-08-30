@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="11201" id="com.ushahidi.mobile" ios-CFBundleVersion="1.12.1" version="1.12" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-versionCode="11203" id="com.ushahidi.mobile" ios-CFBundleVersion="1.12.3" version="1.12" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Ushahidi</name>
     <description>Ushahidi Mobile</description>
     <author email="support@ushahidi.com" href="https://www.ushahidi.com/">Ushahidi</author>
@@ -197,7 +197,7 @@
     <plugin name="cordova-plugin-splashscreen" spec="^4.1.0" />
     <plugin name="cordova-plugin-whitelist" spec="^1.3.3" />
     <plugin name="cordova-plugin-x-socialsharing" spec="^5.4.1" />
-    <plugin name="cordova-sqlite-storage" spec="^2.3.3" />
+    <plugin name="cordova-sqlite-storage" spec="^2.4.0" />
     <plugin name="cordova.plugins.diagnostic" spec="^3.9.2" />
     <plugin name="ionic-plugin-keyboard" spec="^2.2.1" />
     <plugin name="cordova-plugin-themeablebrowser" spec="^0.2.17" />

@@ -23,7 +23,6 @@ import { Tag } from '../models/tag';
 import { HttpService } from '../providers/http-service';
 import { LoggerService } from '../providers/logger-service';
 import { DatabaseService } from '../providers/database-service';
-import { VimeoService } from '../providers/vimeo-service';
 
 import { USHAHIDI_CLIENT_ID, USHAHIDI_CLIENT_SECRET } from '../constants/secrets';
 
@@ -41,7 +40,6 @@ export class ApiService extends HttpService {
     protected http:HTTP,
     protected file:File,
     protected transfer:FileTransfer,
-    protected vimeo:VimeoService,
     protected logger:LoggerService,
     protected storage: NativeStorage,
     protected database:DatabaseService,
@@ -705,9 +703,6 @@ export class ApiService extends HttpService {
         if (value.hasPendingImage()) {
           uploads.push(this.uploadImage(deployment, post, value));
         }
-        else if (value.hasPendingVideo()) {
-          uploads.push(this.uploadVideo(deployment, post, value));
-        }
         else if (value.hasPendingAddress()) {
           uploads.push(this.geocodeAddress(deployment, post, value));
         }
@@ -758,9 +753,6 @@ export class ApiService extends HttpService {
         if (value.hasPendingImage()) {
           uploads.push(this.uploadImage(deployment, post, value));
         }
-        else if (value.hasPendingVideo()) {
-          uploads.push(this.uploadVideo(deployment, post, value));
-        }
         else if (value.hasPendingAddress()) {
           uploads.push(this.geocodeAddress(deployment, post, value));
         }
@@ -787,28 +779,6 @@ export class ApiService extends HttpService {
         resolve(data);
       },
       (error:any) => {
-        reject(error);
-      });
-    });
-  }
-
-  public uploadVideo(deployment:Deployment, post:Post, value:Value):Promise<string> {
-    return new Promise((resolve, reject) => {
-      let file:string = value.value;
-      this.logger.info(this, "uploadVideo", file);
-      this.vimeo.uploadVideo(file, post.title, post.description).then((url:string) => {
-        this.logger.info(this, "uploadVideo", file, url);
-        value.value = url;
-        this.database.saveValue(deployment, value).then(
-          (saved:any) => {
-            resolve(url);
-          },
-          (error:any) => {
-            reject(error);
-          });
-      },
-      (error:any) => {
-        this.logger.error(this, "uploadVideo", file, error);
         reject(error);
       });
     });

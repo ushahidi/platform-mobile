@@ -89,7 +89,6 @@ import { LoggerService } from '../providers/logger-service';
 import { ApiService } from '../providers/api-service';
 import { DatabaseService } from '../providers/database-service';
 import { CacheService } from '../providers/cache-service';
-import { VimeoService } from '../providers/vimeo-service';
 import { LanguageService } from '../providers/language-service';
 import { SettingsService } from '../providers/settings-service';
 
@@ -246,7 +245,6 @@ export class CustomErrorHandler extends IonicErrorHandler implements ErrorHandle
     { provide: NativeStorage, useClass: NativeStorage },
     { provide: ScreenOrientation, useClass: ScreenOrientation },
     { provide: ApiService, useClass: ApiService },
-    { provide: VimeoService, useClass: VimeoService },
     { provide: CacheService, useClass: CacheService },
     { provide: LoggerService, useClass: LoggerService },
     { provide: DatabaseService, useClass: DatabaseService },
