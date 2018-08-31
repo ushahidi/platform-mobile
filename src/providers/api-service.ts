@@ -155,7 +155,8 @@ export class ApiService extends HttpService {
         let login:Login = <Login> {
           username: username,
           access_token: data.access_token,
-          refresh_token: data.refresh_token };
+          refresh_token: data.refresh_token
+        };
         this.storage.setItem(deployment.website, JSON.stringify(login)).then((data:any) => {
           this.getUser(deployment, "me").then((user:User) => {
             login.user_id = user.id;
@@ -215,6 +216,9 @@ export class ApiService extends HttpService {
       this.httpPost(url, null, params).then((data:any) => {
         this.logger.info(this, "userRefresh", data);
         login.access_token = data.access_token;
+        if (data.refresh_token) {
+          login.refresh_token = data.refresh_token;
+        }
         this.storage.setItem(deployment.website, JSON.stringify(login)).then((data:any) => {
           resolve(login);
         },
