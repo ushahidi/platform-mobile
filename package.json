@@ -31,10 +31,9 @@
     "@ionic-native/diagnostic": "^4.4.0",
     "@ionic-native/file": "^4.4.0",
     "@ionic-native/file-path": "^4.4.0",
-    "@ionic-native/file-transfer": "^4.4.0",
     "@ionic-native/geolocation": "^4.4.0",
     "@ionic-native/google-analytics": "^4.4.0",
-    "@ionic-native/http": "^4.4.0",
+    "@ionic-native/http": "^4.12.2",
     "@ionic-native/is-debug": "^4.4.0",
     "@ionic-native/keyboard": "^4.4.0",
     "@ionic-native/media-capture": "^4.4.0",
@@ -63,7 +62,6 @@
     "cordova-plugin-device": "^1.1.7",
     "cordova-plugin-email": "^1.2.7",
     "cordova-plugin-file": "^6.0.1",
-    "cordova-plugin-file-transfer": "^1.7.1",
     "cordova-plugin-filepath": "^1.4.2",
     "cordova-plugin-geolocation": "^2.4.3",
     "cordova-plugin-google-analytics": "^1.8.6",
@@ -98,7 +96,7 @@
     "zone.js": "^0.8.18"
   },
   "devDependencies": {
-    "@ionic/app-scripts": "3.1.8",
+    "@ionic/app-scripts": "3.2.0",
     "typescript": "2.4.2"
   },
   "cordovaPlatforms": [
@@ -121,7 +119,6 @@
       "cordova-plugin-device": {},
       "cordova-plugin-email": {},
       "cordova-plugin-file": {},
-      "cordova-plugin-file-transfer": {},
       "cordova-plugin-filepath": {},
       "cordova-plugin-geolocation": {
         "GEOLOCATION_USAGE_DESCRIPTION": "This app would like to access your location, so you can include it in your reports."

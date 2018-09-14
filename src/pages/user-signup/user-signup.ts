@@ -69,7 +69,48 @@ export class UserSignupPage extends BasePage {
     let name = this.name.value.toString();
     let email = this.email.value.toString();
     let password = this.password.value.toString();
-    if (name.length > 0 && email.length > 0 && password.length > 0) {
+    let confirm = this.password.value.toString();
+    if (name.length == 0) {
+      this.language.getTranslation('USER_NAME').then((translation:string) => {
+        this.showToast(translation);
+        setTimeout(() => {
+          this.name.setFocus();
+        }, 800);
+      });
+    }
+    else if (email.length == 0) {
+      this.language.getTranslation('USER_EMAIL_REQUIRED').then((translation:string) => {
+        this.showToast(translation);
+        setTimeout(() => {
+          this.email.setFocus();
+        }, 800);
+      });
+    }
+    else if (password.length == 0) {
+      this.language.getTranslation('USER_PASSWORD_REQUIRED').then((translation:string) => {
+        this.showToast(translation);
+        setTimeout(() => {
+          this.password.setFocus();
+        }, 800);
+      });
+    }
+    else if (confirm.length == 0) {
+      this.language.getTranslation('USER_PASSWORD_CONFIRM').then((translation:string) => {
+        this.showToast(translation);
+        setTimeout(() => {
+          this.confirm.setFocus();
+        }, 800);
+      });
+    }
+    else if (password !== confirm) {
+      this.language.getTranslation('USER_PASSWORD_CONFIRM').then((translation:string) => {
+        this.showToast(translation);
+        setTimeout(() => {
+          this.password.setFocus();
+        }, 800);
+      });
+    }
+    else {
       this.language.getTranslations([
         'USER_SIGNING_UP_',
         'USER_SIGNUP_SUCCESS',
@@ -105,7 +146,8 @@ export class UserSignupPage extends BasePage {
   private showDeployment(deployment:Deployment) {
     this.logger.event(this, "Deployments", "signup", this.deployment.website);
     this.closePage({
-      deployment: deployment });
+      deployment: deployment
+    });
   }
 
   private onCancel(event:any=null) {
@@ -180,6 +222,17 @@ export class UserSignupPage extends BasePage {
           reject(error);
         });
       });
+  }
+
+  private submitOnReturn(event:any):boolean {
+    if (this.isKeyReturn(event)) {
+      this.hideKeyboard();
+      setTimeout(() => {
+        this.userSignup(event);
+      }, 600);
+      return false;
+    }
+    return true;
   }
 
 }

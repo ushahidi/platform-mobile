@@ -211,7 +211,6 @@
 "USER_PASSWORD_RESET_FAILURE": "Problema Reimpostazione della password",
 "USER_PASSWORD_CONFIRM": "Conferma password",
 "USER_PASSWORD_REQUIRED": "E 'richiesta la password",
-"USER_PHONE": "Numero di telefono",
 "USER_INVALID_CREDENTIALS": "Credenziali non valide",
 "USER_INVALID_CREDENTIALS_DESCRIPTION": "Verifica il tuo indirizzo email e la password, quindi riprova.",
 "USER_SIGNUP": "Iscriviti",

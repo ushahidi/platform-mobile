@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 
 import { File } from '@ionic-native/file';
 import { HTTP } from '@ionic-native/http';
-import { FileTransfer } from '@ionic-native/file-transfer';
 import { NativeGeocoder, NativeGeocoderForwardResult } from '@ionic-native/native-geocoder';
 import { NativeStorage } from '@ionic-native/native-storage';
 
@@ -39,12 +38,11 @@ export class ApiService extends HttpService {
   constructor(
     protected http:HTTP,
     protected file:File,
-    protected transfer:FileTransfer,
     protected logger:LoggerService,
     protected storage: NativeStorage,
     protected database:DatabaseService,
     protected nativeGeocoder:NativeGeocoder) {
-    super(http, file, transfer, logger);
+    super(http, file, logger);
   }
 
   public searchDeployments(search:string):Promise<Deployment[]> {
@@ -389,11 +387,11 @@ export class ApiService extends HttpService {
     });
   }
 
-  protected apiUpload(deployment:Deployment, endpoint:string, file:string, caption:string, mimeType:string):Promise<any> {
+  protected apiUpload(deployment:Deployment, endpoint:string, file:string, caption:string):Promise<any> {
     return new Promise((resolve, reject) => {
       this.getLogin(deployment).then((login:Login) => {
         let url = deployment.api + endpoint;
-        this.fileUpload(url, login.access_token, file, caption, "POST", mimeType).then((data:any) => {
+        this.fileUpload(url, login.access_token, file, caption, "file").then((data:any) => {
           resolve(data);
         },
         (error:any) => {
@@ -896,13 +894,12 @@ export class ApiService extends HttpService {
   public uploadImage(deployment:Deployment, post:Post, value:Value):Promise<Image> {
     return new Promise((resolve, reject) => {
       let file = value.value;
-      let mimeType = this.mimeType(file);
       let caption = value.caption;
       this.logger.info(this, "uploadImage", file);
-      this.apiUpload(deployment, "/api/v3/media", file, caption, mimeType).then((data:any) => {
+      this.apiUpload(deployment, "/api/v3/media", file, caption).then((data:any) => {
         this.logger.info(this, "uploadImage", file, data);
-        let item = JSON.parse(data.response);
-        let image:Image = new Image(item);
+        let _image = JSON.parse(data.data);
+        let image:Image = new Image(_image);
         image.deployment_id = deployment.id;
         value.value = "" + image.id;
         let saves = [

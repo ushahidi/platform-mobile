@@ -209,7 +209,6 @@
   "USER_PASSWORD_RESET_FAILURE": "Probleem Wachtwoord opnieuw instellen",
   "USER_PASSWORD_CONFIRM": "Wachtwoordbevestiging",
   "USER_PASSWORD_REQUIRED": "Een wachtwoord is verplicht",
-  "USER_PHONE": "Telefoonnummer",
   "USER_INVALID_CREDENTIALS": "Ongeldige legitimeringen",
   "USER_INVALID_CREDENTIALS_DESCRIPTION": "Controleer uw e-mailadres en wachtwoord en probeer het opnieuw.",
   "USER_SIGNUP": "Aanmelden",

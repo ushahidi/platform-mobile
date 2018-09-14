@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 
 import { HTTP, HTTPResponse } from '@ionic-native/http';
 import { File, Entry, Metadata } from '@ionic-native/file';
-import { FileTransfer, FileTransferObject, FileUploadOptions, FileUploadResult, FileTransferError } from '@ionic-native/file-transfer';
 
 import { LoggerService } from '../providers/logger-service';
 
@@ -12,7 +11,6 @@ export class HttpService {
   constructor(
     protected http:HTTP,
     protected file:File,
-    protected transfer:FileTransfer,
     protected logger:LoggerService) {
   }
 
@@ -201,23 +199,12 @@ export class HttpService {
     });
   }
 
-  protected fileUpload(url:string, token:string, file:string, caption:string,
-             httpMethod:string="POST",
-             mimeType:string='application/binary',
-             acceptType:string="application/json",
-             contentType:string=undefined,
-             contentLength:number=null) {
+  protected fileUpload(url:string, token:string, filePath:string, caption:string, name:string=null):Promise<any> {
     return new Promise((resolve, reject) => {
-      let fileName = file.substr(file.lastIndexOf('/') + 1).split('?').shift();
+      let contentType = this.mimeType(url);
       let headers = {};
-      if (acceptType) {
-        headers['Accept'] = acceptType;
-      }
       if (contentType) {
         headers['Content-Type'] = contentType;
-      }
-      if (contentLength) {
-        headers['Content-Length'] = contentLength;
       }
       if (token) {
         headers['Authorization'] = `Bearer ${token}`;
@@ -226,28 +213,15 @@ export class HttpService {
       if (caption && caption.length > 0) {
         params['caption'] = caption;
       }
-      var options:FileUploadOptions = {
-        httpMethod: httpMethod,
-        mimeType: mimeType,
-        fileName: fileName,
-        headers: headers,
-        params: params
-      };
-      this.logger.info(this, "UPLOAD", url, file, options);
-      let fileTransfer:FileTransferObject = this.transfer.create();
-      fileTransfer.upload(file, url, options, true).then((data:FileUploadResult) => {
-        this.logger.info(this, "UPLOAD", url, file, data);
+      this.logger.info(this, "UPLOAD", url, filePath, params)
+      this.http.uploadFile(url, params, headers, filePath, name).then((data:any) => {
+        this.logger.info(this, "UPLOAD", url, filePath, data);
         resolve(data);
       },
-      (error:FileTransferError) => {
-        this.logger.error(this, "UPLOAD", url, file,
-          "Code", error.code,
-          "Source", error.source,
-          "Target", error.target,
-          "Body", error.body,
-          "Exception", error.exception);
-        reject(error.body || error.exception);
-     });
+      (error:any) => {
+        this.logger.error(this, "UPLOAD", url, error.status, error.error);
+        reject(this.httpError(error));
+      });
     });
   }
 
@@ -272,27 +246,6 @@ export class HttpService {
       return "image/png";
     }
     return "application/binary"
-  }
-
-  protected fileSize(filePath:any):Promise<number> {
-    return new Promise((resolve, reject) => {
-      this.logger.info(this, "fileSize", filePath);
-      this.file.resolveLocalFilesystemUrl(filePath).then((entry:Entry) => {
-        this.logger.info(this, "fileSize", filePath, "Entry", entry.fullPath);
-        entry.getMetadata((metadata:Metadata) => {
-          this.logger.info(this, "fileSize", filePath, "Metadata", metadata);
-          resolve(metadata.size);
-        },
-        (error:any) => {
-          this.logger.error(this, "fileSize", filePath, "Metadata", error);
-          reject(error);
-        });
-      },
-      (error) => {
-        this.logger.error(this, "fileSize", filePath, "Error", error);
-        reject(error);
-      });
-    });
   }
 
   private httpError(error:any):string {

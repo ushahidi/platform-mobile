@@ -211,7 +211,6 @@
 "USER_PASSWORD_RESET_FAILURE": "Problem Rivendosja e Fjalëkalimit",
 "USER_PASSWORD_CONFIRM": "Konfirmimi i fjalëkalimit",
 "USER_PASSWORD_REQUIRED": "Kërkohet fjalëkalim",
-"USER_PHONE": "Numri i telefonit",
 "USER_INVALID_CREDENTIALS": "Kredencialet e pavlefshme",
 "USER_INVALID_CREDENTIALS_DESCRIPTION": "Ju lutemi verifikoni email-in dhe fjalëkalimin tuaj, pastaj provoni përsëri.",
 "USER_SIGNUP": "Regjistrohu",

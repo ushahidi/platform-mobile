@@ -35,7 +35,7 @@
       <div *ngIf="value.value" [innerHTML]="value.value | htmlParse"></div>
     </div>
     <div class="value-upload selectable" ion-text color="light" *ngIf="value.input == 'upload'">
-      <image-cache *ngIf="value.value" [src]="value.image" [fallback]="photoPlaceholder" tappable (click)="imageClicked(value.image)"></image-cache>
+      <image-cache *ngIf="value.image" [src]="value.image" [fallback]="photoPlaceholder" tappable (click)="imageClicked(value.image)"></image-cache>
       <span *ngIf="value.caption">{{value.caption}}</span>
     </div>
     <div class="value-video selectable" ion-text color="light" *ngIf="value.input == 'video'">

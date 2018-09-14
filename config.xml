@@ -4,10 +4,7 @@
     <description>Ushahidi Mobile</description>
     <author email="support@ushahidi.com" href="https://www.ushahidi.com/">Ushahidi</author>
     <content src="index.html" />
-    <access origin="http://*.ushahidi.*" />
-    <access origin="https://*.ushahidi.*" />
-    <access origin="file://*" />
-    <access origin="cdvfile://*" />
+    <access allows-arbitrary-loads-for-media="true" allows-arbitrary-loads-in-web-content="true" allows-local-networking="true" origin="*" requires-certificate-transparency="false" requires-forward-secrecy="false" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <allow-intent href="tel:*" />
@@ -16,10 +13,10 @@
     <allow-intent href="geo:*" />
     <allow-navigation href="file://*" />
     <allow-navigation href="cdvfile://*" />
-    <allow-navigation href="*://*.ushahidi.*/*" />
+    <allow-navigation href="*://*.ushahidi.*/*" requires-certificate-transparency="false" requires-forward-secrecy="false" />
+    <allow-navigation href="*://*.rackcdn.com/*" requires-certificate-transparency="false" requires-forward-secrecy="false" />
     <allow-navigation href="*://*.youtube.com/*" />
     <allow-navigation href="*://*.vimeo.com/*" />
-    <allow-navigation href="*://*.rackcdn.com/*" />
     <allow-navigation href="*://s3.amazonaws.com/*" />
     <allow-navigation href="*://*.s3.amazonaws.com/*" />
     <allow-navigation href="*://*.ytimg.com/*" />
@@ -138,6 +135,11 @@
     <preference name="AndroidExtraFilesystems" value="files,files-external,documents,sdcard,cache,cache-external,assets,root" />
     <feature name="Device">
         <param name="ios-package" value="CDVDevice" />
+        <param name="android-package" value="org.apache.cordova.device.Device" />
+    </feature>
+    <feature name="File">
+        <param name="ios-package" value="CDVFile" />
+        <param name="android-package" value="org.apache.cordova.file.FileUtils" />
     </feature>
     <feature name="StatusBar">
         <param name="ios-package" onload="true" value="CDVStatusBar" />
@@ -157,16 +159,6 @@
     <feature name="CDVWKWebViewEngine">
         <param name="ios-package" value="CDVWKWebViewEngine" />
     </feature>
-    <allow-navigation href="http://192.168.0.12:8100" />
-    <allow-navigation href="http://192.168.0.14:8100" />
-    <allow-navigation href="http://localhost:8100" />
-    <allow-navigation href="http://192.168.0.16:8100" />
-    <allow-navigation href="http://192.168.0.21:8100" />
-    <allow-navigation href="http://172.20.0.146:8100" />
-    <allow-navigation href="http://192.168.178.192:8100" />
-    <allow-navigation href="http://192.168.88.240:8100" />
-    <allow-navigation href="http://192.168.0.30:8100" />
-    <allow-navigation href="http://192.168.0.30:8101" />
     <engine name="ios" spec="~4.5.5" />
     <engine name="android" spec="~6.4.0" />
     <plugin name="cordova-custom-config" spec="^4.0.2" />
@@ -178,7 +170,6 @@
     <plugin name="cordova-plugin-device" spec="^1.1.7" />
     <plugin name="cordova-plugin-email" spec="^1.2.7" />
     <plugin name="cordova-plugin-file" spec="^6.0.1" />
-    <plugin name="cordova-plugin-file-transfer" spec="^1.7.1" />
     <plugin name="cordova-plugin-filepath" spec="^1.4.2" />
     <plugin name="cordova-plugin-geolocation" spec="^2.4.3">
         <variable name="GEOLOCATION_USAGE_DESCRIPTION" value="This app would like to access your location, so you can include it in your reports." />

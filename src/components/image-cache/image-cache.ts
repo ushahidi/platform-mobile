@@ -3,8 +3,7 @@ import { SafeUrl, DomSanitizer } from '@angular/platform-browser';
 import { Md5 } from 'ts-md5/dist/md5';
 import { Platform, normalizeURL } from 'ionic-angular';
 
-import { FilePath } from '@ionic-native/file-path';
-import { FileTransfer, FileTransferObject } from '@ionic-native/file-transfer';
+import { HTTP } from '@ionic-native/http';
 import { File, Entry, FileEntry, FileError, Metadata } from '@ionic-native/file';
 
 import { LoggerService } from '../../providers/logger-service';
@@ -34,8 +33,7 @@ export class ImageCacheComponent implements OnInit, OnChanges, AfterContentCheck
   constructor(
     private platform:Platform,
     private file:File,
-    private filePath:FilePath,
-    private transfer:FileTransfer,
+    private http:HTTP,
     private sanitizer:DomSanitizer,
     private logger:LoggerService) {
   }
@@ -55,20 +53,18 @@ export class ImageCacheComponent implements OnInit, OnChanges, AfterContentCheck
   public loadCacheImage(url:string) {
     if (url && url.length > 0 && url !== this.original) {
       this.original = url;
-      let file = this.getCacheFile(url);
-      let directory = this.getCacheDirectory();
       this.fetchCacheImage(url).then((cache:string) => {
         this.logger.info(this, "loadCacheImage", url, "Cache", cache);
         this.useCacheImage(cache).then((file:any) => {
           this.logger.info(this, "loadCacheImage", url, "Cache", cache, "File", file);
         },
         (error:any) => {
-          this.logger.info(this, "loadCacheImage", url, "Cache", cache, "Error", error);
+          this.logger.warn(this, "loadCacheImage", url, "Cache", cache, "Error", error);
           this.useFallback();
         });
       },
       (error:any) => {
-        this.logger.info(this, "loadCacheImage", url, "Error", error);
+        this.logger.warn(this, "loadCacheImage", url, "Error", error);
         this.useFallback();
       });
     }
@@ -88,7 +84,7 @@ export class ImageCacheComponent implements OnInit, OnChanges, AfterContentCheck
     }
   }
 
-  public fetchCacheImage(url:string) {
+  public fetchCacheImage(url:string):Promise<string> {
     return new Promise((resolve, reject) => {
       let file = this.getCacheFile(url);
       let directory = this.getCacheDirectory();
@@ -97,66 +93,68 @@ export class ImageCacheComponent implements OnInit, OnChanges, AfterContentCheck
         resolve(cache);
       },
       (none:any) => {
+        this.logger.warn(this, "fetchCacheImage", url, none);
         this.downloadCacheImage(url, directory, file).then((cache:string) => {
           this.logger.info(this, "fetchCacheImage", url, cache);
           resolve(cache);
         },
         (error:any) => {
-          this.logger.info(this, "fetchCacheImage", url, error);
+          this.logger.warn(this, "fetchCacheImage", url, error);
           reject(error);
         });
       });
     });
   }
 
-  public hasCacheImage(image:string, directory:string, cache:string):Promise<string> {
+  public hasCacheImage(url:string, directory:string, file:string):Promise<string> {
     return new Promise((resolve, reject) => {
-      this.file.checkFile(directory, cache).then((exists:boolean) => {
+      this.file.checkFile(directory, file).then((exists:boolean) => {
         if (exists) {
-          let url = directory + cache;
-          this.file.resolveLocalFilesystemUrl(url).then((entry:FileEntry) => {
+          this.file.resolveLocalFilesystemUrl(directory + file).then((entry:FileEntry) => {
             entry.getMetadata((metadata:Metadata) => {
               if (metadata.size > 0) {
-                this.logger.info(this, "hasCacheImage", image, "Yes", entry.toURL(), "Size", metadata.size);
+                this.logger.info(this, "hasCacheImage", url, "Yes", entry.toURL());
                 resolve(entry.toURL());
               }
               else {
-                this.logger.info(this, "hasCacheImage", image, "No");
+                this.logger.info(this, "hasCacheImage", url, "No", "Empty");
                 reject("Cache Empty");
               }
             },
             (error:any) => {
-              this.logger.info(this, "hasCacheImage", image, "No", error);
+              this.logger.warn(this, "hasCacheImage", url, "No", error);
               reject("No Cache");
             });
           },
           (error:FileError) => {
-            this.logger.info(this, "hasCacheImage", image, "No", error);
-            reject(error);
+            this.logger.warn(this, "hasCacheImage", url, "No", error);
+            reject("No Cache");
           });
         }
         else {
-          this.logger.info(this, "hasCacheImage", image, "No");
+          this.logger.info(this, "hasCacheImage", url, "No", exists);
           reject("No Cache");
         }
       },
       (error:FileError) => {
-        this.logger.info(this, "hasCacheImage", image, "No", error);
-        reject(error);
+        this.logger.info(this, "hasCacheImage", url, "No");
+        reject("No Cache");
       });
     });
   }
 
-  public downloadCacheImage(image:string, directory:string, cache:string):Promise<string> {
+  public downloadCacheImage(url:string, directory:string, file:string):Promise<string> {
     return new Promise((resolve, reject) => {
-      let url = directory + cache;
-      let fileFileTransfer:FileTransferObject = this.transfer.create();
-      fileFileTransfer.download(image, url, true).then((entry:Entry) => {
-        this.logger.info(this, "downloadCacheImage", image, entry.toURL());
+      let filePath = directory + file;
+      this.logger.info(this, "downloadCacheImage", url, filePath);
+      this.http.disableRedirect(false);
+      this.http.setRequestTimeout(10.0);
+      this.http.downloadFile(url, {}, {}, filePath).then((entry:any) => {
+        this.logger.info(this, "downloadCacheImage", url, filePath, entry);
         resolve(entry.toURL());
       },
       (error:any) => {
-        this.logger.info(this, "downloadCacheImage", image, error);
+        this.logger.error(this, "downloadCacheImage", url, filePath, error);
         reject(error);
       });
     });
@@ -171,7 +169,9 @@ export class ImageCacheComponent implements OnInit, OnChanges, AfterContentCheck
         resolve(file);
       },
       (error:any) => {
-        this.logger.info(this, "useCacheImage", url, error);
+        this.logger.warn(this, "useCacheImage", url, error);
+        this.cacheUrl = null;
+        this.safeUrl = null;
         reject(error);
       });
     });
@@ -183,41 +183,47 @@ export class ImageCacheComponent implements OnInit, OnChanges, AfterContentCheck
         let normalizedURL = this.platform.is("ios")
           ? normalizeURL(fileEntry.toURL())
           : normalizeURL(fileEntry.toInternalURL());
-        this.logger.info(this, "resolveFilePath", url, "resolveLocalFilesystemUrl", normalizedURL);
+        this.logger.info(this, "resolveFilePath", url, normalizedURL);
         resolve(normalizedURL);
       },
       (error:any) => {
-        this.logger.info(this, "resolveFilePath", url, "resolveLocalFilesystemUrl", error);
+        this.logger.warn(this, "resolveFilePath", url, error);
         reject(error);
       });
     });
   }
 
   private useFallback() {
-    if (this.fallback && this.fallback.length > 0) {
+    if (this.original && this.original.length > 0) {
+      this.logger.info(this, "useFallback", "Original", this.original);
+      this.cacheUrl = this.original;
+      this.safeUrl = this.sanitizer.bypassSecurityTrustUrl(this.original);
+    }
+    else if (this.fallback && this.fallback.length > 0) {
       this.logger.info(this, "useFallback", "Fallback", this.fallback);
       this.cacheUrl = normalizeURL(this.fallback);
       this.safeUrl = this.sanitizer.bypassSecurityTrustUrl(this.fallback);
     }
-    else if (this.original && this.original.length > 0) {
-      this.logger.info(this, "useFallback", "Original", this.original);
-      this.cacheUrl = this.original;
-      this.safeUrl = this.original;
+    else {
+      this.logger.info(this, "useFallback", "None");
+      this.cacheUrl = null;
+      this.safeUrl = null;
     }
   }
 
   private getCacheFile(url:string):string {
     let hash = Md5.hashStr(url);
-    if (url.indexOf(".jpg") != -1) {
+    let lowercase = url.toLowerCase();
+    if (lowercase.indexOf(".jpg") > 0) {
       return hash.toString() + ".jpg";
     }
-    else if (url.indexOf(".jpeg") != -1) {
+    else if (lowercase.indexOf(".jpeg") > 0) {
       return hash.toString() + ".jpeg";
     }
-    else if (url.indexOf(".png") != -1) {
+    else if (lowercase.indexOf(".png") > 0) {
       return hash.toString() + ".png";
     }
-    else if (url.indexOf(".gif") != -1) {
+    else if (lowercase.indexOf(".gif") > 0) {
       return hash.toString() + ".gif";
     }
     return hash.toString() + ".jpg";

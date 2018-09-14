@@ -15,22 +15,23 @@
   <ion-list>
     <ion-item>
       <ion-label floating>{{'USER_EMAIL' | translate}}</ion-label>
-      <ion-input #username type="email" clearInput="false" autocomplete="off" autocorrect="off"></ion-input>
+      <ion-input #username type="email" clearInput="false" autocorrect="off" autocapitalize="off" autocomplete="off" (keypress)="submitOnReturn($event)"></ion-input>
     </ion-item>
     <ion-item>
       <ion-label floating>{{'USER_PASSWORD' | translate}}</ion-label>
-      <ion-input #password type="password" clearInput="false" clearOnEdit="true" autocomplete="off"></ion-input>
+      <ion-input #password type="password" clearInput="false" clearOnEdit="true" autocorrect="off" autocapitalize="off" autocomplete="off" (keypress)="submitOnReturn($event)"></ion-input>
     </ion-item>
   </ion-list>
-  <ion-row>
-    <ion-col text-left>
-      <button ion-button text-uppercase clear color="dark" (click)="showPasswordReset($event)">{{'USER_PASSWORD_FORGOT' | translate}}</button>
-    </ion-col>
-    <ion-col text-right padding-right>
-      <button ion-button text-uppercase color="primary" (click)="userLogin($event)"
-            [disabled]="username.value.length == 0 || password.value.length == 0">{{'USER_LOGIN' | translate}}</button>
-    </ion-col>
-  </ion-row>
+  <ion-grid>
+    <ion-row>
+      <ion-col text-left>
+        <button ion-button text-uppercase clear color="dark" (click)="showPasswordReset($event)">{{'USER_PASSWORD_FORGOT' | translate}}</button>
+      </ion-col>
+      <ion-col text-right>
+        <button ion-button text-uppercase color="primary" (click)="userLogin($event)">{{'USER_LOGIN' | translate}}</button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>
 <ion-footer>
   <ion-toolbar color="toolbar" *ngIf="offline">

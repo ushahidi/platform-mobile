@@ -211,7 +211,6 @@
 "USER_PASSWORD_RESET_FAILURE": "مشكلة اعادة ضبط كلمة المرور",
 "USER_PASSWORD_CONFIRM": "تأكيد كلمة المرور",
 "USER_PASSWORD_REQUIRED": "كلمة المرور مطلوبة",
-"USER_PHONE": "رقم الهاتف",
 "USER_INVALID_CREDENTIALS": "بيانات الاعتماد غير صالحة",
 "USER_INVALID_CREDENTIALS_DESCRIPTION": "يرجى التحقق من بريدك الإلكتروني وكلمة المرور ، ثم حاول مرة أخرى.",
 "USER_SIGNUP": "سجل",

@@ -129,7 +129,7 @@ export class ResponseAddPage extends BasePage {
     this.submitted = true;
     if (this.hasRequiredValues()) {
       this.loadFormValues();
-      if (this.offline) {
+      if (this.networkOffline()) {
         this.language.getTranslations([
           'ACTION_OK',
           'RESPONSE_SAVING_',

@@ -15,29 +15,30 @@
   <ion-list>
     <ion-item>
       <ion-label floating>{{'USER_NAME' | translate}}</ion-label>
-      <ion-input #name type="text" clearInput="false" autocomplete="off" autocorrect="off"></ion-input>
+      <ion-input #name type="text" clearInput="false" autocorrect="on" autocapitalize="off" autocomplete="off" (keypress)="submitOnReturn($event)"></ion-input>
     </ion-item>
     <ion-item>
       <ion-label floating>{{'USER_EMAIL' | translate}}</ion-label>
-      <ion-input #email type="email" clearInput="false" autocomplete="off" autocorrect="off"></ion-input>
+      <ion-input #email type="email" clearInput="false" autocorrect="off" autocapitalize="off" autocomplete="off" (keypress)="submitOnReturn($event)"></ion-input>
     </ion-item>
     <ion-item>
       <ion-label floating>{{'USER_PASSWORD' | translate}}</ion-label>
-      <ion-input #password type="password" clearInput="false" clearOnEdit="true" autocomplete="off" autocorrect="off"></ion-input>
+      <ion-input #password type="password" clearInput="false" clearOnEdit="true" autocorrect="off" autocapitalize="off" autocomplete="off" (keypress)="submitOnReturn($event)"></ion-input>
     </ion-item>
     <ion-item>
       <ion-label floating>{{'USER_PASSWORD_CONFIRM' | translate}}</ion-label>
-      <ion-input #confirm type="password" clearInput="false" clearOnEdit="true" autocomplete="off" autocorrect="off"></ion-input>
+      <ion-input #confirm type="password" clearInput="false" clearOnEdit="true" autocorrect="off" autocapitalize="off" autocomplete="off" (keypress)="submitOnReturn($event)"></ion-input>
     </ion-item>
   </ion-list>
-  <ion-row>
-    <ion-col text-left>
-    </ion-col>
-    <ion-col text-right padding-right>
-      <button ion-button text-uppercase color="primary" (click)="userSignup($event)"
-            [disabled]="name.value.length == 0 || email.value.length == 0 || password.value.length == 0 || password.value != confirm.value">{{'USER_SIGNUP' | translate}}</button>
-    </ion-col>
-  </ion-row>
+  <ion-grid>
+    <ion-row>
+      <ion-col text-left>
+      </ion-col>
+      <ion-col text-right>
+        <button ion-button text-uppercase color="primary" (click)="userSignup($event)">{{'USER_SIGNUP' | translate}}</button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>
 <ion-footer>
   <ion-toolbar color="toolbar" *ngIf="offline">

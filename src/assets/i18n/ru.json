@@ -211,7 +211,6 @@
 "USER_PASSWORD_RESET_FAILURE": "Проблема Сброс пароля",
 "USER_PASSWORD_CONFIRM": "Подтверждение пароля",
 "USER_PASSWORD_REQUIRED": "необходим пароль",
-"USER_PHONE": "Номер телефона",
 "USER_INVALID_CREDENTIALS": "Недопустимые учетные данные",
 "USER_INVALID_CREDENTIALS_DESCRIPTION": "Проверьте свой адрес электронной почты и пароль, затем повторите попытку.",
 "USER_SIGNUP": "зарегистрироваться",

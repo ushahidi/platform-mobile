@@ -211,7 +211,6 @@
 "USER_PASSWORD_RESET_FAILURE": "Problem Passwort zurücksetzen",
 "USER_PASSWORD_CONFIRM": "Passwort Bestätigung",
 "USER_PASSWORD_REQUIRED": "Passwort wird benötigt",
-"USER_PHONE": "Telefonnummer",
 "USER_INVALID_CREDENTIALS": "Ungültige Anmeldeinformationen",
 "USER_INVALID_CREDENTIALS_DESCRIPTION": "Bitte bestätigen Sie Ihre E-Mail-Adresse und Ihr Passwort und versuchen Sie es erneut.",
 "USER_SIGNUP": "Anmelden",

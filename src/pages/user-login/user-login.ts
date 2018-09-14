@@ -62,7 +62,23 @@ export class UserLoginPage extends BasePage {
     this.logger.info(this, "userLogin");
     let username = this.username.value.toString();
     let password = this.password.value.toString();
-    if (username.length > 0 && password.length > 0) {
+    if (username.length == 0) {
+      this.language.getTranslation('USER_EMAIL_REQUIRED').then((translation:string) => {
+        this.showToast(translation);
+        setTimeout(() => {
+          this.username.setFocus();
+        }, 800);
+      });
+    }
+    else if (password.length == 0) {
+      this.language.getTranslation('USER_PASSWORD_REQUIRED').then((translation:string) => {
+        this.showToast(translation);
+        setTimeout(() => {
+          this.password.setFocus();
+        }, 800);
+      });
+    }
+    else {
       this.language.getTranslations([
         'USER_LOGGING_IN_',
         'USER_LOGIN_SUCCESS',
@@ -106,7 +122,8 @@ export class UserLoginPage extends BasePage {
   private showDeployment(deployment:Deployment) {
     this.logger.event(this, "Deployments", "login", this.deployment.website);
     this.closePage({
-      deployment: deployment });
+      deployment: deployment
+    });
   }
 
   private onCancel(event:any=null) {
@@ -233,6 +250,17 @@ export class UserLoginPage extends BasePage {
           this.showAlert(translations[2], error);
         });
     });
+  }
+
+  private submitOnReturn(event:any):boolean {
+    if (this.isKeyReturn(event)) {
+      this.hideKeyboard();
+      setTimeout(() => {
+        this.userLogin(event);
+      }, 600);
+      return false;
+    }
+    return true;
   }
 
 }

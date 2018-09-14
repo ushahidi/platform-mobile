@@ -2,9 +2,8 @@ import { Injectable } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Platform } from 'ionic-angular';
 
+import { HTTP } from '@ionic-native/http';
 import { File } from '@ionic-native/file';
-import { FilePath } from '@ionic-native/file-path';
-import { FileTransfer } from '@ionic-native/file-transfer';
 
 import { StaticMap } from '../maps/static-map';
 import { ImageCacheComponent } from '../components/image-cache/image-cache';
@@ -24,12 +23,11 @@ export class CacheService {
   constructor(
     private platform:Platform,
     private file:File,
-    private filePath:FilePath,
-    private transfer:FileTransfer,
+    private http:HTTP,
     private sanitizer:DomSanitizer,
     private logger:LoggerService,
     private settings:SettingsService) {
-    this.imageCache = new ImageCacheComponent(platform, file, filePath, transfer, sanitizer, logger);
+    this.imageCache = new ImageCacheComponent(platform, file, http, sanitizer, logger);
     this.settings.getMapMarkerPins().then((mapPins:boolean) => {
       this.mapPins = mapPins;
     });

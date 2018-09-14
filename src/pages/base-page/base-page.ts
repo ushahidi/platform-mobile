@@ -4,6 +4,7 @@ import { Content, Platform, Events, NavParams, Alert, AlertController, Toast, To
 import { StatusBar } from '@ionic-native/status-bar';
 import { Network } from '@ionic-native/network';
 import { SocialSharing } from '@ionic-native/social-sharing';
+import { Keyboard } from '@ionic-native/keyboard';
 import { ThemeableBrowser, ThemeableBrowserOptions, ThemeableBrowserObject } from '@ionic-native/themeable-browser';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
 
@@ -38,6 +39,7 @@ export class BasePage {
   protected language:LanguageService;
   protected settings:SettingsService;
   protected screenOrientation:ScreenOrientation;
+  protected keyboard:Keyboard;
 
   @ViewChild(Content)
   content: Content;
@@ -63,6 +65,7 @@ export class BasePage {
     this.language = InjectorService.injector.get(LanguageService);
     this.settings = InjectorService.injector.get(SettingsService);
     this.screenOrientation = InjectorService.injector.get(ScreenOrientation);
+    this.keyboard = InjectorService.injector.get(Keyboard);
   }
 
   ionViewDidLoad() {
@@ -75,7 +78,7 @@ export class BasePage {
   ionViewWillEnter() {
     let network = this.networkType();
     this.logger.info(this, "ionViewWillEnter", "Network", network);
-    this.subscribeNetwork();
+    this.networkSubscribe();
   }
 
   ionViewDidEnter() {
@@ -87,7 +90,7 @@ export class BasePage {
   ionViewWillLeave() {
     this.logger.info(this, "ionViewWillLeave");
     this.unloadLanguage();
-    this.unsubscribeNetwork();
+    this.networkUnsubscribe();
   }
 
   ionViewDidLeave() {
@@ -165,9 +168,9 @@ export class BasePage {
    });
   }
 
-  protected subscribeNetwork() {
-    this.logger.info(this, "subscribeNetwork", "Network", this.network.type);
-    if (this.network.type == 'none') {
+  protected networkSubscribe() {
+    this.logger.info(this, "networkSubscribe", "Network", this.network.type);
+    if (this.network.type == 'none' || this.network.type == 'unknown') {
       this.zone.run(() => {
         this.offline = true;
         this.resizeContent();
@@ -179,14 +182,14 @@ export class BasePage {
       });
     }
     this.connection = this.network.onConnect().subscribe(() => {
-      this.logger.info(this, "subscribeNetwork", "Network Connected", this.network.type);
+      this.logger.info(this, "networkSubscribe", "Connected", this.network.type);
       this.zone.run(() => {
         this.offline = false;
         this.resizeContent();
       });
     });
     this.disconnection = this.network.onDisconnect().subscribe(() => {
-      this.logger.info(this, "subscribeNetwork", "Network Disconnected", this.network.type);
+      this.logger.info(this, "networkSubscribe", "Disconnected", this.network.type);
       this.zone.run(() => {
         this.offline = true;
         this.resizeContent();
@@ -194,8 +197,8 @@ export class BasePage {
     });
   }
 
-  protected unsubscribeNetwork() {
-    this.logger.info(this, "unsubscribeNetwork", "Network", this.network.type);
+  protected networkUnsubscribe() {
+    this.logger.info(this, "networkUnsubscribe", "Network", this.network.type);
     if (this.connection) {
       this.connection.unsubscribe();
       this.connection = null;
@@ -204,6 +207,10 @@ export class BasePage {
       this.disconnection.unsubscribe();
       this.disconnection = null;
     }
+  }
+
+  protected networkOffline():boolean {
+    return this.network.type == 'none' || this.network.type == 'unknown';
   }
 
   protected loadStatusBar(lightContent:boolean=true, overlaysWebView:boolean=true) {
@@ -225,6 +232,14 @@ export class BasePage {
       }
       this.statusBar.backgroundColorByHexString(this.colorNavbar);
     });
+  }
+
+  protected showKeyboard(event:any=null) {
+    this.keyboard.show();
+  }
+
+  protected hideKeyboard(event:any=null) {
+    this.keyboard.close();
   }
 
   protected getParameter<T extends Object>(param:string):T {
@@ -390,18 +405,25 @@ export class BasePage {
     return result;
   }
 
-  protected screenName() {
+  protected screenName():string {
     if (this.constructor) {
         return this.constructor.name.replace("Page", "").replace(/([A-Z])/g," $1").trim();
     }
     return "";
   }
 
-  protected networkType() {
+  protected networkType():string {
     if (this.network && this.network.type) {
       return this.network.type;
     }
     return "";
+  }
+
+  protected isKeyReturn(event:any):boolean {
+    if (event && event.keyCode && event.keyCode == 13) {
+      return true;
+    }
+    return false;
   }
 
 }

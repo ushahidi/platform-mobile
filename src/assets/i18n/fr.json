@@ -211,7 +211,6 @@
 "USER_PASSWORD_RESET_FAILURE": "Problème lors de la réinitialisation",
 "USER_PASSWORD_CONFIRM": "Confirmation mot de passe",
 "USER_PASSWORD_REQUIRED": "Mot de passe requis",
-"USER_PHONE": "Numéro de téléphone",
 "USER_INVALID_CREDENTIALS": "Les informations d'identification invalides",
 "USER_INVALID_CREDENTIALS_DESCRIPTION": "Veuillez vérifier votre email et votre mot de passe, puis réessayez.",
 "USER_SIGNUP": "S'inscrire",

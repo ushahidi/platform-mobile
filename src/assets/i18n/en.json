@@ -209,7 +209,6 @@
 	"USER_PASSWORD_RESET_FAILURE": "Problem Resetting Password",
 	"USER_PASSWORD_CONFIRM": "Password Confirmation",
   "USER_PASSWORD_REQUIRED": "Password is required",
-	"USER_PHONE": "Phone Number",
 	"USER_INVALID_CREDENTIALS": "Invalid Credentials",
 	"USER_INVALID_CREDENTIALS_DESCRIPTION": "Please verify your email and password, then try again.",
 	"USER_SIGNUP": "Sign up",

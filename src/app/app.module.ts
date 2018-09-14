@@ -17,7 +17,6 @@ import { MarkdownToHtmlModule } from 'markdown-to-html-pipe';
 import { AppVersion } from '@ionic-native/app-version';
 import { IsDebug } from '@ionic-native/is-debug';
 import { StatusBar } from '@ionic-native/status-bar';
-import { FileTransfer } from '@ionic-native/file-transfer';
 import { HTTP } from '@ionic-native/http';
 import { File } from '@ionic-native/file';
 import { FilePath } from '@ionic-native/file-path';
@@ -231,7 +230,6 @@ export class CustomErrorHandler extends IonicErrorHandler implements ErrorHandle
     { provide: Network, useClass: Network },
     { provide: Keyboard, useClass: Keyboard },
     { provide: FilePath, useClass: FilePath },
-    { provide: FileTransfer, useClass: FileTransfer },
     { provide: StatusBar, useClass: StatusBar },
     { provide: AppVersion, useClass: AppVersion },
     { provide: Diagnostic, useClass: Diagnostic },

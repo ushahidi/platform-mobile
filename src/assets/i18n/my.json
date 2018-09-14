@@ -211,7 +211,6 @@
 "USER_PASSWORD_RESET_FAILURE": "Password ကိုပြန်လည်ပြင်ဆင်ခြင်းပြဿနာ",
 "USER_PASSWORD_CONFIRM": "Password ကိုအတည်ပြုချက်",
 "USER_PASSWORD_REQUIRED": "Password ကိုလိုအပ်ပါသည်",
-"USER_PHONE": "ဖုန်းနံပါတ်",
 "USER_INVALID_CREDENTIALS": "မှားနေသောသံတမန်ဆောင်ဧည်",
 "USER_INVALID_CREDENTIALS_DESCRIPTION": "ထပ်ကြိုးစားကြည့်ထို့နောက်သင့်အီးမေးလ်နှင့် password ကိုအတည်ပြုရန်ပေးပါ။",
 "USER_SIGNUP": "ဆိုင်းအပ်",

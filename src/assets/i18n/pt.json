@@ -211,7 +211,6 @@
 "USER_PASSWORD_RESET_FAILURE": "Problema Redefinindo Senha",
 "USER_PASSWORD_CONFIRM": "ConfirmaÇão Da Senha",
 "USER_PASSWORD_REQUIRED": "Senha requerida",
-"USER_PHONE": "Número de telefone",
 "USER_INVALID_CREDENTIALS": "Credenciais inválidas",
 "USER_INVALID_CREDENTIALS_DESCRIPTION": "Por favor, verifique seu e-mail e senha e tente novamente.",
 "USER_SIGNUP": "inscrever-se",
