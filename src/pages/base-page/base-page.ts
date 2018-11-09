@@ -239,7 +239,7 @@ export class BasePage {
   }
 
   protected hideKeyboard(event:any=null) {
-    this.keyboard.close();
+    this.keyboard.hide();
   }
 
   protected getParameter<T extends Object>(param:string):T {

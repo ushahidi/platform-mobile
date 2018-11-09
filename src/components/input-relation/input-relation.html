@@ -3,6 +3,7 @@
     <ion-label floating class="input-label selectable" color="dark">
       {{attribute.label}}
       <span ion-text color="danger" *ngIf="attribute.required == true">*</span>
+      <p ion-text color="dark" *ngIf="attribute.instructions">{{attribute.instructions}}</p>
     </ion-label>
     <ion-select #select [(ngModel)]="text" [selectOptions]="selectOptions" [formControlName]="attribute.key" (ionChange)="selectChanged($event)">
       <ion-option value="{{post.id}}" *ngFor="let post of posts">{{post.title}}</ion-option>

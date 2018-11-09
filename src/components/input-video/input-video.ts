@@ -49,7 +49,7 @@ export class InputVideoComponent {
 
   onKeyPress(event) {
     if (event.keyCode == 13) {
-      this.keyboard.close();
+      this.keyboard.hide();
       return false;
     }
     else {

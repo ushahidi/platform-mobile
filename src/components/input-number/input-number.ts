@@ -72,7 +72,7 @@ export class InputNumberComponent {
       return true;
     }
     else if (event.keyCode == 13) {
-      this.keyboard.close();
+      this.keyboard.hide();
       return false;
     }
     else {

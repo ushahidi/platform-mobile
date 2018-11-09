@@ -3,6 +3,7 @@
     <ion-label floating class="input-label selectable" color="dark">
       {{attribute.label}}
       <span ion-text color="danger" *ngIf="attribute.required == true">*</span>
+      <p ion-text color="dark" *ngIf="attribute.instructions">{{attribute.instructions}}</p>
     </ion-label>
     <ion-input #input type="url" clearInput="false" autocomplete="off" autocorrect="off" [formControlName]="attribute.key" [(ngModel)]="text" (keypress)="onKeyPress($event)" (focus)="onFocus($event)" (ionBlur)="onBlur($event)"></ion-input>
   </ion-item>

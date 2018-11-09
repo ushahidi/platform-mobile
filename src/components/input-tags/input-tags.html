@@ -3,6 +3,7 @@
     <ion-label class="input-label selectable" color="dark">
       {{attribute.label}}
       <span ion-text color="danger" *ngIf="attribute.required == true">*</span>
+      <p ion-text color="dark" *ngIf="attribute.instructions">{{attribute.instructions}}</p>
     </ion-label>
   </ion-item>
   <div [formGroup]="formGroup" *ngIf="formGroup">

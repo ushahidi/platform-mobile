@@ -266,7 +266,7 @@ export class ResponseMapPage extends BasePage {
   private searchAddress(event:any) {
     this.logger.info(this, "searchAddress", event.keyCode);
     if (event.keyCode == 13 || event.keyCode == 176) {
-      this.keyboard.close();
+      this.keyboard.hide();
       if (this.search && this.search.length > 0) {
         this.nativeGeocoder.forwardGeocode(this.search).then(
           (results:NativeGeocoderForwardResult[]) => {
