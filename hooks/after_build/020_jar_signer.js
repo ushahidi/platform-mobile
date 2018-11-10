@@ -19,7 +19,7 @@ function puts(error, stdout, stderr) {
 function runJarSigner() {
   process.stdout.write('runJarSigner');
   if (project && config) {
-    var apk = "platforms/android/build/outputs/apk/release/android-release.apk";
+    var apk = "platforms/android/app/build/outputs/apk/release/app-release.apk";
     if (fs.existsSync(root + "/" + apk)) {
       var json = root + "/projects/" + project + "/build.json";
       if (fs.existsSync(json)) {

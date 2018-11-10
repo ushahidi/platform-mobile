@@ -18,8 +18,8 @@ function puts(error, stdout, stderr) {
 
 function runZipAlign() {
   process.stdout.write('runZipAlign');
-  var input = "platforms/android/build/outputs/apk/release/android-release.apk";
-  var output = "platforms/android/build/outputs/apk/release/" + config.appName.replace(/ /g,"_") + ".apk";
+  var input = "platforms/android/app/build/outputs/apk/release/app-release.apk";
+  var output = "platforms/android/app/build/outputs/apk/release/" + config.appName.replace(/ /g,"_") + ".apk";
   if (fs.existsSync(root + "/" + input)) {
     var command = "./zipalign -f -v 4 " + input + " " + output;
     process.stdout.write(command);
