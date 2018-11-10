@@ -501,6 +501,20 @@ export class ResponseAddPage extends BasePage {
         postValue.value = formValue.image;
         postValue.caption = formValue.caption;
       }
+      else if (postValue.input == 'video') {
+        this.logger.info(this, "loadFormValues", "Video", formValue);
+        let vimeo = this.vimeoEmbed(formValue);
+        let youtube = this.youTubeEmbed(formValue);
+        if (vimeo && vimeo.length > 0) {
+          postValue.value = vimeo;
+        }
+        else if (youtube && youtube.length > 0) {
+          postValue.value = youtube;
+        }
+        else {
+          postValue.value = formValue;
+        }
+      }
       else {
         postValue.value = formValue;
       }
@@ -533,20 +547,6 @@ export class ResponseAddPage extends BasePage {
     return this.formGroup.valid == true;
   }
 
-  private getVideos():string[] {
-    let videos:string[] = [];
-    let values = this.formGroup.value;
-    for (let attribute of this.form.attributes) {
-      if (attribute.input == 'video') {
-        let video = values[attribute.key];
-        if (video && video.length > 0) {
-          videos.push(video);
-        }
-      }
-    }
-    return videos;
-  }
-
   private getImages():string[] {
     let images:string[] = [];
     let values = this.formGroup.value;
@@ -560,5 +560,27 @@ export class ResponseAddPage extends BasePage {
     }
     return images;
   }
+
+  private youTubeEmbed(url:string):string {
+    if (url && url.length > 0) {
+      let regex = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+      let match = url.match(regex);
+      if (match && match[2].length == 11) {
+        return `https://www.youtube.com/embed/${match[2]}`;
+      }
+    }
+    return null;
+  }
+
+  private vimeoEmbed(url:string):string {
+    if (url && url.length > 0) {
+      let regex = /(?:vimeo)\.com.*(?:videos|video|channels|)\/([\d]+)/i;
+      let match = url.match(regex);
+      if (match && match.length > 0) {
+        return "https://player.vimeo.com/video/" + match[1];
+      }
+    }
+    return null;
+  };
 
 }
