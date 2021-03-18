@@ -1,6 +1,6 @@
 {
   "name": "ushahidi",
-  "version": "1.13.0",
+  "version": "1.16.0",
   "author": "Ushahidi",
   "homepage": "https://www.ushahidi.com",
   "private": true,
@@ -28,7 +28,7 @@
     "@ionic-native/camera": "~4.15.0",
     "@ionic-native/core": "~4.15.0",
     "@ionic-native/device": "~4.15.0",
-    "@ionic-native/diagnostic": "~4.15.0",
+    "@ionic-native/diagnostic": "^4.15.0",
     "@ionic-native/file": "~4.15.0",
     "@ionic-native/file-path": "~4.15.0",
     "@ionic-native/geolocation": "~4.15.0",
@@ -50,22 +50,23 @@
     "@ngx-translate/core": "^8.0.0",
     "@ngx-translate/http-loader": "^2.0.0",
     "@types/leaflet": "^1.0.60",
-    "cordova-android-support-gradle-release": "^1.4.6",
+    "cordova-android": "^6.4.0",
+    "cordova-android-support-gradle-release": "^1.4.7",
     "cordova-custom-config": "^4.0.2",
-    "cordova-plugin-add-swift-support": "^1.6.0",
+    "cordova-ios": "^5.1.1",
     "cordova-plugin-advanced-http": "^1.11.1",
-    "cordova-plugin-app-version": "^0.1.9",
+    "cordova-plugin-app-version": "^0.1.12",
     "cordova-plugin-camera": "^2.4.1",
     "cordova-plugin-compat": "^1.2.0",
     "cordova-plugin-device": "^1.1.7",
     "cordova-plugin-email": "^1.2.7",
-    "cordova-plugin-file": "^6.0.1",
-    "cordova-plugin-filepath": "^1.4.2",
+    "cordova-plugin-file": "^6.0.2",
+    "cordova-plugin-filepath": "^1.6.0",
     "cordova-plugin-geolocation": "^2.4.3",
     "cordova-plugin-google-analytics": "^1.8.6",
     "cordova-plugin-ionic-webview": "^1.2.1",
     "cordova-plugin-is-debug": "^1.0.0",
-    "cordova-plugin-media-capture": "^3.0.2",
+    "cordova-plugin-media-capture": "^3.0.3",
     "cordova-plugin-nativegeocoder": "^1.0.2",
     "cordova-plugin-nativestorage": "^2.3.2",
     "cordova-plugin-network-information": "^1.3.4",
@@ -73,15 +74,15 @@
     "cordova-plugin-screen-orientation": "^2.0.2",
     "cordova-plugin-spinner-dialog": "^1.3.1",
     "cordova-plugin-splashscreen": "^4.1.0",
-    "cordova-plugin-statusbar": "^2.4.2",
-    "cordova-plugin-themeablebrowser": "^0.2.17",
-    "cordova-plugin-whitelist": "^1.3.3",
-    "cordova-plugin-x-socialsharing": "^5.4.1",
-    "cordova-sqlite-storage": "^2.5.1",
-    "cordova.plugins.diagnostic": "^3.9.2",
+    "cordova-plugin-statusbar": "^2.4.3",
+    "cordova-plugin-themeablebrowser": "^0.2.18",
+    "cordova-plugin-whitelist": "^1.3.4",
+    "cordova-plugin-x-socialsharing": "^5.6.8",
+    "cordova-sqlite-storage": "^2.6.0",
+    "cordova.plugins.diagnostic": "^4.0.12",
     "es6-promise-plugin": "^4.2.2",
     "google-translate-api": "github:arthurlacoste/google-translate-api",
-    "ionic-angular": "3.9.2",
+    "ionic-angular": "3.9.10",
     "ionic-plugin-keyboard": "^2.2.1",
     "ionicons": "3.0.0",
     "leaflet": "^1.2.0",
@@ -94,7 +95,8 @@
     "zone.js": "0.8.26"
   },
   "devDependencies": {
-    "@ionic/app-scripts": "3.2.0",
+    "@ionic/app-scripts": "^3.2.3",
+    "cordova-plugin-add-swift-support": "^1.6.0",
     "typescript": "~2.6.2"
   },
   "cordovaPlatforms": [
@@ -121,7 +123,6 @@
       "cordova-plugin-geolocation": {
         "GEOLOCATION_USAGE_DESCRIPTION": "This app would like to access your location, so you can include it in your reports."
       },
-      "cordova-plugin-google-analytics": {},
       "cordova-plugin-is-debug": {},
       "cordova-plugin-media-capture": {
         "CAMERA_USAGE_DESCRIPTION": "This app would like to access the camera, so you can to take photos for your reports.",
@@ -134,9 +135,12 @@
       "cordova-plugin-spinner-dialog": {},
       "cordova-plugin-splashscreen": {},
       "cordova-plugin-whitelist": {},
-      "cordova-plugin-x-socialsharing": {},
+      "cordova-plugin-x-socialsharing": {
+        "PHOTO_LIBRARY_ADD_USAGE_DESCRIPTION": "This app requires photo library access to function properly.",
+        "PHOTO_LIBRARY_USAGE_DESCRIPTION": "This app requires photo library access to function properly.",
+        "ANDROID_SUPPORT_V4_VERSION": "24.1.1+"
+      },
       "cordova-sqlite-storage": {},
-      "cordova.plugins.diagnostic": {},
       "ionic-plugin-keyboard": {},
       "cordova-plugin-themeablebrowser": {},
       "cordova-plugin-statusbar": {},
@@ -146,8 +150,17 @@
       "cordova-android-support-gradle-release": {
         "ANDROID_SUPPORT_VERSION": "26.+"
       },
-      "cordova-plugin-nativestorage": {}
+      "cordova-plugin-nativestorage": {},
+      "cordova.plugins.diagnostic": {
+        "ANDROID_SUPPORT_VERSION": "26.+"
+      },
+      "cordova-plugin-google-analytics": {
+        "GMS_VERSION": "11.0.1"
+      }
     },
-    "platforms": []
+    "platforms": [
+      "ios",
+      "android"
+    ]
   }
 }
