@@ -21,20 +21,20 @@
     {{'INPUT_LOCATION_NOT_AUTHORIZED' | translate}}
     {{'INPUT_LOCATION_NOT_AUTHORIZED_DESCRIPTION' | translate}}
   </p>
-  <button ion-button margin-left icon-left text-uppercase small color="secondary" *ngIf="authorized == false" (click)="showSettings($event)">
+  <button ion-button margin-left icon-left text-uppercase small color="secondary" *ngIf="authorized == null" (click)="showSettings($event)">
     <ion-icon ios="ios-cog" md="md-cog"></ion-icon> {{'INPUT_LOCATION_SETTINGS' | translate}}
   </button>
-  <ion-row margin-left margin-right margin-top margin-bottom *ngIf="(authorized == false || located == false) && defaulted == false">
+  <ion-row margin-left margin-right margin-top margin-bottom *ngIf="(authorized == null || located == false)">
     <ion-col col-12 class="street">
       <ion-input type="text" [placeholder]="'INPUT_LOCATION_STREET' | translate" [(ngModel)]="street" (ionBlur)="streetChanged($event)"></ion-input>
     </ion-col>
   </ion-row>
-  <ion-row margin-left margin-right margin-top margin-bottom *ngIf="(authorized == false || located == false) && defaulted == false">
+  <ion-row margin-left margin-right margin-top margin-bottom *ngIf="(authorized == null || located == false)">
     <ion-col col-12 class="city">
       <ion-input type="text" [placeholder]="'INPUT_LOCATION_CITY' | translate" [(ngModel)]="city" (ionBlur)="cityChanged($event)"></ion-input>
     </ion-col>
   </ion-row>
-  <ion-row margin-left margin-right margin-bottom *ngIf="(authorized == false || located == false) && defaulted == false">
+  <ion-row margin-left margin-right margin-bottom *ngIf="(authorized == null || located == false)">
     <ion-col col-6 class="country">
       <ion-select [placeholder]="'INPUT_LOCATION_COUNTRY' | translate" [selectOptions]="countriesOptions" [(ngModel)]="country" (ionChange)="countryChanged($event)">
         <ion-option [value]="_country.name" *ngFor="let _country of countries">{{_country.name}}</ion-option>

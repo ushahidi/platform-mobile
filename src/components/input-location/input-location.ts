@@ -83,13 +83,17 @@ export class InputLocationComponent {
 
   ngOnInit() {
     this.logger.info(this, "Attribute", this.attribute, "Value", this.value);
+    console.log("INITinit")
+    console.log(this.value.value)
     if (this.value == null || this.value.value == null || this.value.value.length == 0) {
+
       this.defaultLocation().then((defaulted:boolean) => {
         this.defaulted = defaulted;
       },
       (error:any) => {
         this.defaulted = false;
-      });
+      });      
+
       this.authorizeLocation().then((authorized:boolean) => {
         this.authorized = authorized;
         this.detectLocation().then((located:boolean) => {
@@ -106,6 +110,10 @@ export class InputLocationComponent {
     }
     else if (this.value.value.indexOf(", ") > -1) {
       // IGNORE ADDRESS STRING
+      console.log(this.street)
+      console.log(this.value.value)
+
+      console.log('ADDRESS')
     }
     else if (this.value.value.indexOf(",") > -1) {
       let coordinate:any = this.value.value.split(",");
@@ -114,6 +122,7 @@ export class InputLocationComponent {
       this.located = true;
       this.loadStaticMap(this.latitude, this.longitude);
     }
+    console.log("LOAD COUNTRIES")
     this.loadCountries().then((countries:Country[]) => {
       this.countries = countries;
     },
@@ -129,6 +138,7 @@ export class InputLocationComponent {
       }
       else if (this.value.value.indexOf(", ") > -1) {
         // IGNORE ADDRESS STRING
+        console.log(this.value.value)
       }
       else if (this.value.value.indexOf(",") > -1) {
         let coordinate:any = this.value.value.split(",");
@@ -158,6 +168,7 @@ export class InputLocationComponent {
   }
 
   authorizeLocation(event:any=null):Promise<boolean> {
+    console.log("AUTHORIZE LOC")
     return new Promise((resolve, reject) => {
       this.logger.info(this, "authorizeLocation");
       this.diagnostic.isLocationAuthorized().then((authorized:boolean) => {
@@ -233,6 +244,7 @@ export class InputLocationComponent {
   }
 
   detectLocation(event:any=null):Promise<boolean> {
+    console.log("DETECT LOCATION")
     return new Promise((resolve, reject) => {
       this.logger.info(this, "detectLocation");
       let options:GeolocationOptions = {
