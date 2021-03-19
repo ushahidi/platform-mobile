@@ -48,7 +48,7 @@ export class LoggerService {
 
   public info(instance:any, method:string, ...objects:any[]) {
     if (this.enabled) {
-      console.info(this.message(instance, method, objects));
+      // console.info(this.message(instance, method, objects));
     }
   }
 
