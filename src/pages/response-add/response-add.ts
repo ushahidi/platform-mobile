@@ -129,7 +129,7 @@ export class ResponseAddPage extends BasePage {
     this.submitted = true;
     if (this.hasRequiredValues()) {
       this.loadFormValues();
-      if (true) {
+      // if (true) {
         this.language.getTranslations([
           'ACTION_OK',
           'RESPONSE_SAVING_',
@@ -158,72 +158,72 @@ export class ResponseAddPage extends BasePage {
             });
         });
       }
-      else if (this.post.id > 0) {
-        this.language.getTranslations([
-          'ACTION_OK',
-          'RESPONSE_UPDATING_',
-          'RESPONSE_UPDATE_SUCCESS',
-          'RESPONSE_UPDATE_SUCCESS_DESCRIPTION',
-          'RESPONSE_UPDATE_FAILURE',
-          'RESPONSE_UPDATE_FAILURE_DESCRIPTION']).then((translations:string[]) => {
-            let loading = this.showLoading(translations[1]);
-            this.updatePost(this.post).then(
-              (updated) => {
-                this.events.publish(POST_UPDATED, this.post.id);
-                loading.dismiss();
-                let buttons = [{
-                  text: translations[0],
-                  role: 'cancel',
-                  handler: () => {
-                    this.hideModal();
-                  }
-                }];
-                this.showAlert(translations[2], translations[3], buttons);
-                this.logger.event(this, "Posts", "updated", this.post.url);
-              },
-              (error) => {
-                loading.dismiss();
-                this.showAlert(translations[4], translations[5]);
-              });
-          });
-      }
-      else {
-        this.language.getTranslations([
-          'ACTION_OK',
-          'RESPONSE_POSTING_',
-          'RESPONSE_POST_SUCCESS',
-          'RESPONSE_POST_SUCCESS_DESCRIPTION',
-          'RESPONSE_POST_FAILURE',
-          'RESPONSE_POST_FAILURE_DESCRIPTION']).then((translations:string[]) => {
-            let loading = this.showLoading(translations[1]);
-            this.createPost(this.post).then(
-              (updated) => {
-                this.events.publish(POST_UPDATED, this.post.id);
-                loading.dismiss();
-                let buttons = [{
-                  text: translations[0],
-                  role: 'cancel',
-                  handler: () => {
-                    this.hideModal();
-                  }
-                }];
-                this.showAlert(translations[2], translations[3], buttons);
-                this.logger.event(this, "Posts", "added", this.post.url);
-              },
-              (error) => {
-                loading.dismiss();
-                this.showAlert(translations[4], translations[5]);
-              });
-          });
-      }
-    }
-    else {
-      this.language.getTranslations([
-        'RESPONSE_MISSING_FIELDS',
-        'RESPONSE_MISSING_FIELDS_DESCRIPTION']).then((translations:string[]) => {
-          this.showAlert(translations[0], translations[1]);
-        });
-    }
+      // else if (this.post.id > 0) {
+    //   //   this.language.getTranslations([
+    //   //     'ACTION_OK',
+    //   //     'RESPONSE_UPDATING_',
+    //   //     'RESPONSE_UPDATE_SUCCESS',
+    //   //     'RESPONSE_UPDATE_SUCCESS_DESCRIPTION',
+    //   //     'RESPONSE_UPDATE_FAILURE',
+    //   //     'RESPONSE_UPDATE_FAILURE_DESCRIPTION']).then((translations:string[]) => {
+    //   //       let loading = this.showLoading(translations[1]);
+    //   //       this.updatePost(this.post).then(
+    //   //         (updated) => {
+    //   //           this.events.publish(POST_UPDATED, this.post.id);
+    //   //           loading.dismiss();
+    //   //           let buttons = [{
+    //   //             text: translations[0],
+    //   //             role: 'cancel',
+    //   //             handler: () => {
+    //   //               this.hideModal();
+    //   //             }
+    //   //           }];
+    //   //           this.showAlert(translations[2], translations[3], buttons);
+    //   //           this.logger.event(this, "Posts", "updated", this.post.url);
+    //   //         },
+    //   //         (error) => {
+    //   //           loading.dismiss();
+    //   //           this.showAlert(translations[4], translations[5]);
+    //   //         });
+    //   //     });
+    //   // }
+    //   else {
+    //     this.language.getTranslations([
+    //       'ACTION_OK',
+    //       'RESPONSE_POSTING_',
+    //       'RESPONSE_POST_SUCCESS',
+    //       'RESPONSE_POST_SUCCESS_DESCRIPTION',
+    //       'RESPONSE_POST_FAILURE',
+    //       'RESPONSE_POST_FAILURE_DESCRIPTION']).then((translations:string[]) => {
+    //         let loading = this.showLoading(translations[1]);
+    //         this.createPost(this.post).then(
+    //           (updated) => {
+    //             this.events.publish(POST_UPDATED, this.post.id);
+    //             loading.dismiss();
+    //             let buttons = [{
+    //               text: translations[0],
+    //               role: 'cancel',
+    //               handler: () => {
+    //                 this.hideModal();
+    //               }
+    //             }];
+    //             this.showAlert(translations[2], translations[3], buttons);
+    //             this.logger.event(this, "Posts", "added", this.post.url);
+    //           },
+    //           (error) => {
+    //             loading.dismiss();
+    //             this.showAlert(translations[4], translations[5]);
+    //           });
+    //       });
+    //   }
+    // }
+    // else {
+    //   this.language.getTranslations([
+    //     'RESPONSE_MISSING_FIELDS',
+    //     'RESPONSE_MISSING_FIELDS_DESCRIPTION']).then((translations:string[]) => {
+    //       this.showAlert(translations[0], translations[1]);
+    //     });
+    // }
   }
 
   private savePost(post:Post) {
