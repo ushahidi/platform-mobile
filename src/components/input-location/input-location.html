@@ -14,12 +14,7 @@
       <ion-input hidden type="text" formControlName="country" [(ngModel)]="country"></ion-input>
     </div>
   </ion-item>
-  <button ion-button margin-left icon-left text-uppercase small color="secondary" (click)="geocodeAddress()">
-    <ion-icon name="search">Search</ion-icon>
-  </button>
-  <button ion-button margin-left icon-left text-uppercase small color="secondary" *ngIf="authorized===true" (click)="detectLocation()">
-    <ion-icon name="navigate">Use my location</ion-icon>
-  </button>
+ 
   <p class="detecting" padding-left padding-right *ngIf="(authorized == null || authorized == true) && located == null">
     {{'INPUT_LOCATION_DETECTING_' | translate}}
   </p>
@@ -27,13 +22,17 @@
     {{'INPUT_LOCATION_NOT_AUTHORIZED' | translate}}
     {{'INPUT_LOCATION_NOT_AUTHORIZED_DESCRIPTION' | translate}}
   </p>
-  <p ion-text color="danger" class="input-error" padding-left padding-right *ngIf="geocodingError">
-  {{geocodingError}}
-  </p>
   
-  <button ion-button margin-left icon-left text-uppercase small color="secondary"  (click)="showSettings($event)">
+ 
+  <button ion-button margin-left icon-left text-uppercase small color="secondary"  *ngIf="authorized == false" (click)="showSettings($event)">
     <ion-icon ios="ios-cog" md="md-cog"></ion-icon> {{'INPUT_LOCATION_SETTINGS' | translate}}
   </button>
+
+  <ion-label padding class="input-label" color="dark">
+  {{'SEARCH_BY_ADDRESS_' | translate}}
+  <span ion-text color="danger" *ngIf="attribute.required == true">*</span>
+    <p ion-text color="dark" *ngIf="attribute.instructions">{{attribute.instructions}}</p>
+  </ion-label>
   <ion-row margin-left margin-right margin-top margin-bottom >
     <ion-col col-12 class="street">
       <ion-input type="text" [placeholder]="'INPUT_LOCATION_STREET' | translate" [(ngModel)]="street" (ionBlur)="streetChanged($event)"></ion-input>
@@ -55,7 +54,16 @@
         <ion-option [value]="_province.name" *ngFor="let _province of provinces">{{_province.name}}</ion-option>
       </ion-select>
     </ion-col>
+    <p ion-text color="danger" class="input-error" padding-right *ngIf="geocodingError">
+      {{geocodingError}}
+      </p>
   </ion-row>
+  <button ion-button icon-left text-uppercase margin-left small color="secondary" (click)="geocodeAddress()">
+    <ion-icon name="search"></ion-icon>{{ 'SEARCH' | translate }}
+  </button>
+  <button ion-button icon-left text-uppercase small margin-left color="secondary" *ngIf="authorized===true" (click)="detectLocation()">
+    <ion-icon name="navigate"></ion-icon> {{ "USE_LOCATION" | translate }}
+  </button>
   <ion-card margin-left margin-right *ngIf="map">
     <image-cache full [src]="map"></image-cache>
   </ion-card>

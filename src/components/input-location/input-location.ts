@@ -104,10 +104,6 @@ export class InputLocationComponent {
         this.defaulted = false;
       });  
     }
-    else if (this.value.value.indexOf(", ") > -1) {
-      // Map address to search-editor
-      this.street = this.value.value;
-    }
     else if (this.value.value.indexOf(",") > -1) {
       let coordinate:any = this.value.value.split(",");
       this.latitude = Number(coordinate[0]);
@@ -115,6 +111,11 @@ export class InputLocationComponent {
       this.located = true;
       this.loadStaticMap(this.latitude, this.longitude);
     }
+    else {
+      // Map address to search-editor
+      this.street = this.value.value;
+    }
+    
     this.loadCountries().then((countries:Country[]) => {
       this.countries = countries;
     },
@@ -128,10 +129,6 @@ export class InputLocationComponent {
       if (this.value == null || this.value.value == null || this.value.value.length == 0) {
         // IGNORE BLANK VALUE
       }
-      else if (this.value.value.indexOf(", ") > -1) {
-        // Map address
-        this.street = this.value.value;
-      }
       else if (this.value.value.indexOf(",") > -1) {
         let coordinate:any = this.value.value.split(",");
         if (coordinate && coordinate.length > 0) {
@@ -144,6 +141,11 @@ export class InputLocationComponent {
             this.loadStaticMap(latitude, longitude);
           }
         }
+      }
+      else {
+        // Map address
+        console.log(this.value.value)
+        // this.street = this.value.value;
       }
       if (this.countries == null || this.countries.length == 0) {
         this.loadCountries().then((countries:Country[]) => {
@@ -243,6 +245,7 @@ export class InputLocationComponent {
         enableHighAccuracy: true };
       this.geolocation.getCurrentPosition(options).then((position:Geoposition) => {
         this.logger.info(this, "detectLocation", "Position", position);
+        console.log(JSON.stringify(position))
         if (position && position.coords) {
           this.latitude = position.coords.latitude;
           this.longitude = position.coords.longitude;
@@ -433,10 +436,12 @@ export class InputLocationComponent {
             this.logger.info(this, "geocodeAddress", address, results);
             this.geocodingError = '';
             let coordinates = Object.create(results);
-            this.latitude = Number(coordinates.latitude);
-            this.longitude = Number(coordinates.longitude);
-            this.loadStaticMap(this.latitude, this.longitude);
-            this.located = true;
+            if (coordinates && coordinates.latitude && coordinates.longitude) {
+              this.latitude = Number(coordinates.latitude);
+              this.longitude = Number(coordinates.longitude);
+              this.loadStaticMap(this.latitude, this.longitude);
+              this.located = true;
+            }
             resolve(true);
           }
           else {
