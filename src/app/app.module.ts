@@ -90,6 +90,7 @@ import { DatabaseService } from '../providers/database-service';
 import { CacheService } from '../providers/cache-service';
 import { LanguageService } from '../providers/language-service';
 import { SettingsService } from '../providers/settings-service';
+import { SupportService } from '../providers/support-service';
 
 export function fallbackTranslateLoader(http:HttpClient):TranslateLoader {
     return new FallbackTranslateLoader(http, 'assets/i18n/', '.json');
@@ -249,6 +250,7 @@ export class CustomErrorHandler extends IonicErrorHandler implements ErrorHandle
     { provide: LanguageService, useClass: LanguageService },
     { provide: TranslateService, useClass: TranslateService },
     { provide: SettingsService, useClass: SettingsService },
+    { provide: SupportService, useClass: SupportService },
     { provide: ErrorHandler, useClass: CustomErrorHandler }
   ]
 })
