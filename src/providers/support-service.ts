@@ -33,15 +33,18 @@ export class SupportService {
   // Android:
   //   Internal Storage > Android > data > com.ushahidi.mobile > files > support
   // iOS:
-  //   
+  //   Files > On My iPhone > Ushahidi > support
   protected supportFolder():Promise<DirectoryEntry> {
     var root:string;
+    this.logger.info(this, 'supportFolder', 'Current platforms', this.platform.platforms());
     if (this.platform.is("android")) {
       // On Android, use the externalDataDirectory
       root = this.file.externalDataDirectory;
+      this.logger.info(this, 'supportFolder', 'Platform is Android, setting root to', root);
     } else if (this.platform.is("ios")) {
-      // On iOS, use dataDirectory
-      root = this.file.dataDirectory;
+      // On iOS, use documentsDirectory
+      root = this.file.documentsDirectory;
+      this.logger.info(this, 'supportFolder', 'Platform is iOS, setting root to', root);
     }
     return new Promise<DirectoryEntry>((resolve, reject) => {
       this.file.resolveDirectoryUrl(root).then(
@@ -58,6 +61,7 @@ export class SupportService {
     return new Promise<FileWriter>((resolve, reject) => {
       this.supportFolder().then(
         (folder:DirectoryEntry) => {
+          this.logger.info(this, 'supportFile', 'Got support folder at: ', folder);
           folder.getFile(name, {create: true, exclusive: true},
             (entry:FileEntry) => {
               entry.createWriter((w:FileWriter) => resolve(w), (err) => reject(err));
