@@ -119,7 +119,8 @@ export class InputLocationComponent {
       this.loadStaticMap(this.latitude, this.longitude);
     }
     else {
-      // Map address to search-editor
+      // Map address to search-editor street field
+      this.street = this.value.value;
     }
 
     // Eager load countries if not loaded
