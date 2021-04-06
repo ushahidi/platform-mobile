@@ -53,18 +53,20 @@ export class InputLocationComponent {
   defaulted:boolean = null;
   offline:boolean = false;
   shouldTimeout:boolean = false;
-
+  geocodingError:string = null;
   countries:Country[] = [];
   countriesOptions:{} = {
     title: 'Countries',
     placeholder: 'Country'
   };
+  loadingCountries:Promise<Country[]> = null;
 
   provinces:Province[] = [];
   provincesOptions:{} = {
     title: 'Provinces',
     placeholder: 'Province'
   };
+  loadingProvinces:Promise<Province[]> = null;
 
   @Output()
   changeLocation = new EventEmitter();
@@ -78,48 +80,102 @@ export class InputLocationComponent {
     private geolocation:Geolocation,
     private nativeGeocoder:NativeGeocoder,
     private language:LanguageService) {
-
   }
 
   ngOnInit() {
     this.logger.info(this, "Attribute", this.attribute, "Value", this.value);
+    this.authorizeLocation().then((authorized:boolean) => {
+      this.authorized = authorized;
+      this.detectLocation().then((located:boolean) => {
+        this.located = located;
+      },
+      (error:any) => {
+        this.located = false;
+      });
+    },
+    (error:any) => {
+      this.authorized = false;
+      this.located = false;
+    });
+
     if (this.value == null || this.value.value == null || this.value.value.length == 0) {
       this.defaultLocation().then((defaulted:boolean) => {
         this.defaulted = defaulted;
       },
       (error:any) => {
         this.defaulted = false;
-      });
-      this.authorizeLocation().then((authorized:boolean) => {
-        this.authorized = authorized;
-        this.detectLocation().then((located:boolean) => {
-          this.located = located;
-        },
-        (error:any) => {
-          this.located = false;
-        });
-      },
-      (error:any) => {
-        this.authorized = false;
-        this.located = false;
-      });
+      });  
     }
     else if (this.value.value.indexOf(", ") > -1) {
-      // IGNORE ADDRESS STRING
+      // We've got comma separated geo-address components
+      this.decodeWeakAddressValue(this.value.value);
     }
     else if (this.value.value.indexOf(",") > -1) {
+      // Assuming "latitude,longitude" encoded value
       let coordinate:any = this.value.value.split(",");
       this.latitude = Number(coordinate[0]);
       this.longitude = Number(coordinate[1]);
       this.located = true;
       this.loadStaticMap(this.latitude, this.longitude);
     }
-    this.loadCountries().then((countries:Country[]) => {
-      this.countries = countries;
-    },
-    (error:any) => {
-      this.countries = [];
-    });
+    else {
+      // Map address to search-editor street field
+      this.street = this.value.value;
+    }
+
+    // Eager load countries if not loaded
+    this.getCountries();
+  }
+
+  // Makes best effort to decode comma separated string value, with
+  // the different elemtnsentered by the user.
+  decodeWeakAddressValue(value:string) {
+    // Assuming comma separated address tokens (street, city, etc)
+    // (Can't be sure this will be decoded correctly)
+    let tokens = value.split(", ");
+    // Is there more than one token?
+    if (tokens.length > 1) {
+      // Last token *may* be the country
+      this.getCountries().then(
+        (countryList:Country[]) => {
+          var lastToken = tokens.pop();
+          // Is the last token a country?
+          var [country] = countryList.filter( x => x.name == lastToken);
+          if (country) {
+            // Last token is a country
+            this.country = country.name;
+            // There may be a province
+            this.getProvincesFor(country.code).then(
+              (provinceList:Province[]) => {
+                var lastToken = tokens.pop();
+                var [province] = provinceList.filter( x => x.name == lastToken );
+                if (province) {
+                  // Last token is province
+                  this.province = lastToken;
+                  // Still more than 1 token left, the last one is the city
+                  if (tokens.length > 1) {
+                    this.city = tokens.pop();
+                  }
+                } else {
+                  // Last token is city
+                  this.city = lastToken
+                }
+                // The rest is the street address
+                this.street = tokens.join(", ");
+              }
+            );
+          } else {
+            // Last token is not a country, so no province either
+            // We'll consider last token is the city, the rest the street address
+            this.city = lastToken;
+            this.street = tokens.join(", ");
+          }
+        }
+      )
+    } else {
+      // A single token means we just have a street name
+      this.street = value;
+    }
   }
 
   ngAfterContentChecked() {
@@ -128,7 +184,7 @@ export class InputLocationComponent {
         // IGNORE BLANK VALUE
       }
       else if (this.value.value.indexOf(", ") > -1) {
-        // IGNORE ADDRESS STRING
+        // Geocode details
       }
       else if (this.value.value.indexOf(",") > -1) {
         let coordinate:any = this.value.value.split(",");
@@ -142,14 +198,6 @@ export class InputLocationComponent {
             this.loadStaticMap(latitude, longitude);
           }
         }
-      }
-      if (this.countries == null || this.countries.length == 0) {
-        this.loadCountries().then((countries:Country[]) => {
-          this.countries = countries;
-        },
-        (error:any) => {
-          this.countries = [];
-        });
       }
     }
     catch (error) {
@@ -244,6 +292,7 @@ export class InputLocationComponent {
           this.latitude = position.coords.latitude;
           this.longitude = position.coords.longitude;
           this.located = true;
+          this.geocodingError = '';
           this.loadStaticMap(this.latitude, this.longitude);
           resolve(true);
         }
@@ -251,8 +300,7 @@ export class InputLocationComponent {
           this.latitude = null;
           this.longitude = null;
           this.located = false;
-          reject("No Location Detected");
-        }
+          this.geocodingError = "We could not detect your location, try searching for address instead"        }
       },
       (error:any) => {
         this.logger.error(this, "detectLocation", "Error", error.message);
@@ -339,8 +387,17 @@ export class InputLocationComponent {
     }
   }
 
-  loadCountries():Promise<Country[]> {
-    return new Promise((resolve, reject) => {
+  getCountries():Promise<Country[]> {
+    // If countries have been loaded, return resolved promise
+    if (this.countries != null && this.countries.length > 0) {
+      return Promise.resolve(this.countries);
+    }
+    // If there's a pending promise, return it
+    if (this.loadingCountries != null) {
+      return this.loadingCountries;
+    }
+    // Initiate fetching promise
+    this.loadingCountries = new Promise((resolve, reject) => {
       this.logger.info(this, "loadCountries");
       this.http.get("assets/data/countries.json")
         .map((res) => res.json())
@@ -348,11 +405,36 @@ export class InputLocationComponent {
           this.logger.info(this, "loadCountries", json);
           resolve(<Country[]>json);
         });
-    });
+    })
+    // Store countries when retrieved
+    this.loadingCountries.then(
+      (countries:Country[]) => {
+        this.countries = countries;
+        this.loadingCountries = null;
+        return countries;
+      }
+    )
+    .catch(
+      (error:any) => {
+        this.logger.error(this, "loadingCountries error", error);
+        this.countries = [];
+        this.loadingCountries = null;
+      }
+    );
+    return this.loadingCountries;
   }
 
-  loadProvinces():Promise<Province[]> {
-    return new Promise((resolve, reject) => {
+  getProvinces():Promise<Province[]> {
+    // If provinces have already been loaded, return resolved promise
+    if (this.provinces != null && this.provinces.length > 0) {
+      return Promise.resolve(this.provinces);
+    }
+    // If there's a pending promise, return it
+    if (this.loadingProvinces != null) {
+      return this.loadingProvinces;
+    }
+    // Initiate fetching promise
+    this.loadingProvinces = new Promise((resolve, reject) => {
       this.logger.info(this, "loadProvinces");
       this.http.get("assets/data/provinces.json")
         .map((res) => res.json())
@@ -361,6 +443,31 @@ export class InputLocationComponent {
           resolve(<Province[]>json);
         });
     });
+    // Store provinces when retrieved
+    this.loadingProvinces.then(
+      (provinces:Province[]) => {
+        this.provinces = provinces;
+        this.loadingProvinces = null;
+        return provinces;
+      }
+    )
+    .catch(
+      (error:any) => {
+        this.logger.error(this, "loadingProvinces error", error);
+        this.provinces = [];
+        this.loadingProvinces = null;
+      }
+    );
+    return this.loadingProvinces;
+  }
+
+  getProvincesFor(countryCode:string):Promise<Province[]> {
+    return this.getProvinces().then(
+      (provinces:Province[]) => {
+        var matches:Province[] = provinces.filter( x => (x.country == countryCode) );
+        return matches;
+      }
+    );
   }
 
   streetChanged(event:any) {
@@ -396,7 +503,7 @@ export class InputLocationComponent {
   countryChanged(event:any) {
     this.logger.info(this, "countryChanged", this.country);
     let filteredProvinces = [];
-    this.loadProvinces().then((allProvinces:Province[]) => {
+    this.getProvinces().then((allProvinces:Province[]) => {
       let country:Country = this.countries.filter(c => c.name == this.country)[0];
       for (let province of allProvinces) {
         if (province.country == country.code) {
@@ -426,21 +533,34 @@ export class InputLocationComponent {
       this.logger.info(this, "geocodeAddress", address.join(", "));
       this.nativeGeocoder.forwardGeocode(address.join(", "))
         .then((results:NativeGeocoderForwardResult[]) => {
-          if (results && results.length > 0) {
-            let coordinates = results[0];
-            this.logger.info(this, "geocodeAddress", address, coordinates);
-            this.latitude = Number(coordinates.latitude);
-            this.longitude = Number(coordinates.longitude);
-            this.loadStaticMap(this.latitude, this.longitude);
+          if (results) {
+            this.logger.info(this, "geocodeAddress", address, results);
+            this.geocodingError = '';
+            let coordinates = Object.create(results);
+            if (coordinates && coordinates.latitude && coordinates.longitude) {
+              this.latitude = Number(coordinates.latitude);
+              this.longitude = Number(coordinates.longitude);
+              this.loadStaticMap(this.latitude, this.longitude);
+              this.located = true;
+            }
             resolve(true);
           }
           else {
-            reject("No results");
+            this.geocodingError = "We could not find anything";
+            this.latitude = null;
+            this.longitude = null;
+            this.located = false;
+            this.loadStaticMap(this.latitude, this.longitude);
+            
           }
         })
         .catch((error:any) => {
+          this.geocodingError = error;
+          this.latitude = null;
+          this.longitude = null;
+          this.located = false;
+          this.loadStaticMap(this.latitude, this.longitude);
           this.logger.error(this, "geocodeAddress", address, error);
-          reject(error);
         });
     });
   }

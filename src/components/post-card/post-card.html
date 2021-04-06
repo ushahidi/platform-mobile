@@ -22,7 +22,7 @@
           </ion-col>
         </ion-row>
       </ion-col>
-      <ion-col col-auto class="edit" *ngIf="post.can_update == true && post.form">
+      <ion-col col-auto class="edit" *ngIf="(post.can_update == true && post.form) || post.pending">
         <button icon-only clear tappable (click)="onEditSelected($event)">
           <ion-icon ios="md-create" md="md-create"></ion-icon>
         </button>

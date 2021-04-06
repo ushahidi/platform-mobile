@@ -271,8 +271,8 @@ export class ResponseMapPage extends BasePage {
         this.nativeGeocoder.forwardGeocode(this.search).then(
           (results:NativeGeocoderForwardResult[]) => {
             this.logger.info(this, "searchAddress", results);
-            if (results && results.length > 0) {
-              let coordinates = results[0];
+            if (results) {
+              let coordinates = Object.create(results);
               if (coordinates && coordinates.latitude && coordinates.longitude) {
                 this.latitude = Number(coordinates.latitude);
                 this.longitude = Number(coordinates.longitude);

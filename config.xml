@@ -3,7 +3,7 @@
     <name>Ushahidi</name>
     <description>Ushahidi Mobile</description>
     <author email="support@ushahidi.com" href="https://www.ushahidi.com/">Ushahidi</author>
-    <content src="index.html" />
+    <content original-src="index.html" src="http://192.168.68.106:8100" />
     <access allows-arbitrary-loads-for-media="true" allows-arbitrary-loads-in-web-content="true" allows-local-networking="true" origin="*" requires-certificate-transparency="false" requires-forward-secrecy="false" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -26,6 +26,12 @@
     <allow-navigation href="http://ionic.local/*" />
     <allow-navigation href="http://localhost:3000/*" />
     <allow-navigation href="http://localhost:8080/*" />
+    <allow-navigation href="http://localhost:8100/*" />
+    <allow-navigation href="http://localhost:35729/*" />
+    <allow-navigation href="http://localhost:53703/*" />
+    <access origin="*" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
     <platform name="android">
         <allow-intent href="market:*" />
         <edit-config file="AndroidManifest.xml" mode="merge" target="/manifest/application">
