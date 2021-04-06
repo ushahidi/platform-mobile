@@ -10,11 +10,11 @@
 ---
 
 ## GitHub
-#### Clone the [Ushahidi](https://github.com/ushahidi/platform-mobile) repo
+#### Clone the [Ushahidi](https://github.com/ushahidi/platform-mobile-app) repo
 
 ```
-git clone git@github.com:ushahidi/platform-mobile.git Ushahidi_Mobile
-cd Ushahidi_Mobile
+git clone git@github.com:ushahidi/platform-mobile-app.git
+cd platform-mobile-app
 ```
 
 ## Secrets
@@ -104,8 +104,10 @@ node --version
 
 Install some NPM utilities
 
+NOTE: version 7.x not supported, stick to 6.x
+
 ```
-npm install -g npm
+npm install -g npm@6
 ```
 
 Check the version of NPM
@@ -128,13 +130,7 @@ npm install
 Install the latest Cordova
 
 ```
-npm install -g cordova@latest
-```
-
-If you run into permission problems, try using `sudo`
-
-```
-sudo npm install -g cordova@latest
+npm install -g cordova@7.1.0
 ```
 
 Check the version of Cordova
@@ -154,29 +150,21 @@ cordova clean
 ## Ionic
 #### Install the latest [Ionic](http://ionicframework.com/docs/) and necessary dependencies
 
-Install the latest Ionic
+Install Ionic 4
 
 ```
-npm install -g ionic@latest
+npm install -g ionic@4
 ```
 
-If you run into permission problems, try using `sudo`
-
-```
-sudo npm install -g ionic@latest
-```
 
 Install some Ionic and Cordova utilities
 
 ```
-npm install -g xcode@latest
-npm install -g cordova-common@latest
-npm install -g cordova-ios@latest
-npm install -g cordova-android@latest
-npm install -g cordova-browser@latest
-sudo npm install -g ios-sim@latest
-npm install -g ios-deploy@latest
-npm install -g android-simulator@latest
+npm install -g xcode@^3.0
+npm install -g ios-sim@^9
+npm install -g ios-deploy@^11
+npm install -g cordova-res@^0.15
+npm install -g android-simulator@^0.1
 ```
 
 Check the version of Ionic

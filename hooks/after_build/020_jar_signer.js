@@ -21,10 +21,11 @@ function runJarSigner() {
   if (project && config) {
     var apk = "platforms/android/app/build/outputs/apk/release/app-release.apk";
     if (fs.existsSync(root + "/" + apk)) {
-      var json = root + "/projects/" + project + "/build.json";
+      var prjPath = path.join(root, "projects", project);
+      var json = path.join(prjPath, "build.json");
       if (fs.existsSync(json)) {
         var build = require(json);
-        var keystore = root + "/projects/ushahidi.keystore";
+        var keystore =  path.join(prjPath, build['android']['release']['keystore']);
         var alias = build['android']['release']['alias'];
         var password = build['android']['release']['password'];
         var storePassword = build['android']['release']['storePassword'];
