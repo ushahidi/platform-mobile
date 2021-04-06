@@ -336,11 +336,7 @@ export class UshahidiApp {
 
   private loadDatabase(models:Model[]):Promise<any> {
     this.logger.info(this, "loadDatabase");
-    var db = this.database.loadDatabase(models);
-    window['getDatabase'] = () => {
-      return this.database;
-    }
-    return db;
+    return this.database.loadDatabase(models);
   }
 
   private resetDatabase():Promise<any> {
