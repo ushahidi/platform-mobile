@@ -57,6 +57,12 @@
         <config-file parent="ITSAppUsesNonExemptEncryption" platform="ios" target="*-Info.plist">
             <false />
         </config-file>
+        <config-file parent="UIFileSharingEnabled" target="*-Info.plist">
+            <true />
+        </config-file>
+         <config-file parent="LSSupportsOpeningDocumentsInPlace" target="*-Info.plist">
+            <true />
+        </config-file>
         <config-file parent="NSCameraUsageDescription" platform="ios" target="*-Info.plist">
             <string>This app would like to access the camera, so you can to take photos for your reports.</string>
         </config-file>
@@ -150,7 +156,7 @@
     <preference name="AllowInlineMediaPlayback" value="true" />
     <preference name="CordovaWebViewEngine" value="CDVWKWebViewEngine" />
     <preference name="MediaPlaybackRequiresUserAction" value="true" />
-    <preference name="iosPersistentFileLocation" value="Compatibility" />
+    <preference name="iosPersistentFileLocation" value="Library" />
     <preference name="AndroidPersistentFileLocation" value="Compatibility" />
     <preference name="iosExtraFilesystems" value="library,library-nosync,documents,documents-nosync,cache,bundle,root" />
     <preference name="AndroidExtraFilesystems" value="files,files-external,documents,sdcard,cache,cache-external,assets,root" />
@@ -226,9 +232,7 @@
     <plugin name="cordova.plugins.diagnostic" spec="^4.0.12">
         <variable name="ANDROID_SUPPORT_VERSION" value="28.+" />
     </plugin>
-    <plugin name="cordova-plugin-google-analytics" spec="^1.8.6">
-        <variable name="GMS_VERSION" value="11.0.1" />
-    </plugin>
+    <plugin name="cordova-plugin-google-analytics" spec="^1.8.6" />
     <engine name="ios" spec="~5.1.1" />
     <engine name="android" spec="~9.0.0" />
 </widget>

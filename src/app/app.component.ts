@@ -28,6 +28,7 @@ import { DatabaseService } from '../providers/database-service';
 import { InjectorService } from '../providers/injector-service';
 import { LanguageService } from '../providers/language-service';
 import { SettingsService } from '../providers/settings-service';
+import { SupportService } from '../providers/support-service';
 
 import { DeploymentNonePage } from '../pages/deployment-none/deployment-none';
 import { DeploymentSearchPage } from '../pages/deployment-search/deployment-search';
@@ -96,6 +97,7 @@ export class UshahidiApp {
     private database:DatabaseService,
     private language:LanguageService,
     private settings:SettingsService,
+    private supportService:SupportService,
     private modalController:ModalController,
     private toastController:ToastController,
     private loadingController:LoadingController,
@@ -189,7 +191,12 @@ export class UshahidiApp {
           },
           (error:any) => {
             this.showRootPage();
-          });
+          })
+        .then(
+          () => {
+            this.supportService.dumpPendingPosts()
+          }
+        );
       },
       (error:any) => {
         this.splashScreen.hide();
