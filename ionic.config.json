@@ -1,7 +1,0 @@
-{
-  "name": "ushahidi",
-  "integrations": {
-    "cordova": {}
-  },
-  "type": "ionic-angular"
-}
