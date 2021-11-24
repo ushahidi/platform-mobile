@@ -64,7 +64,7 @@
     "cordova-plugin-filepath": "^1.6.0",
     "cordova-plugin-geolocation": "^2.4.3",
     "cordova-plugin-google-analytics": "^1.8.6",
-    "cordova-plugin-ionic-webview": "^1.2.1",
+    "cordova-plugin-ionic-webview": "^2.2.0",
     "cordova-plugin-is-debug": "^1.0.0",
     "cordova-plugin-media-capture": "^3.0.3",
     "cordova-plugin-nativegeocoder": "^1.0.2",
