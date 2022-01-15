@@ -87,7 +87,7 @@
     "ionicons": "3.0.0",
     "leaflet": "^1.2.0",
     "markdown-to-html-pipe": "^1.2.2",
-    "marked": "^0.3.6",
+    "marked": "^4.0.10",
     "moment": "^2.18.1",
     "rxjs": "5.5.11",
     "sw-toolbox": "3.6.0",
