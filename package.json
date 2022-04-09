@@ -88,7 +88,7 @@
     "leaflet": "^1.2.0",
     "markdown-to-html-pipe": "^1.2.2",
     "marked": "^0.3.6",
-    "moment": "^2.18.1",
+    "moment": "^2.29.2",
     "rxjs": "5.5.11",
     "sw-toolbox": "3.6.0",
     "ts-md5": "^1.2.2",
